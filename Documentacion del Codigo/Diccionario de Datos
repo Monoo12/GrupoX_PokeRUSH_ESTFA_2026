@@ -1,0 +1,100 @@
+DICCIONARIO DE DATOS
+POKEMON
+Representa a cada criatura del juego con sus estadísticas y relaciones.
+Atributos:
+id_pokemon (PK): Identificador único del Pokémon.
+nombre: Nombre del Pokémon.
+tipo: Tipo del Pokémon (ej: fuego, agua, planta; puede admitir más de uno).
+nivel: Nivel actual del Pokémon.
+experiencia: Puntos acumulados para subir de nivel.
+hp: Puntos de vida.
+ataque: Poder de ataque físico.
+defensa: Resistencia a ataques físicos.
+ataque_especial: Poder de ataques especiales.
+defensa_especial: Resistencia a ataques especiales.
+velocidad: Determina el orden de turno en combate.
+id_habilidad (FK): Referencia a la habilidad del Pokémon.
+id_objeto (FK): Referencia al objeto equipado (uno como máximo).
+id_skin (FK): Referencia a la apariencia visual.
+id_estado (FK): Estado actual del Pokémon (solo uno activo a la vez).
+id_jugador (FK): Jugador que posee el Pokémon.
+HABILIDAD
+Define habilidades pasivas o activas de los Pokémon.
+Atributos:
+id_habilidad (PK): Identificador único.
+nombre: Nombre de la habilidad.
+descripcion: Explicación del efecto de la habilidad.
+ESTADO
+Estados alterados que afectan a los Pokémon.
+Atributos:
+id_estado (PK): Identificador único.
+nombre: Nombre del estado (ej: paralizado, envenenado).
+efecto: Descripción del efecto (daño, reducción de estadísticas, etc.).
+OBJETO
+Ítems que pueden ser usados o equipados por el jugador o sus Pokémon.
+Atributos:
+id_objeto (PK): Identificador único.
+nombre: Nombre del objeto.
+efecto: Función o efecto del objeto.
+tipo: Tipo de objeto (equipable o consumible).
+cantidad: Cantidad disponible del objeto.
+id_jugador (FK): Jugador propietario del objeto.
+SKIN
+Define aspectos visuales de los Pokémon.
+Atributos:
+id_skin (PK): Identificador único.
+nombre: Nombre de la skin.
+descripcion: Detalles de la apariencia.
+precio: Costo de adquisición.
+id_tienda (FK): Referencia a la tienda donde se vende.
+TIENDA
+Representa las tiendas del juego.
+Atributos:
+id_tienda (PK): Identificador único.
+nombre: Nombre de la tienda.
+MOVIMIENTO
+Ataques que pueden usar los Pokémon.
+Atributos:
+id_movimiento (PK): Identificador único.
+nombre: Nombre del movimiento.
+tipo: Tipo del movimiento.
+daño: Daño base que produce.
+precision: Probabilidad de acierto (valor entre 0 y 1 o porcentaje).
+pp: Cantidad de usos disponibles.
+efecto: Efecto adicional del movimiento.
+categoria: Tipo de ataque (físico, especial o estado).
+MOVESET
+Relaciona Pokémon con sus movimientos equipados.
+Atributos:
+id_moveset (PK): Identificador único.
+slot: Posición del movimiento (valores del 1 al 4, únicos por Pokémon).
+id_pokemon (FK): Referencia al Pokémon.
+id_movimiento (FK): Referencia al movimiento.
+Restricciones:
+Un Pokémon no puede tener más de 4 movimientos.
+No puede haber dos movimientos en el mismo slot para un mismo Pokémon.
+EVOLUCION
+Define la evolución entre Pokémon.
+Atributos:
+id_evolucion (PK): Identificador único.
+nivel_requerido: Nivel necesario para evolucionar.
+id_pokemon_origen (FK): Pokémon base.
+id_pokemon_destino (FK): Pokémon resultante.
+JUGADOR
+Representa a los usuarios del juego.
+Atributos:
+id_jugador (PK): Identificador único.
+nombre: Nombre del jugador.
+ENEMIGO
+Representa a los oponentes controlados por el sistema, cada uno asociado a un único Pokémon.
+Atributos:
+id_enemigo (PK): Identificador único.
+nombre: Nombre del enemigo.
+id_pokemon (FK): Referencia al Pokémon del enemigo.
+COMBATE
+Registra los enfrentamientos entre jugador y enemigo.
+Atributos:
+id_combate (PK): Identificador único.
+resultado: Resultado del combate (victoria o derrota).
+id_jugador (FK): Jugador participante.
+id_enemigo (FK): Enemigo enfrentado.

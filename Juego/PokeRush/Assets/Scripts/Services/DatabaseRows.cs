@@ -1,0 +1,80 @@
+using SQLite;
+using Table = SQLite.TableAttribute;
+using PrimaryKey = SQLite.PrimaryKeyAttribute;
+using AutoIncrement = SQLite.AutoIncrementAttribute;
+using Unity.VisualScripting.Dependencies.Sqlite;
+
+[Table("player")]
+public class PlayerRow
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Money { get; set; }
+}
+
+[Table("player_poken")]
+public class PlayerPokenRow
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public int PlayerId { get; set; }
+    public string PokenDefinitionId { get; set; }
+    public int Level { get; set; }
+    public int CurrentXP { get; set; }
+    public int CurrentHP { get; set; }
+    public string StatusEffect { get; set; }
+    public int SlotIndex { get; set; }
+    public string EquippedCosmetic { get; set; }
+}
+
+[Table("player_poken_moves")]
+public class PlayerPokenMoveRow
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public int PlayerPokenId { get; set; }
+    public string MoveDefinitionId { get; set; }
+    public int CurrentPP { get; set; }
+}
+
+[Table("player_inventory")]
+public class PlayerInventoryRow
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public int PlayerId { get; set; }
+    public string ItemDefinitionId { get; set; }
+    public string ItemType { get; set; }
+    public int Quantity { get; set; }
+}
+
+[Table("player_cosmetics")]
+public class PlayerCosmeticRow
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public int PlayerId { get; set; }
+    public string CosmeticDefinitionId { get; set; }
+}
+
+[Table("active_flags")]
+public class ActiveFlagRow
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public int PlayerId { get; set; }
+    public string FlagName { get; set; }
+}
+
+[Table("dialogues")]
+public class DialogueRow
+{
+    [PrimaryKey, AutoIncrement]
+    public int Id { get; set; }
+    public string NpcId { get; set; }
+    public int LineIndex { get; set; }
+    public string Text { get; set; }
+    public string RequiredFlag { get; set; }
+    public string GrantsFlag { get; set; }
+}
