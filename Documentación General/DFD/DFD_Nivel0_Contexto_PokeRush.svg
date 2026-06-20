@@ -1,0 +1,41 @@
+<svg viewBox="0 0 900 480" width="900" height="480" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arr0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-end">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555555"/>
+    </marker>
+  </defs>
+  <style>
+    .proc { fill: #ffffff; stroke: #185FA5; stroke-width: 2.5; }
+    .proc-num { fill: #185FA5; font-size: 16px; font-weight: 700; text-anchor: middle; }
+    .proc-lbl { fill: #1a1a1a; font-size: 16px; font-weight: 700; text-anchor: middle; }
+    .ent { fill: #ffffff; stroke: #2C2C2A; stroke-width: 2; }
+    .ent-lbl { fill: #1a1a1a; font-size: 15px; font-weight: 700; text-anchor: middle; }
+    .ent-sub { fill: #666666; font-size: 10px; text-anchor: middle; }
+    .flow { stroke: #555555; stroke-width: 1.6; fill: none; marker-end: url(#arr0); }
+    .flow-lbl { fill: #555555; font-size: 12px; text-anchor: middle; }
+    .title { fill: #1a1a1a; font-size: 17px; font-weight: 700; }
+    .sub { fill: #666666; font-size: 11px; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+
+  <text x="40" y="34" class="title">DFD Nivel 0 — Diagrama de Contexto · PokeRush</text>
+  <text x="40" y="54" class="sub">Define el sistema como un único proceso y su relación con el entorno (Jugador).</text>
+
+  <rect x="80" y="210" width="150" height="100" class="ent"/>
+  <text x="155" y="255" class="ent-lbl">JUGADOR</text>
+  <text x="155" y="275" class="ent-sub">(Entidad externa)</text>
+
+  <circle cx="630" cy="260" r="95" class="proc"/>
+  <text x="630" y="248" class="proc-num">0</text>
+  <text x="630" y="272" class="proc-lbl">Sistema</text>
+  <text x="630" y="293" class="proc-lbl">PokeRush</text>
+
+  <path class="flow" d="M230,235 C360,205 430,200 540,225"/>
+  <text x="385" y="190" class="flow-lbl">comandos / acciones</text>
+  <text x="385" y="206" class="flow-lbl" font-size="10">(mover, atacar, comprar, hablar, usar objeto, guardar)</text>
+
+  <path class="flow" d="M540,300 C430,330 360,330 232,300"/>
+  <text x="385" y="345" class="flow-lbl">pantallas / HUD / resultados</text>
+  <text x="385" y="361" class="flow-lbl" font-size="10">(mapa, diálogos, combate, inventario, estado del juego)</text>
+</svg>
