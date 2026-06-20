@@ -9,7 +9,7 @@ Grupo 4: Nota:9
 # GrupoX_PokeRUSH_ESTFA_2026
 Roles:
 
-Martres - Project Manager
+Koyik - DBA
 
 Brunello - Developer
 
