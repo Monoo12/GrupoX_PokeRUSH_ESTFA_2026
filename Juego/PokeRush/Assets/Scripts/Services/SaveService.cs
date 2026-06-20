@@ -169,7 +169,7 @@ public class SaveService
 
         // Crea el modelo y le restaura el estado guardado
         PokenModel poken = new PokenModel(definition, row.Level);
-        //poken.SetCurrentHP(row.CurrentHP);
+        poken.SetCurrentHP(row.CurrentHP);
 
         if (System.Enum.TryParse<StatusEffect>(row.StatusEffect, out StatusEffect status))
             poken.SetStatus(status);
@@ -182,7 +182,7 @@ public class SaveService
             if (moveDefinition != null)
             {
                 MoveModel move = new MoveModel(moveDefinition);
-               // move.SetCurrentPP(moveRow.CurrentPP);
+                move.SetCurrentPP(moveRow.CurrentPP);
                 poken.Moves.Add(move);
             }
         }

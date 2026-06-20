@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyDefinition : NPCDefinition
 {
     [Header("Equipo")]
-    public PokenDefinition[] pokenTeam;
+    public EnemyTeamEntry[] pokenTeam;
 
     [Header("Sprites de batalla")]
     public Sprite battleFrontSprite;
