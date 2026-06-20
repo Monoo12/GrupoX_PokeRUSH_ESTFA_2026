@@ -6,7 +6,7 @@ Grupo 4: Nota:9
 - El enemigo seria un NPC? o es simplemente otro pokemon?
 
 
-# Grupo4_PokemonBossRush_ESTFA_2026
+# GrupoX_PokeRUSH_ESTFA_2026
 Roles:
 
 Martres - Project Manager
@@ -14,10 +14,6 @@ Martres - Project Manager
 Brunello - Developer
 
 Andrusiani - Developer
-
-Coria - UX
-
-Koyik - DataBase
 
 Lenguaje a utilizar: C#
 
