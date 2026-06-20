@@ -1,4 +1,4 @@
-# 🏛️ Arquitectura del Proyecto — PokeRush
+# Arquitectura del Proyecto — PokeRush
 
 ## 🎮 Motor y Lenguaje
 - **Motor:** Unity (render 2D con **URP** — Universal Render Pipeline)
