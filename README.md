@@ -19,5 +19,5 @@ Lenguaje a utilizar: C#
 
 Color del grupo: Violeta
 
-#Plataforma de Organizacion#
+# Plataforma de Organizacion
 https://dailys-reporter-8ybt.vercel.app/
