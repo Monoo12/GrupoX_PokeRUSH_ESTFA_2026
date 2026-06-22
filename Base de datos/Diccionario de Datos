@@ -1,100 +1,63 @@
 DICCIONARIO DE DATOS
-POKEMON
-Representa a cada criatura del juego con sus estadísticas y relaciones.
+JUGADOR (player)
+Representa a cada usuario que juega Pokerush, con sus datos básicos y su progreso económico.
 Atributos:
-id_pokemon (PK): Identificador único del Pokémon.
-nombre: Nombre del Pokémon.
-tipo: Tipo del Pokémon (ej: fuego, agua, planta; puede admitir más de uno).
-nivel: Nivel actual del Pokémon.
-experiencia: Puntos acumulados para subir de nivel.
-hp: Puntos de vida.
-ataque: Poder de ataque físico.
-defensa: Resistencia a ataques físicos.
-ataque_especial: Poder de ataques especiales.
-defensa_especial: Resistencia a ataques especiales.
-velocidad: Determina el orden de turno en combate.
-id_habilidad (FK): Referencia a la habilidad del Pokémon.
-id_objeto (FK): Referencia al objeto equipado (uno como máximo).
-id_skin (FK): Referencia a la apariencia visual.
-id_estado (FK): Estado actual del Pokémon (solo uno activo a la vez).
-id_jugador (FK): Jugador que posee el Pokémon.
-HABILIDAD
-Define habilidades pasivas o activas de los Pokémon.
+id_jugador (PK): Identificador único del jugador.
+nombre: Nombre del jugador, ingresado al crear la partida.
+dinero: Cantidad de dinero acumulado por el jugador.
+
+POKEN (player_poken)
+Representa a cada Poken que forma parte del equipo de un jugador, con su progreso individual.
 Atributos:
-id_habilidad (PK): Identificador único.
-nombre: Nombre de la habilidad.
-descripcion: Explicación del efecto de la habilidad.
-ESTADO
-Estados alterados que afectan a los Pokémon.
+id_poken (PK): Identificador único del Poken dentro del equipo del jugador.
+id_jugador (FK): Jugador al que pertenece este Poken.
+id_definicion_poken: Nombre del PokenDefinition (ScriptableObject de Unity) que describe a este Poken; no es una clave foránea real, se resuelve en código mediante DefinitionRepository.
+nivel: Nivel actual del Poken.
+xp_actual: Experiencia acumulada en el nivel actual.
+hp_actual: Puntos de vida actuales del Poken.
+efecto_estado: Estado alterado actual del Poken (ej: quemado, paralizado, ninguno).
+indice_slot: Posición del Poken dentro del equipo del jugador.
+id_definicion_cosmetico_equipado: Nombre del cosmético equipado en este Poken (uno como máximo); no es una clave foránea real, se resuelve mediante DefinitionRepository.
+
+POKEN_MOVIMIENTO (player_poken_moves)
+Relaciona a cada Poken con los movimientos que tiene aprendidos.
 Atributos:
-id_estado (PK): Identificador único.
-nombre: Nombre del estado (ej: paralizado, envenenado).
-efecto: Descripción del efecto (daño, reducción de estadísticas, etc.).
-OBJETO
-Ítems que pueden ser usados o equipados por el jugador o sus Pokémon.
+id_poken_movimiento (PK): Identificador único de la relación.
+id_poken (FK): Referencia al Poken que conoce el movimiento.
+id_definicion_movimiento: Nombre del MoveDefinition (ScriptableObject) que describe el movimiento; no es una clave foránea real, se resuelve mediante DefinitionRepository.
+pp_actual: Cantidad de usos restantes de ese movimiento.
+
+INVENTARIO (player_inventory)
+Representa los ítems que posee un jugador, sin importar su categoría.
 Atributos:
-id_objeto (PK): Identificador único.
-nombre: Nombre del objeto.
-efecto: Función o efecto del objeto.
-tipo: Tipo de objeto (equipable o consumible).
-cantidad: Cantidad disponible del objeto.
-id_jugador (FK): Jugador propietario del objeto.
-SKIN
-Define aspectos visuales de los Pokémon.
+id_inventario (PK): Identificador único de la fila de inventario.
+id_jugador (FK): Jugador propietario del ítem.
+id_definicion_item: Nombre del Item Definition (ScriptableObject) que describe el ítem; no es una clave foránea real, se resuelve mediante DefinitionRepository.
+tipo_item: Categoría del ítem (curación, combate o especial).
+cantidad: Cantidad disponible de ese ítem en el inventario.
+
+COSMETICO_EQUIPADO (player_cosmetics)
+Registra qué cosméticos posee desbloqueados cada jugador.
 Atributos:
-id_skin (PK): Identificador único.
-nombre: Nombre de la skin.
-descripcion: Detalles de la apariencia.
-precio: Costo de adquisición.
-id_tienda (FK): Referencia a la tienda donde se vende.
-TIENDA
-Representa las tiendas del juego.
+id_cosmetico_equipado (PK): Identificador único de la fila.
+id_jugador (FK): Jugador propietario del cosmético.
+id_definicion_cosmetico: Nombre del CosmeticDefinition (ScriptableObject) que describe el cosmético; no es una clave foránea real, se resuelve mediante DefinitionRepository.
+
+FLAG (active_flags)
+Registra los hitos de la historia que el jugador ya desbloqueó.
 Atributos:
-id_tienda (PK): Identificador único.
-nombre: Nombre de la tienda.
-MOVIMIENTO
-Ataques que pueden usar los Pokémon.
+id_flag (PK): Identificador único de la fila.
+id_jugador (FK): Jugador al que pertenece esta flag de historia.
+nombre_flag: Nombre de la flag activada (texto correspondiente al enum StoryFlag).
+
+NPC (dialogues)
+Representa cada línea de diálogo disponible para los personajes no jugables del juego.
 Atributos:
-id_movimiento (PK): Identificador único.
-nombre: Nombre del movimiento.
-tipo: Tipo del movimiento.
-daño: Daño base que produce.
-precision: Probabilidad de acierto (valor entre 0 y 1 o porcentaje).
-pp: Cantidad de usos disponibles.
-efecto: Efecto adicional del movimiento.
-categoria: Tipo de ataque (físico, especial o estado).
-MOVESET
-Relaciona Pokémon con sus movimientos equipados.
-Atributos:
-id_moveset (PK): Identificador único.
-slot: Posición del movimiento (valores del 1 al 4, únicos por Pokémon).
-id_pokemon (FK): Referencia al Pokémon.
-id_movimiento (FK): Referencia al movimiento.
+id_dialogo (PK): Identificador único de la línea de diálogo.
+id_npc: Identificador del NPC dueño de esta línea de diálogo.
+indice_linea: Orden de la línea dentro del guion de diálogo del NPC.
+texto: Contenido textual de la línea de diálogo.
+flag_requerida: Nombre de la flag que debe estar activa para que esta línea esté disponible (puede no requerir ninguna).
+flag_otorgada: Nombre de la flag que se activa al mostrarse esta línea (puede no otorgar ninguna).
 Restricciones:
-Un Pokémon no puede tener más de 4 movimientos.
-No puede haber dos movimientos en el mismo slot para un mismo Pokémon.
-EVOLUCION
-Define la evolución entre Pokémon.
-Atributos:
-id_evolucion (PK): Identificador único.
-nivel_requerido: Nivel necesario para evolucionar.
-id_pokemon_origen (FK): Pokémon base.
-id_pokemon_destino (FK): Pokémon resultante.
-JUGADOR
-Representa a los usuarios del juego.
-Atributos:
-id_jugador (PK): Identificador único.
-nombre: Nombre del jugador.
-ENEMIGO
-Representa a los oponentes controlados por el sistema, cada uno asociado a un único Pokémon.
-Atributos:
-id_enemigo (PK): Identificador único.
-nombre: Nombre del enemigo.
-id_pokemon (FK): Referencia al Pokémon del enemigo.
-COMBATE
-Registra los enfrentamientos entre jugador y enemigo.
-Atributos:
-id_combate (PK): Identificador único.
-resultado: Resultado del combate (victoria o derrota).
-id_jugador (FK): Jugador participante.
-id_enemigo (FK): Enemigo enfrentado.
+La validación de flag_requerida y flag_otorgada se resuelve en código comparando contra los nombres guardados en FLAG; no existe una clave foránea formal entre NPC y FLAG.
