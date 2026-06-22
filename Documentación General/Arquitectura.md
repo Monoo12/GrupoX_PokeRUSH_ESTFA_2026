@@ -55,4 +55,4 @@ El proyecto sigue el patrón **Modelo–Vista–Controlador (MVC)**, con capas d
 - **Nivel 0 (Contexto):** [`Documentación/DFD_Nivel0_Contexto_PokeRush`](../Documentación/DFD_Nivel0_Contexto_PokeRush.png) — el sistema como un único proceso y su relación con el Jugador.
 - **Nivel 1 (Procesos):** [`Documentación/DFD_Nivel1_PokeRush`](../Documentación/DFD_Nivel1_PokeRush.png) — 8 procesos del juego y los 6 almacenes (tablas SQLite).
 
-> Archivos editables `.drawio` y vectoriales `.svg` disponibles en la carpeta `Documentación/`.
+> Archivos editables vectoriales `.svg` disponibles en la carpeta `Documentación/`.
