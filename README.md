@@ -21,3 +21,6 @@ Color del grupo: Violeta
 
 # Plataforma de Organizacion
 https://dailys-reporter-8ybt.vercel.app/
+
+# Plataforma de Organizacion
+La organizacion del discord lo hablamos y decidimos no cambiarla para no romper el contexto de la IA
