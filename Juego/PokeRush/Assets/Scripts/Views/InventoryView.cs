@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,7 +40,7 @@ public class InventoryView : MonoBehaviour
     private void CreateSlot(string itemName, Sprite icon, int quantity)
     {
         GameObject slot = Instantiate(itemSlotPrefab, itemListContainer);
-        // configuracion del prefab del slot — se implementa cuando exista el prefab
+        // configuracion del prefab del slot ï¿½ se implementa cuando exista el prefab
         _spawnedSlots.Add(slot);
     }
 
@@ -54,4 +53,4 @@ public class InventoryView : MonoBehaviour
     }
 }
 
-//itemSlotPrefab es un prefab de UI que todavía no existe — representa una fila o casillero por ítem. ClearSlots() se llama antes de redibujar para no acumular slots viejos cada vez que se abre el inventario. CreateSlot queda con un comentario porque depende del diseño visual del prefab, que el equipo define después.
+//itemSlotPrefab es un prefab de UI que todavï¿½a no existe ï¿½ representa una fila o casillero por ï¿½tem. ClearSlots() se llama antes de redibujar para no acumular slots viejos cada vez que se abre el inventario. CreateSlot queda con un comentario porque depende del diseï¿½o visual del prefab, que el equipo define despuï¿½s.

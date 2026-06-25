@@ -1,8 +1,4 @@
 using SQLite;
-using Table = SQLite.TableAttribute;
-using PrimaryKey = SQLite.PrimaryKeyAttribute;
-using AutoIncrement = SQLite.AutoIncrementAttribute;
-using Unity.VisualScripting.Dependencies.Sqlite;
 
 [Table("player")]
 public class PlayerRow

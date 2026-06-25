@@ -1,7 +1,6 @@
 using SQLite;
 using SQLiteConnection = SQLite.SQLiteConnection;
 using System.IO;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class DatabaseService
