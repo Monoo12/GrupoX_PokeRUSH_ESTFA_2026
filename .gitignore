@@ -1,3 +1,4 @@
+# === Unity ===
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -5,3 +6,17 @@
 [Bb]uilds/
 [Ll]ogs/
 UserSettings/
+
+# === IDE / editores ===
+.vs/
+*.vsidx
+.idea/
+*.csproj.user
+
+# === Plastic SCM ===
+.plastic/
+
+# === graphify ===
+# El grafo canónico vive en "Contexto IA/graphify-out/" (versionado).
+# Esto ignora solo la salida suelta que graphify deja en la raíz al correr.
+/graphify-out/
