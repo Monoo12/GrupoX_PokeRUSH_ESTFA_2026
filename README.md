@@ -23,4 +23,4 @@ Color del grupo: Violeta
 https://dailys-reporter-8ybt.vercel.app/
 
 # ACLARACIONES
-La organizacion del discord lo hablamos y decidimos no cambiarla para no romper el contexto de la IA
+La organizacion del Github lo hablamos y decidimos no cambiarla para no romper el contexto de la IA
