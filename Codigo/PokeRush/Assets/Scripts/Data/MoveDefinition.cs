@@ -12,6 +12,8 @@ public class MoveDefinition : ScriptableObject
     public int power;
     public int accuracy;
     public int maxPP;
+    [Tooltip("Prioridad del movimiento. >0 actua antes sin importar la velocidad (ej. Ataque Rapido = 1). Normal = 0.")]
+    public int priority;
 
     [Header("Efecto")]
     public StatusEffect effect;

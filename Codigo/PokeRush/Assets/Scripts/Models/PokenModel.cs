@@ -32,6 +32,16 @@ public class PokenModel
         CurrentXP = 0;
         CurrentStatus = StatusEffect.None;
         Moves = new List<MoveModel>();
+        // Aprende los movimientos de su especie (maximo 4, como en la saga).
+        if (definition.moves != null)
+        {
+            foreach (MoveDefinition moveDef in definition.moves)
+            {
+                if (moveDef == null) continue;
+                Moves.Add(new MoveModel(moveDef));
+                if (Moves.Count >= 4) break;
+            }
+        }
         RecalculateStats();
         CurrentHP = MaxHP;
     }

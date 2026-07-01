@@ -1,9 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\augus\\Escritorio\\Proyecto Fin de A\u00F1o\\GrupoX_PokeRUSH_ESTFA_2026\\GrupoX_PokeRUSH_ESTFA_2026\\Juego\\PokeRush\\",
+  "WorkspaceRootPath": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|c:\\users\\augus\\escritorio\\proyecto fin de a\u00F1o\\grupox_pokerush_estfa_2026\\grupox_pokerush_estfa_2026\\juego\\pokerush\\assets\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|c:\\dev\\pokerush\\codigo\\pokerush\\assets\\scripts\\core\\attacktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\attacktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|c:\\dev\\pokerush\\codigo\\pokerush\\assets\\scripts\\controllers\\playerinputcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\controllers\\playerinputcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|C:\\Dev\\PokeRush\\Codigo\\PokeRush\\assets\\scripts\\controllers\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\controllers\\playercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|C:\\Dev\\PokeRush\\Codigo\\PokeRush\\assets\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D9A6856D-2A3A-5ED2-6BFA-4CC728F5BC83}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\managers\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -19,15 +31,52 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GameManager.cs",
-              "DocumentMoniker": "C:\\Users\\augus\\Escritorio\\Proyecto Fin de A\u00F1o\\GrupoX_PokeRUSH_ESTFA_2026\\GrupoX_PokeRUSH_ESTFA_2026\\Juego\\PokeRush\\Assets\\Scripts\\Managers\\GameManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\GameManager.cs",
-              "ToolTip": "C:\\Users\\augus\\Escritorio\\Proyecto Fin de A\u00F1o\\GrupoX_PokeRUSH_ESTFA_2026\\GrupoX_PokeRUSH_ESTFA_2026\\Juego\\PokeRush\\Assets\\Scripts\\Managers\\GameManager.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Managers\\GameManager.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAuwEYAAAAFAAAAAAAAAA==",
+              "Title": "AttackType.cs",
+              "DocumentMoniker": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Core\\AttackType.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\AttackType.cs",
+              "ToolTip": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Core\\AttackType.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\AttackType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-25T03:35:24.074Z",
+              "WhenOpened": "2026-06-25T21:35:58.845Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayerInputController.cs",
+              "DocumentMoniker": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Controllers\\PlayerInputController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Controllers\\PlayerInputController.cs",
+              "ToolTip": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Controllers\\PlayerInputController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Controllers\\PlayerInputController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T13:06:25.08Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PlayerController.cs",
+              "DocumentMoniker": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Controllers\\PlayerController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Controllers\\PlayerController.cs",
+              "ToolTip": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Controllers\\PlayerController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Controllers\\PlayerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T13:04:46.735Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Managers\\GameManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\GameManager.cs",
+              "ToolTip": "C:\\Dev\\PokeRush\\Codigo\\PokeRush\\Assets\\Scripts\\Managers\\GameManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Managers\\GameManager.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAAwEkAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-25T03:35:24.074Z"
             }
           ]
         }

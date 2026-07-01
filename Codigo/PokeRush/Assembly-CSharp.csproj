@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Data\BossRushDefinition.cs" />
+    <Compile Include="Assets\Scripts\Core\DamageCalculator.cs" />
     <Compile Include="Assets\Scripts\Controllers\BattleController.cs" />
     <Compile Include="Assets\Scripts\Data\EnemyTeamEntry.cs" />
     <Compile Include="Assets\Scripts\Data\EventDefinition.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Assets\Scripts\Controllers\DialogueController.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Views\HealthBarView.cs" />
+    <Compile Include="Assets\Scripts\Views\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Views\PokenView.cs" />
     <Compile Include="Assets\Scripts\Models\NPCModel.cs" />
     <Compile Include="Assets\Scripts\Data\BattleItemDefinition.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Assets\Scripts\Core\GameState.cs" />
     <Compile Include="Assets\Scripts\Models\NurseModel.cs" />
     <Compile Include="Assets\Scripts\Models\EnemyModel.cs" />
+    <Compile Include="Assets\Scripts\Views\PlayerView.cs" />
     <Compile Include="Assets\Scripts\Data\CharacterDefinition.cs" />
     <Compile Include="Assets\Scripts\Controllers\PlayerInputController.cs" />
     <Compile Include="Assets\Scripts\Views\InventoryView.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="Assets\Scripts\Data\CosmeticDefinition.cs" />
     <Compile Include="Assets\Scripts\Data\NurseDefinition.cs" />
     <Compile Include="Assets\Scripts\Controllers\EventController.cs" />
+    <Compile Include="Assets\Scripts\Controllers\BattleTester.cs" />
     <Compile Include="Assets\Scripts\Models\PlayerModel.cs" />
     <Compile Include="Assets\Scripts\Views\PauseMenuView.cs" />
     <Compile Include="Assets\Scripts\Data\VendorDefinition.cs" />
@@ -115,6 +119,7 @@
     <Compile Include="Assets\Scripts\Data\BossDefinition.cs" />
     <Compile Include="Assets\Scripts\Services\DatabaseRows.cs" />
     <Compile Include="Assets\Scripts\Models\StoryModel.cs" />
+    <Compile Include="Assets\Scripts\Core\TypeChart.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

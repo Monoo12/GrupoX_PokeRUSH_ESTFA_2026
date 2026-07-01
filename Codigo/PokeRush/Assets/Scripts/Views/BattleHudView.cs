@@ -27,24 +27,26 @@ public class BattleHudView : MonoBehaviour
 
     public void UpdateHud(BattleModel battleModel)
     {
-        PokenModel playerPoken = battleModel.Player.Team[0];
-        PokenModel enemyPoken = battleModel.Enemy.Team[0];
+        PokenModel playerPoken = battleModel.ActivePlayerPoken;
+        PokenModel enemyPoken = battleModel.ActiveEnemyPoken;
 
-        playerNameText.text = playerPoken.Definition.pokenName;
-        playerHealthBar.SetHealth(playerPoken.CurrentHP, playerPoken.MaxHP);
+        if (playerNameText != null) playerNameText.text = playerPoken.Definition.pokenName;
+        if (playerHealthBar != null) playerHealthBar.SetHealth(playerPoken.CurrentHP, playerPoken.MaxHP);
 
-        enemyNameText.text = enemyPoken.Definition.pokenName;
-        enemyHealthBar.SetHealth(enemyPoken.CurrentHP, enemyPoken.MaxHP);
+        if (enemyNameText != null) enemyNameText.text = enemyPoken.Definition.pokenName;
+        if (enemyHealthBar != null) enemyHealthBar.SetHealth(enemyPoken.CurrentHP, enemyPoken.MaxHP);
 
-        turnText.text = battleModel.CurrentPhase == BattlePhase.PlayerTurn
-            ? "Tu turno"
-            : "Turno rival";
+        if (turnText != null)
+            turnText.text = battleModel.CurrentPhase == BattlePhase.PlayerTurn
+                ? "Tu turno"
+                : "Turno rival";
     }
 
     public void ShowMessage(string message)
     {
-        messageText.text = message;
+        if (messageText != null) messageText.text = message;
+        else Debug.Log($"[Batalla] {message}"); // sin HUD: al menos lo veo en consola
     }
 }
 
-//gameObject.SetActive(true) activa el GameObject completo (y todos sus hijos) en la escena. Si el HUD nunca se activa, todo lo que esté dentro queda invisible aunque el código que lo llena funcione perfecto — por eso Show()/Hide() son los primeros métodos que se llaman desde BattleController antes y después de la batalla.
+//gameObject.SetActive(true) activa el GameObject completo (y todos sus hijos) en la escena. Si el HUD nunca se activa, todo lo que estï¿½ dentro queda invisible aunque el cï¿½digo que lo llena funcione perfecto ï¿½ por eso Show()/Hide() son los primeros mï¿½todos que se llaman desde BattleController antes y despuï¿½s de la batalla.

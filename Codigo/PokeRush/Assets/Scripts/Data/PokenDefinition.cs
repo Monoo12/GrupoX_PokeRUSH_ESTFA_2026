@@ -1,12 +1,13 @@
 using UnityEngine;
-/// Esta clase define las características de un Poken, incluyendo su identidad, stats base, movimientos, habilidad y aspecto cosmético.
+/// Esta clase define las caracterï¿½sticas de un Poken, incluyendo su identidad, stats base, movimientos, habilidad y aspecto cosmï¿½tico.
 [CreateAssetMenu(fileName = "NewPoken", menuName = "PokeRush/PokenDefinition")]
-//Con esto puedo crear Objetos de tipo PokenDefinition desde el editor de Unity, lo que facilita la creación y gestión de los datos de los Pokens en el juego.
+//Con esto puedo crear Objetos de tipo PokenDefinition desde el editor de Unity, lo que facilita la creaciï¿½n y gestiï¿½n de los datos de los Pokens en el juego.
 public class PokenDefinition : ScriptableObject
 {
     [Header("Identidad")]
     public string pokenName;
     public PokenType type;
+    [Tooltip("Segundo tipo. Dejar en None si el Poken es de un solo tipo.")]
     public PokenType type2;
 
     [Header("Sprites de batalla")]
@@ -24,7 +25,7 @@ public class PokenDefinition : ScriptableObject
     public Sprite worldSideShinySprite;
 
     [Header("Sprites de UI")]
-    public Sprite inventorySprite;         // Icono pequeño para el equipo e inventario
+    public Sprite inventorySprite;         // Icono pequeï¿½o para el equipo e inventario
     public Sprite inventoryShinySprite;    // Variante shiny para UI
 
     [Header("Animaciones (opcional)")]

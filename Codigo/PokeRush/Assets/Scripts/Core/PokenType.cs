@@ -1,5 +1,6 @@
 public enum PokenType
 {
+    None,   // "sin tipo": se usa como segundo tipo de los Pokens de un solo tipo
     Normal,
     Fire,
     Water,

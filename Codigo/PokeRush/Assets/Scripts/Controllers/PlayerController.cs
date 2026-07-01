@@ -24,10 +24,12 @@ public class PlayerController : MonoBehaviour
     // Estado del movimiento por grilla
     private Vector2 _targetPosition;
     private bool _isMoving;
+    private bool _isRunning;
     private Vector2 _facing = Vector2.down; // ultima direccion mirada (para animaciones futuras)
 
     // Lectura publica para otros sistemas (interaccion, animaciones)
     public bool IsMoving => _isMoving;
+    public bool IsRunning => _isRunning;
     public Vector2 Facing => _facing;
 
     private void Awake()
@@ -81,6 +83,7 @@ public class PlayerController : MonoBehaviour
         if (Physics2D.OverlapCircle(destination, collisionCheckRadius, obstacleMask) != null)
             return;
 
+        _isRunning = isRunning;
         _targetPosition = destination;
         StartCoroutine(MoveRoutine(isRunning ? runSpeed : walkSpeed));
     }
