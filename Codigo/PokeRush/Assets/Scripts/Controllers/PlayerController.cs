@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private PlayerInputController inputController;
+    [SerializeField] private PauseMenuView pauseMenuView;
 
     [Header("Movimiento por grilla")]
     [Tooltip("Medida de cada celda del Tilemap en unidades de mundo (normalmente 1).")]
@@ -51,7 +52,13 @@ public class PlayerController : MonoBehaviour
 
     public void OpenMenu()
     {
-        // abrir menu de inventario o equipo - se implementa despues
+        // La misma tecla abre y cierra el menu de pausa (toggle).
+        if (pauseMenuView == null || _playerModel == null) return;
+
+        if (pauseMenuView.IsOpen)
+            pauseMenuView.Hide();
+        else
+            pauseMenuView.Show(_playerModel);
     }
 
     public void SaveGame()
