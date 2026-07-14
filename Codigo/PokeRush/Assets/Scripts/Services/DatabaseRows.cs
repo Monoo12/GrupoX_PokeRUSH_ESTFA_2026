@@ -3,7 +3,10 @@ using SQLite;
 [Table("player")]
 public class PlayerRow
 {
-    [PrimaryKey, AutoIncrement]
+    // OJO: sin AutoIncrement. El Id es el numero de slot de guardado (siempre 1
+    // por ahora) y lo asigna SavePlayer a mano. Con AutoIncrement, sqlite-net
+    // ignoraba el Id asignado y HasSaveData(1)/LoadPlayer(1) no encontraban la fila.
+    [PrimaryKey]
     public int Id { get; set; }
     public string Name { get; set; }
     public int Money { get; set; }

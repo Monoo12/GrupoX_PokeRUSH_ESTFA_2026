@@ -70,5 +70,48 @@ public class GameManager : MonoBehaviour
         SaveService.Instance.SavePlayer(CurrentPlayer, Story);
     }
 
+#if UNITY_EDITOR
+    // Herramientas de prueba (solo editor): click derecho sobre el componente
+    // GameManager en el Inspector -> aparecen estas opciones en el menu.
+    [ContextMenu("Crear save de prueba")]
+    private void CrearSaveDePrueba()
+    {
+        // En modo edicion nadie llamo a InitializeServices todavia: cargamos
+        // las definiciones a mano (LoadAll es idempotente, no carga dos veces).
+        DefinitionRepository.Instance.LoadAll();
+
+        NewGame("SANTI");
+
+        // Equipo de prueba con las definiciones de Resources/Definitions/Pokens
+        string[] equipoDePrueba = { "Chispa", "Aquita", "Bulbi" };
+        foreach (string nombre in equipoDePrueba)
+        {
+            PokenDefinition definicion = DefinitionRepository.Instance.GetPoken(nombre);
+            if (definicion != null)
+                CurrentPlayer.Team.Add(new PokenModel(definicion, Random.Range(5, 16)));
+            else
+                Debug.LogWarning($"[GameManager] No se encontro la definicion '{nombre}' en Resources/Definitions/Pokens.");
+        }
+
+        // Tres jefes vencidos = 3 medallas en la tarjeta del menu de saves
+        Story.ActivateFlag(StoryFlag.BossDefeated_01);
+        Story.ActivateFlag(StoryFlag.BossDefeated_02);
+        Story.ActivateFlag(StoryFlag.BossDefeated_03);
+
+        SaveGame();
+        // Verificacion inmediata: si HasSaveData da False aca, el guardado fallo.
+        bool ok = SaveService.Instance.HasSaveData();
+        Debug.Log($"[GameManager] Save de prueba creado ({CurrentPlayer.Team.Count} pokens). HasSaveData: {ok}. " +
+            (ok ? "Press Start ahora va al menu de saves." : "ALGO FALLO: el save no se encuentra."));
+    }
+
+    [ContextMenu("Borrar save")]
+    private void BorrarSave()
+    {
+        SaveService.Instance.DeleteSave();
+        Debug.Log("[GameManager] Save borrado. Press Start ahora va al juego nuevo.");
+    }
+#endif
+
 }
     

@@ -120,6 +120,29 @@ public class SaveService
         return _db.Table<PlayerRow>().Any(p => p.Id == playerId);
     }
 
+    // Borra por completo la partida guardada de este jugador (boton "Borrar partida")
+    // Elimina en orden: movimientos -> pokens -> inventario -> flags -> jugador
+    public void DeleteSave(int playerId = 1)
+    {
+        // Primero los movimientos de cada Poken (estan vinculados por PlayerPokenId)
+        var pokenRows = _db.Table<PlayerPokenRow>().Where(p => p.PlayerId == playerId).ToList();
+        foreach (var pokenRow in pokenRows)
+        {
+            _db.Table<PlayerPokenMoveRow>().Where(m => m.PlayerPokenId == pokenRow.Id).ToList()
+                .ForEach(row => _db.Delete(row));
+            _db.Delete(pokenRow);
+        }
+
+        _db.Table<PlayerInventoryRow>().Where(i => i.PlayerId == playerId).ToList()
+            .ForEach(row => _db.Delete(row));
+
+        _db.Table<ActiveFlagRow>().Where(f => f.PlayerId == playerId).ToList()
+            .ForEach(row => _db.Delete(row));
+
+        var playerRow = _db.Table<PlayerRow>().FirstOrDefault(p => p.Id == playerId);
+        if (playerRow != null) _db.Delete(playerRow);
+    }
+
     // ============ CARGA ============
 
     // Punto de entrada para cargar todo el progreso del jugador
