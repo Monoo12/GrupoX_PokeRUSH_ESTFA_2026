@@ -19,6 +19,58 @@ public class EventController : MonoBehaviour
         _playerModel = playerModel;
     }
 
+    private void OnEnable()
+    {
+        if (battleController != null)
+            battleController.BattleEnded += OnBattleEnded;
+    }
+
+    private void OnDisable()
+    {
+        if (battleController != null)
+            battleController.BattleEnded -= OnBattleEnded;
+    }
+
+    // Al terminar un combate: aplica flag de derrota, items, dialogo del boss
+    // y guarda la partida.
+    private void OnBattleEnded(BattleOutcome outcome)
+    {
+        if (!outcome.PlayerVictory || outcome.Enemy == null) return;
+
+        StoryFlag grantsFlag = StoryFlag.None;
+        HealItemDefinition[] itemRewards = null;
+        DialogueDefinition defeatDialogue = null;
+
+        if (outcome.Enemy.Definition is BossDefinition boss)
+        {
+            grantsFlag = boss.defeatGrantsFlag;
+            itemRewards = boss.itemRewards;
+            defeatDialogue = boss.battleDefeatDialogue;
+        }
+        else if (outcome.Enemy.Definition is EnemyDefinition enemy)
+        {
+            grantsFlag = enemy.defeatGrantsFlag;
+            itemRewards = enemy.itemRewards;
+        }
+
+        if (grantsFlag != StoryFlag.None && _storyModel != null)
+            _storyModel.ActivateFlag(grantsFlag);
+
+        if (itemRewards != null && _playerModel != null)
+        {
+            foreach (HealItemDefinition item in itemRewards)
+                if (item != null)
+                    _playerModel.Inventory.AddHealItem(item, 1);
+        }
+
+        if (defeatDialogue != null && dialogueController != null)
+            dialogueController.StartDialogue(defeatDialogue, _storyModel);
+
+        // Persistir el progreso tras la victoria
+        if (GameManager.Instance != null)
+            GameManager.Instance.SaveGame();
+    }
+
     public void EvaluateZoneEvents(string zoneId, StoryModel storyModel)
     {
         foreach (EventDefinition eventDef in allEvents)

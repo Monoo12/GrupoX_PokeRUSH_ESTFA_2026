@@ -1,8 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Orquestador del combate: recibe el input del jugador, le pide la accion a la
+// IA y REPRODUCE los eventos que emite el TurnEngine (que es quien resuelve
+// las reglas). Toda la logica de combate vive en Core/Battle; aca solo hay
+// presentacion y ritmo.
 public class BattleController : MonoBehaviour
 {
     [Header("Referencias")]
@@ -15,14 +20,41 @@ public class BattleController : MonoBehaviour
     [Tooltip("Segundos que se muestra cada mensaje de combate.")]
     [SerializeField] private float messageDelay = 1f;
 
+    // Fin del combate: EventController/GameManager aplican flags, items y save
+    public event Action<BattleOutcome> BattleEnded;
+
     private BattleModel _battleModel;
     private PlayerModel _playerModel;
     private EnemyModel _enemyModel;
+    private TurnEngine _engine;
+    private IBattleAI _enemyAI;
+    private AIProfileDefinition _aiProfile;
+    private readonly IBattleRng _rng = new UnityRng();
 
+    // Combate contra un NPC (EnemyDefinition o BossDefinition)
     public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition)
     {
+        var enemy = new EnemyModel(enemyDefinition);
+        BeginBattle(player, enemy);
+    }
+
+    // Combate contra un Poken salvaje (nivel sorteado en el rango del encuentro)
+    public void StartWildBattle(PlayerModel player, WildEncounterDefinition encounter)
+    {
+        if (encounter == null || encounter.species == null)
+        {
+            Debug.LogWarning("BattleController: WildEncounterDefinition sin especie asignada.");
+            return;
+        }
+        int level = _rng.Range(encounter.minLevel, encounter.maxLevel + 1);
+        var enemy = new EnemyModel(encounter.species, level, encounter.aiProfile);
+        BeginBattle(player, enemy);
+    }
+
+    private void BeginBattle(PlayerModel player, EnemyModel enemy)
+    {
         _playerModel = player;
-        _enemyModel = new EnemyModel(enemyDefinition);
+        _enemyModel = enemy;
         _battleModel = new BattleModel(_playerModel, _enemyModel);
 
         // El HP persiste entre combates: el primer Poken puede estar debilitado.
@@ -38,6 +70,16 @@ public class BattleController : MonoBehaviour
         _battleModel.SwitchPlayerPoken(playerLead);
         _battleModel.SwitchEnemyPoken(enemyLead);
 
+        // Motor + IA segun el perfil del enemigo (default: Wild para salvajes,
+        // Trainer para NPCs sin perfil asignado)
+        _engine = new TurnEngine(_battleModel, _rng);
+        _aiProfile = enemy.AiProfile != null
+            ? enemy.AiProfile
+            : BattleAIFactory.CreateDefaultProfile(enemy.IsWild ? BattleAIType.Wild : BattleAIType.Trainer);
+        _enemyAI = BattleAIFactory.Create(_aiProfile);
+        _engine.EnemyReplacementSelector =
+            model => _enemyAI.ChooseReplacement(AiContext.ForEnemy(model, _aiProfile));
+
         if (playerInputController != null)
             playerInputController.SetBattleMode(true);
 
@@ -46,36 +88,27 @@ public class BattleController : MonoBehaviour
 
         RefreshActiveSprites();
         battleHudView?.UpdateHud(_battleModel);
-        Announce($"Un {_battleModel.ActiveEnemyPoken.Definition.pokenName} rival apareció!");
+
+        StartCoroutine(BeginBattleRoutine(enemy));
+    }
+
+    private IEnumerator BeginBattleRoutine(EnemyModel enemy)
+    {
+        Announce(enemy.IsWild
+            ? $"¡Un {_battleModel.ActiveEnemyPoken.Definition.pokenName} salvaje apareció!"
+            : $"Un {_battleModel.ActiveEnemyPoken.Definition.pokenName} rival apareció!");
+        yield return new WaitForSeconds(messageDelay);
+
+        // Habilidades de entrada (Intimidación, etc.)
+        yield return PlayEvents(_engine.BeginBattle());
 
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
     }
 
-    // Punto de entrada para elegir movimiento por indice (teclas 1-4 ahora, UI en Fase 3).
-    public void SelectMove(int moveIndex)
-    {
-        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+    // ---------- input del jugador ----------
 
-        List<MoveModel> moves = _battleModel.ActivePlayerPoken.Moves;
-        if (moveIndex < 0 || moveIndex >= moves.Count) return;
-
-        MoveModel chosen = moves[moveIndex];
-        if (!chosen.HasPP)
-        {
-            Announce("No quedan PP para ese movimiento!");
-            return;
-        }
-
-        ExecutePlayerAction(chosen);
-    }
-
-    public void ExecutePlayerAction(MoveModel move)
-    {
-        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
-        StartCoroutine(ResolveTurn(move));
-    }
-
-    // TEMPORAL: entrada de prueba con teclado hasta la UI de batalla (Fase 3).
+    // TEMPORAL: entrada de prueba con teclado hasta la UI de batalla.
+    // 1-4 = movimientos, F1-F6 = cambio manual de Poken.
     private void Update()
     {
         if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
@@ -87,33 +120,70 @@ public class BattleController : MonoBehaviour
         else if (kb.digit2Key.wasPressedThisFrame) SelectMove(1);
         else if (kb.digit3Key.wasPressedThisFrame) SelectMove(2);
         else if (kb.digit4Key.wasPressedThisFrame) SelectMove(3);
+        else if (kb.f1Key.wasPressedThisFrame) SelectSwitch(0);
+        else if (kb.f2Key.wasPressedThisFrame) SelectSwitch(1);
+        else if (kb.f3Key.wasPressedThisFrame) SelectSwitch(2);
+        else if (kb.f4Key.wasPressedThisFrame) SelectSwitch(3);
+        else if (kb.f5Key.wasPressedThisFrame) SelectSwitch(4);
+        else if (kb.f6Key.wasPressedThisFrame) SelectSwitch(5);
     }
 
-    // Resuelve un turno completo: ordena por prioridad/velocidad y ejecuta ambas acciones.
-    private IEnumerator ResolveTurn(MoveModel playerMove)
+    // Punto de entrada para elegir movimiento por indice (teclas ahora, UI despues)
+    public void SelectMove(int moveIndex)
+    {
+        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+
+        List<MoveModel> moves = _battleModel.ActivePlayerPoken.Moves;
+
+        // Sin PP en ningun movimiento: la unica opcion es Forcejeo
+        bool anyPP = moves.Exists(m => m.HasPP);
+        if (!anyPP)
+        {
+            StartCoroutine(ResolveTurnRoutine(BattleAction.Struggle()));
+            return;
+        }
+
+        if (moveIndex < 0 || moveIndex >= moves.Count) return;
+        if (!moves[moveIndex].HasPP)
+        {
+            Announce("No quedan PP para ese movimiento!");
+            return;
+        }
+
+        StartCoroutine(ResolveTurnRoutine(BattleAction.Move(moveIndex)));
+    }
+
+    // Cambio manual de Poken: consume el turno (el rival ataca al que entra)
+    public void SelectSwitch(int teamIndex)
+    {
+        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+        if (teamIndex < 0 || teamIndex >= _playerModel.Team.Count) return;
+
+        if (teamIndex == _battleModel.ActivePlayerIndex)
+        {
+            Announce($"¡{_battleModel.ActivePlayerPoken.Definition.pokenName} ya está en combate!");
+            return;
+        }
+        if (_playerModel.Team[teamIndex].IsFainted)
+        {
+            Announce($"¡{_playerModel.Team[teamIndex].Definition.pokenName} está debilitado!");
+            return;
+        }
+
+        StartCoroutine(ResolveTurnRoutine(BattleAction.Switch(teamIndex)));
+    }
+
+    // ---------- resolucion y reproduccion del turno ----------
+
+    private IEnumerator ResolveTurnRoutine(BattleAction playerAction)
     {
         _battleModel.SetPhase(BattlePhase.CalculatingResult);
 
-        MoveModel enemyMove = ChooseEnemyMove();
-        bool playerFirst = PlayerActsFirst(playerMove, enemyMove);
+        BattleAction enemyAction = _enemyAI.ChooseAction(
+            AiContext.ForEnemy(_battleModel, _aiProfile), _rng);
 
-        // Primera accion.
-        yield return ExecuteMove(playerFirst, playerFirst ? playerMove : enemyMove);
-
-        // Segunda accion: solo si el segundo atacante sigue en pie y nadie fue barrido.
-        if (!OneSideWiped())
-        {
-            bool secondIsPlayer = !playerFirst;
-            PokenModel secondAttacker = secondIsPlayer
-                ? _battleModel.ActivePlayerPoken
-                : _battleModel.ActiveEnemyPoken;
-
-            if (!secondAttacker.IsFainted)
-                yield return ExecuteMove(secondIsPlayer, secondIsPlayer ? playerMove : enemyMove);
-        }
-
-        // Reemplazos por debilitamiento o fin del combate.
-        yield return HandleFaints();
+        List<BattleEvent> events = _engine.ResolveTurn(playerAction, enemyAction);
+        yield return PlayEvents(events);
 
         if (_battleModel.IsBattleOver)
         {
@@ -121,170 +191,71 @@ public class BattleController : MonoBehaviour
             yield break;
         }
 
-        _battleModel.AdvanceTurn();
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
         battleHudView?.UpdateHud(_battleModel);
     }
 
-    private IEnumerator ExecuteMove(bool attackerIsPlayer, MoveModel move)
+    // Reproduce los eventos del motor: refresca la UI y pausa entre mensajes
+    private IEnumerator PlayEvents(List<BattleEvent> events)
     {
-        PokenModel attacker = attackerIsPlayer ? _battleModel.ActivePlayerPoken : _battleModel.ActiveEnemyPoken;
-        PokenModel defender = attackerIsPlayer ? _battleModel.ActiveEnemyPoken : _battleModel.ActivePlayerPoken;
-        string attackerName = attacker.Definition.pokenName;
-
-        // Sin movimiento utilizable: pierde el turno (Forcejeo llega mas adelante).
-        if (move == null || !move.HasPP)
+        foreach (BattleEvent ev in events)
         {
-            Announce($"{attackerName} no puede atacar!");
-            yield return new WaitForSeconds(messageDelay);
-            yield break;
-        }
-
-        move.ConsumePP();
-        Announce($"{attackerName} usó {move.Definition.moveName}!");
-        yield return new WaitForSeconds(messageDelay);
-
-        // Precision: algunos movimientos (accuracy 0 o >=100) nunca fallan.
-        if (!AccuracyHits(move.Definition))
-        {
-            Announce($"{attackerName} falló el ataque!");
-            yield return new WaitForSeconds(messageDelay);
-            yield break;
-        }
-
-        // Movimientos de estado: aplican efecto, no daño (efectos llegan en Fase 2).
-        if (move.Definition.attackType == AttackType.Status || move.Definition.power <= 0)
-        {
-            Announce($"{move.Definition.moveName} todavía no tiene efecto.");
-            yield return new WaitForSeconds(messageDelay);
-            yield break;
-        }
-
-        DamageResult result = DamageCalculator.Calculate(attacker, defender, move.Definition);
-
-        // Inmunidad por tipo (x0): no hace nada, ni siquiera critico.
-        if (result.Effectiveness <= 0f)
-        {
-            Announce($"No afecta a {defender.Definition.pokenName}...");
-            yield return new WaitForSeconds(messageDelay);
-            yield break;
-        }
-
-        defender.TakeDamage(result.Damage);
-        battleHudView?.UpdateHud(_battleModel);
-
-        if (result.IsCritical)
-        {
-            Announce("¡Golpe crítico!");
-            yield return new WaitForSeconds(messageDelay);
-        }
-
-        string effMsg = EffectivenessMessage(result.Effectiveness);
-        if (effMsg != null)
-        {
-            Announce(effMsg);
-            yield return new WaitForSeconds(messageDelay);
-        }
-
-        if (defender.IsFainted)
-        {
-            Announce($"{defender.Definition.pokenName} se debilitó!");
-            yield return new WaitForSeconds(messageDelay);
-        }
-    }
-
-    private IEnumerator HandleFaints()
-    {
-        // Rival debilitado: manda el siguiente con vida, o pierde el combate.
-        if (_battleModel.ActiveEnemyPoken.IsFainted)
-        {
-            int next = FirstAliveIndex(_enemyModel.Team);
-            if (next >= 0)
+            switch (ev.Kind)
             {
-                _battleModel.SwitchEnemyPoken(next);
-                RefreshActiveSprites();
-                battleHudView?.UpdateHud(_battleModel);
-                Announce($"El rival envió a {_battleModel.ActiveEnemyPoken.Definition.pokenName}!");
+                case BattleEventKind.PokenSwitched:
+                    RefreshActiveSprites();
+                    battleHudView?.UpdateHud(_battleModel);
+                    break;
+
+                case BattleEventKind.HpChanged:
+                case BattleEventKind.StatusChanged:
+                case BattleEventKind.StatStageChanged:
+                case BattleEventKind.Fainted:
+                case BattleEventKind.BattleEnded:
+                    battleHudView?.UpdateHud(_battleModel);
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(ev.Message))
+            {
+                Announce(ev.Message);
                 yield return new WaitForSeconds(messageDelay);
-            }
-            else
-            {
-                _battleModel.Finish(playerVictory: true);
-            }
-        }
-
-        // Jugador debilitado: por ahora auto-cambia al siguiente con vida (la
-        // eleccion manual llega con la UI de cambio, Fase 2/3), o pierde.
-        if (_battleModel.ActivePlayerPoken.IsFainted)
-        {
-            int next = FirstAliveIndex(_playerModel.Team);
-            if (next >= 0)
-            {
-                _battleModel.SwitchPlayerPoken(next);
-                RefreshActiveSprites();
-                battleHudView?.UpdateHud(_battleModel);
-                Announce($"¡Adelante, {_battleModel.ActivePlayerPoken.Definition.pokenName}!");
-                yield return new WaitForSeconds(messageDelay);
-            }
-            else
-            {
-                _battleModel.Finish(playerVictory: false);
             }
         }
     }
 
     private IEnumerator EndBattleRoutine()
     {
-        Announce(_battleModel.IsPlayerVictory
-            ? "¡Ganaste el combate!"
-            : "Perdiste el combate...");
+        bool victory = _battleModel.IsPlayerVictory;
+        Announce(victory ? "¡Ganaste el combate!" : "Perdiste el combate...");
         yield return new WaitForSeconds(messageDelay);
 
-        // Fase 4: repartir XP, dinero, items, flags y diálogo del boss.
+        var outcome = new BattleOutcome
+        {
+            PlayerVictory = victory,
+            MoneyEarned = victory ? _enemyModel.Money : 0,
+            Enemy = _enemyModel
+        };
+
+        if (victory && outcome.MoneyEarned > 0)
+        {
+            _playerModel.AddMoney(outcome.MoneyEarned);
+            Announce($"¡Ganaste ${outcome.MoneyEarned} por la victoria!");
+            yield return new WaitForSeconds(messageDelay);
+        }
 
         if (playerInputController != null)
             playerInputController.SetBattleMode(false);
 
         battleHudView?.Hide();
+        _battleModel = null;
+
+        // Flags, items, dialogo de derrota del boss y guardado: los aplican
+        // los suscriptores (EventController / GameManager)
+        BattleEnded?.Invoke(outcome);
     }
 
-    // IA simple (Fase 1): un movimiento al azar de los que tengan PP.
-    private MoveModel ChooseEnemyMove()
-    {
-        List<MoveModel> usable = _battleModel.ActiveEnemyPoken.Moves.FindAll(m => m.HasPP);
-        if (usable.Count == 0) return null;
-        return usable[Random.Range(0, usable.Count)];
-    }
-
-    // Orden de turno: prioridad del movimiento primero; si empata, velocidad; si empata, azar.
-    private bool PlayerActsFirst(MoveModel playerMove, MoveModel enemyMove)
-    {
-        int playerPriority = playerMove != null ? playerMove.Definition.priority : 0;
-        int enemyPriority = enemyMove != null ? enemyMove.Definition.priority : 0;
-        if (playerPriority != enemyPriority) return playerPriority > enemyPriority;
-
-        int playerSpeed = _battleModel.ActivePlayerPoken.Speed;
-        int enemySpeed = _battleModel.ActiveEnemyPoken.Speed;
-        if (playerSpeed != enemySpeed) return playerSpeed > enemySpeed;
-        return Random.value < 0.5f; // empate: al azar
-    }
-
-    private bool OneSideWiped()
-        => !_playerModel.HasAlivePoken || !_enemyModel.HasAlivePoken;
-
-    private bool AccuracyHits(MoveDefinition move)
-    {
-        if (move.accuracy <= 0 || move.accuracy >= 100) return true;
-        return Random.value * 100f < move.accuracy;
-    }
-
-    private string EffectivenessMessage(float eff)
-    {
-        if (eff <= 0f) return "No tuvo efecto...";
-        if (eff < 1f) return "No es muy efectivo...";
-        if (eff > 1f) return "¡Es súper efectivo!";
-        return null;
-    }
+    // ---------- utilidades ----------
 
     // Muestra el mensaje en el HUD si existe; si no, lo manda a la Console.
     // Asi se puede probar el combate sin armar la UI.

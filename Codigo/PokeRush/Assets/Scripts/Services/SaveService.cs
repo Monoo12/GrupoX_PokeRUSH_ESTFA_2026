@@ -83,7 +83,9 @@ public class SaveService
             StatusEffect = poken.CurrentStatus.ToString(),
             SlotIndex = slotIndex,
             // Si no tiene cosmetico equipado, se guarda null
-            EquippedCosmetic = poken.EquippedCosmetic != null ? poken.EquippedCosmetic.cosmeticName : null
+            EquippedCosmetic = poken.EquippedCosmetic != null ? poken.EquippedCosmetic.cosmeticName : null,
+            // IVs como texto "hp,atk,def,spa,spd,spe"
+            Ivs = poken.Ivs.Serialize()
         };
         _db.Insert(pokenRow);
         // pokenRow.Id se llena automaticamente despues del Insert (AutoIncrement)
@@ -190,15 +192,23 @@ public class SaveService
         PokenDefinition definition = DefinitionRepository.Instance.GetPoken(row.PokenDefinitionId);
         if (definition == null) return null; // si no existe (ej: se borro del proyecto), se omite
 
-        // Crea el modelo y le restaura el estado guardado
-        PokenModel poken = new PokenModel(definition, row.Level);
+        // Crea el modelo y le restaura el estado guardado.
+        // Si el save tiene IVs los usa; si es un save viejo (columna NULL),
+        // el constructor normal genera IVs nuevos al azar.
+        PokenModel poken = IvSet.TryParse(row.Ivs, out IvSet ivs)
+            ? new PokenModel(definition, row.Level, ivs)
+            : new PokenModel(definition, row.Level);
         poken.SetCurrentHP(row.CurrentHP);
 
         if (System.Enum.TryParse<StatusEffect>(row.StatusEffect, out StatusEffect status))
             poken.SetStatus(status);
 
-        // Carga los movimientos de este Poken (vinculados por PlayerPokenId)
+        // Carga los movimientos de este Poken (vinculados por PlayerPokenId).
+        // El constructor ya auto-aprendio movimientos del learnset: si el save
+        // trae movimientos propios, se pisan los auto-aprendidos para no duplicar.
         var moveRows = _db.Table<PlayerPokenMoveRow>().Where(m => m.PlayerPokenId == row.Id).ToList();
+        if (moveRows.Count > 0)
+            poken.Moves.Clear();
         foreach (var moveRow in moveRows)
         {
             MoveDefinition moveDefinition = DefinitionRepository.Instance.GetMove(moveRow.MoveDefinitionId);

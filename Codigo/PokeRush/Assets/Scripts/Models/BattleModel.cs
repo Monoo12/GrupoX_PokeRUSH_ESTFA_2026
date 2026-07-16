@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public class BattleModel
 {
     public PlayerModel Player { get; private set; }
@@ -14,6 +16,15 @@ public class BattleModel
     public PokenModel ActivePlayerPoken => Player.Team[ActivePlayerIndex];
     public PokenModel ActiveEnemyPoken => Enemy.Team[ActiveEnemyIndex];
 
+    // Estado volatil de cada Poken activo (stages, confusion...). Se recrea en
+    // cada cambio. Null hasta el primer SwitchPlayerPoken/SwitchEnemyPoken.
+    public BattlePokenState PlayerState { get; private set; }
+    public BattlePokenState EnemyState { get; private set; }
+
+    // Pokens del jugador que enfrentaron al Poken rival ACTUAL (para repartir
+    // su XP). Se reinicia cada vez que el rival envia uno nuevo.
+    public HashSet<PokenModel> PlayerParticipants { get; } = new HashSet<PokenModel>();
+
     public BattleModel(PlayerModel player, EnemyModel enemy)
     {
         Player = player;
@@ -28,8 +39,22 @@ public class BattleModel
 
     public void SetPhase(BattlePhase phase) => CurrentPhase = phase;
     public void AdvanceTurn() => CurrentTurn++;
-    public void SwitchPlayerPoken(int index) => ActivePlayerIndex = index;
-    public void SwitchEnemyPoken(int index) => ActiveEnemyIndex = index;
+
+    public void SwitchPlayerPoken(int index)
+    {
+        ActivePlayerIndex = index;
+        PlayerState = new BattlePokenState(ActivePlayerPoken, isPlayerSide: true);
+        PlayerParticipants.Add(ActivePlayerPoken);
+    }
+
+    public void SwitchEnemyPoken(int index)
+    {
+        ActiveEnemyIndex = index;
+        EnemyState = new BattlePokenState(ActiveEnemyPoken, isPlayerSide: false);
+        // Rival nuevo: la XP de este Poken se reparte entre quienes lo enfrenten
+        PlayerParticipants.Clear();
+        PlayerParticipants.Add(ActivePlayerPoken);
+    }
 
     public void Finish(bool playerVictory)
     {

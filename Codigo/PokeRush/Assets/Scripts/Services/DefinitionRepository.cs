@@ -15,6 +15,10 @@ public class DefinitionRepository
     private Dictionary<string, BattleItemDefinition> _battleItems;
     private Dictionary<string, SpecialItemDefinition> _specialItems;
     private Dictionary<string, CosmeticDefinition> _cosmetics;
+    private Dictionary<string, AIProfileDefinition> _aiProfiles;
+
+    // Tabla de experiencia global (Resources/Definitions/ExperienceTable.asset)
+    public ExperienceTableDefinition ExperienceTable { get; private set; }
 
     // Evita cargar todo de nuevo si LoadAll() se llama mas de una vez
     private bool _loaded = false;
@@ -35,6 +39,11 @@ public class DefinitionRepository
         _battleItems = Resources.LoadAll<BattleItemDefinition>("Definitions/Items").ToDictionary(i => i.itemName);
         _specialItems = Resources.LoadAll<SpecialItemDefinition>("Definitions/Items").ToDictionary(i => i.itemName);
         _cosmetics = Resources.LoadAll<CosmeticDefinition>("Definitions/Cosmetics").ToDictionary(c => c.cosmeticName);
+        // Los perfiles de IA se indexan por el nombre del asset (no tienen campo de nombre propio)
+        _aiProfiles = Resources.LoadAll<AIProfileDefinition>("Definitions/AIProfiles").ToDictionary(p => p.name);
+
+        // Tabla de experiencia unica compartida por todos los Pokens
+        ExperienceTable = Resources.Load<ExperienceTableDefinition>("Definitions/ExperienceTable");
 
         _loaded = true;
     }
@@ -47,4 +56,5 @@ public class DefinitionRepository
     public BattleItemDefinition GetBattleItem(string name) => _battleItems.GetValueOrDefault(name);
     public SpecialItemDefinition GetSpecialItem(string name) => _specialItems.GetValueOrDefault(name);
     public CosmeticDefinition GetCosmetic(string name) => _cosmetics.GetValueOrDefault(name);
+    public AIProfileDefinition GetAIProfile(string name) => _aiProfiles.GetValueOrDefault(name);
 }

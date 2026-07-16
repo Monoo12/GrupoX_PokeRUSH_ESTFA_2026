@@ -36,6 +36,9 @@ public class GameManager : MonoBehaviour
         // Carga todos los ScriptableObjects desde Assets/Resources/Definitions/...
         DefinitionRepository.Instance.LoadAll();
 
+        // Tabla de XP compartida: sin esto AddXP no sube de nivel
+        PokenModel.DefaultXpTable = DefinitionRepository.Instance.ExperienceTable;
+
         // Conecta las fuentes de audio de la escena al servicio de audio
         AudioService.Instance.Initialize(musicSource, sfxSource);
     }

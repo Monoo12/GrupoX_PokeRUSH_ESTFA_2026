@@ -23,4 +23,6 @@ public class EnemyDefinition : NPCDefinition
 
     [Header("Comportamiento")]
     public bool fleeIfWeak;
+    [Tooltip("Perfil de IA que usa en combate. Vacio = perfil Trainer por defecto.")]
+    public AIProfileDefinition aiProfile;
 }

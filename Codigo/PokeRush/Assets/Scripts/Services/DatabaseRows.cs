@@ -25,6 +25,10 @@ public class PlayerPokenRow
     public string StatusEffect { get; set; }
     public int SlotIndex { get; set; }
     public string EquippedCosmetic { get; set; }
+    // IVs serializados como "hp,atk,def,spa,spd,spe" (ej: "31,12,0,5,20,31").
+    // Es string y no int para distinguir saves viejos (NULL -> se regeneran)
+    // de un IV 0 legitimo. La columna la agrega solo sqlite-net via ALTER.
+    public string Ivs { get; set; }
 }
 
 [Table("player_poken_moves")]

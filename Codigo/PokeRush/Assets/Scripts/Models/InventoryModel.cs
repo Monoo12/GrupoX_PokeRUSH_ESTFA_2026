@@ -14,6 +14,15 @@ public class InventoryModel
         SpecialItems = new List<SpecialItemStack>();
         Cosmetics = new List<CosmeticDefinition>();
     }
+
+    // Suma un item de curacion, apilando sobre el stack existente si ya lo tiene
+    public void AddHealItem(HealItemDefinition definition, int quantity)
+    {
+        if (definition == null || quantity <= 0) return;
+        HealItemStack stack = HealItems.Find(s => s.Definition == definition);
+        if (stack != null) stack.AddQuantity(quantity);
+        else HealItems.Add(new HealItemStack(definition, quantity));
+    }
 }
 
 public class HealItemStack
@@ -25,6 +34,11 @@ public class HealItemStack
     {
         Definition = definition;
         Quantity = quantity;
+    }
+
+    public void AddQuantity(int amount)
+    {
+        Quantity += amount;
     }
 }
 

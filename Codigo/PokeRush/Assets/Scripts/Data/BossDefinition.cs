@@ -25,4 +25,8 @@ public class BossDefinition : NPCDefinition
     public int moneyReward;
     public HealItemDefinition[] itemRewards;
     public StoryFlag defeatGrantsFlag;
+
+    [Header("Comportamiento")]
+    [Tooltip("Perfil de IA que usa en combate. Vacio = perfil Trainer por defecto.")]
+    public AIProfileDefinition aiProfile;
 }

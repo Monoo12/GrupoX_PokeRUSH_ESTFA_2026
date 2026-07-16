@@ -6,6 +6,8 @@ public class PokenDefinition : ScriptableObject
 {
     [Header("Identidad")]
     public string pokenName;
+    [Tooltip("Numero de Pokedex nacional. 0 para especies propias del juego (Chispa, Aquita, Bulbi).")]
+    public int dexNumber;
     public PokenType type;
     [Tooltip("Segundo tipo. Dejar en None si el Poken es de un solo tipo.")]
     public PokenType type2;
@@ -41,9 +43,18 @@ public class PokenDefinition : ScriptableObject
     public int baseSpeed;
 
     [Header("Movimientos")]
+    [Tooltip("Learnset por nivel (lo llena el importador de PokeAPI). Tiene prioridad sobre 'moves'.")]
+    public LearnsetEntry[] learnset;
+    [Tooltip("LEGADO: lista plana de movimientos. Solo se usa si 'learnset' esta vacio (Pokens de prueba).")]
     public MoveDefinition[] moves;
 
+    [Header("Experiencia")]
+    [Tooltip("XP base que otorga al ser derrotado (base_experience de PokeAPI).")]
+    public int baseXpYield = 60;
+
     [Header("Habilidad")]
+    [Tooltip("Habilidad con efecto en combate. None = sin efecto (solo se muestra el nombre de 'ability').")]
+    public AbilityId abilityId = AbilityId.None;
     public string ability;
     public string abilityDescription;
 
