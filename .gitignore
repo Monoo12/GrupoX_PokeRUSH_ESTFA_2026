@@ -20,3 +20,7 @@ UserSettings/
 # El grafo canónico vive en "Contexto IA/graphify-out/" (versionado).
 # Esto ignora solo la salida suelta que graphify deja en la raíz al correr.
 /graphify-out/
+# === Unity: proyectos generados por el editor (se regeneran solos) ===
+Codigo/PokeRush/*.csproj
+Codigo/PokeRush/*.slnx
+Codigo/PokeRush/*.sln
