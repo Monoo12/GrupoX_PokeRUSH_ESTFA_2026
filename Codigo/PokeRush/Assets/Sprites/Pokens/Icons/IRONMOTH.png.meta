@@ -14,6 +14,12 @@ TextureImporter:
   - first:
       213: -822945686397997196
     second: IRONMOTH_3
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +66,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,7 +87,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -109,89 +115,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IRONMOTH_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 5
-        y: 3
-        width: 50
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1135b496c676867f0800000000000000
-      internalID: -619131233442770159
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IRONMOTH_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 39
-        y: 21
-        width: 22
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 443f976cd00f34b50800000000000000
-      internalID: 6576363822846178116
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IRONMOTH_2
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 5
-        width: 50
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 13faaa6b17ce5a6c0800000000000000
-      internalID: -4132637109902463183
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IRONMOTH_3
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 23
-        width: 22
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 47faec4224f4494f0800000000000000
-      internalID: -822945686397997196
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
@@ -214,6 +176,8 @@ TextureImporter:
       IRONMOTH_1: 6576363822846178116
       IRONMOTH_2: -4132637109902463183
       IRONMOTH_3: -822945686397997196
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

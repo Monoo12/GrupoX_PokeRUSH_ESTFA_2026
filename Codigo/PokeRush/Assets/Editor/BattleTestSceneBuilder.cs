@@ -4,24 +4,33 @@ using PokeRush.EditorTools.PokeApi;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // Arma TODO lo necesario para probar el combate con un solo click:
 //   PokeRush > Armar combate de prueba
 // 1. Genera los perfiles de IA y la tabla de XP si faltan.
-// 2. Crea assets de prueba: un entrenador, un boss y un encuentro salvaje
-//    (en Assets/Resources/Definitions/Testing/).
-// 3. Construye la escena Assets/Scenes/CombatePrueba.unity con el
-//    BattleController, el BattleTester y un HUD minimo ya cableados.
-// Despues: abrir la escena, dar Play y usar 1-4 (movimientos), F1-F6
-// (cambio de Poken), B (reiniciar contra el rival), W (combate salvaje).
+// 2. Importa y recorta los graficos de UI de batalla y los fondos (Diseño/).
+// 3. Crea assets de prueba: un entrenador, un boss y un encuentro salvaje.
+// 4. Construye la escena Assets/Scenes/CombatePrueba.unity con el HUD clasico
+//    (databoxes, LUCHAR/POKEMON/MOCHILA/HUIR, panel PP/TIPO) todo cableado.
+// En Play: click en los botones, o teclado (1-4 movimientos, F1-F6 cambio,
+// B reiniciar, W salvaje).
 namespace PokeRush.EditorTools
 {
     public static class BattleTestSceneBuilder
     {
         private const string TestingFolder = "Assets/Resources/Definitions/Testing";
         private const string ScenePath = "Assets/Scenes/CombatePrueba.unity";
+
+        // El canvas usa la resolucion nativa de los graficos (512x384): las
+        // coordenadas de este builder son pixeles del mockup del diseñador.
+        private static readonly Vector2 CanvasSize = new Vector2(512, 384);
+
+        private static Font _font;
+        private static Font UiFont => _font != null ? _font : (_font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
 
         [MenuItem("PokeRush/Armar combate de prueba")]
         public static void Build()
@@ -34,11 +43,17 @@ namespace PokeRush.EditorTools
             // referencias cargadas antes se serializarian como null.
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // --- 1. Dependencias: perfiles de IA y tabla de XP ---
+            // --- 1. Dependencias: perfiles de IA, tabla de XP y graficos de UI ---
             AIProfileGenerator.Generate();
             if (AssetDatabase.LoadAssetAtPath<ExperienceTableDefinition>(
                     "Assets/Resources/Definitions/ExperienceTable.asset") == null)
                 ExperienceTableGenerator.Generate();
+            if (!BattleUiAssetImporter.ImportAll())
+            {
+                EditorUtility.DisplayDialog("Faltan graficos",
+                    "No se encontro Diseño/Graphics/UI/Battle en el repo.", "OK");
+                return;
+            }
 
             var profileTrainer = LoadProfile("Trainer");
             var profileGymLeader = LoadProfile("GymLeader");
@@ -65,10 +80,9 @@ namespace PokeRush.EditorTools
                 return found;
             }
 
-            // --- 3. Assets de prueba ---
+            // --- 3. Assets de prueba (con fondo de batalla propio) ---
             EnsureFolder(TestingFolder);
 
-            // Entrenador comun: 2 Pokens, IA Trainer
             var trainer = LoadOrCreate<EnemyDefinition>($"{TestingFolder}/EntrenadorDePrueba.asset");
             trainer.pokenTeam = new[]
             {
@@ -77,9 +91,9 @@ namespace PokeRush.EditorTools
             };
             trainer.aiProfile = profileTrainer;
             trainer.moneyReward = 200;
+            trainer.battleBackground = BattleUiAssetImporter.LoadBackground("Bosque_bg.png");
             EditorUtility.SetDirty(trainer);
 
-            // Boss: 3 Pokens mas fuertes, IA GymLeader (cambia, remata, hace setup)
             var boss = LoadOrCreate<BossDefinition>($"{TestingFolder}/BossDePrueba.asset");
             boss.pokenTeam = new[]
             {
@@ -89,31 +103,37 @@ namespace PokeRush.EditorTools
             };
             boss.aiProfile = profileGymLeader;
             boss.moneyReward = 1000;
+            boss.battleBackground = BattleUiAssetImporter.LoadBackground("Gimnasio1_bg.png");
             EditorUtility.SetDirty(boss);
 
-            // Encuentro salvaje: Pikachu 3-6, IA Wild
             var wild = LoadOrCreate<WildEncounterDefinition>($"{TestingFolder}/SalvajeDePrueba.asset");
             wild.species = Species(25, "Pikachu");
             wild.minLevel = 3;
             wild.maxLevel = 6;
             wild.aiProfile = profileWild;
+            wild.battleBackground = BattleUiAssetImporter.LoadBackground("Pradera_bg.png");
             EditorUtility.SetDirty(wild);
 
             AssetDatabase.SaveAssets();
 
-            // --- 4. Contenido de la escena de prueba ---
+            // --- 4. Contenido de la escena ---
             BuildCamera();
-            PokenView playerView = BuildPokenView("PokenJugador", new Vector3(-4.5f, -1.5f, 0f));
-            PokenView enemyView = BuildPokenView("PokenRival", new Vector3(4.5f, 1.5f, 0f));
+            SpriteRenderer background = BuildBackground();
+            // Los sprites tienen pivot en los pies y PPU = alto del frame (miden
+            // 1 unidad): la Y es el piso de cada plataforma y la escala es directa
+            PokenView playerView = BuildPokenView("PokenJugador", new Vector3(-1.28f, -1.55f, 0f), 1.7f);
+            PokenView enemyView = BuildPokenView("PokenRival", new Vector3(0.95f, 0.30f, 0f), 1.1f);
+            BuildEventSystem();
             BattleHudView hud = BuildHud();
 
-            // BattleController cableado al HUD y las vistas
+            // BattleController cableado al HUD, las vistas y el fondo
             var controllerGo = new GameObject("BattleSystem");
             var controller = controllerGo.AddComponent<BattleController>();
             var so = new SerializedObject(controller);
             so.FindProperty("battleHudView").objectReferenceValue = hud;
             so.FindProperty("playerPokenView").objectReferenceValue = playerView;
             so.FindProperty("enemyPokenView").objectReferenceValue = enemyView;
+            so.FindProperty("backgroundRenderer").objectReferenceValue = background;
             so.FindProperty("messageDelay").floatValue = 0.8f;
             so.ApplyModifiedPropertiesWithoutUndo();
 
@@ -147,17 +167,14 @@ namespace PokeRush.EditorTools
 
             EditorUtility.DisplayDialog("Combate de prueba listo",
                 "Escena creada: Assets/Scenes/CombatePrueba.unity (ya esta abierta).\n\n" +
-                "Dale Play y usa:\n" +
-                "  1-4  = movimientos\n" +
-                "  F1-F6 = cambiar de Poken (consume el turno)\n" +
-                "  B    = reiniciar combate contra el rival\n" +
-                "  W    = combate salvaje (Pikachu 3-6)\n\n" +
-                "Para probar el BOSS (IA GymLeader): selecciona el objeto BattleTester\n" +
-                "y arrastra Testing/BossDePrueba al campo 'Enemy Definition'.\n\n" +
-                "Los mensajes salen en el HUD; sin sprites asignados los Pokens\n" +
-                "no se ven, pero el combate funciona igual.", "¡A jugar!");
+                "Dale Play y usa los botones del HUD (LUCHAR / POKÉMON / MOCHILA / HUIR)\n" +
+                "o el teclado: 1-4 movimientos, F1-F6 cambio, B reiniciar, W salvaje.\n\n" +
+                "El fondo lo define cada enemigo (campo Battle Background):\n" +
+                "entrenador = Bosque, boss = Gimnasio, salvaje = Pradera.\n" +
+                "Para el boss: arrastra Testing/BossDePrueba a 'Enemy Definition' del BattleTester.",
+                "¡A jugar!");
 
-            Debug.Log("[PokeRush] Combate de prueba armado: escena, HUD, entrenador, boss y salvaje listos.");
+            Debug.Log("[PokeRush] Combate de prueba armado con el HUD clasico.");
         }
 
         // ---------- helpers de assets ----------
@@ -214,7 +231,7 @@ namespace PokeRush.EditorTools
                 prop.GetArrayElementAtIndex(i).intValue = values[i];
         }
 
-        // ---------- helpers de escena ----------
+        // ---------- mundo: camara, fondo y battlers ----------
 
         private static void BuildCamera()
         {
@@ -222,18 +239,28 @@ namespace PokeRush.EditorTools
             go.tag = "MainCamera";
             var cam = go.AddComponent<Camera>();
             cam.orthographic = true;
-            cam.orthographicSize = 5f;
+            // Media altura del fondo (384 px / 2 / 100 ppu): el fondo llena la vista
+            cam.orthographicSize = 1.92f;
             cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.backgroundColor = new Color(0.13f, 0.13f, 0.17f);
+            cam.backgroundColor = Color.black;
             go.transform.position = new Vector3(0f, 0f, -10f);
             go.AddComponent<AudioListener>();
         }
 
-        private static PokenView BuildPokenView(string name, Vector3 position)
+        private static SpriteRenderer BuildBackground()
+        {
+            var go = new GameObject("FondoBatalla");
+            var renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sprite = BattleUiAssetImporter.LoadBackground("Pradera_bg.png");
+            renderer.sortingOrder = -10; // detras de los Pokens
+            return renderer;
+        }
+
+        private static PokenView BuildPokenView(string name, Vector3 position, float scale)
         {
             var go = new GameObject(name);
             go.transform.position = position;
-            go.transform.localScale = Vector3.one * 2f;
+            go.transform.localScale = Vector3.one * scale;
             var renderer = go.AddComponent<SpriteRenderer>();
             var view = go.AddComponent<PokenView>();
             var so = new SerializedObject(view);
@@ -242,132 +269,327 @@ namespace PokeRush.EditorTools
             return view;
         }
 
+        private static void BuildEventSystem()
+        {
+            var go = new GameObject("EventSystem");
+            go.AddComponent<EventSystem>();
+            go.AddComponent<InputSystemUIInputModule>(); // el proyecto usa el Input System nuevo
+        }
+
+        // ---------- HUD ----------
+
         private static BattleHudView BuildHud()
         {
-            // Canvas raiz
+            // Canvas a resolucion nativa de los graficos (512x384)
             var canvasGo = new GameObject("Canvas");
             var canvas = canvasGo.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             var scaler = canvasGo.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.referenceResolution = CanvasSize;
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = 1f; // encaja la altura (384): los pixeles coinciden
             canvasGo.AddComponent<GraphicRaycaster>();
 
-            // Contenedor del HUD (BattleHudView hace SetActive sobre este objeto)
-            var hudGo = new GameObject("BattleHud");
-            hudGo.transform.SetParent(canvasGo.transform, false);
-            var hudRect = hudGo.AddComponent<RectTransform>();
-            hudRect.anchorMin = Vector2.zero;
-            hudRect.anchorMax = Vector2.one;
-            hudRect.offsetMin = Vector2.zero;
-            hudRect.offsetMax = Vector2.zero;
+            var hudGo = CreateRect("BattleHud", canvasGo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
             var hud = hudGo.AddComponent<BattleHudView>();
 
-            // Rival: nombre + barra arriba a la izquierda
-            Text enemyName = CreateText(hudGo.transform, "NombreRival", new Vector2(0, 1),
-                new Vector2(30, -30), new Vector2(360, 40), 28, TextAnchor.MiddleLeft);
-            HealthBarView enemyBar = CreateHealthBar(hudGo.transform, "BarraRival",
-                new Vector2(0, 1), new Vector2(30, -80));
+            // --- barra de mensajes (abajo, a lo ancho) ---
+            var messageBar = CreateRect("BarraMensajes", hudGo.transform,
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0),
+                Vector2.zero, new Vector2(0, 96));
+            var barImage = messageBar.AddComponent<Image>();
+            barImage.sprite = BattleUiAssetImporter.LoadSimple("overlay_message.png");
+            barImage.color = new Color(0.12f, 0.12f, 0.15f, 0.92f);
 
-            // Jugador: nombre + barra abajo a la derecha
-            Text playerName = CreateText(hudGo.transform, "NombreJugador", new Vector2(1, 0),
-                new Vector2(-390, 150), new Vector2(360, 40), 28, TextAnchor.MiddleLeft);
-            HealthBarView playerBar = CreateHealthBar(hudGo.transform, "BarraJugador",
-                new Vector2(1, 0), new Vector2(-390, 100));
+            Text messageText = CreateText("TextoMensaje", messageBar.transform,
+                new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0),
+                new Vector2(12, 6), new Vector2(238, 84), 15, TextAnchor.MiddleLeft);
 
-            // Turno arriba a la derecha
-            Text turnText = CreateText(hudGo.transform, "Turno", new Vector2(1, 1),
-                new Vector2(-330, -30), new Vector2(300, 40), 26, TextAnchor.MiddleRight);
+            // --- databox del RIVAL (arriba a la izquierda) ---
+            var enemyBox = CreateRect("DataboxRival", hudGo.transform,
+                new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(0, -24), new Vector2(260, 70));
+            AddNativeImage(enemyBox, BattleUiAssetImporter.LoadSimple("databox_normal_foe.png"));
 
-            // Panel de mensajes abajo, a lo ancho
-            var msgPanel = new GameObject("PanelMensajes");
-            msgPanel.transform.SetParent(hudGo.transform, false);
-            var msgRect = msgPanel.AddComponent<RectTransform>();
-            msgRect.anchorMin = new Vector2(0, 0);
-            msgRect.anchorMax = new Vector2(1, 0);
-            msgRect.pivot = new Vector2(0.5f, 0);
-            msgRect.anchoredPosition = new Vector2(0, 10);
-            msgRect.sizeDelta = new Vector2(-40, 80);
-            var msgBg = msgPanel.AddComponent<Image>();
-            msgBg.color = new Color(0f, 0f, 0f, 0.6f);
+            Text enemyName = CreateBoxText("NombreRival", enemyBox.transform, new Vector2(14, -8), new Vector2(150, 20), 14, TextAnchor.MiddleLeft);
+            Text enemyLevel = CreateBoxText("NivelRival", enemyBox.transform, new Vector2(120, -8), new Vector2(90, 20), 12, TextAnchor.MiddleRight);
+            Image enemyHpFill = CreateFill(enemyBox.transform, "HpRival", new Vector2(118, -40), new Vector2(96, 6));
+            Image enemyStatus = CreateIcon(enemyBox.transform, "EstadoRival", new Vector2(40, -36), new Vector2(44, 16));
 
-            Text messageText = CreateText(msgPanel.transform, "TextoMensaje", new Vector2(0.5f, 0.5f),
-                Vector2.zero, new Vector2(1800, 70), 30, TextAnchor.MiddleCenter);
+            // --- databox del JUGADOR (abajo a la derecha, sobre la barra) ---
+            var playerBox = CreateRect("DataboxJugador", hudGo.transform,
+                new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0),
+                new Vector2(0, 104), new Vector2(260, 84));
+            AddNativeImage(playerBox, BattleUiAssetImporter.LoadSimple("databox_normal.png"));
 
-            // Cablear los campos privados del BattleHudView
+            Text playerName = CreateBoxText("NombreJugador", playerBox.transform, new Vector2(24, -6), new Vector2(140, 20), 14, TextAnchor.MiddleLeft);
+            Text playerHpText = CreateBoxText("HpTexto", playerBox.transform, new Vector2(24, -24), new Vector2(120, 18), 13, TextAnchor.MiddleLeft);
+            Image playerHpFill = CreateFill(playerBox.transform, "HpJugador", new Vector2(136, -40), new Vector2(96, 6));
+            Image playerExpFill = CreateFill(playerBox.transform, "ExpJugador", new Vector2(38, -72), new Vector2(192, 4));
+            playerExpFill.color = new Color(0.25f, 0.78f, 0.97f); // azul EXP (fijo)
+            Text playerLevel = CreateBoxText("NivelJugador", playerBox.transform, new Vector2(2, -64), new Vector2(48, 16), 10, TextAnchor.MiddleLeft);
+            Image playerStatus = CreateIcon(playerBox.transform, "EstadoJugador", new Vector2(58, -36), new Vector2(44, 16));
+
+            // --- menu de COMANDOS (botones con texto horneado en el sprite) ---
+            var commandPanel = CreateRect("MenuComandos", hudGo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+            Button fightBtn = CreateSheetButton(commandPanel.transform, "BotonLuchar",
+                BattleUiAssetImporter.CommandRowFight, new Vector2(-140, 50));
+            Button pokemonBtn = CreateSheetButton(commandPanel.transform, "BotonPokemon",
+                BattleUiAssetImporter.CommandRowPokemon, new Vector2(-6, 50));
+            Button bagBtn = CreateSheetButton(commandPanel.transform, "BotonMochila",
+                BattleUiAssetImporter.CommandRowBag, new Vector2(-140, 3));
+            Button fleeBtn = CreateSheetButton(commandPanel.transform, "BotonHuir",
+                BattleUiAssetImporter.CommandRowFlee, new Vector2(-6, 3));
+
+            // --- menu de LUCHA (4 movimientos + panel PP/TIPO + ATRÁS) ---
+            var fightPanel = CreateRect("MenuLucha", hudGo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+
+            var moveButtons = new Button[4];
+            var moveImages = new Image[4];
+            var moveTexts = new Text[4];
+            Vector2[] movePositions = { new Vector2(4, 50), new Vector2(198, 50), new Vector2(4, 3), new Vector2(198, 3) };
+            for (int i = 0; i < 4; i++)
+            {
+                var btnGo = CreateRect($"Movimiento{i + 1}", fightPanel.transform,
+                    new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0),
+                    movePositions[i], new Vector2(192, 46));
+                moveImages[i] = btnGo.AddComponent<Image>();
+                moveButtons[i] = btnGo.AddComponent<Button>();
+                moveButtons[i].targetGraphic = moveImages[i];
+                moveTexts[i] = CreateText("Nombre", btnGo.transform,
+                    Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f),
+                    new Vector2(18, 0), new Vector2(-24, 0), 14, TextAnchor.MiddleLeft);
+            }
+
+            var infoPanel = CreateRect("PanelInfo", fightPanel.transform,
+                new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0),
+                new Vector2(-4, 3), new Vector2(112, 56));
+            var infoImage = infoPanel.AddComponent<Image>();
+            infoImage.color = new Color(0.08f, 0.08f, 0.11f, 0.92f);
+            Text ppText = CreateBoxText("TextoPP", infoPanel.transform, new Vector2(6, -4), new Vector2(100, 22), 13, TextAnchor.MiddleCenter);
+            Image typeIcon = CreateIcon(infoPanel.transform, "IconoTipo", new Vector2(20, -28), new Vector2(72, 24));
+
+            Button fightBack = CreateSheetButton(fightPanel.transform, "BotonAtras",
+                BattleUiAssetImporter.CommandRowBack, new Vector2(-4, 62));
+            ((RectTransform)fightBack.transform).sizeDelta = new Vector2(112, 34);
+
+            // --- menu de EQUIPO (overlay con la lista de Pokens) ---
+            var teamPanel = CreateRect("MenuEquipo", hudGo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+            var teamOverlay = teamPanel.AddComponent<Image>();
+            teamOverlay.color = new Color(0f, 0f, 0f, 0.65f);
+
+            Sprite slotSprite = BattleUiAssetImporter.LoadSlice("cursor_fight.png", "move", 0, 0);
+            Sprite slotSelected = BattleUiAssetImporter.LoadSlice("cursor_fight.png", "move", 0, 1);
+            var teamButtons = new Button[6];
+            var teamNames = new Text[6];
+            var teamHps = new Text[6];
+            for (int i = 0; i < 6; i++)
+            {
+                var slotGo = CreateRect($"Poken{i + 1}", teamPanel.transform,
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0, 130 - i * 46), new Vector2(300, 42));
+                var slotImage = slotGo.AddComponent<Image>();
+                slotImage.sprite = slotSprite;
+                teamButtons[i] = slotGo.AddComponent<Button>();
+                teamButtons[i].targetGraphic = slotImage;
+                var state = teamButtons[i].spriteState;
+                state.highlightedSprite = slotSelected;
+                state.pressedSprite = slotSelected;
+                teamButtons[i].spriteState = state;
+                teamButtons[i].transition = Selectable.Transition.SpriteSwap;
+
+                teamNames[i] = CreateText("Nombre", slotGo.transform,
+                    Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f),
+                    new Vector2(16, 0), new Vector2(-140, 0), 14, TextAnchor.MiddleLeft);
+                teamHps[i] = CreateText("HP", slotGo.transform,
+                    Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f),
+                    new Vector2(160, 0), new Vector2(-16, 0), 12, TextAnchor.MiddleRight);
+            }
+
+            Button teamBack = CreateSheetButton(teamPanel.transform, "BotonAtras",
+                BattleUiAssetImporter.CommandRowBack, new Vector2(65, -168));
+            var teamBackRect = (RectTransform)teamBack.transform;
+            teamBackRect.anchorMin = teamBackRect.anchorMax = teamBackRect.pivot = new Vector2(0.5f, 0.5f);
+            teamBackRect.anchoredPosition = new Vector2(0, -160);
+
+            // Los menus arrancan ocultos (los muestra BattleHudView)
+            commandPanel.SetActive(false);
+            fightPanel.SetActive(false);
+            teamPanel.SetActive(false);
+
+            // --- cablear todos los campos privados del BattleHudView ---
             var so = new SerializedObject(hud);
-            so.FindProperty("playerNameText").objectReferenceValue = playerName;
-            so.FindProperty("playerHealthBar").objectReferenceValue = playerBar;
-            so.FindProperty("enemyNameText").objectReferenceValue = enemyName;
-            so.FindProperty("enemyHealthBar").objectReferenceValue = enemyBar;
-            so.FindProperty("turnText").objectReferenceValue = turnText;
+            so.FindProperty("messageBar").objectReferenceValue = messageBar;
             so.FindProperty("messageText").objectReferenceValue = messageText;
-            so.ApplyModifiedPropertiesWithoutUndo();
 
+            so.FindProperty("playerBox").objectReferenceValue = playerBox;
+            so.FindProperty("playerNameText").objectReferenceValue = playerName;
+            so.FindProperty("playerLevelText").objectReferenceValue = playerLevel;
+            so.FindProperty("playerHpText").objectReferenceValue = playerHpText;
+            so.FindProperty("playerHpFill").objectReferenceValue = playerHpFill;
+            so.FindProperty("playerExpFill").objectReferenceValue = playerExpFill;
+            so.FindProperty("playerStatusIcon").objectReferenceValue = playerStatus;
+
+            so.FindProperty("enemyBox").objectReferenceValue = enemyBox;
+            so.FindProperty("enemyNameText").objectReferenceValue = enemyName;
+            so.FindProperty("enemyLevelText").objectReferenceValue = enemyLevel;
+            so.FindProperty("enemyHpFill").objectReferenceValue = enemyHpFill;
+            so.FindProperty("enemyStatusIcon").objectReferenceValue = enemyStatus;
+
+            so.FindProperty("commandPanel").objectReferenceValue = commandPanel;
+            so.FindProperty("fightButton").objectReferenceValue = fightBtn;
+            so.FindProperty("pokemonButton").objectReferenceValue = pokemonBtn;
+            so.FindProperty("bagButton").objectReferenceValue = bagBtn;
+            so.FindProperty("fleeButton").objectReferenceValue = fleeBtn;
+
+            so.FindProperty("fightPanel").objectReferenceValue = fightPanel;
+            SetArray(so, "moveButtons", moveButtons.Cast<Object>().ToArray());
+            SetArray(so, "moveButtonImages", moveImages.Cast<Object>().ToArray());
+            SetArray(so, "moveNameTexts", moveTexts.Cast<Object>().ToArray());
+            so.FindProperty("ppText").objectReferenceValue = ppText;
+            so.FindProperty("moveTypeIcon").objectReferenceValue = typeIcon;
+            so.FindProperty("fightBackButton").objectReferenceValue = fightBack;
+
+            so.FindProperty("teamPanel").objectReferenceValue = teamPanel;
+            SetArray(so, "teamButtons", teamButtons.Cast<Object>().ToArray());
+            SetArray(so, "teamNameTexts", teamNames.Cast<Object>().ToArray());
+            SetArray(so, "teamHpTexts", teamHps.Cast<Object>().ToArray());
+            so.FindProperty("teamBackButton").objectReferenceValue = teamBack;
+
+            // Tablas de sprites por tipo y por estado
+            WireTypeSprites(so);
+
+            so.ApplyModifiedPropertiesWithoutUndo();
             return hud;
         }
 
-        private static Text CreateText(Transform parent, string name, Vector2 anchor,
-            Vector2 position, Vector2 size, int fontSize, TextAnchor alignment)
+        // Llena las tablas sprite-por-enum del BattleHudView desde las hojas recortadas
+        private static void WireTypeSprites(SerializedObject so)
+        {
+            var typeValues = (PokenType[])System.Enum.GetValues(typeof(PokenType));
+            var moveNormal = new Object[typeValues.Length];
+            var moveSelected = new Object[typeValues.Length];
+            var typeIcons = new Object[typeValues.Length];
+            foreach (PokenType type in typeValues)
+            {
+                int row = BattleUiAssetImporter.TypeRow.TryGetValue(type, out int r) ? r : 0;
+                moveNormal[(int)type] = BattleUiAssetImporter.LoadSlice("cursor_fight.png", "move", row, 0);
+                moveSelected[(int)type] = BattleUiAssetImporter.LoadSlice("cursor_fight.png", "move", row, 1);
+                typeIcons[(int)type] = BattleUiAssetImporter.LoadSlice("icon_types.png", "type", row, 0);
+            }
+            SetArray(so, "moveSpritesByType", moveNormal);
+            SetArray(so, "moveSelectedSpritesByType", moveSelected);
+            SetArray(so, "typeIconsByType", typeIcons);
+
+            var statusValues = (StatusEffect[])System.Enum.GetValues(typeof(StatusEffect));
+            var statusIcons = new Object[statusValues.Length];
+            foreach (StatusEffect status in statusValues)
+            {
+                if (BattleUiAssetImporter.StatusRow.TryGetValue(status, out int row))
+                    statusIcons[(int)status] = BattleUiAssetImporter.LoadSlice("icon_statuses.png", "status", row, 0);
+            }
+            SetArray(so, "statusIconsByEffect", statusIcons);
+        }
+
+        // ---------- helpers de UI ----------
+
+        private static GameObject CreateRect(string name, Transform parent,
+            Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 position, Vector2 size)
         {
             var go = new GameObject(name);
             go.transform.SetParent(parent, false);
             var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = anchor;
-            rect.anchorMax = anchor;
-            rect.pivot = anchor;
+            rect.anchorMin = anchorMin;
+            rect.anchorMax = anchorMax;
+            rect.pivot = pivot;
             rect.anchoredPosition = position;
             rect.sizeDelta = size;
+            return go;
+        }
 
+        private static void AddNativeImage(GameObject go, Sprite sprite)
+        {
+            var image = go.AddComponent<Image>();
+            image.sprite = sprite;
+            image.raycastTarget = false;
+        }
+
+        // Texto blanco con sombra, anclado al borde superior-izquierdo de su caja
+        private static Text CreateBoxText(string name, Transform parent,
+            Vector2 position, Vector2 size, int fontSize, TextAnchor alignment)
+            => CreateText(name, parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1),
+                position, size, fontSize, alignment);
+
+        private static Text CreateText(string name, Transform parent,
+            Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot,
+            Vector2 position, Vector2 size, int fontSize, TextAnchor alignment)
+        {
+            var go = CreateRect(name, parent, anchorMin, anchorMax, pivot, position, size);
+            // Con anclas estiradas, position/size funcionan como offsets
+            if (anchorMin != anchorMax)
+            {
+                var rect = (RectTransform)go.transform;
+                rect.offsetMin = position;
+                rect.offsetMax = size;
+            }
             var text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = UiFont;
             text.fontSize = fontSize;
             text.alignment = alignment;
             text.color = Color.white;
             text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            text.raycastTarget = false;
+            var shadow = go.AddComponent<Shadow>();
+            shadow.effectColor = new Color(0f, 0f, 0f, 0.75f);
+            shadow.effectDistance = new Vector2(1f, -1f);
             return text;
         }
 
-        private static HealthBarView CreateHealthBar(Transform parent, string name,
-            Vector2 anchor, Vector2 position)
+        // Barra de relleno (HP/EXP): imagen "Filled" horizontal sin sprite
+        private static Image CreateFill(Transform parent, string name, Vector2 position, Vector2 size)
         {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent, false);
-            var rect = go.AddComponent<RectTransform>();
-            rect.anchorMin = anchor;
-            rect.anchorMax = anchor;
-            rect.pivot = anchor;
-            rect.anchoredPosition = position;
-            rect.sizeDelta = new Vector2(360, 30);
+            var go = CreateRect(name, parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1), position, size);
+            var image = go.AddComponent<Image>();
+            image.type = Image.Type.Filled;
+            image.fillMethod = Image.FillMethod.Horizontal;
+            image.raycastTarget = false;
+            return image;
+        }
 
-            // Fondo oscuro
-            var bg = go.AddComponent<Image>();
-            bg.color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
+        private static Image CreateIcon(Transform parent, string name, Vector2 position, Vector2 size)
+        {
+            var go = CreateRect(name, parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1), position, size);
+            var image = go.AddComponent<Image>();
+            image.raycastTarget = false;
+            image.enabled = false; // lo enciende la vista cuando hay icono
+            return image;
+        }
 
-            // Relleno verde (Image tipo Filled horizontal)
-            var fillGo = new GameObject("Relleno");
-            fillGo.transform.SetParent(go.transform, false);
-            var fillRect = fillGo.AddComponent<RectTransform>();
-            fillRect.anchorMin = Vector2.zero;
-            fillRect.anchorMax = Vector2.one;
-            fillRect.offsetMin = new Vector2(3, 3);
-            fillRect.offsetMax = new Vector2(-3, -3);
-            var fill = fillGo.AddComponent<Image>();
-            fill.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
-            fill.type = Image.Type.Filled;
-            fill.fillMethod = Image.FillMethod.Horizontal;
-            fill.color = new Color(0.3f, 0.85f, 0.3f);
+        // Boton de la hoja cursor_command (texto horneado + estado iluminado).
+        // Anclado abajo a la derecha (la zona de comandos del mockup).
+        private static Button CreateSheetButton(Transform parent, string name, int commandRow, Vector2 position)
+        {
+            Sprite normal = BattleUiAssetImporter.LoadSlice("cursor_command.png", "command", commandRow, 0);
+            Sprite selected = BattleUiAssetImporter.LoadSlice("cursor_command.png", "command", commandRow, 1);
 
-            // Texto "HP/MaxHP" encima
-            Text hpText = CreateText(go.transform, "TextoHP", new Vector2(0.5f, 0.5f),
-                Vector2.zero, new Vector2(340, 28), 20, TextAnchor.MiddleCenter);
-
-            var bar = go.AddComponent<HealthBarView>();
-            var so = new SerializedObject(bar);
-            so.FindProperty("fillImage").objectReferenceValue = fill;
-            so.FindProperty("hpText").objectReferenceValue = hpText;
-            so.ApplyModifiedPropertiesWithoutUndo();
-            return bar;
+            var go = CreateRect(name, parent, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0),
+                position, new Vector2(130, 46));
+            var image = go.AddComponent<Image>();
+            image.sprite = normal;
+            var button = go.AddComponent<Button>();
+            button.targetGraphic = image;
+            var state = button.spriteState;
+            state.highlightedSprite = selected;
+            state.pressedSprite = selected;
+            state.selectedSprite = selected;
+            button.spriteState = state;
+            button.transition = Selectable.Transition.SpriteSwap;
+            return button;
         }
     }
 }

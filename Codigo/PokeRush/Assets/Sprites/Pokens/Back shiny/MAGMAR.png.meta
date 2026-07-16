@@ -98,6 +98,102 @@ TextureImporter:
   - first:
       213: -3439256962531378836
     second: MAGMAR_31
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
+  - first:
+      213: 4813649479255411303
+    second: frame_010
+  - first:
+      213: -2163629211269793909
+    second: frame_011
+  - first:
+      213: -3859094460156601481
+    second: frame_012
+  - first:
+      213: 3925152270859159499
+    second: frame_013
+  - first:
+      213: -8613526081923268975
+    second: frame_014
+  - first:
+      213: 6915553294033043229
+    second: frame_015
+  - first:
+      213: 4422891160138998478
+    second: frame_016
+  - first:
+      213: -77789508786456262
+    second: frame_017
+  - first:
+      213: 3973188589083092960
+    second: frame_018
+  - first:
+      213: -6848211472367207970
+    second: frame_019
+  - first:
+      213: -7965393433483348297
+    second: frame_020
+  - first:
+      213: -6131558145244503127
+    second: frame_021
+  - first:
+      213: -7342315053162181326
+    second: frame_022
+  - first:
+      213: -8359974792355084213
+    second: frame_023
+  - first:
+      213: -7937901747678260119
+    second: frame_024
+  - first:
+      213: 4049660129893247617
+    second: frame_025
+  - first:
+      213: -6667151133557481242
+    second: frame_026
+  - first:
+      213: -96064508775971352
+    second: frame_027
+  - first:
+      213: -6329984859060825946
+    second: frame_028
+  - first:
+      213: 5134770211506678550
+    second: frame_029
+  - first:
+      213: -6033780643431468617
+    second: frame_030
+  - first:
+      213: -3932571220498270154
+    second: frame_031
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -144,7 +240,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 70
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -165,7 +261,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -193,705 +289,705 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MAGMAR_0
+      name: frame_000
       rect:
         serializedVersion: 2
         x: 0
-        y: 5
-        width: 63
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 879e718daa36a10d0800000000000000
-      internalID: -3451336579005027976
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 74
-        y: 5
-        width: 61
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 70
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f349cff118cb66b50800000000000000
-      internalID: 6586158767849378879
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 145
-        y: 5
-        width: 61
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 140
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 629a7d013f362ec30800000000000000
-      internalID: 4387178882623056166
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 217
-        y: 5
-        width: 59
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 210
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cd2411796efc76bf0800000000000000
-      internalID: -331067458304523556
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 288
-        y: 5
-        width: 58
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 280
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d106c0953a867bc40800000000000000
-      internalID: 5528002118403514397
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 356
-        y: 5
-        width: 60
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 350
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 181362d2261161370800000000000000
-      internalID: 8292834877211292033
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 424
-        y: 5
-        width: 62
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 420
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a150c822ebd5a130800000000000000
-      internalID: 3577507243408511393
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 493
-        y: 5
-        width: 62
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 490
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 08a7337b7ec29a5c0800000000000000
-      internalID: -4203779403450975616
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_8
+      name: frame_008
       rect:
         serializedVersion: 2
         x: 560
-        y: 5
-        width: 63
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 10307460a84092c60800000000000000
-      internalID: 7793765620998669057
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_9
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 634
-        y: 5
-        width: 61
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 630
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56582f20b5c85b030800000000000000
-      internalID: 3509865807124530533
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_10
+      name: frame_010
       rect:
         serializedVersion: 2
-        x: 705
-        y: 5
-        width: 61
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 700
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b5ede72872b97c8e0800000000000000
-      internalID: -1673198142549467557
+      spriteID: 76a434492b48dc240800000000000000
+      internalID: 4813649479255411303
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_11
+      name: frame_011
       rect:
         serializedVersion: 2
-        x: 777
-        y: 5
-        width: 59
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 770
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2970a3fd9b3037ae0800000000000000
-      internalID: -1552893349663733870
+      spriteID: b87fa9c12be39f1e0800000000000000
+      internalID: -2163629211269793909
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_12
+      name: frame_012
       rect:
         serializedVersion: 2
-        x: 848
-        y: 5
-        width: 58
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 840
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ee862b034b0b755d0800000000000000
-      internalID: -3073793932699473682
+      spriteID: 77b10bbe80eb17ac0800000000000000
+      internalID: -3859094460156601481
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_13
+      name: frame_013
       rect:
         serializedVersion: 2
-        x: 916
-        y: 5
-        width: 60
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 910
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d34f3f3386fcd54c0800000000000000
-      internalID: -4297050422986410947
+      spriteID: bc7c0e9a131f87630800000000000000
+      internalID: 3925152270859159499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_14
+      name: frame_014
       rect:
         serializedVersion: 2
-        x: 984
-        y: 5
-        width: 62
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 980
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e2ced22664ed04490800000000000000
-      internalID: -7763961363710481362
+      spriteID: 19eb6673aab967880800000000000000
+      internalID: -8613526081923268975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_15
+      name: frame_015
       rect:
         serializedVersion: 2
-        x: 1053
-        y: 5
-        width: 62
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1050
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 02422edf439102b20800000000000000
-      internalID: 3107511458274092064
+      spriteID: d1f3f1ca41bf8ff50800000000000000
+      internalID: 6915553294033043229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_16
+      name: frame_016
       rect:
         serializedVersion: 2
         x: 1120
-        y: 5
-        width: 63
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 14cd87d8836ea5870800000000000000
-      internalID: 8672497163021376577
+      spriteID: ec2ec40a314416d30800000000000000
+      internalID: 4422891160138998478
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_17
+      name: frame_017
       rect:
         serializedVersion: 2
-        x: 1194
-        y: 5
-        width: 61
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1190
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5dcfc2604d3e6dd60800000000000000
-      internalID: 7914763894926408917
+      spriteID: a39f7899ad2abeef0800000000000000
+      internalID: -77789508786456262
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_18
+      name: frame_018
       rect:
         serializedVersion: 2
-        x: 1265
-        y: 5
-        width: 61
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1260
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b82323e5caa5e2890800000000000000
-      internalID: -7480942234654592373
+      spriteID: 0e7eeed88f9932730800000000000000
+      internalID: 3973188589083092960
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_19
+      name: frame_019
       rect:
         serializedVersion: 2
-        x: 1337
-        y: 5
-        width: 59
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1330
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 64848288588c126c0800000000000000
-      internalID: -4169831304127821754
+      spriteID: ed93cc203f346f0a0800000000000000
+      internalID: -6848211472367207970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_20
+      name: frame_020
       rect:
         serializedVersion: 2
-        x: 1408
-        y: 5
-        width: 58
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1400
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 33c0e53e458112e50800000000000000
-      internalID: 6782729266667588659
+      spriteID: 7b6fefcefdc357190800000000000000
+      internalID: -7965393433483348297
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_21
+      name: frame_021
       rect:
         serializedVersion: 2
-        x: 1476
-        y: 5
-        width: 60
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1470
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c65430fb08fcf4d10800000000000000
-      internalID: 2112134902127478124
+      spriteID: 9a36c017a5458eaa0800000000000000
+      internalID: -6131558145244503127
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_22
+      name: frame_022
       rect:
         serializedVersion: 2
-        x: 1544
-        y: 5
-        width: 62
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1540
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b97aaaf0cf90e0be0800000000000000
-      internalID: -1509257846923286629
+      spriteID: 23dc3434c5bda1a90800000000000000
+      internalID: -7342315053162181326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_23
+      name: frame_023
       rect:
         serializedVersion: 2
-        x: 1613
-        y: 5
-        width: 62
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1610
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 092a0a36b5f3e0790800000000000000
-      internalID: -7562037062562438512
+      spriteID: b48847a28376bfb80800000000000000
+      internalID: -8359974792355084213
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_24
+      name: frame_024
       rect:
         serializedVersion: 2
         x: 1680
-        y: 5
-        width: 63
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ccff775d16a08bef0800000000000000
-      internalID: -92312377051578420
+      spriteID: 9645fa3da68e6d190800000000000000
+      internalID: -7937901747678260119
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_25
+      name: frame_025
       rect:
         serializedVersion: 2
         x: 1750
-        y: 5
-        width: 67
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 82282c13526d6ef40800000000000000
-      internalID: 5757524628876722728
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MAGMAR_26
-      rect:
-        serializedVersion: 2
-        x: 1822
-        y: 5
-        width: 67
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a0b04c0ba68eb14f0800000000000000
-      internalID: -856835759154132214
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MAGMAR_27
-      rect:
-        serializedVersion: 2
-        x: 1892
-        y: 5
-        width: 69
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f8eb85ad32643fca0800000000000000
-      internalID: -5984362360044208497
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MAGMAR_28
-      rect:
-        serializedVersion: 2
-        x: 1962
-        y: 5
-        width: 68
-        height: 53
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 00eb1373ece3ec280800000000000000
-      internalID: -9021203948166332928
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MAGMAR_29
-      rect:
-        serializedVersion: 2
-        x: 2033
-        y: 5
-        width: 67
-        height: 53
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 95f7207cd8c3fc670800000000000000
-      internalID: 8561127996281487193
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MAGMAR_30
-      rect:
-        serializedVersion: 2
-        x: 2101
-        y: 5
+        y: 0
         width: 70
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 95aae10b11fe7d6a0800000000000000
-      internalID: -6424403484172440999
+      spriteID: 18a695f9e68433830800000000000000
+      internalID: 4049660129893247617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MAGMAR_31
+      name: frame_026
       rect:
         serializedVersion: 2
-        x: 2173
-        y: 5
-        width: 66
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1820
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c693709b30e4540d0800000000000000
-      internalID: -3439256962531378836
+      spriteID: 6e0a67c3e558973a0800000000000000
+      internalID: -6667151133557481242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_027
+      rect:
+        serializedVersion: 2
+        x: 1890
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e5c2e696d5baaef0800000000000000
+      internalID: -96064508775971352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_028
+      rect:
+        serializedVersion: 2
+        x: 1960
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a01412fe406728a0800000000000000
+      internalID: -6329984859060825946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_029
+      rect:
+        serializedVersion: 2
+        x: 2030
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61bec1c5d4e524740800000000000000
+      internalID: 5134770211506678550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_030
+      rect:
+        serializedVersion: 2
+        x: 2100
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b1b3af1974b34ca0800000000000000
+      internalID: -6033780643431468617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_031
+      rect:
+        serializedVersion: 2
+        x: 2170
+        y: 0
+        width: 70
+        height: 70
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 638b6448f43bc69c0800000000000000
+      internalID: -3932571220498270154
       vertices: []
       indices: 
       edges: []
@@ -942,6 +1038,38 @@ TextureImporter:
       MAGMAR_7: -4203779403450975616
       MAGMAR_8: 7793765620998669057
       MAGMAR_9: 3509865807124530533
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
+      frame_010: 4813649479255411303
+      frame_011: -2163629211269793909
+      frame_012: -3859094460156601481
+      frame_013: 3925152270859159499
+      frame_014: -8613526081923268975
+      frame_015: 6915553294033043229
+      frame_016: 4422891160138998478
+      frame_017: -77789508786456262
+      frame_018: 3973188589083092960
+      frame_019: -6848211472367207970
+      frame_020: -7965393433483348297
+      frame_021: -6131558145244503127
+      frame_022: -7342315053162181326
+      frame_023: -8359974792355084213
+      frame_024: -7937901747678260119
+      frame_025: 4049660129893247617
+      frame_026: -6667151133557481242
+      frame_027: -96064508775971352
+      frame_028: -6329984859060825946
+      frame_029: 5134770211506678550
+      frame_030: -6033780643431468617
+      frame_031: -3932571220498270154
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

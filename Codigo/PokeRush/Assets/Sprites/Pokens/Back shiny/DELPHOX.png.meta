@@ -50,6 +50,54 @@ TextureImporter:
   - first:
       213: 2934394457413648354
     second: DELPHOX_15
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
+  - first:
+      213: 4813649479255411303
+    second: frame_010
+  - first:
+      213: -2163629211269793909
+    second: frame_011
+  - first:
+      213: -3859094460156601481
+    second: frame_012
+  - first:
+      213: 3925152270859159499
+    second: frame_013
+  - first:
+      213: -8613526081923268975
+    second: frame_014
+  - first:
+      213: 6915553294033043229
+    second: frame_015
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,7 +144,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 96
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -145,353 +193,353 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DELPHOX_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 14
+        x: 0
         y: 0
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ca126b4457e1881e0800000000000000
-      internalID: -2195471329330323028
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 110
+        x: 96
         y: 0
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: caccae0613b1043c0800000000000000
-      internalID: -4377468938910774100
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 206
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ca86c1e1eaf968830800000000000000
-      internalID: 4073118483181496492
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DELPHOX_3
-      rect:
-        serializedVersion: 2
-        x: 302
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a8d1014fbcc63a0e0800000000000000
-      internalID: -2259842964780999286
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DELPHOX_4
-      rect:
-        serializedVersion: 2
-        x: 398
-        y: 2
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a98663fbecf04dbd0800000000000000
-      internalID: -2606440903694980966
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DELPHOX_5
-      rect:
-        serializedVersion: 2
-        x: 494
-        y: 2
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7f0bbff5b670a61b0800000000000000
-      internalID: -5662705423711751945
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DELPHOX_6
-      rect:
-        serializedVersion: 2
-        x: 590
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8319becced8928230800000000000000
-      internalID: 3639639531556933944
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DELPHOX_7
-      rect:
-        serializedVersion: 2
-        x: 686
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 04ff2b1ce78014170800000000000000
-      internalID: 8160813340280684352
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DELPHOX_8
-      rect:
-        serializedVersion: 2
-        x: 782
+        x: 192
         y: 0
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a2a2f07e7b15f1700800000000000000
-      internalID: 513218732840921642
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_9
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 878
+        x: 288
         y: 0
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2eae810c63cbe9380800000000000000
-      internalID: -8962519265083594014
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_10
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 974
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2c1837529564c1cc0800000000000000
-      internalID: -3739036241929993790
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_11
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 1070
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 480
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c946113367f0c63d0800000000000000
-      internalID: -3212175433884670820
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_12
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 1166
-        y: 2
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 576
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b1f3b8c29076b8d00800000000000000
-      internalID: 975987033355534107
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_13
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 1262
-        y: 2
-        width: 70
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 672
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aba01c80886b7a430800000000000000
-      internalID: 3794201906461608634
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_14
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 1358
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4b4ac531260e29e60800000000000000
-      internalID: 7967677402608084148
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DELPHOX_15
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 1454
-        y: 2
-        width: 70
-        height: 85
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 864
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2eff301463019b820800000000000000
-      internalID: 2934394457413648354
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_010
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76a434492b48dc240800000000000000
+      internalID: 4813649479255411303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_011
+      rect:
+        serializedVersion: 2
+        x: 1056
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b87fa9c12be39f1e0800000000000000
+      internalID: -2163629211269793909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_012
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77b10bbe80eb17ac0800000000000000
+      internalID: -3859094460156601481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_013
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc7c0e9a131f87630800000000000000
+      internalID: 3925152270859159499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_014
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19eb6673aab967880800000000000000
+      internalID: -8613526081923268975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_015
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1f3f1ca41bf8ff50800000000000000
+      internalID: 6915553294033043229
       vertices: []
       indices: 
       edges: []
@@ -526,6 +574,22 @@ TextureImporter:
       DELPHOX_7: 8160813340280684352
       DELPHOX_8: 513218732840921642
       DELPHOX_9: -8962519265083594014
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
+      frame_010: 4813649479255411303
+      frame_011: -2163629211269793909
+      frame_012: -3859094460156601481
+      frame_013: 3925152270859159499
+      frame_014: -8613526081923268975
+      frame_015: 6915553294033043229
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

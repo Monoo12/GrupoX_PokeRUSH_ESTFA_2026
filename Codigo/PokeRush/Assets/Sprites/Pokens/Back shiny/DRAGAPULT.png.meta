@@ -32,6 +32,36 @@ TextureImporter:
   - first:
       213: 4060406144043979194
     second: DRAGAPULT_9
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -78,7 +108,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 96
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -99,7 +129,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -127,221 +157,221 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DRAGAPULT_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 9
-        y: 8
-        width: 73
-        height: 79
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0e92b6af8f0483910800000000000000
-      internalID: 1817273887741389280
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 106
-        y: 7
-        width: 73
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 96
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4d0efff9b909845a0800000000000000
-      internalID: -6536815861049597740
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 203
-        y: 8
-        width: 73
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 192
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2b3654b594b164060800000000000000
-      internalID: 6937262277888664498
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 301
-        y: 8
-        width: 73
-        height: 79
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 288
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1158fb8656ba523a0800000000000000
-      internalID: -6690753219351575279
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 398
-        y: 10
-        width: 73
-        height: 78
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: be9089a3d872ce610800000000000000
-      internalID: 1651738650865043947
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 494
-        y: 11
-        width: 73
-        height: 79
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 480
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3caa154f982c01be0800000000000000
-      internalID: -1508491977403815229
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 590
-        y: 10
-        width: 73
-        height: 78
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 576
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1e187ec0be6dc8900800000000000000
-      internalID: 688161148103000545
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 685
-        y: 8
-        width: 73
-        height: 79
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 672
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f8c5182a745c02b10800000000000000
-      internalID: 1954779149738531983
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_8
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 779
-        y: 8
-        width: 73
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dd1581b29734868e0800000000000000
-      internalID: -1700034671639244323
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DRAGAPULT_9
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 874
-        y: 7
-        width: 73
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 864
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ab11e8300e5795830800000000000000
-      internalID: 4060406144043979194
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
@@ -370,6 +400,16 @@ TextureImporter:
       DRAGAPULT_7: 1954779149738531983
       DRAGAPULT_8: -1700034671639244323
       DRAGAPULT_9: 4060406144043979194
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -32,6 +32,36 @@ TextureImporter:
   - first:
       213: -5850967256480216935
     second: COPPERAJAH_9
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -78,7 +108,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 96
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -99,7 +129,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -127,221 +157,221 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: COPPERAJAH_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 10
-        y: 12
-        width: 75
-        height: 73
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2e0aaf5fe854a4970800000000000000
-      internalID: 8739874507180384482
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 107
-        y: 12
-        width: 75
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 96
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6f8c9f97c5d43f940800000000000000
-      internalID: 5328687843688171766
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 203
-        y: 12
-        width: 74
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 192
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 69104cfbccec59200800000000000000
-      internalID: 186282338391687574
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 299
-        y: 12
-        width: 74
-        height: 73
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 288
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: be7688fd172a95300800000000000000
-      internalID: 241402665006295019
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 395
-        y: 12
-        width: 74
-        height: 71
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 99929551a6a2f2ed0800000000000000
-      internalID: -2436682238271084135
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 493
-        y: 12
-        width: 72
-        height: 70
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 480
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 75afaf4b801e37fa0800000000000000
-      internalID: -5804048067238102441
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 587
-        y: 12
-        width: 74
-        height: 71
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 576
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 67919efa25f516660800000000000000
-      internalID: 7377282473352829302
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 683
-        y: 12
-        width: 74
-        height: 73
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 672
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4de7ea782c42e5c30800000000000000
-      internalID: 4349954708005093076
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_8
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 779
-        y: 12
-        width: 74
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9cbc72793580a68d0800000000000000
-      internalID: -2852458258874512439
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: COPPERAJAH_9
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 875
-        y: 12
-        width: 75
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 864
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9980e0da7403dcea0800000000000000
-      internalID: -5850967256480216935
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
@@ -370,6 +400,16 @@ TextureImporter:
       COPPERAJAH_7: 4349954708005093076
       COPPERAJAH_8: -2852458258874512439
       COPPERAJAH_9: -5850967256480216935
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

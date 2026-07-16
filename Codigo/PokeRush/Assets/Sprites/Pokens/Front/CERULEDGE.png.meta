@@ -17,6 +17,21 @@ TextureImporter:
   - first:
       213: 5319072862420011988
     second: CERULEDGE_4
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -63,7 +78,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 120
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -84,7 +99,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -112,111 +127,111 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CERULEDGE_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 19
-        y: 10
-        width: 81
-        height: 101
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7b80f25bba5020080800000000000000
-      internalID: -9222802851864049481
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CERULEDGE_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 138
-        y: 10
-        width: 83
-        height: 99
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 120
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 52c1e2c44bb9e85b0800000000000000
-      internalID: -5364178907477173211
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CERULEDGE_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 258
-        y: 10
-        width: 83
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 240
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8eb47e68b6f0b4950800000000000000
-      internalID: 6434253447128108008
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CERULEDGE_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 376
-        y: 10
-        width: 88
-        height: 101
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 360
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e20beac886dd38130800000000000000
-      internalID: 3567938770914160686
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CERULEDGE_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 497
-        y: 10
-        width: 87
-        height: 101
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 480
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4db07f2369421d940800000000000000
-      internalID: 5319072862420011988
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
@@ -240,6 +255,11 @@ TextureImporter:
       CERULEDGE_2: 6434253447128108008
       CERULEDGE_3: 3567938770914160686
       CERULEDGE_4: 5319072862420011988
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

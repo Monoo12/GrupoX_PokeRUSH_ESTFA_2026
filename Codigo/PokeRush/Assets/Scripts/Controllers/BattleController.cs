@@ -16,6 +16,10 @@ public class BattleController : MonoBehaviour
     [SerializeField] private PokenView enemyPokenView;           // sprite de frente (rival)
     [SerializeField] private PlayerInputController playerInputController; // corta el movimiento en mundo
 
+    [Header("Escenario")]
+    [Tooltip("Renderer del fondo de batalla. Se escala solo para cubrir la camara.")]
+    [SerializeField] private SpriteRenderer backgroundRenderer;
+
     [Header("Ritmo")]
     [Tooltip("Segundos que se muestra cada mensaje de combate.")]
     [SerializeField] private float messageDelay = 1f;
@@ -31,11 +35,28 @@ public class BattleController : MonoBehaviour
     private AIProfileDefinition _aiProfile;
     private readonly IBattleRng _rng = new UnityRng();
 
+    private void Awake()
+    {
+        // La UI avisa lo que eligio el jugador; aca se convierte en accion de combate
+        if (battleHudView != null)
+        {
+            battleHudView.MoveChosen += SelectMove;
+            battleHudView.SwitchChosen += SelectSwitch;
+            battleHudView.FleeChosen += SelectFlee;
+            battleHudView.BagChosen += OnBagSelected;
+        }
+    }
+
     // Combate contra un NPC (EnemyDefinition o BossDefinition)
     public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition)
     {
         var enemy = new EnemyModel(enemyDefinition);
-        BeginBattle(player, enemy);
+
+        Sprite background = null;
+        if (enemyDefinition is EnemyDefinition e) background = e.battleBackground;
+        else if (enemyDefinition is BossDefinition b) background = b.battleBackground;
+
+        BeginBattle(player, enemy, background);
     }
 
     // Combate contra un Poken salvaje (nivel sorteado en el rango del encuentro)
@@ -48,11 +69,12 @@ public class BattleController : MonoBehaviour
         }
         int level = _rng.Range(encounter.minLevel, encounter.maxLevel + 1);
         var enemy = new EnemyModel(encounter.species, level, encounter.aiProfile);
-        BeginBattle(player, enemy);
+        BeginBattle(player, enemy, encounter.battleBackground);
     }
 
-    private void BeginBattle(PlayerModel player, EnemyModel enemy)
+    private void BeginBattle(PlayerModel player, EnemyModel enemy, Sprite background = null)
     {
+        ApplyBackground(background);
         _playerModel = player;
         _enemyModel = enemy;
         _battleModel = new BattleModel(_playerModel, _enemyModel);
@@ -103,6 +125,7 @@ public class BattleController : MonoBehaviour
         yield return PlayEvents(_engine.BeginBattle());
 
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
+        battleHudView?.ShowCommandMenu(_battleModel);
     }
 
     // ---------- input del jugador ----------
@@ -173,11 +196,33 @@ public class BattleController : MonoBehaviour
         StartCoroutine(ResolveTurnRoutine(BattleAction.Switch(teamIndex)));
     }
 
+    // Huir: solo tiene sentido contra salvajes (contra entrenadores ni se intenta)
+    public void SelectFlee()
+    {
+        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+
+        if (!_enemyModel.IsWild)
+        {
+            Announce("¡No puedes huir de un combate contra un entrenador!");
+            return;
+        }
+
+        StartCoroutine(ResolveTurnRoutine(BattleAction.Flee()));
+    }
+
+    // Mochila: los items en combate llegan mas adelante
+    private void OnBagSelected()
+    {
+        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+        Announce("La mochila todavía no está disponible.");
+    }
+
     // ---------- resolucion y reproduccion del turno ----------
 
     private IEnumerator ResolveTurnRoutine(BattleAction playerAction)
     {
         _battleModel.SetPhase(BattlePhase.CalculatingResult);
+        battleHudView?.HideMenus();
 
         BattleAction enemyAction = _enemyAI.ChooseAction(
             AiContext.ForEnemy(_battleModel, _aiProfile), _rng);
@@ -193,6 +238,7 @@ public class BattleController : MonoBehaviour
 
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
         battleHudView?.UpdateHud(_battleModel);
+        battleHudView?.ShowCommandMenu(_battleModel);
     }
 
     // Reproduce los eventos del motor: refresca la UI y pausa entre mensajes
@@ -227,12 +273,19 @@ public class BattleController : MonoBehaviour
     private IEnumerator EndBattleRoutine()
     {
         bool victory = _battleModel.IsPlayerVictory;
-        Announce(victory ? "¡Ganaste el combate!" : "Perdiste el combate...");
-        yield return new WaitForSeconds(messageDelay);
+        bool escaped = _battleModel.PlayerEscaped;
+
+        // Si escapo, el mensaje "¡Escapaste sin problemas!" ya salio como evento
+        if (!escaped)
+        {
+            Announce(victory ? "¡Ganaste el combate!" : "Perdiste el combate...");
+            yield return new WaitForSeconds(messageDelay);
+        }
 
         var outcome = new BattleOutcome
         {
             PlayerVictory = victory,
+            Escaped = escaped,
             MoneyEarned = victory ? _enemyModel.Money : 0,
             Enemy = _enemyModel
         };
@@ -256,6 +309,25 @@ public class BattleController : MonoBehaviour
     }
 
     // ---------- utilidades ----------
+
+    // Cambia el fondo (si el enemigo trae uno) y lo escala para cubrir la camara
+    private void ApplyBackground(Sprite background)
+    {
+        if (backgroundRenderer == null) return;
+        if (background != null) backgroundRenderer.sprite = background;
+        if (backgroundRenderer.sprite == null) return;
+
+        Camera cam = Camera.main;
+        if (cam == null || !cam.orthographic) return;
+
+        float viewHeight = cam.orthographicSize * 2f;
+        float viewWidth = viewHeight * cam.aspect;
+        Vector2 spriteSize = backgroundRenderer.sprite.bounds.size;
+        if (spriteSize.x <= 0f || spriteSize.y <= 0f) return;
+
+        float scale = Mathf.Max(viewWidth / spriteSize.x, viewHeight / spriteSize.y);
+        backgroundRenderer.transform.localScale = new Vector3(scale, scale, 1f);
+    }
 
     // Muestra el mensaje en el HUD si existe; si no, lo manda a la Console.
     // Asi se puede probar el combate sin armar la UI.

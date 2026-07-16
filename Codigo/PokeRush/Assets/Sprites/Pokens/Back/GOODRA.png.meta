@@ -32,6 +32,36 @@ TextureImporter:
   - first:
       213: -4194980851175817922
     second: GOODRA_9
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -78,7 +108,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 96
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -99,7 +129,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -127,221 +157,221 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GOODRA_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 22
-        y: 7
-        width: 52
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4bdd0b23c0176bb60800000000000000
-      internalID: 7761515305023626676
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 119
-        y: 7
-        width: 51
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 96
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ab182b11e75377eb0800000000000000
-      internalID: -4722246868695612998
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 215
-        y: 7
-        width: 51
-        height: 83
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 192
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 35b4703c8c8b33cf0800000000000000
-      internalID: -273671979934463149
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 312
-        y: 7
-        width: 51
-        height: 83
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 288
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 18c3d61cc9ff9e030800000000000000
-      internalID: 3524629232119266433
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 407
-        y: 7
-        width: 52
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1b645159b30534be0800000000000000
-      internalID: -1494262434522380623
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 504
-        y: 7
-        width: 54
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 480
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 042f9fd67f914a110800000000000000
-      internalID: 1271169545318036032
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 599
-        y: 7
-        width: 52
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 576
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ed0870e02400ed930800000000000000
-      internalID: 4169770588694872286
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 696
-        y: 7
-        width: 51
-        height: 83
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 672
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 369508b2ea3ec2970800000000000000
-      internalID: 8731604114758195555
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_8
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 791
-        y: 7
-        width: 51
-        height: 83
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: edfacb694526efd30800000000000000
-      internalID: 4467115995843833822
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GOODRA_9
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 887
-        y: 7
-        width: 51
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 864
+        y: 0
+        width: 96
+        height: 96
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e3d791e442f68c5c0800000000000000
-      internalID: -4194980851175817922
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
@@ -370,6 +400,16 @@ TextureImporter:
       GOODRA_7: 8731604114758195555
       GOODRA_8: 4467115995843833822
       GOODRA_9: -4194980851175817922
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

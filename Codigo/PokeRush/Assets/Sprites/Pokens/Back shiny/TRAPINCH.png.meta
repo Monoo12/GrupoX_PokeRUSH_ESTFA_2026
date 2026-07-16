@@ -59,6 +59,63 @@ TextureImporter:
   - first:
       213: -1282465872969034638
     second: TRAPINCH_18
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
+  - first:
+      213: 4813649479255411303
+    second: frame_010
+  - first:
+      213: -2163629211269793909
+    second: frame_011
+  - first:
+      213: -3859094460156601481
+    second: frame_012
+  - first:
+      213: 3925152270859159499
+    second: frame_013
+  - first:
+      213: -8613526081923268975
+    second: frame_014
+  - first:
+      213: 6915553294033043229
+    second: frame_015
+  - first:
+      213: 4422891160138998478
+    second: frame_016
+  - first:
+      213: -77789508786456262
+    second: frame_017
+  - first:
+      213: 3973188589083092960
+    second: frame_018
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -105,7 +162,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 45
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,7 +183,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -154,419 +211,419 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TRAPINCH_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a96d881719008cce0800000000000000
-      internalID: -1384856260741376358
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 46
+        x: 45
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c2e8a2011bbdb50f0800000000000000
-      internalID: -1127065728199258580
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 91
+        x: 90
         y: 0
-        width: 41
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 22f874442c8a611d0800000000000000
-      internalID: -3380328917972316382
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TRAPINCH_3
-      rect:
-        serializedVersion: 2
-        x: 136
-        y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b9ffa69e09020c010800000000000000
-      internalID: 1207000506898775963
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_4
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 181
+        x: 135
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dc15ea54f6e00d8b0800000000000000
-      internalID: -5129584104501784115
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_5
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 226
+        x: 180
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a16350c1ea89695f0800000000000000
-      internalID: -750244414348773862
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_6
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 271
+        x: 225
         y: 0
-        width: 43
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a1c40325079d9220800000000000000
-      internalID: 2494315816951267745
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_7
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 316
+        x: 270
         y: 0
-        width: 42
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9e3a068c876c85680800000000000000
-      internalID: -8766038452616518679
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TRAPINCH_8
-      rect:
-        serializedVersion: 2
-        x: 361
-        y: 0
-        width: 43
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 07f196aee3428b540800000000000000
-      internalID: 5023805236971118448
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_9
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 406
+        x: 315
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8f81a9000c5ff5c40800000000000000
-      internalID: 5503387474662660344
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_10
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 451
+        x: 360
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2935e0a53bfd1f7b0800000000000000
-      internalID: -5192122933978442862
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_11
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 496
+        x: 405
         y: 0
-        width: 41
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2cfcde533e0933780800000000000000
-      internalID: -8704454349240283198
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TRAPINCH_12
-      rect:
-        serializedVersion: 2
-        x: 541
-        y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5198658d9c2694ae0800000000000000
-      internalID: -1564610776477038315
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_13
+      name: frame_010
       rect:
         serializedVersion: 2
-        x: 586
+        x: 450
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9fcf12bd7a82e2ce0800000000000000
-      internalID: -1428159330428781319
+      spriteID: 76a434492b48dc240800000000000000
+      internalID: 4813649479255411303
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_14
+      name: frame_011
       rect:
         serializedVersion: 2
-        x: 631
+        x: 495
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 152820a805dc59020800000000000000
-      internalID: 2348008526540079697
+      spriteID: b87fa9c12be39f1e0800000000000000
+      internalID: -2163629211269793909
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_15
+      name: frame_012
       rect:
         serializedVersion: 2
-        x: 676
+        x: 540
         y: 0
-        width: 43
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 98e6c405d14ee0570800000000000000
-      internalID: 8434929966663888521
+      spriteID: 77b10bbe80eb17ac0800000000000000
+      internalID: -3859094460156601481
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_16
+      name: frame_013
       rect:
         serializedVersion: 2
-        x: 721
+        x: 585
         y: 0
-        width: 42
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 31cc6c677990a3750800000000000000
-      internalID: 6285346776086400019
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TRAPINCH_17
-      rect:
-        serializedVersion: 2
-        x: 766
-        y: 0
-        width: 43
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 09d9823fcd7985490800000000000000
-      internalID: -7757283382917554800
+      spriteID: bc7c0e9a131f87630800000000000000
+      internalID: 3925152270859159499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TRAPINCH_18
+      name: frame_014
       rect:
         serializedVersion: 2
-        x: 811
+        x: 630
         y: 0
-        width: 41
+        width: 45
         height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2749e155514c33ee0800000000000000
-      internalID: -1282465872969034638
+      spriteID: 19eb6673aab967880800000000000000
+      internalID: -8613526081923268975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_015
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 0
+        width: 45
+        height: 45
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1f3f1ca41bf8ff50800000000000000
+      internalID: 6915553294033043229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_016
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 45
+        height: 45
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec2ec40a314416d30800000000000000
+      internalID: 4422891160138998478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_017
+      rect:
+        serializedVersion: 2
+        x: 765
+        y: 0
+        width: 45
+        height: 45
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a39f7899ad2abeef0800000000000000
+      internalID: -77789508786456262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_018
+      rect:
+        serializedVersion: 2
+        x: 810
+        y: 0
+        width: 45
+        height: 45
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e7eeed88f9932730800000000000000
+      internalID: 3973188589083092960
       vertices: []
       indices: 
       edges: []
@@ -604,6 +661,25 @@ TextureImporter:
       TRAPINCH_7: -8766038452616518679
       TRAPINCH_8: 5023805236971118448
       TRAPINCH_9: 5503387474662660344
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
+      frame_010: 4813649479255411303
+      frame_011: -2163629211269793909
+      frame_012: -3859094460156601481
+      frame_013: 3925152270859159499
+      frame_014: -8613526081923268975
+      frame_015: 6915553294033043229
+      frame_016: 4422891160138998478
+      frame_017: -77789508786456262
+      frame_018: 3973188589083092960
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

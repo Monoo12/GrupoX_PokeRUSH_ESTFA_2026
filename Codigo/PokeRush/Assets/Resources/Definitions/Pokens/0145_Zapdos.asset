@@ -16,18 +16,74 @@ MonoBehaviour:
   dexNumber: 145
   type: 5
   type2: 10
-  battleFrontSprite: {fileID: 6895073720683191870, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
-  battleBackSprite: {fileID: 6895073720683191870, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
-  battleFrontShinySprite: {fileID: 6895073720683191870, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
-  battleBackShinySprite: {fileID: 6895073720683191870, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  battleFrontSprite: {fileID: 8673283512139689658, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  battleBackSprite: {fileID: 8673283512139689658, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  battleFrontShinySprite: {fileID: 8673283512139689658, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  battleBackShinySprite: {fileID: 8673283512139689658, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  battleFrontFrames:
+  - {fileID: 8673283512139689658, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 2112119992331828786, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 364630787094113051, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: -5490945197755662192, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 8662497501436820962, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 2371050419378103419, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 5961685419649759798, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 601581715184597111, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: -7155570462808879971, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 1696591351133385988, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 4813649479255411303, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: -2163629211269793909, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: -3859094460156601481, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 3925152270859159499, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: -8613526081923268975, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 6915553294033043229, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  - {fileID: 4422891160138998478, guid: e6d6709454ebf474f94753453a2e35d4, type: 3}
+  battleBackFrames:
+  - {fileID: 8673283512139689658, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 2112119992331828786, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 364630787094113051, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: -5490945197755662192, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 8662497501436820962, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 2371050419378103419, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 5961685419649759798, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 601581715184597111, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: -7155570462808879971, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 1696591351133385988, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 4813649479255411303, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: -2163629211269793909, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: -3859094460156601481, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 3925152270859159499, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: -8613526081923268975, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 6915553294033043229, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  - {fileID: 4422891160138998478, guid: b5c8a1c973d6d3a4c8047dd55d0bfe39, type: 3}
+  battleFrontShinyFrames:
+  - {fileID: 8673283512139689658, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: 2112119992331828786, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: 364630787094113051, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: -5490945197755662192, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: 8662497501436820962, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: 2371050419378103419, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: 5961685419649759798, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: 601581715184597111, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  - {fileID: -7155570462808879971, guid: 7bfcd466457108e4db8f9a77f5796ede, type: 3}
+  battleBackShinyFrames:
+  - {fileID: 8673283512139689658, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: 2112119992331828786, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: 364630787094113051, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: -5490945197755662192, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: 8662497501436820962, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: 2371050419378103419, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: 5961685419649759798, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: 601581715184597111, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
+  - {fileID: -7155570462808879971, guid: 290b32d92f54b0a40b2f915ebd1c9ea8, type: 3}
   worldFrontSprite: {fileID: 0}
   worldBackSprite: {fileID: 0}
   worldSideSprite: {fileID: 0}
   worldFrontShinySprite: {fileID: 0}
   worldBackShinySprite: {fileID: 0}
   worldSideShinySprite: {fileID: 0}
-  inventorySprite: {fileID: 6895073720683191870, guid: e8a6d1975eb470642b70661f9fb45ec0, type: 3}
-  inventoryShinySprite: {fileID: 6895073720683191870, guid: 49467c5d6d9e1a5459d10b6c30cd4aa1, type: 3}
+  inventorySprite: {fileID: 8673283512139689658, guid: e8a6d1975eb470642b70661f9fb45ec0, type: 3}
+  inventoryShinySprite: {fileID: 8673283512139689658, guid: 49467c5d6d9e1a5459d10b6c30cd4aa1, type: 3}
   battleAnimator: {fileID: 0}
   worldAnimator: {fileID: 0}
   baseHP: 90

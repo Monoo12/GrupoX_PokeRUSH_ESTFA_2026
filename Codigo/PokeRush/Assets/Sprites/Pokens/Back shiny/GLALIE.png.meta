@@ -143,6 +143,156 @@ TextureImporter:
   - first:
       213: -4359560233566476463
     second: GLALIE_46
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
+  - first:
+      213: 4813649479255411303
+    second: frame_010
+  - first:
+      213: -2163629211269793909
+    second: frame_011
+  - first:
+      213: -3859094460156601481
+    second: frame_012
+  - first:
+      213: 3925152270859159499
+    second: frame_013
+  - first:
+      213: -8613526081923268975
+    second: frame_014
+  - first:
+      213: 6915553294033043229
+    second: frame_015
+  - first:
+      213: 4422891160138998478
+    second: frame_016
+  - first:
+      213: -77789508786456262
+    second: frame_017
+  - first:
+      213: 3973188589083092960
+    second: frame_018
+  - first:
+      213: -6848211472367207970
+    second: frame_019
+  - first:
+      213: -7965393433483348297
+    second: frame_020
+  - first:
+      213: -6131558145244503127
+    second: frame_021
+  - first:
+      213: -7342315053162181326
+    second: frame_022
+  - first:
+      213: -8359974792355084213
+    second: frame_023
+  - first:
+      213: -7937901747678260119
+    second: frame_024
+  - first:
+      213: 4049660129893247617
+    second: frame_025
+  - first:
+      213: -6667151133557481242
+    second: frame_026
+  - first:
+      213: -96064508775971352
+    second: frame_027
+  - first:
+      213: -6329984859060825946
+    second: frame_028
+  - first:
+      213: 5134770211506678550
+    second: frame_029
+  - first:
+      213: -6033780643431468617
+    second: frame_030
+  - first:
+      213: -3932571220498270154
+    second: frame_031
+  - first:
+      213: 3797512929648766989
+    second: frame_032
+  - first:
+      213: -9206479553188696944
+    second: frame_033
+  - first:
+      213: 6778060956798622729
+    second: frame_034
+  - first:
+      213: 2398651452839880482
+    second: frame_035
+  - first:
+      213: 5604796493002131577
+    second: frame_036
+  - first:
+      213: 935331342829904235
+    second: frame_037
+  - first:
+      213: -7506708479759995959
+    second: frame_038
+  - first:
+      213: -7144077952062051191
+    second: frame_039
+  - first:
+      213: -6195428208035944376
+    second: frame_040
+  - first:
+      213: 6850542894335240483
+    second: frame_041
+  - first:
+      213: -1123807724776085567
+    second: frame_042
+  - first:
+      213: 2334950026988436744
+    second: frame_043
+  - first:
+      213: 3796179250682050084
+    second: frame_044
+  - first:
+      213: 3825540009728801096
+    second: frame_045
+  - first:
+      213: -2382365467457108859
+    second: frame_046
+  - first:
+      213: 6520109995006856395
+    second: frame_047
+  - first:
+      213: 839177968523049231
+    second: frame_048
+  - first:
+      213: -2334911464551305496
+    second: frame_049
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -189,7 +339,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 63
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -210,7 +360,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -238,1035 +388,1101 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GLALIE_0
+      name: frame_000
       rect:
         serializedVersion: 2
         x: 0
-        y: 7
-        width: 59
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: de0d141e0b1ccfb20800000000000000
-      internalID: 3169621203199578349
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 62
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 63
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 91fba0dec81c50dc0800000000000000
-      internalID: -3673317110034284775
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 125
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 126
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c2da03687d07a7a20800000000000000
-      internalID: 3060882967723289900
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 188
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 189
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 84386ac682d337380800000000000000
-      internalID: -8974762388588428472
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 251
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 252
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3763257543ea92490800000000000000
-      internalID: -7770488142224542093
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 314
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 315
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f2f876dd32200b0e0800000000000000
-      internalID: -2256301060250955985
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 377
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 378
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9a592afade1324d90800000000000000
-      internalID: -7115069564368284247
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 440
-        y: 7
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 441
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4e1047aaaec8ffd00800000000000000
-      internalID: 1008679781064245732
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_8
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 503
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 504
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 20be03a6b2736e630800000000000000
-      internalID: 3955909982296271618
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_9
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 566
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 567
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 625c1222a8b99ced0800000000000000
-      internalID: -2393210709390277338
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_10
+      name: frame_010
       rect:
         serializedVersion: 2
-        x: 629
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 630
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a18c37654bb45cb90800000000000000
-      internalID: -7222283189502097382
+      spriteID: 76a434492b48dc240800000000000000
+      internalID: 4813649479255411303
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_11
+      name: frame_011
       rect:
         serializedVersion: 2
-        x: 692
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 693
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 42e61bc0346eb5e20800000000000000
-      internalID: 3340516724275506724
+      spriteID: b87fa9c12be39f1e0800000000000000
+      internalID: -2163629211269793909
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_12
+      name: frame_012
       rect:
         serializedVersion: 2
-        x: 755
-        y: 7
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 756
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 571adfe9ba7e21f50800000000000000
-      internalID: 6850792707476791669
+      spriteID: 77b10bbe80eb17ac0800000000000000
+      internalID: -3859094460156601481
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_13
+      name: frame_013
       rect:
         serializedVersion: 2
-        x: 818
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 819
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6720c38dc8512a0d0800000000000000
-      internalID: -3413141872925998474
+      spriteID: bc7c0e9a131f87630800000000000000
+      internalID: 3925152270859159499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_14
+      name: frame_014
       rect:
         serializedVersion: 2
-        x: 881
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 882
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ca4fd62186c2cbce0800000000000000
-      internalID: -1388185759639538516
+      spriteID: 19eb6673aab967880800000000000000
+      internalID: -8613526081923268975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_15
+      name: frame_015
       rect:
         serializedVersion: 2
-        x: 944
-        y: 3
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 945
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a59338edec23d2ca0800000000000000
-      internalID: -6040115661156173478
+      spriteID: d1f3f1ca41bf8ff50800000000000000
+      internalID: 6915553294033043229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_16
+      name: frame_016
       rect:
         serializedVersion: 2
-        x: 1007
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1008
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1fc32b3909d26f0c0800000000000000
-      internalID: -4542393075180094223
+      spriteID: ec2ec40a314416d30800000000000000
+      internalID: 4422891160138998478
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_17
+      name: frame_017
       rect:
         serializedVersion: 2
-        x: 1070
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1071
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f7ac10bb119cb6b40800000000000000
-      internalID: 5434658453341719167
+      spriteID: a39f7899ad2abeef0800000000000000
+      internalID: -77789508786456262
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_18
+      name: frame_018
       rect:
         serializedVersion: 2
-        x: 1133
-        y: 7
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1134
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71c648dc1d6e906b0800000000000000
-      internalID: -5329474895245710313
+      spriteID: 0e7eeed88f9932730800000000000000
+      internalID: 3973188589083092960
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_19
+      name: frame_019
       rect:
         serializedVersion: 2
-        x: 1196
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1197
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e872398025cefc6c0800000000000000
-      internalID: -4120815296945379442
+      spriteID: ed93cc203f346f0a0800000000000000
+      internalID: -6848211472367207970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_20
+      name: frame_020
       rect:
         serializedVersion: 2
-        x: 1259
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1260
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5bb2c6a45c4716d0800000000000000
-      internalID: -3019861098669884580
+      spriteID: 7b6fefcefdc357190800000000000000
+      internalID: -7965393433483348297
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_21
+      name: frame_021
       rect:
         serializedVersion: 2
-        x: 1322
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1323
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6710341a054dc7310800000000000000
-      internalID: 1404230626600747382
+      spriteID: 9a36c017a5458eaa0800000000000000
+      internalID: -6131558145244503127
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_22
+      name: frame_022
       rect:
         serializedVersion: 2
-        x: 1385
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1386
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 826d0fb4b4e36e130800000000000000
-      internalID: 3595629845619463720
+      spriteID: 23dc3434c5bda1a90800000000000000
+      internalID: -7342315053162181326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_23
+      name: frame_023
       rect:
         serializedVersion: 2
-        x: 1448
-        y: 7
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1449
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f882bee0132752cf0800000000000000
-      internalID: -277690246984161137
+      spriteID: b48847a28376bfb80800000000000000
+      internalID: -8359974792355084213
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_24
+      name: frame_024
       rect:
         serializedVersion: 2
-        x: 1511
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1512
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 82318393217bc9ab0800000000000000
-      internalID: -4999920197390822616
+      spriteID: 9645fa3da68e6d190800000000000000
+      internalID: -7937901747678260119
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_25
+      name: frame_025
       rect:
         serializedVersion: 2
-        x: 1574
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1575
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5a9c386a4011a970800000000000000
-      internalID: 8764304261602122332
+      spriteID: 18a695f9e68433830800000000000000
+      internalID: 4049660129893247617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_26
+      name: frame_026
       rect:
         serializedVersion: 2
-        x: 1637
-        y: 3
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1638
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2a7db27f7cdb7bfb0800000000000000
-      internalID: -4632025025184278622
+      spriteID: 6e0a67c3e558973a0800000000000000
+      internalID: -6667151133557481242
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_27
+      name: frame_027
       rect:
         serializedVersion: 2
-        x: 1700
-        y: 1
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1701
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6b9b3df5eab248300800000000000000
-      internalID: 253375506971605430
+      spriteID: 8e5c2e696d5baaef0800000000000000
+      internalID: -96064508775971352
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_28
+      name: frame_028
       rect:
         serializedVersion: 2
-        x: 1763
-        y: 1
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1764
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 077550f37f91d3f80800000000000000
-      internalID: -8125309603001575568
+      spriteID: 6a01412fe406728a0800000000000000
+      internalID: -6329984859060825946
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_29
+      name: frame_029
       rect:
         serializedVersion: 2
-        x: 1831
-        y: 1
-        width: 118
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1827
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6f16c5b461e6da6d0800000000000000
-      internalID: -2977602736589348362
+      spriteID: 61bec1c5d4e524740800000000000000
+      internalID: 5134770211506678550
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_30
+      name: frame_030
       rect:
         serializedVersion: 2
-        x: 1957
-        y: 1
-        width: 118
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1890
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1b2bf84c03916d0e0800000000000000
-      internalID: -2245579666950737231
+      spriteID: 7b1b3af1974b34ca0800000000000000
+      internalID: -6033780643431468617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_31
+      name: frame_031
       rect:
         serializedVersion: 2
-        x: 2078
-        y: 1
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1953
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3450d61ac1b24a660800000000000000
-      internalID: 7396083890016552259
+      spriteID: 638b6448f43bc69c0800000000000000
+      internalID: -3932571220498270154
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_32
+      name: frame_032
       rect:
         serializedVersion: 2
-        x: 2146
-        y: 1
-        width: 118
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2016
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 365f55029d4ae7b30800000000000000
-      internalID: 4287045147760653667
+      spriteID: d00faa1b3e973b430800000000000000
+      internalID: 3797512929648766989
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_33
+      name: frame_033
       rect:
         serializedVersion: 2
-        x: 2267
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2079
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c49ea41f5cd703170800000000000000
-      internalID: 8156157214278216012
+      spriteID: 09c6a48df930c3080800000000000000
+      internalID: -9206479553188696944
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_34
+      name: frame_034
       rect:
         serializedVersion: 2
-        x: 2330
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2142
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1124590c063149950800000000000000
-      internalID: 6454805472197558801
+      spriteID: 90c1deb4782801e50800000000000000
+      internalID: 6778060956798622729
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_35
+      name: frame_035
       rect:
         serializedVersion: 2
-        x: 2393
-        y: 7
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2205
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 824184189efef6540800000000000000
-      internalID: 5003481497207313448
+      spriteID: 227ee7aa9c8b94120800000000000000
+      internalID: 2398651452839880482
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_36
+      name: frame_036
       rect:
         serializedVersion: 2
-        x: 2456
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2268
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d92e378c4eb243ca0800000000000000
-      internalID: -6038152938781416803
+      spriteID: 9784fb307bc38cd40800000000000000
+      internalID: 5604796493002131577
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_37
+      name: frame_037
       rect:
         serializedVersion: 2
-        x: 2519
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2331
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4beeb93decd972a40800000000000000
-      internalID: 5343412994537418420
+      spriteID: b616aa496e6fafc00800000000000000
+      internalID: 935331342829904235
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_38
+      name: frame_038
       rect:
         serializedVersion: 2
-        x: 2582
-        y: 3
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2394
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 22aef53fed2ecafd0800000000000000
-      internalID: -2329237460063622622
+      spriteID: 9cb2e7fe860d2d790800000000000000
+      internalID: -7506708479759995959
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_39
+      name: frame_039
       rect:
         serializedVersion: 2
-        x: 2645
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2457
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0dbf26be356f8e090800000000000000
-      internalID: -8004877497359205424
+      spriteID: 98c24ab14f22bdc90800000000000000
+      internalID: -7144077952062051191
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_40
+      name: frame_040
       rect:
         serializedVersion: 2
-        x: 2708
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2520
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: becc487f742bdaac0800000000000000
-      internalID: -3842218884912067349
+      spriteID: 848259c9eda650aa0800000000000000
+      internalID: -6195428208035944376
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_41
+      name: frame_041
       rect:
         serializedVersion: 2
-        x: 2771
-        y: 7
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2583
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a1d107dd3a6f58e40800000000000000
-      internalID: 5658199690516110618
+      spriteID: 329ad677774021f50800000000000000
+      internalID: 6850542894335240483
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_42
+      name: frame_042
       rect:
         serializedVersion: 2
-        x: 2834
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2646
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a836993bcd1fd2f00800000000000000
-      internalID: 1093796214729171850
+      spriteID: 1c7a1e814de6760f0800000000000000
+      internalID: -1123807724776085567
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_43
+      name: frame_043
       rect:
         serializedVersion: 2
-        x: 2897
-        y: 5
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2709
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 955f61a6203ea39a0800000000000000
-      internalID: -6252435533141183143
+      spriteID: 80d3feeada8676020800000000000000
+      internalID: 2334950026988436744
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_44
+      name: frame_044
       rect:
         serializedVersion: 2
-        x: 2960
-        y: 4
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2772
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: efa62ba07cd8a4c00800000000000000
-      internalID: 885676162749197054
+      spriteID: 426bc9c5aecbea430800000000000000
+      internalID: 3796179250682050084
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_45
+      name: frame_045
       rect:
         serializedVersion: 2
-        x: 3023
-        y: 6
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2835
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f4b52345228aebf40800000000000000
-      internalID: 5746215039966272335
+      spriteID: 849fde9ce5c071530800000000000000
+      internalID: 3825540009728801096
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GLALIE_46
+      name: frame_046
       rect:
         serializedVersion: 2
-        x: 3086
-        y: 7
-        width: 60
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2898
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 157e955c01bbf73c0800000000000000
-      internalID: -4359560233566476463
+      spriteID: 584cf0bca3320fed0800000000000000
+      internalID: -2382365467457108859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_047
+      rect:
+        serializedVersion: 2
+        x: 2961
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcc8bd4de751c7a50800000000000000
+      internalID: 6520109995006856395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_048
+      rect:
+        serializedVersion: 2
+        x: 3024
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f09762d8aeb55ab00800000000000000
+      internalID: 839177968523049231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_049
+      rect:
+        serializedVersion: 2
+        x: 3087
+        y: 0
+        width: 63
+        height: 63
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eeae65d46ab89fd0800000000000000
+      internalID: -2334911464551305496
       vertices: []
       indices: 
       edges: []
@@ -1332,6 +1548,56 @@ TextureImporter:
       GLALIE_7: 1008679781064245732
       GLALIE_8: 3955909982296271618
       GLALIE_9: -2393210709390277338
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
+      frame_010: 4813649479255411303
+      frame_011: -2163629211269793909
+      frame_012: -3859094460156601481
+      frame_013: 3925152270859159499
+      frame_014: -8613526081923268975
+      frame_015: 6915553294033043229
+      frame_016: 4422891160138998478
+      frame_017: -77789508786456262
+      frame_018: 3973188589083092960
+      frame_019: -6848211472367207970
+      frame_020: -7965393433483348297
+      frame_021: -6131558145244503127
+      frame_022: -7342315053162181326
+      frame_023: -8359974792355084213
+      frame_024: -7937901747678260119
+      frame_025: 4049660129893247617
+      frame_026: -6667151133557481242
+      frame_027: -96064508775971352
+      frame_028: -6329984859060825946
+      frame_029: 5134770211506678550
+      frame_030: -6033780643431468617
+      frame_031: -3932571220498270154
+      frame_032: 3797512929648766989
+      frame_033: -9206479553188696944
+      frame_034: 6778060956798622729
+      frame_035: 2398651452839880482
+      frame_036: 5604796493002131577
+      frame_037: 935331342829904235
+      frame_038: -7506708479759995959
+      frame_039: -7144077952062051191
+      frame_040: -6195428208035944376
+      frame_041: 6850542894335240483
+      frame_042: -1123807724776085567
+      frame_043: 2334950026988436744
+      frame_044: 3796179250682050084
+      frame_045: 3825540009728801096
+      frame_046: -2382365467457108859
+      frame_047: 6520109995006856395
+      frame_048: 839177968523049231
+      frame_049: -2334911464551305496
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

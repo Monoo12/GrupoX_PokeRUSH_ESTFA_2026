@@ -21,6 +21,9 @@ public class TurnEngine
     // (los lideres eligen por matchup); por defecto manda el primero con vida.
     public System.Func<BattleModel, int> EnemyReplacementSelector;
 
+    // Intentos de huida acumulados (mejoran la chance, como en la saga)
+    private int _escapeAttempts;
+
     public TurnEngine(BattleModel model, IBattleRng rng)
     {
         _model = model;
@@ -39,6 +42,13 @@ public class TurnEngine
     public List<BattleEvent> ResolveTurn(BattleAction playerAction, BattleAction enemyAction)
     {
         var events = new List<BattleEvent>();
+
+        // 0) Huir (solo de salvajes): se resuelve antes que todo, como en la saga.
+        //    Si falla, el jugador pierde su accion y el rival ataca igual.
+        if (playerAction.Kind == BattleActionKind.Flee)
+        {
+            if (TryEscape(events)) return events;
+        }
 
         // 1) Cambios primero (si ambos cambian, primero el jugador)
         if (playerAction.Kind == BattleActionKind.SwitchPoken)
@@ -92,6 +102,34 @@ public class TurnEngine
             _model.AdvanceTurn();
 
         return events;
+    }
+
+    // Formula clasica de escape: F = velocidad*128/velocidadRival + 30*intentos.
+    // Escapa si un numero al azar de 0-255 es menor que F.
+    private bool TryEscape(List<BattleEvent> events)
+    {
+        if (!_model.Enemy.IsWild)
+        {
+            // Salvaguarda: el controller no deberia dejar llegar esto aca
+            BattleEvent.Add(events, "¡No puedes huir de un combate contra un entrenador!");
+            return false;
+        }
+
+        _escapeAttempts++;
+        int playerSpeed = _model.PlayerState.EffectiveSpeed;
+        int enemySpeed = System.Math.Max(1, _model.EnemyState.EffectiveSpeed);
+        int threshold = playerSpeed * 128 / enemySpeed + 30 * _escapeAttempts;
+
+        if (threshold > 255 || _rng.Range(0, 256) < threshold)
+        {
+            BattleEvent.Add(events, "¡Escapaste sin problemas!");
+            _model.FinishEscaped();
+            events.Add(BattleEvent.Of(BattleEventKind.BattleEnded, false));
+            return true;
+        }
+
+        BattleEvent.Add(events, "¡No puedes escapar!");
+        return false;
     }
 
     // ---------- orden de turno ----------

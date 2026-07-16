@@ -16,4 +16,8 @@ public class WildEncounterDefinition : ScriptableObject
     [Header("IA")]
     [Tooltip("Normalmente el perfil Wild. Si queda vacio, BattleAIFactory usa el comportamiento Wild por defecto.")]
     public AIProfileDefinition aiProfile;
+
+    [Header("Escenario")]
+    [Tooltip("Fondo de batalla (de Assets/Sprites/Battlebacks). Vacio = fondo por defecto de la escena.")]
+    public Sprite battleBackground;
 }

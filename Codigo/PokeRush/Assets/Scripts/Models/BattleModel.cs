@@ -56,10 +56,21 @@ public class BattleModel
         PlayerParticipants.Add(ActivePlayerPoken);
     }
 
+    // El jugador escapo de un combate salvaje: termina sin ganador ni derrota
+    public bool PlayerEscaped { get; private set; }
+
     public void Finish(bool playerVictory)
     {
         IsBattleOver = true;
         IsPlayerVictory = playerVictory;
+        CurrentPhase = BattlePhase.End;
+    }
+
+    public void FinishEscaped()
+    {
+        PlayerEscaped = true;
+        IsBattleOver = true;
+        IsPlayerVictory = false;
         CurrentPhase = BattlePhase.End;
     }
 }

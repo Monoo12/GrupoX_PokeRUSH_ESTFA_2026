@@ -131,6 +131,135 @@ TextureImporter:
   - first:
       213: -9192433325097113949
     second: SHUPPET_42
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
+  - first:
+      213: 4813649479255411303
+    second: frame_010
+  - first:
+      213: -2163629211269793909
+    second: frame_011
+  - first:
+      213: -3859094460156601481
+    second: frame_012
+  - first:
+      213: 3925152270859159499
+    second: frame_013
+  - first:
+      213: -8613526081923268975
+    second: frame_014
+  - first:
+      213: 6915553294033043229
+    second: frame_015
+  - first:
+      213: 4422891160138998478
+    second: frame_016
+  - first:
+      213: -77789508786456262
+    second: frame_017
+  - first:
+      213: 3973188589083092960
+    second: frame_018
+  - first:
+      213: -6848211472367207970
+    second: frame_019
+  - first:
+      213: -7965393433483348297
+    second: frame_020
+  - first:
+      213: -6131558145244503127
+    second: frame_021
+  - first:
+      213: -7342315053162181326
+    second: frame_022
+  - first:
+      213: -8359974792355084213
+    second: frame_023
+  - first:
+      213: -7937901747678260119
+    second: frame_024
+  - first:
+      213: 4049660129893247617
+    second: frame_025
+  - first:
+      213: -6667151133557481242
+    second: frame_026
+  - first:
+      213: -96064508775971352
+    second: frame_027
+  - first:
+      213: -6329984859060825946
+    second: frame_028
+  - first:
+      213: 5134770211506678550
+    second: frame_029
+  - first:
+      213: -6033780643431468617
+    second: frame_030
+  - first:
+      213: -3932571220498270154
+    second: frame_031
+  - first:
+      213: 3797512929648766989
+    second: frame_032
+  - first:
+      213: -9206479553188696944
+    second: frame_033
+  - first:
+      213: 6778060956798622729
+    second: frame_034
+  - first:
+      213: 2398651452839880482
+    second: frame_035
+  - first:
+      213: 5604796493002131577
+    second: frame_036
+  - first:
+      213: 935331342829904235
+    second: frame_037
+  - first:
+      213: -7506708479759995959
+    second: frame_038
+  - first:
+      213: -7144077952062051191
+    second: frame_039
+  - first:
+      213: -6195428208035944376
+    second: frame_040
+  - first:
+      213: 6850542894335240483
+    second: frame_041
+  - first:
+      213: -1123807724776085567
+    second: frame_042
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -177,7 +306,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 61
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -198,7 +327,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -226,947 +355,947 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SHUPPET_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 13
-        y: 2
-        width: 37
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4c3a6fab73bb67cc0800000000000000
-      internalID: -3713574994686073916
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SHUPPET_1
-      rect:
-        serializedVersion: 2
-        x: 74
+        x: 0
         y: 0
-        width: 37
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aacd8acac7b7d6660800000000000000
-      internalID: 7380691139733019818
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_2
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 135
+        x: 61
         y: 0
-        width: 38
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 515979c5c616d3d90800000000000000
-      internalID: -7116424718137715435
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_3
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 196
+        x: 122
         y: 0
-        width: 38
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8d5ccfdc721ffeed0800000000000000
-      internalID: -2382420524593789480
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_4
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 257
+        x: 183
         y: 0
-        width: 39
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 64e9a2b22ba699b20800000000000000
-      internalID: 3141659528528567878
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_5
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 317
+        x: 244
         y: 0
-        width: 39
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 93fea77cc8a394d50800000000000000
-      internalID: 6721968295143731001
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_6
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 378
+        x: 305
         y: 0
-        width: 39
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 572ddb4309fce6f40800000000000000
-      internalID: 5723740394701574773
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_7
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 438
+        x: 366
         y: 0
-        width: 39
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 66b3959a0809e9c30800000000000000
-      internalID: 4368087570867370854
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_8
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 500
+        x: 427
         y: 0
-        width: 38
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7370731e48d7c5ce0800000000000000
-      internalID: -1415118173233543369
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_9
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 561
+        x: 488
         y: 0
-        width: 38
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e50ae4808d859d6b0800000000000000
-      internalID: -5271084203984904098
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_10
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 621
-        y: 1
-        width: 39
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1e8f7366f144b6b40800000000000000
-      internalID: 5434512277002254561
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SHUPPET_11
-      rect:
-        serializedVersion: 2
-        x: 681
-        y: 1
-        width: 40
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9541c9489c2246b50800000000000000
-      internalID: 6585426804031099993
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SHUPPET_12
-      rect:
-        serializedVersion: 2
-        x: 741
-        y: 1
-        width: 41
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c14591ead793fc620800000000000000
-      internalID: 2796517105574958108
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SHUPPET_13
-      rect:
-        serializedVersion: 2
-        x: 803
-        y: 2
-        width: 40
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 09e1ed6884c5dc360800000000000000
-      internalID: 7191505646550654608
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SHUPPET_14
-      rect:
-        serializedVersion: 2
-        x: 866
-        y: 2
-        width: 38
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c5fab5b4d40903450800000000000000
-      internalID: 6066507359719239516
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SHUPPET_15
-      rect:
-        serializedVersion: 2
-        x: 928
-        y: 2
-        width: 37
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d214a86c539886010800000000000000
-      internalID: 1182345766241976621
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SHUPPET_16
-      rect:
-        serializedVersion: 2
-        x: 989
+        x: 549
         y: 0
-        width: 37
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 071e9e6e3cac8f950800000000000000
-      internalID: 6483154606341349744
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_17
+      name: frame_010
       rect:
         serializedVersion: 2
-        x: 1050
+        x: 610
         y: 0
-        width: 38
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 890cae45197febd90800000000000000
-      internalID: -7079949360612851560
+      spriteID: 76a434492b48dc240800000000000000
+      internalID: 4813649479255411303
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_18
+      name: frame_011
       rect:
         serializedVersion: 2
-        x: 1111
+        x: 671
         y: 0
-        width: 39
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3291b8e8361e63470800000000000000
-      internalID: 8374128374851508515
+      spriteID: b87fa9c12be39f1e0800000000000000
+      internalID: -2163629211269793909
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_19
+      name: frame_012
       rect:
         serializedVersion: 2
-        x: 1172
+        x: 732
         y: 0
-        width: 39
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b2e6b09f57e0fbd40800000000000000
-      internalID: 5602212361324424747
+      spriteID: 77b10bbe80eb17ac0800000000000000
+      internalID: -3859094460156601481
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_20
+      name: frame_013
       rect:
         serializedVersion: 2
-        x: 1232
+        x: 793
         y: 0
-        width: 39
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a6a0c59bcb442e850800000000000000
-      internalID: 6404757197428623978
+      spriteID: bc7c0e9a131f87630800000000000000
+      internalID: 3925152270859159499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_21
+      name: frame_014
       rect:
         serializedVersion: 2
-        x: 1293
+        x: 854
         y: 0
-        width: 39
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 02195081abf967650800000000000000
-      internalID: 6230342756129411360
+      spriteID: 19eb6673aab967880800000000000000
+      internalID: -8613526081923268975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_22
+      name: frame_015
       rect:
         serializedVersion: 2
-        x: 1354
+        x: 915
         y: 0
-        width: 38
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 25c345bc14bb26030800000000000000
-      internalID: 3486554952796748882
+      spriteID: d1f3f1ca41bf8ff50800000000000000
+      internalID: 6915553294033043229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_23
+      name: frame_016
       rect:
         serializedVersion: 2
-        x: 1415
+        x: 976
         y: 0
-        width: 38
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e49d8ae652baa6c10800000000000000
-      internalID: 2047637157852010830
+      spriteID: ec2ec40a314416d30800000000000000
+      internalID: 4422891160138998478
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_24
+      name: frame_017
       rect:
         serializedVersion: 2
-        x: 1476
-        y: 1
-        width: 38
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1037
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 39b53f8d891d9cd60800000000000000
-      internalID: 7911084674858048403
+      spriteID: a39f7899ad2abeef0800000000000000
+      internalID: -77789508786456262
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_25
+      name: frame_018
       rect:
         serializedVersion: 2
-        x: 1536
-        y: 1
-        width: 39
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1098
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5125a58fcac1d91b0800000000000000
-      internalID: -5648326828426112491
+      spriteID: 0e7eeed88f9932730800000000000000
+      internalID: 3973188589083092960
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_26
+      name: frame_019
       rect:
         serializedVersion: 2
-        x: 1596
-        y: 1
-        width: 40
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1159
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 124485893efb1a7e0800000000000000
-      internalID: -1755911395463379935
+      spriteID: ed93cc203f346f0a0800000000000000
+      internalID: -6848211472367207970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_27
+      name: frame_020
       rect:
         serializedVersion: 2
-        x: 1657
-        y: 2
-        width: 40
-        height: 44
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1220
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b28696d87c0d25e60800000000000000
-      internalID: 7949645847751911467
+      spriteID: 7b6fefcefdc357190800000000000000
+      internalID: -7965393433483348297
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_28
+      name: frame_021
       rect:
         serializedVersion: 2
-        x: 1720
-        y: 2
-        width: 38
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1281
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71817ae02a0edb130800000000000000
-      internalID: 3584267865091938327
+      spriteID: 9a36c017a5458eaa0800000000000000
+      internalID: -6131558145244503127
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_29
+      name: frame_022
       rect:
         serializedVersion: 2
-        x: 1782
-        y: 2
-        width: 37
-        height: 43
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1342
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: df0ee8521d95647f0800000000000000
-      internalID: -628716343158447875
+      spriteID: 23dc3434c5bda1a90800000000000000
+      internalID: -7342315053162181326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_30
+      name: frame_023
       rect:
         serializedVersion: 2
-        x: 1844
-        y: 3
-        width: 35
-        height: 45
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1403
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c864cdd698e039720800000000000000
-      internalID: 2851638972472116876
+      spriteID: b48847a28376bfb80800000000000000
+      internalID: -8359974792355084213
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_31
+      name: frame_024
       rect:
         serializedVersion: 2
-        x: 1904
-        y: 4
-        width: 36
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1464
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9a0864b82508c5cb0800000000000000
-      internalID: -4873879604709392215
+      spriteID: 9645fa3da68e6d190800000000000000
+      internalID: -7937901747678260119
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_32
+      name: frame_025
       rect:
         serializedVersion: 2
-        x: 1963
-        y: 6
-        width: 37
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1525
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6f6ed54c98a140060800000000000000
-      internalID: 6918684106555254518
+      spriteID: 18a695f9e68433830800000000000000
+      internalID: 4049660129893247617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_33
+      name: frame_026
       rect:
         serializedVersion: 2
-        x: 2023
-        y: 9
-        width: 36
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1586
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fad38a2e513461920800000000000000
-      internalID: 2960627566318730671
+      spriteID: 6e0a67c3e558973a0800000000000000
+      internalID: -6667151133557481242
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_34
+      name: frame_027
       rect:
         serializedVersion: 2
-        x: 2084
-        y: 10
-        width: 35
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1647
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ab44accb43a1b9d40800000000000000
-      internalID: 5592092176118596794
+      spriteID: 8e5c2e696d5baaef0800000000000000
+      internalID: -96064508775971352
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_35
+      name: frame_028
       rect:
         serializedVersion: 2
-        x: 2145
-        y: 11
-        width: 35
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1708
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7d7107e1b704386a0800000000000000
-      internalID: -6448239343928600617
+      spriteID: 6a01412fe406728a0800000000000000
+      internalID: -6329984859060825946
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_36
+      name: frame_029
       rect:
         serializedVersion: 2
-        x: 2206
-        y: 13
-        width: 35
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1769
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e91c1805246144870800000000000000
-      internalID: 8666076057042010526
+      spriteID: 61bec1c5d4e524740800000000000000
+      internalID: 5134770211506678550
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_37
+      name: frame_030
       rect:
         serializedVersion: 2
-        x: 2267
-        y: 11
-        width: 35
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1830
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5e6f1f7bb58addde0800000000000000
-      internalID: -1306703204985997595
+      spriteID: 7b1b3af1974b34ca0800000000000000
+      internalID: -6033780643431468617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_38
+      name: frame_031
       rect:
         serializedVersion: 2
-        x: 2328
-        y: 10
-        width: 35
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1891
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c1283904b83cf7910800000000000000
-      internalID: 1837402175841731100
+      spriteID: 638b6448f43bc69c0800000000000000
+      internalID: -3932571220498270154
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_39
+      name: frame_032
       rect:
         serializedVersion: 2
-        x: 2389
-        y: 8
-        width: 36
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1952
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d3266d22422ae19d0800000000000000
-      internalID: -2801623642090872259
+      spriteID: d00faa1b3e973b430800000000000000
+      internalID: 3797512929648766989
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_40
+      name: frame_033
       rect:
         serializedVersion: 2
-        x: 2451
-        y: 6
-        width: 37
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2013
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2b104345ce6ec6d10800000000000000
-      internalID: 2120323427284025778
+      spriteID: 09c6a48df930c3080800000000000000
+      internalID: -9206479553188696944
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_41
+      name: frame_034
       rect:
         serializedVersion: 2
-        x: 2513
-        y: 4
-        width: 37
-        height: 47
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2074
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9c558fbb80b8e9820800000000000000
-      internalID: 2926929677467014601
+      spriteID: 90c1deb4782801e50800000000000000
+      internalID: 6778060956798622729
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SHUPPET_42
+      name: frame_035
       rect:
         serializedVersion: 2
-        x: 2575
-        y: 2
-        width: 36
-        height: 46
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2135
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3a6af1c289aed6080800000000000000
-      internalID: -9192433325097113949
+      spriteID: 227ee7aa9c8b94120800000000000000
+      internalID: 2398651452839880482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_036
+      rect:
+        serializedVersion: 2
+        x: 2196
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9784fb307bc38cd40800000000000000
+      internalID: 5604796493002131577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_037
+      rect:
+        serializedVersion: 2
+        x: 2257
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b616aa496e6fafc00800000000000000
+      internalID: 935331342829904235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_038
+      rect:
+        serializedVersion: 2
+        x: 2318
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cb2e7fe860d2d790800000000000000
+      internalID: -7506708479759995959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_039
+      rect:
+        serializedVersion: 2
+        x: 2379
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98c24ab14f22bdc90800000000000000
+      internalID: -7144077952062051191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_040
+      rect:
+        serializedVersion: 2
+        x: 2440
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 848259c9eda650aa0800000000000000
+      internalID: -6195428208035944376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_041
+      rect:
+        serializedVersion: 2
+        x: 2501
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 329ad677774021f50800000000000000
+      internalID: 6850542894335240483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: frame_042
+      rect:
+        serializedVersion: 2
+        x: 2562
+        y: 0
+        width: 61
+        height: 61
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c7a1e814de6760f0800000000000000
+      internalID: -1123807724776085567
       vertices: []
       indices: 
       edges: []
@@ -1228,6 +1357,49 @@ TextureImporter:
       SHUPPET_7: 4368087570867370854
       SHUPPET_8: -1415118173233543369
       SHUPPET_9: -5271084203984904098
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
+      frame_010: 4813649479255411303
+      frame_011: -2163629211269793909
+      frame_012: -3859094460156601481
+      frame_013: 3925152270859159499
+      frame_014: -8613526081923268975
+      frame_015: 6915553294033043229
+      frame_016: 4422891160138998478
+      frame_017: -77789508786456262
+      frame_018: 3973188589083092960
+      frame_019: -6848211472367207970
+      frame_020: -7965393433483348297
+      frame_021: -6131558145244503127
+      frame_022: -7342315053162181326
+      frame_023: -8359974792355084213
+      frame_024: -7937901747678260119
+      frame_025: 4049660129893247617
+      frame_026: -6667151133557481242
+      frame_027: -96064508775971352
+      frame_028: -6329984859060825946
+      frame_029: 5134770211506678550
+      frame_030: -6033780643431468617
+      frame_031: -3932571220498270154
+      frame_032: 3797512929648766989
+      frame_033: -9206479553188696944
+      frame_034: 6778060956798622729
+      frame_035: 2398651452839880482
+      frame_036: 5604796493002131577
+      frame_037: 935331342829904235
+      frame_038: -7506708479759995959
+      frame_039: -7144077952062051191
+      frame_040: -6195428208035944376
+      frame_041: 6850542894335240483
+      frame_042: -1123807724776085567
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

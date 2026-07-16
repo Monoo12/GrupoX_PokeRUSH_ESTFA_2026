@@ -29,4 +29,8 @@ public class BossDefinition : NPCDefinition
     [Header("Comportamiento")]
     [Tooltip("Perfil de IA que usa en combate. Vacio = perfil Trainer por defecto.")]
     public AIProfileDefinition aiProfile;
+
+    [Header("Escenario")]
+    [Tooltip("Fondo de batalla (de Assets/Sprites/Battlebacks). Vacio = fondo por defecto de la escena.")]
+    public Sprite battleBackground;
 }

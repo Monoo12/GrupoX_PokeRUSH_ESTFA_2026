@@ -29,6 +29,33 @@ TextureImporter:
   - first:
       213: -7615699979118113811
     second: AERODACTYL_8
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +102,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 93
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -96,7 +123,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -124,199 +151,199 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AERODACTYL_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 6
-        y: 24
-        width: 81
-        height: 61
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71aacd46638572ce0800000000000000
-      internalID: -1430077366023181801
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 109
-        y: 21
-        width: 62
-        height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 93
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eaa7d110c58af0a80800000000000000
-      internalID: -8498388858715669842
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 197
-        y: 18
-        width: 71
-        height: 62
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 186
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 074d0caf2d365f720800000000000000
-      internalID: 2879317294574523504
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 278
-        y: 15
-        width: 94
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 279
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c3d2ed1f4842ac160800000000000000
-      internalID: 7046484720386714940
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 390
-        y: 5
-        width: 58
-        height: 70
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 372
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 713bb329dd9a08020800000000000000
-      internalID: 2342058575338910487
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 482
-        y: 11
-        width: 71
-        height: 76
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 465
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 20fe125464e48d6f0800000000000000
-      internalID: -659691281695248638
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 567
-        y: 16
-        width: 82
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 558
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d29cbe3137bdbc170800000000000000
-      internalID: 8199888833860061485
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 653
-        y: 31
-        width: 92
-        height: 54
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 651
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0d428133a4a9383f0800000000000000
-      internalID: -899705857068489520
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AERODACTYL_8
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 743
-        y: 28
-        width: 94
-        height: 54
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 744
+        y: 0
+        width: 93
+        height: 93
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: deb07bcf7399f4690800000000000000
-      internalID: -7615699979118113811
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
@@ -344,6 +371,15 @@ TextureImporter:
       AERODACTYL_6: 8199888833860061485
       AERODACTYL_7: -899705857068489520
       AERODACTYL_8: -7615699979118113811
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

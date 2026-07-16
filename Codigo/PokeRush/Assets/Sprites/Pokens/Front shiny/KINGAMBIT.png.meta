@@ -98,6 +98,102 @@ TextureImporter:
   - first:
       213: 6039288268912663610
     second: KINGAMBIT_31
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
+  - first:
+      213: 4813649479255411303
+    second: frame_010
+  - first:
+      213: -2163629211269793909
+    second: frame_011
+  - first:
+      213: -3859094460156601481
+    second: frame_012
+  - first:
+      213: 3925152270859159499
+    second: frame_013
+  - first:
+      213: -8613526081923268975
+    second: frame_014
+  - first:
+      213: 6915553294033043229
+    second: frame_015
+  - first:
+      213: 4422891160138998478
+    second: frame_016
+  - first:
+      213: -77789508786456262
+    second: frame_017
+  - first:
+      213: 3973188589083092960
+    second: frame_018
+  - first:
+      213: -6848211472367207970
+    second: frame_019
+  - first:
+      213: -7965393433483348297
+    second: frame_020
+  - first:
+      213: -6131558145244503127
+    second: frame_021
+  - first:
+      213: -7342315053162181326
+    second: frame_022
+  - first:
+      213: -8359974792355084213
+    second: frame_023
+  - first:
+      213: -7937901747678260119
+    second: frame_024
+  - first:
+      213: 4049660129893247617
+    second: frame_025
+  - first:
+      213: -6667151133557481242
+    second: frame_026
+  - first:
+      213: -96064508775971352
+    second: frame_027
+  - first:
+      213: -6329984859060825946
+    second: frame_028
+  - first:
+      213: 5134770211506678550
+    second: frame_029
+  - first:
+      213: -6033780643431468617
+    second: frame_030
+  - first:
+      213: -3932571220498270154
+    second: frame_031
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -144,7 +240,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 120
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -165,7 +261,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -193,705 +289,705 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: KINGAMBIT_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 30
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fb83091908db29f80800000000000000
-      internalID: -8101204419790489409
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 150
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 120
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cb26a3762bafd9700800000000000000
-      internalID: 548870373752070844
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 270
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 240
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 502715220e01dd6f0800000000000000
-      internalID: -658351415691742715
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 390
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 360
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 323558dec9c9bcad0800000000000000
-      internalID: -2680876955355229405
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 510
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 480
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bf3b2277449f735a0800000000000000
-      internalID: -6541485861280500741
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 630
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 600
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 045670b9133a47840800000000000000
-      internalID: 5220977301478925632
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 750
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 720
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2e14875d050d2e3b0800000000000000
-      internalID: -5484592350586453534
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 870
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 840
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 016596f9ddf477940800000000000000
-      internalID: 5293787700278154768
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_8
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 990
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 960
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 175acfa3fd91a9920800000000000000
-      internalID: 2997736948526523761
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_9
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 1110
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1080
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 270d03cee4e1ef440800000000000000
-      internalID: 4971444362982510706
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_10
+      name: frame_010
       rect:
         serializedVersion: 2
-        x: 1230
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1200
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0a8737c95c84e6c90800000000000000
-      internalID: -7174717142784051040
+      spriteID: 76a434492b48dc240800000000000000
+      internalID: 4813649479255411303
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_11
+      name: frame_011
       rect:
         serializedVersion: 2
-        x: 1350
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1320
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4252690cc9e85d710800000000000000
-      internalID: 1717435636808820004
+      spriteID: b87fa9c12be39f1e0800000000000000
+      internalID: -2163629211269793909
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_12
+      name: frame_012
       rect:
         serializedVersion: 2
-        x: 1470
-        y: 14
-        width: 62
-        height: 91
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1440
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6db55fc02fc882c50800000000000000
-      internalID: 6640712621785177046
+      spriteID: 77b10bbe80eb17ac0800000000000000
+      internalID: -3859094460156601481
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_13
+      name: frame_013
       rect:
         serializedVersion: 2
-        x: 1590
-        y: 14
-        width: 61
-        height: 91
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1560
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 148eabc0527ea8f50800000000000000
-      internalID: 6884569126702606401
+      spriteID: bc7c0e9a131f87630800000000000000
+      internalID: 3925152270859159499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_14
+      name: frame_014
       rect:
         serializedVersion: 2
-        x: 1710
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1680
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 65730f9bd7e401070800000000000000
-      internalID: 8075040433772705622
+      spriteID: 19eb6673aab967880800000000000000
+      internalID: -8613526081923268975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_15
+      name: frame_015
       rect:
         serializedVersion: 2
-        x: 1830
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1800
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1c8378a5a1397a480800000000000000
-      internalID: -8887973598195140415
+      spriteID: d1f3f1ca41bf8ff50800000000000000
+      internalID: 6915553294033043229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_16
+      name: frame_016
       rect:
         serializedVersion: 2
-        x: 1950
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1920
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d80e880a8eb830830800000000000000
-      internalID: 4036223522296094861
+      spriteID: ec2ec40a314416d30800000000000000
+      internalID: 4422891160138998478
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_17
+      name: frame_017
       rect:
         serializedVersion: 2
-        x: 2070
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2040
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 389782e9997a4c890800000000000000
-      internalID: -7438636406283929213
+      spriteID: a39f7899ad2abeef0800000000000000
+      internalID: -77789508786456262
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_18
+      name: frame_018
       rect:
         serializedVersion: 2
-        x: 2190
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2160
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b79fd2559d1b85150800000000000000
-      internalID: 5861630462017796475
+      spriteID: 0e7eeed88f9932730800000000000000
+      internalID: 3973188589083092960
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_19
+      name: frame_019
       rect:
         serializedVersion: 2
-        x: 2310
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2280
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5e06312ddac653df0800000000000000
-      internalID: -201135114538491675
+      spriteID: ed93cc203f346f0a0800000000000000
+      internalID: -6848211472367207970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_20
+      name: frame_020
       rect:
         serializedVersion: 2
-        x: 2430
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2400
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aacf1f2cc01fd6600800000000000000
-      internalID: 463291373801569450
+      spriteID: 7b6fefcefdc357190800000000000000
+      internalID: -7965393433483348297
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_21
+      name: frame_021
       rect:
         serializedVersion: 2
-        x: 2550
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2520
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5be119ceef7d93fe0800000000000000
-      internalID: -1208697535081668939
+      spriteID: 9a36c017a5458eaa0800000000000000
+      internalID: -6131558145244503127
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_22
+      name: frame_022
       rect:
         serializedVersion: 2
-        x: 2670
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2640
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56c1a3cd3c66b6150800000000000000
-      internalID: 5866895930979654757
+      spriteID: 23dc3434c5bda1a90800000000000000
+      internalID: -7342315053162181326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_23
+      name: frame_023
       rect:
         serializedVersion: 2
-        x: 2790
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2760
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ed8e1a24a66b02880800000000000000
-      internalID: -8637703517795915554
+      spriteID: b48847a28376bfb80800000000000000
+      internalID: -8359974792355084213
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_24
+      name: frame_024
       rect:
         serializedVersion: 2
-        x: 2910
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2880
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b7de432aaf0eb4730800000000000000
-      internalID: 3984525662407159163
+      spriteID: 9645fa3da68e6d190800000000000000
+      internalID: -7937901747678260119
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_25
+      name: frame_025
       rect:
         serializedVersion: 2
-        x: 3030
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3000
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 00cbc3f384a3efb40800000000000000
-      internalID: 5475878278902103040
+      spriteID: 18a695f9e68433830800000000000000
+      internalID: 4049660129893247617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_26
+      name: frame_026
       rect:
         serializedVersion: 2
-        x: 3150
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3120
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c247a93c6cb524aa0800000000000000
-      internalID: -6178274829555567572
+      spriteID: 6e0a67c3e558973a0800000000000000
+      internalID: -6667151133557481242
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_27
+      name: frame_027
       rect:
         serializedVersion: 2
-        x: 3270
-        y: 14
-        width: 62
-        height: 93
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3240
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 99f00481ad7b1fe30800000000000000
-      internalID: 4535608447076405145
+      spriteID: 8e5c2e696d5baaef0800000000000000
+      internalID: -96064508775971352
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_28
+      name: frame_028
       rect:
         serializedVersion: 2
-        x: 3390
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3360
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 37ecfb5859e99f930800000000000000
-      internalID: 4177544494394101363
+      spriteID: 6a01412fe406728a0800000000000000
+      internalID: -6329984859060825946
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_29
+      name: frame_029
       rect:
         serializedVersion: 2
-        x: 3510
-        y: 14
-        width: 62
-        height: 98
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3480
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 749a50be7e02fa930800000000000000
-      internalID: 4156577161538808135
+      spriteID: 61bec1c5d4e524740800000000000000
+      internalID: 5134770211506678550
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_30
+      name: frame_030
       rect:
         serializedVersion: 2
-        x: 3630
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3600
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2d89f229292b8b840800000000000000
-      internalID: 5240134509033134290
+      spriteID: 7b1b3af1974b34ca0800000000000000
+      internalID: -6033780643431468617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KINGAMBIT_31
+      name: frame_031
       rect:
         serializedVersion: 2
-        x: 3750
-        y: 14
-        width: 62
-        height: 95
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3720
+        y: 0
+        width: 120
+        height: 120
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a3c19bcdeacdfc350800000000000000
-      internalID: 6039288268912663610
+      spriteID: 638b6448f43bc69c0800000000000000
+      internalID: -3932571220498270154
       vertices: []
       indices: 
       edges: []
@@ -942,6 +1038,38 @@ TextureImporter:
       KINGAMBIT_7: 5293787700278154768
       KINGAMBIT_8: 2997736948526523761
       KINGAMBIT_9: 4971444362982510706
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
+      frame_010: 4813649479255411303
+      frame_011: -2163629211269793909
+      frame_012: -3859094460156601481
+      frame_013: 3925152270859159499
+      frame_014: -8613526081923268975
+      frame_015: 6915553294033043229
+      frame_016: 4422891160138998478
+      frame_017: -77789508786456262
+      frame_018: 3973188589083092960
+      frame_019: -6848211472367207970
+      frame_020: -7965393433483348297
+      frame_021: -6131558145244503127
+      frame_022: -7342315053162181326
+      frame_023: -8359974792355084213
+      frame_024: -7937901747678260119
+      frame_025: 4049660129893247617
+      frame_026: -6667151133557481242
+      frame_027: -96064508775971352
+      frame_028: -6329984859060825946
+      frame_029: 5134770211506678550
+      frame_030: -6033780643431468617
+      frame_031: -3932571220498270154
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

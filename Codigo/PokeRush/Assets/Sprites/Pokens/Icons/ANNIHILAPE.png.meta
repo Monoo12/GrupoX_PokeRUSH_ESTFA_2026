@@ -14,6 +14,12 @@ TextureImporter:
   - first:
       213: 6151259917675242610
     second: ANNIHILAPE_3
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +66,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -81,7 +87,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -109,89 +115,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ANNIHILAPE_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 1
-        y: 47
-        width: 10
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e8863de2128bccfc0800000000000000
-      internalID: -3473198759950456690
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ANNIHILAPE_1
-      rect:
-        serializedVersion: 2
-        x: 3
+        x: 0
         y: 0
-        width: 60
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a340a457d8ee602b0800000000000000
-      internalID: -5618541193772530630
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ANNIHILAPE_2
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 65
-        y: 49
-        width: 10
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1397f20e71f239a70800000000000000
-      internalID: 8832455073795635505
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ANNIHILAPE_3
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 1
-        width: 60
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 274a12aed4aad5550800000000000000
-      internalID: 6151259917675242610
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
@@ -214,6 +176,8 @@ TextureImporter:
       ANNIHILAPE_1: -5618541193772530630
       ANNIHILAPE_2: 8832455073795635505
       ANNIHILAPE_3: 6151259917675242610
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

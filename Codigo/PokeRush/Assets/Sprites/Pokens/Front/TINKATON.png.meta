@@ -50,6 +50,54 @@ TextureImporter:
   - first:
       213: -6488412998065435467
     second: TINKATON_15
+  - first:
+      213: 8673283512139689658
+    second: frame_000
+  - first:
+      213: 2112119992331828786
+    second: frame_001
+  - first:
+      213: 364630787094113051
+    second: frame_002
+  - first:
+      213: -5490945197755662192
+    second: frame_003
+  - first:
+      213: 8662497501436820962
+    second: frame_004
+  - first:
+      213: 2371050419378103419
+    second: frame_005
+  - first:
+      213: 5961685419649759798
+    second: frame_006
+  - first:
+      213: 601581715184597111
+    second: frame_007
+  - first:
+      213: -7155570462808879971
+    second: frame_008
+  - first:
+      213: 1696591351133385988
+    second: frame_009
+  - first:
+      213: 4813649479255411303
+    second: frame_010
+  - first:
+      213: -2163629211269793909
+    second: frame_011
+  - first:
+      213: -3859094460156601481
+    second: frame_012
+  - first:
+      213: 3925152270859159499
+    second: frame_013
+  - first:
+      213: -8613526081923268975
+    second: frame_014
+  - first:
+      213: 6915553294033043229
+    second: frame_015
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,7 +144,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 150
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,7 +165,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -145,353 +193,353 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TINKATON_0
+      name: frame_000
       rect:
         serializedVersion: 2
-        x: 28
-        y: 20
-        width: 104
-        height: 74
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1e579ad61345f3f30800000000000000
-      internalID: 4557453919192184289
+      spriteID: abea659b661bd5870800000000000000
+      internalID: 8673283512139689658
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_1
+      name: frame_001
       rect:
         serializedVersion: 2
-        x: 181
-        y: 21
-        width: 103
-        height: 75
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 150
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 450ab0d349e0366c0800000000000000
-      internalID: -4151458401663344556
+      spriteID: 23e70f941f1cf4d10800000000000000
+      internalID: 2112119992331828786
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_2
+      name: frame_002
       rect:
         serializedVersion: 2
-        x: 332
-        y: 22
-        width: 99
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 300
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 61db4bdae0ee37a70800000000000000
-      internalID: 8823657841760189718
+      spriteID: b1b6aead4cd6f0500800000000000000
+      internalID: 364630787094113051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_3
+      name: frame_003
       rect:
         serializedVersion: 2
-        x: 484
-        y: 22
-        width: 96
-        height: 83
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 450
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e22a13ae01b36b480800000000000000
-      internalID: -8883848271107087826
+      spriteID: 09003a65f6e3cc3b0800000000000000
+      internalID: -5490945197755662192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_4
+      name: frame_004
       rect:
         serializedVersion: 2
-        x: 634
-        y: 22
-        width: 94
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 600
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e28da81e4087242b0800000000000000
-      internalID: -5601783024136300498
+      spriteID: 2edb9d8e49f573870800000000000000
+      internalID: 8662497501436820962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_5
+      name: frame_005
       rect:
         serializedVersion: 2
-        x: 786
-        y: 22
-        width: 92
-        height: 88
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 750
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0faeba147b69d0ad0800000000000000
-      internalID: -2734363684919055632
+      spriteID: b74a2974bc9a7e020800000000000000
+      internalID: 2371050419378103419
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_6
+      name: frame_006
       rect:
         serializedVersion: 2
-        x: 938
-        y: 22
-        width: 89
-        height: 89
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 900
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f5df3f8f82fd5d2c0800000000000000
-      internalID: -4407371293243736737
+      spriteID: 63a79d48d492cb250800000000000000
+      internalID: 5961685419649759798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_7
+      name: frame_007
       rect:
         serializedVersion: 2
-        x: 1090
-        y: 21
-        width: 84
-        height: 92
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1050
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b97a8476fa4d90220800000000000000
-      internalID: 2452725321897125787
+      spriteID: 778b2f4f16f395800800000000000000
+      internalID: 601581715184597111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_8
+      name: frame_008
       rect:
         serializedVersion: 2
-        x: 1242
-        y: 20
-        width: 83
-        height: 94
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1200
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 96aba08c201078720800000000000000
-      internalID: 2848246400792836713
+      spriteID: d9ccffe639e42bc90800000000000000
+      internalID: -7155570462808879971
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_9
+      name: frame_009
       rect:
         serializedVersion: 2
-        x: 1390
-        y: 21
-        width: 84
-        height: 92
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1350
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5f29f8dc663febd50800000000000000
-      internalID: 6755104113963274997
+      spriteID: 4053e4d48d08b8710800000000000000
+      internalID: 1696591351133385988
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_10
+      name: frame_010
       rect:
         serializedVersion: 2
-        x: 1538
-        y: 22
-        width: 89
-        height: 89
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1500
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eda6204d5ca20cab0800000000000000
-      internalID: -4989941357972657442
+      spriteID: 76a434492b48dc240800000000000000
+      internalID: 4813649479255411303
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_11
+      name: frame_011
       rect:
         serializedVersion: 2
-        x: 1686
-        y: 22
-        width: 92
-        height: 88
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1650
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 86ba4368fe0e86ad0800000000000000
-      internalID: -2708667856509949080
+      spriteID: b87fa9c12be39f1e0800000000000000
+      internalID: -2163629211269793909
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_12
+      name: frame_012
       rect:
         serializedVersion: 2
-        x: 1834
-        y: 22
-        width: 94
-        height: 86
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1800
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 95e80377ade9e30f0800000000000000
-      internalID: -1135295394911056295
+      spriteID: 77b10bbe80eb17ac0800000000000000
+      internalID: -3859094460156601481
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_13
+      name: frame_013
       rect:
         serializedVersion: 2
-        x: 1984
-        y: 22
-        width: 96
-        height: 83
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1950
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c8f4f1f201dc275c0800000000000000
-      internalID: -4219084431498981492
+      spriteID: bc7c0e9a131f87630800000000000000
+      internalID: 3925152270859159499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_14
+      name: frame_014
       rect:
         serializedVersion: 2
-        x: 2132
-        y: 22
-        width: 99
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2100
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7bf3d62778d6d6750800000000000000
-      internalID: 6299811882268966839
+      spriteID: 19eb6673aab967880800000000000000
+      internalID: -8613526081923268975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TINKATON_15
+      name: frame_015
       rect:
         serializedVersion: 2
-        x: 2281
-        y: 21
-        width: 103
-        height: 75
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2250
+        y: 0
+        width: 150
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bc484e51c684f5a0800000000000000
-      internalID: -6488412998065435467
+      spriteID: d1f3f1ca41bf8ff50800000000000000
+      internalID: 6915553294033043229
       vertices: []
       indices: 
       edges: []
@@ -526,6 +574,22 @@ TextureImporter:
       TINKATON_7: 2452725321897125787
       TINKATON_8: 2848246400792836713
       TINKATON_9: 6755104113963274997
+      frame_000: 8673283512139689658
+      frame_001: 2112119992331828786
+      frame_002: 364630787094113051
+      frame_003: -5490945197755662192
+      frame_004: 8662497501436820962
+      frame_005: 2371050419378103419
+      frame_006: 5961685419649759798
+      frame_007: 601581715184597111
+      frame_008: -7155570462808879971
+      frame_009: 1696591351133385988
+      frame_010: 4813649479255411303
+      frame_011: -2163629211269793909
+      frame_012: -3859094460156601481
+      frame_013: 3925152270859159499
+      frame_014: -8613526081923268975
+      frame_015: 6915553294033043229
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -11,15 +11,18 @@ using UnityEngine;
 //
 //   PokeRush > Asignar sprites a los Pokemon
 //
-// Los sprites del set se nombran por el nombre INGLES en mayusculas y sin
-// simbolos (BULBASAUR, NIDORANF, MRMIME, HOOH...). El nombre ingles de cada
-// especie sale del cache de PokeAPI (indexado por numero de Pokedex, que cada
-// PokenDefinition ya guarda en dexNumber). El script:
-//   1. Deriva el nombre de archivo del sprite desde el nombre ingles.
-//   2. Copia el PNG necesario de Diseño/ a Assets/Sprites/Pokens/ (Unity solo
-//      puede referenciar assets dentro de Assets/). Idempotente: no recopia.
-//   3. Lo importa como Sprite y lo asigna al campo correspondiente.
-// Reporta al final cuantos asigno y de cuales no encontro sprite.
+// Los PNG del set son TIRAS DE ANIMACION estilo Gen 5: N frames cuadrados en
+// fila, donde el lado del frame es el alto del PNG (ej: BULBASAUR.png Front =
+// 3762x38 = 99 frames de 38x38). Este script:
+//   1. Deriva el nombre de archivo desde el nombre ingles (cache de PokeAPI,
+//      indexado por dexNumber): MAYUSCULAS sin simbolos (NIDORANF, MRMIME...).
+//   2. Copia el PNG a Assets/Sprites/Pokens/ (idempotente).
+//   3. Lo RECORTA en frames (Multiple), con pivot bottom-center (los pies
+//      apoyan en la plataforma), PPU = alto del frame (cada Poken mide 1
+//      unidad de alto en el mundo) y maxTextureSize suficiente para que
+//      Unity no reescale la tira (la causa del borroso).
+//   4. Asigna: campo single = frame 0 (UI/compatibilidad) y el array de
+//      frames completo para la animacion en batalla (PokenView los cicla).
 namespace PokeRush.EditorTools.PokeApi
 {
     public static class SpriteAssigner
@@ -27,21 +30,23 @@ namespace PokeRush.EditorTools.PokeApi
         private const string PokensFolder = "Assets/Resources/Definitions/Pokens";
         private const string DestRoot = "Assets/Sprites/Pokens";
 
-        // Que carpeta del set alimenta que campo de PokenDefinition.
+        // Carpeta del set -> campo single + campo array de frames (null = sin array)
         private struct Slot
         {
-            public string SourceSubfolder;   // carpeta en Diseño/Graphics/Pokemon
-            public string Field;             // campo Sprite en PokenDefinition
+            public string SourceSubfolder;
+            public string Field;        // campo Sprite (recibe el frame 0)
+            public string FramesField;  // campo Sprite[] (todos los frames) o null
+            public bool Essential;      // si falta, se reporta
         }
 
         private static readonly Slot[] Slots =
         {
-            new Slot { SourceSubfolder = "Front",       Field = "battleFrontSprite" },
-            new Slot { SourceSubfolder = "Back",        Field = "battleBackSprite" },
-            new Slot { SourceSubfolder = "Front shiny", Field = "battleFrontShinySprite" },
-            new Slot { SourceSubfolder = "Back shiny",  Field = "battleBackShinySprite" },
-            new Slot { SourceSubfolder = "Icons",       Field = "inventorySprite" },
-            new Slot { SourceSubfolder = "Icons shiny", Field = "inventoryShinySprite" }
+            new Slot { SourceSubfolder = "Front", Field = "battleFrontSprite", FramesField = "battleFrontFrames", Essential = true },
+            new Slot { SourceSubfolder = "Back", Field = "battleBackSprite", FramesField = "battleBackFrames", Essential = true },
+            new Slot { SourceSubfolder = "Front shiny", Field = "battleFrontShinySprite", FramesField = "battleFrontShinyFrames", Essential = false },
+            new Slot { SourceSubfolder = "Back shiny", Field = "battleBackShinySprite", FramesField = "battleBackShinyFrames", Essential = false },
+            new Slot { SourceSubfolder = "Icons", Field = "inventorySprite", FramesField = null, Essential = false },
+            new Slot { SourceSubfolder = "Icons shiny", Field = "inventoryShinySprite", FramesField = null, Essential = false }
         };
 
         [MenuItem("PokeRush/Asignar sprites a los Pokemon")]
@@ -51,8 +56,7 @@ namespace PokeRush.EditorTools.PokeApi
             if (designRoot == null)
             {
                 EditorUtility.DisplayDialog("No encuentro los graficos",
-                    "No pude ubicar la carpeta Diseño/Graphics/Pokemon subiendo desde el proyecto.\n" +
-                    "Verifica que exista en la raiz del repositorio.", "OK");
+                    "No pude ubicar la carpeta Diseño/Graphics/Pokemon subiendo desde el proyecto.", "OK");
                 return;
             }
 
@@ -65,13 +69,13 @@ namespace PokeRush.EditorTools.PokeApi
             }
 
             int assigned = 0, copied = 0;
-            var newlyCopied = new List<string>();                 // assetPaths a configurar como Sprite
-            var assignments = new List<(PokenDefinition poken, string field, string assetPath)>();
-            var missing = new List<string>();                     // "Pikachu: Back shiny" no encontrados
+            var toConfigure = new List<string>();  // assetPaths a configurar/recortar
+            var assignments = new List<(PokenDefinition poken, Slot slot, string assetPath)>();
+            var missing = new List<string>();
 
             try
             {
-                // --- Pasada 1: copiar los PNG necesarios y anotar las asignaciones ---
+                // --- Pasada 1: copiar los PNG y anotar las asignaciones ---
                 for (int i = 0; i < pokens.Count; i++)
                 {
                     PokenDefinition poken = pokens[i];
@@ -87,46 +91,73 @@ namespace PokeRush.EditorTools.PokeApi
                         string sourcePath = Path.Combine(designRoot, slot.SourceSubfolder, fileName + ".png");
                         if (!File.Exists(sourcePath))
                         {
-                            // Front/Back son los esenciales: solo esos se reportan como faltantes
-                            if (slot.SourceSubfolder == "Front" || slot.SourceSubfolder == "Back")
+                            if (slot.Essential)
                                 missing.Add($"{poken.pokenName} ({fileName}): {slot.SourceSubfolder}");
                             continue;
                         }
 
-                        string destDir = $"{DestRoot}/{slot.SourceSubfolder}";
-                        string assetPath = $"{destDir}/{fileName}.png";
+                        string assetPath = $"{DestRoot}/{slot.SourceSubfolder}/{fileName}.png";
                         string destFull = Path.GetFullPath(assetPath);
-
                         if (!File.Exists(destFull))
                         {
                             Directory.CreateDirectory(Path.GetDirectoryName(destFull));
                             File.Copy(sourcePath, destFull);
-                            newlyCopied.Add(assetPath);
                             copied++;
                         }
-                        assignments.Add((poken, slot.Field, assetPath));
+                        toConfigure.Add(assetPath);
+                        assignments.Add((poken, slot, assetPath));
                     }
                 }
 
-                // --- Importar de una sola vez lo recien copiado ---
-                EditorUtility.DisplayProgressBar("Importando sprites", "Actualizando la base de assets...", 0.9f);
+                EditorUtility.DisplayProgressBar("Importando sprites", "Actualizando la base de assets...", 0f);
                 AssetDatabase.Refresh();
 
-                // --- Configurar como Sprite (pixel art: sin filtro, sin compresion) ---
-                foreach (string assetPath in newlyCopied)
-                    ConfigureAsSprite(assetPath);
-
-                // --- Pasada 2: asignar cada sprite a su campo ---
-                foreach (var (poken, field, assetPath) in assignments)
+                // --- Pasada 2: configurar y recortar cada tira (idempotente) ---
+                var uniquePaths = toConfigure.Distinct().ToList();
+                for (int i = 0; i < uniquePaths.Count; i++)
                 {
-                    Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-                    if (sprite == null) continue;
+                    if (i % 25 == 0 && EditorUtility.DisplayCancelableProgressBar("Recortando tiras de animacion",
+                            $"{i + 1}/{uniquePaths.Count} (esto tarda unos minutos la primera vez)",
+                            (float)i / uniquePaths.Count))
+                        break;
+                    ConfigureStrip(uniquePaths[i]);
+                }
+
+                // --- Pasada 3: asignar frame 0 + array de frames a cada especie ---
+                for (int i = 0; i < assignments.Count; i++)
+                {
+                    var (poken, slot, assetPath) = assignments[i];
+                    if (i % 50 == 0)
+                        EditorUtility.DisplayProgressBar("Asignando sprites",
+                            $"{i + 1}/{assignments.Count}", (float)i / assignments.Count);
+
+                    Sprite[] frames = LoadFramesSorted(assetPath);
+                    if (frames.Length == 0) continue;
 
                     var so = new SerializedObject(poken);
-                    SerializedProperty prop = so.FindProperty(field);
-                    if (prop != null && prop.objectReferenceValue != sprite)
+                    bool changed = false;
+
+                    SerializedProperty single = so.FindProperty(slot.Field);
+                    if (single != null && single.objectReferenceValue != frames[0])
                     {
-                        prop.objectReferenceValue = sprite;
+                        single.objectReferenceValue = frames[0];
+                        changed = true;
+                    }
+
+                    if (slot.FramesField != null)
+                    {
+                        SerializedProperty array = so.FindProperty(slot.FramesField);
+                        if (array != null && array.arraySize != frames.Length)
+                        {
+                            array.arraySize = frames.Length;
+                            for (int f = 0; f < frames.Length; f++)
+                                array.GetArrayElementAtIndex(f).objectReferenceValue = frames[f];
+                            changed = true;
+                        }
+                    }
+
+                    if (changed)
+                    {
                         so.ApplyModifiedPropertiesWithoutUndo();
                         assigned++;
                     }
@@ -139,26 +170,92 @@ namespace PokeRush.EditorTools.PokeApi
                 EditorUtility.ClearProgressBar();
             }
 
-            string faltantes = missing.Count == 0
-                ? ""
-                : $"\n\nSin sprite ({missing.Count}, revisar a mano):\n- " +
-                  string.Join("\n- ", missing.Take(25)) +
-                  (missing.Count > 25 ? $"\n...y {missing.Count - 25} mas (ver Console)." : "");
-
             if (missing.Count > 0)
                 Debug.LogWarning("[SpriteAssigner] Sin sprite:\n" + string.Join("\n", missing));
 
-            string report = $"Sprites copiados a Assets/Sprites/Pokens: {copied}\n" +
-                            $"Asignaciones hechas: {assigned}" + faltantes;
+            string report = $"PNG copiados: {copied}\nEspecies con sprites/frames asignados: {assigned}" +
+                            (missing.Count > 0 ? $"\nSin sprite: {missing.Count} (ver Console)" : "");
             Debug.Log("[SpriteAssigner] " + report);
             EditorUtility.DisplayDialog("Sprites asignados", report, "OK");
         }
 
+        // ---------- recorte de tiras ----------
+
+        // Configura un PNG como tira de frames cuadrados: Multiple, pivot abajo,
+        // PPU = alto del frame, sin filtro ni compresion, tamaño sin reescalar.
+        private static void ConfigureStrip(string assetPath)
+        {
+            var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (importer == null) return;
+
+            // Dimensiones REALES del PNG (texture.width mentiria si Unity ya lo reescalo)
+            if (!TryReadPngSize(Path.GetFullPath(assetPath), out int width, out int height)) return;
+
+            // Tira = frames cuadrados en fila; si no es exacto, queda como frame unico
+            int frameCount = (height > 0 && width > height && width % height == 0) ? width / height : 1;
+            int maxSize = NextPowerOfTwo(Mathf.Max(width, height));
+
+            var metas = new List<SpriteMetaData>();
+            for (int f = 0; f < frameCount; f++)
+            {
+                metas.Add(new SpriteMetaData
+                {
+                    name = $"frame_{f:000}",
+                    rect = new Rect(f * height, 0, frameCount > 1 ? height : width, height),
+                    alignment = (int)SpriteAlignment.BottomCenter,
+                    pivot = new Vector2(0.5f, 0f)
+                });
+            }
+
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Multiple;
+#pragma warning disable 618
+            importer.spritesheet = metas.ToArray();
+#pragma warning restore 618
+            // PPU = alto del frame: el Poken mide 1 unidad de alto en el mundo
+            importer.spritePixelsPerUnit = height;
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.alphaIsTransparency = true;
+            importer.mipmapEnabled = false;
+            importer.maxTextureSize = Mathf.Clamp(maxSize, 32, 16384);
+            importer.SaveAndReimport();
+        }
+
+        // Frames ordenados por indice (frame_000, frame_001...)
+        private static Sprite[] LoadFramesSorted(string assetPath)
+            => AssetDatabase.LoadAllAssetsAtPath(assetPath)
+                .OfType<Sprite>()
+                .OrderBy(s => s.name, StringComparer.Ordinal)
+                .ToArray();
+
+        // Lee ancho/alto directo del encabezado PNG (bytes 16-23, big-endian)
+        private static bool TryReadPngSize(string fullPath, out int width, out int height)
+        {
+            width = height = 0;
+            try
+            {
+                using (var stream = File.OpenRead(fullPath))
+                {
+                    var header = new byte[24];
+                    if (stream.Read(header, 0, 24) < 24) return false;
+                    width = (header[16] << 24) | (header[17] << 16) | (header[18] << 8) | header[19];
+                    height = (header[20] << 24) | (header[21] << 16) | (header[22] << 8) | header[23];
+                    return width > 0 && height > 0;
+                }
+            }
+            catch { return false; }
+        }
+
+        private static int NextPowerOfTwo(int value)
+        {
+            int result = 32;
+            while (result < value && result < 16384) result *= 2;
+            return result;
+        }
+
         // ---------- nombre de archivo del sprite ----------
 
-        // Nombre ingles de la especie (del cache PokeAPI por dexNumber) convertido
-        // al formato del set: MAYUSCULAS sin simbolos. Fallback: el nombre del
-        // propio asset (util para las especies de prueba sin cache).
         private static string SpriteFileNameFor(PokenDefinition poken)
         {
             string english = EnglishNameFor(poken);
@@ -176,7 +273,6 @@ namespace PokeRush.EditorTools.PokeApi
                 }
                 catch { /* sin cache: usa el fallback */ }
             }
-            // Fallback: el nombre del asset (que suele coincidir con el ingles en Gen 1-2)
             return poken.pokenName;
         }
 
@@ -192,30 +288,6 @@ namespace PokeRush.EditorTools.PokeApi
                 .Where(p => p != null)
                 .ToList();
 
-        private static void ConfigureAsSprite(string assetPath)
-        {
-            var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
-            if (importer == null) return;
-
-            bool changed = false;
-            if (importer.textureType != TextureImporterType.Sprite)
-            {
-                importer.textureType = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Single;
-                changed = true;
-            }
-            if (importer.filterMode != FilterMode.Point) { importer.filterMode = FilterMode.Point; changed = true; }
-            if (importer.textureCompression != TextureImporterCompression.Uncompressed)
-            {
-                importer.textureCompression = TextureImporterCompression.Uncompressed;
-                changed = true;
-            }
-            if (!importer.alphaIsTransparency) { importer.alphaIsTransparency = true; changed = true; }
-
-            if (changed) importer.SaveAndReimport();
-        }
-
-        // Sube desde Assets/ hasta encontrar Diseño/Graphics/Pokemon en el repo.
         private static string FindDesignPokemonFolder()
         {
             var dir = new DirectoryInfo(Application.dataPath);

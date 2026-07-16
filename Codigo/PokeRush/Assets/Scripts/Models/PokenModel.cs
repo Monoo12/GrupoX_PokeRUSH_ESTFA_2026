@@ -125,6 +125,20 @@ public class PokenModel
 
     private ExperienceTableDefinition XpTable => _xpTable != null ? _xpTable : DefaultXpTable;
 
+    // Progreso 0-1 hacia el proximo nivel (para la barra de EXP del HUD)
+    public float XpProgress
+    {
+        get
+        {
+            ExperienceTableDefinition table = XpTable;
+            if (table == null || Level >= table.maxLevel) return 0f;
+            int threshold = table.GetXPForLevel(Level);
+            if (threshold <= 0) return 0f;
+            float progress = (float)CurrentXP / threshold;
+            return progress < 0f ? 0f : (progress > 1f ? 1f : progress);
+        }
+    }
+
     // Suma XP y sube de nivel las veces que haga falta.
     // Devuelve la lista de niveles alcanzados (vacia si no subio).
     public List<int> AddXP(int xp)

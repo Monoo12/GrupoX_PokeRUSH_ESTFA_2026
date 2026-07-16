@@ -16,18 +16,58 @@ MonoBehaviour:
   dexNumber: 747
   type: 8
   type2: 3
-  battleFrontSprite: {fileID: 4866035824159091677, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
-  battleBackSprite: {fileID: 4866035824159091677, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
-  battleFrontShinySprite: {fileID: 4866035824159091677, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
-  battleBackShinySprite: {fileID: 4866035824159091677, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  battleFrontSprite: {fileID: 8673283512139689658, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  battleBackSprite: {fileID: 8673283512139689658, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  battleFrontShinySprite: {fileID: 8673283512139689658, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  battleBackShinySprite: {fileID: 8673283512139689658, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  battleFrontFrames:
+  - {fileID: 8673283512139689658, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  - {fileID: 2112119992331828786, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  - {fileID: 364630787094113051, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  - {fileID: -5490945197755662192, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  - {fileID: 8662497501436820962, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  - {fileID: 2371050419378103419, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  - {fileID: 5961685419649759798, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  - {fileID: 601581715184597111, guid: d37dc09e3fab37f43b44a1e21d72b20b, type: 3}
+  battleBackFrames:
+  - {fileID: 8673283512139689658, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: 2112119992331828786, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: 364630787094113051, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: -5490945197755662192, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: 8662497501436820962, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: 2371050419378103419, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: 5961685419649759798, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: 601581715184597111, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: -7155570462808879971, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  - {fileID: 1696591351133385988, guid: 34a45df91c45d984e973278f1cb594d4, type: 3}
+  battleFrontShinyFrames:
+  - {fileID: 8673283512139689658, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  - {fileID: 2112119992331828786, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  - {fileID: 364630787094113051, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  - {fileID: -5490945197755662192, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  - {fileID: 8662497501436820962, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  - {fileID: 2371050419378103419, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  - {fileID: 5961685419649759798, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  - {fileID: 601581715184597111, guid: 7e35424612784914a9a6c3e714417e7d, type: 3}
+  battleBackShinyFrames:
+  - {fileID: 8673283512139689658, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: 2112119992331828786, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: 364630787094113051, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: -5490945197755662192, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: 8662497501436820962, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: 2371050419378103419, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: 5961685419649759798, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: 601581715184597111, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: -7155570462808879971, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
+  - {fileID: 1696591351133385988, guid: 40df10d97d6882b479dacea102ef8d3e, type: 3}
   worldFrontSprite: {fileID: 0}
   worldBackSprite: {fileID: 0}
   worldSideSprite: {fileID: 0}
   worldFrontShinySprite: {fileID: 0}
   worldBackShinySprite: {fileID: 0}
   worldSideShinySprite: {fileID: 0}
-  inventorySprite: {fileID: 4866035824159091677, guid: 2ad05bea61910a2438f370870162a7a2, type: 3}
-  inventoryShinySprite: {fileID: 4866035824159091677, guid: 53797cddfa4fb0640b851f72793b947e, type: 3}
+  inventorySprite: {fileID: 8673283512139689658, guid: 2ad05bea61910a2438f370870162a7a2, type: 3}
+  inventoryShinySprite: {fileID: 8673283512139689658, guid: 53797cddfa4fb0640b851f72793b947e, type: 3}
   battleAnimator: {fileID: 0}
   worldAnimator: {fileID: 0}
   baseHP: 50

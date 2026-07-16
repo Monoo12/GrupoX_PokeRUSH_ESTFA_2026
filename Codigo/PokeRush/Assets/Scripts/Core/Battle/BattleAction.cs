@@ -31,4 +31,8 @@ public class BattleAction
 
     public static BattleAction Switch(int teamIndex)
         => new BattleAction { Kind = BattleActionKind.SwitchPoken, SwitchIndex = teamIndex };
+
+    // Huir de un combate salvaje (el TurnEngine resuelve si lo logra)
+    public static BattleAction Flee()
+        => new BattleAction { Kind = BattleActionKind.Flee };
 }

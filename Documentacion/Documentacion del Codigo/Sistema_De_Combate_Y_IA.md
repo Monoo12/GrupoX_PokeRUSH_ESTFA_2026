@@ -4,6 +4,9 @@ Documento técnico del sistema de combate por turnos, las cuatro inteligencias
 artificiales y el importador de datos de PokeAPI. Escrito para el equipo: explica
 **cómo funciona** cada pieza y **por qué** se diseñó así, no solo qué hace.
 
+> 🖥️ La capa visual (databoxes, menús LUCHAR/POKÉMON/MOCHILA/HUIR, fondos
+> intercambiables y sprites) está documentada aparte en `HUD_De_Batalla.md`.
+
 > **Resumen de la sesión (16-jul-2026):** se completaron las mecánicas de la saga
 > (estados alterados, cambios de estadística, cambio de Pokémon, Forcejeo, efectos
 > de movimientos, habilidades), se construyó una IA modular por niveles

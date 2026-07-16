@@ -18,6 +18,12 @@ public class PokenDefinition : ScriptableObject
     public Sprite battleFrontShinySprite;  // Frente shiny
     public Sprite battleBackShinySprite;   // Espalda shiny
 
+    [Header("Animacion de batalla (frames recortados de la tira, los llena SpriteAssigner)")]
+    public Sprite[] battleFrontFrames;
+    public Sprite[] battleBackFrames;
+    public Sprite[] battleFrontShinyFrames;
+    public Sprite[] battleBackShinyFrames;
+
     [Header("Sprites de mundo")]
     public Sprite worldFrontSprite;
     public Sprite worldBackSprite;
