@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0469_Yanmega
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Yanmega
+  dexNumber: 469
+  type: 12
+  type2: 10
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 86
+  baseAttack: 76
+  baseDefense: 86
+  baseSpecialAttack: 116
+  baseSpecialDefense: 56
+  baseSpeed: 95
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: fdb565ec37957df468c220e3594634bb, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 528400ecac969b84cb9b8bed1b447c74, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 00faadc1d931ed6469d5e9258b39d435, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: b947a036e66d4f5448536aab852867be, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 14
+  - move: {fileID: 11400000, guid: a057930e4a287e14887b185a1cefe425, type: 2}
+    level: 22
+  - move: {fileID: 11400000, guid: 8ff1ac6379909b54ea1cc811df67b7a1, type: 2}
+    level: 27
+  - move: {fileID: 11400000, guid: 3fae31720888cae4aaaecb067409b443, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 6d40967e80e87e64c85fdfc3d7f9375a, type: 2}
+    level: 33
+  - move: {fileID: 11400000, guid: 336b88b34d8822a4086c3f6efad0eea0, type: 2}
+    level: 38
+  - move: {fileID: 11400000, guid: d807e8387c0223146903ddf472184de5, type: 2}
+    level: 43
+  - move: {fileID: 11400000, guid: fa8294ac94d746e46949b22369e34129, type: 2}
+    level: 46
+  - move: {fileID: 11400000, guid: fd6c8516c523ae2468efc188130fa109, type: 2}
+    level: 49
+  moves: []
+  baseXpYield: 180
+  abilityId: 11
+  ability: Impulso
+  abilityDescription: Aumenta su Velocidad en cada turno.

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0350_Milotic
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Milotic
+  dexNumber: 350
+  type: 3
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 95
+  baseAttack: 60
+  baseDefense: 79
+  baseSpecialAttack: 100
+  baseSpecialDefense: 125
+  baseSpeed: 81
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: c98d1745f5d888047a5979627107e00a, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 49ceb0b4aa089514e85e1d4eef3b0c12, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2d575ade7ad50ff48a067bb185f69f62, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 023a3d45a5c37dc4bab8c00d7dad245a, type: 2}
+    level: 4
+  - move: {fileID: 11400000, guid: 30c3f4f75cac1604b907628d9d9656a7, type: 2}
+    level: 8
+  - move: {fileID: 11400000, guid: 024b234164fe94c46a7056240e7f016b, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: dc16b20fc8cbfa14ba59048de4876b8e, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: 9f3c7699e40cc444fbb80b86d3e5d10e, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: d1d2b85b60fffe344a2065626918e96f, type: 2}
+    level: 32
+  - move: {fileID: 11400000, guid: 4d868a6349c841e48841f6a4f8bd75da, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: ac1eb4baa6554af499fdc47fde5d4a4a, type: 2}
+    level: 48
+  - move: {fileID: 11400000, guid: 8cbc0be922d8f1142be182225dfa3fac, type: 2}
+    level: 52
+  moves: []
+  baseXpYield: 189
+  abilityId: 0
+  ability: Escama Especial
+  abilityDescription: Sube su Defensa si sufre un problema de estado.

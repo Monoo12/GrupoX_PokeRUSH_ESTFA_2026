@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0598_Ferrothorn
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Ferrothorn
+  dexNumber: 598
+  type: 4
+  type2: 17
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 74
+  baseAttack: 94
+  baseDefense: 131
+  baseSpecialAttack: 54
+  baseSpecialDefense: 116
+  baseSpeed: 20
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 545bfce2e1ae8fa4a8fec753a3c46c98, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: bcc92307d1844394eb760a2c297b6698, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0ec080414c4da4b43bcdaf8af9d16013, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8b1b7d50a5355344d892c2c4cb4fc3f4, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 81b3b964ab6a8484e99a18ad6294eeb0, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 9f180f7b85095b6469223eae146ec673, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 2ba204c7505a9024f9c4d86c431a7f33, type: 2}
+    level: 35
+  moves: []
+  baseXpYield: 171
+  abilityId: 0
+  ability: Punta Acero
+  abilityDescription: "Inflige da\xF1o al rival si este le golpea con un movimiento
+    de contacto."

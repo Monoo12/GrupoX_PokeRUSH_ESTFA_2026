@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce36bd0a53d25444a1b37d61f312d49, type: 3}
+  m_Name: 0715_Ojos Llorosos
+  m_EditorClassIdentifier: Assembly-CSharp::MoveDefinition
+  moveName: Ojos Llorosos
+  pokeApiId: 715
+  englishName: tearful-look
+  type: 1
+  attackType: 2
+  power: 0
+  accuracy: 0
+  maxPP: 20
+  priority: 0
+  alwaysHits: 1
+  critRateStage: 0
+  effect: 0
+  effectChance: 0
+  effectDescription: "Lowers the target\u2019s Attack and Special Attack by one stage."
+  statChanges:
+  - stat: 0
+    stages: -1
+    targetSelf: 0
+  - stat: 2
+    stages: -1
+    targetSelf: 0
+  statChangeChance: 100
+  flinchChance: 0
+  minHits: 0
+  maxHits: 0
+  recoilPercent: 0
+  drainPercent: 0
+  healPercent: 0
+  makesContact: 0
+  implementation: 0

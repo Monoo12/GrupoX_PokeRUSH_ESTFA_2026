@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0362_Glalie
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Glalie
+  dexNumber: 362
+  type: 6
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 80
+  baseAttack: 80
+  baseDefense: 80
+  baseSpecialAttack: 80
+  baseSpecialDefense: 80
+  baseSpeed: 80
+  learnset:
+  - move: {fileID: 11400000, guid: e60fe9644cf1a854488b7314a016d23f, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: fdb565ec37957df468c220e3594634bb, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: bea54168dc009f241a94466b026407f7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 3c940815bb4e9424abd86c596f6a3b8d, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 56c600be8d56cb14e8e9e19ffe461e5e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a160e99cd6518f74d8ca82543bfacfb0, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: aedc2462218b3ab42b01d7048ce3e1c3, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: fc351cca14903534fa5c726d2b72b864, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 1b78dd7683269494891e8118d43ac788, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 4ff2919b221bd6049a24aa9a937b70a2, type: 2}
+    level: 54
+  - move: {fileID: 11400000, guid: e24e765ecfa83684cb1a4da6dcf51151, type: 2}
+    level: 61
+  - move: {fileID: 11400000, guid: 9e8285c6b539e2b47bdb1b0a8acc3dad, type: 2}
+    level: 68
+  moves: []
+  baseXpYield: 168
+  abilityId: 0
+  ability: Fuerza Mental
+  abilityDescription: "Gracias a su profunda concentraci\xF3n, no se amedrenta ante
+    los ataques del rival."

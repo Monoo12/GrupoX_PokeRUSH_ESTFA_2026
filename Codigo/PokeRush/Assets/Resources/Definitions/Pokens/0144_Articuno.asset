@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0144_Articuno
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Articuno
+  dexNumber: 144
+  type: 6
+  type2: 10
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 90
+  baseAttack: 85
+  baseDefense: 100
+  baseSpecialAttack: 95
+  baseSpecialDefense: 125
+  baseSpeed: 85
+  learnset:
+  - move: {fileID: 11400000, guid: 2f0d765eb34571b4eb9695a761370704, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: bea54168dc009f241a94466b026407f7, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: a160e99cd6518f74d8ca82543bfacfb0, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: b80f29f1c1c5e4b4b90005c093cf9180, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 6d40967e80e87e64c85fdfc3d7f9375a, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 3c940815bb4e9424abd86c596f6a3b8d, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 17e2b92ee51f9c54eb0cc0a6791d5d1b, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: a0cffadefd1b7654a99eb9ded0c2ede9, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: 7fcf27597777a0e438b7e0cad47b94d3, type: 2}
+    level: 55
+  - move: {fileID: 11400000, guid: 9e8285c6b539e2b47bdb1b0a8acc3dad, type: 2}
+    level: 65
+  moves: []
+  baseXpYield: 261
+  abilityId: 0
+  ability: "Presi\xF3n"
+  abilityDescription: Presiona al rival para que sus PP se acaben antes.

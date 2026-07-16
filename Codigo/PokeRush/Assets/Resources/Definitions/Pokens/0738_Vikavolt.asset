@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0738_Vikavolt
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Vikavolt
+  dexNumber: 738
+  type: 12
+  type2: 5
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 77
+  baseAttack: 70
+  baseDefense: 90
+  baseSpecialAttack: 145
+  baseSpecialDefense: 75
+  baseSpeed: 43
+  learnset:
+  - move: {fileID: 11400000, guid: b42f2537ce9a90d478fb3337e4f83b61, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 36d10a937a795bb4c9f30127293736c8, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e24e765ecfa83684cb1a4da6dcf51151, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 04b162525ca470c45ac38093d5833d42, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0d237a6346667f4419376a6811751ce8, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: ccaef489232a3a043b75537cd6991072, type: 2}
+    level: 23
+  - move: {fileID: 11400000, guid: b947a036e66d4f5448536aab852867be, type: 2}
+    level: 36
+  - move: {fileID: 11400000, guid: eddf82a2ded4cc145941f8b0eae25d5d, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: b80f29f1c1c5e4b4b90005c093cf9180, type: 2}
+    level: 57
+  - move: {fileID: 11400000, guid: a74fab6cc94245b4b9fca493d0c70f84, type: 2}
+    level: 64
+  moves: []
+  baseXpYield: 225
+  abilityId: 2
+  ability: "Levitaci\xF3n"
+  abilityDescription: Su capacidad de flotar sobre el suelo le proporciona inmunidad
+    frente a los movimientos de tipo Tierra.

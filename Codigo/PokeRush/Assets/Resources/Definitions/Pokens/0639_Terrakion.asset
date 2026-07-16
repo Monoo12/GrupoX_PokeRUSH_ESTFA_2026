@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0639_Terrakion
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Terrakion
+  dexNumber: 639
+  type: 13
+  type2: 7
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 91
+  baseAttack: 129
+  baseDefense: 90
+  baseSpecialAttack: 72
+  baseSpecialDefense: 90
+  baseSpeed: 108
+  learnset:
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 1f5416f3c3b40ee44b2d08a3052da8b1, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: f414ae42237eebe45926f199374b1a26, type: 2}
+    level: 7
+  - move: {fileID: 11400000, guid: b6f649c9fcac55449a20350e4ebb6e1b, type: 2}
+    level: 21
+  - move: {fileID: 11400000, guid: 472ae19c4701cc04eb8a5b03decdab81, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: 72e601f57f47bb441990c3dbbee78e15, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: e6301713e02752e4fb0cfd6ab93fd256, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: 73533f1b5b6df48438d4ca74319eaab8, type: 2}
+    level: 49
+  - move: {fileID: 11400000, guid: ba2a6cc8073d70d43a50c0410c5f6a94, type: 2}
+    level: 56
+  - move: {fileID: 11400000, guid: fda0a12db995dd6438016dbd6cc4a38d, type: 2}
+    level: 63
+  - move: {fileID: 11400000, guid: a7518ae3c9faaa3408e418f00728053e, type: 2}
+    level: 70
+  moves: []
+  baseXpYield: 261
+  abilityId: 0
+  ability: Justiciero
+  abilityDescription: Si le alcanza un movimiento de tipo Siniestro, aumenta el Ataque
+    debido a su integridad.

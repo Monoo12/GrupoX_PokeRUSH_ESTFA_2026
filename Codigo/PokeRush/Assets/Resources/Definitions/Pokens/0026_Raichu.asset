@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0026_Raichu
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Raichu
+  dexNumber: 26
+  type: 5
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 60
+  baseAttack: 90
+  baseDefense: 55
+  baseSpecialAttack: 90
+  baseSpecialDefense: 80
+  baseSpeed: 110
+  learnset:
+  - move: {fileID: 11400000, guid: bca81b5635b9f75459c105d81737a45e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: fdb565ec37957df468c220e3594634bb, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: cf1ac9aea9133c643bedada03bc07e2c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 72a44e08e70b7d3409fe622b83f21267, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0ec3ba36c65bdb741a4588779af6cc38, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: b8408045f82f2b84aadd8bcf99a7926e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: b80f29f1c1c5e4b4b90005c093cf9180, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 11714a6bf7eea1b41adcafd548888e02, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0df7103633a83604cafd20ea82c13b31, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0340b48cc27b3f046a972d864c65d374, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ccaef489232a3a043b75537cd6991072, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ce40d8b990abdca419fd2364cfc2d205, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 336b88b34d8822a4086c3f6efad0eea0, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 033803f731a76624c8b38340bb7da99e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0d237a6346667f4419376a6811751ce8, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 940ade343eadb15499992247a0169cfd, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 36d10a937a795bb4c9f30127293736c8, type: 2}
+    level: 5
+  moves: []
+  baseXpYield: 218
+  abilityId: 6
+  ability: "Electricidad Est\xE1tica"
+  abilityDescription: "La electricidad est\xE1tica que lo envuelve puede paralizar
+    al m\xEDnimo contacto."

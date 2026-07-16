@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0359_Absol
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Absol
+  dexNumber: 359
+  type: 16
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 65
+  baseAttack: 130
+  baseDefense: 60
+  baseSpecialAttack: 75
+  baseSpecialDefense: 60
+  baseSpeed: 75
+  learnset:
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: fdb565ec37957df468c220e3594634bb, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 430c8662115fcc3498c9d666fc2682a5, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: d807e8387c0223146903ddf472184de5, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 528400ecac969b84cb9b8bed1b447c74, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 312ae596f9b8c5347a9c4930f45eb3e9, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: ba2a6cc8073d70d43a50c0410c5f6a94, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: c897cd44300faed4ebf7b513e813a866, type: 2}
+    level: 50
+  moves: []
+  baseXpYield: 163
+  abilityId: 0
+  ability: "Presi\xF3n"
+  abilityDescription: Presiona al rival para que sus PP se acaben antes.

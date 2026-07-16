@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0451_Skorupi
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Skorupi
+  dexNumber: 451
+  type: 8
+  type2: 12
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 40
+  baseAttack: 50
+  baseDefense: 90
+  baseSpecialAttack: 30
+  baseSpecialDefense: 55
+  baseSpeed: 65
+  learnset:
+  - move: {fileID: 11400000, guid: 26f3ee3790d47e74c957f2f259ac54fd, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0e0763fcb1143ff4ba8d977ccebe550d, type: 2}
+    level: 3
+  - move: {fileID: 11400000, guid: 72eed7fa21ad4d04f9c30304be2dcd20, type: 2}
+    level: 6
+  - move: {fileID: 11400000, guid: fd5ff8b546d2db04c82cb86fa7d07945, type: 2}
+    level: 9
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 12
+  - move: {fileID: 11400000, guid: 3fae31720888cae4aaaecb067409b443, type: 2}
+    level: 18
+  - move: {fileID: 11400000, guid: 75993b8494d377c4b94487be2d34d24b, type: 2}
+    level: 21
+  - move: {fileID: 11400000, guid: 430c8662115fcc3498c9d666fc2682a5, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: c9bedad56a792dd40800505ce098462e, type: 2}
+    level: 27
+  - move: {fileID: 11400000, guid: 545bfce2e1ae8fa4a8fec753a3c46c98, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 5ca0530e84452d84592f2064d0bc2202, type: 2}
+    level: 33
+  - move: {fileID: 11400000, guid: 528400ecac969b84cb9b8bed1b447c74, type: 2}
+    level: 36
+  - move: {fileID: 11400000, guid: 092a4f3ca18b53c499b090663a22d815, type: 2}
+    level: 39
+  - move: {fileID: 11400000, guid: 49e285cb77aa54f4d84e6082ed745698, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: e24e765ecfa83684cb1a4da6dcf51151, type: 2}
+    level: 48
+  moves: []
+  baseXpYield: 66
+  abilityId: 0
+  ability: Armadura Batalla
+  abilityDescription: "La robusta coraza que lo protege bloquea los golpes cr\xEDticos."

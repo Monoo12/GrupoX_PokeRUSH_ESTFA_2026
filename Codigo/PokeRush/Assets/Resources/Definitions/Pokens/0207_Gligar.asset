@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0207_Gligar
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Gligar
+  dexNumber: 207
+  type: 9
+  type2: 10
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 65
+  baseAttack: 75
+  baseDefense: 105
+  baseSpecialAttack: 35
+  baseSpecialDefense: 65
+  baseSpeed: 85
+  learnset:
+  - move: {fileID: 11400000, guid: 26f3ee3790d47e74c957f2f259ac54fd, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 628973f1b74f9214e9e09860800736ad, type: 2}
+    level: 4
+  - move: {fileID: 11400000, guid: bcc92307d1844394eb760a2c297b6698, type: 2}
+    level: 7
+  - move: {fileID: 11400000, guid: 430c8662115fcc3498c9d666fc2682a5, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 13
+  - move: {fileID: 11400000, guid: 3d7b55faf0f70ac47b1b386b1db167b4, type: 2}
+    level: 16
+  - move: {fileID: 11400000, guid: ffde62a9b40ddb844813514aea956a17, type: 2}
+    level: 19
+  - move: {fileID: 11400000, guid: d3c9bceff8e73f74da6686a05cf39987, type: 2}
+    level: 22
+  - move: {fileID: 11400000, guid: d807e8387c0223146903ddf472184de5, type: 2}
+    level: 27
+  - move: {fileID: 11400000, guid: fd6c8516c523ae2468efc188130fa109, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: fa8294ac94d746e46949b22369e34129, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 49e285cb77aa54f4d84e6082ed745698, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: e168e9a8006472b4c96aa69708ea0547, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: ba2a6cc8073d70d43a50c0410c5f6a94, type: 2}
+    level: 50
+  moves: []
+  baseXpYield: 86
+  abilityId: 0
+  ability: Corte Fuerte
+  abilityDescription: Evita que el rival le baje el Ataque.

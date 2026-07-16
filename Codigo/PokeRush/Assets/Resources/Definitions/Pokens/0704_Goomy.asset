@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0704_Goomy
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Goomy
+  dexNumber: 704
+  type: 15
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 45
+  baseAttack: 50
+  baseDefense: 35
+  baseSpecialAttack: 55
+  baseSpecialDefense: 75
+  baseSpeed: 40
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8ef450f838ef1034c9b178205e5f3408, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 49ceb0b4aa089514e85e1d4eef3b0c12, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 2e7120dbb7e597b4ea5462868b38449e, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 2d575ade7ad50ff48a067bb185f69f62, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 5f03c86d741b37146b42757b21e7079f, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 346eadc54dc59084fb09cfaa8597bb55, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: 327ff6ca3cb932042bfe8776febf80c7, type: 2}
+    level: 50
+  moves: []
+  baseXpYield: 60
+  abilityId: 0
+  ability: "Herb\xEDvoro"
+  abilityDescription: Neutraliza los movimientos de tipo Planta y sube su Ataque.

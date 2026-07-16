@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0492_Shaymin
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Shaymin
+  dexNumber: 492
+  type: 4
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 100
+  baseAttack: 100
+  baseDefense: 100
+  baseSpecialAttack: 100
+  baseSpecialDefense: 100
+  baseSpeed: 100
+  learnset:
+  - move: {fileID: 11400000, guid: aeba9e52894860748b60ee7140b71025, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 906e85e1d9e6bc14b934964dc0e2c227, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 7f2c8688093e60546beb323e63f69bc6, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: 8696724e771295f48b05a7872f0d89bf, type: 2}
+    level: 37
+  - move: {fileID: 11400000, guid: 2ecb23911f1be964ca58e675e646a451, type: 2}
+    level: 46
+  - move: {fileID: 11400000, guid: 842de1784d9355f4b82398980ad451ff, type: 2}
+    level: 73
+  - move: {fileID: 11400000, guid: 0df7103633a83604cafd20ea82c13b31, type: 2}
+    level: 82
+  - move: {fileID: 11400000, guid: 45151981047af7e4a9399496075fb0bb, type: 2}
+    level: 100
+  moves: []
+  baseXpYield: 270
+  abilityId: 0
+  ability: Cura Natural
+  abilityDescription: "Cura sus problemas de estado al cambiarse con otro Pok\xE9mon."

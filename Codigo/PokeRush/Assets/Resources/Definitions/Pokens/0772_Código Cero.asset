@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: "0772_C\xF3digo Cero"
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: "C\xF3digo Cero"
+  dexNumber: 772
+  type: 1
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 95
+  baseAttack: 95
+  baseDefense: 95
+  baseSpecialAttack: 95
+  baseSpecialDefense: 95
+  baseSpeed: 59
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ca205b7258862ba4bb1c07af927f8bcd, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: c9bedad56a792dd40800505ce098462e, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 6a9478a70ebe94e459ad1c4319816906, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: e3b493b276eebf74493e1630932ad846, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 8e37eacf70cda7344a38ceb5dfd73e6f, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 00faadc1d931ed6469d5e9258b39d435, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: f6f0f3963c479f54a9537c2c6f317aab, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 49e285cb77aa54f4d84e6082ed745698, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 9f180f7b85095b6469223eae146ec673, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: e6301713e02752e4fb0cfd6ab93fd256, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: 578f544335c85f441b40468c966f5707, type: 2}
+    level: 55
+  moves: []
+  baseXpYield: 107
+  abilityId: 0
+  ability: Armadura Batalla
+  abilityDescription: "La robusta coraza que lo protege bloquea los golpes cr\xEDticos."

@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0787_Tapu Bulu
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Tapu Bulu
+  dexNumber: 787
+  type: 4
+  type2: 18
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 70
+  baseAttack: 130
+  baseDefense: 115
+  baseSpecialAttack: 85
+  baseSpecialDefense: 95
+  baseSpeed: 75
+  learnset:
+  - move: {fileID: 11400000, guid: 3d34cb8007e9dee4b8d03cfcbf6b0e3a, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 43e93fdef5d595a4d8e42e939edba61d, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: d1f9cdcd13a077345acd6a5bf2ea0ea7, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 05a0594ff4cb736449a1b3ede6c5bc7c, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: c6b69781761a6dc4296fdd4dcbe44035, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: c9bedad56a792dd40800505ce098462e, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 06d5bda178f0dce4b954b24ca73b571b, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 3409b8d03f50bac47a6e26dc97bdd43c, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: 511449a6eee0c9840840577ef5bbe7b6, type: 2}
+    level: 60
+  - move: {fileID: 11400000, guid: df6ba38085c613547a5f5185ffdfcfc7, type: 2}
+    level: 65
+  - move: {fileID: 11400000, guid: e1615fd916be79a418e926c939e20a55, type: 2}
+    level: 70
+  moves: []
+  baseXpYield: 257
+  abilityId: 0
+  ability: "Herbog\xE9nesis"
+  abilityDescription: Crea un campo de hierba al entrar en combate.

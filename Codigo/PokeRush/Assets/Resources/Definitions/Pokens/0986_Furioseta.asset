@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0986_Furioseta
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Furioseta
+  dexNumber: 986
+  type: 4
+  type2: 16
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 111
+  baseAttack: 127
+  baseDefense: 99
+  baseSpecialAttack: 79
+  baseSpecialDefense: 99
+  baseSpeed: 55
+  learnset:
+  - move: {fileID: 11400000, guid: 8ef450f838ef1034c9b178205e5f3408, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: aeba9e52894860748b60ee7140b71025, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 56c600be8d56cb14e8e9e19ffe461e5e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 5548e82f3f517324f9d8291966d7119a, type: 2}
+    level: 7
+  - move: {fileID: 11400000, guid: 05a0594ff4cb736449a1b3ede6c5bc7c, type: 2}
+    level: 14
+  - move: {fileID: 11400000, guid: 7f2c8688093e60546beb323e63f69bc6, type: 2}
+    level: 21
+  - move: {fileID: 11400000, guid: fe23fcd7b4730ef43ad23297f40c7d3f, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: a4f26e7065b672f45b8e5a5ec89ed3a0, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 250fbb957ad260348acd86209264d7fa, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: 98c0cc8f178045c4eaf1e1558cb1e941, type: 2}
+    level: 49
+  - move: {fileID: 11400000, guid: 312ae596f9b8c5347a9c4930f45eb3e9, type: 2}
+    level: 56
+  - move: {fileID: 11400000, guid: 7713a8ad8f2654d45912aa3627117b87, type: 2}
+    level: 63
+  - move: {fileID: 11400000, guid: f51526809262ba94c813ea2a5b13d799, type: 2}
+    level: 91
+  moves: []
+  baseXpYield: 285
+  abilityId: 0
+  ability: "Paleos\xEDntesis"
+  abilityDescription: "Boosts the Pok\xE9mon's most proficient stat in harsh sunlight
+    or if the Pok\xE9mon is holding Booster Energy."

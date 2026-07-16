@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0151_Mew
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Mew
+  dexNumber: 151
+  type: 11
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 100
+  baseAttack: 100
+  baseDefense: 100
+  baseSpecialAttack: 100
+  baseSpecialDefense: 100
+  baseSpeed: 100
+  learnset:
+  - move: {fileID: 11400000, guid: 40cdd65c3494a9b4c968bb73156d3389, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ab73a5e1a8c42414ab1be5ed78b92ce7, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 6d40967e80e87e64c85fdfc3d7f9375a, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 024b234164fe94c46a7056240e7f016b, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 033803f731a76624c8b38340bb7da99e, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: 1b6b00d1f5275064baa1498c6b8c1ab4, type: 2}
+    level: 90
+  - move: {fileID: 11400000, guid: 0bbf6d2dcf506eb46abd27722dbc038b, type: 2}
+    level: 100
+  moves: []
+  baseXpYield: 270
+  abilityId: 0
+  ability: "Sincron\xEDa"
+  abilityDescription: "Contagia el envenenamiento, las quemaduras o la par\xE1lisis
+    al Pok\xE9mon que le cause ese estado."

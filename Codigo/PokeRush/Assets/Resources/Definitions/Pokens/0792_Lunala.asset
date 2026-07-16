@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0792_Lunala
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Lunala
+  dexNumber: 792
+  type: 11
+  type2: 14
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 137
+  baseAttack: 113
+  baseDefense: 89
+  baseSpecialAttack: 137
+  baseSpecialDefense: 107
+  baseSpeed: 97
+  learnset:
+  - move: {fileID: 11400000, guid: 31f1043e3839e9747bd5bf22368f4b26, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e0d600f5155f445419fb85147df1aa80, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 54838246d6289ef4c9768386af5e84db, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 5a2b21c8b8d757b48b9d6bf17f698003, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 61fcd18dc2f9f0f4a9921a0cdfdd624f, type: 2}
+    level: 14
+  - move: {fileID: 11400000, guid: 00faadc1d931ed6469d5e9258b39d435, type: 2}
+    level: 21
+  - move: {fileID: 11400000, guid: f7ef3eca6d8ddd4429f56d8ea592bc46, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: 886e9e1f04ab6ff429d1745bf300b330, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: eb78bcf3173303546a8a85e6651dfe6e, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: 0bbf6d2dcf506eb46abd27722dbc038b, type: 2}
+    level: 49
+  - move: {fileID: 11400000, guid: 7d5ab32eeaa70b8488ebb5dcb888dd6c, type: 2}
+    level: 56
+  - move: {fileID: 11400000, guid: 1ccb161cf9e9aef439a53c9c0d5422da, type: 2}
+    level: 63
+  moves: []
+  baseXpYield: 306
+  abilityId: 0
+  ability: Guardia Espectro
+  abilityDescription: "Reduce el da\xF1o que sufre si sus PS est\xE1n al m\xE1ximo."

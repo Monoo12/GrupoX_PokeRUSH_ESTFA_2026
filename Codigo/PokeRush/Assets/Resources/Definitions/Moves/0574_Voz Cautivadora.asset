@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce36bd0a53d25444a1b37d61f312d49, type: 3}
+  m_Name: 0574_Voz Cautivadora
+  m_EditorClassIdentifier: Assembly-CSharp::MoveDefinition
+  moveName: Voz Cautivadora
+  pokeApiId: 574
+  englishName: disarming-voice
+  type: 18
+  attackType: 1
+  power: 40
+  accuracy: 0
+  maxPP: 15
+  priority: 0
+  alwaysHits: 1
+  critRateStage: 0
+  effect: 0
+  effectChance: 0
+  effectDescription: Never misses.
+  statChanges: []
+  statChangeChance: 0
+  flinchChance: 0
+  minHits: 0
+  maxHits: 0
+  recoilPercent: 0
+  drainPercent: 0
+  healPercent: 0
+  makesContact: 0
+  implementation: 0

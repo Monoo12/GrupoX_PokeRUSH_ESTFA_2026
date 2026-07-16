@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0214_Heracross
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Heracross
+  dexNumber: 214
+  type: 12
+  type2: 7
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 80
+  baseAttack: 125
+  baseDefense: 75
+  baseSpecialAttack: 40
+  baseSpecialDefense: 95
+  baseSpeed: 85
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8fa5f06a0311d19479c672704f71abda, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: fa7ae277c368b7748a264fe36911ae5d, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: ca205b7258862ba4bb1c07af927f8bcd, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: c6b69781761a6dc4296fdd4dcbe44035, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 25caf57381f2c3d46bc100dcb7729648, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 545bfce2e1ae8fa4a8fec753a3c46c98, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 629e78c656b6e9f41a37a06b7354e562, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 250fbb957ad260348acd86209264d7fa, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: ba2a6cc8073d70d43a50c0410c5f6a94, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: df6ba38085c613547a5f5185ffdfcfc7, type: 2}
+    level: 55
+  - move: {fileID: 11400000, guid: a7518ae3c9faaa3408e418f00728053e, type: 2}
+    level: 60
+  moves: []
+  baseXpYield: 175
+  abilityId: 15
+  ability: Enjambre
+  abilityDescription: Potencia sus movimientos de tipo Bicho cuando le quedan pocos
+    PS.

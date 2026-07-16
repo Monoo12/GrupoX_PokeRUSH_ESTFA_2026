@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0849_Toxtricity
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Toxtricity
+  dexNumber: 849
+  type: 5
+  type2: 8
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 75
+  baseAttack: 98
+  baseDefense: 70
+  baseSpecialAttack: 114
+  baseSpecialDefense: 70
+  baseSpeed: 75
+  learnset:
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: eb7eef79178033945a7d793d00a7809c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 72a44e08e70b7d3409fe622b83f21267, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 11714a6bf7eea1b41adcafd548888e02, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 51fda485aba35b6458cfabb91fd186ac, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 7f16d0e598b5c524a90cb5b05716f656, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ccaef489232a3a043b75537cd6991072, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0f06afc367129a34d95a455ffdc61790, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: eadcd5d3718c6cf42aa1b07eb25e8e68, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 04b162525ca470c45ac38093d5833d42, type: 2}
+    level: 4
+  - move: {fileID: 11400000, guid: 9508236e7f2dd104bb2f34c3b00d1b28, type: 2}
+    level: 8
+  - move: {fileID: 11400000, guid: c9bedad56a792dd40800505ce098462e, type: 2}
+    level: 12
+  - move: {fileID: 11400000, guid: fa8294ac94d746e46949b22369e34129, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: e9a16f55448b8a04396cae37eeb37510, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: 5ca0530e84452d84592f2064d0bc2202, type: 2}
+    level: 32
+  - move: {fileID: 11400000, guid: 0d237a6346667f4419376a6811751ce8, type: 2}
+    level: 36
+  - move: {fileID: 11400000, guid: ed61bc2aefba4754d975dc849f135dfa, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: a756a4a1588494541a46b21792f4a5d8, type: 2}
+    level: 44
+  - move: {fileID: 11400000, guid: 5ea8142c0b11f4b4895e457335def00f, type: 2}
+    level: 48
+  - move: {fileID: 11400000, guid: c8b1d76e13d110e46a3cebd429e16317, type: 2}
+    level: 52
+  moves: []
+  baseXpYield: 176
+  abilityId: 0
+  ability: Punk Rock
+  abilityDescription: "Potencia los movimientos que usan sonido y reduce a la mitad
+    el da\xF1o que le infligen dichos movimientos."

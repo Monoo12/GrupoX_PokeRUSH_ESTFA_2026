@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0784_Kommo-o
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Kommo-o
+  dexNumber: 784
+  type: 15
+  type2: 7
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 75
+  baseAttack: 110
+  baseDefense: 125
+  baseSpecialAttack: 100
+  baseSpecialDefense: 105
+  baseSpeed: 85
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: fcd9ba8c0520a264b80f6669a703b109, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: dc16b20fc8cbfa14ba59048de4876b8e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: c9bedad56a792dd40800505ce098462e, type: 2}
+    level: 12
+  - move: {fileID: 11400000, guid: e60fe9644cf1a854488b7314a016d23f, type: 2}
+    level: 16
+  - move: {fileID: 11400000, guid: 1f5416f3c3b40ee44b2d08a3052da8b1, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: fa8294ac94d746e46949b22369e34129, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: 2ba204c7505a9024f9c4d86c431a7f33, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: bbed24c21ae56aa43bad8c77a21f0629, type: 2}
+    level: 32
+  - move: {fileID: 11400000, guid: 51fda485aba35b6458cfabb91fd186ac, type: 2}
+    level: 38
+  - move: {fileID: 11400000, guid: b41a69eeb61a76c4998b2ae9f582c6b2, type: 2}
+    level: 44
+  - move: {fileID: 11400000, guid: 37ffeca31b12835418ea3990672104df, type: 2}
+    level: 52
+  - move: {fileID: 11400000, guid: a7518ae3c9faaa3408e418f00728053e, type: 2}
+    level: 60
+  - move: {fileID: 11400000, guid: 5ea8142c0b11f4b4895e457335def00f, type: 2}
+    level: 76
+  moves: []
+  baseXpYield: 270
+  abilityId: 0
+  ability: Antibalas
+  abilityDescription: No le afectan las bombas ni algunos proyectiles.

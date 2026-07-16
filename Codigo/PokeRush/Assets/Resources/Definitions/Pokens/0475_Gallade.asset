@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0475_Gallade
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Gallade
+  dexNumber: 475
+  type: 11
+  type2: 7
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 68
+  baseAttack: 125
+  baseDefense: 65
+  baseSpecialAttack: 65
+  baseSpecialDefense: 115
+  baseSpeed: 80
+  learnset:
+  - move: {fileID: 11400000, guid: fb1eeb9deff548d408c3ee05f312a80c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: f4bcf953747872d48b4b27ea1dcd7e97, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e77ff88c1d8d47b45a9a88389bc81ca0, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 31f1043e3839e9747bd5bf22368f4b26, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0bbf6d2dcf506eb46abd27722dbc038b, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a82b4e62c9155794e955e044dd2cffe6, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: fdb565ec37957df468c220e3594634bb, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e0d600f5155f445419fb85147df1aa80, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 19037e9f239c4274ebf73f6d2faebf5a, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 023a3d45a5c37dc4bab8c00d7dad245a, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0340b48cc27b3f046a972d864c65d374, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 73533f1b5b6df48438d4ca74319eaab8, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 3d7b55faf0f70ac47b1b386b1db167b4, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: c897cd44300faed4ebf7b513e813a866, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 024b234164fe94c46a7056240e7f016b, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 528400ecac969b84cb9b8bed1b447c74, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: d807e8387c0223146903ddf472184de5, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 336b88b34d8822a4086c3f6efad0eea0, type: 2}
+    level: 12
+  - move: {fileID: 11400000, guid: ca205b7258862ba4bb1c07af927f8bcd, type: 2}
+    level: 18
+  - move: {fileID: 11400000, guid: e990ba4a1e752974989cdb43d028ce71, type: 2}
+    level: 23
+  - move: {fileID: 11400000, guid: ba2a6cc8073d70d43a50c0410c5f6a94, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 72a2ec9c8c4452a4e806170a2305f7ad, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: 6649a01721a1721458046fc4a8bc8263, type: 2}
+    level: 49
+  - move: {fileID: 11400000, guid: a7518ae3c9faaa3408e418f00728053e, type: 2}
+    level: 63
+  moves: []
+  baseXpYield: 233
+  abilityId: 0
+  ability: Impasible
+  abilityDescription: Cada vez que se amedrenta sube su Velocidad, debido a su voluntad
+    inquebrantable.

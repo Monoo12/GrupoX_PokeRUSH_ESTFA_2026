@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef10378eaabcfb7418ca5c927b5eaebe, type: 3}
+  m_Name: FinalBoss
+  m_EditorClassIdentifier: Assembly-CSharp::AIProfileDefinition
+  aiType: 3
+  randomness: 0.02
+  avoidsIneffective: 1
+  damageWeight: 1
+  koWeight: 1
+  statusWeight: 0.5
+  setupWeight: 0.6
+  healWeight: 0.5
+  canSwitch: 1
+  switchGainThreshold: 0.25
+  minHpPctForSetup: 0.5
+  maxSetupStages: 2

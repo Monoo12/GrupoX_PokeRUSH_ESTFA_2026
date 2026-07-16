@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0251_Celebi
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Celebi
+  dexNumber: 251
+  type: 11
+  type2: 4
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 100
+  baseAttack: 100
+  baseDefense: 100
+  baseSpecialAttack: 100
+  baseSpecialDefense: 100
+  baseSpeed: 100
+  learnset:
+  - move: {fileID: 11400000, guid: 31f1043e3839e9747bd5bf22368f4b26, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 906e85e1d9e6bc14b934964dc0e2c227, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 6d40967e80e87e64c85fdfc3d7f9375a, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 024b234164fe94c46a7056240e7f016b, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 9f3c7699e40cc444fbb80b86d3e5d10e, type: 2}
+    level: 60
+  - move: {fileID: 11400000, guid: c897cd44300faed4ebf7b513e813a866, type: 2}
+    level: 70
+  - move: {fileID: 11400000, guid: 8c856e83edd26634985785a7a298b2d2, type: 2}
+    level: 90
+  moves: []
+  baseXpYield: 270
+  abilityId: 0
+  ability: Cura Natural
+  abilityDescription: "Cura sus problemas de estado al cambiarse con otro Pok\xE9mon."

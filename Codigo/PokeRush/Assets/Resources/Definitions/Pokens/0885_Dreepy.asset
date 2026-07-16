@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0885_Dreepy
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Dreepy
+  dexNumber: 885
+  type: 15
+  type2: 14
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 28
+  baseAttack: 60
+  baseDefense: 30
+  baseSpecialAttack: 40
+  baseSpecialDefense: 30
+  baseSpeed: 82
+  learnset:
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 56c600be8d56cb14e8e9e19ffe461e5e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: b5a63e660581c9044992406b36ba9951, type: 2}
+    level: 1
+  moves: []
+  baseXpYield: 54
+  abilityId: 0
+  ability: Cuerpo Puro
+  abilityDescription: "Evita que bajen sus caracter\xEDsticas a causa de movimientos
+    o habilidades de otros Pok\xE9mon."

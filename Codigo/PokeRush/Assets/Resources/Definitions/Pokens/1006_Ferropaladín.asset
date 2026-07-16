@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: "1006_Ferropalad\xEDn"
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: "Ferropalad\xEDn"
+  dexNumber: 1006
+  type: 18
+  type2: 7
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 74
+  baseAttack: 130
+  baseDefense: 90
+  baseSpecialAttack: 120
+  baseSpecialDefense: 60
+  baseSpeed: 116
+  learnset:
+  - move: {fileID: 11400000, guid: fdb565ec37957df468c220e3594634bb, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ecbcf173fd8fdf445aa7e0d307d51c5a, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 3d7b55faf0f70ac47b1b386b1db167b4, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e0d600f5155f445419fb85147df1aa80, type: 2}
+    level: 7
+  - move: {fileID: 11400000, guid: 336b88b34d8822a4086c3f6efad0eea0, type: 2}
+    level: 14
+  - move: {fileID: 11400000, guid: c897cd44300faed4ebf7b513e813a866, type: 2}
+    level: 21
+  - move: {fileID: 11400000, guid: c691b853ce3b026469a58399952e5841, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: 72a2ec9c8c4452a4e806170a2305f7ad, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 528400ecac969b84cb9b8bed1b447c74, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: f4bcf953747872d48b4b27ea1dcd7e97, type: 2}
+    level: 49
+  - move: {fileID: 11400000, guid: 7d5ab32eeaa70b8488ebb5dcb888dd6c, type: 2}
+    level: 56
+  - move: {fileID: 11400000, guid: a7518ae3c9faaa3408e418f00728053e, type: 2}
+    level: 63
+  - move: {fileID: 11400000, guid: 430c8662115fcc3498c9d666fc2682a5, type: 2}
+    level: 70
+  - move: {fileID: 11400000, guid: b767e8512d0ab2a4fb19ff331ed43973, type: 2}
+    level: 91
+  moves: []
+  baseXpYield: 295
+  abilityId: 0
+  ability: Carga Cuark
+  abilityDescription: "Boosts the Pok\xE9mon's most proficient stat on Electric Terrain
+    or if the Pok\xE9mon is holding Booster Energy."

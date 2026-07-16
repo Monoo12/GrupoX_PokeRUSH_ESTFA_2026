@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0815_Cinderace
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Cinderace
+  dexNumber: 815
+  type: 2
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 80
+  baseAttack: 116
+  baseDefense: 75
+  baseSpecialAttack: 65
+  baseSpecialDefense: 75
+  baseSpeed: 119
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: eca0f55e08dddf5478388b7aac2aacce, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 336b88b34d8822a4086c3f6efad0eea0, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ad011c18b5c3da648bb1aab0661ef7be, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: b6f649c9fcac55449a20350e4ebb6e1b, type: 2}
+    level: 12
+  - move: {fileID: 11400000, guid: 928b07084060ec3448bcc93e2c4eaf40, type: 2}
+    level: 19
+  - move: {fileID: 11400000, guid: b80f29f1c1c5e4b4b90005c093cf9180, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: e60fe9644cf1a854488b7314a016d23f, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: cf038c544aa31f34880a279681afdcab, type: 2}
+    level: 46
+  - move: {fileID: 11400000, guid: 578f544335c85f441b40468c966f5707, type: 2}
+    level: 54
+  moves: []
+  baseXpYield: 265
+  abilityId: 12
+  ability: Mar Llamas
+  abilityDescription: Potencia sus movimientos de tipo Fuego cuando le quedan pocos
+    PS.

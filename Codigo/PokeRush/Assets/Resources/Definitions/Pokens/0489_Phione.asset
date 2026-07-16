@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0489_Phione
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Phione
+  dexNumber: 489
+  type: 3
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 80
+  baseAttack: 80
+  baseDefense: 80
+  baseSpecialAttack: 80
+  baseSpecialDefense: 80
+  baseSpeed: 80
+  learnset:
+  - move: {fileID: 11400000, guid: 49ceb0b4aa089514e85e1d4eef3b0c12, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0340b48cc27b3f046a972d864c65d374, type: 2}
+    level: 9
+  - move: {fileID: 11400000, guid: a057930e4a287e14887b185a1cefe425, type: 2}
+    level: 16
+  - move: {fileID: 11400000, guid: 5fbf42eb507255943ab4f1db80b99d5d, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: dcb003192cc433542a1f0e4278ed0271, type: 2}
+    level: 31
+  - move: {fileID: 11400000, guid: db6fb263f4780f145ade58c510380a3f, type: 2}
+    level: 39
+  - move: {fileID: 11400000, guid: 2d575ade7ad50ff48a067bb185f69f62, type: 2}
+    level: 46
+  - move: {fileID: 11400000, guid: f2422eefc46eee440a85b6222c6c1962, type: 2}
+    level: 61
+  moves: []
+  baseXpYield: 216
+  abilityId: 0
+  ability: "Hidrataci\xF3n"
+  abilityDescription: "Cura los problemas de estado si est\xE1 lloviendo."

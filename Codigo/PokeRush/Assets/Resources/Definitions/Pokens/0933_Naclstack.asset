@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0933_Naclstack
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Naclstack
+  dexNumber: 933
+  type: 13
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 60
+  baseAttack: 60
+  baseDefense: 100
+  baseSpecialAttack: 35
+  baseSpecialDefense: 65
+  baseSpeed: 35
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: bcc92307d1844394eb760a2c297b6698, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 9a8cc0d7b919f504db5b2679c3eecfe0, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 78fefa95c0412994b8f4b89fadae5aab, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 99ff3b3f66c514d4ca92da67409d2467, type: 2}
+    level: 7
+  - move: {fileID: 11400000, guid: f414ae42237eebe45926f199374b1a26, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 3701b47990489324d91c6c14a12273dd, type: 2}
+    level: 13
+  - move: {fileID: 11400000, guid: e60fe9644cf1a854488b7314a016d23f, type: 2}
+    level: 16
+  - move: {fileID: 11400000, guid: 2ba204c7505a9024f9c4d86c431a7f33, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 9f3c7699e40cc444fbb80b86d3e5d10e, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 72e601f57f47bb441990c3dbbee78e15, type: 2}
+    level: 34
+  - move: {fileID: 11400000, guid: 2c26d4067ac31f747a09743bd8ccb3d3, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: fda0a12db995dd6438016dbd6cc4a38d, type: 2}
+    level: 51
+  moves: []
+  baseXpYield: 124
+  abilityId: 0
+  ability: Sal Purificadora
+  abilityDescription: "The Pok\xE9mon's pure salt protects it from status conditions
+    and halves the damage taken from Ghost-type moves."

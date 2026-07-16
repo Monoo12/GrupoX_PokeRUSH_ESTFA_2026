@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0260_Swampert
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Swampert
+  dexNumber: 260
+  type: 3
+  type2: 9
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 100
+  baseAttack: 110
+  baseDefense: 90
+  baseSpecialAttack: 85
+  baseSpecialDefense: 90
+  baseSpeed: 60
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 49ceb0b4aa089514e85e1d4eef3b0c12, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 99ff3b3f66c514d4ca92da67409d2467, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 78fefa95c0412994b8f4b89fadae5aab, type: 2}
+    level: 9
+  - move: {fileID: 11400000, guid: a057930e4a287e14887b185a1cefe425, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: 2d575ade7ad50ff48a067bb185f69f62, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 72e601f57f47bb441990c3dbbee78e15, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: e6301713e02752e4fb0cfd6ab93fd256, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: ab73a5e1a8c42414ab1be5ed78b92ce7, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 327ff6ca3cb932042bfe8776febf80c7, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: fa8294ac94d746e46949b22369e34129, type: 2}
+    level: 49
+  - move: {fileID: 11400000, guid: 8cbc0be922d8f1142be182225dfa3fac, type: 2}
+    level: 63
+  moves: []
+  baseXpYield: 241
+  abilityId: 13
+  ability: Torrente
+  abilityDescription: Potencia sus movimientos de tipo Agua cuando le quedan pocos
+    PS.

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce36bd0a53d25444a1b37d61f312d49, type: 3}
+  m_Name: 0210_Corte Furia
+  m_EditorClassIdentifier: Assembly-CSharp::MoveDefinition
+  moveName: Corte Furia
+  pokeApiId: 210
+  englishName: fury-cutter
+  type: 12
+  attackType: 0
+  power: 40
+  accuracy: 95
+  maxPP: 20
+  priority: 0
+  alwaysHits: 0
+  critRateStage: 0
+  effect: 0
+  effectChance: 0
+  effectDescription: Power doubles every turn this move is used in succession after
+    the first, maxing out after five turns.
+  statChanges: []
+  statChangeChance: 0
+  flinchChance: 0
+  minHits: 0
+  maxHits: 0
+  recoilPercent: 0
+  drainPercent: 0
+  healPercent: 0
+  makesContact: 1
+  implementation: 0

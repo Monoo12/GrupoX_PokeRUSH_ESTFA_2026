@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0111_Rhyhorn
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Rhyhorn
+  dexNumber: 111
+  type: 9
+  type2: 13
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 80
+  baseAttack: 85
+  baseDefense: 95
+  baseSpecialAttack: 30
+  baseSpecialDefense: 30
+  baseSpeed: 25
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: cf1ac9aea9133c643bedada03bc07e2c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: f414ae42237eebe45926f199374b1a26, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 218daa716fa46724698d5c550c0f21a1, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: c6b69781761a6dc4296fdd4dcbe44035, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: c9bedad56a792dd40800505ce098462e, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 71f10000a37daac4187f8cd829b365d6, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 47b22a599883dbf4ab97926102a67d24, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 407d5e9a41dea094297bfac74cde1e0d, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: e6301713e02752e4fb0cfd6ab93fd256, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 2c26d4067ac31f747a09743bd8ccb3d3, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: fda0a12db995dd6438016dbd6cc4a38d, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: df6ba38085c613547a5f5185ffdfcfc7, type: 2}
+    level: 55
+  moves: []
+  baseXpYield: 69
+  abilityId: 0
+  ability: Pararrayos
+  abilityDescription: "Atrae y neutraliza los movimientos de tipo El\xE9ctrico, que
+    adem\xE1s le suben el Ataque Especial."

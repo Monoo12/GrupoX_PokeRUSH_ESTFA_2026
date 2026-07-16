@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0135_Jolteon
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Jolteon
+  dexNumber: 135
+  type: 5
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 65
+  baseAttack: 65
+  baseDefense: 60
+  baseSpecialAttack: 110
+  baseSpecialDefense: 95
+  baseSpeed: 130
+  learnset:
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8996f994cd35e8041a14c23914ba8664, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2f6bc59df7fd88844854fee5d1bac210, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 72a44e08e70b7d3409fe622b83f21267, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0340b48cc27b3f046a972d864c65d374, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: cf1ac9aea9133c643bedada03bc07e2c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 578f544335c85f441b40468c966f5707, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e6301713e02752e4fb0cfd6ab93fd256, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 628973f1b74f9214e9e09860800736ad, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 9d4f49d41da3d314c8ba4126f7759c4a, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: 0ec3ba36c65bdb741a4588779af6cc38, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: b6f649c9fcac55449a20350e4ebb6e1b, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 891535ef4a7ef0242948fce1e03d8bd4, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 545bfce2e1ae8fa4a8fec753a3c46c98, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 0d237a6346667f4419376a6811751ce8, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: b80f29f1c1c5e4b4b90005c093cf9180, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: b8408045f82f2b84aadd8bcf99a7926e, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: 69be535ff0e78d94798501e12ac14b44, type: 2}
+    level: 55
+  moves: []
+  baseXpYield: 184
+  abilityId: 3
+  ability: Absorbe Electricidad
+  abilityDescription: "Si le alcanza un movimiento de tipo El\xE9ctrico, recupera
+    PS en vez de sufrir da\xF1o."

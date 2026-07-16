@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 1009_Ondulagua
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Ondulagua
+  dexNumber: 1009
+  type: 3
+  type2: 15
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 99
+  baseAttack: 83
+  baseDefense: 91
+  baseSpecialAttack: 125
+  baseSpecialDefense: 83
+  baseSpeed: 109
+  learnset:
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 30c3f4f75cac1604b907628d9d9656a7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: ccaac71e98a665d4394beb7afb5801ff, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 7
+  - move: {fileID: 11400000, guid: 2d575ade7ad50ff48a067bb185f69f62, type: 2}
+    level: 14
+  - move: {fileID: 11400000, guid: 51fda485aba35b6458cfabb91fd186ac, type: 2}
+    level: 21
+  - move: {fileID: 11400000, guid: 2e7120dbb7e597b4ea5462868b38449e, type: 2}
+    level: 28
+  - move: {fileID: 11400000, guid: 762acebb0709c5844a026e35c95bdd57, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 82c798d8c7a47e245b56e611a0107224, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: e6890e37008f514438adc6f7b6d0cc1b, type: 2}
+    level: 56
+  - move: {fileID: 11400000, guid: 5f03c86d741b37146b42757b21e7079f, type: 2}
+    level: 63
+  - move: {fileID: 11400000, guid: 37ffeca31b12835418ea3990672104df, type: 2}
+    level: 70
+  - move: {fileID: 11400000, guid: 25269c48c1789d14b90b8f188a767b5d, type: 2}
+    level: 77
+  - move: {fileID: 11400000, guid: 8cbc0be922d8f1142be182225dfa3fac, type: 2}
+    level: 84
+  moves: []
+  baseXpYield: 295
+  abilityId: 0
+  ability: "Paleos\xEDntesis"
+  abilityDescription: "Boosts the Pok\xE9mon's most proficient stat in harsh sunlight
+    or if the Pok\xE9mon is holding Booster Energy."

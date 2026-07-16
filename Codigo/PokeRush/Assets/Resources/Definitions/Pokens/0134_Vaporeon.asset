@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0134_Vaporeon
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Vaporeon
+  dexNumber: 134
+  type: 3
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 130
+  baseAttack: 65
+  baseDefense: 60
+  baseSpecialAttack: 110
+  baseSpecialDefense: 95
+  baseSpeed: 65
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8996f994cd35e8041a14c23914ba8664, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2f6bc59df7fd88844854fee5d1bac210, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 49ceb0b4aa089514e85e1d4eef3b0c12, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 0340b48cc27b3f046a972d864c65d374, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: cf1ac9aea9133c643bedada03bc07e2c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 578f544335c85f441b40468c966f5707, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e6301713e02752e4fb0cfd6ab93fd256, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 628973f1b74f9214e9e09860800736ad, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 9d4f49d41da3d314c8ba4126f7759c4a, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: 2d575ade7ad50ff48a067bb185f69f62, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 3b18172be0ddeb946b067314641c3e87, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 327ff6ca3cb932042bfe8776febf80c7, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: dcb003192cc433542a1f0e4278ed0271, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: 8cbc0be922d8f1142be182225dfa3fac, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: 69be535ff0e78d94798501e12ac14b44, type: 2}
+    level: 55
+  moves: []
+  baseXpYield: 184
+  abilityId: 4
+  ability: Absorbe Agua
+  abilityDescription: "Si le alcanza un movimiento de tipo Agua, recupera PS en vez
+    de sufrir da\xF1o."

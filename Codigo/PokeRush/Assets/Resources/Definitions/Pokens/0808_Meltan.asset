@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0808_Meltan
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Meltan
+  dexNumber: 808
+  type: 17
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 46
+  baseAttack: 65
+  baseDefense: 65
+  baseSpecialAttack: 55
+  baseSpecialDefense: 35
+  baseSpeed: 34
+  learnset:
+  - move: {fileID: 11400000, guid: 72a44e08e70b7d3409fe622b83f21267, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: bcc92307d1844394eb760a2c297b6698, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: cf1ac9aea9133c643bedada03bc07e2c, type: 2}
+    level: 8
+  - move: {fileID: 11400000, guid: e60fe9644cf1a854488b7314a016d23f, type: 2}
+    level: 16
+  - move: {fileID: 11400000, guid: 0ec3ba36c65bdb741a4588779af6cc38, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: dcb003192cc433542a1f0e4278ed0271, type: 2}
+    level: 32
+  - move: {fileID: 11400000, guid: 81b3b964ab6a8484e99a18ad6294eeb0, type: 2}
+    level: 40
+  moves: []
+  baseXpYield: 135
+  abilityId: 0
+  ability: "Im\xE1n"
+  abilityDescription: "Su magnetismo atrae a los Pok\xE9mon de tipo Acero y les impide
+    huir."

@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0471_Glaceon
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Glaceon
+  dexNumber: 471
+  type: 6
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 65
+  baseAttack: 60
+  baseDefense: 110
+  baseSpecialAttack: 130
+  baseSpecialDefense: 95
+  baseSpeed: 65
+  learnset:
+  - move: {fileID: 11400000, guid: 0340b48cc27b3f046a972d864c65d374, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8996f994cd35e8041a14c23914ba8664, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2f6bc59df7fd88844854fee5d1bac210, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a76cd2420723158438c94e7ea875c97c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: aedc2462218b3ab42b01d7048ce3e1c3, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 578f544335c85f441b40468c966f5707, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: e6301713e02752e4fb0cfd6ab93fd256, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: cf1ac9aea9133c643bedada03bc07e2c, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 628973f1b74f9214e9e09860800736ad, type: 2}
+    level: 5
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 9d4f49d41da3d314c8ba4126f7759c4a, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: a160e99cd6518f74d8ca82543bfacfb0, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 2daf77979e51d77499f2d6d17df6a24e, type: 2}
+    level: 25
+  - move: {fileID: 11400000, guid: 1b78dd7683269494891e8118d43ac788, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: 3c940815bb4e9424abd86c596f6a3b8d, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 9e8285c6b539e2b47bdb1b0a8acc3dad, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: 69be535ff0e78d94798501e12ac14b44, type: 2}
+    level: 55
+  moves: []
+  baseXpYield: 184
+  abilityId: 0
+  ability: "Manto N\xEDveo"
+  abilityDescription: "Sube la Evasi\xF3n cuando graniza."

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 1003_Ting-Lu
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Ting-Lu
+  dexNumber: 1003
+  type: 16
+  type2: 9
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 155
+  baseAttack: 110
+  baseDefense: 125
+  baseSpecialAttack: 55
+  baseSpecialDefense: 80
+  baseSpeed: 45
+  learnset:
+  - move: {fileID: 11400000, guid: 4c2097a5e496d424baee29e4191000db, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a4f26e7065b672f45b8e5a5ec89ed3a0, type: 2}
+    level: 10
+  - move: {fileID: 11400000, guid: 71f10000a37daac4187f8cd829b365d6, type: 2}
+    level: 15
+  - move: {fileID: 11400000, guid: 218daa716fa46724698d5c550c0f21a1, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 250fbb957ad260348acd86209264d7fa, type: 2}
+    level: 35
+  - move: {fileID: 11400000, guid: 6dfcf6e12382c0041847c9c34fdf63e5, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: 765b56a88643e2f49ab6429665379f82, type: 2}
+    level: 45
+  - move: {fileID: 11400000, guid: 3e46e55dac14d1f469c82a5a5fbe4df1, type: 2}
+    level: 50
+  - move: {fileID: 11400000, guid: 629e78c656b6e9f41a37a06b7354e562, type: 2}
+    level: 55
+  - move: {fileID: 11400000, guid: 72e601f57f47bb441990c3dbbee78e15, type: 2}
+    level: 60
+  - move: {fileID: 11400000, guid: 2c26d4067ac31f747a09743bd8ccb3d3, type: 2}
+    level: 70
+  moves: []
+  baseXpYield: 285
+  abilityId: 0
+  ability: Caldero Debacle
+  abilityDescription: "The power of the Pok\xE9mon's ruinous vessel lowers the Sp.
+    Atk stats of all Pok\xE9mon except itself."

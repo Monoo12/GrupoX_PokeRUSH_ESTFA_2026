@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0123_Scyther
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Scyther
+  dexNumber: 123
+  type: 12
+  type2: 10
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 70
+  baseAttack: 110
+  baseDefense: 80
+  baseSpecialAttack: 55
+  baseSpecialDefense: 80
+  baseSpeed: 105
+  learnset:
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 2dcd584cc6bdfb742b16f96138d97eb7, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 3d7b55faf0f70ac47b1b386b1db167b4, type: 2}
+    level: 4
+  - move: {fileID: 11400000, guid: e990ba4a1e752974989cdb43d028ce71, type: 2}
+    level: 8
+  - move: {fileID: 11400000, guid: 17016ab476a64d7438cc949b2f6c8606, type: 2}
+    level: 12
+  - move: {fileID: 11400000, guid: fdb565ec37957df468c220e3594634bb, type: 2}
+    level: 16
+  - move: {fileID: 11400000, guid: 6a9478a70ebe94e459ad1c4319816906, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: d807e8387c0223146903ddf472184de5, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: b80f29f1c1c5e4b4b90005c093cf9180, type: 2}
+    level: 32
+  - move: {fileID: 11400000, guid: 00faadc1d931ed6469d5e9258b39d435, type: 2}
+    level: 36
+  - move: {fileID: 11400000, guid: 49e285cb77aa54f4d84e6082ed745698, type: 2}
+    level: 40
+  - move: {fileID: 11400000, guid: ba2a6cc8073d70d43a50c0410c5f6a94, type: 2}
+    level: 44
+  moves: []
+  baseXpYield: 100
+  abilityId: 15
+  ability: Enjambre
+  abilityDescription: Potencia sus movimientos de tipo Bicho cuando le quedan pocos
+    PS.

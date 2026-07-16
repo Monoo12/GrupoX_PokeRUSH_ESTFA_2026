@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac1bdca6e2bda85438fd10079cfe87ab, type: 3}
+  m_Name: SalvajeDePrueba
+  m_EditorClassIdentifier: Assembly-CSharp::WildEncounterDefinition
+  species: {fileID: 11400000, guid: e1d2ee9d3d84c6b4085aee132d24968e, type: 2}
+  minLevel: 3
+  maxLevel: 6
+  aiProfile: {fileID: 11400000, guid: 1b6fdae9a791b3e4d893a1534d6d2962, type: 2}

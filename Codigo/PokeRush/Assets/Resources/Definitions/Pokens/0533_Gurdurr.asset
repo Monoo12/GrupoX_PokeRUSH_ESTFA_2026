@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: 0533_Gurdurr
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Gurdurr
+  dexNumber: 533
+  type: 7
+  type2: 0
+  battleFrontSprite: {fileID: 0}
+  battleBackSprite: {fileID: 0}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 0}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 85
+  baseAttack: 105
+  baseDefense: 85
+  baseSpecialAttack: 40
+  baseSpecialDefense: 50
+  baseSpeed: 40
+  learnset:
+  - move: {fileID: 11400000, guid: 40cdd65c3494a9b4c968bb73156d3389, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: a387517da97ab2340862ced08918bb48, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 78fefa95c0412994b8f4b89fadae5aab, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 8bfd1889a157ba442ab4abbbac64030f, type: 2}
+    level: 16
+  - move: {fileID: 11400000, guid: 72e601f57f47bb441990c3dbbee78e15, type: 2}
+    level: 20
+  - move: {fileID: 11400000, guid: 983a96d5b9ff9e445b36971eea724ac9, type: 2}
+    level: 24
+  - move: {fileID: 11400000, guid: c9bedad56a792dd40800505ce098462e, type: 2}
+    level: 30
+  - move: {fileID: 11400000, guid: c519c752b13b76849bb0848e872f38df, type: 2}
+    level: 36
+  - move: {fileID: 11400000, guid: 0aa7b8a0f351c2f4681e6e7b377f36fb, type: 2}
+    level: 42
+  - move: {fileID: 11400000, guid: fda0a12db995dd6438016dbd6cc4a38d, type: 2}
+    level: 48
+  - move: {fileID: 11400000, guid: d4080f57c4cd4eb4a9a943baf32a4aad, type: 2}
+    level: 54
+  - move: {fileID: 11400000, guid: 04786eaa2e71d664dadde22eb8bbed4f, type: 2}
+    level: 60
+  moves: []
+  baseXpYield: 142
+  abilityId: 10
+  ability: Agallas
+  abilityDescription: Si sufre un problema de estado, se viene arriba y aumenta su
+    Ataque.
