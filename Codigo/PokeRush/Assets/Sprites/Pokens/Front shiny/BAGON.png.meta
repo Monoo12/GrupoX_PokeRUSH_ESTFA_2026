@@ -1,0 +1,819 @@
+fileFormatVersion: 2
+guid: 67dcded151e49154fb9958b16a11b7fa
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6370395098760114626
+    second: BAGON_0
+  - first:
+      213: -8402323172003223839
+    second: BAGON_1
+  - first:
+      213: -2462856478805844809
+    second: BAGON_2
+  - first:
+      213: -2632650934340182441
+    second: BAGON_3
+  - first:
+      213: 2923876441349944900
+    second: BAGON_4
+  - first:
+      213: -7023077988448416261
+    second: BAGON_5
+  - first:
+      213: -8895350372463448869
+    second: BAGON_6
+  - first:
+      213: -4326738237108517958
+    second: BAGON_7
+  - first:
+      213: 8917258119584348502
+    second: BAGON_8
+  - first:
+      213: -9101063663063960307
+    second: BAGON_9
+  - first:
+      213: 8522454664572431153
+    second: BAGON_10
+  - first:
+      213: -9149362916381684929
+    second: BAGON_11
+  - first:
+      213: -3438163837946751024
+    second: BAGON_12
+  - first:
+      213: 7141607997883856075
+    second: BAGON_13
+  - first:
+      213: 8180307047368590852
+    second: BAGON_14
+  - first:
+      213: -8853817076504068207
+    second: BAGON_15
+  - first:
+      213: -2082020845286547681
+    second: BAGON_16
+  - first:
+      213: -1315735803410053037
+    second: BAGON_17
+  - first:
+      213: -1577460811841812057
+    second: BAGON_18
+  - first:
+      213: -7703919736524900221
+    second: BAGON_19
+  - first:
+      213: 6323126800365201067
+    second: BAGON_20
+  - first:
+      213: -1487608695730534654
+    second: BAGON_21
+  - first:
+      213: -5545909533138053111
+    second: BAGON_22
+  - first:
+      213: 7851565092124197528
+    second: BAGON_23
+  - first:
+      213: -4181424594297263684
+    second: BAGON_24
+  - first:
+      213: -3969271098315582119
+    second: BAGON_25
+  - first:
+      213: 5752419830006521137
+    second: BAGON_26
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BAGON_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3e8383d86fc797a0800000000000000
+      internalID: -6370395098760114626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 33
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e6e6bca793f46b80800000000000000
+      internalID: -8402323172003223839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_2
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 0
+        width: 33
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bc1200d41d22ddd0800000000000000
+      internalID: -2462856478805844809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_3
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 0
+        width: 33
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75e9d017ce1f67bd0800000000000000
+      internalID: -2632650934340182441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_4
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 0
+        width: 33
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 446fbcdc122b39820800000000000000
+      internalID: 2923876441349944900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_5
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfdcaa487c3098e90800000000000000
+      internalID: -7023077988448416261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_6
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdc6da047fd5d8480800000000000000
+      internalID: -8895350372463448869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_7
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 0
+        width: 33
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab30c055f7654f3c0800000000000000
+      internalID: -4326738237108517958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_8
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 0
+        width: 33
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 659fa4c930770cb70800000000000000
+      internalID: 8917258119584348502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_9
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 0
+        width: 33
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d057bd461d682b180800000000000000
+      internalID: -9101063663063960307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_10
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 0
+        width: 33
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13be5301d57d54670800000000000000
+      internalID: 8522454664572431153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_11
+      rect:
+        serializedVersion: 2
+        x: 574
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3b00f727eee60180800000000000000
+      internalID: -9149362916381684929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_12
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d7179f94303940d0800000000000000
+      internalID: -3438163837946751024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_13
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 0
+        width: 33
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc4b4fed2a61c1360800000000000000
+      internalID: 7141607997883856075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_14
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 0
+        width: 33
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40687002be9468170800000000000000
+      internalID: 8180307047368590852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_15
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 0
+        width: 33
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19fffa8474ce02580800000000000000
+      internalID: -8853817076504068207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_16
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1f9cbd721d2b13e0800000000000000
+      internalID: -2082020845286547681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_17
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3580b7302419dbde0800000000000000
+      internalID: -1315735803410053037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_18
+      rect:
+        serializedVersion: 2
+        x: 931
+        y: 0
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a9c117dfbbbb1ae0800000000000000
+      internalID: -1577460811841812057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_19
+      rect:
+        serializedVersion: 2
+        x: 978
+        y: 0
+        width: 38
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 388ff4611dd261590800000000000000
+      internalID: -7703919736524900221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_20
+      rect:
+        serializedVersion: 2
+        x: 1026
+        y: 0
+        width: 42
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba62585d25240c750800000000000000
+      internalID: 6323126800365201067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_21
+      rect:
+        serializedVersion: 2
+        x: 1074
+        y: 0
+        width: 45
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 207033ed5c3fa5be0800000000000000
+      internalID: -1487608695730534654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_22
+      rect:
+        serializedVersion: 2
+        x: 1126
+        y: 0
+        width: 44
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9089ad0c9a8f803b0800000000000000
+      internalID: -5545909533138053111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_23
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 0
+        width: 43
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8928be61adc56fc60800000000000000
+      internalID: 7851565092124197528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_24
+      rect:
+        serializedVersion: 2
+        x: 1234
+        y: 0
+        width: 38
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb964d15c7898f5c0800000000000000
+      internalID: -4181424594297263684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_25
+      rect:
+        serializedVersion: 2
+        x: 1287
+        y: 0
+        width: 35
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 955dca757f05ae8c0800000000000000
+      internalID: -3969271098315582119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BAGON_26
+      rect:
+        serializedVersion: 2
+        x: 1339
+        y: 0
+        width: 34
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13d93769b53b4df40800000000000000
+      internalID: 5752419830006521137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BAGON_0: -6370395098760114626
+      BAGON_1: -8402323172003223839
+      BAGON_10: 8522454664572431153
+      BAGON_11: -9149362916381684929
+      BAGON_12: -3438163837946751024
+      BAGON_13: 7141607997883856075
+      BAGON_14: 8180307047368590852
+      BAGON_15: -8853817076504068207
+      BAGON_16: -2082020845286547681
+      BAGON_17: -1315735803410053037
+      BAGON_18: -1577460811841812057
+      BAGON_19: -7703919736524900221
+      BAGON_2: -2462856478805844809
+      BAGON_20: 6323126800365201067
+      BAGON_21: -1487608695730534654
+      BAGON_22: -5545909533138053111
+      BAGON_23: 7851565092124197528
+      BAGON_24: -4181424594297263684
+      BAGON_25: -3969271098315582119
+      BAGON_26: 5752419830006521137
+      BAGON_3: -2632650934340182441
+      BAGON_4: 2923876441349944900
+      BAGON_5: -7023077988448416261
+      BAGON_6: -8895350372463448869
+      BAGON_7: -4326738237108517958
+      BAGON_8: 8917258119584348502
+      BAGON_9: -9101063663063960307
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
