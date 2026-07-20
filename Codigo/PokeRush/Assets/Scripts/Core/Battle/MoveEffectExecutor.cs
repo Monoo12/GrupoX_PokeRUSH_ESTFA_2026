@@ -6,14 +6,24 @@ public static class MoveEffectExecutor
 {
     // Aplica los efectos del movimiento. Devuelve true si algo surtio efecto
     // (para que los movimientos de estado puros digan "¡Pero falló!" si no).
+    // 'field' habilita clima/terrenos/pantallas/trampas (null en tests basicos).
     public static bool ApplyEffects(
         BattlePokenState attacker, BattlePokenState defender, MoveDefinition move,
-        List<BattleEvent> events, IBattleRng rng, bool isPureStatusMove)
+        List<BattleEvent> events, IBattleRng rng, bool isPureStatusMove,
+        BattleModel field = null)
     {
         // Los DamageOnly ignoran su efecto secundario por diseño
         if (move.implementation != MoveImplementation.Full) return false;
 
         bool anyEffect = false;
+
+        // --- clima / terreno / pantallas / trampas ---
+        if (field != null
+            && (move.weatherEffect != WeatherKind.None || move.fieldEffect != FieldEffectKind.None))
+        {
+            if (FieldEffects.ApplyMoveFieldEffect(field, attacker.IsPlayerSide, move, events))
+                anyEffect = true;
+        }
 
         // --- curacion del usuario (ej: Recuperacion) ---
         if (move.healPercent > 0 && !attacker.Poken.IsFainted)
@@ -55,7 +65,7 @@ public static class MoveEffectExecutor
         {
             bool applies = move.effectChance <= 0 || rng.Value() * 100f < move.effectChance;
             if (applies && StatusEffects.TryApplyStatus(defender, move.effect, events, rng,
-                    showFailMessage: isPureStatusMove))
+                    showFailMessage: isPureStatusMove, field))
                 anyEffect = true;
         }
 

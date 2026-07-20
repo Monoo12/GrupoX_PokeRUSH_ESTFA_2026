@@ -11,6 +11,8 @@ public enum BattleEventKind
     PokenSwitched,    // cambio el Poken activo de un lado (refrescar sprites)
     MoveUsed,         // un Poken uso un movimiento
     Fainted,          // un Poken se debilito
+    WeatherChanged,   // empezo/termino un clima (actualizar overlay)
+    TerrainChanged,   // empezo/termino un terreno (actualizar overlay)
     BattleEnded       // fin del combate
 }
 
@@ -21,6 +23,9 @@ public class BattleEvent
     public string Message;
     // Que lado afecta el evento (para saber que barra/sprite refrescar)
     public bool TargetIsPlayer;
+    // Solo en MoveUsed: el movimiento usado, para elegir su animacion
+    // (null = Forcejeo / autogolpe: se anima como fisico sin tipo)
+    public MoveDefinition Move;
 
     public static BattleEvent Msg(string text)
         => new BattleEvent { Kind = BattleEventKind.Message, Message = text };

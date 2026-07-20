@@ -103,6 +103,33 @@ namespace PokeRush.EditorTools.PokeApi
             ["swarm"] = AbilityId.Swarm, ["rough-skin"] = AbilityId.RoughSkin
         };
 
+        // Movimientos que instalan clima / efectos de campo (por nombre PokeAPI).
+        // Estos SI se implementan aunque su categoria sea whole-field-effect.
+        private static readonly Dictionary<string, WeatherKind> WeatherMoves = new Dictionary<string, WeatherKind>
+        {
+            ["rain-dance"] = WeatherKind.Rain, ["sunny-day"] = WeatherKind.Sun,
+            ["sandstorm"] = WeatherKind.Sandstorm, ["hail"] = WeatherKind.Hail,
+            ["snowscape"] = WeatherKind.Hail // la version moderna del granizo
+        };
+
+        private static readonly Dictionary<string, FieldEffectKind> FieldMoves = new Dictionary<string, FieldEffectKind>
+        {
+            ["reflect"] = FieldEffectKind.Reflect, ["light-screen"] = FieldEffectKind.LightScreen,
+            ["aurora-veil"] = FieldEffectKind.AuroraVeil, ["stealth-rock"] = FieldEffectKind.StealthRock,
+            ["spikes"] = FieldEffectKind.Spikes, ["toxic-spikes"] = FieldEffectKind.ToxicSpikes,
+            ["sticky-web"] = FieldEffectKind.StickyWeb,
+            ["electric-terrain"] = FieldEffectKind.ElectricTerrain,
+            ["psychic-terrain"] = FieldEffectKind.PsychicTerrain,
+            ["grassy-terrain"] = FieldEffectKind.GrassyTerrain,
+            ["misty-terrain"] = FieldEffectKind.MistyTerrain
+        };
+
+        public static WeatherKind WeatherFor(string apiName)
+            => apiName != null && WeatherMoves.TryGetValue(apiName, out WeatherKind w) ? w : WeatherKind.None;
+
+        public static FieldEffectKind FieldEffectFor(string apiName)
+            => apiName != null && FieldMoves.TryGetValue(apiName, out FieldEffectKind f) ? f : FieldEffectKind.None;
+
         // ---------- nombres ----------
 
         // Nombre oficial en español; si PokeAPI no lo tiene, cae al ingles.

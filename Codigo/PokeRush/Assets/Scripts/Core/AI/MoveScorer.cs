@@ -51,7 +51,8 @@ public static class MoveScorer
         // Sin efecto: inmunidad por tipo o por habilidad conocida del rival
         if (FoeAbilityBlocks(ctx.Foe, move.type)) return 0f;
 
-        DamageResult expected = DamageCalculator.CalculateExpected(ctx.Self, ctx.Foe, move);
+        // Con el modelo, la estimacion incluye clima/terreno/pantallas del rival
+        DamageResult expected = DamageCalculator.CalculateExpected(ctx.Self, ctx.Foe, move, ctx.Model);
         if (expected.Effectiveness <= 0f) return 0f;
 
         float dmgPct = System.Math.Min((float)expected.Damage / ctx.Foe.Poken.MaxHP, 1f);
@@ -116,6 +117,16 @@ public static class MoveScorer
         // --- curacion ---
         if (move.healPercent > 0 && ctx.SelfHpPercent < HealCutoffHpPct)
             score += profile.healWeight * (1f - ctx.SelfHpPercent);
+
+        // --- clima / pantallas / trampas / terrenos ---
+        // Valen como jugada de preparacion: solo si aportan algo nuevo y la IA
+        // tiene mentalidad de setup (lideres/bosses; los comunes ni lo miran).
+        if (ctx.Model != null
+            && (move.weatherEffect != WeatherKind.None || move.fieldEffect != FieldEffectKind.None)
+            && !FieldEffects.IsRedundant(ctx.Model, attackerIsPlayer: false, move))
+        {
+            score += profile.setupWeight * 0.8f;
+        }
 
         return score;
     }

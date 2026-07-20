@@ -12,6 +12,8 @@ public class AiContext
     public List<PokenModel> OwnTeam;
     public int OwnActiveIndex;
     public AIProfileDefinition Profile;
+    // Estado del campo (clima/terreno/pantallas): informacion visible en pantalla
+    public BattleModel Model;
 
     // Señales legitimas del rival, listas para usar
     public float FoeHpPercent => Foe.Poken.MaxHP > 0
@@ -28,7 +30,8 @@ public class AiContext
             Foe = model.PlayerState,
             OwnTeam = model.Enemy.Team,
             OwnActiveIndex = model.ActiveEnemyIndex,
-            Profile = profile
+            Profile = profile,
+            Model = model
         };
     }
 }

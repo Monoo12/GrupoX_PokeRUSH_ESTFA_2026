@@ -39,9 +39,11 @@ public static class DamageCalculator
            (moveType == attacker.type ||
             (attacker.type2 != PokenType.None && moveType == attacker.type2));
 
-    // Daño real de un movimiento (con azar: critico + roll 0.85-1.0)
+    // Daño real de un movimiento (con azar: critico + roll 0.85-1.0).
+    // 'field' (opcional) aplica clima, terreno y pantallas del defensor.
     public static DamageResult Calculate(
-        BattlePokenState attacker, BattlePokenState defender, MoveDefinition move, IBattleRng rng)
+        BattlePokenState attacker, BattlePokenState defender, MoveDefinition move,
+        IBattleRng rng, BattleModel field = null)
     {
         if (move.attackType == AttackType.Status || move.power <= 0)
             return new DamageResult { Damage = 0, Effectiveness = 1f, IsCritical = false };
@@ -51,22 +53,23 @@ public static class DamageCalculator
         float abilityMult = AbilityEffects.AttackerDamageMultiplier(attacker, move.type, move.attackType);
 
         return Compute(attacker, defender, move.power, move.type, move.attackType,
-            HasStab(attacker.Poken.Definition, move.type), abilityMult, crit, roll);
+            HasStab(attacker.Poken.Definition, move.type), abilityMult, crit, roll, field);
     }
 
     // Forcejeo: potencia 50, sin tipo (efectividad 1 contra todo), fisico.
     public static DamageResult CalculateStruggle(
-        BattlePokenState attacker, BattlePokenState defender, IBattleRng rng)
+        BattlePokenState attacker, BattlePokenState defender, IBattleRng rng, BattleModel field = null)
     {
         bool crit = rng.Value() < CritChance(0);
         float roll = rng.Range(0.85f, 1f);
         return Compute(attacker, defender, StrugglePower, PokenType.None, AttackType.Physical,
-            stab: false, abilityMult: 1f, crit, roll);
+            stab: false, abilityMult: 1f, crit, roll, field);
     }
 
     // Estimacion determinista para la IA: sin critico, roll promedio.
     public static DamageResult CalculateExpected(
-        BattlePokenState attacker, BattlePokenState defender, MoveDefinition move)
+        BattlePokenState attacker, BattlePokenState defender, MoveDefinition move,
+        BattleModel field = null)
     {
         if (move.attackType == AttackType.Status || move.power <= 0)
             return new DamageResult { Damage = 0, Effectiveness = 1f, IsCritical = false };
@@ -74,13 +77,61 @@ public static class DamageCalculator
         float abilityMult = AbilityEffects.AttackerDamageMultiplier(attacker, move.type, move.attackType);
         return Compute(attacker, defender, move.power, move.type, move.attackType,
             HasStab(attacker.Poken.Definition, move.type), abilityMult,
-            isCritical: false, randomRoll: AverageRoll);
+            isCritical: false, randomRoll: AverageRoll, field);
+    }
+
+    // Multiplicador de clima/terreno/pantallas sobre el daño
+    private static float FieldMultiplier(
+        BattleModel field, BattlePokenState attacker, BattlePokenState defender,
+        PokenType moveType, AttackType attackType, bool isCritical)
+    {
+        if (field == null) return 1f;
+        float mult = 1f;
+
+        // Clima
+        switch (field.CurrentWeather)
+        {
+            case WeatherKind.Rain:
+                if (moveType == PokenType.Water) mult *= 1.5f;
+                else if (moveType == PokenType.Fire) mult *= 0.5f;
+                break;
+            case WeatherKind.Sun:
+                if (moveType == PokenType.Fire) mult *= 1.5f;
+                else if (moveType == PokenType.Water) mult *= 0.5f;
+                break;
+        }
+
+        // Terreno: potencia si el ATACANTE toca el suelo
+        if (FieldEffects.IsGrounded(attacker))
+        {
+            if (field.CurrentTerrain == FieldTerrain.Electric && moveType == PokenType.Electric) mult *= 1.3f;
+            else if (field.CurrentTerrain == FieldTerrain.Psychic && moveType == PokenType.Psychic) mult *= 1.3f;
+            else if (field.CurrentTerrain == FieldTerrain.Grassy && moveType == PokenType.Grass) mult *= 1.3f;
+        }
+        // Campo Nebuloso: protege a los que tocan el suelo del daño Dragon
+        if (field.CurrentTerrain == FieldTerrain.Misty && moveType == PokenType.Dragon
+            && FieldEffects.IsGrounded(defender))
+            mult *= 0.5f;
+
+        // Pantallas del lado defensor (los criticos las ignoran, como en la saga)
+        if (!isCritical)
+        {
+            SideState defenderSide = field.SideOf(defender.IsPlayerSide);
+            bool physical = attackType == AttackType.Physical;
+            if (defenderSide.HasAuroraVeil
+                || (physical && defenderSide.HasReflect)
+                || (!physical && defenderSide.HasLightScreen))
+                mult *= 0.5f;
+        }
+
+        return mult;
     }
 
     private static DamageResult Compute(
         BattlePokenState attacker, BattlePokenState defender,
         int power, PokenType moveType, AttackType attackType,
-        bool stab, float abilityMult, bool isCritical, float randomRoll)
+        bool stab, float abilityMult, bool isCritical, float randomRoll,
+        BattleModel field = null)
     {
         // Stats con stages. El critico ignora los stages que perjudican al
         // atacante (ataque bajado, defensa rival subida), como en la saga.
@@ -95,6 +146,13 @@ public static class DamageCalculator
 
         float atkStat = atkBase * StatStageTable.Multiplier(atkStage);
         float defStat = defBase * StatStageTable.Multiplier(defStage);
+
+        // Tormenta de arena: Defensa Especial x1.5 para los tipo Roca
+        if (field != null && field.CurrentWeather == WeatherKind.Sandstorm && !physical
+            && (defender.Poken.Definition.type == PokenType.Rock
+                || defender.Poken.Definition.type2 == PokenType.Rock))
+            defStat *= 1.5f;
+
         if (defStat < 1f) defStat = 1f;
 
         // Quemadura: ataque fisico a la mitad, salvo que tenga Agallas (Guts)
@@ -110,7 +168,8 @@ public static class DamageCalculator
         float stabMult = stab ? StabMultiplier : 1f;
         float critMult = isCritical ? CritMultiplier : 1f;
 
-        float total = baseDamage * stabMult * eff * critMult * randomRoll * burnMult * abilityMult;
+        float fieldMult = FieldMultiplier(field, attacker, defender, moveType, attackType, isCritical);
+        float total = baseDamage * stabMult * eff * critMult * randomRoll * burnMult * abilityMult * fieldMult;
 
         return new DamageResult
         {

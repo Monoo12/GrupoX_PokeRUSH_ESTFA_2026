@@ -183,7 +183,8 @@ namespace PokeRush.EditorTools.PokeApi
 
         // Configura un PNG como tira de frames cuadrados: Multiple, pivot abajo,
         // PPU = alto del frame, sin filtro ni compresion, tamaño sin reescalar.
-        private static void ConfigureStrip(string assetPath)
+        // Publico: BattleUiAssetImporter lo reusa para los sprites de entrenadores.
+        public static void ConfigureStrip(string assetPath)
         {
             var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
             if (importer == null) return;

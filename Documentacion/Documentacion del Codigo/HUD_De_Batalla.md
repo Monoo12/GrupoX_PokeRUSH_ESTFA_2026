@@ -288,6 +288,69 @@ no les encontró sprite (solo Front/Back cuentan como faltantes críticos).
 
 ---
 
+## 🎬 Secuencias de inicio y animaciones (`BattleFxView.cs`)
+
+**Ubicación:** `Assets/Scripts/Views/BattleFxView.cs`
+
+Todas las secuencias visuales del combate viven en este componente (corrutinas que
+`BattleController` encadena con `yield return`). Igual que el HUD: **solo
+presentación**, nunca toca reglas. Si el campo `battleFxView` del controller queda
+vacío, el combate degrada a los refrescos instantáneos (modo de respaldo).
+
+**Inicio de combate** (`BeginBattleRoutine`):
+- `ScreenTransition()` — doble flash blanco + fundido a negro (Image fullscreen en
+  un canvas propio con sorting 100, encima del HUD).
+- Vs entrenador: `TrainerSlideIn` (el sprite del entrenador —campo
+  `battleFrontSprite` del EnemyDefinition/BossDefinition— entra deslizándose),
+  mensaje de desafío, `TrainerSlideOut`, y `ThrowBallAndAppear` para su Pokémon.
+- Vs salvaje: `WildAppear` (fade + saltito desde el entorno).
+- Siempre: el jugador lanza su ball (`ThrowBallAndAppear`: arco parabólico con la
+  tira de rotación `ball_POKEBALL.png` de 8 frames, apertura + destello
+  `ballBurst_ray`, y el Pokémon crece desde el piso con rebote).
+
+**Durante el combate** (`PlayEvents` del controller, por tipo de evento):
+- `PokenSwitched` → retirada (`Recall`: se encoge hacia la ball) + ball del nuevo.
+  Si venía de debilitarse, no hay retirada (flag por lado que setea `Fainted`).
+- `Fainted` → `FaintAnim`: se hunde y desvanece — **después** de que la barra
+  terminó de vaciarse.
+- `StatStageChanged` → pulso naranja (subida) o azul (bajada).
+- `StatusChanged` → pulso con el color del estado (rojizo quemado, púrpura veneno,
+  amarillo parálisis, gris sueño, cian congelado).
+
+## ⚔️ Animaciones de ataques (`BattleFxView.PlayAttack`)
+
+Cada movimiento se anima con la secuencia **anticipación → viaje/embestida →
+impacto → recuperación**. El evento `MoveUsed` ahora lleva el `MoveDefinition`
+usado, y el controller reproduce la animación completa **antes** del evento
+`HpChanged` — el daño visual (drenado de barra) nunca ocurre antes del impacto,
+como pide la spec.
+
+**Animación genérica** (sin configurar nada, todos los 595 movimientos):
+- **Físico**: el atacante retrocede (carga) y embiste hasta el objetivo.
+- **Especial**: paso al frente y dispara un **proyectil teñido del color del
+  tipo** (tabla `ColorForType`: Fuego naranja, Agua azul, Eléctrico amarillo...).
+- **Estado**: destello del color del tipo sobre el usuario.
+- **Impacto** (siempre): estrella de impacto teñida + parpadeo del golpeado +
+  **sacudida de cámara**.
+
+**Extensible por movimiento**: el asset `MoveAnimationDefinition`
+(`Crear > PokeRush > MoveAnimationDefinition`) define tiempos (inicio/viaje/
+impacto/recuperación), sprites propios de proyectil e impacto, tinte, fuerza de
+sacudida, **flash de pantalla** y ganchos de sonido. Se arrastra al campo
+`animationOverride` del `MoveDefinition` — el importador de PokeAPI **nunca toca
+ese campo**, así que sobrevive a re-importaciones. Diseño puede darle animación
+propia a los movimientos importantes sin tocar código.
+
+## 📉 Barra de HP progresiva (`BattleHudView.AnimateHp`)
+
+La vista mantiene un **HP mostrado** separado del real. Ante cada evento
+`HpChanged`, `AnimateHp` lo drena/sube hacia el valor real con duración
+proporcional al daño (0.25 a 1.3 s), actualizando color y números por frame, y
+termina **exacto**. Como el evento `Fainted` viene después del `HpChanged` en la
+lista del TurnEngine, el debilitamiento arranca recién con la barra en 0 — el
+requisito de la spec sale gratis del diseño por eventos. `UpdateHud` (instantáneo)
+queda para inicio/cambios. Gancho comentado para el sonido de drenaje.
+
 ## 🗂️ Resumen de archivos de esta capa
 
 ```

@@ -55,4 +55,14 @@ public class MoveDefinition : ScriptableObject
     [Header("Implementacion")]
     [Tooltip("Full: efecto completo. DamageOnly: hace daño pero su efecto complejo se ignora. NotImplemented: no usable.")]
     public MoveImplementation implementation = MoveImplementation.Full;
+
+    [Header("Efectos de campo")]
+    [Tooltip("Clima que instala este movimiento (Danza Lluvia, Dia Soleado...).")]
+    public WeatherKind weatherEffect = WeatherKind.None;
+    [Tooltip("Efecto de campo que genera (pantallas, trampas de entrada, terrenos).")]
+    public FieldEffectKind fieldEffect = FieldEffectKind.None;
+
+    [Header("Animacion")]
+    [Tooltip("Animacion propia de este movimiento (opcional). Vacio = animacion generica segun categoria y tipo. El importador de PokeAPI nunca toca este campo.")]
+    public MoveAnimationDefinition animationOverride;
 }

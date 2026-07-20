@@ -34,6 +34,10 @@ namespace PokeRush.EditorTools
             TestStruggle();
             TestTurnEngineDeterminism();
             TestMultiHitRange();
+            TestWeatherDamageModifiers();
+            TestWeatherResidualAndEnd();
+            TestStealthRockOnSwitchIn();
+            TestScreensHalveDamage();
             TestTrainerNeverPicksIneffective();
             TestTrainerSkipsRedundantStatus();
             TestGymLeaderPrefersGuaranteedKo();
@@ -392,6 +396,103 @@ namespace PokeRush.EditorTools
             float average = samples > 0 ? (float)totalHits / samples : 0f;
             Check(average > 2.6f && average < 3.6f,
                 $"Multi-golpe: promedio ~3.1 golpes (dio {average:F2} sobre {samples} usos)");
+        }
+
+        // ---------- clima y efectos de campo ----------
+
+        private static void TestWeatherDamageModifiers()
+        {
+            var waterGun = MakeMove("Pistola Agua", PokenType.Water, AttackType.Special, 40, 100, 25);
+            var attacker = MakePoken(
+                MakeSpecies("Atacante", PokenType.Water, PokenType.None, 80, 50, 50, 60, 50, 60), 30, waterGun);
+            var defender = MakePoken(
+                MakeSpecies("Defensor", PokenType.Normal, PokenType.None, 80, 50, 50, 50, 50, 50), 30,
+                MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35));
+
+            var model = MakeBattle(defender, attacker); // atacante = lado rival
+            int normal = DamageCalculator.CalculateExpected(model.EnemyState, model.PlayerState, waterGun, model).Damage;
+
+            model.SetWeather(WeatherKind.Rain, 5);
+            int rain = DamageCalculator.CalculateExpected(model.EnemyState, model.PlayerState, waterGun, model).Damage;
+            model.SetWeather(WeatherKind.Sun, 5);
+            int sun = DamageCalculator.CalculateExpected(model.EnemyState, model.PlayerState, waterGun, model).Damage;
+
+            Check(rain > normal && Mathf.Abs(rain - normal * 1.5f) <= 2,
+                $"Clima: la lluvia potencia Agua x1.5 ({normal} -> {rain})");
+            Check(sun < normal, $"Clima: el sol debilita Agua ({normal} -> {sun})");
+        }
+
+        private static void TestWeatherResidualAndEnd()
+        {
+            var tackle = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var playerPoken = MakePoken(
+                MakeSpecies("Normalito", PokenType.Normal, PokenType.None, 160, 10, 200, 10, 200, 60), 50, tackle);
+            var enemyPoken = MakePoken(
+                MakeSpecies("Rocoso", PokenType.Rock, PokenType.None, 160, 10, 200, 10, 200, 50), 50, tackle);
+
+            var model = MakeBattle(playerPoken, enemyPoken);
+            var engine = new TurnEngine(model, new SeededRng(21));
+            model.SetWeather(WeatherKind.Sandstorm, 2);
+
+            int playerHp = playerPoken.CurrentHP;
+            int enemyHp = enemyPoken.CurrentHP;
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+
+            // El Normal sufre la tormenta ademas del golpe; el Roca solo el golpe
+            int playerLoss = playerHp - playerPoken.CurrentHP;
+            Check(playerLoss >= playerPoken.MaxHP / 16, "Clima: la tormenta daña a los no inmunes");
+            Check(model.WeatherTurnsLeft == 1, $"Clima: el contador baja por turno (quedan {model.WeatherTurnsLeft})");
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(model.CurrentWeather == WeatherKind.None, "Clima: termina al agotarse los turnos");
+        }
+
+        private static void TestStealthRockOnSwitchIn()
+        {
+            var tackle = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var lead = MakePoken(
+                MakeSpecies("Lider", PokenType.Normal, PokenType.None, 100, 50, 50, 50, 50, 90), 30, tackle);
+            var bird = MakePoken(
+                MakeSpecies("Pajaro", PokenType.Flying, PokenType.None, 100, 50, 50, 50, 50, 70), 30, tackle);
+            var enemyPoken = MakePoken(
+                MakeSpecies("Rival", PokenType.Normal, PokenType.None, 100, 50, 50, 50, 50, 10), 30, tackle);
+
+            var player = new PlayerModel("Tester");
+            player.Team.Add(lead);
+            player.Team.Add(bird);
+            var enemy = new EnemyModel(enemyPoken.Definition, 30);
+            enemy.Team.Clear();
+            enemy.Team.Add(enemyPoken);
+            var model = new BattleModel(player, enemy);
+            model.SwitchPlayerPoken(0);
+            model.SwitchEnemyPoken(0);
+
+            // Trampa Rocas en el lado del jugador; el volador entra y recibe x2
+            model.PlayerSide.StealthRock = true;
+            var engine = new TurnEngine(model, new SeededRng(23));
+            engine.ResolveTurn(BattleAction.Switch(1), BattleAction.Move(0));
+
+            // Volador: eff Roca x2 -> MaxHP * 2/8 = 25 de 100
+            int expected = (int)(bird.MaxHP * 2f / 8f);
+            int lost = bird.MaxHP - bird.CurrentHP;
+            Check(lost >= expected, $"Trampa Rocas: daño por efectividad al entrar (perdió {lost}, esperado >= {expected})");
+        }
+
+        private static void TestScreensHalveDamage()
+        {
+            var tackle = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var attacker = MakePoken(
+                MakeSpecies("Atacante", PokenType.Normal, PokenType.None, 80, 60, 50, 60, 50, 60), 30, tackle);
+            var defender = MakePoken(
+                MakeSpecies("Protegido", PokenType.Normal, PokenType.None, 80, 50, 50, 50, 50, 50), 30, tackle);
+
+            var model = MakeBattle(defender, attacker); // defensor = lado jugador
+            int normal = DamageCalculator.CalculateExpected(model.EnemyState, model.PlayerState, tackle, model).Damage;
+            model.PlayerSide.ReflectTurns = 5;
+            int screened = DamageCalculator.CalculateExpected(model.EnemyState, model.PlayerState, tackle, model).Damage;
+
+            Check(screened < normal && Mathf.Abs(screened - normal / 2) <= 2,
+                $"Pantallas: Reflejo reduce el daño físico a la mitad ({normal} -> {screened})");
         }
 
         // ---------- IA ----------

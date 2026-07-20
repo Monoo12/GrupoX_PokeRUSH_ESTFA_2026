@@ -25,6 +25,32 @@ public class BattleModel
     // su XP). Se reinicia cada vez que el rival envia uno nuevo.
     public HashSet<PokenModel> PlayerParticipants { get; } = new HashSet<PokenModel>();
 
+    // --- estado del campo ---
+    public WeatherKind CurrentWeather { get; private set; }
+    public int WeatherTurnsLeft { get; private set; }
+    public FieldTerrain CurrentTerrain { get; private set; }
+    public int TerrainTurnsLeft { get; private set; }
+    // Efectos por lado (pantallas propias, trampas que sufre ese lado)
+    public SideState PlayerSide { get; } = new SideState();
+    public SideState EnemySide { get; } = new SideState();
+
+    public SideState SideOf(bool isPlayer) => isPlayer ? PlayerSide : EnemySide;
+
+    public void SetWeather(WeatherKind weather, int turns)
+    {
+        CurrentWeather = weather;
+        WeatherTurnsLeft = weather == WeatherKind.None ? 0 : turns;
+    }
+
+    public void SetTerrain(FieldTerrain terrain, int turns)
+    {
+        CurrentTerrain = terrain;
+        TerrainTurnsLeft = terrain == FieldTerrain.None ? 0 : turns;
+    }
+
+    public void TickWeather() { if (WeatherTurnsLeft > 0) WeatherTurnsLeft--; }
+    public void TickTerrain() { if (TerrainTurnsLeft > 0) TerrainTurnsLeft--; }
+
     public BattleModel(PlayerModel player, EnemyModel enemy)
     {
         Player = player;

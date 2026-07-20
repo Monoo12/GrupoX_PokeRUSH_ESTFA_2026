@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -79,6 +80,10 @@ public class BattleHudView : MonoBehaviour
 
     private BattleModel _model;
 
+    // HP que se MUESTRA (drena gradualmente hacia el valor real del modelo)
+    private float _displayedPlayerHp = -1f;
+    private float _displayedEnemyHp = -1f;
+
     private void Awake()
     {
         // Cableado de botones (los refs los asigna el builder en el Inspector)
@@ -118,25 +123,78 @@ public class BattleHudView : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    // Refresco INSTANTANEO (inicio de combate, cambio de Poken). Para el daño
+    // gradual usar AnimateHp.
     public void UpdateHud(BattleModel battleModel)
     {
         _model = battleModel;
         PokenModel player = battleModel.ActivePlayerPoken;
         PokenModel enemy = battleModel.ActiveEnemyPoken;
 
+        _displayedPlayerHp = player.CurrentHP;
+        _displayedEnemyHp = enemy.CurrentHP;
+
         // --- databox del jugador ---
         if (playerNameText != null) playerNameText.text = player.Definition.pokenName;
         if (playerLevelText != null) playerLevelText.text = $"Nv. {player.Level}";
-        if (playerHpText != null) playerHpText.text = $"{player.CurrentHP}/{player.MaxHP}";
-        UpdateHpFill(playerHpFill, player);
         if (playerExpFill != null) playerExpFill.fillAmount = player.XpProgress;
         UpdateStatusIcon(playerStatusIcon, player);
 
         // --- databox del rival (sin numeros de HP, como en la saga) ---
         if (enemyNameText != null) enemyNameText.text = enemy.Definition.pokenName;
         if (enemyLevelText != null) enemyLevelText.text = $"Nv. {enemy.Level}";
-        UpdateHpFill(enemyHpFill, enemy);
         UpdateStatusIcon(enemyStatusIcon, enemy);
+
+        ApplyHpVisuals(player, enemy);
+    }
+
+    // Drena/sube el HP mostrado hacia el valor real, como en la saga: velocidad
+    // proporcional al daño (0.25 a 1.3 segundos), color segun porcentaje, y se
+    // detiene EXACTO en el valor correcto. El evento Fainted viene despues de
+    // este drenado, asi que el debilitamiento arranca con la barra ya en 0.
+    public IEnumerator AnimateHp(BattleModel battleModel)
+    {
+        _model = battleModel;
+        PokenModel player = battleModel.ActivePlayerPoken;
+        PokenModel enemy = battleModel.ActiveEnemyPoken;
+
+        if (_displayedPlayerHp < 0f) _displayedPlayerHp = player.CurrentHP;
+        if (_displayedEnemyHp < 0f) _displayedEnemyHp = enemy.CurrentHP;
+
+        float playerDelta = Mathf.Abs(player.CurrentHP - _displayedPlayerHp);
+        float enemyDelta = Mathf.Abs(enemy.CurrentHP - _displayedEnemyHp);
+        if (playerDelta < 0.5f && enemyDelta < 0.5f)
+        {
+            UpdateHud(battleModel);
+            yield break;
+        }
+
+        float maxFraction = Mathf.Max(
+            playerDelta / Mathf.Max(1, player.MaxHP),
+            enemyDelta / Mathf.Max(1, enemy.MaxHP));
+        float duration = Mathf.Clamp(maxFraction * 1.6f, 0.25f, 1.3f);
+        float playerSpeed = playerDelta / duration;
+        float enemySpeed = enemyDelta / duration;
+
+        for (float t = 0f; t < duration; t += Time.deltaTime)
+        {
+            _displayedPlayerHp = Mathf.MoveTowards(_displayedPlayerHp, player.CurrentHP, playerSpeed * Time.deltaTime);
+            _displayedEnemyHp = Mathf.MoveTowards(_displayedEnemyHp, enemy.CurrentHP, enemySpeed * Time.deltaTime);
+            ApplyHpVisuals(player, enemy);
+            // TODO: sonido de drenaje sincronizado (AudioService) cuando haya sfx
+            yield return null;
+        }
+
+        // Termina exacto y refresca el resto del HUD (exp, estados)
+        UpdateHud(battleModel);
+    }
+
+    private void ApplyHpVisuals(PokenModel player, PokenModel enemy)
+    {
+        if (playerHpText != null)
+            playerHpText.text = $"{Mathf.RoundToInt(_displayedPlayerHp)}/{player.MaxHP}";
+        SetHpBar(playerHpFill, _displayedPlayerHp, player.MaxHP);
+        SetHpBar(enemyHpFill, _displayedEnemyHp, enemy.MaxHP);
     }
 
     public void ShowMessage(string message)
@@ -260,10 +318,10 @@ public class BattleHudView : MonoBehaviour
 
     // ---------- utilidades ----------
 
-    private static void UpdateHpFill(Image fill, PokenModel poken)
+    private static void SetHpBar(Image fill, float currentHp, int maxHp)
     {
         if (fill == null) return;
-        float ratio = poken.MaxHP > 0 ? (float)poken.CurrentHP / poken.MaxHP : 0f;
+        float ratio = maxHp > 0 ? currentHp / maxHp : 0f;
         fill.fillAmount = Mathf.Clamp01(ratio);
         fill.color = ratio > 0.5f ? HpGreen : (ratio > 0.2f ? HpYellow : HpRed);
     }

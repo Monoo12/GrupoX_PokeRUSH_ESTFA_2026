@@ -10,6 +10,9 @@ public class PokenView : MonoBehaviour
     [Tooltip("Frames por segundo de la tira de animacion del Poken.")]
     [SerializeField] private float frameRate = 30f;
 
+    // Acceso directo para los efectos de batalla (BattleFxView)
+    public SpriteRenderer Renderer => spriteRenderer;
+
     // Frames de la tira de animacion (los recorta SpriteAssigner en el editor)
     private Sprite[] _frames;
     private int _frameIndex;

@@ -19,6 +19,8 @@ public class BattleController : MonoBehaviour
     [Header("Escenario")]
     [Tooltip("Renderer del fondo de batalla. Se escala solo para cubrir la camara.")]
     [SerializeField] private SpriteRenderer backgroundRenderer;
+    [Tooltip("Secuencias visuales (transicion, balls, apariciones). Opcional: sin esto el combate arranca directo.")]
+    [SerializeField] private BattleFxView battleFxView;
 
     [Header("Ritmo")]
     [Tooltip("Segundos que se muestra cada mensaje de combate.")]
@@ -34,6 +36,12 @@ public class BattleController : MonoBehaviour
     private IBattleAI _enemyAI;
     private AIProfileDefinition _aiProfile;
     private readonly IBattleRng _rng = new UnityRng();
+
+    // Sprite del entrenador rival para la intro (null = combate salvaje)
+    private Sprite _trainerIntroSprite;
+    // El Poken de este lado se debilito y espera reemplazo (el cambio no hace retirada)
+    private bool _playerFaintedPendingSwitch;
+    private bool _enemyFaintedPendingSwitch;
 
     private void Awake()
     {
@@ -53,8 +61,17 @@ public class BattleController : MonoBehaviour
         var enemy = new EnemyModel(enemyDefinition);
 
         Sprite background = null;
-        if (enemyDefinition is EnemyDefinition e) background = e.battleBackground;
-        else if (enemyDefinition is BossDefinition b) background = b.battleBackground;
+        _trainerIntroSprite = null;
+        if (enemyDefinition is EnemyDefinition e)
+        {
+            background = e.battleBackground;
+            _trainerIntroSprite = e.battleFrontSprite;
+        }
+        else if (enemyDefinition is BossDefinition b)
+        {
+            background = b.battleBackground;
+            _trainerIntroSprite = b.battleFrontSprite;
+        }
 
         BeginBattle(player, enemy, background);
     }
@@ -69,6 +86,7 @@ public class BattleController : MonoBehaviour
         }
         int level = _rng.Range(encounter.minLevel, encounter.maxLevel + 1);
         var enemy = new EnemyModel(encounter.species, level, encounter.aiProfile);
+        _trainerIntroSprite = null;
         BeginBattle(player, enemy, encounter.battleBackground);
     }
 
@@ -116,10 +134,50 @@ public class BattleController : MonoBehaviour
 
     private IEnumerator BeginBattleRoutine(EnemyModel enemy)
     {
-        Announce(enemy.IsWild
-            ? $"¡Un {_battleModel.ActiveEnemyPoken.Definition.pokenName} salvaje apareció!"
-            : $"Un {_battleModel.ActiveEnemyPoken.Definition.pokenName} rival apareció!");
-        yield return new WaitForSeconds(messageDelay);
+        _playerFaintedPendingSwitch = false;
+        _enemyFaintedPendingSwitch = false;
+
+        string enemyName = _battleModel.ActiveEnemyPoken.Definition.pokenName;
+        string playerName = _battleModel.ActivePlayerPoken.Definition.pokenName;
+
+        if (battleFxView != null)
+        {
+            // Secuencia clasica: transicion, aparicion del rival y balls
+            playerPokenView?.Hide();
+            enemyPokenView?.Hide();
+            yield return battleFxView.ScreenTransition();
+
+            if (enemy.IsWild)
+            {
+                Announce($"¡Un {enemyName} salvaje apareció!");
+                yield return battleFxView.WildAppear(enemyPokenView);
+                yield return new WaitForSeconds(messageDelay * 0.5f);
+            }
+            else
+            {
+                if (_trainerIntroSprite != null && enemyPokenView != null)
+                {
+                    yield return battleFxView.TrainerSlideIn(
+                        _trainerIntroSprite, enemyPokenView.transform.position);
+                    Announce("¡Te desafían a un combate!");
+                    yield return new WaitForSeconds(messageDelay);
+                    yield return battleFxView.TrainerSlideOut();
+                }
+                Announce($"¡El rival envió a {enemyName}!");
+                yield return battleFxView.ThrowBallAndAppear(enemyPokenView, fromPlayerSide: false);
+            }
+
+            Announce($"¡Adelante, {playerName}!");
+            yield return battleFxView.ThrowBallAndAppear(playerPokenView, fromPlayerSide: true);
+        }
+        else
+        {
+            // Sin efectos: arranque directo (modo de respaldo)
+            Announce(enemy.IsWild
+                ? $"¡Un {enemyName} salvaje apareció!"
+                : $"Un {enemyName} rival apareció!");
+            yield return new WaitForSeconds(messageDelay);
+        }
 
         // Habilidades de entrada (Intimidación, etc.)
         yield return PlayEvents(_engine.BeginBattle());
@@ -241,28 +299,123 @@ public class BattleController : MonoBehaviour
         battleHudView?.ShowCommandMenu(_battleModel);
     }
 
-    // Reproduce los eventos del motor: refresca la UI y pausa entre mensajes
+    // Reproduce los eventos del motor: anima cada paso, refresca la UI y pausa
+    // entre mensajes. Con battleFxView null todo degrada a refrescos instantaneos.
     private IEnumerator PlayEvents(List<BattleEvent> events)
     {
         foreach (BattleEvent ev in events)
         {
+            PokenView view = ev.TargetIsPlayer ? playerPokenView : enemyPokenView;
+            bool messageHandled = false;
+
             switch (ev.Kind)
             {
-                case BattleEventKind.PokenSwitched:
-                    RefreshActiveSprites();
-                    battleHudView?.UpdateHud(_battleModel);
+                case BattleEventKind.MoveUsed:
+                {
+                    // Mensaje "¡X usó Y!" primero, la animacion despues; el
+                    // drenado de HP es el evento siguiente, asi que el daño
+                    // visual nunca ocurre antes del impacto.
+                    if (!string.IsNullOrEmpty(ev.Message))
+                    {
+                        Announce(ev.Message);
+                        yield return new WaitForSeconds(messageDelay * 0.6f);
+                    }
+                    messageHandled = true;
+
+                    PokenView attackerView = ev.TargetIsPlayer ? playerPokenView : enemyPokenView;
+                    PokenView defenderView = ev.TargetIsPlayer ? enemyPokenView : playerPokenView;
+                    if (battleFxView != null && attackerView != null && defenderView != null
+                        && attackerView.gameObject.activeSelf && defenderView.gameObject.activeSelf)
+                        yield return battleFxView.PlayAttack(attackerView, defenderView, ev.Move);
                     break;
+                }
+
+                case BattleEventKind.PokenSwitched:
+                {
+                    // Si el saliente se debilito, ya se fue con su animacion:
+                    // no hay retirada, solo entra el nuevo.
+                    bool cameFromFaint = ev.TargetIsPlayer
+                        ? _playerFaintedPendingSwitch
+                        : _enemyFaintedPendingSwitch;
+                    if (ev.TargetIsPlayer) _playerFaintedPendingSwitch = false;
+                    else _enemyFaintedPendingSwitch = false;
+
+                    if (battleFxView != null && view != null)
+                    {
+                        if (!cameFromFaint && view.gameObject.activeSelf)
+                            yield return battleFxView.Recall(view);
+                        RefreshActiveSprites();
+                        battleHudView?.UpdateHud(_battleModel);
+                        yield return battleFxView.ThrowBallAndAppear(view, ev.TargetIsPlayer);
+                    }
+                    else
+                    {
+                        RefreshActiveSprites();
+                        battleHudView?.UpdateHud(_battleModel);
+                    }
+                    break;
+                }
 
                 case BattleEventKind.HpChanged:
-                case BattleEventKind.StatusChanged:
-                case BattleEventKind.StatStageChanged:
+                    // La barra drena gradualmente hasta el valor exacto
+                    if (battleHudView != null)
+                        yield return battleHudView.AnimateHp(_battleModel);
+                    break;
+
                 case BattleEventKind.Fainted:
+                {
+                    // Asegura que la barra llego a 0 ANTES de la caida
+                    if (battleHudView != null)
+                        yield return battleHudView.AnimateHp(_battleModel);
+                    if (ev.TargetIsPlayer) _playerFaintedPendingSwitch = true;
+                    else _enemyFaintedPendingSwitch = true;
+
+                    if (battleFxView != null && view != null && view.gameObject.activeSelf)
+                        yield return battleFxView.FaintAnim(view);
+                    battleHudView?.UpdateHud(_battleModel);
+                    break;
+                }
+
+                case BattleEventKind.StatStageChanged:
+                {
+                    if (battleFxView != null && view != null && view.gameObject.activeSelf)
+                    {
+                        bool isRaise = ev.Message != null && ev.Message.Contains("subió");
+                        yield return battleFxView.PulseTint(view,
+                            isRaise ? BattleFxView.PulseStatUp : BattleFxView.PulseStatDown);
+                    }
+                    battleHudView?.UpdateHud(_battleModel);
+                    break;
+                }
+
+                case BattleEventKind.StatusChanged:
+                {
+                    if (battleFxView != null && view != null && view.gameObject.activeSelf)
+                    {
+                        PokenModel poken = ev.TargetIsPlayer
+                            ? _battleModel.ActivePlayerPoken
+                            : _battleModel.ActiveEnemyPoken;
+                        yield return battleFxView.PulseTint(view,
+                            BattleFxView.PulseForStatus(poken.CurrentStatus));
+                    }
+                    battleHudView?.UpdateHud(_battleModel);
+                    break;
+                }
+
+                case BattleEventKind.WeatherChanged:
+                    battleFxView?.SetWeather(_battleModel.CurrentWeather);
+                    break;
+
+                case BattleEventKind.TerrainChanged:
+                    battleFxView?.SetTerrain(_battleModel.CurrentTerrain);
+                    break;
+
                 case BattleEventKind.BattleEnded:
                     battleHudView?.UpdateHud(_battleModel);
                     break;
             }
 
-            if (!string.IsNullOrEmpty(ev.Message))
+            if (!messageHandled && !string.IsNullOrEmpty(ev.Message))
             {
                 Announce(ev.Message);
                 yield return new WaitForSeconds(messageDelay);
@@ -301,6 +454,7 @@ public class BattleController : MonoBehaviour
             playerInputController.SetBattleMode(false);
 
         battleHudView?.Hide();
+        battleFxView?.ClearFieldOverlays();
         _battleModel = null;
 
         // Flags, items, dialogo de derrota del boss y guardado: los aplican

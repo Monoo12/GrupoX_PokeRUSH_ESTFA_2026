@@ -187,7 +187,14 @@ namespace PokeRush.EditorTools.PokeApi
             asset.healPercent = dto.Meta?.Healing ?? 0;
             asset.makesContact = PokeApiMapper.MakesContact(dto);
 
+            // Clima y efectos de campo: estos movimientos SI estan implementados
+            // aunque su categoria (whole-field-effect...) los excluiria
+            asset.weatherEffect = PokeApiMapper.WeatherFor(dto.Name);
+            asset.fieldEffect = PokeApiMapper.FieldEffectFor(dto.Name);
+
             asset.implementation = PokeApiMapper.ClassifyMove(dto);
+            if (asset.weatherEffect != WeatherKind.None || asset.fieldEffect != FieldEffectKind.None)
+                asset.implementation = MoveImplementation.Full;
             asset.effectDescription = BuildEffectDescription(dto, asset.implementation);
         }
 

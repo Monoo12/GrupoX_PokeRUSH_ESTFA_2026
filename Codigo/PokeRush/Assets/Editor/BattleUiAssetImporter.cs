@@ -14,6 +14,7 @@ namespace PokeRush.EditorTools
     {
         private const string UiDest = "Assets/Sprites/UI/Battle";
         private const string BackgroundsDest = "Assets/Sprites/Battlebacks";
+        private const string TrainersDest = "Assets/Sprites/Trainers";
 
         // Mapa PokenType -> fila en cursor_fight.png / icon_types.png
         // (orden interno de Essentials: Normal=0, Fighting=1, Flying=2, Poison=3,
@@ -102,6 +103,39 @@ namespace PokeRush.EditorTools
             SliceGrid($"{UiDest}/icon_types.png", 96, 32, "type");
             SliceGrid($"{UiDest}/icon_statuses.png", 44, 16, "status");
 
+            // --- Poke Balls y destello (secuencias de inicio/cambio) ---
+            string designAnims = FindDesignFolder("Battle animations");
+            if (designAnims != null)
+            {
+                CopyPng(designAnims, "ball_POKEBALL.png", UiDest);
+                CopyPng(designAnims, "ball_POKEBALL_open.png", UiDest);
+                CopyPng(designAnims, "ballBurst_ray.png", UiDest);
+                // particulas genericas para proyectiles e impactos de ataques
+                CopyPng(designAnims, "ballBurst_particle.png", UiDest);
+                CopyPng(designAnims, "ballBurst_star.png", UiDest);
+                AssetDatabase.Refresh();
+                // tira de rotacion: 8 frames de 32x64
+                SliceGrid($"{UiDest}/ball_POKEBALL.png", 32, 64, "ball");
+                ConfigureSprite($"{UiDest}/ball_POKEBALL_open.png");
+                ConfigureSprite($"{UiDest}/ballBurst_ray.png");
+                ConfigureSprite($"{UiDest}/ballBurst_particle.png");
+                ConfigureSprite($"{UiDest}/ballBurst_star.png");
+            }
+
+            // --- Sprites de entrenadores (intro de combate) ---
+            string designTrainers = FindDesignFolder("Trainers");
+            if (designTrainers != null)
+            {
+                int trainers = 0;
+                foreach (string file in Directory.GetFiles(designTrainers, "*.png"))
+                    if (CopyPng(designTrainers, Path.GetFileName(file), TrainersDest)) trainers++;
+                AssetDatabase.Refresh();
+                // Mismas reglas que los Pokens: tira si aplica, pivot abajo, PPU = alto
+                foreach (string path in Directory.GetFiles(TrainersDest, "*.png"))
+                    PokeApi.SpriteAssigner.ConfigureStrip(path.Replace('\\', '/'));
+                Debug.Log($"[BattleUi] {trainers} sprites de entrenadores en {TrainersDest}.");
+            }
+
             Debug.Log($"[BattleUi] UI copiada y {backgrounds} fondos importados en {BackgroundsDest}.");
             return true;
         }
@@ -121,6 +155,23 @@ namespace PokeRush.EditorTools
             return AssetDatabase.LoadAllAssetsAtPath($"{UiDest}/{sheetFileName}")
                 .OfType<Sprite>()
                 .FirstOrDefault(s => s.name == name);
+        }
+
+        // Todos los sub-sprites de una hoja, ordenados por nombre (para tiras)
+        public static Sprite[] LoadAllSlices(string sheetFileName)
+            => AssetDatabase.LoadAllAssetsAtPath($"{UiDest}/{sheetFileName}")
+                .OfType<Sprite>()
+                .OrderBy(s => s.name, System.StringComparer.Ordinal)
+                .ToArray();
+
+        // Primer sprite de un entrenador (frame 0 si es tira, o el sprite unico)
+        public static Sprite LoadTrainer(string fileName)
+        {
+            string path = $"{TrainersDest}/{fileName}";
+            return AssetDatabase.LoadAllAssetsAtPath(path)
+                .OfType<Sprite>()
+                .OrderBy(s => s.name, System.StringComparer.Ordinal)
+                .FirstOrDefault();
         }
 
         // ---------- internos ----------

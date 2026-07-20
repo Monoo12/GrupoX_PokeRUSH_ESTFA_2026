@@ -92,6 +92,7 @@ namespace PokeRush.EditorTools
             trainer.aiProfile = profileTrainer;
             trainer.moneyReward = 200;
             trainer.battleBackground = BattleUiAssetImporter.LoadBackground("Bosque_bg.png");
+            trainer.battleFrontSprite = BattleUiAssetImporter.LoadTrainer("ASH.png");
             EditorUtility.SetDirty(trainer);
 
             var boss = LoadOrCreate<BossDefinition>($"{TestingFolder}/BossDePrueba.asset");
@@ -104,10 +105,11 @@ namespace PokeRush.EditorTools
             boss.aiProfile = profileGymLeader;
             boss.moneyReward = 1000;
             boss.battleBackground = BattleUiAssetImporter.LoadBackground("Gimnasio1_bg.png");
+            boss.battleFrontSprite = BattleUiAssetImporter.LoadTrainer("AGATHA1.png");
             EditorUtility.SetDirty(boss);
 
             var wild = LoadOrCreate<WildEncounterDefinition>($"{TestingFolder}/SalvajeDePrueba.asset");
-            wild.species = Species(25, "Pikachu");
+            wild.species = Species(151, "Mew");
             wild.minLevel = 3;
             wild.maxLevel = 6;
             wild.aiProfile = profileWild;
@@ -125,8 +127,9 @@ namespace PokeRush.EditorTools
             PokenView enemyView = BuildPokenView("PokenRival", new Vector3(0.95f, 0.30f, 0f), 1.1f);
             BuildEventSystem();
             BattleHudView hud = BuildHud();
+            BattleFxView fx = BuildBattleFx();
 
-            // BattleController cableado al HUD, las vistas y el fondo
+            // BattleController cableado al HUD, las vistas, el fondo y los FX
             var controllerGo = new GameObject("BattleSystem");
             var controller = controllerGo.AddComponent<BattleController>();
             var so = new SerializedObject(controller);
@@ -134,6 +137,7 @@ namespace PokeRush.EditorTools
             so.FindProperty("playerPokenView").objectReferenceValue = playerView;
             so.FindProperty("enemyPokenView").objectReferenceValue = enemyView;
             so.FindProperty("backgroundRenderer").objectReferenceValue = background;
+            so.FindProperty("battleFxView").objectReferenceValue = fx;
             so.FindProperty("messageDelay").floatValue = 0.8f;
             so.ApplyModifiedPropertiesWithoutUndo();
 
@@ -274,6 +278,79 @@ namespace PokeRush.EditorTools
             var go = new GameObject("EventSystem");
             go.AddComponent<EventSystem>();
             go.AddComponent<InputSystemUIInputModule>(); // el proyecto usa el Input System nuevo
+        }
+
+        // Objetos de las secuencias visuales: entrenador rival, ball volando,
+        // destello y el fundido de pantalla (en su propio canvas, encima del HUD)
+        private static BattleFxView BuildBattleFx()
+        {
+            var fxGo = new GameObject("BattleFx");
+            var fx = fxGo.AddComponent<BattleFxView>();
+
+            var trainerGo = new GameObject("EntrenadorRival");
+            var trainerRenderer = trainerGo.AddComponent<SpriteRenderer>();
+            trainerRenderer.sortingOrder = 5;
+            trainerGo.transform.localScale = Vector3.one * 1.6f;
+            trainerGo.SetActive(false);
+
+            var ballGo = new GameObject("BallVolando");
+            var ballRenderer = ballGo.AddComponent<SpriteRenderer>();
+            ballRenderer.sortingOrder = 10;
+            ballGo.SetActive(false);
+
+            var burstGo = new GameObject("DestelloBall");
+            var burstRenderer = burstGo.AddComponent<SpriteRenderer>();
+            burstRenderer.sprite = BattleUiAssetImporter.LoadSimple("ballBurst_ray.png");
+            burstRenderer.sortingOrder = 9;
+            burstGo.SetActive(false);
+
+            var projectileGo = new GameObject("Proyectil");
+            var projectileRenderer = projectileGo.AddComponent<SpriteRenderer>();
+            projectileRenderer.sprite = BattleUiAssetImporter.LoadSimple("ballBurst_particle.png");
+            projectileRenderer.sortingOrder = 8;
+            projectileGo.SetActive(false);
+
+            var impactGo = new GameObject("ImpactoGolpe");
+            var impactRenderer = impactGo.AddComponent<SpriteRenderer>();
+            impactRenderer.sprite = BattleUiAssetImporter.LoadSimple("ballBurst_star.png");
+            impactRenderer.sortingOrder = 8;
+            impactGo.SetActive(false);
+
+            // Canvas de ambiente: tintes de clima/terreno sobre el mundo pero
+            // DEBAJO del HUD (sorting -5 < HUD 0 < fundido 100)
+            var ambientCanvasGo = new GameObject("CanvasAmbiente");
+            var ambientCanvas = ambientCanvasGo.AddComponent<Canvas>();
+            ambientCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            ambientCanvas.sortingOrder = -5;
+            Image weatherOverlay = CreateOverlayImage(ambientCanvasGo.transform, "OverlayClima");
+            Image terrainOverlay = CreateOverlayImage(ambientCanvasGo.transform, "OverlayTerreno");
+
+            var fadeCanvasGo = new GameObject("CanvasFx");
+            var fadeCanvas = fadeCanvasGo.AddComponent<Canvas>();
+            fadeCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            fadeCanvas.sortingOrder = 100; // encima del canvas del HUD
+            var fadeGo = CreateRect("Fundido", fadeCanvasGo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+            var fadeImage = fadeGo.AddComponent<Image>();
+            fadeImage.color = new Color(0f, 0f, 0f, 0f);
+            fadeImage.raycastTarget = false;
+            fadeGo.SetActive(false);
+
+            var so = new SerializedObject(fx);
+            so.FindProperty("trainerRenderer").objectReferenceValue = trainerRenderer;
+            so.FindProperty("ballRenderer").objectReferenceValue = ballRenderer;
+            so.FindProperty("burstRenderer").objectReferenceValue = burstRenderer;
+            so.FindProperty("projectileRenderer").objectReferenceValue = projectileRenderer;
+            so.FindProperty("impactRenderer").objectReferenceValue = impactRenderer;
+            so.FindProperty("fadeOverlay").objectReferenceValue = fadeImage;
+            so.FindProperty("weatherOverlay").objectReferenceValue = weatherOverlay;
+            so.FindProperty("terrainOverlay").objectReferenceValue = terrainOverlay;
+            SetArray(so, "ballSpinFrames",
+                BattleUiAssetImporter.LoadAllSlices("ball_POKEBALL.png").Cast<Object>().ToArray());
+            so.FindProperty("ballOpenSprite").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Battle/ball_POKEBALL_open.png");
+            so.ApplyModifiedPropertiesWithoutUndo();
+            return fx;
         }
 
         // ---------- HUD ----------
@@ -496,6 +573,18 @@ namespace PokeRush.EditorTools
             SetArray(so, "statusIconsByEffect", statusIcons);
         }
 
+        // Image fullscreen inactiva para tintes persistentes (clima/terreno)
+        private static Image CreateOverlayImage(Transform parent, string name)
+        {
+            var go = CreateRect(name, parent, Vector2.zero, Vector2.one,
+                new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+            var image = go.AddComponent<Image>();
+            image.color = new Color(0f, 0f, 0f, 0f);
+            image.raycastTarget = false;
+            go.SetActive(false);
+            return image;
+        }
+
         // ---------- helpers de UI ----------
 
         private static GameObject CreateRect(string name, Transform parent,
@@ -555,6 +644,9 @@ namespace PokeRush.EditorTools
         {
             var go = CreateRect(name, parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1), position, size);
             var image = go.AddComponent<Image>();
+            // OJO: un Image tipo Filled SIN sprite ignora fillAmount (dibuja el
+            // rectangulo completo siempre). El sprite blanco built-in es obligatorio.
+            image.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
             image.type = Image.Type.Filled;
             image.fillMethod = Image.FillMethod.Horizontal;
             image.raycastTarget = false;

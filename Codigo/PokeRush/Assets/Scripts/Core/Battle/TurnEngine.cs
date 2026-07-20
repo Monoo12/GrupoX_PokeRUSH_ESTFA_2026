@@ -90,6 +90,9 @@ public class TurnEngine
             StatusEffects.OnTurnEnd(slow, events);
             AbilityEffects.OnTurnEnd(slow, events);
 
+            // Clima (daño residual + contador), terreno y pantallas
+            FieldEffects.OnTurnEnd(_model, events);
+
             // El retroceso solo dura el turno en que se produjo
             _model.PlayerState.Flinched = false;
             _model.EnemyState.Flinched = false;
@@ -171,6 +174,7 @@ public class TurnEngine
             events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, true,
                 $"¡Adelante, {_model.ActivePlayerPoken.Definition.pokenName}!"));
             AbilityEffects.OnSwitchIn(_model.PlayerState, _model.EnemyState, events);
+            FieldEffects.OnSwitchIn(_model, isPlayerSide: true, events, _rng);
         }
         else
         {
@@ -179,6 +183,7 @@ public class TurnEngine
             events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
                 $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
             AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
+            FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);
         }
     }
 
@@ -220,8 +225,10 @@ public class TurnEngine
         string defenderName = defender.Poken.Definition.pokenName;
 
         moveModel.ConsumePP();
-        events.Add(BattleEvent.Of(BattleEventKind.MoveUsed, attackerIsPlayer,
-            $"¡{attackerName} usó {move.moveName}!"));
+        var moveUsedEvent = BattleEvent.Of(BattleEventKind.MoveUsed, attackerIsPlayer,
+            $"¡{attackerName} usó {move.moveName}!");
+        moveUsedEvent.Move = move; // para que la presentacion elija la animacion
+        events.Add(moveUsedEvent);
 
         // Salvaguarda: los NotImplemented no deberian estar en ningun learnset
         if (move.implementation == MoveImplementation.NotImplemented)
@@ -249,7 +256,7 @@ public class TurnEngine
             }
 
             bool anyEffect = MoveEffectExecutor.ApplyEffects(
-                attacker, defender, move, events, _rng, isPureStatusMove: true);
+                attacker, defender, move, events, _rng, isPureStatusMove: true, _model);
             if (!anyEffect)
                 BattleEvent.Add(events, "¡Pero falló!");
             return;
@@ -279,7 +286,7 @@ public class TurnEngine
 
         for (int i = 0; i < plannedHits && !defender.Poken.IsFainted; i++)
         {
-            DamageResult result = DamageCalculator.Calculate(attacker, defender, move, _rng);
+            DamageResult result = DamageCalculator.Calculate(attacker, defender, move, _rng, _model);
             int damage = AbilityEffects.ModifyIncomingDamage(defender, result.Damage, out bool endured);
             sturdyEndured |= endured;
             anyCrit |= result.IsCritical;
@@ -325,7 +332,7 @@ public class TurnEngine
         }
 
         // Efectos secundarios: estado, stats, retroceso del rival
-        MoveEffectExecutor.ApplyEffects(attacker, defender, move, events, _rng, isPureStatusMove: false);
+        MoveEffectExecutor.ApplyEffects(attacker, defender, move, events, _rng, isPureStatusMove: false, _model);
 
         // Castigos por contacto (Impacto Estático, Piel Tosca...)
         if (move.makesContact)
@@ -341,7 +348,7 @@ public class TurnEngine
         events.Add(BattleEvent.Of(BattleEventKind.MoveUsed, attacker.IsPlayerSide,
             $"¡{attackerName} no tiene PP! ¡Usó Forcejeo!"));
 
-        DamageResult result = DamageCalculator.CalculateStruggle(attacker, defender, _rng);
+        DamageResult result = DamageCalculator.CalculateStruggle(attacker, defender, _rng, _model);
         int damage = AbilityEffects.ModifyIncomingDamage(defender, result.Damage, out bool endured);
         defender.Poken.TakeDamage(damage);
         events.Add(BattleEvent.Of(BattleEventKind.HpChanged, defender.IsPlayerSide));
@@ -424,6 +431,8 @@ public class TurnEngine
                 events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
                     $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
                 AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
+                FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);
+                AnnounceFaintIfNeeded(_model.EnemyState, events); // por si las trampas lo debilitan
             }
             else
             {
@@ -444,6 +453,8 @@ public class TurnEngine
                 events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, true,
                     $"¡Adelante, {_model.ActivePlayerPoken.Definition.pokenName}!"));
                 AbilityEffects.OnSwitchIn(_model.PlayerState, _model.EnemyState, events);
+                FieldEffects.OnSwitchIn(_model, isPlayerSide: true, events, _rng);
+                AnnounceFaintIfNeeded(_model.PlayerState, events); // por si las trampas lo debilitan
             }
             else
             {

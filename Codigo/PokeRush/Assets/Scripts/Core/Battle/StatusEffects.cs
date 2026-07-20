@@ -17,9 +17,25 @@ public static class StatusEffects
     // estado puros (Onda Trueno fallida), false para efectos secundarios.
     public static bool TryApplyStatus(
         BattlePokenState target, StatusEffect status,
-        List<BattleEvent> events, IBattleRng rng, bool showFailMessage)
+        List<BattleEvent> events, IBattleRng rng, bool showFailMessage,
+        BattleModel field = null)
     {
         string name = target.Poken.Definition.pokenName;
+
+        // Terrenos que protegen a los Pokens en el suelo
+        if (field != null && FieldEffects.IsGrounded(target))
+        {
+            if (field.CurrentTerrain == FieldTerrain.Misty)
+            {
+                if (showFailMessage) BattleEvent.Add(events, $"¡La niebla protege a {name}!");
+                return false;
+            }
+            if (field.CurrentTerrain == FieldTerrain.Electric && status == StatusEffect.Asleep)
+            {
+                if (showFailMessage) BattleEvent.Add(events, $"¡El Campo Eléctrico impide que {name} se duerma!");
+                return false;
+            }
+        }
 
         // La confusion es volatil: convive con los estados persistentes
         if (status == StatusEffect.Confused)

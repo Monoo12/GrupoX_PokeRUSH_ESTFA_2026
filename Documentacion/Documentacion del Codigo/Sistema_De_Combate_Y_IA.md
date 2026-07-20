@@ -346,6 +346,45 @@ le da efecto en `AbilityEffects.cs`.
 
 ---
 
+## 🌦️ Climas y efectos de campo (`FieldEffects.cs`)
+
+El estado del campo vive en `BattleModel` (clima + terreno + un `SideState` por
+lado) y toda su lógica en `Core/Battle/FieldEffects.cs` (puro). Los movimientos
+que los generan tienen los campos `weatherEffect`/`fieldEffect` en
+`MoveDefinition` — el importador los mapea por nombre (Danza Lluvia, Reflejo,
+Trampa Rocas...) y los marca implementados.
+
+**Climas** (5 turnos, mensaje al empezar y al terminar, overlay visual):
+
+| Clima | Efecto |
+|---|---|
+| **Lluvia** | Agua ×1.5, Fuego ×0.5 |
+| **Sol** | Fuego ×1.5, Agua ×0.5 |
+| **Tormenta de Arena** | 1/16 por turno a los no Roca/Tierra/Acero; Def. Esp. ×1.5 a los Roca |
+| **Granizo** | 1/16 por turno a los no Hielo |
+
+**Pantallas** (5 turnos, protegen el lado del usuario, los críticos las ignoran):
+Reflejo (físico ×0.5), Pantalla de Luz (especial ×0.5), Velo Aurora (ambos,
+solo activable con granizo).
+
+**Trampas de entrada** (se colocan en el lado rival y golpean a cada Pokémon
+que entra): Trampa Rocas (daño según efectividad de Roca), Púas (1/8→1/6→1/4
+según capas, solo a los que tocan el suelo), Púas Tóxicas (envenenan; los tipo
+Veneno las absorben), Red Viscosa (-1 Velocidad).
+
+**Terrenos** (5 turnos, afectan a los Pokémon "en el suelo" — no voladores ni
+Levitación): Eléctrico (×1.3 Eléctrico, nadie se duerme), Psíquico (×1.3),
+Hierba (×1.3 Planta, cura 1/16 por turno), Nebuloso (Dragón ×0.5, sin estados
+nuevos).
+
+La IA los conoce: `CalculateExpected` recibe el campo (un líder valora más su
+Surf bajo lluvia) y los movimientos de campo puntúan como jugada de setup solo
+si aportan algo nuevo (`FieldEffects.IsRedundant`). **No implementado aún**:
+Sustituto, bloqueo de prioridad del Campo Psíquico, precisión perfecta de
+Trueno/Ventisca bajo su clima, y habilidades de clima (Llovizna/Sequía).
+
+---
+
 ## 💾 Datos: IVs, experiencia y learnsets
 
 ### IVs (valores individuales)
