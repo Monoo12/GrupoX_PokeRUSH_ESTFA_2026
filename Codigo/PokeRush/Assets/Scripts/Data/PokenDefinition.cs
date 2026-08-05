@@ -24,6 +24,12 @@ public class PokenDefinition : ScriptableObject
     public Sprite[] battleFrontShinyFrames;
     public Sprite[] battleBackShinyFrames;
 
+    [Header("Modelo 3D de batalla (opcional)")]
+    [Tooltip("Modelo .glb de la especie. Si esta cargado, PokenView dibuja el modelo " +
+             "en vez del sprite. Vacio = se usa el sprite, que es el caso de la mayoria " +
+             "de las especies. Lo llena el importador de modelos 3D.")]
+    public GameObject battleModel;
+
     [Header("Sprites de mundo")]
     public Sprite worldFrontSprite;
     public Sprite worldBackSprite;

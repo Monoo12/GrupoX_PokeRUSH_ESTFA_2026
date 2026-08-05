@@ -472,13 +472,31 @@ public class BattleController : MonoBehaviour
         if (backgroundRenderer.sprite == null) return;
 
         Camera cam = Camera.main;
-        if (cam == null || !cam.orthographic) return;
+        if (cam == null) return;
 
-        float viewHeight = cam.orthographicSize * 2f;
-        float viewWidth = viewHeight * cam.aspect;
         Vector2 spriteSize = backgroundRenderer.sprite.bounds.size;
         if (spriteSize.x <= 0f || spriteSize.y <= 0f) return;
 
+        // Cuanto abarca la camara a la altura del fondo. Con camara ortografica
+        // es fijo; con perspectiva depende de la distancia, asi que hay que medir
+        // el frustum en el plano donde esta parado el fondo.
+        float viewHeight;
+        if (cam.orthographic)
+        {
+            viewHeight = cam.orthographicSize * 2f;
+        }
+        else
+        {
+            // Distancia proyectada sobre el eje de vista (no la distancia recta):
+            // es la que define el tamaño del frustum en ese plano.
+            float distance = Vector3.Dot(
+                backgroundRenderer.transform.position - cam.transform.position,
+                cam.transform.forward);
+            if (distance <= 0f) return; // el fondo quedo detras de la camara
+            viewHeight = 2f * distance * Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        }
+
+        float viewWidth = viewHeight * cam.aspect;
         float scale = Mathf.Max(viewWidth / spriteSize.x, viewHeight / spriteSize.y);
         backgroundRenderer.transform.localScale = new Vector3(scale, scale, 1f);
     }

@@ -164,19 +164,17 @@ public class BattleFxView : MonoBehaviour
     // Aparicion de un salvaje: surge del entorno con un fade + saltito
     public IEnumerator WildAppear(PokenView pokenView)
     {
-        SpriteRenderer renderer = pokenView.Renderer;
         pokenView.Show();
-        if (renderer == null) yield break;
 
         Vector3 basePos = pokenView.transform.position;
         for (float t = 0f; t < appearDuration * 1.6f; t += Time.deltaTime)
         {
             float k = t / (appearDuration * 1.6f);
-            renderer.color = new Color(1f, 1f, 1f, k);
+            pokenView.SetTint(new Color(1f, 1f, 1f, k));
             pokenView.transform.position = basePos + Vector3.up * Mathf.Abs(Mathf.Sin(k * Mathf.PI * 2f)) * 0.15f;
             yield return null;
         }
-        renderer.color = Color.white;
+        pokenView.SetTint(Color.white);
         pokenView.transform.position = basePos;
     }
 
@@ -185,7 +183,7 @@ public class BattleFxView : MonoBehaviour
         Vector3 fullScale = pokenView.transform.localScale;
         pokenView.transform.localScale = Vector3.zero;
         pokenView.Show();
-        ResetRendererColor(pokenView);
+        pokenView.SetTint(Color.white);
 
         for (float t = 0f; t < appearDuration; t += Time.deltaTime)
         {
@@ -216,44 +214,42 @@ public class BattleFxView : MonoBehaviour
     // Debilitado: se hunde mientras se desvanece
     public IEnumerator FaintAnim(PokenView pokenView)
     {
-        SpriteRenderer renderer = pokenView.Renderer;
         Vector3 basePos = pokenView.transform.position;
 
         for (float t = 0f; t < faintDuration; t += Time.deltaTime)
         {
             float k = t / faintDuration;
             pokenView.transform.position = basePos + Vector3.down * k * 0.9f;
-            if (renderer != null) renderer.color = new Color(1f, 1f, 1f, 1f - k);
+            pokenView.SetTint(new Color(1f, 1f, 1f, 1f - k));
             yield return null;
         }
 
         pokenView.Hide();
         pokenView.transform.position = basePos;
-        if (renderer != null) renderer.color = Color.white;
+        pokenView.SetTint(Color.white);
     }
 
     // ---------- pulsos de color (stats, estados, curacion) ----------
 
     public IEnumerator PulseTint(PokenView pokenView, Color color, int pulses = 2)
     {
-        SpriteRenderer renderer = pokenView.Renderer;
-        if (renderer == null) yield break;
+        if (pokenView == null) yield break;
 
         const float pulseTime = 0.16f;
         for (int i = 0; i < pulses; i++)
         {
             for (float t = 0f; t < pulseTime; t += Time.deltaTime)
             {
-                renderer.color = Color.Lerp(Color.white, color, t / pulseTime);
+                pokenView.SetTint(Color.Lerp(Color.white, color, t / pulseTime));
                 yield return null;
             }
             for (float t = 0f; t < pulseTime; t += Time.deltaTime)
             {
-                renderer.color = Color.Lerp(color, Color.white, t / pulseTime);
+                pokenView.SetTint(Color.Lerp(color, Color.white, t / pulseTime));
                 yield return null;
             }
         }
-        renderer.color = Color.white;
+        pokenView.SetTint(Color.white);
     }
 
     // ---------- clima y terreno (overlays persistentes) ----------
@@ -359,7 +355,10 @@ public class BattleFxView : MonoBehaviour
         }
 
         Vector3 attackerHome = attacker.transform.position;
-        Vector3 impactPoint = defender.transform.position + Vector3.up * 0.45f;
+        // El impacto apunta al cuerpo del defensor, no a sus pies. La altura sale
+        // del visual, asi que le pega bien tanto a un Diglett como a un Onix (con
+        // sprites todos median 1 unidad, con modelos 3D no).
+        Vector3 impactPoint = defender.HitPoint;
         Vector3 towardDefender = (defender.transform.position - attackerHome).normalized;
 
         // 1) anticipacion: pequeño retroceso de carga
@@ -377,7 +376,8 @@ public class BattleFxView : MonoBehaviour
                 if (anim != null && anim.projectileSprite != null)
                     projectileRenderer.sprite = anim.projectileSprite;
                 projectileRenderer.color = color;
-                Vector3 origin = attackerHome + towardDefender * 0.3f + Vector3.up * 0.5f;
+                Vector3 origin = attackerHome + towardDefender * 0.3f
+                                 + Vector3.up * (attacker.Height * 0.5f);
                 projectileRenderer.gameObject.SetActive(true);
                 yield return MoveOver(projectileRenderer.transform, origin, impactPoint, travel);
                 projectileRenderer.gameObject.SetActive(false);
@@ -407,7 +407,7 @@ public class BattleFxView : MonoBehaviour
     {
         if (impactRenderer != null)
         {
-            impactRenderer.transform.position = defender.transform.position + Vector3.up * 0.45f;
+            impactRenderer.transform.position = defender.HitPoint;
             impactRenderer.color = new Color(color.r, color.g, color.b, 1f);
             impactRenderer.gameObject.SetActive(true);
         }
@@ -419,23 +419,26 @@ public class BattleFxView : MonoBehaviour
 
         Camera cam = Camera.main;
         Vector3 camHome = cam != null ? cam.transform.position : Vector3.zero;
-        SpriteRenderer defenderRenderer = defender.Renderer;
 
         for (float t = 0f; t < duration; t += Time.deltaTime)
         {
             // parpadeo del golpeado
-            if (defenderRenderer != null)
-                defenderRenderer.enabled = ((int)(t / 0.05f)) % 2 == 0;
-            // sacudida de camara
+            defender.SetRendererVisible(((int)(t / 0.05f)) % 2 == 0);
+            // sacudida de camara: el desplazamiento se rota con la camara para que
+            // la sacudida sea siempre en el plano de la pantalla. En 3D la camara
+            // esta picada y rotada, y un offset en XY del mundo se veria torcido.
             if (cam != null && shakeStrength > 0f)
-                cam.transform.position = camHome + (Vector3)(Random.insideUnitCircle * shakeStrength);
+            {
+                Vector3 jitter = (Vector3)(Random.insideUnitCircle * shakeStrength);
+                cam.transform.position = camHome + cam.transform.rotation * jitter;
+            }
             // el flash de pantalla se apaga gradualmente
             if (screenFlash && fadeOverlay != null)
                 fadeOverlay.color = new Color(1f, 1f, 1f, Mathf.Lerp(0.45f, 0f, t / duration));
             yield return null;
         }
 
-        if (defenderRenderer != null) defenderRenderer.enabled = true;
+        defender.SetRendererVisible(true);
         if (cam != null) cam.transform.position = camHome;
         if (impactRenderer != null) impactRenderer.gameObject.SetActive(false);
         if (screenFlash && fadeOverlay != null)
@@ -455,11 +458,5 @@ public class BattleFxView : MonoBehaviour
             yield return null;
         }
         target.position = to;
-    }
-
-    private static void ResetRendererColor(PokenView pokenView)
-    {
-        SpriteRenderer renderer = pokenView.Renderer;
-        if (renderer != null) renderer.color = Color.white;
     }
 }

@@ -29,6 +29,16 @@ namespace PokeRush.EditorTools
         // coordenadas de este builder son pixeles del mockup del diseñador.
         private static readonly Vector2 CanvasSize = new Vector2(512, 384);
 
+        // --- Distribucion del escenario 3D ---
+        // El jugador va cerca y a la izquierda, el rival lejos y a la derecha,
+        // como en la saga. La diferencia de tamaño en pantalla ya no se fuerza
+        // escalando los sprites: la da la perspectiva.
+        private const float CameraPitch = 14f;          // picado, en grados
+        private const float BackgroundDistance = 22f;   // telon detras de todo
+        private static readonly Vector3 CameraPosition = new Vector3(0f, 2.6f, -6f);
+        private static readonly Vector3 PlayerStandPosition = new Vector3(-1.7f, 0f, -1.6f);
+        private static readonly Vector3 EnemyStandPosition = new Vector3(1.6f, 0f, 2.6f);
+
         private static Font _font;
         private static Font UiFont => _font != null ? _font : (_font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
 
@@ -118,13 +128,16 @@ namespace PokeRush.EditorTools
 
             AssetDatabase.SaveAssets();
 
-            // --- 4. Contenido de la escena ---
-            BuildCamera();
-            SpriteRenderer background = BuildBackground();
-            // Los sprites tienen pivot en los pies y PPU = alto del frame (miden
-            // 1 unidad): la Y es el piso de cada plataforma y la escala es directa
-            PokenView playerView = BuildPokenView("PokenJugador", new Vector3(-1.28f, -1.55f, 0f), 1.7f);
-            PokenView enemyView = BuildPokenView("PokenRival", new Vector3(0.95f, 0.30f, 0f), 1.1f);
+            // --- 4. Contenido de la escena (3D) ---
+            Camera cam = BuildCamera();
+            BuildLighting();
+            BuildGround();
+            SpriteRenderer background = BuildBackground(cam);
+            // Los sprites tienen pivot en los pies y miden 1 unidad, asi que la Y
+            // es el piso. Los dos Pokens van casi a la misma escala: el del
+            // jugador se ve mas grande porque esta mas cerca de la camara.
+            PokenView playerView = BuildPokenView("PokenJugador", PlayerStandPosition, 1.15f);
+            PokenView enemyView = BuildPokenView("PokenRival", EnemyStandPosition, 1f);
             BuildEventSystem();
             BattleHudView hud = BuildHud();
             BattleFxView fx = BuildBattleFx();
@@ -237,38 +250,125 @@ namespace PokeRush.EditorTools
 
         // ---------- mundo: camara, fondo y battlers ----------
 
-        private static void BuildCamera()
+        // Camara en perspectiva, picada sobre el campo. El escorzo es lo que da
+        // la sensacion 3D: el Poken de adelante se ve mas grande que el de atras
+        // sin tener que escalarlos a mano como se hacia en 2D.
+        private static Camera BuildCamera()
         {
             var go = new GameObject("Main Camera");
             go.tag = "MainCamera";
             var cam = go.AddComponent<Camera>();
-            cam.orthographic = true;
-            // Media altura del fondo (384 px / 2 / 100 ppu): el fondo llena la vista
-            cam.orthographicSize = 1.92f;
+            cam.orthographic = false;
+            cam.fieldOfView = 40f;
+            cam.nearClipPlane = 0.1f;
+            cam.farClipPlane = 200f;
             cam.clearFlags = CameraClearFlags.SolidColor;
             cam.backgroundColor = Color.black;
-            go.transform.position = new Vector3(0f, 0f, -10f);
+            go.transform.SetPositionAndRotation(
+                CameraPosition, Quaternion.Euler(CameraPitch, 0f, 0f));
             go.AddComponent<AudioListener>();
+            return cam;
         }
 
-        private static SpriteRenderer BuildBackground()
+        // Los modelos 3D usan shaders Lit: sin una luz en la escena se ven negros.
+        // Los sprites son unlit y no la necesitan, pero no les molesta.
+        private static void BuildLighting()
+        {
+            var go = new GameObject("Luz Direccional");
+            var light = go.AddComponent<Light>();
+            light.type = LightType.Directional;
+            light.color = new Color(1f, 0.97f, 0.9f);
+            light.intensity = 1.1f;
+            light.shadows = LightShadows.Soft;
+            go.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
+        }
+
+        // Piso y las dos plataformas donde se para cada Poken. Son primitivas a
+        // proposito: sirven para tener referencia de profundidad al probar el
+        // combate, y el diseñador las reemplaza por el arte definitivo.
+        private static void BuildGround()
+        {
+            var ground = CreateSolid(PrimitiveType.Plane, "Piso",
+                Vector3.zero, new Vector3(4f, 1f, 4f), new Color(0.34f, 0.45f, 0.28f));
+            ground.isStatic = true;
+
+            CreateSolid(PrimitiveType.Cylinder, "PlataformaJugador",
+                PlayerStandPosition + Vector3.up * 0.02f,
+                new Vector3(2.2f, 0.02f, 2.2f), new Color(0.42f, 0.52f, 0.34f));
+            CreateSolid(PrimitiveType.Cylinder, "PlataformaRival",
+                EnemyStandPosition + Vector3.up * 0.02f,
+                new Vector3(1.9f, 0.02f, 1.9f), new Color(0.42f, 0.52f, 0.34f));
+        }
+
+        private static GameObject CreateSolid(PrimitiveType type, string name,
+            Vector3 position, Vector3 scale, Color color)
+        {
+            var go = GameObject.CreatePrimitive(type);
+            go.name = name;
+            go.transform.position = position;
+            go.transform.localScale = scale;
+
+            // Sin fisicas en el combate: los colliders solo estorban.
+            Collider collider = go.GetComponent<Collider>();
+            if (collider != null) Object.DestroyImmediate(collider);
+
+            var renderer = go.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                // Material propio para no pisar el material compartido por defecto.
+                var material = new Material(renderer.sharedMaterial);
+                material.color = color;
+                renderer.sharedMaterial = material;
+            }
+            return go;
+        }
+
+        // El fondo es un telon plano perpendicular a la vista: se planta lejos
+        // sobre el eje de la camara y con su misma rotacion. Asi el escalado que
+        // hace BattleController.ApplyBackground lo ajusta para llenar el frustum
+        // exactamente a esa distancia.
+        private static SpriteRenderer BuildBackground(Camera cam)
         {
             var go = new GameObject("FondoBatalla");
             var renderer = go.AddComponent<SpriteRenderer>();
             renderer.sprite = BattleUiAssetImporter.LoadBackground("Pradera_bg.png");
             renderer.sortingOrder = -10; // detras de los Pokens
+            go.transform.SetPositionAndRotation(
+                cam.transform.position + cam.transform.forward * BackgroundDistance,
+                cam.transform.rotation);
             return renderer;
         }
 
+        // Arma la jerarquia de un Poken con sus dos representaciones posibles:
+        //   PokenJugador          (PokenView: elige cual usar)
+        //     +- Sprite           (SpriteRenderer + SpritePokenVisual + Billboard)
+        //     +- Modelo           (ModelPokenVisual)
+        // La especie decide: si tiene battleModel se dibuja el modelo, si no el
+        // sprite. Las dos pueden convivir en el mismo combate.
         private static PokenView BuildPokenView(string name, Vector3 position, float scale)
         {
             var go = new GameObject(name);
             go.transform.position = position;
             go.transform.localScale = Vector3.one * scale;
-            var renderer = go.AddComponent<SpriteRenderer>();
             var view = go.AddComponent<PokenView>();
+
+            var spriteGo = new GameObject("Sprite");
+            spriteGo.transform.SetParent(go.transform, false);
+            var renderer = spriteGo.AddComponent<SpriteRenderer>();
+            var spriteVisual = spriteGo.AddComponent<SpritePokenVisual>();
+            spriteGo.AddComponent<Billboard>(); // que el sprite no se vea de canto
+            var spriteSo = new SerializedObject(spriteVisual);
+            spriteSo.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            spriteSo.ApplyModifiedPropertiesWithoutUndo();
+
+            var modelGo = new GameObject("Modelo");
+            modelGo.transform.SetParent(go.transform, false);
+            var modelVisual = modelGo.AddComponent<ModelPokenVisual>();
+            modelGo.SetActive(false); // lo prende PokenView si la especie trae modelo
+
             var so = new SerializedObject(view);
-            so.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            so.FindProperty("spriteVisual").objectReferenceValue = spriteVisual;
+            so.FindProperty("modelVisual").objectReferenceValue = modelVisual;
             so.ApplyModifiedPropertiesWithoutUndo();
             return view;
         }
@@ -287,33 +387,41 @@ namespace PokeRush.EditorTools
             var fxGo = new GameObject("BattleFx");
             var fx = fxGo.AddComponent<BattleFxView>();
 
+            // El entrenador esta parado en el piso: billboard solo en Y, como los
+            // Pokens. El resto son efectos que flotan, asi que les va mejor el
+            // billboard esferico (se inclinan con la camara).
             var trainerGo = new GameObject("EntrenadorRival");
             var trainerRenderer = trainerGo.AddComponent<SpriteRenderer>();
             trainerRenderer.sortingOrder = 5;
             trainerGo.transform.localScale = Vector3.one * 1.6f;
+            trainerGo.AddComponent<Billboard>();
             trainerGo.SetActive(false);
 
             var ballGo = new GameObject("BallVolando");
             var ballRenderer = ballGo.AddComponent<SpriteRenderer>();
             ballRenderer.sortingOrder = 10;
+            AddFacingBillboard(ballGo);
             ballGo.SetActive(false);
 
             var burstGo = new GameObject("DestelloBall");
             var burstRenderer = burstGo.AddComponent<SpriteRenderer>();
             burstRenderer.sprite = BattleUiAssetImporter.LoadSimple("ballBurst_ray.png");
             burstRenderer.sortingOrder = 9;
+            AddFacingBillboard(burstGo);
             burstGo.SetActive(false);
 
             var projectileGo = new GameObject("Proyectil");
             var projectileRenderer = projectileGo.AddComponent<SpriteRenderer>();
             projectileRenderer.sprite = BattleUiAssetImporter.LoadSimple("ballBurst_particle.png");
             projectileRenderer.sortingOrder = 8;
+            AddFacingBillboard(projectileGo);
             projectileGo.SetActive(false);
 
             var impactGo = new GameObject("ImpactoGolpe");
             var impactRenderer = impactGo.AddComponent<SpriteRenderer>();
             impactRenderer.sprite = BattleUiAssetImporter.LoadSimple("ballBurst_star.png");
             impactRenderer.sortingOrder = 8;
+            AddFacingBillboard(impactGo);
             impactGo.SetActive(false);
 
             // Canvas de ambiente: tintes de clima/terreno sobre el mundo pero
@@ -571,6 +679,17 @@ namespace PokeRush.EditorTools
                     statusIcons[(int)status] = BattleUiAssetImporter.LoadSlice("icon_statuses.png", "status", row, 0);
             }
             SetArray(so, "statusIconsByEffect", statusIcons);
+        }
+
+        // Billboard esferico: el sprite se inclina con la camara. Para efectos
+        // que flotan (ball, destellos, proyectiles), que no estan apoyados en
+        // el piso y deben verse siempre de frente.
+        private static void AddFacingBillboard(GameObject go)
+        {
+            var billboard = go.AddComponent<Billboard>();
+            var so = new SerializedObject(billboard);
+            so.FindProperty("tiltWithCamera").boolValue = true;
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
 
         // Image fullscreen inactiva para tintes persistentes (clima/terreno)

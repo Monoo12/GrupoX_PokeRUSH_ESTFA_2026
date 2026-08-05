@@ -13,6 +13,11 @@ namespace PokeRush.EditorTools.PokeApi
         private string _lastResult = "";
         private Vector2 _scroll;
 
+        // Rango de Pokedex para los modelos 3D. Por defecto la primera
+        // generacion, que es con la que se esta probando el combate.
+        private int _minDex = 1;
+        private int _maxDex = 151;
+
         [MenuItem("PokeRush/Importador PokeAPI")]
         public static void ShowWindow()
         {
@@ -48,12 +53,71 @@ namespace PokeRush.EditorTools.PokeApi
             }
 
             EditorGUILayout.Space();
+            DrawModelSection();
+
+            EditorGUILayout.Space();
             if (!string.IsNullOrEmpty(_lastResult))
             {
                 GUILayout.Label("Ultimo resultado:", EditorStyles.boldLabel);
                 _scroll = EditorGUILayout.BeginScrollView(_scroll);
                 EditorGUILayout.HelpBox(_lastResult, MessageType.None);
                 EditorGUILayout.EndScrollView();
+            }
+        }
+
+        // Los modelos 3D son opcionales y van por separado: pesan mucho (hasta
+        // 10 MB por especie), no se versionan, y una especie sin modelo funciona
+        // igual porque PokenView cae al sprite.
+        private void DrawModelSection()
+        {
+            GUILayout.Label("Modelos 3D (opcional)", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(
+                "Baja los .glb de Pokemon-3D-api/assets y los asigna al campo " +
+                "'Battle Model' de cada especie, emparejando por numero de Pokedex.\n\n" +
+                "Los modelos NO se versionan: cada integrante corre esto una vez. " +
+                "Las especies sin modelo se siguen dibujando con su sprite.",
+                MessageType.Info);
+
+            EditorGUILayout.BeginHorizontal();
+            _minDex = EditorGUILayout.IntField("Dex desde", _minDex);
+            _maxDex = EditorGUILayout.IntField("hasta", _maxDex);
+            EditorGUILayout.EndHorizontal();
+
+            if (GUILayout.Button($"Descargar modelos 3D (#{_minDex}-#{_maxDex})", GUILayout.Height(30)))
+                RunDownloadModels();
+        }
+
+        private void RunDownloadModels()
+        {
+            bool cancelled = false;
+            try
+            {
+                var report = Poken3DModelDownloader.DownloadAndAssign(
+                    _minDex, _maxDex, _forceDownload,
+                    (msg, t) => cancelled = EditorUtility.DisplayCancelableProgressBar(
+                        "Descargando modelos 3D", msg, t),
+                    () => cancelled);
+
+                string warnings = report.Warnings.Count == 0
+                    ? ""
+                    : $"\n\nAvisos ({report.Warnings.Count}):\n- " +
+                      string.Join("\n- ", report.Warnings.GetRange(0, Math.Min(30, report.Warnings.Count)));
+
+                _lastResult = (report.Cancelled ? "Descarga de modelos CANCELADA.\n" : "") +
+                    $"Modelos: {report.Downloaded} bajados, {report.Reused} ya estaban, " +
+                    $"{report.Assigned} asignados.\n" +
+                    $"Sin modelo en el repo: {report.NotFound} (esas especies usan su sprite)." +
+                    warnings;
+                Debug.Log($"[PokeApi] {_lastResult}");
+            }
+            catch (Exception e)
+            {
+                _lastResult = $"Error bajando modelos: {e.Message}";
+                Debug.LogError($"[PokeApi] {e}");
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
             }
         }
 
