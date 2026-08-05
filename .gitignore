@@ -24,3 +24,12 @@ UserSettings/
 Codigo/PokeRush/*.csproj
 Codigo/PokeRush/*.slnx
 Codigo/PokeRush/*.sln
+
+# === Modelos 3D de los Pokens ===
+# Los .glb NO se versionan: pesan entre 33 KB y 10 MB cada uno (las ~971
+# especies son varios GB) y son extraidos de los juegos originales, asi que no
+# corresponde redistribuirlos desde un repo publico.
+# Cada integrante los baja localmente desde:
+#   PokeRush > Importador PokeAPI > Modelos 3D
+Codigo/PokeRush/Assets/Models/Pokens/
+Codigo/PokeRush/Assets/Models/Pokens.meta

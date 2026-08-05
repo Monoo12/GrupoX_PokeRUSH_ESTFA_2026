@@ -1,2 +1,16 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# === Unity: merge de archivos YAML ===
+# Escenas, prefabs y ScriptableObjects son YAML enorme que git mergea pésimo
+# (conflictos ilegibles o, peor, merges "limpios" que rompen la escena).
+# UnityYAMLMerge entiende el formato y resuelve la mayoría solo.
+#
+# Hace falta configurar el driver UNA VEZ por máquina (no se versiona):
+#   git config --global merge.unityyamlmerge.name "Unity SmartMerge"
+#   git config --global merge.unityyamlmerge.driver '"C:/Program Files/Unity/Hub/Editor/6000.4.2f1/Editor/Data/Tools/UnityYAMLMerge.exe" merge -p %O %B %A %A'
+#
+# Sin configurar no rompe nada: git avisa y cae al merge de tres vías de siempre.
+*.unity   merge=unityyamlmerge eol=lf
+*.prefab  merge=unityyamlmerge eol=lf
+*.asset   merge=unityyamlmerge eol=lf
