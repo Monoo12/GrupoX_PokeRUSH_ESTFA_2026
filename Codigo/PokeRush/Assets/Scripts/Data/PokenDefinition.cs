@@ -30,6 +30,11 @@ public class PokenDefinition : ScriptableObject
              "de las especies. Lo llena el importador de modelos 3D.")]
     public GameObject battleModel;
 
+    [Tooltip("Clip que se reproduce en loop mientras el Poken espera su turno. Lo elige " +
+             "el importador entre los clips del modelo (busca 'idle', 'wait', etc). " +
+             "Vacio = el modelo se queda quieto.")]
+    public AnimationClip battleIdleClip;
+
     [Header("Sprites de mundo")]
     public Sprite worldFrontSprite;
     public Sprite worldBackSprite;

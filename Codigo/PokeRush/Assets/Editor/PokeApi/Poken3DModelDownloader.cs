@@ -200,11 +200,36 @@ namespace PokeRush.EditorTools.PokeApi
                 return false;
             }
 
-            if (poken.battleModel == model) return true;
-
             poken.battleModel = model;
+            poken.battleIdleClip = FindIdleClip(assetPath);
             EditorUtility.SetDirty(poken);
             return true;
+        }
+
+        // Prioridad de nombres para el clip de espera. Los modelos sacados de los
+        // juegos originales usan el nombrado de Game Freak
+        // (pm0150_00_00_00001_battlewait01_loop), asi que "battlewait" gana; despues
+        // van los nombres genericos. Si no matchea ninguno se usa el primer clip,
+        // que es mejor que dejar el modelo congelado.
+        private static readonly string[] IdleKeywords =
+            { "battlewait", "defaultwait", "wait01", "aidle", "defaultidle", "idle", "wait", "loop" };
+
+        private static AnimationClip FindIdleClip(string assetPath)
+        {
+            AnimationClip[] clips = AssetDatabase.LoadAllAssetsAtPath(assetPath)
+                .OfType<AnimationClip>()
+                .Where(c => c != null && !c.name.StartsWith("__preview__"))
+                .ToArray();
+
+            if (clips.Length == 0) return null;
+
+            foreach (string keyword in IdleKeywords)
+            {
+                AnimationClip match = clips.FirstOrDefault(
+                    c => c.name.ToLowerInvariant().Contains(keyword));
+                if (match != null) return match;
+            }
+            return clips[0];
         }
 
         private static List<PokenDefinition> LoadSpecies(int minDex, int maxDex)

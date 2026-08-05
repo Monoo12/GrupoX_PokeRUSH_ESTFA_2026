@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.Playables;
 
 // El Poken dibujado con un modelo 3D. El modelo sale del campo battleModel de
 // la especie (los .glb los baja el importador y los convierte glTFast).
@@ -33,6 +35,14 @@ public class ModelPokenVisual : PokenVisual
     private Color[] _originalColors;
     private MaterialPropertyBlock _block;
     private float _height = 1f;
+
+    // Animacion de espera. Se toca con Playables en vez de un AnimatorController
+    // porque un controller hay que crearlo como asset desde el editor, y los
+    // clips vienen adentro del .glb: con Playables se reproduce un clip suelto
+    // directamente, sin assets intermedios ni una maquina de estados por especie.
+    private PlayableGraph _graph;
+    private AnimationClipPlayable _idlePlayable;
+    private double _idleLength;
 
     public override float Height => _height;
 
@@ -70,7 +80,49 @@ public class ModelPokenVisual : PokenVisual
 
         CacheOriginalColors();
         ApplyAnimator(definition);
+        PlayIdle(definition);
     }
+
+    // Arranca la animacion de espera en loop. Sin esto el modelo se ve congelado
+    // aunque el .glb traiga clips, que es lo que pasaba antes de implementarlo.
+    private void PlayIdle(PokenDefinition definition)
+    {
+        DestroyGraph();
+        if (definition.battleIdleClip == null) return;
+
+        // glTFast importa las animaciones en modo Mecanim, asi que el modelo trae
+        // Animator. Si por alguna razon no viniera, lo agrego.
+        var target = _instance.GetComponentInChildren<Animator>();
+        if (target == null) target = _instance.AddComponent<Animator>();
+
+        _idleLength = definition.battleIdleClip.length;
+        if (_idleLength <= 0d) return;
+
+        _graph = PlayableGraph.Create($"{name}-idle");
+        var output = AnimationPlayableOutput.Create(_graph, "Animation", target);
+        _idlePlayable = AnimationClipPlayable.Create(_graph, definition.battleIdleClip);
+        _idlePlayable.SetApplyFootIK(false);
+        output.SetSourcePlayable(_idlePlayable);
+        _graph.Play();
+    }
+
+    // El loop se hace rebobinando a mano en vez de poner wrapMode = Loop, porque
+    // eso mutaria el AnimationClip, que es un sub-asset compartido del .glb.
+    private void Update()
+    {
+        if (!_graph.IsValid() || _idleLength <= 0d) return;
+
+        double time = _idlePlayable.GetTime();
+        if (time >= _idleLength) _idlePlayable.SetTime(time % _idleLength);
+    }
+
+    private void DestroyGraph()
+    {
+        if (_graph.IsValid()) _graph.Destroy();
+        _idleLength = 0d;
+    }
+
+    private void OnDestroy() => DestroyGraph();
 
     // Escala el modelo para que mida targetHeight en el mundo. Se mide con
     // localScale = 1 y despues se aplica el factor, asi la escala del objeto
