@@ -120,6 +120,42 @@ namespace PokeRush.EditorTools.PokeApi
             return report;
         }
 
+        // Asigna los .glb que ya estan en Assets/Models/Pokens/ sin bajar nada.
+        // Sirve para dos casos: modelos puestos a mano (Spriters Resource,
+        // Project Pokemon) y para re-asignar despues de que un cambio de paquetes
+        // arregle la importacion (p.ej. agregar Draco), cuando los archivos ya
+        // estaban en disco pero no habian producido un GameObject.
+        [MenuItem("PokeRush/3D/Asignar modelos ya descargados")]
+        public static void AssignExistingModels()
+        {
+            var assigned = 0;
+            var failed = 0;
+            var warnings = new List<string>();
+
+            foreach (PokenDefinition poken in LoadSpecies(0, int.MaxValue))
+            {
+                string assetPath = $"{ModelsFolder}/{poken.dexNumber}.glb";
+                if (!File.Exists(Path.GetFullPath(assetPath))) continue;
+
+                // Re-import forzado: si el .glb ya estaba en disco, Unity no lo
+                // vuelve a procesar solo porque cambiaron los paquetes. Sin esto,
+                // un modelo que fallo por falta de Draco sigue sin dar GameObject.
+                AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+
+                if (AssignModel(poken, assetPath, warnings)) assigned++;
+                else failed++;
+            }
+
+            AssetDatabase.SaveAssets();
+
+            string message = $"Modelos asignados: {assigned}. Sin importar: {failed}.";
+            if (failed > 0)
+                message += "\n\nLos que fallan casi siempre son .glb que Unity no logro " +
+                           "convertir en GameObject. Revisar la consola.";
+            Debug.Log($"[PokeRush] {message}");
+            foreach (string warning in warnings.Take(10)) Debug.LogWarning($"[PokeRush] {warning}");
+        }
+
         private enum DownloadResult { Ok, NotFound, Failed }
 
         private static DownloadResult TryDownload(int dexNumber, string fullPath, out string error)
