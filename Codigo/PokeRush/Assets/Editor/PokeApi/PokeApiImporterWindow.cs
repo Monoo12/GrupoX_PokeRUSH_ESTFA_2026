@@ -74,9 +74,16 @@ namespace PokeRush.EditorTools.PokeApi
             EditorGUILayout.HelpBox(
                 "Baja los .glb de Pokemon-3D-api/assets y los asigna al campo " +
                 "'Battle Model' de cada especie, emparejando por numero de Pokedex.\n\n" +
+                "IMPORTANTE - hay un paso intermedio obligatorio. Esos modelos vienen " +
+                "optimizados para la web con texturas WebP, declaradas como extension " +
+                "REQUERIDA. Por especificacion glTF, Unity rechaza el archivo entero y no " +
+                "genera ningun modelo. Despues de descargar hay que correr, una vez:\n\n" +
+                "    pip install Pillow\n" +
+                "    python Tools/webp2png_glb.py Assets/Models/Pokens\n\n" +
+                "y despues 'PokeRush > 3D > Asignar modelos ya descargados'.\n\n" +
                 "Los modelos NO se versionan: cada integrante corre esto una vez. " +
                 "Las especies sin modelo se siguen dibujando con su sprite.",
-                MessageType.Info);
+                MessageType.Warning);
 
             EditorGUILayout.BeginHorizontal();
             _minDex = EditorGUILayout.IntField("Dex desde", _minDex);
