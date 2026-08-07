@@ -25,9 +25,9 @@ public class PokenDefinition : ScriptableObject
     public Sprite[] battleBackShinyFrames;
 
     [Header("Modelo 3D de batalla (opcional)")]
-    [Tooltip("Modelo .glb de la especie. Si esta cargado, PokenView dibuja el modelo " +
-             "en vez del sprite. Vacio = se usa el sprite, que es el caso de la mayoria " +
-             "de las especies. Lo llena el importador de modelos 3D.")]
+    [Tooltip("Modelo FBX de la especie (dump de UNITE). Si esta cargado, PokenView " +
+             "dibuja el modelo en vez del sprite. Vacio = se usa el sprite, que es el " +
+             "caso de la mayoria de las especies. Lo llena el importador de UNITE.")]
     public GameObject battleModel;
 
     [Tooltip("Clip que se reproduce en loop mientras el Poken espera su turno. Lo elige " +

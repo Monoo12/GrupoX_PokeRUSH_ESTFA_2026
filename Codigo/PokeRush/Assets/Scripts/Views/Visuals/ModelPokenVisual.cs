@@ -3,7 +3,7 @@ using UnityEngine.Animations;
 using UnityEngine.Playables;
 
 // El Poken dibujado con un modelo 3D. El modelo sale del campo battleModel de
-// la especie (los .glb los baja el importador y los convierte glTFast).
+// la especie (los FBX del dump de UNITE, que Unity importa de forma nativa).
 //
 // Solo se usa en las especies que tienen modelo cargado; el resto sigue con
 // SpritePokenVisual. Eso permite ir migrando de a poco sin romper nada: hoy
@@ -12,7 +12,9 @@ public class ModelPokenVisual : PokenVisual
 {
     [Header("Escala")]
     [Tooltip("Alto en unidades de mundo al que se normaliza cualquier modelo. " +
-             "Los .glb vienen en escalas muy distintas: sin esto un Onix tapa la " +
+             "OJO: con los FBX de UNITE conviene DESACTIVARLO y usar el factor " +
+             "global de 55x, que conserva las proporciones relativas entre especies. " +
+             "Normalizar por especie las deja a todas del mismo tamano. " +
              "pantalla y un Diglett no se ve.")]
     [SerializeField] private float targetHeight = 1f;
     [Tooltip("Desactivar para respetar la escala original del modelo (util si ya " +
@@ -38,7 +40,7 @@ public class ModelPokenVisual : PokenVisual
 
     // Animacion de espera. Se toca con Playables en vez de un AnimatorController
     // porque un controller hay que crearlo como asset desde el editor, y los
-    // clips vienen adentro del .glb: con Playables se reproduce un clip suelto
+    // clips vienen adentro del FBX: con Playables se reproduce un clip suelto
     // directamente, sin assets intermedios ni una maquina de estados por especie.
     private PlayableGraph _graph;
     private AnimationClipPlayable _idlePlayable;
@@ -84,7 +86,7 @@ public class ModelPokenVisual : PokenVisual
     }
 
     // Arranca la animacion de espera en loop. Sin esto el modelo se ve congelado
-    // aunque el .glb traiga clips, que es lo que pasaba antes de implementarlo.
+    // aunque el FBX traiga clips, que es lo que pasaba antes de implementarlo.
     private void PlayIdle(PokenDefinition definition)
     {
         DestroyGraph();
@@ -107,7 +109,7 @@ public class ModelPokenVisual : PokenVisual
     }
 
     // El loop se hace rebobinando a mano en vez de poner wrapMode = Loop, porque
-    // eso mutaria el AnimationClip, que es un sub-asset compartido del .glb.
+    // eso mutaria el AnimationClip, que es un sub-asset compartido del FBX.
     private void Update()
     {
         if (!_graph.IsValid() || _idleLength <= 0d) return;

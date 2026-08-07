@@ -26,10 +26,24 @@ Codigo/PokeRush/*.slnx
 Codigo/PokeRush/*.sln
 
 # === Modelos 3D de los Pokens ===
-# Los .glb NO se versionan: pesan entre 33 KB y 10 MB cada uno (las ~971
-# especies son varios GB) y son extraidos de los juegos originales, asi que no
-# corresponde redistribuirlos desde un repo publico.
-# Cada integrante los baja localmente desde:
-#   PokeRush > Importador PokeAPI > Modelos 3D
-Codigo/PokeRush/Assets/Models/Pokens/
-Codigo/PokeRush/Assets/Models/Pokens.meta
+# Los modelos NO se versionan: son varios GB y estan extraidos de los juegos
+# originales, asi que no corresponde redistribuirlos desde un repo publico.
+# Cada integrante consigue el dump de UNITE por su cuenta y lo deja FUERA del
+# proyecto (en Assets3D/ en la raiz del repo), y el importador copia a Assets/
+# solo las especies que se usan.
+Codigo/PokeRush/Assets/Models/
+Codigo/PokeRush/Assets/Models.meta
+Assets3D/
+
+# Carpetas de auditoria de assets (importaciones de prueba, cientos de MB).
+Codigo/PokeRush/Assets/_Audit*/
+Codigo/PokeRush/Assets/_Audit*.meta
+Codigo/PokeRush/Assets/Screenshots/
+Codigo/PokeRush/Assets/Screenshots.meta
+
+# Escenas de referencia de los modelos de UNITE. No se versionan porque apuntan
+# a los prefabs de _AuditRank/, que tampoco estan versionados: a quien clone el
+# repo le llegarian con todas las referencias rotas. Se regeneran corriendo
+# PokeRush > 3D > Generar prefabs de UNITE y armando la grilla.
+Codigo/PokeRush/Assets/Scenes/GaleriaUnite.unity*
+Codigo/PokeRush/Assets/Scenes/PruebaPrefabs.unity*
