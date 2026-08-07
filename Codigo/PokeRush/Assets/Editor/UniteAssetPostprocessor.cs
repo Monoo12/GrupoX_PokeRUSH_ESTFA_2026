@@ -36,6 +36,7 @@ public class UniteAssetPostprocessor : AssetPostprocessor
     {
         "Assets/_Audit",
         "Assets/Models/",
+        "Assets/Scenes/try/",   // mapas de UNITE en prueba
     };
 
     // El pack trae texturas para el shader propio de UNITE (matcap, mascaras de
@@ -81,6 +82,20 @@ public class UniteAssetPostprocessor : AssetPostprocessor
             // Datos, no color: van en lineal.
             importer.sRGBTexture = false;
         }
+
+        // El importador reescala a 2048 por defecto cualquier textura mas
+        // grande, y la version achicada y vuelta a estirar se ve borrosa. Es el
+        // mismo problema que tuvieron las tiras de sprites Gen 5 (el arreglo de
+        // SpriteAssigner). Subir el tope deja que cada una se importe al tamaño
+        // real. OJO: las texturas de los MAPAS son chicas de nacimiento (128 a
+        // 512): si un piso se ve borroso no es por esto sino porque el material
+        // perdio su TILING al importar y la textura quedo estirada una sola vez
+        // sobre todo el terreno. Ese tiling esta en los mat_*.json del dump.
+        importer.maxTextureSize = 8192;
+
+        // Con la camara inclinada de la ruta, el piso a distancia se lava sin
+        // filtrado anisotropico (el default es 1).
+        importer.anisoLevel = 8;
     }
 
     // --- Modelos ------------------------------------------------------------
