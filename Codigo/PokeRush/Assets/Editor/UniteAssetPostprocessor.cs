@@ -5,7 +5,12 @@ using UnityEngine;
 
 // Arregla al importar los modelos y texturas del dump de Pokemon UNITE.
 //
-// Unity importa estos FBX con tres defectos, y los tres se ven en pantalla:
+// Unity importa estos FBX con cuatro defectos. Uno impide animarlos y los otros
+// tres se ven en pantalla:
+//
+//  0. SIN AVATAR. Los FBX llegan con avatarSetup = NoAvatar, asi que Unity no
+//     les agrega Animator y no hay donde reproducir los clips: el modelo queda
+//     congelado por mas que el FBX traiga 25 animaciones.
 //
 //  1. EMISION PARASITA. Los FBX declaran un color emisivo que el shader propio
 //     de UNITE usaba para otra cosa. Unity lo toma como emision real y prende
@@ -23,7 +28,7 @@ using UnityEngine;
 //     mat_bat_0038body_lv3   <-> t_d_bat_0038body_lv3   (difusa)
 //                            <-> t_n_bat_0038body_lv3   (normal)
 //                            <-> t_mro_bat_0038body_lv3 (metal/rugosidad/oclusion)
-public class UniteMaterialPostprocessor : AssetPostprocessor
+public class UniteAssetPostprocessor : AssetPostprocessor
 {
     // Solo toca lo que este bajo estas carpetas, para no pisar materiales ni
     // texturas de otros assets del proyecto.
@@ -54,6 +59,18 @@ public class UniteMaterialPostprocessor : AssetPostprocessor
         string nombre = Path.GetFileNameWithoutExtension(assetPath);
         var importer = (TextureImporter)assetImporter;
 
+        // Todo lo que cae en _UI es para el HUD y para los decals de apuntado:
+        // va como Sprite o no se puede usar en un Image ni en un material de UI.
+        if (assetPath.Contains("/_UI/"))
+        {
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.alphaIsTransparency = true;
+            importer.mipmapEnabled = false;
+            importer.wrapMode = TextureWrapMode.Clamp;
+            return;
+        }
+
         if (nombre.StartsWith("t_n_"))
         {
             // Sin esto Unity rechaza asignarlas a _BumpMap.
@@ -67,6 +84,21 @@ public class UniteMaterialPostprocessor : AssetPostprocessor
     }
 
     // --- Modelos ------------------------------------------------------------
+
+    private void OnPreprocessModel()
+    {
+        if (!EsDeUnite()) return;
+
+        var importer = (ModelImporter)assetImporter;
+
+        // Generic y no Humanoid: son criaturas, y un rig humanoide les deforma
+        // el esqueleto. CreateFromThisModel es lo que hace que Unity genere el
+        // Avatar y le ponga el Animator al prefab; con NoAvatar no hay donde
+        // reproducir los clips.
+        importer.animationType = ModelImporterAnimationType.Generic;
+        importer.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+        importer.importAnimation = true;
+    }
 
     // Se usa OnPostprocessModel y no OnPostprocessMaterial: para los FBX, Unity
     // importa los materiales por la via de "material description" y el callback
