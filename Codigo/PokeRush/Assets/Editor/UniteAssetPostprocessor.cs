@@ -142,7 +142,10 @@ public class UniteAssetPostprocessor : AssetPostprocessor
                 // UniteMaterialBuilder, que crea materiales propios como asset.
                 if (EsCompartido(material)) continue;
 
-                ArreglarMaterial(material, texturas, idMalla);
+                // Los FX van por otro camino: son efectos, no personajes.
+                // Necesitan Unlit aditivo, no Lit opaco y mate.
+                if (EsFx()) ArreglarMaterialDeFx(material, texturas);
+                else ArreglarMaterial(material, texturas, idMalla);
             }
         }
     }
@@ -184,10 +187,14 @@ public class UniteAssetPostprocessor : AssetPostprocessor
         {
             string ruta = AssetDatabase.GUIDToAssetPath(guid);
             string nombre = Path.GetFileNameWithoutExtension(ruta);
-            if (EsIgnorada(nombre)) continue;
+            // En una carpeta de FX, las t_fx_ son PRECISAMENTE las que hacen
+            // falta; en la de un personaje, en cambio, son ruido que no debe
+            // terminar en su piel.
+            if (!EsFx() && EsIgnorada(nombre)) continue;
 
             var textura = AssetDatabase.LoadAssetAtPath<Texture2D>(ruta);
             if (textura != null) indice[nombre] = textura;
+
         }
         return indice;
     }
@@ -197,6 +204,93 @@ public class UniteAssetPostprocessor : AssetPostprocessor
         foreach (string prefijo in PrefijosIgnorados)
             if (nombre.StartsWith(prefijo)) return true;
         return false;
+    }
+
+    private bool EsFx() => assetPath.Contains("/_Fx/");
+
+    // Los FX del pack son mallas de efecto (destellos, estelas, ondas) y no
+    // superficies: van Unlit y ADITIVAS, que es como las dibuja UNITE. Con el
+    // Lit opaco que les pone Unity se ven como plasticos grises.
+    //
+    // El emparejamiento con su textura no sigue la regla de los modelos: el
+    // material puede llamarse mat_fx_0813_glow_05_cj y usar una textura de OTRA
+    // especie (t_fx_0001_glow_01_cj). Por eso se busca en cascada, del match
+    // exacto al mas laxo.
+    private void ArreglarMaterialDeFx(Material material, Dictionary<string, Texture2D> texturas)
+    {
+        Texture2D textura = TexturaDeFx(material.name, texturas);
+
+        Shader unlit = Shader.Find("Universal Render Pipeline/Unlit");
+        if (unlit != null) material.shader = unlit;
+
+        if (textura != null)
+        {
+            material.SetTexture("_BaseMap", textura);
+            if (material.HasProperty("_MainTex")) material.SetTexture("_MainTex", textura);
+        }
+        material.SetColor("_BaseColor", Color.white);
+
+        // Aditivo. Poner _Surface = 1 no alcanza: URP decide por _SrcBlend y
+        // _DstBlend, y con los valores opacos el efecto tapa en vez de sumar.
+        material.SetFloat("_Surface", 1f);
+        material.SetFloat("_Blend", 1f);
+        material.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        material.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.One);
+        material.SetFloat("_ZWrite", 0f);
+        material.SetFloat("_Cull", (float)UnityEngine.Rendering.CullMode.Off);
+        material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+    }
+
+    private static Texture2D TexturaDeFx(string nombreMaterial, Dictionary<string, Texture2D> texturas)
+    {
+        if (texturas.Count == 0) return null;
+
+        // "mat_fx_0813_wind_08_cj" -> "0813_wind_08_cj"
+        string cola = nombreMaterial.StartsWith("mat_fx_") ? nombreMaterial.Substring(7) : nombreMaterial;
+
+        // 1. Nombre exacto.
+        if (texturas.TryGetValue("t_fx_" + cola, out Texture2D exacta)) return exacta;
+
+        // 2. Misma palabra clave (glow, wind, trail, mask...) y mismo sufijo de autor.
+        string clave = PalabraClave(cola);
+        string sufijo = Sufijo(cola);
+        if (clave != null)
+        {
+            foreach (KeyValuePair<string, Texture2D> par in texturas)
+                if (par.Key.Contains(clave) && sufijo != null && par.Key.EndsWith(sufijo))
+                    return par.Value;
+
+            // 3. Solo la palabra clave.
+            foreach (KeyValuePair<string, Texture2D> par in texturas)
+                if (par.Key.Contains(clave)) return par.Value;
+        }
+
+        // 4. Ultimo recurso: la unica que haya, ignorando las marcadas "delete".
+        foreach (KeyValuePair<string, Texture2D> par in texturas)
+            if (!par.Key.Contains("_delete_")) return par.Value;
+
+        return null;
+    }
+
+    private static readonly string[] PalabrasDeFx =
+    {
+        "glow", "wind", "trail", "mask", "line", "noise", "laser", "ring", "smoke", "fire", "star",
+    };
+
+    private static string PalabraClave(string nombre)
+    {
+        foreach (string palabra in PalabrasDeFx)
+            if (nombre.Contains(palabra)) return palabra;
+        return null;
+    }
+
+    // "0813_wind_08_cj" -> "_cj". Es la sigla del autor del efecto; cuando
+    // coincide, casi siempre son el par que va junto.
+    private static string Sufijo(string nombre)
+    {
+        int ultimo = nombre.LastIndexOf('_');
+        return ultimo < 0 ? null : nombre.Substring(ultimo);
     }
 
     private void ArreglarMaterial(Material material, Dictionary<string, Texture2D> texturas, string idMalla)

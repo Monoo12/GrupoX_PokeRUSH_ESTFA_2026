@@ -98,6 +98,13 @@ public class AbilityRunner : MonoBehaviour
         Encarar(puntoApuntado);
         if (animador != null) animador.ReproducirAccion(habilidad.clip);
 
+        // El FX de lanzamiento sale con la animacion, no con el golpe: es la
+        // anticipacion que le avisa al rival que algo viene.
+        if (habilidad.fxLanzamiento != null)
+            UniteFx.Reproducir(habilidad.fxLanzamiento,
+                               transform.position + Vector3.up * 0.5f, transform.rotation,
+                               Mathf.Max(0.3f, habilidad.ventanaFin), habilidad.TamañoDeFx);
+
         // Anticipacion. Esta ventana es el telegrafiado: mientras dura, el rival
         // todavia puede leer el golpe y salirse.
         yield return new WaitForSeconds(habilidad.ventanaInicio);
@@ -156,7 +163,19 @@ public class AbilityRunner : MonoBehaviour
         foreach (RunCombatant objetivo in alcanzados)
             objetivo.RecibirGolpe(_combatiente, habilidad, transform.position);
 
-        if (efectos != null)
+        // Un FX de impacto por cada alcanzado: pegarle a tres tiene que verse
+        // como tres golpes, no como uno.
+        if (habilidad.fxImpacto != null)
+        {
+            foreach (RunCombatant objetivo in alcanzados)
+                UniteFx.Reproducir(habilidad.fxImpacto, objetivo.PuntoDeImpacto,
+                                   Quaternion.LookRotation(objetivo.transform.position - transform.position),
+                                   0.4f, habilidad.TamañoDeFx);
+        }
+
+        // El chispazo procedural queda de respaldo: cubre el golpe al aire, que
+        // no tiene FX propio en el pack, y las especies sin efectos copiados.
+        if (efectos != null && (habilidad.fxImpacto == null || alcanzados.Count == 0))
             efectos.Reventar(HitResolver.PuntoDeImpacto(_combatiente, habilidad, puntoApuntado, alcanzados),
                              habilidad, alcanzados.Count > 0);
 

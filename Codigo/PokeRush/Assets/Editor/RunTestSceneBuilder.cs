@@ -239,9 +239,16 @@ public static class RunTestSceneBuilder
         string ruta = $"{CarpetaModelos}/{especie}/{Path.GetFileName(fbx[0])}";
         List<AnimationClip> propios = UniteClips.PropiosDe(ruta);
 
+        // Se crea en disco y se refresca, en vez de confiar en IsValidFolder:
+        // si alguien borro la carpeta por fuera del editor, la base de assets
+        // queda diciendo que existe y CreateAsset falla.
         string carpeta = $"{CarpetaModelos}/{especie}/Habilidades";
-        if (!AssetDatabase.IsValidFolder(carpeta))
-            AssetDatabase.CreateFolder($"{CarpetaModelos}/{especie}", "Habilidades");
+        string carpetaAbsoluta = Path.Combine(Application.dataPath, $"_AuditRank/{especie}/Habilidades");
+        if (!Directory.Exists(carpetaAbsoluta))
+        {
+            Directory.CreateDirectory(carpetaAbsoluta);
+            AssetDatabase.Refresh();
+        }
 
         string[] prefijos = basicos
             ? new[] { "ani_atk1_", "ani_atk2_", "ani_atk3_" }
@@ -261,6 +268,7 @@ public static class RunTestSceneBuilder
             {
                 habilidad = ScriptableObject.CreateInstance<AbilityDefinition>();
                 ConfigurarPorDefecto(habilidad, nombreAsset, clip, basicos, i, prefijos.Length);
+                CablearFx(habilidad, basicos, i, prefijos.Length);
                 AssetDatabase.CreateAsset(habilidad, rutaAsset);
             }
             else if (habilidad.clip == null)
@@ -268,11 +276,54 @@ public static class RunTestSceneBuilder
                 habilidad.clip = clip;
                 EditorUtility.SetDirty(habilidad);
             }
+
+            // Los FX se recablean siempre: son assets del pack que se pueden ir
+            // copiando de a poco, y no algo que se afine a mano.
+            if (habilidad.fxLanzamiento == null || habilidad.fxImpacto == null)
+            {
+                CablearFx(habilidad, basicos, i, prefijos.Length);
+                EditorUtility.SetDirty(habilidad);
+            }
+
             resultado.Add(habilidad);
         }
 
         AssetDatabase.SaveAssets();
         return resultado.ToArray();
+    }
+
+    // Los FX de combate del pack estan bajo el nombre de la FORMA BASE, no el de
+    // la evolucion: los de Cinderace son "Scorbunny", los de Greninja "Froakie".
+    // Por eso buscarlos por el nombre de la especie jugable no encuentra nada.
+    private const string NombreFxJugador = "Scorbunny";
+
+    private static void CablearFx(AbilityDefinition habilidad, bool basico, int indice, int total)
+    {
+        // natk = ataque basico, spell01/spell02 = las habilidades. El tercer
+        // golpe de la cadena usa la variante _plus, que es la potenciada.
+        bool esRemate = basico && indice == total - 1;
+        string rol = basico
+            ? (esRemate ? "natk_atk01_plus" : "natk_atk01")
+            : (indice == 0 ? "spell01_atk01" : "spell02_atk01");
+        string impacto = basico
+            ? (esRemate ? "natk_hit_plus" : "natk_hit")
+            : (indice == 0 ? "spell01_hit" : "spell02_hit");
+
+        habilidad.fxLanzamiento = BuscarFx(rol);
+        habilidad.fxImpacto = BuscarFx(impacto);
+        // 0 = que lo derive del radio de la habilidad.
+        habilidad.tamañoFx = 0f;
+    }
+
+    private static GameObject BuscarFx(string rol)
+    {
+        string carpeta = $"{CarpetaModelos}/_Fx/pref_fx_{NombreFxJugador}_{rol}_lv3";
+        foreach (string guid in AssetDatabase.FindAssets("t:GameObject", new[] { carpeta }))
+        {
+            var fx = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid));
+            if (fx != null) return fx;
+        }
+        return null;
     }
 
     // Valores de arranque, pensados para que se sienta algo desde el primer Play.

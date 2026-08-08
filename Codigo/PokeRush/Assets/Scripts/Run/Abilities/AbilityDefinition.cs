@@ -64,6 +64,21 @@ public class AbilityDefinition : ScriptableObject
     public AttackType categoria = AttackType.Physical;
     public int potencia = 60;
 
+    [Header("Efectos visuales del pack")]
+    [Tooltip("FX que sale del Poken al lanzar. En el pack son los *_atk01_*.")]
+    public GameObject fxLanzamiento;
+    [Tooltip("FX en el punto de impacto. En el pack son los *_hit_*.")]
+    public GameObject fxImpacto;
+    [Tooltip("Cuanto tiene que MEDIR el efecto en unidades de mundo. Se deriva " +
+             "del radio de la habilidad, asi que normalmente no hace falta " +
+             "tocarlo: 0 = automatico (el doble del radio).")]
+    public float tamañoFx;
+
+    /// Tamaño del efecto en unidades. Por defecto acompaña al area del golpe:
+    /// un ataque de radio 2,4 tiene que verse del ancho de su area, no de un
+    /// tamaño fijo que quede chico en unas habilidades y enorme en otras.
+    public float TamañoDeFx => tamañoFx > 0.01f ? tamañoFx : Mathf.Clamp(radio * 2f, 1f, 8f);
+
     [Header("Efecto de control")]
     public ControlEffect control;
 
