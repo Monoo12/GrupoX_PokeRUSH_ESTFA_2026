@@ -25,6 +25,11 @@ public class AbilityRunner : MonoBehaviour
     private float[] _listaEn;
     private Coroutine _enCurso;
 
+    // Identifica cada ejecucion. La animacion sigue corriendo despues de que se
+    // libera el control, asi que hay que saber si el golpe que la lanzo sigue
+    // siendo el ultimo: si no, cortarla apagaria la animacion del golpe nuevo.
+    private int _ejecucionActual;
+
     public int Cantidad => habilidades != null ? habilidades.Length : 0;
     public bool Ocupado => _enCurso != null;
 
@@ -92,6 +97,7 @@ public class AbilityRunner : MonoBehaviour
     private IEnumerator Ejecutar(AbilityDefinition habilidad, Vector3 puntoApuntado)
     {
         EnEjecucion = habilidad;
+        int mia = ++_ejecucionActual;
 
         // Encarar el objetivo antes de arrancar: pegarle a algo que quedo a la
         // espalda se ve roto por mas que el impacto resuelva bien.
@@ -119,9 +125,21 @@ public class AbilityRunner : MonoBehaviour
         float restante = Mathf.Max(0f, habilidad.bloqueo - habilidad.ventanaInicio);
         if (restante > 0f) yield return new WaitForSeconds(restante);
 
-        if (animador != null) animador.CortarAccion();
         EnEjecucion = null;
         _enCurso = null;
+
+        // La ANIMACION sigue hasta el final aunque ya hayas recuperado el
+        // control. Son dos cosas distintas y antes estaban atadas al mismo
+        // valor: con bloqueo al 50% del clip, la patada se cortaba por la mitad
+        // y volvia de golpe a la pose de espera. Eso es lo que se veia roto.
+        if (animador != null)
+        {
+            float sobra = habilidad.Duracion - habilidad.bloqueo;
+            if (sobra > 0f) yield return new WaitForSeconds(sobra);
+
+            // Solo si en el medio no arranco otro golpe.
+            if (mia == _ejecucionActual) animador.CortarAccion();
+        }
     }
 
     private void Encarar(Vector3 puntoApuntado)

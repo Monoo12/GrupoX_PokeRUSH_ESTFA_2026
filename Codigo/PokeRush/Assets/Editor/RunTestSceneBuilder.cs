@@ -142,6 +142,8 @@ public static class RunTestSceneBuilder
         combatiente.Configurar(BuscarEspecie(EspecieJugador), NivelJugador, true);
 
         var chispazo = raiz.AddComponent<HitBurst>();
+        Asignar(chispazo, "texturaChispa", TexturaDeFx("pref_fx_Scorbunny_natk_atk01_lv3", "t_fx_0001_glow_01_cj"));
+        Asignar(chispazo, "texturaOnda", Textura("t_fx_Indicator_Decal_Circle_02_sam_alfa"));
 
         var ejecutor = raiz.AddComponent<AbilityRunner>();
         Asignar(ejecutor, "animador", locomocion);
@@ -309,9 +311,13 @@ public static class RunTestSceneBuilder
             ? (esRemate ? "natk_hit_plus" : "natk_hit")
             : (indice == 0 ? "spell01_hit" : "spell02_hit");
 
-        habilidad.fxLanzamiento = BuscarFx(rol);
-        habilidad.fxImpacto = BuscarFx(impacto);
-        // 0 = que lo derive del radio de la habilidad.
+        // Los prefabs de FX del pack quedan DESCONECTADOS a proposito: son
+        // mallas estaticas y sin el motor de efectos de UNITE se ven como una
+        // lamina congelada. El impacto lo hace HitBurst con las texturas del
+        // pack y particulas de Unity, que si dan movimiento. Los campos siguen
+        // ahi para cuando se reconstruyan los efectos como corresponde.
+        habilidad.fxLanzamiento = null;
+        habilidad.fxImpacto = null;
         habilidad.tamañoFx = 0f;
     }
 
@@ -476,6 +482,10 @@ public static class RunTestSceneBuilder
 
     private static Texture2D Textura(string nombre)
         => AssetDatabase.LoadAssetAtPath<Texture2D>($"{CarpetaUI}/{nombre}.png");
+
+    // Las texturas de efecto viven junto a su FX, no en _UI.
+    private static Texture2D TexturaDeFx(string carpetaFx, string nombre)
+        => AssetDatabase.LoadAssetAtPath<Texture2D>($"{CarpetaModelos}/_Fx/{carpetaFx}/{nombre}.png");
 
     private static Sprite Sprite(string nombre)
         => AssetDatabase.LoadAssetAtPath<Sprite>($"{CarpetaUI}/{nombre}.png");
