@@ -103,7 +103,8 @@ public class AbilityRunner : MonoBehaviour
         if (habilidad.fxLanzamiento != null)
             UniteFx.Reproducir(habilidad.fxLanzamiento,
                                transform.position + Vector3.up * 0.5f, transform.rotation,
-                               Mathf.Max(0.3f, habilidad.ventanaFin), habilidad.TamañoDeFx);
+                               Mathf.Max(0.3f, habilidad.ventanaFin), habilidad.TamañoDeFx,
+                               BattleFxView.ColorForType(habilidad.tipo));
 
         // Anticipacion. Esta ventana es el telegrafiado: mientras dura, el rival
         // todavia puede leer el golpe y salirse.
@@ -170,7 +171,8 @@ public class AbilityRunner : MonoBehaviour
             foreach (RunCombatant objetivo in alcanzados)
                 UniteFx.Reproducir(habilidad.fxImpacto, objetivo.PuntoDeImpacto,
                                    Quaternion.LookRotation(objetivo.transform.position - transform.position),
-                                   0.4f, habilidad.TamañoDeFx);
+                                   0.4f, habilidad.TamañoDeFx,
+                                   BattleFxView.ColorForType(habilidad.tipo));
         }
 
         // El chispazo procedural queda de respaldo: cubre el golpe al aire, que

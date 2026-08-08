@@ -32,7 +32,7 @@ public class HitBurst : MonoBehaviour
     {
         if (_sistema == null) return;
 
-        Color color = ColorDeTipo(habilidad != null ? habilidad.tipo : PokenType.Normal);
+        Color color = BattleFxView.ColorForType(habilidad != null ? habilidad.tipo : PokenType.Normal);
 
         // Al aire tambien se dibuja, pero apagado: el jugador tiene que ver que
         // el ataque salio y fallo, no que no paso nada.
@@ -103,31 +103,4 @@ public class HitBurst : MonoBehaviour
         return curva;
     }
 
-    // Los colores de tipo de la serie. Es el mismo criterio que usa BattleFxView
-    // en el combate por turnos, para que un ataque de Fuego se vea igual en los
-    // dos modos.
-    private static Color ColorDeTipo(PokenType tipo)
-    {
-        switch (tipo)
-        {
-            case PokenType.Fire: return new Color(1f, 0.45f, 0.15f);
-            case PokenType.Water: return new Color(0.3f, 0.6f, 1f);
-            case PokenType.Grass: return new Color(0.45f, 0.9f, 0.35f);
-            case PokenType.Electric: return new Color(1f, 0.9f, 0.2f);
-            case PokenType.Ice: return new Color(0.6f, 0.9f, 1f);
-            case PokenType.Fighting: return new Color(0.9f, 0.35f, 0.25f);
-            case PokenType.Poison: return new Color(0.7f, 0.35f, 0.8f);
-            case PokenType.Ground: return new Color(0.85f, 0.7f, 0.4f);
-            case PokenType.Flying: return new Color(0.7f, 0.75f, 1f);
-            case PokenType.Psychic: return new Color(1f, 0.4f, 0.65f);
-            case PokenType.Bug: return new Color(0.7f, 0.85f, 0.25f);
-            case PokenType.Rock: return new Color(0.75f, 0.65f, 0.35f);
-            case PokenType.Ghost: return new Color(0.55f, 0.4f, 0.75f);
-            case PokenType.Dragon: return new Color(0.45f, 0.4f, 0.95f);
-            case PokenType.Dark: return new Color(0.45f, 0.38f, 0.35f);
-            case PokenType.Steel: return new Color(0.75f, 0.75f, 0.85f);
-            case PokenType.Fairy: return new Color(1f, 0.65f, 0.85f);
-            default: return new Color(0.95f, 0.9f, 0.8f);
-        }
-    }
 }
