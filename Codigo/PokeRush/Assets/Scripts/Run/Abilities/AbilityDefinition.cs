@@ -14,6 +14,14 @@ public enum AimMode
     Dash,
     // No golpea: se aplica sobre uno mismo (escudos, buffos).
     Propia,
+    // Abanico delante del Poken, hacia donde mira. Es la forma que tiene de
+    // verdad un golpe fisico -una patada, un cabezazo, un zarpazo-: nace del
+    // cuerpo, barre un arco y llega hasta donde llega el miembro.
+    //
+    // Es el modo que corresponde a los basicos. Antes usaban AreaEnSuelo, que
+    // pone el circulo DONDE ESTA EL MOUSE: el golpe no salia del Poken sino del
+    // cursor, y por eso pegaba en lugares donde la animacion no tocaba nada.
+    ConoFrontal,
 }
 
 // Una habilidad del modelo de UNITE: se apunta, tiene area, y tiene enfriamiento.
@@ -39,8 +47,14 @@ public class AbilityDefinition : ScriptableObject
     [Tooltip("Alcance en unidades. En SkillshotLineal es el largo; en AreaEnSuelo, " +
              "hasta donde se puede alejar el circulo; en Dash, cuanto se desplaza.")]
     public float rango = 5f;
-    [Tooltip("Radio del area, en unidades. En SkillshotLineal es el ancho del haz.")]
+    [Tooltip("Radio del area, en unidades. En SkillshotLineal es el ancho del haz. " +
+             "En ConoFrontal no se usa: el ancho lo da el angulo.")]
     public float radio = 1.2f;
+
+    [Tooltip("Solo en ConoFrontal: cuantos grados abre el abanico, contando de " +
+             "punta a punta. 60 es un golpe dirigido; 120 barre casi todo el frente.")]
+    [Range(15f, 360f)]
+    public float anguloCono = 90f;
 
     [Header("Tiempos")]
     [Tooltip("Segundos hasta poder volver a usarla.")]
@@ -64,20 +78,36 @@ public class AbilityDefinition : ScriptableObject
     public AttackType categoria = AttackType.Physical;
     public int potencia = 60;
 
-    [Header("Efectos visuales del pack")]
-    [Tooltip("FX que sale del Poken al lanzar. En el pack son los *_atk01_*.")]
-    public GameObject fxLanzamiento;
-    [Tooltip("FX en el punto de impacto. En el pack son los *_hit_*.")]
+    [Header("Efectos visuales")]
+    [Tooltip("Estela del golpe. Vacio = la que le toca al tipo en el catalogo.")]
+    public GameObject fxArco;
+    [Tooltip("Efecto propio de esta habilidad, si le queres uno distinto al que " +
+             "le toca a su tipo. Vacio = sale del catalogo de FX del ejecutor.")]
     public GameObject fxImpacto;
+    [Tooltip("Efecto que sale del Poken al arrancar la animacion. Vacio = el del " +
+             "catalogo, que casi siempre es ninguno.")]
+    public GameObject fxLanzamiento;
     [Tooltip("Cuanto tiene que MEDIR el efecto en unidades de mundo. Se deriva " +
-             "del radio de la habilidad, asi que normalmente no hace falta " +
-             "tocarlo: 0 = automatico (el doble del radio).")]
+             "del area de la habilidad, asi que normalmente no hace falta " +
+             "tocarlo: 0 = automatico.")]
     public float tamañoFx;
 
-    /// Tamaño del efecto en unidades. Por defecto acompaña al area del golpe:
-    /// un ataque de radio 2,4 tiene que verse del ancho de su area, no de un
-    /// tamaño fijo que quede chico en unas habilidades y enorme en otras.
-    public float TamañoDeFx => tamañoFx > 0.01f ? tamañoFx : Mathf.Clamp(radio * 2f, 1f, 8f);
+    /// Tamaño del efecto en unidades. Por defecto acompaña al area del golpe: un
+    /// ataque de radio 2,4 tiene que verse del ancho de su area, no de un tamaño
+    /// fijo que quede chico en unas habilidades y enorme en otras.
+    ///
+    /// El cono es el caso aparte: ahi el area no la da el radio sino el alcance,
+    /// asi que el efecto tiene que medir lo que mide el abanico.
+    public float TamañoDeFx
+    {
+        get
+        {
+            if (tamañoFx > 0.01f) return tamañoFx;
+
+            float medida = apuntado == AimMode.ConoFrontal ? rango : radio * 2f;
+            return Mathf.Clamp(medida, 1f, 8f);
+        }
+    }
 
     [Header("Efecto de control")]
     public ControlEffect control;

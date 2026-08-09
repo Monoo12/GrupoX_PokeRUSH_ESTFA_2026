@@ -141,13 +141,9 @@ public static class RunTestSceneBuilder
         var combatiente = raiz.AddComponent<RunCombatant>();
         combatiente.Configurar(BuscarEspecie(EspecieJugador), NivelJugador, true);
 
-        var chispazo = raiz.AddComponent<HitBurst>();
-        Asignar(chispazo, "texturaChispa", TexturaDeFx("pref_fx_Scorbunny_natk_atk01_lv3", "t_fx_0001_glow_01_cj"));
-        Asignar(chispazo, "texturaOnda", Textura("t_fx_Indicator_Decal_Circle_02_sam_alfa"));
-
         var ejecutor = raiz.AddComponent<AbilityRunner>();
         Asignar(ejecutor, "animador", locomocion);
-        Asignar(ejecutor, "efectos", chispazo);
+        Asignar(ejecutor, "catalogo", FxCatalogBuilder.Cablear());
         Asignar(ejecutor, "habilidades", GenerarHabilidades(EspecieJugador, false));
 
         var cadena = raiz.AddComponent<BasicAttackChain>();
@@ -269,67 +265,21 @@ public static class RunTestSceneBuilder
             if (habilidad == null)
             {
                 habilidad = ScriptableObject.CreateInstance<AbilityDefinition>();
-                ConfigurarPorDefecto(habilidad, nombreAsset, clip, basicos, i, prefijos.Length);
-                CablearFx(habilidad, basicos, i, prefijos.Length);
                 AssetDatabase.CreateAsset(habilidad, rutaAsset);
             }
-            else if (habilidad.clip == null)
-            {
-                habilidad.clip = clip;
-                EditorUtility.SetDirty(habilidad);
-            }
 
-            // Los FX se recablean siempre: son assets del pack que se pueden ir
-            // copiando de a poco, y no algo que se afine a mano.
-            if (habilidad.fxLanzamiento == null || habilidad.fxImpacto == null)
-            {
-                CablearFx(habilidad, basicos, i, prefijos.Length);
-                EditorUtility.SetDirty(habilidad);
-            }
+            // Se reescriben siempre los valores de arranque. Son parametros de
+            // diseño que todavia estan cambiando de sesion en sesion, y si se
+            // conservaran los del asset viejo rearmar la escena dejaria golpes
+            // con el apuntado anterior mezclados con los nuevos.
+            ConfigurarPorDefecto(habilidad, nombreAsset, clip, basicos, i, prefijos.Length);
+            EditorUtility.SetDirty(habilidad);
 
             resultado.Add(habilidad);
         }
 
         AssetDatabase.SaveAssets();
         return resultado.ToArray();
-    }
-
-    // Los FX de combate del pack estan bajo el nombre de la FORMA BASE, no el de
-    // la evolucion: los de Cinderace son "Scorbunny", los de Greninja "Froakie".
-    // Por eso buscarlos por el nombre de la especie jugable no encuentra nada.
-    private const string NombreFxJugador = "Scorbunny";
-
-    private static void CablearFx(AbilityDefinition habilidad, bool basico, int indice, int total)
-    {
-        // natk = ataque basico, spell01/spell02 = las habilidades. El tercer
-        // golpe de la cadena usa la variante _plus, que es la potenciada.
-        bool esRemate = basico && indice == total - 1;
-        string rol = basico
-            ? (esRemate ? "natk_atk01_plus" : "natk_atk01")
-            : (indice == 0 ? "spell01_atk01" : "spell02_atk01");
-        string impacto = basico
-            ? (esRemate ? "natk_hit_plus" : "natk_hit")
-            : (indice == 0 ? "spell01_hit" : "spell02_hit");
-
-        // Los prefabs de FX del pack quedan DESCONECTADOS a proposito: son
-        // mallas estaticas y sin el motor de efectos de UNITE se ven como una
-        // lamina congelada. El impacto lo hace HitBurst con las texturas del
-        // pack y particulas de Unity, que si dan movimiento. Los campos siguen
-        // ahi para cuando se reconstruyan los efectos como corresponde.
-        habilidad.fxLanzamiento = null;
-        habilidad.fxImpacto = null;
-        habilidad.tamañoFx = 0f;
-    }
-
-    private static GameObject BuscarFx(string rol)
-    {
-        string carpeta = $"{CarpetaModelos}/_Fx/pref_fx_{NombreFxJugador}_{rol}_lv3";
-        foreach (string guid in AssetDatabase.FindAssets("t:GameObject", new[] { carpeta }))
-        {
-            var fx = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid));
-            if (fx != null) return fx;
-        }
-        return null;
     }
 
     // Valores de arranque, pensados para que se sienta algo desde el primer Play.
@@ -340,22 +290,22 @@ public static class RunTestSceneBuilder
     {
         habilidad.nombre = nombre;
         habilidad.clip = clip;
-        habilidad.ventanaInicio = clip.length * 0.35f;
-        habilidad.ventanaFin = clip.length * 0.55f;
-        habilidad.bloqueo = clip.length * 0.7f;
 
         bool esRemate = basico && indice == total - 1;
 
         // Los tres roles tienen que sentirse distintos, si no da lo mismo cual
-        // apretar. El basico es corto y rapido, la 1 es larga y fina y atraviesa
-        // a varios, y la 2 es un zonazo lento que ademas frena.
+        // apretar. El basico es corto y rapido, la 1 se lanza hacia adelante y
+        // la 2 es un zonazo lento alrededor que ademas frena.
         if (basico)
         {
-            // Cuerpo a cuerpo justo delante: no lleva indicador y se encadena
-            // rapido. Es el golpe de relleno mientras esperas los enfriamientos.
-            habilidad.apuntado = AimMode.AreaEnSuelo;
-            habilidad.rango = 1.6f;
-            habilidad.radio = 1.2f;
+            // ABANICO DELANTE DEL CUERPO. Es un golpe fisico -una patada, un
+            // zarpazo-, asi que nace del Poken y barre un arco hasta donde llega
+            // el miembro. Antes era un circulo puesto EN EL MOUSE: el golpe
+            // salia del cursor y no del cuerpo, y por eso pegaba donde la
+            // animacion no tocaba nada.
+            habilidad.apuntado = AimMode.ConoFrontal;
+            habilidad.rango = esRemate ? 3f : 2.4f;
+            habilidad.anguloCono = esRemate ? 140f : 95f;
             habilidad.enfriamiento = 0f;
             habilidad.ventanaInicio = clip.length * 0.25f;
             habilidad.ventanaFin = clip.length * 0.45f;
@@ -389,9 +339,14 @@ public static class RunTestSceneBuilder
             // PATADA GIRATORIA. Golpea alrededor del Poken, no a distancia: hay
             // que meterse. Pega fuerte y ralentiza, pero la anticipacion es larga
             // y se ve venir, asi que es la que se prepara y no la de reflejo.
-            habilidad.apuntado = AimMode.AreaEnSuelo;
-            habilidad.rango = 3f;
-            habilidad.radio = 2.4f;
+            //
+            // Va centrada en el cuerpo y no en el mouse: el clip es un giro
+            // sobre el propio eje, asi que un area que se pudiera alejar
+            // apuntando estaria mintiendo sobre lo que hace la animacion. El
+            // indicador dibuja el circulo pegado al Poken y eso ES la habilidad.
+            habilidad.apuntado = AimMode.AreaPropia;
+            habilidad.rango = 2.8f;
+            habilidad.radio = 2.8f;
             habilidad.enfriamiento = 9f;
             habilidad.ventanaInicio = clip.length * 0.5f;
             habilidad.ventanaFin = clip.length * 0.7f;
@@ -446,20 +401,14 @@ public static class RunTestSceneBuilder
     // importa como Sprite.
     private const string CarpetaUI = "Assets/_AuditRank/_UI";
 
+    // Ya no lleva texturas cableadas: AbilityIndicator las genera por codigo, asi
+    // el contorno cae exactamente donde termina la hitbox. Con los decals de
+    // UNITE eso era imposible -son arte con el borde difuso y el alfa en 1- y
+    // por eso el area dibujada nunca coincidia con la que golpeaba.
     private static AbilityIndicator ArmarIndicador()
     {
         var go = new GameObject("IndicadorApuntado", typeof(MeshFilter), typeof(MeshRenderer));
-        var indicador = go.AddComponent<AbilityIndicator>();
-
-        // Las versiones _alfa las genera PokeRush > 3D > Preparar decals de
-        // apuntado: los originales traen el alfa en 1 y se veria el cuadrado.
-        Asignar(indicador, "decalLinea", Textura("t_fx_Indicator_rectangle_02_cj_alfa"));
-        // _Circle_03_wyj y no _02_sam: este trae mascara de alfa de verdad
-        // (0,04 en las esquinas contra 0,25), asi el circulo no arrastra el
-        // cuadrado del quad.
-        Asignar(indicador, "decalArea", Textura("t_fx_Indicator_Decal_Circle_03_wyj_alfa"));
-        Asignar(indicador, "decalAlcance", Textura("t_fx_0656_indicator_Ring_01_sam_alfa"));
-        return indicador;
+        return go.AddComponent<AbilityIndicator>();
     }
 
     private static void ArmarHud(GameObject jugador)
@@ -479,13 +428,6 @@ public static class RunTestSceneBuilder
         Asignar(hud, "marcoHabilidad", Sprite("t_Pokemon_SkillBtn"));
         Asignar(hud, "fondoPanel", Sprite("t_battle_hud_normalAtk_bg"));
     }
-
-    private static Texture2D Textura(string nombre)
-        => AssetDatabase.LoadAssetAtPath<Texture2D>($"{CarpetaUI}/{nombre}.png");
-
-    // Las texturas de efecto viven junto a su FX, no en _UI.
-    private static Texture2D TexturaDeFx(string carpetaFx, string nombre)
-        => AssetDatabase.LoadAssetAtPath<Texture2D>($"{CarpetaModelos}/_Fx/{carpetaFx}/{nombre}.png");
 
     private static Sprite Sprite(string nombre)
         => AssetDatabase.LoadAssetAtPath<Sprite>($"{CarpetaUI}/{nombre}.png");

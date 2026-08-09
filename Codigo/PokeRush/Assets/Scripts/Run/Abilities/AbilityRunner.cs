@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Ejecuta habilidades: lleva los enfriamientos, reproduce el clip, abre la
-// ventana de daño en el instante configurado y resuelve el impacto.
+// Ejecuta habilidades: lleva los enfriamientos, reproduce el clip, mantiene
+// abierta la ventana de daño y resuelve los impactos.
 //
 // Lo usan IGUAL el jugador y la IA. Que el rival ataque con el mismo sistema es
 // lo que hace que sus golpes sean legibles: la misma anticipacion, la misma
 // ventana, el mismo indicador. Si la IA tuviera su propio camino, sus ataques se
 // sentirian tramposos.
+//
+// La linea de tiempo de un golpe tiene cuatro tramos, y hay que no confundirlos
+// -confundir los dos ultimos es lo que hacia que las animaciones se vieran
+// cortadas por la mitad:
+//
+//   0 .............. ventanaInicio    anticipacion; el rival todavia puede salirse
+//   ventanaInicio .. ventanaFin       VENTANA DE DAÑO; golpea a quien este adentro
+//   ventanaFin ..... bloqueo          recuperacion; no se puede mover ni encadenar
+//   bloqueo ........ fin del clip     la animacion termina sola, ya con el control devuelto
 [RequireComponent(typeof(RunCombatant))]
 public class AbilityRunner : MonoBehaviour
 {
@@ -19,16 +28,33 @@ public class AbilityRunner : MonoBehaviour
 
     [Header("Referencias")]
     [SerializeField] private RunLocomotionAnimator animador;
-    [SerializeField] private HitBurst efectos;
+    [Tooltip("De aca sale el efecto de cada golpe segun su tipo. Una habilidad " +
+             "puede traer el suyo propio y entonces gana el de la habilidad.")]
+    [SerializeField] private FxCatalog catalogo;
+
+    [Header("Depuracion")]
+    [Tooltip("Dibuja en la vista de escena la hitbox del ultimo golpe. Es la " +
+             "unica forma de ver si lo que golpea coincide con lo que se dibuja.")]
+    [SerializeField] private bool dibujarHitbox = true;
 
     private RunCombatant _combatiente;
     private float[] _listaEn;
     private Coroutine _enCurso;
 
+    // Quienes ya cobraron ESTE golpe. La ventana dura varios cuadros, asi que
+    // sin esto un rival quieto adentro del area recibiria el ataque entero una
+    // vez por cuadro.
+    private readonly HashSet<RunCombatant> _yaGolpeados = new HashSet<RunCombatant>();
+
     // Identifica cada ejecucion. La animacion sigue corriendo despues de que se
     // libera el control, asi que hay que saber si el golpe que la lanzo sigue
     // siendo el ultimo: si no, cortarla apagaria la animacion del golpe nuevo.
     private int _ejecucionActual;
+
+    // Ultima hitbox resuelta, para poder dibujarla.
+    private AbilityDefinition _ultimaHabilidad;
+    private Vector3 _ultimoPunto;
+    private float _ultimaHasta;
 
     public int Cantidad => habilidades != null ? habilidades.Length : 0;
     public bool Ocupado => _enCurso != null;
@@ -37,16 +63,15 @@ public class AbilityRunner : MonoBehaviour
     /// dejar de dibujarse mientras dura el golpe.
     public AbilityDefinition EnEjecucion { get; private set; }
 
-    /// Se emite al resolver el golpe, con cuantos alcanzo. La cadena de basicos
-    /// la escucha para avanzar solo cuando pega: encadenar al aire deberia
-    /// castigarse, no premiarse.
+    /// Se emite al CERRARSE la ventana de daño, con a cuantos alcanzo en total.
+    /// La cadena de basicos la escucha para avanzar solo cuando pega: encadenar
+    /// al aire deberia castigarse, no premiarse.
     public event System.Action<AbilityDefinition, int> Impacto;
 
     private void Awake()
     {
         _combatiente = GetComponent<RunCombatant>();
         if (animador == null) animador = GetComponent<RunLocomotionAnimator>();
-        if (efectos == null) efectos = GetComponent<HitBurst>();
         _listaEn = new float[Cantidad];
     }
 
@@ -105,24 +130,29 @@ public class AbilityRunner : MonoBehaviour
         if (animador != null) animador.ReproducirAccion(habilidad.clip);
 
         // El FX de lanzamiento sale con la animacion, no con el golpe: es la
-        // anticipacion que le avisa al rival que algo viene.
+        // anticipacion. Va colgado del Poken para que lo acompañe si se mueve.
         if (habilidad.fxLanzamiento != null)
-            UniteFx.Reproducir(habilidad.fxLanzamiento,
-                               transform.position + Vector3.up * 0.5f, transform.rotation,
-                               Mathf.Max(0.3f, habilidad.ventanaFin), habilidad.TamañoDeFx,
-                               BattleFxView.ColorForType(habilidad.tipo));
+            FxPlayer.Reproducir(habilidad.fxLanzamiento, transform.position + Vector3.up * 0.6f,
+                                transform.rotation, habilidad.TamañoDeFx * 0.6f, transform);
+        else if (catalogo != null)
+            FxPlayer.Reproducir(catalogo.Lanzamiento(habilidad.tipo), transform.position + Vector3.up * 0.6f,
+                                transform.rotation, habilidad.TamañoDeFx * 0.6f, transform);
 
-        // Anticipacion. Esta ventana es el telegrafiado: mientras dura, el rival
-        // todavia puede leer el golpe y salirse.
         yield return new WaitForSeconds(habilidad.ventanaInicio);
 
-        if (habilidad.apuntado == AimMode.Dash)
-            yield return Desplazar(habilidad, puntoApuntado);
-
-        Golpear(habilidad, puntoApuntado);
+        // Las habilidades sobre uno mismo no tienen ventana: se aplican y listo.
+        if (habilidad.apuntado == AimMode.Propia)
+        {
+            _combatiente.AplicarControl(habilidad.control, Vector3.zero);
+            Impacto?.Invoke(habilidad, 1);
+        }
+        else
+        {
+            yield return VentanaDeDaño(habilidad, puntoApuntado);
+        }
 
         // Recuperacion: no puede encadenar hasta que pase el bloqueo.
-        float restante = Mathf.Max(0f, habilidad.bloqueo - habilidad.ventanaInicio);
+        float restante = habilidad.bloqueo - habilidad.ventanaFin;
         if (restante > 0f) yield return new WaitForSeconds(restante);
 
         EnEjecucion = null;
@@ -140,6 +170,99 @@ public class AbilityRunner : MonoBehaviour
             // Solo si en el medio no arranco otro golpe.
             if (mia == _ejecucionActual) animador.CortarAccion();
         }
+    }
+
+    // El golpe esta ACTIVO durante toda la ventana, no en un instante.
+    //
+    // Se consulta cuadro a cuadro con la posicion de ahora, asi que quien entra
+    // al area con el ataque ya empezado igual la cobra, y un dash barre a todo
+    // el que atropella en el camino. Cada rival cobra una sola vez por golpe.
+    private IEnumerator VentanaDeDaño(AbilityDefinition habilidad, Vector3 puntoApuntado)
+    {
+        _yaGolpeados.Clear();
+
+        if (dibujarHitbox)
+        {
+            _ultimaHabilidad = habilidad;
+            _ultimoPunto = puntoApuntado;
+        }
+
+        // El arco es OPCIONAL y por defecto no hay ninguno. Ver FxCatalog: en un
+        // golpe cuerpo a cuerpo la estela la hace la animacion, y cualquier
+        // efecto suelto flotando delante del Poken se lee como una bola.
+        //
+        // Nace adelante y a media altura, no encima del cuerpo, para cuando se
+        // le cargue uno a una habilidad concreta.
+        Vector3 puntoArco = transform.position
+                            + transform.forward * (habilidad.rango * 0.45f)
+                            + Vector3.up * 0.8f;
+
+        if (habilidad.fxArco != null)
+            FxPlayer.Reproducir(habilidad.fxArco, puntoArco, transform.rotation, habilidad.TamañoDeFx);
+        else if (catalogo != null)
+            FxPlayer.Reproducir(catalogo.Arco(habilidad.tipo), puntoArco, transform.rotation, habilidad.TamañoDeFx);
+
+        // El desplazamiento corre EN PARALELO a la ventana, no antes. Si se
+        // esperara a que termine, el dash llegaria hasta el final y recien ahi
+        // golpearia: atravesar a alguien no haria nada.
+        if (habilidad.apuntado == AimMode.Dash)
+            StartCoroutine(Desplazar(habilidad, puntoApuntado));
+
+        // Piso de un cuadro: una ventana de duracion cero no llegaria a golpear
+        // nunca, y es facil dejarla asi sin querer al afinar valores.
+        float duracion = Mathf.Max(habilidad.ventanaFin - habilidad.ventanaInicio, 0.01f);
+
+        for (float t = 0f; t < duracion; t += Time.deltaTime)
+        {
+            if (dibujarHitbox) _ultimaHasta = Time.time + 0.5f;
+
+            foreach (RunCombatant objetivo in HitResolver.Alcanzados(_combatiente, habilidad, puntoApuntado))
+            {
+                if (!_yaGolpeados.Add(objetivo)) continue;
+
+                objetivo.RecibirGolpe(_combatiente, habilidad, transform.position);
+                ReventarImpacto(habilidad, objetivo);
+            }
+            yield return null;
+        }
+
+        // Al aire: el golpe se marca EN EL SUELO, en el medio de donde barrio, y
+        // mas chico. Asi el jugador ve que el ataque salio y donde llego -que es
+        // lo que necesita para corregir la distancia- sin que aparezca un
+        // destello flotando en el aire, que es lo que se lee como un proyectil.
+        if (_yaGolpeados.Count == 0 && catalogo != null)
+        {
+            Vector3 punto = HitResolver.PuntoDeImpacto(_combatiente, habilidad, puntoApuntado, null);
+            punto.y = transform.position.y + 0.12f;
+            FxPlayer.Reproducir(catalogo.Impacto(habilidad.tipo), punto, transform.rotation,
+                                habilidad.TamañoDeFx * 0.55f);
+        }
+
+        Impacto?.Invoke(habilidad, _yaGolpeados.Count);
+    }
+
+    // Un efecto por cada alcanzado: pegarle a tres tiene que verse como tres
+    // golpes, no como uno.
+    private void ReventarImpacto(AbilityDefinition habilidad, RunCombatant objetivo)
+    {
+        // Mira hacia afuera, en la direccion en que viajo el golpe: un impacto
+        // orientado al reves se lee como si el rival hubiera pegado el.
+        Vector3 hacia = objetivo.transform.position - transform.position;
+        Quaternion rotacion = hacia.sqrMagnitude > 0.01f
+            ? Quaternion.LookRotation(hacia.normalized, Vector3.up)
+            : transform.rotation;
+
+        // El impacto se dibuja al TAMAÑO DEL CUERPO que lo recibe, no al del
+        // area de la habilidad: un area de 5 metros que pega en un solo rival
+        // tiene que verse como un golpe en ese rival, no como una explosion que
+        // lo tapa entero. El piso de 1,5 es igual de importante: por debajo de
+        // eso deja de leerse como un golpe y pasa a ser una bolita.
+        float tamaño = Mathf.Clamp(habilidad.TamañoDeFx, 1.5f, 2.5f);
+
+        if (habilidad.fxImpacto != null)
+            FxPlayer.Reproducir(habilidad.fxImpacto, objetivo.PuntoDeImpacto, rotacion, tamaño);
+        else if (catalogo != null)
+            FxPlayer.Reproducir(catalogo.Impacto(habilidad.tipo), objetivo.PuntoDeImpacto, rotacion, tamaño);
     }
 
     private void Encarar(Vector3 puntoApuntado)
@@ -169,36 +292,44 @@ public class AbilityRunner : MonoBehaviour
         }
     }
 
-    private void Golpear(AbilityDefinition habilidad, Vector3 puntoApuntado)
+    // Dibuja la hitbox que de verdad se consulto. Sirve para contestar la unica
+    // pregunta que importa cuando un ataque se siente injusto: si lo que golpea
+    // es lo mismo que se ve en el suelo.
+    private void OnDrawGizmos()
     {
-        if (habilidad.apuntado == AimMode.Propia)
+        if (!dibujarHitbox || _ultimaHabilidad == null || Time.time > _ultimaHasta) return;
+
+        Gizmos.color = new Color(1f, 0.35f, 0.25f, 0.9f);
+        Vector3 origen = transform.position;
+        Vector3 direccion = Vector3.ProjectOnPlane(_ultimoPunto - origen, Vector3.up);
+        direccion = direccion.sqrMagnitude < 0.01f ? transform.forward : direccion.normalized;
+
+        switch (_ultimaHabilidad.apuntado)
         {
-            _combatiente.AplicarControl(habilidad.control, Vector3.zero);
-            Impacto?.Invoke(habilidad, 1);
-            return;
+            case AimMode.ConoFrontal:
+                float mitad = _ultimaHabilidad.anguloCono * 0.5f;
+                for (int i = 0; i <= 16; i++)
+                {
+                    Vector3 rayo = Quaternion.AngleAxis(-mitad + _ultimaHabilidad.anguloCono * i / 16f, Vector3.up) * direccion;
+                    Gizmos.DrawLine(origen, origen + rayo * _ultimaHabilidad.rango);
+                }
+                break;
+
+            case AimMode.SkillshotLineal:
+                Gizmos.DrawWireSphere(origen, _ultimaHabilidad.radio);
+                Gizmos.DrawWireSphere(origen + direccion * _ultimaHabilidad.rango, _ultimaHabilidad.radio);
+                Gizmos.DrawLine(origen, origen + direccion * _ultimaHabilidad.rango);
+                break;
+
+            case AimMode.AreaEnSuelo:
+                Gizmos.DrawWireSphere(
+                    origen + Vector3.ClampMagnitude(_ultimoPunto - origen, _ultimaHabilidad.rango),
+                    _ultimaHabilidad.radio);
+                break;
+
+            default:
+                Gizmos.DrawWireSphere(origen, _ultimaHabilidad.radio);
+                break;
         }
-
-        List<RunCombatant> alcanzados = HitResolver.Alcanzados(_combatiente, habilidad, puntoApuntado);
-        foreach (RunCombatant objetivo in alcanzados)
-            objetivo.RecibirGolpe(_combatiente, habilidad, transform.position);
-
-        // Un FX de impacto por cada alcanzado: pegarle a tres tiene que verse
-        // como tres golpes, no como uno.
-        if (habilidad.fxImpacto != null)
-        {
-            foreach (RunCombatant objetivo in alcanzados)
-                UniteFx.Reproducir(habilidad.fxImpacto, objetivo.PuntoDeImpacto,
-                                   Quaternion.LookRotation(objetivo.transform.position - transform.position),
-                                   0.4f, habilidad.TamañoDeFx,
-                                   BattleFxView.ColorForType(habilidad.tipo));
-        }
-
-        // El chispazo procedural queda de respaldo: cubre el golpe al aire, que
-        // no tiene FX propio en el pack, y las especies sin efectos copiados.
-        if (efectos != null && (habilidad.fxImpacto == null || alcanzados.Count == 0))
-            efectos.Reventar(HitResolver.PuntoDeImpacto(_combatiente, habilidad, puntoApuntado, alcanzados),
-                             habilidad, alcanzados.Count > 0);
-
-        Impacto?.Invoke(habilidad, alcanzados.Count);
     }
 }

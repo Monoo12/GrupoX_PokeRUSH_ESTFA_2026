@@ -35,6 +35,19 @@ Codigo/PokeRush/Assets/Models/
 Codigo/PokeRush/Assets/Models.meta
 Assets3D/
 
+# Packs de efectos de la Asset Store (112 MB). Son gratuitos, pero su licencia
+# permite USARLOS en un proyecto, no REDISTRIBUIRLOS, y este repo es publico.
+# Cada integrante los importa por su cuenta desde la Asset Store:
+#   - Hovl Studio, "Magic effects pack"
+#   - Jean Moreno, "Cartoon FX Remaster FREE"
+# Las referencias no se rompen porque los GUID vienen fijos dentro del paquete:
+# dos personas que importan la misma version obtienen los mismos identificadores,
+# asi que Assets/Fx/CatalogoFx.asset -que si se versiona- los resuelve igual.
+Codigo/PokeRush/Assets/Hovl Studio/
+Codigo/PokeRush/Assets/Hovl Studio.meta
+Codigo/PokeRush/Assets/JMO Assets/
+Codigo/PokeRush/Assets/JMO Assets.meta
+
 # Carpetas de auditoria de assets (importaciones de prueba, cientos de MB).
 Codigo/PokeRush/Assets/_Audit*/
 Codigo/PokeRush/Assets/_Audit*.meta
