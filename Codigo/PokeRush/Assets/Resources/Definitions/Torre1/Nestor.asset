@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21470442b8469bb449473839a934b6ad, type: 3}
+  m_Name: Nestor
+  m_EditorClassIdentifier: Assembly-CSharp::BossDefinition
+  characterName: Nestor
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: 98b8c825488052d4ba4e8574aa18bbee, type: 2}
+    level: 16
+  - species: {fileID: 11400000, guid: a7e8ec9aa8c9e6c48a848fcb5ac8aecd, type: 2}
+    level: 17
+  - species: {fileID: 11400000, guid: b0f34f9f363b18648b237a6c37464688, type: 2}
+    level: 18
+  - species: {fileID: 11400000, guid: 6c7618e1736bcae439a550b961fba3e6, type: 2}
+    level: 19
+  battleIntroSprite: {fileID: 0}
+  battleFrontSprite: {fileID: 8673283512139689658, guid: 49a0d12d5337a7741b0cf64ad07cb270, type: 3}
+  battleFrontShinySprite: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  battleDefeatDialogue: {fileID: 0}
+  battleMusic: {fileID: 0}
+  triggerElaborateCinematic: 0
+  moneyReward: 1500
+  itemRewards: []
+  defeatGrantsFlag: 0
+  aiProfile: {fileID: 11400000, guid: e4e7bcb582789584a88898f642a0d19d, type: 2}
+  battleBackground: {fileID: 0}

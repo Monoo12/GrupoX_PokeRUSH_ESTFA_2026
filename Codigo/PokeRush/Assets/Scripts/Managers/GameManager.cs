@@ -9,9 +9,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource musicSource; // se asignan en el Inspector
     [SerializeField] private AudioSource sfxSource;
 
+    [Header("Equipo inicial")]
+    // Se busca por pokenName en DefinitionRepository, asi que el nombre tiene
+    // que coincidir con el campo pokenName del asset (no con el del archivo).
+    // Gastly es Fantasma/Veneno: INMUNE a Normal, o sea que los STAB de
+    // Raticate y Porygon-Z le hacen cero. Basculin aguanta a Braixen y
+    // Combusken le pega a Melmetal y Porygon-Z con Lucha. Uno por amenaza.
+    [SerializeField] private string[] equipoInicial = { "Gastly", "Basculin", "Combusken" };
+    [SerializeField] private int[] nivelesIniciales = { 15, 15, 16 };
+
     public GameState CurrentState { get; private set; }
     public PlayerModel CurrentPlayer { get; private set; }
     public StoryModel Story { get; private set; }
+
+    // Lectura del progreso de la torre 1. Se recrea junto con Story.
+    public TowerProgressModel Tower { get; private set; }
 
     private void Awake()
     {
@@ -52,14 +64,43 @@ public class GameManager : MonoBehaviour
     public void NewGame(string playerName)
     {
         Story = new StoryModel();
+        Tower = new TowerProgressModel(Story);
         CurrentPlayer = new PlayerModel(playerName);
-        // (el equipo inicial de Pokens se asigna en otra tarea)
+
+        ArmarEquipoInicial();
+
+        Story.ActivateFlag(StoryFlag.GameStarted);
+        Story.ActivateFlag(StoryFlag.ReceivedStarterPoken);
         ChangeState(GameState.Exploration);
+    }
+
+    // El equipo fijo con el que se entra a la torre 1. Si alguna especie no
+    // esta en Resources avisamos fuerte: sin equipo el combate aborta con un
+    // warning mudo en BattleController.BeginBattle.
+    private void ArmarEquipoInicial()
+    {
+        for (int i = 0; i < equipoInicial.Length; i++)
+        {
+            PokenDefinition especie = DefinitionRepository.Instance.GetPoken(equipoInicial[i]);
+            if (especie == null)
+            {
+                Debug.LogError($"[GameManager] No encuentro la especie '{equipoInicial[i]}' " +
+                               "para el equipo inicial. Revisa que el pokenName coincida.");
+                continue;
+            }
+
+            int nivel = i < nivelesIniciales.Length ? nivelesIniciales[i] : 5;
+            CurrentPlayer.Team.Add(new PokenModel(especie, nivel));
+        }
+
+        if (CurrentPlayer.Team.Count == 0)
+            Debug.LogError("[GameManager] El equipo inicial quedo vacio: no se va a poder pelear.");
     }
 
     public void ContinueGame()
     {
         Story = new StoryModel();
+        Tower = new TowerProgressModel(Story);
         CurrentPlayer = SaveService.Instance.LoadPlayer(Story); // null si no hay guardado
 
         if (CurrentPlayer == null) return; // no hay partida: la UI decide que hacer
