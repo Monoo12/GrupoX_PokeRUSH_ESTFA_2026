@@ -26,8 +26,7 @@ MonoBehaviour:
   effect: 0
   effectChance: 0
   effectDescription: "For five turns, heals all Pok\xE9mon on the ground for 1/16
-    max HP each turn and strengthens their Grass moves to 1.5\xD7 their power. [No
-    implementado: excluido de los learnsets]"
+    max HP each turn and strengthens their Grass moves to 1.5\xD7 their power."
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -37,4 +36,7 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 0
-  implementation: 2
+  implementation: 0
+  weatherEffect: 0
+  fieldEffect: 10
+  animationOverride: {fileID: 0}

@@ -27,7 +27,7 @@ MonoBehaviour:
   effectChance: 0
   effectDescription: "For five turns, protects all Pok\xE9mon on the ground from
     major status ailments and confusion, and halves the power of incoming Dragon
-    moves. [No implementado: excluido de los learnsets]"
+    moves."
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -37,4 +37,7 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 0
-  implementation: 2
+  implementation: 0
+  weatherEffect: 0
+  fieldEffect: 11
+  animationOverride: {fileID: 0}

@@ -25,8 +25,7 @@ MonoBehaviour:
   critRateStage: 0
   effect: 0
   effectChance: 0
-  effectDescription: 'Reduces damage from special attacks by 50% for five turns.
-    [No implementado: excluido de los learnsets]'
+  effectDescription: Reduces damage from special attacks by 50% for five turns.
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -36,7 +35,7 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 0
-  implementation: 2
+  implementation: 0
   weatherEffect: 0
-  fieldEffect: 0
+  fieldEffect: 2
   animationOverride: {fileID: 11400000, guid: 4a9e2d54163b60f40948b88d42d7a286, type: 2}

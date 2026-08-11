@@ -1,5 +1,6 @@
 {
   "_readme": "Lista curada de especies a importar desde PokeAPI, por numero de Pokedex nacional. Con expandEvolutionLines=true basta listar UNA especie de cada linea evolutiva (la que sea): el importador descarga la cadena completa. Los grupos son solo para legibilidad; agregar/quitar numeros y volver a correr el importador (PokeRush > Importador PokeAPI).",
+  "_ojo_expansion": "La expansion NO siempre alcanza: si PokeAPI no modela la evolucion como cadena, la forma final no viene. Caso concreto: Meltan (808) estaba listado y Melmetal (809) nunca se descargo, porque evolution-chain/428 tiene solo a meltan (Meltan evoluciona por caramelos en Pokemon GO, no hay evolves_to). Ante la duda, listar la forma final tambien.",
   "expandEvolutionLines": true,
   "groups": {
     "starters": [
@@ -46,6 +47,13 @@
     ],
     "pseudoLegendaries": [
       147, 246, 371, 374, 443, 633, 704, 782, 885, 996
+    ],
+    "_torre1_ciberseguridad": [
+      19, 20,
+      137, 233, 474,
+      201,
+      550,
+      809
     ],
     "metaCompetitive": [
       25, 56, 63, 66, 81, 92, 95, 111, 113, 123, 127, 131, 133, 142, 143,

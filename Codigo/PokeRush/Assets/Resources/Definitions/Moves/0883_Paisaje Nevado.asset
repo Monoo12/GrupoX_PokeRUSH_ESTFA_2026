@@ -25,7 +25,7 @@ MonoBehaviour:
   critRateStage: 0
   effect: 0
   effectChance: 0
-  effectDescription: '[No implementado: excluido de los learnsets]'
+  effectDescription: 
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -35,4 +35,7 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 0
-  implementation: 2
+  implementation: 0
+  weatherEffect: 4
+  fieldEffect: 0
+  animationOverride: {fileID: 0}

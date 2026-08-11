@@ -26,8 +26,7 @@ MonoBehaviour:
   effect: 0
   effectChance: 0
   effectDescription: "For five turns, prevents all Pok\xE9mon on the ground from
-    sleeping and strengthens their Electric moves to 1.5\xD7 their power. [No implementado:
-    excluido de los learnsets]"
+    sleeping and strengthens their Electric moves to 1.5\xD7 their power."
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -37,4 +36,7 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 0
-  implementation: 2
+  implementation: 0
+  weatherEffect: 0
+  fieldEffect: 8
+  animationOverride: {fileID: 0}

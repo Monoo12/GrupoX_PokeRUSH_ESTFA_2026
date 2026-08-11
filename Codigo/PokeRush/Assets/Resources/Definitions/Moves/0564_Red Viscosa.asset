@@ -26,7 +26,7 @@ MonoBehaviour:
   effect: 0
   effectChance: 0
   effectDescription: "Covers the opposing field, lowering opponents\u2019 Speed by
-    one stage upon switching in. [No implementado: excluido de los learnsets]"
+    one stage upon switching in."
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -36,7 +36,7 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 0
-  implementation: 2
+  implementation: 0
   weatherEffect: 0
-  fieldEffect: 0
+  fieldEffect: 7
   animationOverride: {fileID: 11400000, guid: 48410bbf2699fa048a5fcb41962bf5d5, type: 2}
