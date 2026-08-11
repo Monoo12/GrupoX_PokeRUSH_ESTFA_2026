@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: 0083_Giro Fuego
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: 6073887245615479104, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  - {fileID: 4177875563692360280, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  - {fileID: -1979859536746857338, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  - {fileID: 7722356352124445788, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  - {fileID: 6773084619902690922, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  - {fileID: -804888213936921339, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  - {fileID: -5867619524688586159, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  - {fileID: 9169314341133792632, guid: 656f7b6154e532c4f9229567d096e6a7, type: 3}
+  impactFps: 15
+  impactScale: 1.9348836
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: 0226_Relevo
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: 4989392908937491914, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: -6391459281417762054, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: -2550410849834561471, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: 734663452681662162, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: 6171710139939232467, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: 482603651912091030, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: 5759513098593401789, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: -8599800315893249691, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: -7998449356750784008, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: -6117155968807520733, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  - {fileID: 2690347854836085822, guid: 250ea8ad0828f0340a4c3650a020b34d, type: 3}
+  impactFps: 15
+  impactScale: 4
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}

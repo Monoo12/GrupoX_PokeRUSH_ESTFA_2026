@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: Fire
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: 6881439759259805693, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: -2342849770512933991, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: -1891752345027440075, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: 6708639839718351127, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: 8255946687491560157, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: -1860823263886117890, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: 8160043586424364719, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: -6258441796343563994, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: -3979901364903979141, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: 2532845465881917526, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  - {fileID: 5112245717205206707, guid: c006885764257d2409a0fd0a6059f4f5, type: 3}
+  impactFps: 15
+  impactScale: 1.9653542
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}

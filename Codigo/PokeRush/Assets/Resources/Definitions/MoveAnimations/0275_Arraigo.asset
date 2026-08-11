@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: 0275_Arraigo
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: 3612803456377758616, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: 392854080797450137, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: -3056092860260836890, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: 6425004623218045440, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: -5316194496191702698, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: -8046302465674888051, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: 7336876368173764048, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: -5901585578137214725, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: -84227676244305882, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  - {fileID: -2103214457211484041, guid: 36a7f6ebdfeb79b4d83e93a4751f8946, type: 3}
+  impactFps: 15
+  impactScale: 3.515493
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}

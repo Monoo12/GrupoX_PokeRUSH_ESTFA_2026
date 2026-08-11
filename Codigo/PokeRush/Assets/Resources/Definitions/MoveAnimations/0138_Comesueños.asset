@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: "0138_Comesue\xF1os"
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: -6815249085137212464, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: -8532595662547483539, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: 7071452243308351129, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: -4456429879719056630, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: -6221258082849313340, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: -8387295649459062032, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: -6698028052585232251, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: -7564661751570792199, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: 311563741161331402, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: 8669435769643508457, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  - {fileID: -4760929095280720056, guid: d6e9de203cf761243b7eae1ddbcc7fa5, type: 3}
+  impactFps: 15
+  impactScale: 2.0292683
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}

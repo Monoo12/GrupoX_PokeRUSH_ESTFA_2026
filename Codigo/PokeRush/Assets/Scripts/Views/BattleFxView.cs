@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -338,6 +339,10 @@ public class BattleFxView : MonoBehaviour
     public IEnumerator PlayAttack(PokenView attacker, PokenView defender, MoveDefinition move)
     {
         MoveAnimationDefinition anim = move != null ? move.animationOverride : null;
+        // Solo ~1 de cada 3 movimientos tiene hoja propia en el pack (los
+        // vistosos). Para el resto usamos la generica de su tipo, asi un
+        // Ascuas o un Placaje tambien muestran algo en vez del destello pelado.
+        if (anim == null && move != null) anim = TypeFallback(move.type);
         bool isStatus = move != null && (move.attackType == AttackType.Status || move.power <= 0);
         bool isSpecial = move != null && move.attackType == AttackType.Special;
         PokenType type = move != null ? move.type : PokenType.None;
@@ -351,10 +356,16 @@ public class BattleFxView : MonoBehaviour
         bool flash = anim != null && anim.screenFlash;
         // TODO sonidos: anim.windupSound / anim.impactSound via AudioService cuando haya sfx
 
-        // Movimientos de estado: destello del color del tipo sobre el usuario
+        // Movimientos de estado: el efecto va sobre el USUARIO, no sobre el
+        // rival, y sin sacudida ni parpadeo (no esta recibiendo un golpe).
+        // Sin secuencia asignada, el pulso de color de siempre.
         if (isStatus)
         {
-            yield return PulseTint(attacker, color, 2);
+            bool tieneSecuencia = anim != null && anim.impactFrames != null && anim.impactFrames.Length > 0;
+            if (tieneSecuencia)
+                yield return ImpactBurst(attacker, color, impact, 0f, false, anim, false);
+            else
+                yield return PulseTint(attacker, color, 2);
             yield break;
         }
 
@@ -374,13 +385,38 @@ public class BattleFxView : MonoBehaviour
 
             if (projectileRenderer != null)
             {
-                if (anim != null && anim.projectileSprite != null)
-                    projectileRenderer.sprite = anim.projectileSprite;
-                projectileRenderer.color = color;
+                Sprite[] travelFrames = anim != null ? anim.projectileFrames : null;
+                bool animatedTravel = travelFrames != null && travelFrames.Length > 0;
+                Vector3 projectileHomeScale = projectileRenderer.transform.localScale;
+
+                if (animatedTravel)
+                {
+                    // arte a todo color: no lo teñimos ni le imponemos el color del tipo
+                    projectileRenderer.sprite = travelFrames[0];
+                    projectileRenderer.color = Color.white;
+                    if (anim.projectileScale > 0f)
+                        projectileRenderer.transform.localScale = projectileHomeScale * anim.projectileScale;
+                }
+                else
+                {
+                    if (anim != null && anim.projectileSprite != null)
+                        projectileRenderer.sprite = anim.projectileSprite;
+                    projectileRenderer.color = color;
+                }
+
                 Vector3 origin = attackerHome + towardDefender * 0.3f + Vector3.up * 0.5f;
                 projectileRenderer.gameObject.SetActive(true);
-                yield return MoveOver(projectileRenderer.transform, origin, impactPoint, travel);
+                if (animatedTravel)
+                {
+                    yield return MoveOverAnimated(projectileRenderer, origin, impactPoint, travel,
+                        travelFrames, anim.projectileFps);
+                }
+                else
+                {
+                    yield return MoveOver(projectileRenderer.transform, origin, impactPoint, travel);
+                }
                 projectileRenderer.gameObject.SetActive(false);
+                projectileRenderer.transform.localScale = projectileHomeScale;
             }
             else
             {
@@ -394,8 +430,8 @@ public class BattleFxView : MonoBehaviour
             yield return MoveOver(attacker.transform, attacker.transform.position, lungeTo, 0.16f);
         }
 
-        // 3) impacto: destello + parpadeo del defensor + sacudida de camara
-        yield return ImpactBurst(defender, color, impact, shake, flash);
+        // 3) impacto: destello (o secuencia) + parpadeo del defensor + sacudida de camara
+        yield return ImpactBurst(defender, color, impact, shake, flash, anim);
 
         // 4) recuperacion: el atacante vuelve a su lugar
         yield return MoveOver(attacker.transform, attacker.transform.position, attackerHome, recovery + 0.06f);
@@ -403,12 +439,42 @@ public class BattleFxView : MonoBehaviour
     }
 
     private IEnumerator ImpactBurst(PokenView defender, Color color,
-        float duration, float shakeStrength, bool screenFlash)
+        float duration, float shakeStrength, bool screenFlash,
+        MoveAnimationDefinition anim = null, bool flickerTarget = true)
     {
+        // Con una secuencia asignada el impacto es una animacion cuadro a cuadro;
+        // si no, el destello estatico de siempre.
+        Sprite[] frames = anim != null ? anim.impactFrames : null;
+        bool hasFrames = frames != null && frames.Length > 0;
+        float frameStep = 0f;
+        Vector3 impactHomeScale = Vector3.one;
+
         if (impactRenderer != null)
         {
             impactRenderer.transform.position = defender.transform.position + Vector3.up * 0.45f;
-            impactRenderer.color = new Color(color.r, color.g, color.b, 1f);
+            impactHomeScale = impactRenderer.transform.localScale;
+
+            if (hasFrames)
+            {
+                float fps = Mathf.Max(1f, anim.impactFps);
+                frameStep = 1f / fps;
+                // los frames mandan sobre impactTime: la animacion se ve entera
+                duration = frames.Length * frameStep;
+
+                impactRenderer.sprite = frames[0];
+                impactRenderer.color = anim.tintImpactFrames
+                    ? new Color(color.r, color.g, color.b, 1f)
+                    : Color.white;
+                if (anim.impactScale > 0f)
+                    impactRenderer.transform.localScale = impactHomeScale * anim.impactScale;
+            }
+            else
+            {
+                if (anim != null && anim.impactSprite != null)
+                    impactRenderer.sprite = anim.impactSprite;
+                impactRenderer.color = new Color(color.r, color.g, color.b, 1f);
+            }
+
             impactRenderer.gameObject.SetActive(true);
         }
         if (screenFlash && fadeOverlay != null)
@@ -423,8 +489,14 @@ public class BattleFxView : MonoBehaviour
 
         for (float t = 0f; t < duration; t += Time.deltaTime)
         {
+            // avance de la secuencia de impacto
+            if (hasFrames && impactRenderer != null)
+            {
+                int index = Mathf.Clamp((int)(t / frameStep), 0, frames.Length - 1);
+                impactRenderer.sprite = frames[index];
+            }
             // parpadeo del golpeado
-            if (defenderRenderer != null)
+            if (flickerTarget && defenderRenderer != null)
                 defenderRenderer.enabled = ((int)(t / 0.05f)) % 2 == 0;
             // sacudida de camara
             if (cam != null && shakeStrength > 0f)
@@ -437,7 +509,12 @@ public class BattleFxView : MonoBehaviour
 
         if (defenderRenderer != null) defenderRenderer.enabled = true;
         if (cam != null) cam.transform.position = camHome;
-        if (impactRenderer != null) impactRenderer.gameObject.SetActive(false);
+        if (impactRenderer != null)
+        {
+            impactRenderer.gameObject.SetActive(false);
+            // la escala es compartida: si no se restaura, el proximo ataque la hereda
+            impactRenderer.transform.localScale = impactHomeScale;
+        }
         if (screenFlash && fadeOverlay != null)
         {
             fadeOverlay.color = new Color(1f, 1f, 1f, 0f);
@@ -445,7 +522,49 @@ public class BattleFxView : MonoBehaviour
         }
     }
 
+    // ---------- animacion generica por tipo ----------
+
+    // Las genericas las arma PokeRush > Importar animaciones de ataque, una por
+    // tipo, copiando los frames de un movimiento representativo. Se cachean
+    // porque PlayAttack corre en cada ataque del combate.
+    private static Dictionary<PokenType, MoveAnimationDefinition> typeFallbacks;
+
+    private static MoveAnimationDefinition TypeFallback(PokenType type)
+    {
+        if (type == PokenType.None) return null;
+
+        if (typeFallbacks == null)
+        {
+            typeFallbacks = new Dictionary<PokenType, MoveAnimationDefinition>();
+            foreach (MoveAnimationDefinition generic in
+                     Resources.LoadAll<MoveAnimationDefinition>("Definitions/MoveAnimations/PorTipo"))
+            {
+                if (System.Enum.TryParse(generic.name, out PokenType parsed))
+                    typeFallbacks[parsed] = generic;
+            }
+        }
+
+        MoveAnimationDefinition result;
+        return typeFallbacks.TryGetValue(type, out result) ? result : null;
+    }
+
     // ---------- utilidades ----------
+
+    // Igual que MoveOver pero ademas cicla una secuencia de sprites durante el
+    // trayecto: el chorro de un Lanzallamas se ve moviendose Y ardiendo.
+    // Los frames se repiten en loop, asi una tira corta cubre viajes largos.
+    private static IEnumerator MoveOverAnimated(SpriteRenderer renderer, Vector3 from, Vector3 to,
+        float duration, Sprite[] frames, float fps)
+    {
+        float step = 1f / Mathf.Max(1f, fps);
+        for (float t = 0f; t < duration; t += Time.deltaTime)
+        {
+            renderer.transform.position = Vector3.Lerp(from, to, Mathf.SmoothStep(0f, 1f, t / duration));
+            renderer.sprite = frames[(int)(t / step) % frames.Length];
+            yield return null;
+        }
+        renderer.transform.position = to;
+    }
 
     private static IEnumerator MoveOver(Transform target, Vector3 from, Vector3 to, float duration)
     {

@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: 0243_Manto Espejo
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: -8063039330913501950, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: -3393675560954043563, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: -9073733883263541225, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: 7427518557345583113, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: 1763145590591070556, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: -727271837379813908, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: 4236026386407903168, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: -8178653618725681356, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: 5112159239412697585, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: 7911372172692123481, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: 5134098098127590979, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: 1707893405758825634, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  - {fileID: -7670311005024976789, guid: 319cec8f82a2e86449ccd6055ec4a330, type: 3}
+  impactFps: 15
+  impactScale: 1.9053434
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}

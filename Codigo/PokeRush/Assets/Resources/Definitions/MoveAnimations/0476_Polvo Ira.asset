@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: 0476_Polvo Ira
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: 2316278505543880511, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  - {fileID: -2259639651775194046, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  - {fileID: 3971975332509263036, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  - {fileID: -4145371651880195585, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  - {fileID: 480414474436879563, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  - {fileID: 5036419170269677984, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  - {fileID: -414186114122806518, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  - {fileID: 1807856511389547960, guid: 92084e6d8de4ce1428395cd0f9121ad0, type: 3}
+  impactFps: 15
+  impactScale: 4
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}

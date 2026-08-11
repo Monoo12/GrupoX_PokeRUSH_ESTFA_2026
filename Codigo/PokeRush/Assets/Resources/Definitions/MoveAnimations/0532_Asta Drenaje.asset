@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835d8c02075d74e40be29a083f4772b0, type: 3}
+  m_Name: 0532_Asta Drenaje
+  m_EditorClassIdentifier: Assembly-CSharp::MoveAnimationDefinition
+  windupTime: 0.18
+  travelTime: 0.25
+  impactTime: 0.22
+  recoveryTime: 0.12
+  projectileSprite: {fileID: 0}
+  impactSprite: {fileID: 0}
+  projectileFrames: []
+  projectileFps: 20
+  projectileScale: 1
+  impactFrames:
+  - {fileID: -4179310166927167359, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: -4866203600179015885, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: -4708553445975969233, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: 391426851290796944, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: 2217859474926706724, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: -6295749713834890698, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: -3502069153302703967, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: -5422800782922038853, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: -1393216686142027838, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: 5259390178610454108, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: 152644500738506332, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  - {fileID: 1940661955236337967, guid: 3eef5e9547c296e4289041177d92cbef, type: 3}
+  impactFps: 15
+  impactScale: 3.419178
+  tintImpactFrames: 0
+  tint: {r: 1, g: 1, b: 1, a: 0}
+  cameraShake: 0.06
+  screenFlash: 0
+  windupSound: {fileID: 0}
+  impactSound: {fileID: 0}
