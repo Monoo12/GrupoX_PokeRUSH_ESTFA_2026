@@ -37,6 +37,11 @@ public class BattleController : MonoBehaviour
     private AIProfileDefinition _aiProfile;
     private readonly IBattleRng _rng = new UnityRng();
 
+    // Como los subsistemas cortados en la torre modifican esta pelea.
+    // Null en los combates normales (no todos los enemigos son el boss).
+    private BossBattleConfig _bossConfig;
+    private PredictionState _prediction;
+
     // Sprite del entrenador rival para la intro (null = combate salvaje)
     private Sprite _trainerIntroSprite;
     // El Poken de este lado se debilito y espera reemplazo (el cambio no hace retirada)
@@ -55,10 +60,21 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    // Combate contra un NPC (EnemyDefinition o BossDefinition)
-    public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition)
+    // Combate contra un NPC (EnemyDefinition o BossDefinition).
+    //
+    // 'config' dice como los subsistemas cortados en la torre modifican la
+    // pelea. Es opcional para no romper a los llamadores que ya existian
+    // (EventController, BattleTester) y porque solo el boss lo usa. Contra el
+    // boss sin config se arma sola desde el GameManager; pasarla a mano sirve
+    // para probar combinaciones de subsistemas sin caminar la torre.
+    public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition,
+        BossBattleConfig config = null)
     {
         var enemy = new EnemyModel(enemyDefinition);
+
+        _bossConfig = enemyDefinition is BossDefinition
+            ? (config ?? BossBattleConfig.DesdeTorre(GameManager.Instance?.Tower))
+            : null;
 
         Sprite background = null;
         _trainerIntroSprite = null;
@@ -112,6 +128,16 @@ public class BattleController : MonoBehaviour
 
         // Motor + IA segun el perfil del enemigo (default: Wild para salvajes,
         // Trainer para NPCs sin perfil asignado)
+        // La Prediccion solo existe contra el boss. Vive aca y no en la IA
+        // porque anula una categoria ANTES de que el jugador elija: es un gate
+        // de input, no una regla de resolucion de turno. Por eso el TurnEngine
+        // ni se entera.
+        _prediction = _bossConfig != null
+            ? new PredictionState(_bossConfig.PrediccionConAviso)
+            : null;
+        if (_bossConfig != null)
+            Debug.Log($"[Combate] Config del boss: {_bossConfig.Resumen()}");
+
         _engine = new TurnEngine(_battleModel, _rng);
         _aiProfile = enemy.AiProfile != null
             ? enemy.AiProfile
@@ -183,7 +209,24 @@ public class BattleController : MonoBehaviour
         yield return PlayEvents(_engine.BeginBattle());
 
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
+        yield return AvanzarPrediccion();
         battleHudView?.ShowCommandMenu(_battleModel);
+    }
+
+    // Adelanta el contador de la Prediccion y avisa por pantalla si corresponde.
+    // Se llama SIEMPRE antes de abrir el menu de comandos, para que el jugador
+    // vea la categoria anulada antes de elegir.
+    private IEnumerator AvanzarPrediccion()
+    {
+        if (_prediction == null) yield break;
+
+        string mensaje = _prediction.Avanzar(_battleModel, _rng);
+        battleHudView?.SetPredictionBanner(_prediction.Banda());
+
+        if (string.IsNullOrEmpty(mensaje)) yield break;
+
+        Announce(mensaje);
+        yield return new WaitForSeconds(messageDelay);
     }
 
     // ---------- input del jugador ----------
@@ -231,6 +274,10 @@ public class BattleController : MonoBehaviour
             return;
         }
 
+        // La Prediccion se chequea ACA y no solo en los botones del HUD: el
+        // Update() de abajo tiene atajos 1-4 que saltean la UI por completo.
+        if (Anticipado(BattleActionKind.UseMove, moves[moveIndex].Definition)) return;
+
         StartCoroutine(ResolveTurnRoutine(BattleAction.Move(moveIndex)));
     }
 
@@ -251,6 +298,15 @@ public class BattleController : MonoBehaviour
             return;
         }
 
+        // Rastreo activo: no se puede cambiar en toda la pelea (GDD)
+        if (_bossConfig != null && !_bossConfig.PermiteCambio)
+        {
+            Announce("El rastreo tiene marcado a tu equipo: no podés cambiar.");
+            return;
+        }
+
+        if (Anticipado(BattleActionKind.SwitchPoken, null)) return;
+
         StartCoroutine(ResolveTurnRoutine(BattleAction.Switch(teamIndex)));
     }
 
@@ -268,11 +324,23 @@ public class BattleController : MonoBehaviour
         StartCoroutine(ResolveTurnRoutine(BattleAction.Flee()));
     }
 
-    // Mochila: los items en combate llegan mas adelante
+    // Mochila
     private void OnBagSelected()
     {
         if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+        if (Anticipado(BattleActionKind.UseItem, null)) return;
+
         Announce("La mochila todavía no está disponible.");
+    }
+
+    // Devuelve true si la Prediccion de Nestor anula esta accion, y ya avisa por
+    // pantalla. Se llama desde CADA punto de entrada de input, no solo desde la
+    // UI, porque los atajos de teclado del Update() la saltean.
+    private bool Anticipado(BattleActionKind tipo, MoveDefinition movimiento)
+    {
+        if (_prediction == null || !_prediction.Bloquea(tipo, movimiento)) return false;
+        Announce(_prediction.MensajeRechazo());
+        return true;
     }
 
     // ---------- resolucion y reproduccion del turno ----------
@@ -296,6 +364,7 @@ public class BattleController : MonoBehaviour
 
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
         battleHudView?.UpdateHud(_battleModel);
+        yield return AvanzarPrediccion();
         battleHudView?.ShowCommandMenu(_battleModel);
     }
 

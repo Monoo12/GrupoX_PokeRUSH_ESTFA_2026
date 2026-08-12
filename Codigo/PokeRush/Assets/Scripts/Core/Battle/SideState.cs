@@ -13,7 +13,14 @@ public class SideState
     public bool StealthRock;
     public bool StickyWeb;
 
+    // Escudo del nucleo (torre 1): absorbe daño hasta agotarse. Va del lado y
+    // no del Poken porque es un escudo del EDIFICIO: sobrevive los cambios de
+    // Poken del boss. Lo arma BossBattleConfig segun los nodos de firewall que
+    // hayan quedado activos.
+    public int ShieldHp;
+
     public bool HasReflect => ReflectTurns > 0;
     public bool HasLightScreen => LightScreenTurns > 0;
     public bool HasAuroraVeil => AuroraVeilTurns > 0;
+    public bool HasShield => ShieldHp > 0;
 }

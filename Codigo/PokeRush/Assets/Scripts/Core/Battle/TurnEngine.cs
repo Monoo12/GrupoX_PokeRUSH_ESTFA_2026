@@ -56,6 +56,15 @@ public class TurnEngine
         if (enemyAction.Kind == BattleActionKind.SwitchPoken)
             DoSwitch(isPlayer: false, enemyAction.SwitchIndex, events);
 
+        // 1b) Objetos y proteccion: van con los cambios y sin chequeo de
+        //     velocidad, o sea con prioridad efectiva maxima, como en la saga.
+        if (playerAction.Kind == BattleActionKind.UseItem)
+            DoUseItem(playerAction.Item, events);
+        if (playerAction.Kind == BattleActionKind.Protect)
+            DoProtect(_model.PlayerState, events);
+        if (enemyAction.Kind == BattleActionKind.Protect)
+            DoProtect(_model.EnemyState, events);
+
         // 2) Movimientos
         bool playerUsesMove = playerAction.Kind == BattleActionKind.UseMove;
         bool enemyUsesMove = enemyAction.Kind == BattleActionKind.UseMove;
@@ -96,6 +105,10 @@ public class TurnEngine
             // El retroceso solo dura el turno en que se produjo
             _model.PlayerState.Flinched = false;
             _model.EnemyState.Flinched = false;
+
+            // La proteccion tampoco se acumula entre turnos
+            _model.PlayerState.Protected = false;
+            _model.EnemyState.Protected = false;
         }
 
         // 4) Debilitados: XP, reemplazos o fin
@@ -105,6 +118,72 @@ public class TurnEngine
             _model.AdvanceTurn();
 
         return events;
+    }
+
+    // ---------- objetos, proteccion y escudo ----------
+
+    // Usa un objeto de curacion sobre el Poken ACTIVO del jugador.
+    private void DoUseItem(HealItemDefinition item, List<BattleEvent> events)
+    {
+        if (item == null) return;
+
+        PokenModel objetivo = _model.ActivePlayerPoken;
+        string nombre = objetivo.Definition.pokenName;
+
+        // Un objeto de curacion sobre un Poken debilitado no revive: eso seria
+        // otro tipo de objeto y otro flujo.
+        if (objetivo.IsFainted)
+        {
+            BattleEvent.Add(events, $"¡{nombre} está debilitado!");
+            return;
+        }
+
+        // Si no hay stock no se hace nada: se chequea ANTES de curar para no
+        // regalar la curacion cuando el objeto ya se gasto.
+        if (!_model.Player.Inventory.ConsumeHealItem(item, 1))
+        {
+            BattleEvent.Add(events, $"No te quedan {item.itemName}.");
+            return;
+        }
+
+        int antes = objetivo.CurrentHP;
+        objetivo.Heal(item.fullHeal ? objetivo.MaxHP : item.healAmount);
+        int curado = objetivo.CurrentHP - antes;
+
+        if (curado > 0)
+        {
+            events.Add(BattleEvent.Of(BattleEventKind.HpChanged, true));
+            BattleEvent.Add(events, $"¡{nombre} recuperó {curado} PS!");
+        }
+        else
+        {
+            BattleEvent.Add(events, $"¡{nombre} ya está al máximo!");
+        }
+    }
+
+    private void DoProtect(BattlePokenState quien, List<BattleEvent> events)
+    {
+        quien.Protected = true;
+        BattleEvent.Add(events, $"¡{quien.Poken.Definition.pokenName} se puso en guardia!");
+    }
+
+    // El escudo del nucleo come daño antes que los PS. Devuelve lo que queda
+    // para el Poken. Un solo punto de insercion en cada camino de daño alcanza
+    // porque va justo despues de ModifyIncomingDamage, igual que Robustez.
+    private int AbsorberEscudo(BattlePokenState defender, int damage, List<BattleEvent> events)
+    {
+        SideState lado = defender.IsPlayerSide ? _model.PlayerSide : _model.EnemySide;
+        if (lado == null || lado.ShieldHp <= 0 || damage <= 0) return damage;
+
+        int absorbido = System.Math.Min(lado.ShieldHp, damage);
+        lado.ShieldHp -= absorbido;
+
+        if (lado.ShieldHp <= 0)
+            BattleEvent.Add(events, "¡El escudo del núcleo se rompió!");
+        else
+            BattleEvent.Add(events, $"El escudo del núcleo absorbió el golpe ({lado.ShieldHp} restante).");
+
+        return damage - absorbido;
     }
 
     // Formula clasica de escape: F = velocidad*128/velocidadRival + 30*intentos.
@@ -244,6 +323,14 @@ public class TurnEngine
             return;
         }
 
+        // Proteccion: va DESPUES de la precision para que el mensaje "uso X" y
+        // el consumo de PP ya hayan salido, que es lo correcto.
+        if (defender.Protected)
+        {
+            BattleEvent.Add(events, $"¡{defenderName} aguantó el golpe!");
+            return;
+        }
+
         bool isPureStatus = move.attackType == AttackType.Status || move.power <= 0;
         if (isPureStatus)
         {
@@ -288,6 +375,7 @@ public class TurnEngine
         {
             DamageResult result = DamageCalculator.Calculate(attacker, defender, move, _rng, _model);
             int damage = AbilityEffects.ModifyIncomingDamage(defender, result.Damage, out bool endured);
+            damage = AbsorberEscudo(defender, damage, events);
             sturdyEndured |= endured;
             anyCrit |= result.IsCritical;
 
@@ -350,6 +438,7 @@ public class TurnEngine
 
         DamageResult result = DamageCalculator.CalculateStruggle(attacker, defender, _rng, _model);
         int damage = AbilityEffects.ModifyIncomingDamage(defender, result.Damage, out bool endured);
+        damage = AbsorberEscudo(defender, damage, events);
         defender.Poken.TakeDamage(damage);
         events.Add(BattleEvent.Of(BattleEventKind.HpChanged, defender.IsPlayerSide));
 

@@ -23,6 +23,28 @@ public class InventoryModel
         if (stack != null) stack.AddQuantity(quantity);
         else HealItems.Add(new HealItemStack(definition, quantity));
     }
+
+    // Gasta objetos de curacion. Devuelve false si no habia suficientes, asi el
+    // que llama puede abortar sin haber consumido nada.
+    public bool ConsumeHealItem(HealItemDefinition definition, int quantity = 1)
+    {
+        if (definition == null || quantity <= 0) return false;
+
+        HealItemStack stack = HealItems.Find(s => s.Definition == definition);
+        if (stack == null || stack.Quantity < quantity) return false;
+
+        stack.Consume(quantity);
+        // El stack vacio se saca de la lista para que la mochila no muestre 0
+        if (stack.Quantity <= 0) HealItems.Remove(stack);
+        return true;
+    }
+
+    // Cuantos hay de un objeto (0 si no esta)
+    public int CountHealItem(HealItemDefinition definition)
+    {
+        HealItemStack stack = HealItems.Find(s => s.Definition == definition);
+        return stack?.Quantity ?? 0;
+    }
 }
 
 public class HealItemStack
@@ -39,6 +61,11 @@ public class HealItemStack
     public void AddQuantity(int amount)
     {
         Quantity += amount;
+    }
+
+    public void Consume(int amount)
+    {
+        Quantity = System.Math.Max(0, Quantity - amount);
     }
 }
 

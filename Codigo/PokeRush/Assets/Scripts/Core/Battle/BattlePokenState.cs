@@ -18,6 +18,15 @@ public class BattlePokenState
     // Retroceso: pierde su accion este turno; se limpia al final del turno
     public bool Flinched;
 
+    // Aguantando: el ataque que reciba este turno no le hace nada. Se limpia al
+    // final del turno, igual que Flinched.
+    //
+    // Va aca y no en SideState a proposito: BattlePokenState se recrea en cada
+    // cambio de Poken, asi que la proteccion se pierde al cambiar, que es la
+    // semantica correcta y sale gratis. SideState sobrevive los cambios y
+    // dejaria protegido al que entra.
+    public bool Protected;
+
     // Turnos de sueño restantes (se sortea 1-3 al aplicar Asleep)
     public int SleepTurnsLeft;
 

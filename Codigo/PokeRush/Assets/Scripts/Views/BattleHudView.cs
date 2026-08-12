@@ -36,6 +36,11 @@ public class BattleHudView : MonoBehaviour
     [Header("Mensajes")]
     [SerializeField] private Text messageText;
 
+    [Header("Prediccion del boss")]
+    [Tooltip("Banda con el contador de la lectura de Nestor y la categoria anulada. " +
+             "Opcional: sin esto el combate anda igual, solo que sin contador visible.")]
+    [SerializeField] private Text predictionBannerText;
+
     [Header("Menu de comandos")]
     [SerializeField] private GameObject commandPanel;
     [SerializeField] private Button fightButton;
@@ -201,6 +206,15 @@ public class BattleHudView : MonoBehaviour
     {
         if (messageText != null) messageText.text = message;
         else Debug.Log($"[Batalla] {message}"); // sin HUD: al menos lo veo en consola
+    }
+
+    // Banda de la Prediccion: cuantos turnos faltan para la proxima lectura, o
+    // que categoria quedo anulada este turno. Texto vacio la apaga.
+    public void SetPredictionBanner(string texto)
+    {
+        if (predictionBannerText == null) return;
+        predictionBannerText.text = texto;
+        predictionBannerText.gameObject.SetActive(!string.IsNullOrEmpty(texto));
     }
 
     // Turno del jugador: muestra los comandos y la pregunta clasica
