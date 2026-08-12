@@ -19,6 +19,12 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Radio del chequeo de colision en el tile destino. Menor a medio tile.")]
     [SerializeField] private float collisionCheckRadius = 0.3f;
 
+    [Header("Interaccion")]
+    [Tooltip("Capas donde buscar cosas con las que interactuar (paneles, NPCs, puertas).")]
+    [SerializeField] private LayerMask interactableMask;
+    [Tooltip("Radio del chequeo en el tile de adelante.")]
+    [SerializeField] private float interactionRadius = 0.4f;
+
     private PlayerModel _playerModel;
     private StoryModel _storyModel;
 
@@ -45,9 +51,39 @@ public class PlayerController : MonoBehaviour
         _storyModel = storyModel;
     }
 
+    // Busca algo con que interactuar en el tile de ADELANTE (no en el propio),
+    // asi que hay que estar mirando la cosa. Lo llama PlayerInputController.
     public void Interact()
     {
-        // detectar NPC cercano e iniciar dialogo o batalla - se implementa despues
+        if (_playerModel == null || _storyModel == null) return;
+        if (_isMoving) return; // a mitad de un paso no se interactua
+
+        Vector2 frente = (Vector2)transform.position + _facing * tileSize;
+
+        // OverlapCircleAll y no OverlapCircle: un panel puede tener el collider
+        // en un hijo, o haber dos cosas cerca. Nos quedamos con la primera que
+        // consuma la interaccion.
+        Collider2D[] cerca = Physics2D.OverlapCircleAll(frente, interactionRadius, interactableMask);
+        foreach (Collider2D c in cerca)
+        {
+            // GetComponentInParent para que ande aunque el collider este en un hijo
+            var interactuable = c.GetComponentInParent<IInteractable>();
+            if (interactuable == null) continue;
+            if (interactuable.Interact(_playerModel, _storyModel)) return;
+        }
+    }
+
+    // Mueve al jugador de golpe, cortando cualquier paso en curso. Lo usa
+    // DoorTrigger para pasar de sala.
+    public void TeleportTo(Vector3 posicion, Vector2 mirandoHacia)
+    {
+        StopAllCoroutines();
+        _isMoving = false;
+
+        transform.position = new Vector3(posicion.x, posicion.y, transform.position.z);
+        _targetPosition = transform.position;
+
+        if (mirandoHacia != Vector2.zero) _facing = mirandoHacia;
     }
 
     public void OpenMenu()
