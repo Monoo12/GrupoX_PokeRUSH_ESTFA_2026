@@ -152,6 +152,19 @@ namespace PokeRush.EditorTools
             testerSo.FindProperty("enemyDefinition").objectReferenceValue = trainer;
             testerSo.FindProperty("wildEncounter").objectReferenceValue = wild;
             testerSo.FindProperty("startOnPlay").boolValue = true;
+
+            // Nestor y sus dos variantes, para probar los subsistemas con la
+            // tecla N sin tener que caminar la torre.
+            testerSo.FindProperty("nestorConMelmetal").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<BossDefinition>(
+                    "Assets/Resources/Definitions/Torre1/Nestor.asset");
+            testerSo.FindProperty("nestorSinMelmetal").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<BossDefinition>(
+                    "Assets/Resources/Definitions/Torre1/Nestor_SinMelmetal.asset");
+
+            // Un objeto de curacion cualquiera: sin esto el boton CURAR de la
+            // fase de liberacion no tiene con que curar.
+            testerSo.FindProperty("testHealItem").objectReferenceValue = PrimerObjetoDeCuracion();
             testerSo.ApplyModifiedPropertiesWithoutUndo();
 
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -171,11 +184,16 @@ namespace PokeRush.EditorTools
 
             EditorUtility.DisplayDialog("Combate de prueba listo",
                 "Escena creada: Assets/Scenes/CombatePrueba.unity (ya esta abierta).\n\n" +
-                "Dale Play y usa los botones del HUD (LUCHAR / POKÉMON / MOCHILA / HUIR)\n" +
-                "o el teclado: 1-4 movimientos, F1-F6 cambio, B reiniciar, W salvaje.\n\n" +
-                "El fondo lo define cada enemigo (campo Battle Background):\n" +
-                "entrenador = Bosque, boss = Gimnasio, salvaje = Pradera.\n" +
-                "Para el boss: arrastra Testing/BossDePrueba a 'Enemy Definition' del BattleTester.",
+                "TECLAS\n" +
+                "  B  combate contra el entrenador de prueba\n" +
+                "  W  combate salvaje\n" +
+                "  N  combate contra NESTOR con los subsistemas del Inspector\n" +
+                "  1-4 movimientos   F1-F6 cambio de Poken\n\n" +
+                "Para probar la torre 1: selecciona el objeto BattleTester y marca\n" +
+                "que subsistemas estan cortados (camaras, nodos del firewall,\n" +
+                "rastreo, energia). Apreta N y pelea. Son 16 combinaciones y no\n" +
+                "hace falta caminar ninguna torre.\n\n" +
+                "Con los CUATRO cortados sale Unown en vez de Melmetal.",
                 "¡A jugar!");
 
             Debug.Log("[PokeRush] Combate de prueba armado con el HUD clasico.");
@@ -236,6 +254,25 @@ namespace PokeRush.EditorTools
         }
 
         // ---------- mundo: camara, fondo y battlers ----------
+
+        // Un objeto de curacion cualquiera para el equipo de prueba. Se prefiere
+        // la Pocion comun; si no esta, el primero que aparezca.
+        private static HealItemDefinition PrimerObjetoDeCuracion()
+        {
+            var pocion = AssetDatabase.LoadAssetAtPath<HealItemDefinition>(
+                "Assets/Resources/Definitions/Items/Pocion.asset");
+            if (pocion != null) return pocion;
+
+            string[] guids = AssetDatabase.FindAssets("t:HealItemDefinition");
+            if (guids.Length == 0)
+            {
+                Debug.LogWarning("[PokeRush] No hay ningun HealItemDefinition: el boton CURAR " +
+                                 "de la fase de liberacion no va a tener con que curar.");
+                return null;
+            }
+            return AssetDatabase.LoadAssetAtPath<HealItemDefinition>(
+                AssetDatabase.GUIDToAssetPath(guids[0]));
+        }
 
         private static void BuildCamera()
         {

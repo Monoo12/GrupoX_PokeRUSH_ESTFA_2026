@@ -21,6 +21,23 @@ public class BattleTester : MonoBehaviour
     [Tooltip("Opcional: un WildEncounterDefinition para probar combates salvajes con la tecla W.")]
     [SerializeField] private WildEncounterDefinition wildEncounter;
 
+    [Header("Objetos (para probar CURAR en la fase de liberacion)")]
+    [Tooltip("Sin esto el boton CURAR de la liberacion no tiene con que curar.")]
+    [SerializeField] private HealItemDefinition testHealItem;
+    [SerializeField] private int testHealItemQuantity = 5;
+
+    // --- combate contra Nestor con subsistemas, tecla N ---
+    // Esto es lo que evita tener que caminar la torre para probar el balance:
+    // se marcan los subsistemas aca y se pelea directo. Son 16 combinaciones.
+    [Header("Nestor con subsistemas (tecla N)")]
+    [SerializeField] private BossDefinition nestorConMelmetal;
+    [Tooltip("Variante sin Melmetal (con Unown). Se usa sola si cortas los cuatro.")]
+    [SerializeField] private BossDefinition nestorSinMelmetal;
+    [SerializeField] private bool camarasCortadas;
+    [Range(0, 3)] [SerializeField] private int firewallNodosCortados;
+    [SerializeField] private bool rastreoCortado;
+    [SerializeField] private bool energiaAuxiliarCortada;
+
     [Header("Disparo")]
     [SerializeField] private bool startOnPlay = true;
 
@@ -43,6 +60,54 @@ public class BattleTester : MonoBehaviour
         if (kb == null) return;
         if (kb.bKey.wasPressedThisFrame) Launch();
         else if (kb.wKey.wasPressedThisFrame) LaunchWild();
+        else if (kb.nKey.wasPressedThisFrame) LaunchNestor();
+    }
+
+    // Combate contra Nestor con los subsistemas marcados en el Inspector.
+    // No hace falta caminar la torre ni tener partida: se arma la config a mano.
+    private void LaunchNestor()
+    {
+        if (battleController == null) return;
+
+        BossDefinition boss = ElegirVarianteDeNestor(out bool todosCortados);
+        if (boss == null)
+        {
+            Debug.LogWarning("BattleTester: asigná nestorConMelmetal (y ojala tambien la variante sin Melmetal).");
+            return;
+        }
+
+        PlayerModel player = BuildPlayerTeam();
+        if (player == null) return;
+
+        int nodosActivos = TowerProgressModel.FirewallNodosTotales - firewallNodosCortados;
+        var config = new BossBattleConfig
+        {
+            PrediccionConAviso = camarasCortadas,
+            EscudoInicial = BossBattleConfig.EscudoPorNodoActivo * nodosActivos,
+            PermiteCambio = rastreoCortado,
+            TurnosLiberacion = energiaAuxiliarCortada
+                ? BossBattleConfig.TurnosLiberacionBase
+                : BossBattleConfig.TurnosLiberacionBase * BossBattleConfig.MultiplicadorSinEnergia,
+            SinMelmetal = todosCortados
+        };
+
+        Debug.Log($"[Tester] Nestor con {Cortados()}/4 subsistemas -> {config.Resumen()}");
+        battleController.StartBattle(player, boss, config);
+    }
+
+    private int Cortados() =>
+        (camarasCortadas ? 1 : 0) +
+        (firewallNodosCortados >= TowerProgressModel.FirewallNodosTotales ? 1 : 0) +
+        (rastreoCortado ? 1 : 0) +
+        (energiaAuxiliarCortada ? 1 : 0);
+
+    // Melmetal solo desaparece con los CUATRO cortados (el firewall cuenta solo
+    // si estan los tres nodos). Todo o nada, como pide el GDD.
+    private BossDefinition ElegirVarianteDeNestor(out bool todosCortados)
+    {
+        todosCortados = Cortados() >= TowerProgressModel.SubsistemasTotales;
+        if (todosCortados && nestorSinMelmetal != null) return nestorSinMelmetal;
+        return nestorConMelmetal;
     }
 
     private void LaunchWild()
@@ -86,6 +151,12 @@ public class BattleTester : MonoBehaviour
             int level = (playerLevels != null && i < playerLevels.Length) ? playerLevels[i] : 5;
             player.Team.Add(new PokenModel(playerSpecies[i], level));
         }
+
+        // Sin objetos no se puede probar CURAR en la fase de liberacion, que es
+        // una de las tres herramientas de esa fase.
+        if (testHealItem != null && testHealItemQuantity > 0)
+            player.Inventory.AddHealItem(testHealItem, testHealItemQuantity);
+
         return player.Team.Count > 0 ? player : null;
     }
 }
