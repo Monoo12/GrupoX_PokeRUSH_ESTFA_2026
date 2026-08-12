@@ -21,6 +21,14 @@ public class TurnEngine
     // (los lideres eligen por matchup); por defecto manda el primero con vida.
     public System.Func<BattleModel, int> EnemyReplacementSelector;
 
+    // Jefes que no pueden caer: en vez de debilitarse quedan en 1 PS. Lo setea
+    // BattleController cuando el boss tiene fase de liberacion.
+    //
+    // Un solo punto de insercion (arriba de HandleFaints) cubre TODAS las
+    // fuentes de dano: golpe directo, forcejeo, quemadura, veneno, clima y
+    // retroceso. Chequearlo en cada una seria seis lugares que mantener.
+    public System.Func<BattleModel, bool> EnemyCannotFaint;
+
     // Intentos de huida acumulados (mejoran la chance, como en la saga)
     private int _escapeAttempts;
 
@@ -501,6 +509,14 @@ public class TurnEngine
 
     private void HandleFaints(List<BattleEvent> events)
     {
+        // Jefe con fase de liberacion: no puede caer, se queda en 1 PS.
+        // Va PRIMERO para que nada de lo de abajo lo vea debilitado.
+        if (EnemyCannotFaint != null && EnemyCannotFaint(_model)
+            && _model.EnemyState.Poken.IsFainted)
+        {
+            _model.EnemyState.Poken.SetCurrentHP(1);
+        }
+
         // Debilitados por daño residual que nadie anuncio todavia
         AnnounceFaintIfNeeded(_model.EnemyState, events);
         AnnounceFaintIfNeeded(_model.PlayerState, events);

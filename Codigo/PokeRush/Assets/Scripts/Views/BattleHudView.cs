@@ -64,6 +64,17 @@ public class BattleHudView : MonoBehaviour
     [SerializeField] private Text[] teamHpTexts = new Text[6];
     [SerializeField] private Button teamBackButton;
 
+    [Header("Menu de la fase de liberacion")]
+    [Tooltip("Panel propio con CURAR / PROTEGER / CAMBIAR / ATACAR. No reusa el " +
+             "commandPanel porque sus botones tienen el texto horneado en el sprite.")]
+    [SerializeField] private GameObject liberationPanel;
+    [SerializeField] private Button liberationHealButton;
+    [SerializeField] private Button liberationProtectButton;
+    [SerializeField] private Button liberationSwitchButton;
+    [SerializeField] private Button liberationAttackButton;
+    [SerializeField] private Text liberationTurnsText;
+    [SerializeField] private Text liberationHintText;
+
     [Header("Sprites por tipo (indice = enum PokenType, 0=None)")]
     [SerializeField] private Sprite[] moveSpritesByType;          // boton de movimiento, estado normal
     [SerializeField] private Sprite[] moveSelectedSpritesByType;  // boton de movimiento, iluminado
@@ -83,7 +94,17 @@ public class BattleHudView : MonoBehaviour
     public event Action FleeChosen;
     public event Action BagChosen;
 
+    // Fase de liberacion. El cambio de Poken reusa el menu de equipo y su
+    // evento SwitchChosen: BattleController lo redirige segun la fase.
+    public event Action LiberationHealChosen;
+    public event Action LiberationProtectChosen;
+    public event Action LiberationAttackChosen;
+
     private BattleModel _model;
+
+    // En liberacion, "volver" desde el menu de equipo tiene que regresar al
+    // panel de liberacion y no al de comandos.
+    private bool _liberationMode;
 
     // HP que se MUESTRA (drena gradualmente hacia el valor real del modelo)
     private float _displayedPlayerHp = -1f;
@@ -113,6 +134,16 @@ public class BattleHudView : MonoBehaviour
             if (teamButtons[i] == null) continue;
             teamButtons[i].onClick.AddListener(() => SwitchChosen?.Invoke(index));
         }
+
+        // Botones de la fase de liberacion
+        if (liberationHealButton != null)
+            liberationHealButton.onClick.AddListener(() => LiberationHealChosen?.Invoke());
+        if (liberationProtectButton != null)
+            liberationProtectButton.onClick.AddListener(() => LiberationProtectChosen?.Invoke());
+        if (liberationAttackButton != null)
+            liberationAttackButton.onClick.AddListener(() => LiberationAttackChosen?.Invoke());
+        if (liberationSwitchButton != null)
+            liberationSwitchButton.onClick.AddListener(OpenTeamMenu);
     }
 
     // ---------- API que usa BattleController ----------
@@ -221,6 +252,7 @@ public class BattleHudView : MonoBehaviour
     public void ShowCommandMenu(BattleModel battleModel)
     {
         _model = battleModel;
+        _liberationMode = false;
         ShowCommandMenuInternal();
     }
 
@@ -230,6 +262,27 @@ public class BattleHudView : MonoBehaviour
         if (commandPanel != null) commandPanel.SetActive(false);
         if (fightPanel != null) fightPanel.SetActive(false);
         if (teamPanel != null) teamPanel.SetActive(false);
+        if (liberationPanel != null) liberationPanel.SetActive(false);
+    }
+
+    // Menu de la fase de liberacion: las tres herramientas mas atacar.
+    // Atacar queda HABILITADO a proposito: es un error castigado, no una opcion
+    // prohibida. La leccion del nivel es dejar de atacar, y para aprenderla hay
+    // que poder equivocarse.
+    public void ShowLiberationMenu(int aguantados, int totales, string avisoDelChip)
+    {
+        _liberationMode = true;
+        HideMenus();
+
+        if (liberationTurnsText != null)
+            liberationTurnsText.text = $"Sobrecarga {aguantados}/{totales}";
+        if (liberationHintText != null)
+            liberationHintText.text = avisoDelChip;
+
+        if (liberationPanel != null) liberationPanel.SetActive(true);
+        else Debug.LogWarning("[HUD] Falta liberationPanel: la fase corre pero sin botones.");
+
+        ShowMessage("Aguantá sin atacar.");
     }
 
     // ---------- menus internos ----------
@@ -238,6 +291,15 @@ public class BattleHudView : MonoBehaviour
     {
         if (fightPanel != null) fightPanel.SetActive(false);
         if (teamPanel != null) teamPanel.SetActive(false);
+
+        // En liberacion el "volver" del menu de equipo regresa a su propio
+        // panel, no al de comandos (que no aplica en esa fase).
+        if (_liberationMode)
+        {
+            if (liberationPanel != null) liberationPanel.SetActive(true);
+            return;
+        }
+
         if (commandPanel != null) commandPanel.SetActive(true);
         if (_model != null)
             ShowMessage($"¿Qué hará {_model.ActivePlayerPoken.Definition.pokenName}?");

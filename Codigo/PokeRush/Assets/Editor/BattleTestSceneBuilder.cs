@@ -494,10 +494,45 @@ namespace PokeRush.EditorTools
             teamBackRect.anchorMin = teamBackRect.anchorMax = teamBackRect.pivot = new Vector2(0.5f, 0.5f);
             teamBackRect.anchoredPosition = new Vector2(0, -160);
 
+            // --- banda de la PREDICCION de Nestor (arriba, centrada) ---
+            Text predictionBanner = CreateText("BandaPrediccion", hudGo.transform,
+                new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0, -6), new Vector2(420, 24), 14, TextAnchor.MiddleCenter);
+            predictionBanner.color = new Color(1f, 0.85f, 0.35f);
+            predictionBanner.gameObject.SetActive(false);
+
+            // --- menu de la FASE DE LIBERACION ---
+            // Panel propio y no reuso del de comandos: esos botones tienen el
+            // texto horneado en el sprite (CreateSheetButton), asi que "HUIR"
+            // no puede decir "PROTEGER" sin sprites nuevos.
+            var liberationPanel = CreateRect("MenuLiberacion", hudGo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+
+            Text liberationTurns = CreateText("TurnosLiberacion", liberationPanel.transform,
+                new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0, -34), new Vector2(420, 22), 15, TextAnchor.MiddleCenter);
+            liberationTurns.color = new Color(1f, 0.55f, 0.35f);
+
+            Text liberationHint = CreateText("AvisoDelChip", liberationPanel.transform,
+                new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0, -56), new Vector2(460, 20), 12, TextAnchor.MiddleCenter);
+
+            Button libHeal = CreateLabelButton(liberationPanel.transform, "BotonCurar",
+                "CURAR", new Vector2(-140, 50));
+            Button libProtect = CreateLabelButton(liberationPanel.transform, "BotonProteger",
+                "PROTEGER", new Vector2(-6, 50));
+            Button libSwitch = CreateLabelButton(liberationPanel.transform, "BotonCambiar",
+                "CAMBIAR", new Vector2(-140, 3));
+            // Atacar queda habilitado: es un error castigado, no una opcion
+            // prohibida. La leccion es dejar de atacar, y hay que poder errarle.
+            Button libAttack = CreateLabelButton(liberationPanel.transform, "BotonAtacar",
+                "ATACAR", new Vector2(-6, 3));
+
             // Los menus arrancan ocultos (los muestra BattleHudView)
             commandPanel.SetActive(false);
             fightPanel.SetActive(false);
             teamPanel.SetActive(false);
+            liberationPanel.SetActive(false);
 
             // --- cablear todos los campos privados del BattleHudView ---
             var so = new SerializedObject(hud);
@@ -517,6 +552,16 @@ namespace PokeRush.EditorTools
             so.FindProperty("enemyLevelText").objectReferenceValue = enemyLevel;
             so.FindProperty("enemyHpFill").objectReferenceValue = enemyHpFill;
             so.FindProperty("enemyStatusIcon").objectReferenceValue = enemyStatus;
+
+            so.FindProperty("predictionBannerText").objectReferenceValue = predictionBanner;
+
+            so.FindProperty("liberationPanel").objectReferenceValue = liberationPanel;
+            so.FindProperty("liberationHealButton").objectReferenceValue = libHeal;
+            so.FindProperty("liberationProtectButton").objectReferenceValue = libProtect;
+            so.FindProperty("liberationSwitchButton").objectReferenceValue = libSwitch;
+            so.FindProperty("liberationAttackButton").objectReferenceValue = libAttack;
+            so.FindProperty("liberationTurnsText").objectReferenceValue = liberationTurns;
+            so.FindProperty("liberationHintText").objectReferenceValue = liberationHint;
 
             so.FindProperty("commandPanel").objectReferenceValue = commandPanel;
             so.FindProperty("fightButton").objectReferenceValue = fightBtn;
@@ -660,6 +705,31 @@ namespace PokeRush.EditorTools
             image.raycastTarget = false;
             image.enabled = false; // lo enciende la vista cuando hay icono
             return image;
+        }
+
+        // Boton con el texto en un Text hijo, no horneado en el sprite.
+        // Hace falta para la fase de liberacion: sus acciones (CURAR, PROTEGER,
+        // CAMBIAR, ATACAR) no existen en la hoja cursor_command, que solo tiene
+        // los comandos clasicos. Cuando Diseño haga los sprites, esto se
+        // reemplaza por CreateSheetButton y listo.
+        private static Button CreateLabelButton(Transform parent, string name,
+            string label, Vector2 position)
+        {
+            var go = CreateRect(name, parent, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0),
+                position, new Vector2(130, 46));
+            var image = go.AddComponent<Image>();
+            image.color = new Color(0.12f, 0.12f, 0.16f, 0.92f);
+
+            var button = go.AddComponent<Button>();
+            button.targetGraphic = image;
+
+            Text texto = CreateText("Etiqueta", go.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f),
+                Vector2.zero, Vector2.zero, 14, TextAnchor.MiddleCenter);
+            texto.text = label;
+            texto.color = Color.white;
+
+            return button;
         }
 
         // Boton de la hoja cursor_command (texto horneado + estado iluminado).

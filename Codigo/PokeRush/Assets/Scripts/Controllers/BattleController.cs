@@ -42,6 +42,15 @@ public class BattleController : MonoBehaviour
     private BossBattleConfig _bossConfig;
     private PredictionState _prediction;
 
+    // Fase de liberacion: se dispara cuando el ULTIMO Poken del boss llega a PS
+    // criticos. Null mientras no este activa.
+    private LiberationEngine _liberation;
+    private bool _liberationDone;
+
+    [Header("Fase de liberacion")]
+    [Tooltip("Porcentaje de PS del ultimo Poken del boss al que arranca la fase.")]
+    [SerializeField, Range(0.05f, 0.5f)] private float liberationHpThreshold = 0.15f;
+
     // Sprite del entrenador rival para la intro (null = combate salvaje)
     private Sprite _trainerIntroSprite;
     // El Poken de este lado se debilito y espera reemplazo (el cambio no hace retirada)
@@ -54,9 +63,13 @@ public class BattleController : MonoBehaviour
         if (battleHudView != null)
         {
             battleHudView.MoveChosen += SelectMove;
-            battleHudView.SwitchChosen += SelectSwitch;
+            battleHudView.SwitchChosen += OnSwitchChosen;
             battleHudView.FleeChosen += SelectFlee;
             battleHudView.BagChosen += OnBagSelected;
+
+            battleHudView.LiberationHealChosen += LiberationHeal;
+            battleHudView.LiberationProtectChosen += LiberationProtect;
+            battleHudView.LiberationAttackChosen += LiberationAttack;
         }
     }
 
@@ -145,6 +158,20 @@ public class BattleController : MonoBehaviour
         _enemyAI = BattleAIFactory.Create(_aiProfile);
         _engine.EnemyReplacementSelector =
             model => _enemyAI.ChooseReplacement(AiContext.ForEnemy(model, _aiProfile));
+
+        // El boss con fase de liberacion no puede caer: queda en 1 PS y el
+        // combate sigue hasta que se resuelva la fase.
+        _liberation = null;
+        _liberationDone = false;
+        if (_bossConfig != null)
+        {
+            _engine.EnemyCannotFaint = m =>
+                !_liberationDone && EsUltimoPokenDelBoss(m);
+
+            // El escudo del nucleo lo pone la torre: cuantos nodos de firewall
+            // quedaron activos.
+            _battleModel.EnemySide.ShieldHp = _bossConfig.EscudoInicial;
+        }
 
         if (playerInputController != null)
             playerInputController.SetBattleMode(true);
@@ -362,10 +389,159 @@ public class BattleController : MonoBehaviour
             yield break;
         }
 
+        // El boss llego a PS criticos con su ultimo Poken: no muere, entra en
+        // la fase de liberacion.
+        if (DebeEmpezarLiberacion())
+        {
+            yield return LiberationRoutine();
+            yield break;
+        }
+
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
         battleHudView?.UpdateHud(_battleModel);
         yield return AvanzarPrediccion();
         battleHudView?.ShowCommandMenu(_battleModel);
+    }
+
+    // ---------- fase de liberacion ----------
+
+    private bool EsUltimoPokenDelBoss(BattleModel m)
+    {
+        int vivos = 0;
+        foreach (PokenModel p in m.Enemy.Team)
+            if (!p.IsFainted) vivos++;
+        return vivos <= 1;
+    }
+
+    private bool DebeEmpezarLiberacion()
+    {
+        if (_bossConfig == null || _liberationDone || _liberation != null) return false;
+        if (!EsUltimoPokenDelBoss(_battleModel)) return false;
+
+        PokenModel boss = _battleModel.ActiveEnemyPoken;
+        if (boss == null || boss.MaxHP <= 0) return false;
+
+        return boss.CurrentHP / (float)boss.MaxHP <= liberationHpThreshold;
+    }
+
+    // Arranca la fase: mensajes de entrada y primer menu. De aca en mas el
+    // input pasa por LiberationTurnRoutine, no por ResolveTurnRoutine.
+    private IEnumerator LiberationRoutine()
+    {
+        _liberation = new LiberationEngine(_battleModel, _rng, _bossConfig.TurnosLiberacion);
+        _battleModel.SetPhase(BattlePhase.Liberation);
+        battleHudView?.HideMenus();
+        battleHudView?.SetPredictionBanner(null);
+
+        string nestor = _battleModel.ActiveEnemyPoken.Definition.pokenName;
+        Announce($"¡El chip de {nestor} se sobrecarga!");
+        yield return new WaitForSeconds(messageDelay);
+        Announce("Si le pegás, el chip se repara. Aguantá sin atacar.");
+        yield return new WaitForSeconds(messageDelay);
+
+        AbrirMenuLiberacion();
+    }
+
+    private void AbrirMenuLiberacion()
+    {
+        battleHudView?.UpdateHud(_battleModel);
+        battleHudView?.ShowLiberationMenu(
+            _liberation.TurnosAguantados, _liberation.TurnosTotales, _liberation.AvisoDelChip());
+    }
+
+    // Un turno de la fase. Espeja a ResolveTurnRoutine para no tocar el camino
+    // de input que ya funciona.
+    private IEnumerator LiberationTurnRoutine(LiberationEngine.Accion accion, int indiceExtra = -1)
+    {
+        _battleModel.SetPhase(BattlePhase.CalculatingResult);
+        battleHudView?.HideMenus();
+
+        // Curar y cambiar los aplica el controller: el motor de la fase solo
+        // sabe que fueron acciones validas.
+        if (accion == LiberationEngine.Accion.Curar)
+        {
+            HealItemDefinition item = PrimerObjetoDeCuracion();
+            if (item == null)
+            {
+                Announce("No te quedan objetos de curación.");
+                yield return new WaitForSeconds(messageDelay);
+                AbrirMenuLiberacion();
+                yield break;
+            }
+            PokenModel objetivo = _battleModel.ActivePlayerPoken;
+            _playerModel.Inventory.ConsumeHealItem(item, 1);
+            objetivo.Heal(item.fullHeal ? objetivo.MaxHP : item.healAmount);
+            objetivo.CureStatus();
+            Announce($"Usaste {item.itemName}.");
+            yield return new WaitForSeconds(messageDelay);
+        }
+        else if (accion == LiberationEngine.Accion.Cambiar)
+        {
+            if (indiceExtra >= 0) _battleModel.SwitchPlayerPoken(indiceExtra);
+        }
+
+        yield return PlayEvents(_liberation.ResolveTurn(accion));
+
+        // El jugador se puede quedar sin equipo aguantando: eso si es derrota
+        if (!_playerModel.HasAlivePoken)
+        {
+            yield return EndBattleRoutine();
+            yield break;
+        }
+
+        if (_liberation.Terminada)
+        {
+            _liberationDone = true;
+            GameManager.Instance?.Story?.ActivateFlag(StoryFlag.Torre1_NestorLiberado);
+
+            // Resuelta la fase, el combate cierra como victoria normal:
+            // EndBattleRoutine + EventController aplican dinero, flags y save.
+            // No pasa por HandleFaints, asi que el ultimo Poken no da XP — es
+            // coherente: no lo derrotaste, lo liberaste.
+            _battleModel.ActiveEnemyPoken.SetCurrentHP(0);
+            _battleModel.Finish(playerVictory: true);
+            yield return EndBattleRoutine();
+            yield break;
+        }
+
+        AbrirMenuLiberacion();
+    }
+
+    private HealItemDefinition PrimerObjetoDeCuracion()
+    {
+        foreach (HealItemStack stack in _playerModel.Inventory.HealItems)
+            if (stack.Quantity > 0) return stack.Definition;
+        return null;
+    }
+
+    // Entradas de la UI de la fase
+    public void LiberationHeal()    => TomarAccionLiberacion(LiberationEngine.Accion.Curar);
+    public void LiberationProtect() => TomarAccionLiberacion(LiberationEngine.Accion.Proteger);
+    public void LiberationWait()    => TomarAccionLiberacion(LiberationEngine.Accion.Nada);
+    public void LiberationAttack()  => TomarAccionLiberacion(LiberationEngine.Accion.Atacar);
+
+    public void LiberationSwitch(int teamIndex)
+    {
+        if (teamIndex < 0 || teamIndex >= _playerModel.Team.Count) return;
+        if (_playerModel.Team[teamIndex].IsFainted) return;
+        if (teamIndex == _battleModel.ActivePlayerIndex) return;
+        TomarAccionLiberacion(LiberationEngine.Accion.Cambiar, teamIndex);
+    }
+
+    // El menu de equipo es el mismo en las dos fases, asi que el evento del HUD
+    // se desvia segun donde estemos.
+    private void OnSwitchChosen(int teamIndex)
+    {
+        if (_battleModel != null && _battleModel.CurrentPhase == BattlePhase.Liberation)
+            LiberationSwitch(teamIndex);
+        else
+            SelectSwitch(teamIndex);
+    }
+
+    private void TomarAccionLiberacion(LiberationEngine.Accion accion, int indiceExtra = -1)
+    {
+        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.Liberation) return;
+        StartCoroutine(LiberationTurnRoutine(accion, indiceExtra));
     }
 
     // Reproduce los eventos del motor: anima cada paso, refresca la UI y pausa
