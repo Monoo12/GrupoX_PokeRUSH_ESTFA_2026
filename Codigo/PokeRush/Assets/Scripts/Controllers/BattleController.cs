@@ -46,6 +46,9 @@ public class BattleController : MonoBehaviour
     // criticos. Null mientras no este activa.
     private LiberationEngine _liberation;
     private bool _liberationDone;
+    // El motor salvo al boss de caer: la fase TIENE que arrancar si o si, o el
+    // combate queda trabado con un boss inmortal.
+    private bool _bossSalvadoEnUnPS;
 
     [Header("Fase de liberacion")]
     [Tooltip("Porcentaje de PS del ultimo Poken del boss al que arranca la fase.")]
@@ -116,6 +119,11 @@ public class BattleController : MonoBehaviour
         int level = _rng.Range(encounter.minLevel, encounter.maxLevel + 1);
         var enemy = new EnemyModel(encounter.species, level, encounter.aiProfile);
         _trainerIntroSprite = null;
+
+        // Un salvaje no es un boss. Sin esto se arrastraba la config del
+        // combate ANTERIOR y el salvaje heredaba EnemyCannotFaint: no podia
+        // morir y el combate no terminaba nunca.
+        _bossConfig = null;
         BeginBattle(player, enemy, encounter.battleBackground);
     }
 
@@ -148,6 +156,16 @@ public class BattleController : MonoBehaviour
         _prediction = _bossConfig != null
             ? new PredictionState(_bossConfig.PrediccionConAviso)
             : null;
+
+        // La Prediccion necesita saber que salidas le quedan al jugador para no
+        // anularle la ultima. El rastreo activo ya le cierra el cambio.
+        if (_prediction != null)
+        {
+            _prediction.PuedeCambiar = () =>
+                _bossConfig.PermiteCambio && HayBancoDisponible();
+            _prediction.TieneObjetos = () =>
+                _playerModel.Inventory.HealItems.Exists(s => s.Quantity > 0);
+        }
         if (_bossConfig != null)
             Debug.Log($"[Combate] Config del boss: {_bossConfig.Resumen()}");
 
@@ -163,10 +181,20 @@ public class BattleController : MonoBehaviour
         // combate sigue hasta que se resuelva la fase.
         _liberation = null;
         _liberationDone = false;
+        _bossSalvadoEnUnPS = false;
         if (_bossConfig != null)
         {
+            // OJO: este delegado y DebeEmpezarLiberacion() TIENEN que estar de
+            // acuerdo. Si el boss se salva de morir pero la fase no arranca, el
+            // combate no termina nunca (no puede caer y nadie lo libera).
+            // Por eso lo que dispara la fase es haberlo salvado, no un umbral
+            // aparte que podria no cumplirse.
             _engine.EnemyCannotFaint = m =>
-                !_liberationDone && EsUltimoPokenDelBoss(m);
+            {
+                if (_liberationDone || !EsUltimoPokenDelBoss(m)) return false;
+                _bossSalvadoEnUnPS = true;
+                return true;
+            };
 
             // El escudo del nucleo lo pone la torre: cuantos nodos de firewall
             // quedaron activos.
@@ -405,6 +433,15 @@ public class BattleController : MonoBehaviour
 
     // ---------- fase de liberacion ----------
 
+    // Tiene a quien mandar aparte del que esta peleando?
+    private bool HayBancoDisponible()
+    {
+        int vivos = 0;
+        foreach (PokenModel p in _playerModel.Team)
+            if (!p.IsFainted) vivos++;
+        return vivos > 1;
+    }
+
     private bool EsUltimoPokenDelBoss(BattleModel m)
     {
         int vivos = 0;
@@ -420,6 +457,10 @@ public class BattleController : MonoBehaviour
 
         PokenModel boss = _battleModel.ActiveEnemyPoken;
         if (boss == null || boss.MaxHP <= 0) return false;
+
+        // Si el motor ya lo salvo de caer, la fase arranca SI O SI: no puede
+        // quedar un boss inmortal esperando un umbral que quizas no se cumpla.
+        if (_bossSalvadoEnUnPS) return true;
 
         return boss.CurrentHP / (float)boss.MaxHP <= liberationHpThreshold;
     }

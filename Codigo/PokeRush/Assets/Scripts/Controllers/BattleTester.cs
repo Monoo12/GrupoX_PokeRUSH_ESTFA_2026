@@ -13,6 +13,23 @@ public class BattleTester : MonoBehaviour
     [SerializeField] private PokenDefinition[] playerSpecies;
     [SerializeField] private int[] playerLevels;
 
+    // Movimientos a mano, uno por Poken. Vacio = los que le tocan por learnset.
+    //
+    // Por que hace falta: PokenModel.LearnInitialMoves se queda con los 4
+    // movimientos de MAYOR NIVEL que la especie ya puede conocer, asi que
+    // cambiar el nivel cambia el set entero. Esta bien para el juego, pero
+    // hace imposible probar un movimiento concreto.
+    [System.Serializable]
+    public class MovimientosDePrueba
+    {
+        [Tooltip("Hasta 4. Se ignoran los vacios. Si queda vacio, usa el learnset.")]
+        public MoveDefinition[] movimientos = new MoveDefinition[4];
+    }
+
+    [Tooltip("Uno por Poken, en el mismo orden que 'Player Species'. " +
+             "Dejalo vacio para que use los movimientos automaticos.")]
+    [SerializeField] private MovimientosDePrueba[] playerMoves;
+
     [Header("Rival")]
     [Tooltip("Un EnemyDefinition o BossDefinition con su pokenTeam cargado.")]
     [SerializeField] private NPCDefinition enemyDefinition;
@@ -141,6 +158,29 @@ public class BattleTester : MonoBehaviour
         battleController.StartBattle(player, enemyDefinition);
     }
 
+    // Pisa el set automatico por el elegido en el Inspector, si hay uno.
+    // Los vacios se ignoran, asi se puede dar un solo movimiento para probar un
+    // caso puntual (por ejemplo: que pasa si el jugador NO puede hacer daño).
+    private void AplicarMovimientosManuales(PokenModel poken, int indice)
+    {
+        if (playerMoves == null || indice >= playerMoves.Length) return;
+        MovimientosDePrueba set = playerMoves[indice];
+        if (set == null || set.movimientos == null) return;
+
+        var elegidos = new System.Collections.Generic.List<MoveDefinition>();
+        foreach (MoveDefinition m in set.movimientos)
+            if (m != null && !elegidos.Contains(m)) elegidos.Add(m);
+
+        if (elegidos.Count == 0) return; // sin nada elegido: deja el automatico
+
+        poken.Moves.Clear();
+        foreach (MoveDefinition m in elegidos)
+            poken.Moves.Add(new MoveModel(m));
+
+        Debug.Log($"[Tester] {poken.Definition.pokenName}: movimientos manuales -> " +
+                  string.Join(", ", elegidos.ConvertAll(m => m.moveName)));
+    }
+
     // Arma el equipo de prueba del jugador desde el Inspector (null si esta vacio)
     private PlayerModel BuildPlayerTeam()
     {
@@ -149,7 +189,9 @@ public class BattleTester : MonoBehaviour
         {
             if (playerSpecies[i] == null) continue;
             int level = (playerLevels != null && i < playerLevels.Length) ? playerLevels[i] : 5;
-            player.Team.Add(new PokenModel(playerSpecies[i], level));
+            var poken = new PokenModel(playerSpecies[i], level);
+            AplicarMovimientosManuales(poken, i);
+            player.Team.Add(poken);
         }
 
         // Sin objetos no se puede probar CURAR en la fase de liberacion, que es

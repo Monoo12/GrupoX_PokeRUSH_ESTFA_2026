@@ -42,6 +42,11 @@ public class LiberationEngine
     // Lo que se le devuelve al chip si el jugador ataca
     private const int TurnosQueRetrocede = 2;
 
+    // Cuanto se cura el boss cuando le pegan, como fraccion de sus PS maximos.
+    // Poco a proposito: el castigo real es que el contador retrocede, no que se
+    // vuelva imposible de bajar. Con 16 son ~6 PS en un boss de 98.
+    private const int DivisorCuracionDelChip = 16;
+
     public LiberationEngine(BattleModel model, IBattleRng rng, int turnosTotales)
     {
         _model = model;
@@ -72,7 +77,7 @@ public class LiberationEngine
             case Accion.Atacar:
                 // Pegarle repara el chip: es la trampa central de la fase.
                 TurnosAguantados = UnityEngine.Mathf.Max(0, TurnosAguantados - TurnosQueRetrocede);
-                _model.ActiveEnemyPoken.Heal(_model.ActiveEnemyPoken.MaxHP / 8);
+                _model.ActiveEnemyPoken.Heal(_model.ActiveEnemyPoken.MaxHP / DivisorCuracionDelChip);
                 events.Add(BattleEvent.Of(BattleEventKind.HpChanged, false));
                 BattleEvent.Add(events,
                     $"¡El golpe reparó el chip! {nestor} se recupera y la sobrecarga retrocede.");

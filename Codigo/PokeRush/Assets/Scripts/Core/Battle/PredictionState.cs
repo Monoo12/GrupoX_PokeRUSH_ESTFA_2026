@@ -40,10 +40,25 @@ public class PredictionState
     private readonly bool _conAviso;
     private int _turno;
 
+    // Que salidas tiene el jugador aparte de atacar. Si no tiene ninguna, la
+    // Prediccion NO puede anularle el ataque: el GDD dice "nunca anula dos
+    // categorias a la vez, siempre hay salida", y con el rastreo activo el
+    // cambio YA esta cerrado de entrada. Sin esto se puede quedar sin ninguna
+    // accion valida y el combate se traba.
+    public System.Func<bool> PuedeCambiar;
+    public System.Func<bool> TieneObjetos;
+
     public PredictionState(bool conAviso)
     {
         _conAviso = conAviso;
         TurnosParaProxima = TurnosEntrePredicciones;
+    }
+
+    private bool HaySalidaSinAtacar()
+    {
+        bool cambio = PuedeCambiar == null || PuedeCambiar();
+        bool objetos = TieneObjetos == null || TieneObjetos();
+        return cambio || objetos;
     }
 
     // Se llama al empezar cada turno del jugador, antes de mostrarle el menu.
@@ -134,7 +149,7 @@ public class PredictionState
 
     // Elige que anular. Heuristica corta que mira el estado real para que
     // moleste de verdad, en vez de sortear al azar.
-    private static PredictedCategory Elegir(BattleModel model, IBattleRng rng)
+    private PredictedCategory Elegir(BattleModel model, IBattleRng rng)
     {
         var candidatas = new List<PredictedCategory>();
 
@@ -142,20 +157,31 @@ public class PredictionState
         {
             PokenModel activo = model.ActivePlayerPoken;
 
-            // Con poca vida el jugador quiere curarse: anularle la mochila duele
+            // Con poca vida el jugador quiere curarse: anularle la mochila duele.
+            // Solo si REALMENTE tiene objetos, si no la Prediccion se desperdicia
+            // anulando algo que ya no podia hacer.
             if (activo != null && activo.MaxHP > 0 &&
-                activo.CurrentHP / (float)activo.MaxHP < 0.35f)
+                activo.CurrentHP / (float)activo.MaxHP < 0.35f &&
+                (TieneObjetos == null || TieneObjetos()))
                 candidatas.Add(PredictedCategory.Objeto);
 
-            // Si tiene banco disponible, cortarle el cambio lo deja expuesto
+            // Si tiene banco disponible, cortarle el cambio lo deja expuesto.
+            // Con el rastreo activo el cambio ya esta cerrado: no tiene sentido.
             int vivos = 0;
             foreach (PokenModel p in model.Player.Team)
                 if (!p.IsFainted) vivos++;
-            if (vivos > 1) candidatas.Add(PredictedCategory.Cambio);
+            if (vivos > 1 && (PuedeCambiar == null || PuedeCambiar()))
+                candidatas.Add(PredictedCategory.Cambio);
         }
 
-        // Anular el ataque siempre es una opcion valida
-        candidatas.Add(PredictedCategory.Ataque);
+        // Anular el ataque solo si al jugador le queda otra salida. Si no puede
+        // cambiar (rastreo activo) y no tiene objetos, atacar es lo unico que
+        // le queda y quitarselo lo dejaria sin ninguna accion valida.
+        if (HaySalidaSinAtacar()) candidatas.Add(PredictedCategory.Ataque);
+
+        // Si no quedo ninguna candidata, este turno no se anula nada. Es
+        // preferible una Prediccion que a veces no pega a un combate trabado.
+        if (candidatas.Count == 0) return PredictedCategory.None;
 
         return candidatas[rng != null ? rng.Range(0, candidatas.Count) : 0];
     }
