@@ -26,6 +26,10 @@ public class BattleController : MonoBehaviour
     [Tooltip("Segundos que se muestra cada mensaje de combate.")]
     [SerializeField] private float messageDelay = 1f;
 
+    // Inicio del combate: lo usa MapBattleBridge para esconder el mapa.
+    // Se dispara ANTES de la intro, con el modelo ya armado.
+    public event Action BattleStarted;
+
     // Fin del combate: EventController/GameManager aplican flags, items y save
     public event Action<BattleOutcome> BattleEnded;
 
@@ -203,6 +207,9 @@ public class BattleController : MonoBehaviour
 
         if (playerInputController != null)
             playerInputController.SetBattleMode(true);
+
+        // Avisa antes de la intro para que el mapa se esconda a tiempo
+        BattleStarted?.Invoke();
 
         if (battleHudView != null)
             battleHudView.Show();

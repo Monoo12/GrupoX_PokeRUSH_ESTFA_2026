@@ -123,6 +123,40 @@ Es **todo o nada**: los cuatro completos o Melmetal está. Cortar dos de tres no
 
 ---
 
+## 4b. Entrar en combate sin perder el mapa
+
+**El combate no es una escena aparte.** Vive en la misma escena que el mapa, escondido, y se muestra cuando hace falta. Así el mapa nunca se descarga y **no hay nada que guardar ni restaurar**: la posición del jugador, los NPCs y los triggers ya usados siguen exactamente donde estaban.
+
+Estructura de la escena — dos objetos raíz:
+
+```
+Escena
+├── MapaRaiz            ← Grid, jugador, NPCs, cámara de exploración
+├── CombateRaiz         ← HUD, PokenViews, fondo, cámara de combate
+│                         (DESACTIVADO en el editor)
+└── MapBattleBridge     ← el puente
+```
+
+En `MapBattleBridge`: arrastrá `MapaRaiz`, `CombateRaiz`, el `BattleController` (que vive dentro de CombateRaiz) y el `PlayerController`.
+
+Listo. Cualquier `InteractableTrigger` que dispare un combate ya funciona — el puente escucha los eventos del `BattleController`, no hay que avisarle nada.
+
+### Para copiar esto a otra escena
+
+Copiá los dos objetos raíz y el `MapBattleBridge`, y volvé a arrastrar las cuatro referencias. Lo más rápido es armar `CombateRaiz` una vez y guardarlo como **prefab**: `PokeRush > Armar combate de prueba` genera esa jerarquía completa en `CombatePrueba`, así que se puede sacar de ahí.
+
+### Dos trampas
+
+**Desactivar un GameObject mata sus corrutinas.** Si el jugador estaba a mitad de un paso cuando arranca el combate, esa corrutina muere y queda entre dos tiles para siempre. Por eso el puente llama a `PlayerController.SnapToGrid()` antes de esconder el mapa.
+
+**Dos `AudioListener` activos a la vez tira warnings.** Si cada raíz tiene su cámara con listener, se resuelve solo (al desactivar una raíz se va su listener). Pero si dejás las dos activas por algún motivo, hay que apagar uno a mano.
+
+### Si algún día el combate sí tiene que ser otra escena
+
+Ahí sí habría que persistir, y hoy **no se guarda ninguna de las tres**: `SaveService` solo tiene `Id`, `Name` y `Money` en la tabla `player`. Haría falta agregar escena actual, posición del jugador y qué triggers ya se usaron.
+
+---
+
 ## 5. Regla de diseño del GDD
 
 > **Cada sala tiene un motivo o no existe.** Combate, subsistema, objeto, o algo que cambie el estado de la torre. Una sala vacía es peor que un mapa de menú: perdiste tiempo de diseño y encima empeoraste el juego.

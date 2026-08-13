@@ -32,9 +32,9 @@ public class BossBattleConfig
 
     // --- numeros de balance, todos en un solo lugar ---
 
-    public const int EscudoPorNodoActivo = 10;   // 3 nodos activos = 120 PS de escudo
-    public const int TurnosLiberacionBase = 4;
-    public const int MultiplicadorSinEnergia = 2; // 12 turnos si no cortaste la energia
+    public const int EscudoPorNodoActivo = 10;    // 3 nodos activos = 30 PS de escudo
+    public const int TurnosLiberacionBase = 4;    // 4 turnos con la energia cortada
+    public const int MultiplicadorSinEnergia = 2; // 8 turnos si no la cortaste
 
     // Config por defecto: la del combate sin ningun subsistema cortado. Es la
     // que se usa si alguien pelea contra el boss sin pasar por la torre (por

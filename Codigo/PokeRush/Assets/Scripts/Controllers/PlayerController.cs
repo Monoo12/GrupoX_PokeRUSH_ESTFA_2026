@@ -73,6 +73,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Termina el paso en curso al instante y deja al jugador alineado a la
+    // grilla. Lo llama MapBattleBridge antes de esconder el mapa: si el objeto
+    // se desactiva a mitad de una corrutina de movimiento, esa corrutina muere
+    // y el jugador queda entre dos tiles para siempre.
+    public void SnapToGrid()
+    {
+        StopAllCoroutines();
+        _isMoving = false;
+        float z = transform.position.z;
+        transform.position = new Vector3(_targetPosition.x, _targetPosition.y, z);
+    }
+
     // Mueve al jugador de golpe, cortando cualquier paso en curso. Lo usa
     // DoorTrigger para pasar de sala.
     public void TeleportTo(Vector3 posicion, Vector2 mirandoHacia)
