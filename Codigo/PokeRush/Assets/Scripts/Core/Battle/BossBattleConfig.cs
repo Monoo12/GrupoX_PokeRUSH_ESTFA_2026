@@ -13,10 +13,10 @@ public class BossBattleConfig
     // informacion, timing distinto — ahi esta el valor de cortarlas.
     public bool PrediccionConAviso;
 
-    // Cada cuantos turnos lee Nestor. Cortar las camaras no solo adelanta el
-    // aviso: ademas lo hace TARDAR mas en calcular, asi que las lecturas son
-    // menos seguidas. Los dos efectos van juntos porque son la misma causa
-    // (se quedo sin ojos en el edificio).
+    // Cada cuantos turnos lee Nestor. NO depende de los subsistemas: las
+    // camaras cambian el TIMING del aviso, no la frecuencia. Es un numero de
+    // balance suelto, aca para poder tocarlo en un solo lugar (y para que el
+    // BattleTester pueda probar otra cadencia sin tocar codigo).
     public int TurnosEntrePredicciones;
 
     // Escudo del nucleo, en PS. Se achica proporcional a los nodos de firewall
@@ -42,9 +42,10 @@ public class BossBattleConfig
     public const int TurnosLiberacionBase = 4;    // 4 turnos con la energia cortada
     public const int MultiplicadorSinEnergia = 2; // 8 turnos si no la cortaste
 
-    // Frecuencia de la lectura de Nestor
-    public const int PrediccionCadaConCamaras = 2;  // camaras activas: lee seguido
-    public const int PrediccionCadaSinCamaras = 4;  // cortadas: tarda mas en calcular
+    // Frecuencia de la lectura de Nestor: turnos 1 y 2 libres, el 3 condicionado.
+    // Genera ritmo (guardas la jugada fuerte para los libres) y es inmune a
+    // save/load, que era el agujero de la version probabilistica.
+    public const int PrediccionCadaTurnos = 3;
 
     // Config por defecto: la del combate sin ningun subsistema cortado. Es la
     // que se usa si alguien pelea contra el boss sin pasar por la torre (por
@@ -54,7 +55,7 @@ public class BossBattleConfig
         return new BossBattleConfig
         {
             PrediccionConAviso = false,
-            TurnosEntrePredicciones = PrediccionCadaConCamaras,
+            TurnosEntrePredicciones = PrediccionCadaTurnos,
             EscudoInicial = EscudoPorNodoActivo * TowerProgressModel.FirewallNodosTotales,
             PermiteCambio = false,
             TurnosLiberacion = TurnosLiberacionBase * MultiplicadorSinEnergia,
@@ -71,9 +72,7 @@ public class BossBattleConfig
         return new BossBattleConfig
         {
             PrediccionConAviso = torre.CamarasCortadas,
-            TurnosEntrePredicciones = torre.CamarasCortadas
-                ? PrediccionCadaSinCamaras
-                : PrediccionCadaConCamaras,
+            TurnosEntrePredicciones = PrediccionCadaTurnos,
             EscudoInicial = EscudoPorNodoActivo * nodosActivos,
             PermiteCambio = torre.RastreoCortado,
             TurnosLiberacion = torre.EnergiaAuxiliarCortada

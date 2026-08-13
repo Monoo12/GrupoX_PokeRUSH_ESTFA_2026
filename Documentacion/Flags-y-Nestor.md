@@ -80,7 +80,7 @@ en la pelea". Se arma una vez al empezar y de ahí en más solo se lee.
 
 | Subsistema | Efecto si lo cortás | Campo de config |
 |---|---|---|
-| **Cámaras** | La lectura de Nestor avisa un turno antes **y** pasa a ser cada 4 turnos en vez de cada 2 | `PrediccionConAviso`, `TurnosEntrePredicciones` |
+| **Cámaras** | La lectura de Nestor avisa un turno antes | `PrediccionConAviso` |
 | **Firewall** | Escudo del núcleo: −10 PS por nodo | `EscudoInicial` |
 | **Rastreo** | Habilita cambiar de Pokémon | `PermiteCambio` |
 | **Energía auxiliar** | La liberación dura 4 turnos en vez de 8 | `TurnosLiberacion` |
@@ -88,6 +88,11 @@ en la pelea". Se arma una vez al empezar y de ahí en más solo se lee.
 
 Detalle que confunde: el escudo se cuenta por nodos **activos**, o sea los que
 *no* cortaste. Cortar los tres lo deja en 0.
+
+Las cámaras cambian el **timing** del aviso, no cada cuánto lee. La frecuencia
+(`BossBattleConfig.PrediccionCadaTurnos`, hoy cada 3 turnos) es un número de
+balance suelto, no un efecto de subsistema: se toca ahí y afecta a toda la
+pelea por igual.
 
 ## Tres formas distintas, a propósito
 

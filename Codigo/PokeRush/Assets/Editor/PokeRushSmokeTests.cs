@@ -866,8 +866,6 @@ namespace PokeRush.EditorTools
                 "Subsistemas: sin cortar nada, el escudo del nucleo esta entero");
             Check(!nada.PrediccionConAviso,
                 "Subsistemas: sin cortar las camaras, la lectura de Nestor no se avisa antes");
-            Check(nada.TurnosEntrePredicciones == BossBattleConfig.PrediccionCadaConCamaras,
-                "Subsistemas: con las camaras activas Nestor lee seguido");
             Check(!nada.PermiteCambio,
                 "Subsistemas: sin cortar el rastreo, no se puede cambiar de Poken");
             Check(nada.TurnosLiberacion ==
@@ -882,9 +880,10 @@ namespace PokeRush.EditorTools
             BossBattleConfig camaras = ConfigCon(StoryFlag.Torre1_CamarasCortadas);
             Check(camaras.PrediccionConAviso,
                 "Camaras cortadas: la lectura de Nestor se avisa un turno antes");
-            Check(camaras.TurnosEntrePredicciones == BossBattleConfig.PrediccionCadaSinCamaras
-                  && camaras.TurnosEntrePredicciones > ConfigCon().TurnosEntrePredicciones,
-                "Camaras cortadas: ademas Nestor lee menos seguido");
+            // Las camaras cambian el TIMING del aviso, no cada cuanto lee: la
+            // frecuencia es un numero de balance, no un efecto de subsistema.
+            Check(camaras.TurnosEntrePredicciones == ConfigCon().TurnosEntrePredicciones,
+                "Camaras cortadas: la frecuencia de lectura NO cambia");
 
             Check(ConfigCon(StoryFlag.Torre1_RastreoCortado).PermiteCambio,
                 "Rastreo cortado: se habilita el cambio de Poken");
