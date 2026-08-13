@@ -13,6 +13,12 @@ public class BossBattleConfig
     // informacion, timing distinto — ahi esta el valor de cortarlas.
     public bool PrediccionConAviso;
 
+    // Cada cuantos turnos lee Nestor. Cortar las camaras no solo adelanta el
+    // aviso: ademas lo hace TARDAR mas en calcular, asi que las lecturas son
+    // menos seguidas. Los dos efectos van juntos porque son la misma causa
+    // (se quedo sin ojos en el edificio).
+    public int TurnosEntrePredicciones;
+
     // Escudo del nucleo, en PS. Se achica proporcional a los nodos de firewall
     // cortados: es el unico subsistema PARCIAL, para ensenar que esto no es
     // binario.
@@ -36,6 +42,10 @@ public class BossBattleConfig
     public const int TurnosLiberacionBase = 4;    // 4 turnos con la energia cortada
     public const int MultiplicadorSinEnergia = 2; // 8 turnos si no la cortaste
 
+    // Frecuencia de la lectura de Nestor
+    public const int PrediccionCadaConCamaras = 2;  // camaras activas: lee seguido
+    public const int PrediccionCadaSinCamaras = 4;  // cortadas: tarda mas en calcular
+
     // Config por defecto: la del combate sin ningun subsistema cortado. Es la
     // que se usa si alguien pelea contra el boss sin pasar por la torre (por
     // ejemplo desde CombatePrueba).
@@ -44,6 +54,7 @@ public class BossBattleConfig
         return new BossBattleConfig
         {
             PrediccionConAviso = false,
+            TurnosEntrePredicciones = PrediccionCadaConCamaras,
             EscudoInicial = EscudoPorNodoActivo * TowerProgressModel.FirewallNodosTotales,
             PermiteCambio = false,
             TurnosLiberacion = TurnosLiberacionBase * MultiplicadorSinEnergia,
@@ -60,6 +71,9 @@ public class BossBattleConfig
         return new BossBattleConfig
         {
             PrediccionConAviso = torre.CamarasCortadas,
+            TurnosEntrePredicciones = torre.CamarasCortadas
+                ? PrediccionCadaSinCamaras
+                : PrediccionCadaConCamaras,
             EscudoInicial = EscudoPorNodoActivo * nodosActivos,
             PermiteCambio = torre.RastreoCortado,
             TurnosLiberacion = torre.EnergiaAuxiliarCortada
@@ -73,6 +87,7 @@ public class BossBattleConfig
     public string Resumen()
     {
         return $"escudo={EscudoInicial} aviso={(PrediccionConAviso ? "anticipado" : "tardio")} " +
+               $"lecturaCada={TurnosEntrePredicciones}t " +
                $"cambios={(PermiteCambio ? "si" : "NO")} liberacion={TurnosLiberacion}t " +
                $"melmetal={(SinMelmetal ? "no" : "si")}";
     }

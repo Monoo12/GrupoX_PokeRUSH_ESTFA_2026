@@ -62,7 +62,10 @@ namespace PokeRush.EditorTools
 
             // --- infraestructura suelta ---
             var gmGo = new GameObject("GameManager");
-            gmGo.AddComponent<GameManager>();
+            var gm = gmGo.AddComponent<GameManager>();
+            // Mismo equipo de arranque que las escenas del juego, por referencia
+            var equipo = InitialTeamMigrator.EquipoPorDefecto();
+            if (equipo != null) InitialTeamMigrator.Asignar(gm, equipo);
 
             var eventSystemGo = new GameObject("EventSystem");
             eventSystemGo.AddComponent<EventSystem>();

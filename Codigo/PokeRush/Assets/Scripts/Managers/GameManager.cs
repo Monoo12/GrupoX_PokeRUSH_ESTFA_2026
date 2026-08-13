@@ -10,12 +10,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource sfxSource;
 
     [Header("Equipo inicial")]
-    // Se busca por pokenName en DefinitionRepository, asi que el nombre tiene
-    // que coincidir con el campo pokenName del asset (no con el del archivo).
-    // Gastly es Fantasma/Veneno: INMUNE a Normal, o sea que los STAB de
-    // Raticate y Porygon-Z le hacen cero. Basculin aguanta a Braixen y
-    // Combusken le pega a Melmetal y Porygon-Z con Lucha. Uno por amenaza.
-    [SerializeField] private string[] equipoInicial = { "Gastly", "Basculin", "Combusken" };
+    // Referencias DIRECTAS a los assets, no nombres.
+    //
+    // Antes esto era un string[] que se resolvia por pokenName contra el
+    // DefinitionRepository. Buscar por nombre es fragil de una forma que no se
+    // ve hasta que rompe: renombrar una especie, un acento o un espacio de mas
+    // compilan igual y fallan recien en runtime, con el equipo vacio y el
+    // combate abortando. Con referencias, Unity mantiene el link solo, el
+    // Inspector no deja elegir algo que no exista, y si alguien borra el asset
+    // el campo queda visiblemente en None.
+    //
+    // Eleccion del equipo (por si se retoca): Gastly es Fantasma/Veneno, INMUNE
+    // a Normal, o sea que los STAB de Raticate y Porygon-Z le hacen cero.
+    // Basculin aguanta a Braixen y Combusken le pega a Melmetal y Porygon-Z
+    // con Lucha. Uno por amenaza.
+    [Tooltip("Arrastra los PokenDefinition. El orden define el equipo.")]
+    [SerializeField] private PokenDefinition[] equipoInicial;
+    [Tooltip("Nivel de cada Poken, en el mismo orden. Si faltan, se usa 5.")]
     [SerializeField] private int[] nivelesIniciales = { 15, 15, 16 };
 
     public GameState CurrentState { get; private set; }
@@ -74,18 +85,24 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.Exploration);
     }
 
-    // El equipo fijo con el que se entra a la torre 1. Si alguna especie no
-    // esta en Resources avisamos fuerte: sin equipo el combate aborta con un
-    // warning mudo en BattleController.BeginBattle.
+    // El equipo fijo con el que se entra a la torre 1. Un hueco sin asignar se
+    // saltea con aviso: sin equipo el combate aborta con un warning mudo en
+    // BattleController.BeginBattle y no se entiende por que.
     private void ArmarEquipoInicial()
     {
+        if (equipoInicial == null || equipoInicial.Length == 0)
+        {
+            Debug.LogError("[GameManager] No hay especies asignadas en 'Equipo inicial'. " +
+                           "Arrastra los PokenDefinition en el Inspector.");
+            return;
+        }
+
         for (int i = 0; i < equipoInicial.Length; i++)
         {
-            PokenDefinition especie = DefinitionRepository.Instance.GetPoken(equipoInicial[i]);
+            PokenDefinition especie = equipoInicial[i];
             if (especie == null)
             {
-                Debug.LogError($"[GameManager] No encuentro la especie '{equipoInicial[i]}' " +
-                               "para el equipo inicial. Revisa que el pokenName coincida.");
+                Debug.LogError($"[GameManager] El slot {i} del equipo inicial esta vacio.");
                 continue;
             }
 

@@ -57,7 +57,9 @@ public struct PredictionSnapshot
 // en BattleController y no en el motor.
 public class PredictionState
 {
-    public const int TurnosEntrePredicciones = 3;
+    // Cada cuantos turnos lee. Lo decide BossBattleConfig segun las camaras:
+    // cortadas = Nestor tarda mas en calcular y lee menos seguido.
+    public int TurnosEntrePredicciones { get; }
 
     // Categoria activa este turno (None = turno libre)
     public PredictedCategory Categoria { get; private set; }
@@ -80,9 +82,12 @@ public class PredictionState
     public System.Func<bool> PuedeCambiar;
     public System.Func<bool> TieneObjetos;
 
-    public PredictionState(bool conAviso)
+    public PredictionState(bool conAviso, int turnosEntrePredicciones)
     {
         _conAviso = conAviso;
+        // Menos de 2 dejaria al jugador anulado un turno por medio: no es
+        // dificultad, es no poder jugar.
+        TurnosEntrePredicciones = turnosEntrePredicciones < 2 ? 2 : turnosEntrePredicciones;
         TurnosParaProxima = TurnosEntrePredicciones;
     }
 

@@ -182,7 +182,8 @@ public class BattleController : MonoBehaviour
         // de input, no una regla de resolucion de turno. Por eso el TurnEngine
         // ni se entera.
         _prediction = _bossConfig != null
-            ? new PredictionState(_bossConfig.PrediccionConAviso)
+            ? new PredictionState(_bossConfig.PrediccionConAviso,
+                                  _bossConfig.TurnosEntrePredicciones)
             : null;
 
         // La Prediccion necesita saber que salidas le quedan al jugador para no
