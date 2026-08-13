@@ -1,9 +1,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Arranca un combate de prueba sin depender del flujo de exploracion todavia.
-// TEMPORAL: borralo cuando exista el disparador real (encuentro con NPC/Boss).
-// Asigna todo en el Inspector y apreta Play (o la tecla B para reiniciar).
+// BANCO DE PRUEBAS. No es parte del juego.
+//
+// Vive en Scripts/Testing/ y NO esta en el prefab de combate: el flujo real es
+// BattleZoneTrigger / InteractableTrigger -> BattleController, sin pasar por
+// aca. Solo lo usa la escena CombatePrueba.
+//
+// Se conserva a proposito en vez de borrarlo: es la unica forma de probar las
+// 16 combinaciones de subsistemas de Nestor sin caminar la torre entera cada
+// vez que se toca un numero de balance (tecla N), y de probar un movimiento
+// concreto sin pelear con el learnset.
+//
+// Uso: asignar todo en el Inspector y apretar Play.
+//   B = reiniciar contra el entrenador   W = salvaje   N = Nestor
 public class BattleTester : MonoBehaviour
 {
     [Header("Referencias")]

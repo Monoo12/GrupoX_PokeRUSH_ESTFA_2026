@@ -19,6 +19,10 @@ public class BattleController : MonoBehaviour
     [Header("Escenario")]
     [Tooltip("Renderer del fondo de batalla. Se escala solo para cubrir la camara.")]
     [SerializeField] private SpriteRenderer backgroundRenderer;
+    [Tooltip("Camara propia del combate. El layout de la pelea esta hecho para " +
+             "orthographicSize 1.92; usar la camara del mapa (que tiene otro " +
+             "tamaño) deja los Pokens y el fondo desproporcionados contra el HUD.")]
+    [SerializeField] private Camera battleCamera;
     [Tooltip("Secuencias visuales (transicion, balls, apariciones). Opcional: sin esto el combate arranca directo.")]
     [SerializeField] private BattleFxView battleFxView;
 
@@ -58,6 +62,10 @@ public class BattleController : MonoBehaviour
     [Tooltip("Porcentaje de PS del ultimo Poken del boss al que arranca la fase.")]
     [SerializeField, Range(0.05f, 0.5f)] private float liberationHpThreshold = 0.15f;
 
+    // El reemplazo que se esta pidiendo viene de la fase de liberacion: al
+    // elegir hay que volver a esa fase y no al menu de comandos normal.
+    private bool _reemplazoDesdeLiberacion;
+
     // Sprite del entrenador rival para la intro (null = combate salvaje)
     private Sprite _trainerIntroSprite;
     // El Poken de este lado se debilito y espera reemplazo (el cambio no hace retirada)
@@ -73,6 +81,7 @@ public class BattleController : MonoBehaviour
             battleHudView.SwitchChosen += OnSwitchChosen;
             battleHudView.FleeChosen += SelectFlee;
             battleHudView.BagChosen += OnBagSelected;
+            battleHudView.ItemChosen += OnItemChosen;
 
             battleHudView.LiberationHealChosen += LiberationHeal;
             battleHudView.LiberationProtectChosen += LiberationProtect;
@@ -90,11 +99,26 @@ public class BattleController : MonoBehaviour
     public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition,
         BossBattleConfig config = null)
     {
-        var enemy = new EnemyModel(enemyDefinition);
-
         _bossConfig = enemyDefinition is BossDefinition
             ? (config ?? BossBattleConfig.DesdeTorre(GameManager.Instance?.Tower))
             : null;
+
+        // Cortar los CUATRO subsistemas cambia con QUE pelea el boss, no solo
+        // como. Se resuelve antes de armar el EnemyModel porque implica otro
+        // equipo entero (en la torre 1: Nestor sin Melmetal).
+        //
+        // Todo o nada: dos de tres nodos achican el escudo pero no alcanzan
+        // para esto, que es lo que obliga a terminar lo que se empieza.
+        if (_bossConfig != null && _bossConfig.SinMelmetal
+            && enemyDefinition is BossDefinition original
+            && original.varianteTodoCortado != null)
+        {
+            enemyDefinition = original.varianteTodoCortado;
+            Debug.Log($"[Combate] Subsistemas todos cortados: pelea la variante " +
+                      $"'{enemyDefinition.name}' en vez de '{original.name}'.");
+        }
+
+        var enemy = new EnemyModel(enemyDefinition);
 
         Sprite background = null;
         _trainerIntroSprite = null;
@@ -224,6 +248,7 @@ public class BattleController : MonoBehaviour
     {
         _playerFaintedPendingSwitch = false;
         _enemyFaintedPendingSwitch = false;
+        _reemplazoDesdeLiberacion = false;
 
         string enemyName = _battleModel.ActiveEnemyPoken.Definition.pokenName;
         string playerName = _battleModel.ActivePlayerPoken.Definition.pokenName;
@@ -280,10 +305,15 @@ public class BattleController : MonoBehaviour
     // vea la categoria anulada antes de elegir.
     private IEnumerator AvanzarPrediccion()
     {
-        if (_prediction == null) yield break;
+        if (_prediction == null)
+        {
+            // Combate normal: la UI de prediccion se apaga sola
+            battleHudView?.SetPrediction(default);
+            yield break;
+        }
 
         string mensaje = _prediction.Avanzar(_battleModel, _rng);
-        battleHudView?.SetPredictionBanner(_prediction.Banda());
+        battleHudView?.SetPrediction(_prediction.Snapshot());
 
         if (string.IsNullOrEmpty(mensaje)) yield break;
 
@@ -297,21 +327,26 @@ public class BattleController : MonoBehaviour
     // 1-4 = movimientos, F1-F6 = cambio manual de Poken.
     private void Update()
     {
-        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+        if (_battleModel == null) return;
 
         Keyboard kb = Keyboard.current;
         if (kb == null) return;
+
+        // F1-F6 tambien sirven para el cambio OBLIGADO, por eso pasan por
+        // OnSwitchChosen (el mismo router que usa la UI) y no por SelectSwitch.
+        if (kb.f1Key.wasPressedThisFrame) { OnSwitchChosen(0); return; }
+        if (kb.f2Key.wasPressedThisFrame) { OnSwitchChosen(1); return; }
+        if (kb.f3Key.wasPressedThisFrame) { OnSwitchChosen(2); return; }
+        if (kb.f4Key.wasPressedThisFrame) { OnSwitchChosen(3); return; }
+        if (kb.f5Key.wasPressedThisFrame) { OnSwitchChosen(4); return; }
+        if (kb.f6Key.wasPressedThisFrame) { OnSwitchChosen(5); return; }
+
+        if (_battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
 
         if (kb.digit1Key.wasPressedThisFrame) SelectMove(0);
         else if (kb.digit2Key.wasPressedThisFrame) SelectMove(1);
         else if (kb.digit3Key.wasPressedThisFrame) SelectMove(2);
         else if (kb.digit4Key.wasPressedThisFrame) SelectMove(3);
-        else if (kb.f1Key.wasPressedThisFrame) SelectSwitch(0);
-        else if (kb.f2Key.wasPressedThisFrame) SelectSwitch(1);
-        else if (kb.f3Key.wasPressedThisFrame) SelectSwitch(2);
-        else if (kb.f4Key.wasPressedThisFrame) SelectSwitch(3);
-        else if (kb.f5Key.wasPressedThisFrame) SelectSwitch(4);
-        else if (kb.f6Key.wasPressedThisFrame) SelectSwitch(5);
     }
 
     // Punto de entrada para elegir movimiento por indice (teclas ahora, UI despues)
@@ -354,7 +389,8 @@ public class BattleController : MonoBehaviour
             Announce($"¡{_battleModel.ActivePlayerPoken.Definition.pokenName} ya está en combate!");
             return;
         }
-        if (_playerModel.Team[teamIndex].IsFainted)
+        // Un Poken debilitado no puede volver a entrar al combate
+        if (!BattleTeamRules.EsIndiceVivo(_playerModel.Team, teamIndex))
         {
             Announce($"¡{_playerModel.Team[teamIndex].Definition.pokenName} está debilitado!");
             return;
@@ -386,13 +422,65 @@ public class BattleController : MonoBehaviour
         StartCoroutine(ResolveTurnRoutine(BattleAction.Flee()));
     }
 
-    // Mochila
+    // ---------- mochila ----------
+
+    // Objetos que se pueden usar en combate, con stock. Se recalcula cada vez
+    // que se abre la mochila para que los indices que devuelve el HUD siempre
+    // apunten a esta misma lista.
+    private List<HealItemStack> ObjetosUsables()
+    {
+        var usables = new List<HealItemStack>();
+        if (_playerModel?.Inventory?.HealItems == null) return usables;
+
+        foreach (HealItemStack stack in _playerModel.Inventory.HealItems)
+            if (stack != null && stack.Definition != null && stack.Quantity > 0)
+                usables.Add(stack);
+        return usables;
+    }
+
+    // Abrir la mochila. Funciona en el turno normal y en la fase de liberacion
+    // (ahi el boton CURAR entra por aca).
     private void OnBagSelected()
     {
-        if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+        if (_battleModel == null) return;
+
+        bool enLiberacion = _battleModel.CurrentPhase == BattlePhase.Liberation;
+        if (!enLiberacion && _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+
+        // La Prediccion se chequea al ABRIR: no tiene sentido dejar elegir un
+        // objeto para rechazarlo despues.
+        if (!enLiberacion && Anticipado(BattleActionKind.UseItem, null)) return;
+
+        List<HealItemStack> usables = ObjetosUsables();
+        if (usables.Count == 0)
+        {
+            Announce("No te quedan objetos.");
+            return;
+        }
+
+        if (battleHudView != null) battleHudView.ShowBagMenu(usables);
+        else OnItemChosen(0); // sin HUD (modo consola): usa el primero
+    }
+
+    // El jugador eligio un objeto de la lista que se le mostro.
+    private void OnItemChosen(int index)
+    {
+        if (_battleModel == null) return;
+
+        List<HealItemStack> usables = ObjetosUsables();
+        if (index < 0 || index >= usables.Count) return;
+        HealItemDefinition item = usables[index].Definition;
+
+        if (_battleModel.CurrentPhase == BattlePhase.Liberation)
+        {
+            TomarAccionLiberacion(LiberationEngine.Accion.Curar, -1, item);
+            return;
+        }
+
+        if (_battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
         if (Anticipado(BattleActionKind.UseItem, null)) return;
 
-        Announce("La mochila todavía no está disponible.");
+        StartCoroutine(ResolveTurnRoutine(BattleAction.UseItem(item)));
     }
 
     // Devuelve true si la Prediccion de Nestor anula esta accion, y ya avisa por
@@ -418,9 +506,28 @@ public class BattleController : MonoBehaviour
         List<BattleEvent> events = _engine.ResolveTurn(playerAction, enemyAction);
         yield return PlayEvents(events);
 
+        yield return ContinuarDespuesDelTurno();
+    }
+
+    // Que pasa cuando termina de reproducirse un turno: fin del combate, pedir
+    // reemplazo, arrancar la liberacion, o abrir el menu del turno siguiente.
+    // Un solo lugar para que los tres caminos (turno normal, reemplazo, entrada
+    // a la liberacion) no se desincronicen.
+    private IEnumerator ContinuarDespuesDelTurno()
+    {
         if (_battleModel.IsBattleOver)
         {
             yield return EndBattleRoutine();
+            yield break;
+        }
+
+        // El Poken del jugador cayo: el combate se DETIENE hasta que elija.
+        // Va antes que todo lo demas, porque mientras tanto no hay activo valido.
+        if (_battleModel.AwaitingPlayerReplacement)
+        {
+            // Se conserva de donde vino: si el reemplazo anterior salio de la
+            // liberacion y el que entro tambien cayo, seguimos en esa fase.
+            PedirReemplazo(_reemplazoDesdeLiberacion);
             yield break;
         }
 
@@ -438,24 +545,63 @@ public class BattleController : MonoBehaviour
         battleHudView?.ShowCommandMenu(_battleModel);
     }
 
+    // ---------- cambio de Poken al caer el activo ----------
+
+    // Abre el selector de equipo en modo obligado. La barra y el sprite del
+    // caido quedan como estan: el HUD del que entra se refresca recien cuando
+    // el jugador elige (el evento PokenSwitched llega despues de la eleccion).
+    private void PedirReemplazo(bool desdeLiberacion)
+    {
+        _reemplazoDesdeLiberacion = desdeLiberacion;
+        _battleModel.SetPhase(BattlePhase.PlayerReplacement);
+        battleHudView?.HideMenus();
+        battleHudView?.ShowTeamMenu(_battleModel, forzado: true);
+    }
+
+    // El jugador ya eligio con quien sigue.
+    private IEnumerator ReemplazoRoutine(int teamIndex)
+    {
+        // Eleccion invalida: el menu sigue abierto, no se consume nada.
+        if (!BattleTeamRules.EsIndiceVivo(_playerModel.Team, teamIndex))
+        {
+            Announce("Ese Poken no puede combatir.");
+            yield break;
+        }
+
+        _battleModel.SetPhase(BattlePhase.CalculatingResult);
+        battleHudView?.HideMenus();
+
+        yield return PlayEvents(_engine.CompletePlayerReplacement(teamIndex));
+
+        // Volver a la fase de liberacion si el reemplazo salio de ahi
+        if (_reemplazoDesdeLiberacion && !_battleModel.IsBattleOver
+            && !_battleModel.AwaitingPlayerReplacement)
+        {
+            _reemplazoDesdeLiberacion = false;
+            _battleModel.SetPhase(BattlePhase.Liberation);
+            AbrirMenuLiberacion();
+            yield break;
+        }
+
+        yield return ContinuarDespuesDelTurno();
+    }
+
     // ---------- fase de liberacion ----------
 
     // Tiene a quien mandar aparte del que esta peleando?
     private bool HayBancoDisponible()
-    {
-        int vivos = 0;
-        foreach (PokenModel p in _playerModel.Team)
-            if (!p.IsFainted) vivos++;
-        return vivos > 1;
-    }
+        => _battleModel != null
+           && BattleTeamRules.HayBanco(_playerModel.Team, _battleModel.ActivePlayerIndex);
 
-    private bool EsUltimoPokenDelBoss(BattleModel m)
-    {
-        int vivos = 0;
-        foreach (PokenModel p in m.Enemy.Team)
-            if (!p.IsFainted) vivos++;
-        return vivos <= 1;
-    }
+    // El Poken que esta peleando es el ULTIMO del boss?
+    //
+    // Se pregunta por el banco (todos menos el activo) y no por el total de
+    // vivos. Contar el total daba true tambien con el ANTEULTIMO: ese se
+    // salvaba de caer en 1 PS turno tras turno —bucle contra un Poken muerto—
+    // y la fase de liberacion nunca arrancaba, porque para ella el conteo
+    // incluia al que acababa de "revivir".
+    private static bool EsUltimoPokenDelBoss(BattleModel m)
+        => BattleTeamRules.EsElUltimo(m.Enemy.Team, m.ActiveEnemyIndex);
 
     private bool DebeEmpezarLiberacion()
     {
@@ -479,7 +625,7 @@ public class BattleController : MonoBehaviour
         _liberation = new LiberationEngine(_battleModel, _rng, _bossConfig.TurnosLiberacion);
         _battleModel.SetPhase(BattlePhase.Liberation);
         battleHudView?.HideMenus();
-        battleHudView?.SetPredictionBanner(null);
+        battleHudView?.SetPrediction(default); // en la liberacion no hay lectura
 
         string nestor = _battleModel.ActiveEnemyPoken.Definition.pokenName;
         Announce($"¡El chip de {nestor} se sobrecarga!");
@@ -499,7 +645,8 @@ public class BattleController : MonoBehaviour
 
     // Un turno de la fase. Espeja a ResolveTurnRoutine para no tocar el camino
     // de input que ya funciona.
-    private IEnumerator LiberationTurnRoutine(LiberationEngine.Accion accion, int indiceExtra = -1)
+    private IEnumerator LiberationTurnRoutine(LiberationEngine.Accion accion,
+        int indiceExtra = -1, HealItemDefinition objetoElegido = null)
     {
         _battleModel.SetPhase(BattlePhase.CalculatingResult);
         battleHudView?.HideMenus();
@@ -508,8 +655,8 @@ public class BattleController : MonoBehaviour
         // sabe que fueron acciones validas.
         if (accion == LiberationEngine.Accion.Curar)
         {
-            HealItemDefinition item = PrimerObjetoDeCuracion();
-            if (item == null)
+            HealItemDefinition item = objetoElegido ?? PrimerObjetoDeCuracion();
+            if (item == null || !_playerModel.Inventory.ConsumeHealItem(item, 1))
             {
                 Announce("No te quedan objetos de curación.");
                 yield return new WaitForSeconds(messageDelay);
@@ -517,7 +664,6 @@ public class BattleController : MonoBehaviour
                 yield break;
             }
             PokenModel objetivo = _battleModel.ActivePlayerPoken;
-            _playerModel.Inventory.ConsumeHealItem(item, 1);
             objetivo.Heal(item.fullHeal ? objetivo.MaxHP : item.healAmount);
             objetivo.CureStatus();
             Announce($"Usaste {item.itemName}.");
@@ -531,9 +677,20 @@ public class BattleController : MonoBehaviour
         yield return PlayEvents(_liberation.ResolveTurn(accion));
 
         // El jugador se puede quedar sin equipo aguantando: eso si es derrota
-        if (!_playerModel.HasAlivePoken)
+        if (!BattleTeamRules.TieneAlgunoVivo(_playerModel.Team))
         {
+            _battleModel.Finish(playerVictory: false);
             yield return EndBattleRoutine();
+            yield break;
+        }
+
+        // El chip debilito al activo pero al jugador le queda banco: elige el
+        // reemplazo y vuelve a esta misma fase. Sin esto la fase seguiria
+        // corriendo con un Poken caido en el campo.
+        if (_battleModel.ActivePlayerPoken.IsFainted)
+        {
+            _battleModel.SetAwaitingPlayerReplacement(true);
+            PedirReemplazo(desdeLiberacion: true);
             yield break;
         }
 
@@ -562,34 +719,45 @@ public class BattleController : MonoBehaviour
         return null;
     }
 
-    // Entradas de la UI de la fase
-    public void LiberationHeal()    => TomarAccionLiberacion(LiberationEngine.Accion.Curar);
+    // Entradas de la UI de la fase. CURAR abre la mochila en vez de gastar el
+    // primer objeto que aparezca: es la misma mochila del combate normal.
+    public void LiberationHeal()    => OnBagSelected();
     public void LiberationProtect() => TomarAccionLiberacion(LiberationEngine.Accion.Proteger);
     public void LiberationWait()    => TomarAccionLiberacion(LiberationEngine.Accion.Nada);
     public void LiberationAttack()  => TomarAccionLiberacion(LiberationEngine.Accion.Atacar);
 
     public void LiberationSwitch(int teamIndex)
     {
-        if (teamIndex < 0 || teamIndex >= _playerModel.Team.Count) return;
-        if (_playerModel.Team[teamIndex].IsFainted) return;
+        if (!BattleTeamRules.EsIndiceVivo(_playerModel.Team, teamIndex)) return;
         if (teamIndex == _battleModel.ActivePlayerIndex) return;
         TomarAccionLiberacion(LiberationEngine.Accion.Cambiar, teamIndex);
     }
 
-    // El menu de equipo es el mismo en las dos fases, asi que el evento del HUD
-    // se desvia segun donde estemos.
+    // El menu de equipo es el mismo en las tres situaciones, asi que el evento
+    // del HUD se desvia segun la fase.
     private void OnSwitchChosen(int teamIndex)
     {
-        if (_battleModel != null && _battleModel.CurrentPhase == BattlePhase.Liberation)
-            LiberationSwitch(teamIndex);
-        else
-            SelectSwitch(teamIndex);
+        if (_battleModel == null) return;
+
+        switch (_battleModel.CurrentPhase)
+        {
+            case BattlePhase.PlayerReplacement:
+                StartCoroutine(ReemplazoRoutine(teamIndex));
+                break;
+            case BattlePhase.Liberation:
+                LiberationSwitch(teamIndex);
+                break;
+            case BattlePhase.PlayerTurn:
+                SelectSwitch(teamIndex);
+                break;
+        }
     }
 
-    private void TomarAccionLiberacion(LiberationEngine.Accion accion, int indiceExtra = -1)
+    private void TomarAccionLiberacion(LiberationEngine.Accion accion,
+        int indiceExtra = -1, HealItemDefinition objetoElegido = null)
     {
         if (_battleModel == null || _battleModel.CurrentPhase != BattlePhase.Liberation) return;
-        StartCoroutine(LiberationTurnRoutine(accion, indiceExtra));
+        StartCoroutine(LiberationTurnRoutine(accion, indiceExtra, objetoElegido));
     }
 
     // Reproduce los eventos del motor: anima cada paso, refresca la UI y pausa
@@ -695,6 +863,14 @@ public class BattleController : MonoBehaviour
                     break;
                 }
 
+                case BattleEventKind.PlayerMustSwitch:
+                    // El caido sigue en pantalla con su barra en 0: es lo que
+                    // el jugador tiene que ver mientras elige el reemplazo. El
+                    // HUD del que entra se refresca con su PokenSwitched, o
+                    // sea DESPUES de la eleccion.
+                    battleHudView?.UpdateHud(_battleModel);
+                    break;
+
                 case BattleEventKind.WeatherChanged:
                     battleFxView?.SetWeather(_battleModel.CurrentWeather);
                     break;
@@ -764,7 +940,9 @@ public class BattleController : MonoBehaviour
         if (background != null) backgroundRenderer.sprite = background;
         if (backgroundRenderer.sprite == null) return;
 
-        Camera cam = Camera.main;
+        // La del prefab manda: Camera.main en un mapa es la de exploracion y
+        // tiene otro tamaño ortografico, asi que el fondo saldria mal escalado.
+        Camera cam = battleCamera != null ? battleCamera : Camera.main;
         if (cam == null || !cam.orthographic) return;
 
         float viewHeight = cam.orthographicSize * 2f;

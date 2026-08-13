@@ -51,6 +51,18 @@ public class TurnEngine
     {
         var events = new List<BattleEvent>();
 
+        // Regla fundamental: un Poken debilitado no recibe turno. Si el combate
+        // ya termino, o falta elegir reemplazo, o alguno de los dos activos esta
+        // caido, este turno NO existe. En vez de dejar actuar a un muerto se
+        // resuelve el debilitamiento pendiente y se devuelve el control: es lo
+        // que evita el bucle "sigo peleando contra el que ya cayo".
+        if (_model.IsBattleOver || _model.AwaitingPlayerReplacement) return events;
+        if (_model.PlayerState.Poken.IsFainted || _model.EnemyState.Poken.IsFainted)
+        {
+            HandleFaints(events);
+            return events;
+        }
+
         // 0) Huir (solo de salvajes): se resuelve antes que todo, como en la saga.
         //    Si falla, el jugador pierde su accion y el rival ataca igual.
         if (playerAction.Kind == BattleActionKind.Flee)
@@ -138,8 +150,8 @@ public class TurnEngine
         PokenModel objetivo = _model.ActivePlayerPoken;
         string nombre = objetivo.Definition.pokenName;
 
-        // Un objeto de curacion sobre un Poken debilitado no revive: eso seria
-        // otro tipo de objeto y otro flujo.
+        // Un objeto de curacion sobre un Poken debilitado no revive: la muerte
+        // es definitiva hasta que exista un objeto de revivir y su propio flujo.
         if (objetivo.IsFainted)
         {
             BattleEvent.Add(events, $"¡{nombre} está debilitado!");
@@ -249,7 +261,7 @@ public class TurnEngine
     {
         List<PokenModel> team = isPlayer ? _model.Player.Team : _model.Enemy.Team;
         int currentIndex = isPlayer ? _model.ActivePlayerIndex : _model.ActiveEnemyIndex;
-        if (index < 0 || index >= team.Count || index == currentIndex || team[index].IsFainted)
+        if (index == currentIndex || !BattleTeamRules.EsIndiceVivo(team, index))
             return; // el llamador valido mal: no hacemos nada
 
         string outgoing = (isPlayer ? _model.ActivePlayerPoken : _model.ActiveEnemyPoken).Definition.pokenName;
@@ -281,8 +293,9 @@ public class TurnEngine
         BattlePokenState attacker = attackerIsPlayer ? _model.PlayerState : _model.EnemyState;
         BattlePokenState defender = attackerIsPlayer ? _model.EnemyState : _model.PlayerState;
 
-        // Sin atacante o sin objetivo (debilitado a mitad de turno): no hay accion
-        if (attacker.Poken.IsFainted || defender.Poken.IsFainted) return;
+        // Sin atacante o sin objetivo (debilitado a mitad de turno): no hay
+        // accion. Un Poken caido no ataca ni puede ser atacado.
+        if (!BattleTeamRules.PuedeActuar(attacker) || !BattleTeamRules.PuedeActuar(defender)) return;
 
         // Retroceso, sueño, congelado, paralisis, confusion...
         if (!StatusEffects.CanAct(attacker, events, _rng))
@@ -509,57 +522,58 @@ public class TurnEngine
 
     private void HandleFaints(List<BattleEvent> events)
     {
+        if (_model.IsBattleOver) return;
+
         // Jefe con fase de liberacion: no puede caer, se queda en 1 PS.
         // Va PRIMERO para que nada de lo de abajo lo vea debilitado.
-        if (EnemyCannotFaint != null && EnemyCannotFaint(_model)
-            && _model.EnemyState.Poken.IsFainted)
+        if (EnemyCannotFaint != null && _model.EnemyState.Poken.IsFainted
+            && EnemyCannotFaint(_model))
         {
             _model.EnemyState.Poken.SetCurrentHP(1);
+            // Volvio a estar vivo: si mas adelante cae de verdad hay que poder
+            // anunciarlo otra vez.
+            _model.EnemyState.FaintAnnounced = false;
         }
 
         // Debilitados por daño residual que nadie anuncio todavia
         AnnounceFaintIfNeeded(_model.EnemyState, events);
         AnnounceFaintIfNeeded(_model.PlayerState, events);
 
-        // Rival debilitado: XP para los participantes y reemplazo (o victoria)
-        if (_model.EnemyState.Poken.IsFainted)
+        // Rival debilitado: XP para los participantes y reemplazo (o victoria).
+        // Es un bucle porque las trampas pueden debilitar al que entra, y ahi
+        // hay que mandar al siguiente en vez de seguir peleando contra un caido.
+        // Termina siempre: cada vuelta o cierra el combate o consume un vivo.
+        while (_model.EnemyState.Poken.IsFainted)
         {
             AwardExperience(events);
 
-            int next = EnemyReplacementSelector != null
-                ? EnemyReplacementSelector(_model)
-                : FirstAliveIndex(_model.Enemy.Team);
-
-            if (next >= 0 && next < _model.Enemy.Team.Count && !_model.Enemy.Team[next].IsFainted)
+            int next = ElegirReemplazoRival();
+            if (next < 0)
             {
-                _model.SwitchEnemyPoken(next);
-                events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
-                    $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
-                AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
-                FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);
-                AnnounceFaintIfNeeded(_model.EnemyState, events); // por si las trampas lo debilitan
-            }
-            else
-            {
+                // Equipo rival sin Pokens disponibles: el combate TERMINA aca.
+                // Nunca se vuelve a pedir turno contra el que acaba de caer.
                 _model.Finish(playerVictory: true);
                 events.Add(BattleEvent.Of(BattleEventKind.BattleEnded, true));
                 return;
             }
+
+            _model.SwitchEnemyPoken(next);
+            events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
+                $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
+            AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
+            FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);
+            AnnounceFaintIfNeeded(_model.EnemyState, events); // por si las trampas lo debilitan
         }
 
-        // Jugador debilitado: por ahora auto-cambia al siguiente con vida (la
-        // eleccion manual llega con la UI de cambio), o pierde.
+        // Jugador debilitado: el motor NO elige por el. Marca que falta
+        // reemplazo y se detiene; el controller abre el selector de Poken y
+        // despues llama a CompletePlayerReplacement.
         if (_model.PlayerState.Poken.IsFainted)
         {
-            int next = FirstAliveIndex(_model.Player.Team);
-            if (next >= 0)
+            if (BattleTeamRules.HayBanco(_model.Player.Team, _model.ActivePlayerIndex))
             {
-                _model.SwitchPlayerPoken(next);
-                events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, true,
-                    $"¡Adelante, {_model.ActivePlayerPoken.Definition.pokenName}!"));
-                AbilityEffects.OnSwitchIn(_model.PlayerState, _model.EnemyState, events);
-                FieldEffects.OnSwitchIn(_model, isPlayerSide: true, events, _rng);
-                AnnounceFaintIfNeeded(_model.PlayerState, events); // por si las trampas lo debilitan
+                _model.SetAwaitingPlayerReplacement(true);
+                events.Add(BattleEvent.Of(BattleEventKind.PlayerMustSwitch, true));
             }
             else
             {
@@ -567,6 +581,48 @@ public class TurnEngine
                 events.Add(BattleEvent.Of(BattleEventKind.BattleEnded, false));
             }
         }
+    }
+
+    // Reemplazo del rival: lo propone la IA, pero el motor VALIDA. Un indice
+    // fuera de rango o de un Poken debilitado cae al primer vivo del banco; si
+    // no queda ninguno devuelve -1 y el combate se termina.
+    private int ElegirReemplazoRival()
+    {
+        List<PokenModel> team = _model.Enemy.Team;
+        int active = _model.ActiveEnemyIndex;
+
+        if (EnemyReplacementSelector != null)
+        {
+            int elegido = EnemyReplacementSelector(_model);
+            if (elegido != active && BattleTeamRules.EsIndiceVivo(team, elegido)) return elegido;
+        }
+        return BattleTeamRules.PrimerVivoDelBanco(team, active);
+    }
+
+    // El jugador ya eligio con que Poken sigue despues de un debilitamiento.
+    // Devuelve los eventos de la entrada (habilidades + trampas). Lista vacia si
+    // el indice no sirve: el controller vuelve a preguntar sin haber cambiado
+    // nada.
+    public List<BattleEvent> CompletePlayerReplacement(int index)
+    {
+        var events = new List<BattleEvent>();
+        if (!_model.AwaitingPlayerReplacement) return events;
+        if (!BattleTeamRules.EsIndiceVivo(_model.Player.Team, index)) return events;
+
+        _model.SetAwaitingPlayerReplacement(false);
+        _model.SwitchPlayerPoken(index);
+
+        events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, true,
+            $"¡Adelante, {_model.ActivePlayerPoken.Definition.pokenName}!"));
+        AbilityEffects.OnSwitchIn(_model.PlayerState, _model.EnemyState, events);
+        FieldEffects.OnSwitchIn(_model, isPlayerSide: true, events, _rng);
+
+        // Las trampas pueden debilitar al que entra: se resuelve en el acto y,
+        // si hace falta, se vuelve a pedir reemplazo.
+        AnnounceFaintIfNeeded(_model.PlayerState, events);
+        if (_model.PlayerState.Poken.IsFainted) HandleFaints(events);
+
+        return events;
     }
 
     // Reparte la XP del Poken rival caido entre los participantes vivos.
@@ -601,12 +657,5 @@ public class TurnEngine
                 }
             }
         }
-    }
-
-    private static int FirstAliveIndex(List<PokenModel> team)
-    {
-        for (int i = 0; i < team.Count; i++)
-            if (!team[i].IsFainted) return i;
-        return -1;
     }
 }

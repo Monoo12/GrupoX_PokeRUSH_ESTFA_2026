@@ -37,8 +37,10 @@ public class BattleHudView : MonoBehaviour
     [SerializeField] private Text messageText;
 
     [Header("Prediccion del boss")]
-    [Tooltip("Banda con el contador de la lectura de Nestor y la categoria anulada. " +
-             "Opcional: sin esto el combate anda igual, solo que sin contador visible.")]
+    [Tooltip("Panel de la lectura de Nestor. Presentacion aparte: recibe un " +
+             "PredictionSnapshot y decide como se ve. Opcional.")]
+    [SerializeField] private BattlePredictionView predictionView;
+    [Tooltip("Respaldo si no hay BattlePredictionView: un solo Text con el titulo.")]
     [SerializeField] private Text predictionBannerText;
 
     [Header("Menu de comandos")]
@@ -63,6 +65,17 @@ public class BattleHudView : MonoBehaviour
     [SerializeField] private Text[] teamNameTexts = new Text[6];
     [SerializeField] private Text[] teamHpTexts = new Text[6];
     [SerializeField] private Button teamBackButton;
+
+    [Header("Menu de MOCHILA")]
+    [Tooltip("Panel con los objetos de curacion. Mismo patron que el menu de " +
+             "equipo: N slots fijos cableados en el Inspector, se muestran solo " +
+             "los que tienen objeto. Reemplazar el arte no toca la logica.")]
+    [SerializeField] private GameObject bagPanel;
+    [SerializeField] private Button[] bagButtons = new Button[6];
+    [SerializeField] private Text[] bagNameTexts = new Text[6];
+    [SerializeField] private Text[] bagQuantityTexts = new Text[6];
+    [SerializeField] private Text bagEmptyText;
+    [SerializeField] private Button bagBackButton;
 
     [Header("Menu de la fase de liberacion")]
     [Tooltip("Panel propio con CURAR / PROTEGER / CAMBIAR / ATACAR. No reusa el " +
@@ -93,6 +106,8 @@ public class BattleHudView : MonoBehaviour
     public event Action<int> SwitchChosen;
     public event Action FleeChosen;
     public event Action BagChosen;
+    // Indice DENTRO de la lista que se le paso a ShowBagMenu, no del inventario
+    public event Action<int> ItemChosen;
 
     // Fase de liberacion. El cambio de Poken reusa el menu de equipo y su
     // evento SwitchChosen: BattleController lo redirige segun la fase.
@@ -106,6 +121,13 @@ public class BattleHudView : MonoBehaviour
     // panel de liberacion y no al de comandos.
     private bool _liberationMode;
 
+    // Cambio OBLIGADO (el Poken activo se debilito): no hay "volver", el
+    // jugador tiene que elegir si o si.
+    private bool _forcedSwitch;
+
+    // Cuantos objetos tiene la mochila abierta ahora mismo
+    private int _bagCount;
+
     // HP que se MUESTRA (drena gradualmente hacia el valor real del modelo)
     private float _displayedPlayerHp = -1f;
     private float _displayedEnemyHp = -1f;
@@ -118,7 +140,15 @@ public class BattleHudView : MonoBehaviour
         if (bagButton != null) bagButton.onClick.AddListener(() => BagChosen?.Invoke());
         if (fleeButton != null) fleeButton.onClick.AddListener(() => FleeChosen?.Invoke());
         if (fightBackButton != null) fightBackButton.onClick.AddListener(ShowCommandMenuInternal);
-        if (teamBackButton != null) teamBackButton.onClick.AddListener(ShowCommandMenuInternal);
+        if (teamBackButton != null) teamBackButton.onClick.AddListener(VolverDesdeEquipo);
+        if (bagBackButton != null) bagBackButton.onClick.AddListener(ShowCommandMenuInternal);
+
+        for (int i = 0; i < bagButtons.Length; i++)
+        {
+            int index = i;
+            if (bagButtons[i] == null) continue;
+            bagButtons[i].onClick.AddListener(() => ItemChosen?.Invoke(index));
+        }
 
         for (int i = 0; i < moveButtons.Length; i++)
         {
@@ -239,11 +269,18 @@ public class BattleHudView : MonoBehaviour
         else Debug.Log($"[Batalla] {message}"); // sin HUD: al menos lo veo en consola
     }
 
-    // Banda de la Prediccion: cuantos turnos faltan para la proxima lectura, o
-    // que categoria quedo anulada este turno. Texto vacio la apaga.
-    public void SetPredictionBanner(string texto)
+    // Estado de la Prediccion. Recibe DATOS, no texto armado: la presentacion
+    // la decide BattlePredictionView (o el Text de respaldo).
+    public void SetPrediction(PredictionSnapshot snapshot)
     {
+        if (predictionView != null)
+        {
+            predictionView.Render(snapshot);
+            return;
+        }
+
         if (predictionBannerText == null) return;
+        string texto = snapshot.Activa ? snapshot.Titulo : null;
         predictionBannerText.text = texto;
         predictionBannerText.gameObject.SetActive(!string.IsNullOrEmpty(texto));
     }
@@ -253,6 +290,7 @@ public class BattleHudView : MonoBehaviour
     {
         _model = battleModel;
         _liberationMode = false;
+        _forcedSwitch = false;
         ShowCommandMenuInternal();
     }
 
@@ -262,7 +300,61 @@ public class BattleHudView : MonoBehaviour
         if (commandPanel != null) commandPanel.SetActive(false);
         if (fightPanel != null) fightPanel.SetActive(false);
         if (teamPanel != null) teamPanel.SetActive(false);
+        if (bagPanel != null) bagPanel.SetActive(false);
         if (liberationPanel != null) liberationPanel.SetActive(false);
+    }
+
+    // Selector de Poken. 'forzado' = el activo se debilito: no hay como volver
+    // atras y el mensaje lo dice. La UI no decide NADA de reglas: solo pinta lo
+    // que el modelo ya sabe (quien esta vivo, quien es el activo) y avisa por
+    // SwitchChosen.
+    public void ShowTeamMenu(BattleModel battleModel, bool forzado = false)
+    {
+        _model = battleModel;
+        _forcedSwitch = forzado;
+        OpenTeamMenu();
+    }
+
+    // Mochila. Recibe la lista YA filtrada por el controller (solo lo usable en
+    // combate): la vista no sabe que es usable y que no.
+    public void ShowBagMenu(List<HealItemStack> objetos)
+    {
+        HideMenus();
+        _bagCount = objetos != null ? objetos.Count : 0;
+
+        if (bagPanel == null)
+        {
+            Debug.LogWarning("[HUD] Falta bagPanel: la mochila no se puede abrir.");
+            return;
+        }
+
+        bagPanel.SetActive(true);
+        ShowMessage(_bagCount > 0 ? "¿Qué objeto vas a usar?" : "La mochila está vacía.");
+
+        if (bagEmptyText != null)
+        {
+            bagEmptyText.gameObject.SetActive(_bagCount == 0);
+            bagEmptyText.text = "No te quedan objetos.";
+        }
+
+        for (int i = 0; i < bagButtons.Length; i++)
+        {
+            if (bagButtons[i] == null) continue;
+
+            bool hasItem = i < _bagCount;
+            bagButtons[i].gameObject.SetActive(hasItem);
+            if (!hasItem) continue;
+
+            // Los arrays de textos se pueden redimensionar a mano en el
+            // Inspector: se accede con guardas para que un slot sin Text no
+            // rompa la mochila entera.
+            HealItemStack stack = objetos[i];
+            Text nombre = At(bagNameTexts, i);
+            Text cantidad = At(bagQuantityTexts, i);
+            if (nombre != null) nombre.text = stack.Definition.itemName;
+            if (cantidad != null) cantidad.text = $"x{stack.Quantity}";
+            bagButtons[i].interactable = stack.Quantity > 0;
+        }
     }
 
     // Menu de la fase de liberacion: las tres herramientas mas atacar.
@@ -272,6 +364,7 @@ public class BattleHudView : MonoBehaviour
     public void ShowLiberationMenu(int aguantados, int totales, string avisoDelChip)
     {
         _liberationMode = true;
+        _forcedSwitch = false;
         HideMenus();
 
         if (liberationTurnsText != null)
@@ -287,10 +380,21 @@ public class BattleHudView : MonoBehaviour
 
     // ---------- menus internos ----------
 
-    private void ShowCommandMenuInternal()
+    // Apaga TODOS los submenus. Existe como metodo y no suelto en cada lugar
+    // porque agregar un panel nuevo y olvidarse de apagarlo en uno solo de los
+    // caminos deja la pantalla trabada: fue exactamente lo que paso con la
+    // mochila, que al tocar ATRAS mostraba el menu de comandos por debajo pero
+    // el overlay de la mochila quedaba encima y parecia que no salia.
+    private void CerrarSubmenus()
     {
         if (fightPanel != null) fightPanel.SetActive(false);
         if (teamPanel != null) teamPanel.SetActive(false);
+        if (bagPanel != null) bagPanel.SetActive(false);
+    }
+
+    private void ShowCommandMenuInternal()
+    {
+        CerrarSubmenus();
 
         // En liberacion el "volver" del menu de equipo regresa a su propio
         // panel, no al de comandos (que no aplica en esa fase).
@@ -318,6 +422,7 @@ public class BattleHudView : MonoBehaviour
             return;
         }
 
+        CerrarSubmenus();
         if (commandPanel != null) commandPanel.SetActive(false);
         fightPanel.SetActive(true);
         ShowMessage("Elige un movimiento.");
@@ -366,13 +471,26 @@ public class BattleHudView : MonoBehaviour
         }
     }
 
+    // Vuelve al menu anterior desde el equipo. En un cambio OBLIGADO no hace
+    // nada: el jugador tiene que elegir con quien sigue.
+    private void VolverDesdeEquipo()
+    {
+        if (_forcedSwitch) return;
+        ShowCommandMenuInternal();
+    }
+
     private void OpenTeamMenu()
     {
         if (_model == null || teamPanel == null) return;
 
+        CerrarSubmenus();
         if (commandPanel != null) commandPanel.SetActive(false);
+        if (liberationPanel != null) liberationPanel.SetActive(false);
         teamPanel.SetActive(true);
-        ShowMessage("Elige un Pokémon.");
+
+        // En un cambio obligado el "volver" se esconde: no hay a donde volver.
+        if (teamBackButton != null) teamBackButton.gameObject.SetActive(!_forcedSwitch);
+        ShowMessage(_forcedSwitch ? "¿Qué Poken vas a enviar?" : "Elige un Pokémon.");
 
         List<PokenModel> team = _model.Player.Team;
         for (int i = 0; i < teamButtons.Length; i++)
@@ -393,6 +511,11 @@ public class BattleHudView : MonoBehaviour
     }
 
     // ---------- utilidades ----------
+
+    // Acceso seguro a los arrays cableados en el Inspector: si alguien los
+    // redimensiona o deja un hueco, devuelve null en vez de tirar excepcion.
+    private static T At<T>(T[] array, int index) where T : class
+        => (array != null && index >= 0 && index < array.Length) ? array[index] : null;
 
     private static void SetHpBar(Image fill, float currentHp, int maxHp)
     {

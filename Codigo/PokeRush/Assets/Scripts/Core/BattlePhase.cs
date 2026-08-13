@@ -12,5 +12,11 @@ public enum BattlePhase
     //  significa otra cosa y confundiria.)
     Liberation,
 
+    // El Poken activo del jugador se debilito y el combate esta DETENIDO hasta
+    // que elija con cual sigue. Es una fase propia y no un sub-estado del turno
+    // porque mientras dura no se resuelve nada: ni el rival actua ni avanza la
+    // Prediccion.
+    PlayerReplacement,
+
     End
 }

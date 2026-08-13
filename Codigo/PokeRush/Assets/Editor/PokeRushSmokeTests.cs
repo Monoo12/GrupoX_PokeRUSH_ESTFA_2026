@@ -44,6 +44,20 @@ namespace PokeRush.EditorTools
             TestGymLeaderSwitchesOnBadMatchup();
             TestWildFavorsSuperEffective();
 
+            // Estados de vida/muerte y fin de combate (bugs del boss)
+            TestEsElUltimoExcluyeAlActivo();
+            TestDebilitadoNoPuedeSerActivo();
+            TestBossNoSalvaAlAnteultimo();
+            TestCombateTerminaAlCaerElUltimo();
+            TestMuertoNoRecibeTurno();
+            TestJugadorCaidoEsperaEleccion();
+            TestReemplazoRivalInvalidoNoRevive();
+
+            // Subsistemas de la torre -> dificultad del boss
+            TestSubsistemasSinCortarDanElBossMasDuro();
+            TestCadaSubsistemaAflojaLoSuyo();
+            TestFirewallEsParcialPeroMelmetalEsTodoONada();
+
             if (_failed == 0)
                 Debug.Log($"[SmokeTests] TODOS OK: {_passed} checks pasaron.");
             else
@@ -624,6 +638,296 @@ namespace PokeRush.EditorTools
             Check(pickedTackle > 100, $"WildAI: sigue usando el movimiento neutro a veces ({pickedTackle}/1000)");
             Check(ratio > 1.2f && ratio < 1.9f,
                 $"WildAI: sesgo suave hacia lo super efectivo (proporcion {ratio:F2}, esperado ~1.5)");
+        }
+
+        // ---------- vida, muerte y fin de combate ----------
+        //
+        // Estos tests cubren los bugs del combate contra Nestor: el bucle contra
+        // un Poken ya derrotado, el boss inmortal y el turno que se seguia
+        // pidiendo despues de que el rival se quedara sin equipo.
+
+        // Combate con banco de los dos lados, que MakeBattle no arma.
+        private static BattleModel MakeBattleConBancos(
+            List<PokenModel> equipoJugador, List<PokenModel> equipoRival)
+        {
+            var player = new PlayerModel("Tester");
+            foreach (PokenModel p in equipoJugador) player.Team.Add(p);
+
+            var enemy = new EnemyModel(equipoRival[0].Definition, equipoRival[0].Level);
+            enemy.Team.Clear();
+            foreach (PokenModel p in equipoRival) enemy.Team.Add(p);
+
+            var model = new BattleModel(player, enemy);
+            model.SwitchPlayerPoken(0);
+            model.SwitchEnemyPoken(0);
+            return model;
+        }
+
+        private static PokenModel MakeDummy(string nombre, int hp, int speed, MoveDefinition move)
+            => MakePoken(MakeSpecies(nombre, PokenType.Normal, PokenType.None,
+                hp, 50, 50, 50, 50, speed), 20, move);
+
+        private static void TestEsElUltimoExcluyeAlActivo()
+        {
+            var tackle = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var a = MakeDummy("A", 60, 50, tackle);
+            var b = MakeDummy("B", 60, 50, tackle);
+            var team = new List<PokenModel> { a, b };
+
+            // Con el activo caido pero un compañero vivo, NO es el ultimo
+            a.SetCurrentHP(0);
+            Check(!BattleTeamRules.EsElUltimo(team, 0),
+                "EsElUltimo: con el activo caido y un compañero vivo devuelve false");
+
+            // Ahora si: el compañero tambien cayo
+            b.SetCurrentHP(0);
+            Check(BattleTeamRules.EsElUltimo(team, 0),
+                "EsElUltimo: sin nadie mas en el banco devuelve true");
+            Check(!BattleTeamRules.TieneAlgunoVivo(team),
+                "TieneAlgunoVivo: equipo entero caido devuelve false");
+        }
+
+        private static void TestDebilitadoNoPuedeSerActivo()
+        {
+            var tackle = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var lead = MakeDummy("Lider", 60, 60, tackle);
+            var banco = MakeDummy("Banco", 60, 50, tackle);
+            var rival = MakeDummy("Rival", 60, 10, tackle);
+
+            var model = MakeBattleConBancos(
+                new List<PokenModel> { lead, banco }, new List<PokenModel> { rival });
+
+            banco.SetCurrentHP(0);
+            bool cambio = model.SwitchPlayerPoken(1);
+            Check(!cambio && model.ActivePlayerIndex == 0,
+                "SwitchPlayerPoken: un Poken debilitado nunca pasa a ser el activo");
+        }
+
+        // El bug central: el ANTEULTIMO Poken del boss se salvaba de caer en
+        // 1 PS y el combate quedaba en bucle contra un muerto.
+        private static void TestBossNoSalvaAlAnteultimo()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 250, 100, 35);
+            var atacante = MakeDummy("Atacante", 200, 200, golpe);
+            var boss1 = MakeDummy("Boss1", 40, 5, golpe);
+            var boss2 = MakeDummy("Boss2", 200, 5, golpe);
+
+            var model = MakeBattleConBancos(
+                new List<PokenModel> { atacante }, new List<PokenModel> { boss1, boss2 });
+
+            var engine = new TurnEngine(model, new SeededRng(7));
+            // Mismo delegado que arma BattleController: solo el ULTIMO no cae
+            engine.EnemyCannotFaint =
+                m => BattleTeamRules.EsElUltimo(m.Enemy.Team, m.ActiveEnemyIndex);
+
+            // PS al minimo para que el test mida la REGLA y no la formula de daño
+            boss1.SetCurrentHP(1);
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+
+            Check(boss1.IsFainted,
+                "Boss: el anteultimo Poken SI se debilita (no queda inmortal en 1 PS)");
+            Check(model.ActiveEnemyIndex == 1 && !model.IsBattleOver,
+                "Boss: al caer el anteultimo entra el siguiente y el combate sigue");
+
+            // El ultimo si se salva: es lo que habilita la fase de liberacion
+            boss2.SetCurrentHP(1);
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(!boss2.IsFainted && boss2.CurrentHP == 1,
+                "Boss: el ULTIMO Poken queda en 1 PS para la fase de liberacion");
+            Check(!model.IsBattleOver,
+                "Boss: con el ultimo en 1 PS el combate todavia no termino");
+        }
+
+        private static void TestCombateTerminaAlCaerElUltimo()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 250, 100, 35);
+            var atacante = MakeDummy("Atacante", 200, 200, golpe);
+            var rival = MakeDummy("Rival", 40, 5, golpe);
+
+            var model = MakeBattleConBancos(
+                new List<PokenModel> { atacante }, new List<PokenModel> { rival });
+            var engine = new TurnEngine(model, new SeededRng(11));
+
+            rival.SetCurrentHP(1);
+            List<BattleEvent> events = engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+
+            Check(model.IsBattleOver && model.IsPlayerVictory,
+                "Fin: sin Pokens disponibles del rival el combate termina en victoria");
+            Check(events.Exists(e => e.Kind == BattleEventKind.BattleEnded),
+                "Fin: se emite el evento BattleEnded");
+
+            // Y no se puede pedir otro turno contra el que ya cayo
+            List<BattleEvent> despues = engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(despues.Count == 0,
+                "Fin: pedir otro turno con el combate terminado no produce nada");
+        }
+
+        private static void TestMuertoNoRecibeTurno()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 60, 100, 35);
+            var jugador = MakeDummy("Jugador", 100, 60, golpe);
+            var rivalA = MakeDummy("RivalA", 100, 10, golpe);
+            var rivalB = MakeDummy("RivalB", 100, 10, golpe);
+
+            var model = MakeBattleConBancos(
+                new List<PokenModel> { jugador }, new List<PokenModel> { rivalA, rivalB });
+            var engine = new TurnEngine(model, new SeededRng(3));
+
+            // Se fuerza el estado invalido: el activo rival esta caido y aun asi
+            // se pide un turno. El motor tiene que resolver el debilitamiento,
+            // no dejarlo atacar.
+            rivalA.SetCurrentHP(0);
+            int hpAntes = jugador.CurrentHP;
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+
+            Check(jugador.CurrentHP == hpAntes,
+                "Muerto: un Poken debilitado no ataca aunque se le pida el turno");
+            Check(model.ActiveEnemyIndex == 1,
+                "Muerto: en vez de actuar, el rival caido es reemplazado");
+        }
+
+        private static void TestJugadorCaidoEsperaEleccion()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 250, 100, 35);
+            var suave = MakeMove("Suave", PokenType.Normal, AttackType.Physical, 1, 100, 35);
+            var lead = MakeDummy("Lider", 30, 5, suave);
+            var banco = MakeDummy("Banco", 100, 5, suave);
+            var rival = MakeDummy("Rival", 200, 200, golpe);
+
+            var model = MakeBattleConBancos(
+                new List<PokenModel> { lead, banco }, new List<PokenModel> { rival });
+            var engine = new TurnEngine(model, new SeededRng(5));
+
+            lead.SetCurrentHP(1);
+            List<BattleEvent> events = engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+
+            Check(lead.IsFainted && model.AwaitingPlayerReplacement,
+                "Jugador caido: el motor queda esperando que ELIJA reemplazo");
+            Check(model.ActivePlayerIndex == 0,
+                "Jugador caido: no se auto-cambia (el activo sigue siendo el caido)");
+            Check(events.Exists(e => e.Kind == BattleEventKind.PlayerMustSwitch),
+                "Jugador caido: se emite PlayerMustSwitch para que la UI abra el selector");
+            Check(!model.IsBattleOver,
+                "Jugador caido: con banco disponible el combate no termina");
+
+            // Elegir uno debilitado no hace nada; elegir uno vivo si
+            Check(engine.CompletePlayerReplacement(0).Count == 0 && model.AwaitingPlayerReplacement,
+                "Reemplazo: elegir al caido se rechaza y se sigue esperando");
+
+            List<BattleEvent> entrada = engine.CompletePlayerReplacement(1);
+            Check(!model.AwaitingPlayerReplacement && model.ActivePlayerIndex == 1,
+                "Reemplazo: al elegir uno vivo entra al combate");
+            Check(entrada.Exists(e => e.Kind == BattleEventKind.PokenSwitched),
+                "Reemplazo: el evento PokenSwitched llega DESPUES de la eleccion");
+        }
+
+        // Una IA que devuelve basura no puede revivir a nadie ni trabar el combate
+        private static void TestReemplazoRivalInvalidoNoRevive()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 250, 100, 35);
+            var atacante = MakeDummy("Atacante", 200, 200, golpe);
+            var rivalA = MakeDummy("RivalA", 40, 5, golpe);
+            var rivalB = MakeDummy("RivalB", 200, 5, golpe);
+
+            var model = MakeBattleConBancos(
+                new List<PokenModel> { atacante }, new List<PokenModel> { rivalA, rivalB });
+            var engine = new TurnEngine(model, new SeededRng(13));
+            engine.EnemyReplacementSelector = _ => 99; // indice invalido a proposito
+
+            rivalA.SetCurrentHP(1);
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+
+            Check(model.ActiveEnemyIndex == 1 && !model.IsBattleOver,
+                "Reemplazo rival: un indice invalido cae al primer vivo del banco");
+            Check(rivalA.IsFainted,
+                "Reemplazo rival: el caido sigue caido (nadie lo revive)");
+        }
+
+        // ---------- subsistemas de la torre -> combate de Nestor ----------
+        //
+        // Verifican que cortar cosas caminando la torre REALMENTE llegue a la
+        // pelea. Es una cadena larga (StoryFlag -> TowerProgressModel ->
+        // BossBattleConfig -> BattleController) y cualquier eslabon flojo se ve
+        // igual desde afuera: un boss que no cambia.
+
+        private static BossBattleConfig ConfigCon(params StoryFlag[] flags)
+        {
+            var story = new StoryModel();
+            foreach (StoryFlag f in flags) story.ActivateFlag(f);
+            return BossBattleConfig.DesdeTorre(new TowerProgressModel(story));
+        }
+
+        private static void TestSubsistemasSinCortarDanElBossMasDuro()
+        {
+            BossBattleConfig nada = ConfigCon();
+
+            Check(nada.EscudoInicial ==
+                  BossBattleConfig.EscudoPorNodoActivo * TowerProgressModel.FirewallNodosTotales,
+                "Subsistemas: sin cortar nada, el escudo del nucleo esta entero");
+            Check(!nada.PrediccionConAviso,
+                "Subsistemas: sin cortar las camaras, la lectura de Nestor no se avisa antes");
+            Check(!nada.PermiteCambio,
+                "Subsistemas: sin cortar el rastreo, no se puede cambiar de Poken");
+            Check(nada.TurnosLiberacion ==
+                  BossBattleConfig.TurnosLiberacionBase * BossBattleConfig.MultiplicadorSinEnergia,
+                "Subsistemas: sin cortar la energia, la liberacion dura el doble");
+            Check(!nada.SinMelmetal,
+                "Subsistemas: sin cortar todo, Nestor pelea con Melmetal");
+        }
+
+        private static void TestCadaSubsistemaAflojaLoSuyo()
+        {
+            Check(ConfigCon(StoryFlag.Torre1_CamarasCortadas).PrediccionConAviso,
+                "Camaras cortadas: la lectura de Nestor se avisa un turno antes");
+
+            Check(ConfigCon(StoryFlag.Torre1_RastreoCortado).PermiteCambio,
+                "Rastreo cortado: se habilita el cambio de Poken");
+
+            Check(ConfigCon(StoryFlag.Torre1_EnergiaAuxiliarCortada).TurnosLiberacion
+                  == BossBattleConfig.TurnosLiberacionBase,
+                "Energia cortada: la fase de liberacion dura la mitad");
+
+            // Y no se pisan entre si: cortar una no toca las otras
+            BossBattleConfig soloCamaras = ConfigCon(StoryFlag.Torre1_CamarasCortadas);
+            Check(!soloCamaras.PermiteCambio && soloCamaras.EscudoInicial ==
+                  BossBattleConfig.EscudoPorNodoActivo * TowerProgressModel.FirewallNodosTotales,
+                "Subsistemas: cortar uno no afloja los demas");
+        }
+
+        private static void TestFirewallEsParcialPeroMelmetalEsTodoONada()
+        {
+            // El firewall es el unico PARCIAL: cada nodo achica el escudo
+            int escudo0 = ConfigCon().EscudoInicial;
+            int escudo1 = ConfigCon(StoryFlag.Torre1_FirewallNodoA).EscudoInicial;
+            int escudo2 = ConfigCon(StoryFlag.Torre1_FirewallNodoA,
+                                    StoryFlag.Torre1_FirewallNodoB).EscudoInicial;
+            int escudo3 = ConfigCon(StoryFlag.Torre1_FirewallNodoA,
+                                    StoryFlag.Torre1_FirewallNodoB,
+                                    StoryFlag.Torre1_FirewallNodoC).EscudoInicial;
+
+            Check(escudo0 > escudo1 && escudo1 > escudo2 && escudo2 > escudo3 && escudo3 == 0,
+                $"Firewall: cada nodo achica el escudo ({escudo0}/{escudo1}/{escudo2}/{escudo3})");
+
+            // Melmetal es TODO O NADA: tres de cuatro subsistemas no alcanzan
+            Check(!ConfigCon(StoryFlag.Torre1_CamarasCortadas,
+                             StoryFlag.Torre1_RastreoCortado,
+                             StoryFlag.Torre1_EnergiaAuxiliarCortada).SinMelmetal,
+                "Melmetal: con el firewall a medias NO desaparece");
+
+            Check(!ConfigCon(StoryFlag.Torre1_FirewallNodoA,
+                             StoryFlag.Torre1_FirewallNodoB,
+                             StoryFlag.Torre1_FirewallNodoC,
+                             StoryFlag.Torre1_RastreoCortado,
+                             StoryFlag.Torre1_EnergiaAuxiliarCortada).SinMelmetal,
+                "Melmetal: faltando las camaras NO desaparece");
+
+            Check(ConfigCon(StoryFlag.Torre1_CamarasCortadas,
+                            StoryFlag.Torre1_FirewallNodoA,
+                            StoryFlag.Torre1_FirewallNodoB,
+                            StoryFlag.Torre1_FirewallNodoC,
+                            StoryFlag.Torre1_RastreoCortado,
+                            StoryFlag.Torre1_EnergiaAuxiliarCortada).SinMelmetal,
+                "Melmetal: con los CUATRO subsistemas cortados, Nestor pelea sin el");
         }
     }
 }

@@ -27,6 +27,14 @@ public class BattleFxView : MonoBehaviour
     [SerializeField] private Image weatherOverlay;   // tinte persistente del clima
     [SerializeField] private Image terrainOverlay;   // tinte persistente del terreno
 
+    [Tooltip("Camara del combate, para el temblor de pantalla. Sin esto se usa " +
+             "Camera.main, que en un mapa es la camara de exploracion: el " +
+             "temblor le movería la camara al mundo en vez de a la pelea.")]
+    [SerializeField] private Camera battleCamera;
+
+    // La del prefab si esta, si no la principal de la escena
+    private Camera Cam => battleCamera != null ? battleCamera : Camera.main;
+
     [Header("Tiempos")]
     [SerializeField] private float throwDuration = 0.55f;
     [SerializeField] private float appearDuration = 0.30f;
@@ -483,7 +491,7 @@ public class BattleFxView : MonoBehaviour
             fadeOverlay.color = new Color(1f, 1f, 1f, 0.45f);
         }
 
-        Camera cam = Camera.main;
+        Camera cam = Cam;
         Vector3 camHome = cam != null ? cam.transform.position : Vector3.zero;
         SpriteRenderer defenderRenderer = defender.Renderer;
 

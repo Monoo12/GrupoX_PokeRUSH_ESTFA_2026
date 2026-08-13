@@ -119,27 +119,14 @@ namespace PokeRush.EditorTools
             AssetDatabase.SaveAssets();
 
             // --- 4. Contenido de la escena ---
-            BuildCamera();
-            SpriteRenderer background = BuildBackground();
-            // Los sprites tienen pivot en los pies y PPU = alto del frame (miden
-            // 1 unidad): la Y es el piso de cada plataforma y la escala es directa
-            PokenView playerView = BuildPokenView("PokenJugador", new Vector3(-1.28f, -1.55f, 0f), 1.7f);
-            PokenView enemyView = BuildPokenView("PokenRival", new Vector3(0.95f, 0.30f, 0f), 1.1f);
+            // Sin BuildCamera(): el rig ya trae la suya, con el tamaño correcto
             BuildEventSystem();
-            BattleHudView hud = BuildHud();
-            BattleFxView fx = BuildBattleFx();
 
-            // BattleController cableado al HUD, las vistas, el fondo y los FX
-            var controllerGo = new GameObject("BattleSystem");
-            var controller = controllerGo.AddComponent<BattleController>();
-            var so = new SerializedObject(controller);
-            so.FindProperty("battleHudView").objectReferenceValue = hud;
-            so.FindProperty("playerPokenView").objectReferenceValue = playerView;
-            so.FindProperty("enemyPokenView").objectReferenceValue = enemyView;
-            so.FindProperty("backgroundRenderer").objectReferenceValue = background;
-            so.FindProperty("battleFxView").objectReferenceValue = fx;
-            so.FindProperty("messageDelay").floatValue = 0.8f;
-            so.ApplyModifiedPropertiesWithoutUndo();
+            // Todo el combate junto bajo una raiz: es la misma que empaqueta
+            // BattlePrefabBuilder, asi la escena de prueba y el prefab del juego
+            // no pueden quedar distintos.
+            BattleSystemRoot root = BuildCombatRig();
+            BattleController controller = root.Controller;
 
             // BattleTester: equipo del jugador (iniciales nivel 12) vs el entrenador
             var testerGo = new GameObject("BattleTester");
@@ -274,6 +261,88 @@ namespace PokeRush.EditorTools
                 AssetDatabase.GUIDToAssetPath(guids[0]));
         }
 
+        // ---------- el sistema de combate completo, bajo UNA raiz ----------
+
+        // Arma el combate entero (fondo, PokenViews, HUD, FX y BattleController)
+        // colgando de un solo GameObject. Lo usan la escena de prueba y el
+        // prefab del juego: un unico armado, una sola cosa que mantener.
+        //
+        // NO incluye camara ni EventSystem a proposito: esos son de la escena.
+        // BattleSystemRoot crea el EventSystem en runtime si falta, asi que el
+        // prefab igual se puede soltar en cualquier mapa.
+        internal static BattleSystemRoot BuildCombatRig()
+        {
+            var rootGo = new GameObject("SistemaDeCombate");
+            Transform root = rootGo.transform;
+
+            // Camara PROPIA. Va adentro del prefab y no en la escena porque el
+            // layout del combate esta hecho para orthographicSize 1.92: con la
+            // camara de un mapa (7.5 en MapaNuevo) los Pokens y el fondo salen
+            // ~4x mas chicos, mientras el HUD —que es screen-space y no depende
+            // de la camara— queda igual. Eso es lo que se ve desproporcionado.
+            Camera battleCamera = BuildBattleCamera(root);
+
+            SpriteRenderer background = BuildBackground(root);
+            // Los sprites tienen pivot en los pies y PPU = alto del frame (miden
+            // 1 unidad): la Y es el piso de cada plataforma y la escala es directa
+            PokenView playerView = BuildPokenView("PokenJugador", new Vector3(-1.28f, -1.55f, 0f), 1.7f, root);
+            PokenView enemyView = BuildPokenView("PokenRival", new Vector3(0.95f, 0.30f, 0f), 1.1f, root);
+            BattleHudView hud = BuildHud(root);
+            BattleFxView fx = BuildBattleFx(root);
+
+            // BattleController cableado al HUD, las vistas, el fondo y los FX
+            var controller = rootGo.AddComponent<BattleController>();
+            var so = new SerializedObject(controller);
+            so.FindProperty("battleHudView").objectReferenceValue = hud;
+            so.FindProperty("playerPokenView").objectReferenceValue = playerView;
+            so.FindProperty("enemyPokenView").objectReferenceValue = enemyView;
+            so.FindProperty("backgroundRenderer").objectReferenceValue = background;
+            so.FindProperty("battleFxView").objectReferenceValue = fx;
+            so.FindProperty("battleCamera").objectReferenceValue = battleCamera;
+            so.FindProperty("messageDelay").floatValue = 0.8f;
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            // El temblor de pantalla tiene que mover la camara del combate, no
+            // la del mapa
+            var fxSo = new SerializedObject(fx);
+            fxSo.FindProperty("battleCamera").objectReferenceValue = battleCamera;
+            fxSo.ApplyModifiedPropertiesWithoutUndo();
+
+            var systemRoot = rootGo.AddComponent<BattleSystemRoot>();
+            var rootSo = new SerializedObject(systemRoot);
+            rootSo.FindProperty("battleController").objectReferenceValue = controller;
+            rootSo.FindProperty("battleCamera").objectReferenceValue = battleCamera;
+            rootSo.FindProperty("audioListener").objectReferenceValue =
+                battleCamera.GetComponent<AudioListener>();
+            rootSo.ApplyModifiedPropertiesWithoutUndo();
+
+            return systemRoot;
+        }
+
+        // Camara del combate. Va tageada MainCamera para que todo lo que use
+        // Camera.main (FX heredados, futuros efectos) apunte a ella mientras la
+        // pelea esta activa; como el prefab arranca DESACTIVADO, fuera del
+        // combate la unica MainCamera sigue siendo la del mapa.
+        private static Camera BuildBattleCamera(Transform parent)
+        {
+            var go = new GameObject("CamaraCombate");
+            go.transform.SetParent(parent, false);
+            go.tag = "MainCamera";
+            go.transform.localPosition = new Vector3(0f, 0f, -10f);
+
+            var cam = go.AddComponent<Camera>();
+            cam.orthographic = true;
+            // Media altura del fondo (384 px / 2 / 100 ppu): el fondo llena la vista
+            cam.orthographicSize = 1.92f;
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = Color.black;
+            cam.depth = 10; // por encima de la camara de exploracion
+
+            // BattleSystemRoot lo apaga si la escena ya tiene otro activo
+            go.AddComponent<AudioListener>();
+            return cam;
+        }
+
         private static void BuildCamera()
         {
             var go = new GameObject("Main Camera");
@@ -288,18 +357,20 @@ namespace PokeRush.EditorTools
             go.AddComponent<AudioListener>();
         }
 
-        private static SpriteRenderer BuildBackground()
+        internal static SpriteRenderer BuildBackground(Transform parent)
         {
             var go = new GameObject("FondoBatalla");
+            go.transform.SetParent(parent, false);
             var renderer = go.AddComponent<SpriteRenderer>();
             renderer.sprite = BattleUiAssetImporter.LoadBackground("Pradera_bg.png");
             renderer.sortingOrder = -10; // detras de los Pokens
             return renderer;
         }
 
-        private static PokenView BuildPokenView(string name, Vector3 position, float scale)
+        internal static PokenView BuildPokenView(string name, Vector3 position, float scale, Transform parent)
         {
             var go = new GameObject(name);
+            go.transform.SetParent(parent, false);
             go.transform.position = position;
             go.transform.localScale = Vector3.one * scale;
             var renderer = go.AddComponent<SpriteRenderer>();
@@ -319,10 +390,16 @@ namespace PokeRush.EditorTools
 
         // Objetos de las secuencias visuales: entrenador rival, ball volando,
         // destello y el fundido de pantalla (en su propio canvas, encima del HUD)
-        private static BattleFxView BuildBattleFx()
+        internal static BattleFxView BuildBattleFx(Transform parent)
         {
             var fxGo = new GameObject("BattleFx");
+            fxGo.transform.SetParent(parent, false);
             var fx = fxGo.AddComponent<BattleFxView>();
+
+            // Todo lo de los FX cuelga de fxGo (que esta en el origen, asi que
+            // local == mundo). Antes quedaban sueltos en la raiz de la escena y
+            // no se podian empaquetar en un prefab.
+            Transform fxRoot = fxGo.transform;
 
             var trainerGo = new GameObject("EntrenadorRival");
             var trainerRenderer = trainerGo.AddComponent<SpriteRenderer>();
@@ -373,6 +450,11 @@ namespace PokeRush.EditorTools
             fadeImage.raycastTarget = false;
             fadeGo.SetActive(false);
 
+            foreach (GameObject hijo in new[]
+                     { trainerGo, ballGo, burstGo, projectileGo, impactGo,
+                       ambientCanvasGo, fadeCanvasGo })
+                hijo.transform.SetParent(fxRoot, false);
+
             var so = new SerializedObject(fx);
             so.FindProperty("trainerRenderer").objectReferenceValue = trainerRenderer;
             so.FindProperty("ballRenderer").objectReferenceValue = ballRenderer;
@@ -392,10 +474,11 @@ namespace PokeRush.EditorTools
 
         // ---------- HUD ----------
 
-        private static BattleHudView BuildHud()
+        internal static BattleHudView BuildHud(Transform parent)
         {
             // Canvas a resolucion nativa de los graficos (512x384)
             var canvasGo = new GameObject("Canvas");
+            canvasGo.transform.SetParent(parent, false);
             var canvas = canvasGo.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             var scaler = canvasGo.AddComponent<CanvasScaler>();
@@ -531,12 +614,53 @@ namespace PokeRush.EditorTools
             teamBackRect.anchorMin = teamBackRect.anchorMax = teamBackRect.pivot = new Vector2(0.5f, 0.5f);
             teamBackRect.anchoredPosition = new Vector2(0, -160);
 
-            // --- banda de la PREDICCION de Nestor (arriba, centrada) ---
-            Text predictionBanner = CreateText("BandaPrediccion", hudGo.transform,
-                new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
-                new Vector2(0, -6), new Vector2(420, 24), 14, TextAnchor.MiddleCenter);
-            predictionBanner.color = new Color(1f, 0.85f, 0.35f);
-            predictionBanner.gameObject.SetActive(false);
+            // --- menu de MOCHILA (overlay con la lista de objetos) ---
+            var bagPanel = CreateRect("MenuMochila", hudGo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+            var bagOverlay = bagPanel.AddComponent<Image>();
+            bagOverlay.color = new Color(0f, 0f, 0f, 0.65f);
+
+            var bagButtons = new Button[6];
+            var bagNames = new Text[6];
+            var bagQuantities = new Text[6];
+            for (int i = 0; i < 6; i++)
+            {
+                var slotGo = CreateRect($"Objeto{i + 1}", bagPanel.transform,
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                    new Vector2(0, 130 - i * 46), new Vector2(300, 42));
+                var slotImage = slotGo.AddComponent<Image>();
+                slotImage.sprite = slotSprite;
+                bagButtons[i] = slotGo.AddComponent<Button>();
+                bagButtons[i].targetGraphic = slotImage;
+                var bagState = bagButtons[i].spriteState;
+                bagState.highlightedSprite = slotSelected;
+                bagState.pressedSprite = slotSelected;
+                bagButtons[i].spriteState = bagState;
+                bagButtons[i].transition = Selectable.Transition.SpriteSwap;
+
+                bagNames[i] = CreateText("Nombre", slotGo.transform,
+                    Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f),
+                    new Vector2(16, 0), new Vector2(-90, 0), 14, TextAnchor.MiddleLeft);
+                bagQuantities[i] = CreateText("Cantidad", slotGo.transform,
+                    Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f),
+                    new Vector2(210, 0), new Vector2(-16, 0), 13, TextAnchor.MiddleRight);
+            }
+
+            Text bagEmpty = CreateText("MochilaVacia", bagPanel.transform,
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0, 60), new Vector2(320, 24), 14, TextAnchor.MiddleCenter);
+            bagEmpty.gameObject.SetActive(false);
+
+            Button bagBack = CreateSheetButton(bagPanel.transform, "BotonAtras",
+                BattleUiAssetImporter.CommandRowBack, Vector2.zero);
+            var bagBackRect = (RectTransform)bagBack.transform;
+            bagBackRect.anchorMin = bagBackRect.anchorMax = bagBackRect.pivot = new Vector2(0.5f, 0.5f);
+            bagBackRect.anchoredPosition = new Vector2(0, -160);
+
+            // --- panel de la PREDICCION de Nestor (arriba, centrado) ---
+            // Componente propio: recibe datos y decide como se ve. Todo esto se
+            // puede rehacer a mano desde Unity sin tocar la logica.
+            BattlePredictionView predictionView = BuildPredictionView(hudGo.transform);
 
             // --- menu de la FASE DE LIBERACION ---
             // Panel propio y no reuso del de comandos: esos botones tienen el
@@ -569,6 +693,7 @@ namespace PokeRush.EditorTools
             commandPanel.SetActive(false);
             fightPanel.SetActive(false);
             teamPanel.SetActive(false);
+            bagPanel.SetActive(false);
             liberationPanel.SetActive(false);
 
             // --- cablear todos los campos privados del BattleHudView ---
@@ -590,7 +715,7 @@ namespace PokeRush.EditorTools
             so.FindProperty("enemyHpFill").objectReferenceValue = enemyHpFill;
             so.FindProperty("enemyStatusIcon").objectReferenceValue = enemyStatus;
 
-            so.FindProperty("predictionBannerText").objectReferenceValue = predictionBanner;
+            so.FindProperty("predictionView").objectReferenceValue = predictionView;
 
             so.FindProperty("liberationPanel").objectReferenceValue = liberationPanel;
             so.FindProperty("liberationHealButton").objectReferenceValue = libHeal;
@@ -620,11 +745,76 @@ namespace PokeRush.EditorTools
             SetArray(so, "teamHpTexts", teamHps.Cast<Object>().ToArray());
             so.FindProperty("teamBackButton").objectReferenceValue = teamBack;
 
+            so.FindProperty("bagPanel").objectReferenceValue = bagPanel;
+            SetArray(so, "bagButtons", bagButtons.Cast<Object>().ToArray());
+            SetArray(so, "bagNameTexts", bagNames.Cast<Object>().ToArray());
+            SetArray(so, "bagQuantityTexts", bagQuantities.Cast<Object>().ToArray());
+            so.FindProperty("bagEmptyText").objectReferenceValue = bagEmpty;
+            so.FindProperty("bagBackButton").objectReferenceValue = bagBack;
+
             // Tablas de sprites por tipo y por estado
             WireTypeSprites(so);
 
             so.ApplyModifiedPropertiesWithoutUndo();
             return hud;
+        }
+
+        // Panel de la lectura de Nestor: marco, titulo, detalle y barra de
+        // progreso hacia la proxima lectura. Es una jerarquia comun y corriente
+        // con un BattlePredictionView arriba: se puede reemplazar entera a mano
+        // (otros sprites, otro layout, animaciones) sin tocar el combate,
+        // porque el componente solo recibe un PredictionSnapshot.
+        private static BattlePredictionView BuildPredictionView(Transform parent)
+        {
+            var panel = CreateRect("PanelPrediccion", parent,
+                new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0, -4), new Vector2(300, 46));
+
+            var marco = panel.AddComponent<Image>();
+            marco.color = new Color(0.07f, 0.07f, 0.11f, 0.88f);
+            marco.raycastTarget = false;
+
+            var group = panel.AddComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+
+            Text titulo = CreateText("Titulo", panel.transform,
+                new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1),
+                new Vector2(8, -4), new Vector2(-8, 18), 13, TextAnchor.MiddleCenter);
+            titulo.color = new Color(1f, 0.85f, 0.35f);
+
+            Text detalle = CreateText("Detalle", panel.transform,
+                new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1),
+                new Vector2(8, -22), new Vector2(-8, 16), 11, TextAnchor.MiddleCenter);
+            detalle.color = new Color(0.82f, 0.82f, 0.88f);
+
+            // Barra de progreso: fondo + relleno horizontal
+            var barraFondo = CreateRect("BarraFondo", panel.transform,
+                new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0),
+                new Vector2(0, 4), new Vector2(-16, 4));
+            var fondoImage = barraFondo.AddComponent<Image>();
+            fondoImage.color = new Color(0.2f, 0.2f, 0.26f, 0.9f);
+            fondoImage.raycastTarget = false;
+
+            var relleno = CreateRect("BarraRelleno", barraFondo.transform,
+                Vector2.zero, Vector2.one, new Vector2(0, 0.5f), Vector2.zero, Vector2.zero);
+            var progressFill = relleno.AddComponent<Image>();
+            progressFill.color = new Color(1f, 0.85f, 0.35f);
+            progressFill.type = Image.Type.Filled;
+            progressFill.fillMethod = Image.FillMethod.Horizontal;
+            progressFill.raycastTarget = false;
+
+            var view = panel.AddComponent<BattlePredictionView>();
+            var so = new SerializedObject(view);
+            so.FindProperty("root").objectReferenceValue = panel;
+            so.FindProperty("titleText").objectReferenceValue = titulo;
+            so.FindProperty("detailText").objectReferenceValue = detalle;
+            so.FindProperty("progressFill").objectReferenceValue = progressFill;
+            so.FindProperty("pulseGroup").objectReferenceValue = group;
+            SetArray(so, "tintTargets", new Object[] { titulo, progressFill });
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            panel.SetActive(false);
+            return view;
         }
 
         // Llena las tablas sprite-por-enum del BattleHudView desde las hojas recortadas

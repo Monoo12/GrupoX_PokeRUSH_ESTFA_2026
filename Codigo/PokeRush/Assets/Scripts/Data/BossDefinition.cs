@@ -33,4 +33,12 @@ public class BossDefinition : NPCDefinition
     [Header("Escenario")]
     [Tooltip("Fondo de batalla (de Assets/Sprites/Battlebacks). Vacio = fondo por defecto de la escena.")]
     public Sprite battleBackground;
+
+    [Header("Subsistemas de la torre")]
+    [Tooltip("Variante que se usa cuando el jugador corta TODOS los subsistemas " +
+             "(en la torre 1: Nestor sin Melmetal). Vacio = siempre pelea con " +
+             "este equipo, sin importar los subsistemas.\n\n" +
+             "Es una BossDefinition entera y no solo un equipo porque la " +
+             "variante puede cambiar tambien sprites, dialogo y recompensas.")]
+    public BossDefinition varianteTodoCortado;
 }

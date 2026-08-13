@@ -11,6 +11,38 @@ public enum PredictedCategory
     Objeto    // no podes usar la mochila
 }
 
+// Foto del estado de la Prediccion para la UI. Es SOLO datos: no sabe de
+// Text, de posiciones ni de colores.
+//
+// Existe para que la vista no le pregunte nada al PredictionState ni arme
+// strings por su cuenta. La logica publica un snapshot, la vista decide como
+// se ve. Cambiar la UI (banda, iconos, barra de progreso, animaciones) no
+// obliga a tocar una linea de la logica.
+public struct PredictionSnapshot
+{
+    // Hay Prediccion en esta pelea? (false = combate normal, la UI se apaga)
+    public bool Activa;
+
+    // Categoria anulada ESTE turno (None = turno libre)
+    public PredictedCategory Categoria;
+
+    // Categoria que viene el turno siguiente, si las camaras estan cortadas
+    public PredictedCategory Anticipada;
+
+    // Turnos que faltan para la proxima lectura
+    public int TurnosParaProxima;
+
+    // Cada cuantos turnos lee (para dibujar progreso sin hardcodear el 3)
+    public int TurnosEntreLecturas;
+
+    // Textos ya armados en español, por si la vista solo quiere mostrarlos
+    public string Titulo;   // "LECTURA DE NESTOR" / "ANULADO: ATACAR"
+    public string Detalle;  // "Proxima lectura en 2 turnos" / aviso anticipado
+
+    public bool HayBloqueo => Activa && Categoria != PredictedCategory.None;
+    public bool HayAviso => Activa && Anticipada != PredictedCategory.None;
+}
+
 // La Prediccion de Nestor contra el jugador.
 //
 // Reglas del GDD:
@@ -125,16 +157,45 @@ public class PredictionState
         }
     }
 
-    // Texto corto para la banda de arriba
-    public string Banda()
+    // Foto del estado actual para la UI. La vista no llama a nada mas que esto.
+    public PredictionSnapshot Snapshot()
     {
-        if (Categoria == PredictedCategory.None)
-            return $"Lectura de Nestor en {TurnosParaProxima}";
-        return "ANULADO: " + Texto(Categoria).ToUpperInvariant();
+        var snap = new PredictionSnapshot
+        {
+            Activa = true,
+            Categoria = Categoria,
+            Anticipada = Anticipada,
+            TurnosParaProxima = TurnosParaProxima,
+            TurnosEntreLecturas = TurnosEntrePredicciones
+        };
+
+        if (Categoria != PredictedCategory.None)
+        {
+            snap.Titulo = "ANULADO: " + Texto(Categoria).ToUpperInvariant();
+            snap.Detalle = "Nestor te leyó la jugada.";
+        }
+        else if (Anticipada != PredictedCategory.None)
+        {
+            snap.Titulo = "LECTURA DE NESTOR";
+            snap.Detalle = $"El próximo turno te lee {Texto(Anticipada)}.";
+        }
+        else
+        {
+            snap.Titulo = "LECTURA DE NESTOR";
+            snap.Detalle = TurnosParaProxima == 1
+                ? "Próxima lectura: el turno que viene."
+                : $"Próxima lectura en {TurnosParaProxima} turnos.";
+        }
+
+        return snap;
     }
 
     private static string MensajeBloqueo(PredictedCategory c) =>
         $"Nestor te leyo: este turno no podes {Texto(c)}.";
+
+    // Nombre de la categoria en español. Publico porque la vista lo necesita
+    // para rotular iconos sin volver a escribir la tabla.
+    public static string TextoDeCategoria(PredictedCategory c) => Texto(c);
 
     private static string Texto(PredictedCategory c)
     {

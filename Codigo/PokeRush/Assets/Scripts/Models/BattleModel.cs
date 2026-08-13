@@ -63,23 +63,37 @@ public class BattleModel
         ActiveEnemyIndex = 0;
     }
 
+    // El Poken del jugador cayo y el combate espera que ELIJA el reemplazo.
+    // Mientras esto sea true no se resuelve ningun turno.
+    public bool AwaitingPlayerReplacement { get; private set; }
+    public void SetAwaitingPlayerReplacement(bool value) => AwaitingPlayerReplacement = value;
+
     public void SetPhase(BattlePhase phase) => CurrentPhase = phase;
     public void AdvanceTurn() => CurrentTurn++;
 
-    public void SwitchPlayerPoken(int index)
+    // Los dos Switch VALIDAN el indice y devuelven si el cambio se hizo.
+    // Un Poken debilitado nunca puede pasar a ser el activo: es la ultima
+    // barrera, aunque el que llama ya deberia haber filtrado.
+    public bool SwitchPlayerPoken(int index)
     {
+        if (!BattleTeamRules.EsIndiceVivo(Player.Team, index)) return false;
+
         ActivePlayerIndex = index;
         PlayerState = new BattlePokenState(ActivePlayerPoken, isPlayerSide: true);
         PlayerParticipants.Add(ActivePlayerPoken);
+        return true;
     }
 
-    public void SwitchEnemyPoken(int index)
+    public bool SwitchEnemyPoken(int index)
     {
+        if (!BattleTeamRules.EsIndiceVivo(Enemy.Team, index)) return false;
+
         ActiveEnemyIndex = index;
         EnemyState = new BattlePokenState(ActiveEnemyPoken, isPlayerSide: false);
         // Rival nuevo: la XP de este Poken se reparte entre quienes lo enfrenten
         PlayerParticipants.Clear();
         PlayerParticipants.Add(ActivePlayerPoken);
+        return true;
     }
 
     // El jugador escapo de un combate salvaje: termina sin ganador ni derrota
@@ -87,6 +101,7 @@ public class BattleModel
 
     public void Finish(bool playerVictory)
     {
+        AwaitingPlayerReplacement = false;
         IsBattleOver = true;
         IsPlayerVictory = playerVictory;
         CurrentPhase = BattlePhase.End;

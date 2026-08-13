@@ -11,6 +11,7 @@ public enum BattleEventKind
     PokenSwitched,    // cambio el Poken activo de un lado (refrescar sprites)
     MoveUsed,         // un Poken uso un movimiento
     Fainted,          // un Poken se debilito
+    PlayerMustSwitch, // el Poken del jugador cayo: el motor espera que ELIJA reemplazo
     WeatherChanged,   // empezo/termino un clima (actualizar overlay)
     TerrainChanged,   // empezo/termino un terreno (actualizar overlay)
     BattleEnded       // fin del combate
