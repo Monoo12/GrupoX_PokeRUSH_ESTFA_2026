@@ -36,6 +36,13 @@ public class BattleHudView : MonoBehaviour
     [Header("Mensajes")]
     [SerializeField] private Text messageText;
 
+    [Header("Escudo del nucleo (solo boss)")]
+    [Tooltip("Se prende solo si la pelea tiene escudo. Todas las referencias son " +
+             "opcionales: sin ellas el combate anda igual, solo que sin barra.")]
+    [SerializeField] private GameObject shieldBox;
+    [SerializeField] private Image shieldFill;
+    [SerializeField] private Text shieldText;
+
     [Header("Prediccion del boss")]
     [Tooltip("Panel de la lectura de Nestor. Presentacion aparte: recibe un " +
              "PredictionSnapshot y decide como se ve. Opcional.")]
@@ -100,6 +107,11 @@ public class BattleHudView : MonoBehaviour
     private static readonly Color HpGreen = new Color(0.11f, 0.79f, 0.29f);
     private static readonly Color HpYellow = new Color(0.97f, 0.78f, 0.17f);
     private static readonly Color HpRed = new Color(0.94f, 0.22f, 0.16f);
+
+    // Cian: se distingue de la barra de PS de un vistazo y pega con el tema
+    // "nucleo/firewall" de la torre
+    private static readonly Color ShieldFull = new Color(0.35f, 0.80f, 0.95f);
+    private static readonly Color ShieldLow = new Color(0.45f, 0.50f, 0.62f);
 
     // La UI avisa lo que eligio el jugador; BattleController resuelve
     public event Action<int> MoveChosen;
@@ -212,47 +224,89 @@ public class BattleHudView : MonoBehaviour
         UpdateStatusIcon(enemyStatusIcon, enemy);
 
         ApplyHpVisuals(player, enemy);
+        ApplyShieldVisuals(battleModel);
+    }
+
+    // Escudo del nucleo. Se dibuja como barra y no como mensaje porque el
+    // mensaje pasaba desapercibido entre el resto del texto de combate, y el
+    // escudo es justamente lo que el jugador se gano cortando el firewall:
+    // tiene que verse bajar golpe a golpe.
+    private void ApplyShieldVisuals(BattleModel battleModel)
+    {
+        SideState lado = battleModel.EnemySide;
+        bool visible = lado != null && lado.UsaEscudo;
+
+        if (shieldBox != null) shieldBox.SetActive(visible);
+        if (!visible) return;
+
+        float ratio = Mathf.Clamp01(lado.ShieldHp / (float)Mathf.Max(1, lado.ShieldMaxHp));
+        if (shieldFill != null)
+        {
+            shieldFill.fillAmount = ratio;
+            shieldFill.color = ratio > 0f ? ShieldFull : ShieldLow;
+        }
+        if (shieldText != null)
+            shieldText.text = lado.ShieldHp > 0 ? $"ESCUDO {lado.ShieldHp}" : "ESCUDO ROTO";
     }
 
     // Drena/sube el HP mostrado hacia el valor real, como en la saga: velocidad
     // proporcional al daño (0.25 a 1.3 segundos), color segun porcentaje, y se
     // detiene EXACTO en el valor correcto. El evento Fainted viene despues de
     // este drenado, asi que el debilitamiento arranca con la barra ya en 0.
-    public IEnumerator AnimateHp(BattleModel battleModel)
+    public IEnumerator AnimateHp(BattleModel battleModel) => AnimateHp(battleModel, null);
+
+    // 'ev' trae la foto de PS del instante en que se emitio (BattleEvent.HpAfter).
+    // Sin ella se anima hacia el HP actual del modelo, que al reproducir ya es
+    // el del FINAL del turno: por eso una curacion saltaba directo al valor con
+    // el golpe del rival ya restado, y el golpe despues no movia la barra.
+    public IEnumerator AnimateHp(BattleModel battleModel, BattleEvent ev)
     {
         _model = battleModel;
         PokenModel player = battleModel.ActivePlayerPoken;
         PokenModel enemy = battleModel.ActiveEnemyPoken;
 
+        float objetivoPlayer = player.CurrentHP;
+        float objetivoEnemy = enemy.CurrentHP;
+        if (ev != null && ev.HpAfter >= 0)
+        {
+            // Solo el lado que cambio va a la foto; el otro se queda donde esta
+            if (ev.TargetIsPlayer) { objetivoPlayer = ev.HpAfter; objetivoEnemy = _displayedEnemyHp; }
+            else { objetivoEnemy = ev.HpAfter; objetivoPlayer = _displayedPlayerHp; }
+        }
+
         if (_displayedPlayerHp < 0f) _displayedPlayerHp = player.CurrentHP;
         if (_displayedEnemyHp < 0f) _displayedEnemyHp = enemy.CurrentHP;
 
-        float playerDelta = Mathf.Abs(player.CurrentHP - _displayedPlayerHp);
-        float enemyDelta = Mathf.Abs(enemy.CurrentHP - _displayedEnemyHp);
-        if (playerDelta < 0.5f && enemyDelta < 0.5f)
-        {
-            UpdateHud(battleModel);
-            yield break;
-        }
+        float playerDelta = Mathf.Abs(objetivoPlayer - _displayedPlayerHp);
+        float enemyDelta = Mathf.Abs(objetivoEnemy - _displayedEnemyHp);
+        if (playerDelta < 0.5f && enemyDelta < 0.5f) yield break;
 
         float maxFraction = Mathf.Max(
             playerDelta / Mathf.Max(1, player.MaxHP),
             enemyDelta / Mathf.Max(1, enemy.MaxHP));
-        float duration = Mathf.Clamp(maxFraction * 1.6f, 0.25f, 1.3f);
+        // Piso de 0.45s: un cambio chico (una pocion de 20 PS sobre 100) daba
+        // 0.32s y se leia como un salto instantaneo. La barra tiene que MOVERSE
+        // para que se entienda que curo.
+        float duration = Mathf.Clamp(maxFraction * 1.8f, 0.45f, 1.3f);
         float playerSpeed = playerDelta / duration;
         float enemySpeed = enemyDelta / duration;
 
         for (float t = 0f; t < duration; t += Time.deltaTime)
         {
-            _displayedPlayerHp = Mathf.MoveTowards(_displayedPlayerHp, player.CurrentHP, playerSpeed * Time.deltaTime);
-            _displayedEnemyHp = Mathf.MoveTowards(_displayedEnemyHp, enemy.CurrentHP, enemySpeed * Time.deltaTime);
+            _displayedPlayerHp = Mathf.MoveTowards(_displayedPlayerHp, objetivoPlayer, playerSpeed * Time.deltaTime);
+            _displayedEnemyHp = Mathf.MoveTowards(_displayedEnemyHp, objetivoEnemy, enemySpeed * Time.deltaTime);
             ApplyHpVisuals(player, enemy);
             // TODO: sonido de drenaje sincronizado (AudioService) cuando haya sfx
             yield return null;
         }
 
-        // Termina exacto y refresca el resto del HUD (exp, estados)
-        UpdateHud(battleModel);
+        // Termina exacto en la foto. Ojo: NO se llama UpdateHud, porque ese
+        // resincroniza las barras con el HP final del turno y volveria a pisar
+        // los pasos intermedios que justamente queremos mostrar.
+        _displayedPlayerHp = objetivoPlayer;
+        _displayedEnemyHp = objetivoEnemy;
+        ApplyHpVisuals(player, enemy);
+        ApplyShieldVisuals(battleModel);
     }
 
     private void ApplyHpVisuals(PokenModel player, PokenModel enemy)

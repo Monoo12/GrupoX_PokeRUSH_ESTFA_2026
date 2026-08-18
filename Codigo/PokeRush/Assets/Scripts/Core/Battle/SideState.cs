@@ -19,6 +19,15 @@ public class SideState
     // hayan quedado activos.
     public int ShieldHp;
 
+    // Con cuanto arranco. Hace falta para dibujar la barra: sin el maximo solo
+    // se puede mostrar un numero, que es lo que habia y casi no se leia.
+    public int ShieldMaxHp;
+
+    // Distinto de HasShield: eso dice si QUEDA escudo, esto si esta pelea
+    // TIENE escudo. La barra se muestra aunque llegue a cero (rota), porque
+    // que se rompa es informacion.
+    public bool UsaEscudo => ShieldMaxHp > 0;
+
     public bool HasReflect => ReflectTurns > 0;
     public bool HasLightScreen => LightScreenTurns > 0;
     public bool HasAuroraVeil => AuroraVeilTurns > 0;

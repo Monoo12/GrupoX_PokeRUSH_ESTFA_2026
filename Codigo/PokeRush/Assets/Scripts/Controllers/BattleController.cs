@@ -49,6 +49,8 @@ public class BattleController : MonoBehaviour
     // Null en los combates normales (no todos los enemigos son el boss).
     private BossBattleConfig _bossConfig;
     private PredictionState _prediction;
+    // Definicion del boss en curso: de aca sale a QUIEN se libera
+    private BossDefinition _bossDefinition;
 
     // Fase de liberacion: se dispara cuando el ULTIMO Poken del boss llega a PS
     // criticos. Null mientras no este activa.
@@ -119,6 +121,7 @@ public class BattleController : MonoBehaviour
         }
 
         var enemy = new EnemyModel(enemyDefinition);
+        _bossDefinition = enemyDefinition as BossDefinition;
 
         Sprite background = null;
         _trainerIntroSprite = null;
@@ -147,6 +150,7 @@ public class BattleController : MonoBehaviour
         int level = _rng.Range(encounter.minLevel, encounter.maxLevel + 1);
         var enemy = new EnemyModel(encounter.species, level, encounter.aiProfile);
         _trainerIntroSprite = null;
+        _bossDefinition = null;
 
         // Un salvaje no es un boss. Sin esto se arrastraba la config del
         // combate ANTERIOR y el salvaje heredaba EnemyCannotFaint: no podia
@@ -228,6 +232,7 @@ public class BattleController : MonoBehaviour
             // El escudo del nucleo lo pone la torre: cuantos nodos de firewall
             // quedaron activos.
             _battleModel.EnemySide.ShieldHp = _bossConfig.EscudoInicial;
+            _battleModel.EnemySide.ShieldMaxHp = _bossConfig.EscudoInicial;
         }
 
         if (playerInputController != null)
@@ -235,6 +240,20 @@ public class BattleController : MonoBehaviour
 
         // Avisa antes de la intro para que el mapa se esconda a tiempo
         BattleStarted?.Invoke();
+
+        // Red de seguridad: el prefab de combate se guarda DESACTIVADO para no
+        // tapar el mapa, y normalmente lo prende MapBattleBridge al escuchar
+        // BattleStarted. Si no hay puente —o quedo sin cablear— el objeto sigue
+        // inactivo y el StartCoroutine de abajo tira
+        // "Coroutine couldn't be started because the game object is inactive".
+        // Encenderse solo evita que el combate dependa de que alguien lo prenda.
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+            Debug.LogWarning("[Combate] El sistema de combate estaba desactivado y se encendio " +
+                             "solo. Si tenes un mapa, cablea el MapBattleBridge para que ademas " +
+                             "lo esconda; si no, el mapa va a quedar visible detras.");
+        }
 
         if (battleHudView != null)
             battleHudView.Show();
@@ -627,6 +646,11 @@ public class BattleController : MonoBehaviour
     // input pasa por LiberationTurnRoutine, no por ResolveTurnRoutine.
     private IEnumerator LiberationRoutine()
     {
+        // El chip es de NESTOR, no del ultimo Poken de su equipo. Sin esto la
+        // fase decia "Porygon-Z se apago... lo liberaste", que es justo lo
+        // contrario de lo que cuenta el nivel: al que recuperas es a Nestor.
+        yield return EntraElQueSeLibera();
+
         _liberation = new LiberationEngine(_battleModel, _rng, _bossConfig.TurnosLiberacion);
         _battleModel.SetPhase(BattlePhase.Liberation);
         battleHudView?.HideMenus();
@@ -639,6 +663,36 @@ public class BattleController : MonoBehaviour
         yield return new WaitForSeconds(messageDelay);
 
         AbrirMenuLiberacion();
+    }
+
+    // Reemplaza al Poken rival en el campo por el que de verdad se libera.
+    // Entra con PS al minimo: viene de la pelea, no es un rival nuevo.
+    private IEnumerator EntraElQueSeLibera()
+    {
+        PokenDefinition quien = _bossDefinition != null ? _bossDefinition.pokenDeLiberacion : null;
+        if (quien == null) yield break;   // sin asignar: se libera al que este
+
+        int nivel = _bossDefinition.nivelDeLiberacion > 0 ? _bossDefinition.nivelDeLiberacion : 50;
+        var liberado = new PokenModel(quien, nivel);
+        liberado.SetCurrentHP(Mathf.Max(1, Mathf.RoundToInt(liberado.MaxHP * liberationHpThreshold)));
+
+        // Ocupa el lugar del Poken activo del rival
+        _enemyModel.Team[_battleModel.ActiveEnemyIndex] = liberado;
+        _battleModel.SwitchEnemyPoken(_battleModel.ActiveEnemyIndex);
+
+        RefreshActiveSprites();
+        battleHudView?.UpdateHud(_battleModel);
+
+        // El view pudo haber quedado escondido por una animacion de caida
+        // previa; sin esto Nestor entra pero no se ve.
+        enemyPokenView?.Show();
+        _enemyFaintedPendingSwitch = false;
+
+        Announce($"¡{quien.pokenName} se adelanta!");
+        yield return new WaitForSeconds(messageDelay);
+
+        if (battleFxView != null && enemyPokenView != null)
+            yield return battleFxView.PulseTint(enemyPokenView, BattleFxView.PulseStatUp);
     }
 
     private void AbrirMenuLiberacion()
@@ -841,9 +895,10 @@ public class BattleController : MonoBehaviour
                 }
 
                 case BattleEventKind.HpChanged:
-                    // La barra drena gradualmente hasta el valor exacto
+                    // La barra drena hasta la foto de ESTE evento, no hasta el
+                    // HP del final del turno (ver BattleEvent.HpAfter)
                     if (battleHudView != null)
-                        yield return battleHudView.AnimateHp(_battleModel);
+                        yield return battleHudView.AnimateHp(_battleModel, ev);
                     break;
 
                 case BattleEventKind.Fainted:
@@ -851,6 +906,7 @@ public class BattleController : MonoBehaviour
                     // Asegura que la barra llego a 0 ANTES de la caida
                     if (battleHudView != null)
                         yield return battleHudView.AnimateHp(_battleModel);
+                    battleHudView?.UpdateHud(_battleModel);
                     if (ev.TargetIsPlayer) _playerFaintedPendingSwitch = true;
                     else _enemyFaintedPendingSwitch = true;
 
@@ -912,6 +968,10 @@ public class BattleController : MonoBehaviour
                 Announce(ev.Message);
                 yield return new WaitForSeconds(messageDelay);
             }
+
+            // Respiro pedido por el evento (ver BattleEvent.ExtraPause)
+            if (ev.ExtraPause > 0f)
+                yield return new WaitForSeconds(ev.ExtraPause);
         }
     }
 

@@ -78,7 +78,9 @@ public class LiberationEngine
                 // Pegarle repara el chip: es la trampa central de la fase.
                 TurnosAguantados = UnityEngine.Mathf.Max(0, TurnosAguantados - TurnosQueRetrocede);
                 _model.ActiveEnemyPoken.Heal(_model.ActiveEnemyPoken.MaxHP / DivisorCuracionDelChip);
-                events.Add(BattleEvent.Of(BattleEventKind.HpChanged, false));
+                var reparado = BattleEvent.Of(BattleEventKind.HpChanged, false);
+                reparado.HpAfter = _model.ActiveEnemyPoken.CurrentHP;
+                events.Add(reparado);
                 BattleEvent.Add(events,
                     $"¡El golpe reparó el chip! {nestor} se recupera y la sobrecarga retrocede.");
                 break;
@@ -133,10 +135,20 @@ public class LiberationEngine
         PokenModel objetivo = _model.ActivePlayerPoken;
         if (objetivo == null || objetivo.IsFainted) return;
 
-        if (_model.PlayerState.Protected)
+        // Protegerse NO es un comodin. Solo anula el GOLPE FUERTE, que es el
+        // ataque para el que existe; contra los otros dos apenas amortigua.
+        //
+        // Antes anulaba los tres y la fase se ganaba spameando PROTEGER: sin
+        // gastar objetos, sin cambiar de Poken y sin recibir un rasguño. La
+        // leccion del nivel —aguantar, decidir cuando quemar un item, no
+        // atacar— desaparecia porque no habia ninguna decision que tomar.
+        bool protegido = _model.PlayerState.Protected;
+        _model.PlayerState.Protected = false;
+        bool esGolpeFuerte = _turno % 3 == 0;
+
+        if (protegido && esGolpeFuerte)
         {
-            BattleEvent.Add(events, $"¡{objetivo.Definition.pokenName} aguantó la descarga!");
-            _model.PlayerState.Protected = false;
+            BattleEvent.Add(events, $"¡{objetivo.Definition.pokenName} aguantó el golpe fuerte!");
             return;
         }
 
@@ -167,8 +179,17 @@ public class LiberationEngine
         // Escala con los turnos aguantados: la fase se pone tensa hacia el final
         dano += TurnosAguantados * 2;
 
+        // Protegerse contra el ataque equivocado sirve, pero poco
+        if (protegido)
+        {
+            dano = UnityEngine.Mathf.Max(1, dano / 2);
+            mensaje = "Te cubriste, pero no era el golpe para el que te preparaste.";
+        }
+
         objetivo.TakeDamage(dano);
-        events.Add(BattleEvent.Of(BattleEventKind.HpChanged, true));
+        var golpe = BattleEvent.Of(BattleEventKind.HpChanged, true);
+        golpe.HpAfter = objetivo.CurrentHP;   // foto: ver BattleEvent.HpAfter
+        events.Add(golpe);
         BattleEvent.Add(events, mensaje);
     }
 }

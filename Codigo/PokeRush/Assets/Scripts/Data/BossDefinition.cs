@@ -41,4 +41,13 @@ public class BossDefinition : NPCDefinition
              "Es una BossDefinition entera y no solo un equipo porque la " +
              "variante puede cambiar tambien sprites, dialogo y recompensas.")]
     public BossDefinition varianteTodoCortado;
+
+    [Tooltip("Quien aparece en la FASE DE LIBERACION. En la torre 1 es Nestor: " +
+             "el chip es suyo, no del ultimo Poken de su equipo. " +
+             "Vacio = se libera al ultimo Poken que quede en el campo, que es " +
+             "lo que hacia antes y se leia mal (\"liberaste a Porygon-Z\").")]
+    public PokenDefinition pokenDeLiberacion;
+
+    [Tooltip("Nivel con el que entra el Poken de liberacion.")]
+    public int nivelDeLiberacion = 50;
 }

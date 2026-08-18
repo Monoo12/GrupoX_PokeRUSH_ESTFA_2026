@@ -14,6 +14,10 @@ public class TurnEngine
 {
     private const float StruggleRecoilFraction = 0.25f;
 
+    // Cuanto respira el combate despues de una curacion con objeto, para que se
+    // vea el efecto antes del ataque rival.
+    private const float ItemPauseSeconds = 2f;
+
     private readonly BattleModel _model;
     private readonly IBattleRng _rng;
 
@@ -79,7 +83,11 @@ public class TurnEngine
         // 1b) Objetos y proteccion: van con los cambios y sin chequeo de
         //     velocidad, o sea con prioridad efectiva maxima, como en la saga.
         if (playerAction.Kind == BattleActionKind.UseItem)
+        {
+            int marca = events.Count;
             DoUseItem(playerAction.Item, events);
+            Sellar(events, marca);
+        }
         if (playerAction.Kind == BattleActionKind.Protect)
             DoProtect(_model.PlayerState, events);
         if (enemyAction.Kind == BattleActionKind.Protect)
@@ -92,19 +100,29 @@ public class TurnEngine
         if (playerUsesMove && enemyUsesMove)
         {
             bool playerFirst = PlayerActsFirst(playerAction, enemyAction);
+            int marca1 = events.Count;
             ExecuteMoveAction(playerFirst, playerFirst ? playerAction : enemyAction, events);
+            Sellar(events, marca1);
 
             bool secondIsPlayer = !playerFirst;
             if (!_model.IsBattleOver)
+            {
+                int marca2 = events.Count;
                 ExecuteMoveAction(secondIsPlayer, secondIsPlayer ? playerAction : enemyAction, events);
+                Sellar(events, marca2);
+            }
         }
         else if (playerUsesMove)
         {
+            int marca = events.Count;
             ExecuteMoveAction(true, playerAction, events);
+            Sellar(events, marca);
         }
         else if (enemyUsesMove)
         {
+            int marca = events.Count;
             ExecuteMoveAction(false, enemyAction, events);
+            Sellar(events, marca);
         }
 
         // 3) Fin de turno: residuales y habilidades, en orden de velocidad
@@ -114,6 +132,7 @@ public class TurnEngine
                 ? _model.PlayerState : _model.EnemyState;
             BattlePokenState slow = fast.IsPlayerSide ? _model.EnemyState : _model.PlayerState;
 
+            int marcaResiduales = events.Count;
             StatusEffects.OnTurnEnd(fast, events);
             AbilityEffects.OnTurnEnd(fast, events);
             StatusEffects.OnTurnEnd(slow, events);
@@ -121,6 +140,8 @@ public class TurnEngine
 
             // Clima (daño residual + contador), terreno y pantallas
             FieldEffects.OnTurnEnd(_model, events);
+
+            Sellar(events, marcaResiduales);
 
             // El retroceso solo dura el turno en que se produjo
             _model.PlayerState.Flinched = false;
@@ -132,12 +153,30 @@ public class TurnEngine
         }
 
         // 4) Debilitados: XP, reemplazos o fin
+        int marcaFin = events.Count;
         HandleFaints(events);
+        Sellar(events, marcaFin);
 
         if (!_model.IsBattleOver)
             _model.AdvanceTurn();
 
         return events;
+    }
+
+    // Sella los HpChanged emitidos desde 'desde' con los PS de ESTE instante.
+    // Se llama despues de cada paso que muta PS, porque el turno se resuelve
+    // entero antes de reproducirse y despues ya es tarde para saber por cuanto
+    // paso la barra en el medio.
+    private void Sellar(List<BattleEvent> events, int desde)
+    {
+        for (int i = desde; i < events.Count; i++)
+        {
+            BattleEvent ev = events[i];
+            if (ev.Kind != BattleEventKind.HpChanged || ev.HpAfter >= 0) continue;
+            ev.HpAfter = ev.TargetIsPlayer
+                ? _model.ActivePlayerPoken.CurrentHP
+                : _model.ActiveEnemyPoken.CurrentHP;
+        }
     }
 
     // ---------- objetos, proteccion y escudo ----------
@@ -181,7 +220,13 @@ public class TurnEngine
         if (curado > 0)
         {
             events.Add(BattleEvent.Of(BattleEventKind.HpChanged, true));
-            BattleEvent.Add(events, $"¡{nombre} recuperó {curado} PS!");
+
+            // Pausa extra: la curacion tiene que quedar a la vista ANTES de que
+            // el rival pegue. Sin esto la barra subia y bajaba casi junta y la
+            // pocion parecia amortiguar el golpe en vez de curar.
+            BattleEvent curacion = BattleEvent.Msg($"¡{nombre} recuperó {curado} PS!");
+            curacion.ExtraPause = ItemPauseSeconds;
+            events.Add(curacion);
         }
         else
         {
@@ -518,9 +563,15 @@ public class TurnEngine
         return null;
     }
 
-    private static void AnnounceFaintIfNeeded(BattlePokenState state, List<BattleEvent> events)
+    private void AnnounceFaintIfNeeded(BattlePokenState state, List<BattleEvent> events)
     {
         if (!state.Poken.IsFainted || state.FaintAnnounced) return;
+
+        // Un boss que HandleFaints va a rescatar en 1 PS no se debilito: no hay
+        // que anunciarlo ni reproducirle la animacion de caida. Sin esto el
+        // sprite se caia y quedaba escondido, y despues la fase de liberacion
+        // arrancaba con el campo vacio del lado rival.
+        if (!state.IsPlayerSide && EnemyCannotFaint != null && EnemyCannotFaint(_model)) return;
         state.FaintAnnounced = true;
         events.Add(BattleEvent.Of(BattleEventKind.Fainted, state.IsPlayerSide,
             $"¡{state.Poken.Definition.pokenName} se debilitó!"));

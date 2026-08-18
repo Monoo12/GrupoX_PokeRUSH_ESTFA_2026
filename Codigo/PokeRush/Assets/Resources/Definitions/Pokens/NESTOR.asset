@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
+  m_Name: NESTOR
+  m_EditorClassIdentifier: Assembly-CSharp::PokenDefinition
+  pokenName: Nestor
+  dexNumber: 0
+  type: 5
+  type2: 0
+  battleFrontSprite: {fileID: 21300000, guid: 6c73c19a21b888a45a01e480e2507836, type: 3}
+  battleBackSprite: {fileID: 21300000, guid: 7f7d0d470582c104d8eff8e1d54d5de7, type: 3}
+  battleFrontShinySprite: {fileID: 0}
+  battleBackShinySprite: {fileID: 0}
+  battleFrontFrames:
+  - {fileID: 21300000, guid: 6c73c19a21b888a45a01e480e2507836, type: 3}
+  - {fileID: 21300000, guid: ed4fc8f0acc0fb442bf638763147ec6c, type: 3}
+  - {fileID: 21300000, guid: 8416023d7ff63544da317df7763d24c8, type: 3}
+  battleBackFrames: []
+  battleFrontShinyFrames: []
+  battleBackShinyFrames: []
+  worldFrontSprite: {fileID: 21300000, guid: 6c73c19a21b888a45a01e480e2507836, type: 3}
+  worldBackSprite: {fileID: 21300000, guid: 7f7d0d470582c104d8eff8e1d54d5de7, type: 3}
+  worldSideSprite: {fileID: 21300000, guid: cad0e874ef701384cb4f5739e3a64144, type: 3}
+  worldFrontShinySprite: {fileID: 0}
+  worldBackShinySprite: {fileID: 0}
+  worldSideShinySprite: {fileID: 0}
+  inventorySprite: {fileID: 21300000, guid: 853498d5f00c6fa45a5a2b62a53fa1c5, type: 3}
+  inventoryShinySprite: {fileID: 0}
+  battleAnimator: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  baseHP: 110
+  baseAttack: 95
+  baseDefense: 90
+  baseSpecialAttack: 105
+  baseSpecialDefense: 95
+  baseSpeed: 80
+  learnset: []
+  moves: []
+  baseXpYield: 200
+  abilityId: 0
+  ability: 
+  abilityDescription: 

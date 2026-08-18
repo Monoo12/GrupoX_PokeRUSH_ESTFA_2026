@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossDefinition
   characterName: Nestor
   portrait: {fileID: 0}
-  worldFrontSprite: {fileID: 0}
-  worldBackSprite: {fileID: 0}
-  worldSideSprite: {fileID: 0}
+  worldFrontSprite: {fileID: 21300000, guid: 6c73c19a21b888a45a01e480e2507836, type: 3}
+  worldBackSprite: {fileID: 21300000, guid: 41df12ee761751e4fa5e34dee13b6914, type: 3}
+  worldSideSprite: {fileID: 21300000, guid: cad0e874ef701384cb4f5739e3a64144, type: 3}
   worldAnimator: {fileID: 0}
   defaultDialogue: {fileID: 0}
   requiredFlag: 0
@@ -31,8 +31,8 @@ MonoBehaviour:
     level: 18
   - species: {fileID: 11400000, guid: 6c7618e1736bcae439a550b961fba3e6, type: 2}
     level: 19
-  battleIntroSprite: {fileID: 0}
-  battleFrontSprite: {fileID: 8673283512139689658, guid: 49a0d12d5337a7741b0cf64ad07cb270, type: 3}
+  battleIntroSprite: {fileID: 21300000, guid: 6c73c19a21b888a45a01e480e2507836, type: 3}
+  battleFrontSprite: {fileID: 21300000, guid: 6c73c19a21b888a45a01e480e2507836, type: 3}
   battleFrontShinySprite: {fileID: 0}
   battleIntroDialogue: {fileID: 0}
   battleDefeatDialogue: {fileID: 0}
@@ -42,5 +42,7 @@ MonoBehaviour:
   itemRewards: []
   defeatGrantsFlag: 0
   aiProfile: {fileID: 11400000, guid: e4e7bcb582789584a88898f642a0d19d, type: 2}
-  battleBackground: {fileID: 0}
+  battleBackground: {fileID: -4945403047133626937, guid: 87a18e2f51cdc404cbf4856aa6e112d0, type: 3}
   varianteTodoCortado: {fileID: 11400000, guid: 38df53c18287cda47b46b2e9ce2e11c3, type: 2}
+  pokenDeLiberacion: {fileID: 11400000, guid: 051aa4f589794844e9aa34306ca5f871, type: 2}
+  nivelDeLiberacion: 50

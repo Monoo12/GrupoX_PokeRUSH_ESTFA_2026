@@ -515,6 +515,38 @@ namespace PokeRush.EditorTools
             Image enemyHpFill = CreateFill(enemyBox.transform, "HpRival", new Vector2(118, -40), new Vector2(96, 6));
             Image enemyStatus = CreateIcon(enemyBox.transform, "EstadoRival", new Vector2(40, -36), new Vector2(44, 16));
 
+            // --- barra del ESCUDO DEL NUCLEO (debajo del databox rival) ---
+            // Mismo lenguaje visual que los databox: marco oscuro, relleno
+            // Filled horizontal y rotulo corto. Solo se prende contra el boss.
+            var shieldBox = CreateRect("EscudoNucleo", hudGo.transform,
+                new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(14, -96), new Vector2(232, 18));
+            var shieldBg = shieldBox.AddComponent<Image>();
+            shieldBg.color = new Color(0.07f, 0.09f, 0.13f, 0.92f);
+            shieldBg.raycastTarget = false;
+
+            Text shieldText = CreateText("TextoEscudo", shieldBox.transform,
+                new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 0.5f),
+                new Vector2(6, 0), new Vector2(78, 0), 10, TextAnchor.MiddleLeft);
+            shieldText.color = new Color(0.62f, 0.88f, 0.98f);
+
+            var shieldTrack = CreateRect("Riel", shieldBox.transform,
+                new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(40, 0), new Vector2(-92, 8));
+            var trackImg = shieldTrack.AddComponent<Image>();
+            trackImg.color = new Color(0.18f, 0.20f, 0.26f, 1f);
+            trackImg.raycastTarget = false;
+
+            var shieldFillGo = CreateRect("Relleno", shieldTrack.transform,
+                Vector2.zero, Vector2.one, new Vector2(0, 0.5f), Vector2.zero, Vector2.zero);
+            var shieldFill = shieldFillGo.AddComponent<Image>();
+            shieldFill.color = new Color(0.35f, 0.80f, 0.95f);
+            shieldFill.type = Image.Type.Filled;
+            shieldFill.fillMethod = Image.FillMethod.Horizontal;
+            shieldFill.raycastTarget = false;
+
+            shieldBox.SetActive(false); // lo prende el HUD si la pelea tiene escudo
+
             // --- databox del JUGADOR (abajo a la derecha, sobre la barra) ---
             var playerBox = CreateRect("DataboxJugador", hudGo.transform,
                 new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0),
@@ -716,6 +748,10 @@ namespace PokeRush.EditorTools
             so.FindProperty("enemyStatusIcon").objectReferenceValue = enemyStatus;
 
             so.FindProperty("predictionView").objectReferenceValue = predictionView;
+
+            so.FindProperty("shieldBox").objectReferenceValue = shieldBox;
+            so.FindProperty("shieldFill").objectReferenceValue = shieldFill;
+            so.FindProperty("shieldText").objectReferenceValue = shieldText;
 
             so.FindProperty("liberationPanel").objectReferenceValue = liberationPanel;
             so.FindProperty("liberationHealButton").objectReferenceValue = libHeal;
