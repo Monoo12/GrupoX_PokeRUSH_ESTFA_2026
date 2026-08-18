@@ -19,6 +19,11 @@ CREATE TABLE player_poken (
     slot_index INTEGER,
     equipped_cosmetic TEXT,
 
+    -- IVs serializados como "hp,atk,def,spa,spd,spe" (ej: "31,12,0,5,20,31").
+    -- Es TEXT (no INTEGER) para distinguir saves viejos (NULL -> se regeneran)
+    -- de un IV 0 legitimo.
+    ivs TEXT,
+
     FOREIGN KEY(player_id)
     REFERENCES player(id)
 );

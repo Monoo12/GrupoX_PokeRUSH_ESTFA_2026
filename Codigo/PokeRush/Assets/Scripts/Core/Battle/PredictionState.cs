@@ -82,6 +82,12 @@ public class PredictionState
     public System.Func<bool> PuedeCambiar;
     public System.Func<bool> TieneObjetos;
 
+    // Los movimientos de ESTADO tambien son una salida: Bloquea() solo anula los
+    // de dano. Sin contarlos, un jugador con un solo Poken y la mochila vacia no
+    // tenia ninguna categoria anulable y Nestor no leia NUNCA — pasaban los
+    // turnos y no bloqueaba nada.
+    public System.Func<bool> TieneMovimientoDeEstado;
+
     public PredictionState(bool conAviso, int turnosEntrePredicciones)
     {
         _conAviso = conAviso;
@@ -95,7 +101,8 @@ public class PredictionState
     {
         bool cambio = PuedeCambiar == null || PuedeCambiar();
         bool objetos = TieneObjetos == null || TieneObjetos();
-        return cambio || objetos;
+        bool estado = TieneMovimientoDeEstado == null || TieneMovimientoDeEstado();
+        return cambio || objetos || estado;
     }
 
     // Se llama al empezar cada turno del jugador, antes de mostrarle el menu.

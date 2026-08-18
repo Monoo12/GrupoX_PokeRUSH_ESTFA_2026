@@ -55,6 +55,10 @@ tc.enabled = false; tc.enabled = true;   // sin esto el shapeCount sigue en 0
 cc.GenerateGeometry();
 ```
 
+> **Lo definitivo:** el GameObject `Colisiones` de `NestorGOD2` lleva el componente **`ColisionesTilemapRuntimeFix`**, que repone los `colliderType` en `Awake`. Con eso el **juego** arranca bien siempre, aunque la escena se haya guardado con las colisiones perdidas. Copialo a cualquier mapa nuevo: es la única forma de no depender de acordarse.
+
+> **Para el editor:** está el menú **`PokeRush > Reparar colisiones del mapa`**, que hace todo esto de una sobre la escena abierta. Correlo cada vez que toques la capa `Colisiones` — pintar o borrar tiles **pierde los overrides en silencio**, y el síntoma es siempre el mismo: el jugador atraviesa las paredes.
+
 Dos detalles que cuestan horas si no se saben:
 
 - **`Grid`, no `Sprite`.** Los sprites de estos tiles tienen la physics shape vacía, así que `ColliderType.Sprite` genera geometría vacía igual. `Grid` usa la celda entera, que además es lo que querés para movimiento por grilla.
@@ -108,18 +112,98 @@ Ya está configurada en el prefab, pero si cambiás la hoja de sprites hay que s
 
 ---
 
-## 6. Checklist antes de dar el mapa por listo
+## 6. NPCs
+
+Hay dos prefabs listos en `Assets/Prefabs/NPCs/`. Se arrastran a la escena y listo, **no hace falta ningun script**:
+
+| Prefab | Sprite | Alto |
+|---|---|---|
+| `NPC_Nestor.prefab` | `Sprites/Nestor/NESTOR_frente.png` | 2,6 u |
+| `NPC_Combusken.prefab` | `Sprites/Pokens/COMBUSKEN.png` (fila de arriba, mirando abajo) | 1,7 u |
+
+Estructura, igual que el jugador:
+
+```
+NPC_X          BoxCollider2D (0.8 x 0.8), capa Obstacles
+└── Visual     SpriteRenderer (sortingOrder 15)
+```
+
+**Lo importante: la raiz va en la capa `Obstacles`.** Asi el mismo `obstacleMask` del `PlayerController` que lo frena contra las paredes lo frena tambien contra el NPC, sin escribir una linea de codigo. Si queda en `Default`, el jugador lo atraviesa.
+
+**No llevan `Rigidbody2D`**, a diferencia del jugador: no se mueven y nadie les dispara triggers, asi que alcanza con el collider estatico.
+
+### Alto y pivot
+
+Ojo que los sprites del proyecto **no usan la misma convencion de pivot**, y eso cambia donde hay que poner el `Visual`:
+
+- Los de **Nestor** tienen el **pivot en los pies** y el PPU igual a su propia altura en pixeles, asi que miden 1 unidad exacta (se lo pone `PokeRush > Importar sprites de Nestor`).
+- Los de **Pokemon y del jugador** tienen el **pivot centrado** y PPU 100.
+
+Esta formula sirve para los dos casos y evita tener que adivinar:
+
+```
+Visual.localScale    = altoDeseado / sprite.bounds.size.y
+Visual.localPosition = (0, -0.25 - escala * sprite.bounds.min.y, 0)
+```
+
+El `-0.25` es cuanto sobresalen los pies bajo el centro del tile, igual que el jugador. Como referencia de tamanios: **el jugador mide 2,24 u**.
+
+### Que les falta para ser interactuables
+
+Los NPCs de hoy solo bloquean el paso. Para que respondan al boton de interactuar hay que agregarles `InteractableTrigger` **y** meter la capa `Obstacles` dentro del `interactableMask` del `PlayerController`, que hoy esta vacio. `PlayerController.Interact()` los busca con `GetComponentInParent<IInteractable>()`, asi que el componente puede ir en la raiz del NPC.
+
+---
+
+## 7. Interacciones y dialogo
+
+La tecla de accion es la **X** (quedan Z y Enter como alias, y el boton sur del gamepad). Se define en codigo en `PlayerInputController`, no hay asset de input que tocar.
+
+### Lo que necesita la escena
+
+1. Un **`DialogoCanvas`**: Canvas en ScreenSpaceOverlay, `sortingOrder 100`, CanvasScaler a 512x384, con un `DialogueController` en la raiz y un `DialogueView` en la caja. Copialo de `NestorGOD2`.
+2. El **`interactableMask`** del `PlayerController` tiene que incluir la capa donde viven los NPC (en NestorGOD2 es `Obstacles`). Si esta vacio, apretar X no hace nada — y no avisa.
+
+Mientras hay un dialogo abierto, `PlayerInputController` le manda todo el input a la caja y **el jugador no se mueve**. Por eso no hay que leer teclado desde otro lado: si dos componentes escuchan la misma tecla, la X que cierra la linea vuelve a abrir el dialogo.
+
+### NPC que pelea
+
+`InteractableTrigger` con el campo `combate` apuntando a un `EnemyDefinition` o `BossDefinition` (Nestor es `Resources/Definitions/Torre1/Nestor.asset`). No hace falta codigo: el trigger busca solo el `BattleController`, lanza la pelea y `MapBattleBridge` se encarga de esconder el mapa y devolverlo al terminar.
+
+Para que eso funcione la escena necesita, **fuera** de `MapaRaiz`:
+- el prefab `Assets/Prefabs/Combate/SistemaDeCombate.prefab`, **desactivado**;
+- un `MapBattleBridge` con `mapaRaiz`, `combateRaiz`, `battleController` y `playerController`;
+- un `GameManager` y un `SceneBootstrapper` (sin bootstrap el `PlayerModel` no llega a la escena y `Interact()` hace early-return en silencio).
+
+> **Todo lo del mundo va adentro de `MapaRaiz`** (Grid, jugador, NPCs y la camara del mapa). Es lo que el puente apaga durante la pelea. Lo que quede afuera se sigue viendo encima del combate.
+
+### NPC que se libera y se suma al equipo
+
+`LiberarPokenTrigger`: pregunta con dos opciones y, si aceptan, crea el `PokenModel` y lo mete en el equipo (tope 6).
+
+- `poken` + `nivel`: que especie se suma.
+- Se dispara de **dos formas**: apretando X de frente (`IInteractable`) y, si `tambienPorTrigger` esta activo, al caminarle al lado. Para lo segundo el NPC necesita un **segundo collider en Is Trigger** ademas del solido — el solido no deja que el jugador se le encime, asi que sin el trigger nunca entraria. En los prefabs es un `CircleCollider2D` de radio 0.9.
+- El trigger queda desarmado hasta que el jugador se aleja, si no vuelve a preguntar apenas se cierra la caja.
+- `desaparecerAlLiberar` esconde el NPC, pero **recien cuando se cierra el cartel**: si se apagara antes, moriria el callback y la caja quedaria abierta para siempre.
+
+Prefabs listos: `NPC_Combusken.prefab` y `NPC_Basculin.prefab`.
+
+---
+
+## 8. Checklist antes de dar el mapa por listo
 
 No alcanza con que los componentes estén puestos. Comprobá:
 
 1. `Colisiones` está en la capa **`Obstacles`**.
 2. El `CompositeCollider2D` tiene **`shapeCount > 0`** (si da 0, falta el toggle del punto 2b).
 3. El jugador arranca en un **centro de tile** y sobre piso transitable.
+3b. Todo lo interactuable es **realmente alcanzable**. Que un tile esté libre **no** quiere decir que se pueda llegar: puede ser un hueco encerrado por paredes. Comprobalo con un flood fill desde el spawn, no mirando el mapa — un botón puesto del lado equivocado de una pared parece bien puesto y no se puede apretar.
 4. Camina, y **choca** contra paredes y muebles.
 5. La cámara lo sigue.
 6. Entrás en **Play** y sigue funcionando (el `shapeCount` sobrevive al reload).
-7. La consola no tira errores nuevos.
-8. La escena está en **Build Settings** si la vas a necesitar fuera del editor.
+7. Los NPCs que hayas puesto **frenan** al jugador (si los atraviesa, quedaron en capa `Default`).
+8. Si hay NPC con interaccion: apretar **X** de frente abre la caja, y el jugador no se mueve mientras esta abierta.
+9. La consola no tira errores nuevos.
+10. La escena está en **Build Settings** si la vas a necesitar fuera del editor.
 
 Para chequear las colisiones sin adivinar, este barrido imprime un mapa ASCII de lo que ve la física; tiene que calcar al mapa dibujado:
 
@@ -146,6 +230,15 @@ for (int dy = 4; dy >= -5; dy--) {
 | `colliderType` de los tiles | `Grid`, por celda |
 | Sorting del jugador | 15 |
 | Prefab del jugador | `Assets/Prefabs/Player.prefab` |
-| Controles | WASD / flechas / stick, Shift o botón este para correr |
+| Prefabs de NPC | `Assets/Prefabs/NPCs/NPC_Nestor.prefab`, `NPC_Combusken.prefab` |
+| Capa de los NPC | `Obstacles` (si no, no frenan) |
+| Alto de referencia | jugador 2,24 u / Nestor 2,6 u / Combusken 1,7 u |
+| Controles | WASD / flechas / stick, Shift para correr, **X** para interactuar |
+| Canvas de diálogo | `DialogoCanvas` (copiar de NestorGOD2), sortingOrder 100 |
+| Prefab de combate | `Assets/Prefabs/Combate/SistemaDeCombate.prefab`, desactivado |
 
-Escenas de referencia ya armadas: **`NESTORGOD.unity`**.
+Escenas de referencia ya armadas: **`NestorGOD2.unity`** (mapa + combate + diálogo + NPCs).
+
+Ver también:
+- **`Como_Hacer_Dialogos_Y_Decisiones.md`** — diálogos, preguntas de sí/no, botones y barreras por flag.
+- **`Como_Correr_La_Demo.md`** — el recorrido menú → creación de personaje → torre, y el guardado con F2.

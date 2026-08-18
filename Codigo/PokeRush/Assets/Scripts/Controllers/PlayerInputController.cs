@@ -6,6 +6,9 @@ public class PlayerInputController : MonoBehaviour
     [Header("Referencias")]
     [SerializeField] private PlayerController playerController;
     [SerializeField] private BattleController battleController;
+    [Tooltip("Opcional. Si esta, mientras haya un dialogo abierto el input va " +
+             "a la caja de texto y el jugador no se mueve.")]
+    [SerializeField] private DialogueController dialogueController;
 
     private bool _inBattle = false;
 
@@ -17,8 +20,15 @@ public class PlayerInputController : MonoBehaviour
     private InputAction _interactAction;
     private InputAction _menuAction;
 
+    // Ultima direccion vertical/horizontal usada para navegar el dialogo. Sirve
+    // para que mantener la tecla no barra todas las opciones de golpe.
+    private int _navPrevio;
+
     private void Awake()
     {
+        if (dialogueController == null)
+            dialogueController = FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
+
         // Move: vector 2D. WASD + flechas en teclado, stick izquierdo en gamepad.
         _moveAction = new InputAction("Move", InputActionType.Value, expectedControlType: "Vector2");
         _moveAction.AddCompositeBinding("2DVector")
@@ -38,13 +48,16 @@ public class PlayerInputController : MonoBehaviour
         _runAction.AddBinding("<Keyboard>/leftShift");
         _runAction.AddBinding("<Gamepad>/buttonEast");
 
-        // Interact: confirmar / hablar (Z, Enter o boton sur del gamepad).
+        // Interact: la tecla de accion del juego es la X. Se dejan Z y Enter
+        // como alias porque ya estaban y no molestan.
         _interactAction = new InputAction("Interact", InputActionType.Button);
+        _interactAction.AddBinding("<Keyboard>/x");
         _interactAction.AddBinding("<Keyboard>/z");
         _interactAction.AddBinding("<Keyboard>/enter");
         _interactAction.AddBinding("<Gamepad>/buttonSouth");
 
-        // Menu: abrir menu (Escape o Start del gamepad).
+        // Menu: abrir menu (Escape o Start del gamepad). Dentro de un dialogo
+        // cancela, que equivale a elegir la ultima opcion.
         _menuAction = new InputAction("Menu", InputActionType.Button);
         _menuAction.AddBinding("<Keyboard>/escape");
         _menuAction.AddBinding("<Gamepad>/start");
@@ -82,6 +95,17 @@ public class PlayerInputController : MonoBehaviour
 
     private void Update()
     {
+        // El dialogo se queda con el teclado: si no, apretar X para avanzar la
+        // linea tambien volveria a interactuar, y las flechas moverian al
+        // jugador por atras de la caja de texto.
+        if (dialogueController != null && dialogueController.IsOpen)
+        {
+            HandleDialogueInput();
+            return;
+        }
+
+        _navPrevio = 0;
+
         if (_inBattle)
             HandleBattleInput();
         else
@@ -101,6 +125,27 @@ public class PlayerInputController : MonoBehaviour
 
         if (_menuAction.WasPressedThisFrame())
             playerController.OpenMenu();
+    }
+
+    private void HandleDialogueInput()
+    {
+        Vector2 dir = _moveAction.ReadValue<Vector2>();
+
+        // Arriba/izquierda = opcion anterior; abajo/derecha = siguiente.
+        int nav = 0;
+        if (dir.y > 0.5f) nav = -1;
+        else if (dir.y < -0.5f) nav = 1;
+        else if (dir.x < -0.5f) nav = -1;
+        else if (dir.x > 0.5f) nav = 1;
+
+        if (nav != 0 && nav != _navPrevio)
+            dialogueController.OnNavigate(nav);
+        _navPrevio = nav;
+
+        if (_interactAction.WasPressedThisFrame())
+            dialogueController.OnConfirm();
+        else if (_menuAction.WasPressedThisFrame())
+            dialogueController.OnCancel();
     }
 
     private void HandleBattleInput()

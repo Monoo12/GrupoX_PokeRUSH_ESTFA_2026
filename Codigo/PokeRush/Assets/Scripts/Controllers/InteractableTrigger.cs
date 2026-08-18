@@ -19,6 +19,15 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class InteractableTrigger : MonoBehaviour, IInteractable
 {
+    // Un objeto y cuantos. Se usa para las pokeballs del piso, que no pelean ni
+    // cortan nada: solo te dan cosas para la mochila.
+    [System.Serializable]
+    public class EntregaDeObjeto
+    {
+        public HealItemDefinition objeto;
+        public int cantidad = 1;
+    }
+
     [Header("Identidad")]
     [Tooltip("Titulo del cartel de confirmacion. Ej: FIREWALL")]
     [SerializeField] private string titulo = "SUBSISTEMA";
@@ -37,6 +46,8 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
     [SerializeField] private NPCDefinition combate;
     [Tooltip("PS que cuesta usarlo (el Rastreo del GDD). 0 = gratis.")]
     [SerializeField] private int costoHP = 0;
+    [Tooltip("Objetos que entrega al usarlo (pokeballs del piso). Vacio = ninguno.")]
+    [SerializeField] private EntregaDeObjeto[] entrega;
 
     [Header("Textos")]
     [Tooltip("Lo que dice el cartel al lograrlo. Ej: nodo 1 de 3 caido. Escudo reducido.")]
@@ -46,9 +57,23 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
     [Tooltip("Lo que dice si no alcanzan los PS para pagar el costo.")]
     [SerializeField] private string mensajeSinRecursos = "Tu equipo no aguanta la sobrecarga.";
 
+    [Header("Pregunta previa (opcional)")]
+    [Tooltip("Si esta puesto, primero pregunta y solo sigue si el jugador acepta. " +
+             "Vacio = se ejecuta de una, como siempre.")]
+    [SerializeField, TextArea(2, 4)] private string preguntaAntes = "";
+    [Tooltip("Nombre que aparece arriba de la caja al preguntar.")]
+    [SerializeField] private string nombreQuePregunta = "";
+    [SerializeField] private Sprite retrato;
+    [SerializeField] private string opcionSi = "Si";
+    [SerializeField] private string opcionNo = "No";
+    [Tooltip("Lo que dice si el jugador dice que no. Vacio = no dice nada.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeSiRechaza = "";
+
     [Header("Referencias (opcionales: se buscan solas)")]
     [SerializeField] private BattleController battleController;
     [SerializeField] private SubsystemFeedbackView feedback;
+    [Tooltip("Solo hace falta si se usa 'preguntaAntes'.")]
+    [SerializeField] private DialogueController dialogueController;
 
     [Header("Presentacion")]
     [Tooltip("Apagar el objeto una vez usado. Util para puertas o paneles de un solo uso.")]
@@ -67,6 +92,8 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
             battleController = FindAnyObjectByType<BattleController>(FindObjectsInactive.Include);
         if (feedback == null)
             feedback = FindAnyObjectByType<SubsystemFeedbackView>(FindObjectsInactive.Include);
+        if (dialogueController == null)
+            dialogueController = FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
     }
 
     public bool Interact(PlayerModel player, StoryModel story)
@@ -88,7 +115,30 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
             return true;
         }
 
-        // 3) costo en PS: el Rastreo del GDD. Se cobra ANTES de otorgar nada,
+        // 3) pregunta previa: si el diseniador puso una, no se hace nada
+        //    hasta que el jugador acepte. La respuesta llega por callback, asi
+        //    que aca se corta y se sigue adentro de Ejecutar().
+        if (!string.IsNullOrEmpty(preguntaAntes) && dialogueController != null)
+        {
+            dialogueController.StartConfirm(nombreQuePregunta, retrato, preguntaAntes,
+                opcionSi, opcionNo, acepto =>
+                {
+                    if (acepto) Ejecutar(player, story);
+                    else if (!string.IsNullOrEmpty(mensajeSiRechaza))
+                        dialogueController.StartMessage(nombreQuePregunta, retrato,
+                            new[] { mensajeSiRechaza });
+                });
+            return true;
+        }
+
+        return Ejecutar(player, story);
+    }
+
+    // Lo que pasa una vez decidido que se sigue adelante. Separado de Interact
+    // porque con pregunta previa esto corre DESPUES, cuando contesta el jugador.
+    private bool Ejecutar(PlayerModel player, StoryModel story)
+    {
+        // costo en PS: el Rastreo del GDD. Se cobra ANTES de otorgar nada,
         //    y si no alcanza no pasa nada (no se puede quedar sin equipo).
         if (costoHP > 0 && !CobrarHP(player))
         {
@@ -114,7 +164,7 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
         }
 
         // 5) sin combate: se resuelve en el momento
-        Lograr(story);
+        Lograr(player, story);
         return true;
     }
 
@@ -131,11 +181,42 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
         if (desactivarAlUsar) gameObject.SetActive(false);
     }
 
-    private void Lograr(StoryModel story)
+    private void Lograr(PlayerModel player, StoryModel story)
     {
         if (otorgaFlag != StoryFlag.None) story.ActivateFlag(otorgaFlag);
-        Avisar(mensajeExito);
+
+        string loQueDio = EntregarObjetos(player);
+
+        // Si el mensaje tiene {0}, se le mete lo que entrego. Asi el mismo campo
+        // sirve para "Pocion x3" y para un cartel fijo de subsistema.
+        string mensaje = mensajeExito;
+        if (!string.IsNullOrEmpty(loQueDio) && mensaje.Contains("{0}"))
+            mensaje = string.Format(mensaje, loQueDio);
+
+        Avisar(mensaje);
         if (desactivarAlUsar) gameObject.SetActive(false);
+    }
+
+    // Mete los objetos en la mochila y devuelve el texto de lo que dio.
+    private string EntregarObjetos(PlayerModel player)
+    {
+        if (entrega == null || entrega.Length == 0 || player == null) return null;
+
+        var partes = new System.Collections.Generic.List<string>();
+        foreach (EntregaDeObjeto e in entrega)
+        {
+            if (e == null || e.objeto == null || e.cantidad <= 0) continue;
+            player.Inventory.AddHealItem(e.objeto, e.cantidad);
+            partes.Add(e.cantidad > 1
+                ? $"{e.objeto.itemName} x{e.cantidad}"
+                : e.objeto.itemName);
+        }
+
+        if (partes.Count == 0) return null;
+
+        string texto = string.Join(" y ", partes);
+        Debug.Log($"[{titulo}] Entregado: {texto}.");
+        return texto;
     }
 
     // Cobra los PS repartiendo desde el primer Poken con vida. Nunca deja a
@@ -165,9 +246,20 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
         return true;
     }
 
+    // Orden de preferencia: el cartel de subsistemas si la escena lo tiene, si
+    // no la caja de dialogo del mapa, y como ultimo recurso la consola. Sin
+    // esto un boton sin SubsystemFeedbackView "funciona" pero el jugador no ve
+    // ninguna respuesta.
     private void Avisar(string mensaje)
     {
-        if (feedback != null) feedback.Show(titulo, mensaje);
-        else Debug.Log($"[{titulo}] {mensaje}");
+        if (string.IsNullOrEmpty(mensaje)) return;
+
+        if (feedback != null) { feedback.Show(titulo, mensaje); return; }
+        if (dialogueController != null)
+        {
+            dialogueController.StartMessage(nombreQuePregunta, retrato, new[] { mensaje });
+            return;
+        }
+        Debug.Log($"[{titulo}] {mensaje}");
     }
 }

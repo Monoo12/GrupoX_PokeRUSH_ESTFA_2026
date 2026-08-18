@@ -34,6 +34,12 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private DirectionalAnimation walk;
     [SerializeField] private DirectionalAnimation run;
 
+    [Header("Skin de mujer (opcional)")]
+    [Tooltip("Si estan cargadas y la partida es de una jugadora, se usan estas " +
+             "en lugar de las de arriba. Vacio = siempre la skin por defecto.")]
+    [SerializeField] private DirectionalAnimation walkMujer;
+    [SerializeField] private DirectionalAnimation runMujer;
+
     [Header("Velocidad de animacion")]
     [Tooltip("Cuadros por segundo al caminar.")]
     [SerializeField] private float walkFps = 6f;
@@ -42,6 +48,7 @@ public class PlayerView : MonoBehaviour
 
     private float _frameTimer;
     private int _frameIndex;
+    private bool _skinResuelta;
 
     // Autollenar referencias al agregar el componente en el editor.
     private void Reset()
@@ -58,8 +65,32 @@ public class PlayerView : MonoBehaviour
             playerController = GetComponentInParent<PlayerController>();
     }
 
+    // El genero se resuelve en Update y no en Start porque el PlayerModel lo
+    // inyecta SceneBootstrapper en SU Start, y el orden entre dos Start no esta
+    // garantizado: en Start todavia puede no haber partida.
+    private void ResolverSkin()
+    {
+        if (_skinResuelta) return;
+
+        var gm = GameManager.Instance;
+        if (gm == null || gm.CurrentPlayer == null) return;
+
+        _skinResuelta = true;
+        if (gm.CurrentPlayer.Genero != Genero.Mujer) return;
+
+        if (walkMujer != null && walkMujer.FramesFor(Vector2.down) != null
+            && walkMujer.FramesFor(Vector2.down).Length > 0)
+        {
+            walk = walkMujer;
+            if (runMujer != null) run = runMujer;
+            Debug.Log("[PlayerView] Partida de mujer: uso la skin femenina.");
+        }
+    }
+
     private void Update()
     {
+        ResolverSkin();
+
         bool moving = playerController.IsMoving;
         bool running = moving && playerController.IsRunning;
 

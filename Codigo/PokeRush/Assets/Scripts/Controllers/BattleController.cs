@@ -198,6 +198,18 @@ public class BattleController : MonoBehaviour
                 _bossConfig.PermiteCambio && HayBancoDisponible();
             _prediction.TieneObjetos = () =>
                 _playerModel.Inventory.HealItems.Exists(s => s.Quantity > 0);
+            // Un movimiento de estado CON PP alcanza como salida: la Prediccion
+            // de Ataque solo anula los de dano, asi que el jugador igual puede
+            // actuar. Sin esto, con un solo Poken y sin objetos no habia
+            // ninguna categoria anulable y Nestor no leia nunca.
+            _prediction.TieneMovimientoDeEstado = () =>
+            {
+                PokenModel activo = _battleModel.ActivePlayerPoken;
+                if (activo == null) return false;
+                return activo.Moves.Exists(m =>
+                    m.HasPP && m.Definition != null &&
+                    (m.Definition.attackType == AttackType.Status || m.Definition.power <= 0));
+            };
         }
         if (_bossConfig != null)
             Debug.Log($"[Combate] Config del boss: {_bossConfig.Resumen()}");

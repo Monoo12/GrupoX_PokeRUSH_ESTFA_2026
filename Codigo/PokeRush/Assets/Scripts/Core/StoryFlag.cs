@@ -30,5 +30,10 @@ public enum StoryFlag
     Torre1_FirewallNodoC,
     Torre1_RastreoCortado,
     Torre1_EnergiaAuxiliarCortada,
-    Torre1_NestorLiberado
+    Torre1_NestorLiberado,
+
+    // Objetos del piso: uno por pokeball, para que no reaparezcan al recargar
+    // la partida. El InteractableTrigger los usa como 'otorgaFlag'.
+    Torre1_PocionesTomadas,
+    Torre1_SuperPocionesTomadas
 }

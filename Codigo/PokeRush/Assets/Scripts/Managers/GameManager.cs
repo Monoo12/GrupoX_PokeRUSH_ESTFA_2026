@@ -72,13 +72,32 @@ public class GameManager : MonoBehaviour
         // Mas adelante: disparar un evento aca para que la UI/otros sistemas reaccionen
     }
 
+    // Partida nueva con el equipo fijo del Inspector. Se usa al entrar directo a
+    // una escena por Play (SceneBootstrapper) y en las herramientas de prueba.
     public void NewGame(string playerName)
+    {
+        NewGame(playerName, Genero.Varon, null, 0);
+    }
+
+    // Partida nueva desde la creacion de personaje: el jugador eligio genero y
+    // un inicial. Si 'inicial' viene en null se cae al equipo del Inspector, asi
+    // el arranque suelto por Play sigue funcionando igual que antes.
+    public void NewGame(string playerName, Genero genero, PokenDefinition inicial, int nivelInicial)
     {
         Story = new StoryModel();
         Tower = new TowerProgressModel(Story);
-        CurrentPlayer = new PlayerModel(playerName);
+        CurrentPlayer = new PlayerModel(playerName, genero);
 
-        ArmarEquipoInicial();
+        if (inicial != null)
+        {
+            CurrentPlayer.Team.Add(new PokenModel(inicial, Mathf.Max(1, nivelInicial)));
+            Debug.Log($"[GameManager] Partida nueva de '{playerName}' ({genero}) " +
+                      $"con {inicial.pokenName} Nv{nivelInicial}.");
+        }
+        else
+        {
+            ArmarEquipoInicial();
+        }
 
         Story.ActivateFlag(StoryFlag.GameStarted);
         Story.ActivateFlag(StoryFlag.ReceivedStarterPoken);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 public class PlayerModel
 {
     public string PlayerName { get; private set; }
+    public Genero Genero { get; private set; }
     public int Money { get; private set; }
 
     public List<PokenModel> Team { get; private set; }
@@ -10,9 +11,12 @@ public class PlayerModel
 
     public bool HasAlivePoken => Team.Exists(p => !p.IsFainted);
 
-    public PlayerModel(string playerName)
+    public PlayerModel(string playerName) : this(playerName, Genero.Varon) { }
+
+    public PlayerModel(string playerName, Genero genero)
     {
         PlayerName = playerName;
+        Genero = genero;
         Money = 0;
         Team = new List<PokenModel>();
         Inventory = new InventoryModel();

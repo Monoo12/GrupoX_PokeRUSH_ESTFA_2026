@@ -25,13 +25,15 @@ public class SaveService
         if (playerRow == null)
         {
             // No existe: crear fila nueva
-            playerRow = new PlayerRow { Id = playerId, Name = player.PlayerName, Money = player.Money };
+            playerRow = new PlayerRow { Id = playerId, Name = player.PlayerName,
+                                       Gender = player.Genero.ToString(), Money = player.Money };
             _db.Insert(playerRow);
         }
         else
         {
             // Ya existe: actualizar valores
             playerRow.Name = player.PlayerName;
+            playerRow.Gender = player.Genero.ToString();
             playerRow.Money = player.Money;
             _db.Update(playerRow);
         }
@@ -155,7 +157,9 @@ public class SaveService
         if (playerRow == null) return null; // no hay guardado para este id
 
         // Crea el PlayerModel con el nombre guardado y le suma el dinero guardado
-        var player = new PlayerModel(playerRow.Name);
+        // Un guardado viejo no tiene la columna: cae en Varon sin romper.
+        System.Enum.TryParse(playerRow.Gender ?? "", out Genero genero);
+        var player = new PlayerModel(playerRow.Name, genero);
         player.AddMoney(playerRow.Money);
 
         // --- Cargar equipo de Pokens ---

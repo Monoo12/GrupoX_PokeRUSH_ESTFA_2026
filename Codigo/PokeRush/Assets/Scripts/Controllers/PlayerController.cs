@@ -51,26 +51,50 @@ public class PlayerController : MonoBehaviour
         _storyModel = storyModel;
     }
 
-    // Busca algo con que interactuar en el tile de ADELANTE (no en el propio),
-    // asi que hay que estar mirando la cosa. Lo llama PlayerInputController.
+    // Busca algo con que interactuar en los tiles de al lado. Primero el de
+    // ADELANTE, y si ahi no hay nada prueba los otros tres: pararse de espaldas
+    // o de costado a un NPC y que no pase nada se siente roto, sobre todo
+    // cuando el NPC ocupa un tile y hay que rodearlo. Lo llama
+    // PlayerInputController.
     public void Interact()
     {
         if (_playerModel == null || _storyModel == null) return;
         if (_isMoving) return; // a mitad de un paso no se interactua
 
-        Vector2 frente = (Vector2)transform.position + _facing * tileSize;
+        // El frente va primero para que siga mandando a quien estas mirando si
+        // hay dos cosas interactuables alrededor.
+        if (IntentarInteractuar(_facing)) return;
+
+        foreach (Vector2 d in new[] { Vector2.down, Vector2.up, Vector2.left, Vector2.right })
+        {
+            if (d == _facing) continue; // ya probado
+            if (IntentarInteractuar(d)) return;
+        }
+    }
+
+    private bool IntentarInteractuar(Vector2 direccion)
+    {
+        Vector2 destino = (Vector2)transform.position + direccion * tileSize;
 
         // OverlapCircleAll y no OverlapCircle: un panel puede tener el collider
         // en un hijo, o haber dos cosas cerca. Nos quedamos con la primera que
         // consuma la interaccion.
-        Collider2D[] cerca = Physics2D.OverlapCircleAll(frente, interactionRadius, interactableMask);
+        Collider2D[] cerca = Physics2D.OverlapCircleAll(destino, interactionRadius, interactableMask);
         foreach (Collider2D c in cerca)
         {
             // GetComponentInParent para que ande aunque el collider este en un hijo
             var interactuable = c.GetComponentInParent<IInteractable>();
             if (interactuable == null) continue;
-            if (interactuable.Interact(_playerModel, _storyModel)) return;
+
+            // Si consume la interaccion, ademas lo miro: queda mas natural que
+            // hablarle de espaldas.
+            if (interactuable.Interact(_playerModel, _storyModel))
+            {
+                _facing = direccion;
+                return true;
+            }
         }
+        return false;
     }
 
     // Termina el paso en curso al instante y deja al jugador alineado a la

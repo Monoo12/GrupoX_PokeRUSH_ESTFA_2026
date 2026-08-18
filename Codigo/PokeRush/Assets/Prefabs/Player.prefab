@@ -86,8 +86,8 @@ MonoBehaviour:
   collisionCheckRadius: 0.3
   interactableMask:
     serializedVersion: 2
-    m_Bits: 0
-  interactionRadius: 0.4
+    m_Bits: 8
+  interactionRadius: 0.45
 --- !u!114 &5720142082632575368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputController
   playerController: {fileID: 1516548415266587877}
   battleController: {fileID: 0}
+  dialogueController: {fileID: 0}
 --- !u!70 &3401976463399851070
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -287,5 +288,47 @@ MonoBehaviour:
     - {fileID: 3960785168931543400, guid: 53906698c8d2a4946b9277acc785b381, type: 3}
     - {fileID: 8269896084109458194, guid: 53906698c8d2a4946b9277acc785b381, type: 3}
     - {fileID: 659740103688298303, guid: 53906698c8d2a4946b9277acc785b381, type: 3}
+  walkMujer:
+    down:
+    - {fileID: -7945514919060410075, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: -5117654564697132706, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: -7945514919060410075, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: -1828801133986926467, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    up:
+    - {fileID: 736845395981589385, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: 8181157841227271374, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: 736845395981589385, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: -2089985868780103463, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    left:
+    - {fileID: 1331827665900934708, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: 7051040023249981280, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: 1331827665900934708, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: -1718762491325153683, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    right:
+    - {fileID: -6568656847468215597, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: 54563392676255490, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: -6568656847468215597, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+    - {fileID: 1828768775681118433, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
+  runMujer:
+    down:
+    - {fileID: 115487711278812316, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 6028387448473608446, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 6832425085459808586, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 5235667480445476445, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    up:
+    - {fileID: -4539297741510654949, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: -4725105619017891563, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: -8071578189423607535, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 4342608423501460312, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    left:
+    - {fileID: 4805976116521314473, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 8043541303053690365, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 3551955153779929099, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 7651912235108408125, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    right:
+    - {fileID: -1555187017199457115, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: 2223374010827741248, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: -1243079690075971273, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
+    - {fileID: -701144323355432101, guid: 18a9a5f9802de564481ab3b04b76caf1, type: 3}
   walkFps: 8
   runFps: 14

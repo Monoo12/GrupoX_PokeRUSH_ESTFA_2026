@@ -9,6 +9,9 @@ public class PlayerRow
     [PrimaryKey]
     public int Id { get; set; }
     public string Name { get; set; }
+    // Se guarda como texto ("Varon"/"Mujer"). sqlite-net agrega la columna sola
+    // en los guardados viejos, que quedan con null y se leen como Varon.
+    public string Gender { get; set; }
     public int Money { get; set; }
 }
 
