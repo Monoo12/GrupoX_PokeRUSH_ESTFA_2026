@@ -91,23 +91,36 @@ public static class MoveScorer
         if (move.statChanges != null)
         {
             // --- setup: subir stats propias ---
-            bool selfBoostWithRoom = false;
+            // Margen de setup: 1 = todavia no boosteo nada, 0 = llego al tope.
+            //
+            // Antes esto era un bool y el setup valia lo MISMO con 0 stages que
+            // con 5. Como el puntaje de atacar es proporcional al daño relativo
+            // (contra un rival mucho mas fuerte da casi cero), el boost ganaba
+            // siempre y la IA se quedaba boosteando la pelea entera sin atacar.
+            // Con el margen decayendo, despues de un par de subidas el ataque
+            // pasa a valer mas y la IA arranca a pegar.
+            float setupRoom = 0f;
             bool foeDebuffWithRoom = false;
             foreach (StatChangeEntry entry in move.statChanges)
             {
                 if (entry.targetSelf && entry.stages > 0
                     && ctx.Self.GetStage(entry.stat) < profile.maxSetupStages)
-                    selfBoostWithRoom = true;
+                {
+                    int tope = System.Math.Max(1, profile.maxSetupStages);
+                    int actual = System.Math.Max(0, ctx.Self.GetStage(entry.stat));
+                    float margen = 1f - (float)actual / tope;
+                    if (margen > setupRoom) setupRoom = margen;
+                }
                 if (!entry.targetSelf && entry.stages < 0
                     && ctx.Foe.GetStage(entry.stat) > StatStageTable.MinStage)
                     foeDebuffWithRoom = true;
             }
 
-            if (selfBoostWithRoom && ctx.SelfHpPercent >= profile.minHpPctForSetup)
+            if (setupRoom > 0f && ctx.SelfHpPercent >= profile.minHpPctForSetup)
             {
                 // Vale mas con HP alto: (hp - 0.5) * 2 mapea 50%->0 y 100%->1
                 float hpFactor = (ctx.SelfHpPercent - 0.5f) * 2f;
-                if (hpFactor > 0f) score += profile.setupWeight * hpFactor;
+                if (hpFactor > 0f) score += profile.setupWeight * hpFactor * setupRoom;
             }
 
             if (foeDebuffWithRoom)

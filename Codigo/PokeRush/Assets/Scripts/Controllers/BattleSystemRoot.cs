@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -58,8 +59,6 @@ public class BattleSystemRoot : MonoBehaviour
     {
         if (audioListener == null && battleCamera != null)
             audioListener = battleCamera.GetComponent<AudioListener>();
-        if (audioListener != null)
-            audioListener.enabled = !HayOtroAudioListenerActivo();
 
         if (battleCamera == null)
         {
@@ -69,8 +68,23 @@ public class BattleSystemRoot : MonoBehaviour
             return;
         }
 
-        // Aviso util al montarlo: si el mapa sigue visible detras, es que el
-        // puente no esta apagando su raiz.
+        StartCoroutine(ResolverConflictosDeEscena());
+    }
+
+    // Los chequeos van un frame DESPUES a proposito.
+    //
+    // MapBattleBridge prende el combate y RECIEN DESPUES apaga el mapa, asi que
+    // en el instante del OnEnable las dos mitades estan activas. Mirar ahi daba
+    // el aviso de camara siempre, y con el audio era peor que un falso positivo:
+    // se apagaba el listener del combate por culpa del mapa, y al frame
+    // siguiente el mapa se iba y no quedaba NINGUNO. Combate sin sonido.
+    private IEnumerator ResolverConflictosDeEscena()
+    {
+        yield return null;
+
+        if (audioListener != null)
+            audioListener.enabled = !HayOtroAudioListenerActivo();
+
         foreach (Camera otra in Camera.allCameras)
             if (otra != battleCamera && otra.depth >= battleCamera.depth)
                 Debug.LogWarning($"[Combate] La camara '{otra.name}' dibuja por encima o al mismo " +
@@ -79,7 +93,7 @@ public class BattleSystemRoot : MonoBehaviour
 
     private bool HayOtroAudioListenerActivo()
     {
-        foreach (AudioListener otro in FindObjectsByType<AudioListener>(FindObjectsSortMode.None))
+        foreach (AudioListener otro in FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude))
             if (otro != audioListener && otro.enabled && otro.gameObject.activeInHierarchy) return true;
         return false;
     }

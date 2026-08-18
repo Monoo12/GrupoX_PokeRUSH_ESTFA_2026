@@ -158,6 +158,14 @@ public class TurnEngine
             return;
         }
 
+        // Ya esta al maximo: NO se gasta el objeto. Va ANTES de consumir; si no,
+        // la pocion desaparecia del inventario sin curar nada.
+        if (objetivo.CurrentHP >= objetivo.MaxHP)
+        {
+            BattleEvent.Add(events, $"¡{nombre} ya está al máximo!");
+            return;
+        }
+
         // Si no hay stock no se hace nada: se chequea ANTES de curar para no
         // regalar la curacion cuando el objeto ya se gasto.
         if (!_model.Player.Inventory.ConsumeHealItem(item, 1))

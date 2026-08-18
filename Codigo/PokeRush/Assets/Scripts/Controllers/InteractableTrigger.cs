@@ -60,8 +60,13 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
     {
         // Se resuelven solas para que el equipo pueda soltar el prefab en la
         // escena sin cablear nada. Se pueden pisar desde el Inspector.
-        if (battleController == null) battleController = FindFirstObjectByType<BattleController>();
-        if (feedback == null) feedback = FindFirstObjectByType<SubsystemFeedbackView>();
+        // Include: el prefab de combate esta DESACTIVADO hasta que arranca la
+        // pelea, y las busquedas por defecto ignoran lo inactivo. Sin esto el
+        // trigger no lo encuentra y tira 'no hay BattleController en la escena'.
+        if (battleController == null)
+            battleController = FindAnyObjectByType<BattleController>(FindObjectsInactive.Include);
+        if (feedback == null)
+            feedback = FindAnyObjectByType<SubsystemFeedbackView>(FindObjectsInactive.Include);
     }
 
     public bool Interact(PlayerModel player, StoryModel story)

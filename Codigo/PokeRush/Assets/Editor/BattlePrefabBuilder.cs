@@ -52,6 +52,12 @@ namespace PokeRush.EditorTools
             BattleSystemRoot rig = BattleTestSceneBuilder.BuildCombatRig();
             try
             {
+                // Se guarda DESACTIVADO. El prefab trae su propia camara (depth
+                // 10) y un canvas a pantalla completa: soltarlo activo tapa el
+                // mapa entero. Inactivo, se arrastra a cualquier escena sin
+                // romper nada y lo prende MapBattleBridge al empezar la pelea.
+                rig.gameObject.SetActive(false);
+
                 GameObject saved = PrefabUtility.SaveAsPrefabAsset(rig.gameObject, PrefabPath, out bool ok);
                 if (!ok || saved == null)
                 {

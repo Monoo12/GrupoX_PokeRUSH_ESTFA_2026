@@ -768,7 +768,7 @@ namespace PokeRush.EditorTools
         {
             var panel = CreateRect("PanelPrediccion", parent,
                 new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
-                new Vector2(0, -4), new Vector2(300, 46));
+                new Vector2(0, -4), new Vector2(380, 58));
 
             var marco = panel.AddComponent<Image>();
             marco.color = new Color(0.07f, 0.07f, 0.11f, 0.88f);
@@ -779,13 +779,16 @@ namespace PokeRush.EditorTools
 
             Text titulo = CreateText("Titulo", panel.transform,
                 new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1),
-                new Vector2(8, -4), new Vector2(-8, 18), 13, TextAnchor.MiddleCenter);
+                // X en 0: con anclas estiradas, un offset en X corre la caja
+                // entera y el texto queda descentrado aunque diga MiddleCenter.
+                new Vector2(0, -5), new Vector2(-24, 22), 17, TextAnchor.MiddleCenter);
             titulo.color = new Color(1f, 0.85f, 0.35f);
+            titulo.fontStyle = FontStyle.Bold;
 
             Text detalle = CreateText("Detalle", panel.transform,
                 new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1),
-                new Vector2(8, -22), new Vector2(-8, 16), 11, TextAnchor.MiddleCenter);
-            detalle.color = new Color(0.82f, 0.82f, 0.88f);
+                new Vector2(0, -28), new Vector2(-24, 20), 14, TextAnchor.MiddleCenter);
+            detalle.color = new Color(0.88f, 0.88f, 0.94f);
 
             // Barra de progreso: fondo + relleno horizontal
             var barraFondo = CreateRect("BarraFondo", panel.transform,

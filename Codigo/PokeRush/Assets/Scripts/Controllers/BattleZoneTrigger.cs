@@ -51,7 +51,14 @@ public class BattleZoneTrigger : MonoBehaviour
 
     private void Awake()
     {
-        if (battleController == null) battleController = FindAnyObjectByType<BattleController>();
+        // FindObjectsInactive.Include es OBLIGATORIO: el prefab de combate vive
+        // DESACTIVADO en la escena (lo prende MapBattleBridge al empezar la
+        // pelea), y las busquedas por defecto ignoran lo inactivo. Sin esto el
+        // fallback no encuentra nada y solo funciona si la referencia
+        // serializada esta intacta — que se rompe al regenerar el prefab,
+        // porque cambian los fileID internos.
+        if (battleController == null)
+            battleController = FindAnyObjectByType<BattleController>(FindObjectsInactive.Include);
 
         var col = GetComponent<Collider2D>();
         if (col != null && !col.isTrigger)

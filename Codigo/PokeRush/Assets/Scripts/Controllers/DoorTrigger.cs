@@ -28,7 +28,7 @@ public class DoorTrigger : MonoBehaviour
 
     private void Awake()
     {
-        if (feedback == null) feedback = FindFirstObjectByType<SubsystemFeedbackView>();
+        if (feedback == null) feedback = FindAnyObjectByType<SubsystemFeedbackView>(FindObjectsInactive.Include);
         if (destino == null)
             Debug.LogError($"[Puerta] '{name}' no tiene destino asignado: no lleva a ningun lado.");
     }

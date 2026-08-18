@@ -490,6 +490,10 @@ public class BattleController : MonoBehaviour
     private bool Anticipado(BattleActionKind tipo, MoveDefinition movimiento)
     {
         if (_prediction == null || !_prediction.Bloquea(tipo, movimiento)) return false;
+
+        // Cerrar el panel de lucha ANTES de avisar: tapa la barra de mensajes,
+        // asi que el rechazo quedaba escrito abajo, donde no se lee.
+        battleHudView?.ShowCommandMenu(_battleModel);
         Announce(_prediction.MensajeRechazo());
         return true;
     }
@@ -639,6 +643,11 @@ public class BattleController : MonoBehaviour
 
     private void AbrirMenuLiberacion()
     {
+        // Devolver la fase a Liberation es OBLIGATORIO: LiberationTurnRoutine la
+        // pone en CalculatingResult mientras resuelve, y TomarAccionLiberacion
+        // exige Liberation para aceptar input. Sin esto, del segundo turno en
+        // adelante el menu se dibujaba pero ningun boton hacia nada.
+        _battleModel.SetPhase(BattlePhase.Liberation);
         battleHudView?.UpdateHud(_battleModel);
         battleHudView?.ShowLiberationMenu(
             _liberation.TurnosAguantados, _liberation.TurnosTotales, _liberation.AvisoDelChip());
@@ -729,8 +738,21 @@ public class BattleController : MonoBehaviour
 
     public void LiberationSwitch(int teamIndex)
     {
-        if (!BattleTeamRules.EsIndiceVivo(_playerModel.Team, teamIndex)) return;
-        if (teamIndex == _battleModel.ActivePlayerIndex) return;
+        // Una eleccion invalida NO puede quedarse callada: el menu de equipo ya
+        // se cerro, asi que sin aviso ni vuelta al panel de liberacion la fase
+        // queda sin ningun boton en pantalla y el combate parece trabado.
+        if (teamIndex == _battleModel.ActivePlayerIndex)
+        {
+            Announce($"¡{_battleModel.ActivePlayerPoken.Definition.pokenName} ya está en combate!");
+            AbrirMenuLiberacion();
+            return;
+        }
+        if (!BattleTeamRules.EsIndiceVivo(_playerModel.Team, teamIndex))
+        {
+            Announce("Ese Poken no puede combatir.");
+            AbrirMenuLiberacion();
+            return;
+        }
         TomarAccionLiberacion(LiberationEngine.Accion.Cambiar, teamIndex);
     }
 
