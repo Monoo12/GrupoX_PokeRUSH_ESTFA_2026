@@ -61,6 +61,32 @@ El género se agregó como columna `Gender` en la tabla `player`. sqlite-net la 
 
 ---
 
+## Música
+
+Cada escena dice qué suena con un componente **`MusicaDeEscena`** en un objeto `Musica`. La reproducción la hace `AudioService`, que vive en el `GameManager` y sobrevive los cambios de escena: por eso no hay un `AudioSource` por escena, solo se le dice **qué** sonar.
+
+| Escena | Pista |
+|---|---|
+| Menu Principal / MenuSaves | `Musica_MenuPrincipalySave.mp3` |
+| CreacionPersonaje | `Creacion _PJ.mp3` |
+| NestorGOD2 (mapa) | `BackMusic_Torre1.mp3` |
+| Combate contra Néstor | `Pelea_Nestor.mp3` |
+
+El menú y la pantalla de guardados comparten pista **a propósito**: al pasar de una a otra la música no se reinicia, porque `AudioService.PlayMusic` ignora el pedido si ya está sonando ese clip.
+
+La música de combate se cambia sola: `MusicaDeEscena` se engancha a los eventos del `BattleController` y vuelve a la del mapa al terminar la pelea. No hay que tocar el `MapBattleBridge`.
+
+### Dos cosas del import que importan
+
+Las cuatro pistas están importadas como **Streaming** con **Preload Audio Data** prendido, y conviene dejarlas así:
+
+- **Streaming**: son de 95 a 293 segundos. Con `DecompressOnLoad` se descomprimen enteras en memoria; en streaming se leen del disco a medida que suenan.
+- **Preload prendido**: sin esto, el `Play()` del arranque de la escena **no hace nada y no avisa** — el clip queda asignado y en silencio.
+
+> Un clip en Streaming **nunca** pasa al estado `Loaded`. Si alguna vez hace falta esperar a que un clip esté listo, no se puede usar `AudioClip.loadState`: hay que mirar si la fuente está sonando. `MusicaDeEscena` reintenta un par de veces y avisa por consola si no arrancó.
+
+---
+
 ## Qué se puede hacer dentro de la torre
 
 - Moverse con **WASD / flechas**, correr con **Shift**.
@@ -83,5 +109,7 @@ El género se agregó como columna `Gender` en la tabla `player`. sqlite-net la 
 | "No hay GameManager" | entraste directo a una escena sin `GameManager`; entrá por `Menu Principal` |
 | El combate no arranca | falta el prefab `SistemaDeCombate` (desactivado) o el `MapBattleBridge` en la escena |
 | La escena no carga por nombre | no está en Build Settings |
+| No se escucha la música | el `GameManager` de esa escena no tiene asignadas sus dos `AudioSource`. Ojo que el que manda es el de la **primera** escena, porque es `DontDestroyOnLoad` |
+| La música se corta al rato, probando en el editor | no es un bug: **Run In Background** está apagado, así que Unity pausa el juego entero (audio incluido) cuando el Editor pierde el foco |
 
 Detalle de cada sistema en `Como_Armar_Un_Mapa_Nuevo.md` y `Como_Hacer_Dialogos_Y_Decisiones.md`.

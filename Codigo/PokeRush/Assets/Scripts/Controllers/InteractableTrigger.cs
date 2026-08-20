@@ -79,6 +79,11 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
     [Tooltip("Apagar el objeto una vez usado. Util para puertas o paneles de un solo uso.")]
     [SerializeField] private bool desactivarAlUsar = false;
 
+    // Que flag activa este interactuable. Publico para que otros componentes
+    // (el brillo que marca los subsistemas sin cortar) sepan cuando dejar de
+    // mostrarse, sin tener que repetir el flag en el Inspector.
+    public StoryFlag OtorgaFlag => otorgaFlag;
+
     private bool _esperandoCombate;
 
     private void Awake()

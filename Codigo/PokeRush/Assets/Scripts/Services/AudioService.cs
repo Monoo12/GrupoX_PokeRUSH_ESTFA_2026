@@ -37,6 +37,22 @@ public class AudioService
         _musicSource?.Stop();
     }
 
+    // Volumen de la musica de fondo. Cada escena puede pedir el suyo: la fuente
+    // es una sola y sobrevive los cambios de escena, asi que sin esto el volumen
+    // quedaria fijo al del primer AudioSource que se haya inicializado.
+    public void SetMusicVolume(float volumen)
+    {
+        if (_musicSource == null) return;
+        _musicSource.volume = Mathf.Clamp01(volumen);
+    }
+
+    public float GetMusicVolume() => _musicSource == null ? 0f : _musicSource.volume;
+
+    // Para poder confirmar que la musica arranco de verdad. Un clip en
+    // Streaming nunca queda en estado 'Loaded', asi que no sirve mirar
+    // AudioClip.loadState: hay que preguntarle a la fuente.
+    public bool IsMusicPlaying => _musicSource != null && _musicSource.isPlaying;
+
     // Reproduce un efecto de sonido una sola vez, sin interrumpir la musica
     public void PlaySFX(AudioClip clip)
     {

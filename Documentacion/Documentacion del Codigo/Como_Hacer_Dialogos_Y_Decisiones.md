@@ -125,6 +125,26 @@ Ejemplo armado en `NestorGOD2`: `BotonRayos` en el rack de la sala de servidores
 
 > Los rayos eran **tiles** del tilemap `Colisiones`. Para poder apagarlos se borraron esos tiles y se reemplazaron por un GameObject con los mismos sprites: apagar un GameObject es un `SetActive`, mientras que apagar tiles obliga a operar el tilemap en runtime. **Después de borrar tiles hay que correr `PokeRush > Reparar colisiones del mapa`** (ver `Como_Armar_Un_Mapa_Nuevo.md`, punto 2).
 
+### 3b. Marcar un interactuable con un brillito
+
+Los paneles de subsistema **no tienen sprite propio**: son colliders invisibles puestos encima de los tiles del mapa. Sin una marca no hay forma de saber que ahí se puede apretar X.
+
+**`BrilloInteractuable`**, en el mismo objeto que el `InteractableTrigger`. No hay nada que configurar: **toma el flag del propio trigger**, así que no se puede desincronizar. Se apaga solo al cortar ese subsistema, con lo cual el brillo funciona además como checklist de lo que falta.
+
+| Campo | Para qué |
+|---|---|
+| `flagQueLoApaga` | `None` = lo lee del `InteractableTrigger` del objeto |
+| `spriteHalo` / `spriteEstrella` | `ballBurst_particle` y `ballBurst_star` de `Sprites/UI/Battle` |
+| `tamanioHalo` / `tamanioEstrella` | alto en tiles (1.15 y 0.4) |
+| `sortingOrder` | 12: encima de `Colisiones` (10), debajo del jugador (15) |
+| `periodo`, `amplitud`, `girosPorMinuto` | el ritmo del latido |
+
+El visual se arma **en runtime** como dos hijos, así no hay que mantener dos GameObjects por panel en la escena y agregar uno nuevo es poner un solo componente.
+
+> Cada panel late **desfasado** de los demás. El desfase sale del nombre del objeto, no de un random: se ve orgánico pero es igual en todas las partidas, así que un bug visual siempre se reproduce.
+
+Puesto en `NestorGOD2` sobre los seis que debilitan a Néstor: `Camaras`, `nodoA/B/C`, `Rastreo` y `BotonRayos`. Las Pokéballs y Néstor **no** lo llevan, a propósito.
+
 ### 4. Un objeto en el piso (pokeball)
 
 Mismo `InteractableTrigger`, con el campo **`entrega`**: una lista de objeto + cantidad que va a la mochila.
