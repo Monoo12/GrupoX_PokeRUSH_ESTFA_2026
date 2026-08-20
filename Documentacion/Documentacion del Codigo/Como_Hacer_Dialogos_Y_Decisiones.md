@@ -134,14 +134,22 @@ Los paneles de subsistema **no tienen sprite propio**: son colliders invisibles 
 | Campo | Para qué |
 |---|---|
 | `flagQueLoApaga` | `None` = lo lee del `InteractableTrigger` del objeto |
+| `tamanioHalo` / `tamanioEstrella` | **alto en tiles** (1.15 y 0.4). `tamanioEstrella` en 0 = sin estrella |
+| `escalaGeneral` | multiplica a los dos, para agrandar todo sin tocarlos por separado |
 | `spriteHalo` / `spriteEstrella` | `ballBurst_particle` y `ballBurst_star` de `Sprites/UI/Battle` |
-| `tamanioHalo` / `tamanioEstrella` | alto en tiles (1.15 y 0.4) |
 | `sortingOrder` | 12: encima de `Colisiones` (10), debajo del jugador (15) |
 | `periodo`, `amplitud`, `girosPorMinuto` | el ritmo del latido |
+| `verEnElEditor` | mostrarlo fuera de Play para poder calibrarlo |
 
-El visual se arma **en runtime** como dos hijos, así no hay que mantener dos GameObjects por panel en la escena y agregar uno nuevo es poner un solo componente.
+**El tamaño se ajusta a ojo, sin entrar a Play.** El componente es `[ExecuteAlways]`, así que el brillo se ve en la Scene view, y `OnValidate` re-aplica el tamaño apenas movés el valor en el Inspector. Ojo que el alto que ves oscila ±`amplitud` (18% por defecto) alrededor del número pedido, porque está latiendo.
+
+El visual se arma **en runtime** como dos hijos con `HideFlags.HideAndDontSave`: no ensucian la jerarquía ni se guardan en el `.unity`, y agregar un panel nuevo es poner un solo componente.
 
 > Cada panel late **desfasado** de los demás. El desfase sale del nombre del objeto, no de un random: se ve orgánico pero es igual en todas las partidas, así que un bug visual siempre se reproduce.
+
+> **Dos trampas que ya mordieron acá**, por si hacés otro componente parecido:
+> - Los objetos con `HideFlags.DontSave` **no se destruyen al entrar a Play**. Los que arma el editor se cuelan en la partida y el componente ya no los conoce, así que no los puede apagar. Por eso `BrilloInteractuable` borra en `OnEnable` **todo** hijo que se llame `Brillo*`, no solo los que tiene referenciados.
+> - No conviene escuchar `StoryModel.FlagActivated` para esto: `NewGame` crea un `StoryModel` nuevo, y quien se suscribió antes no se entera nunca más. El brillo **consulta el flag por frame** (es un `HashSet.Contains`), lo que además cubre gratis el caso de cargar una partida que ya tenía el subsistema cortado.
 
 Puesto en `NestorGOD2` sobre los seis que debilitan a Néstor: `Camaras`, `nodoA/B/C`, `Rastreo` y `BotonRayos`. Las Pokéballs y Néstor **no** lo llevan, a propósito.
 

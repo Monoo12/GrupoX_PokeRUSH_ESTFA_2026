@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 // Un brillito sobre las cosas con las que se puede interactuar y todavia no se
@@ -12,26 +13,40 @@ using UnityEngine;
 //
 // USO
 //   1. Poner el componente en el mismo objeto que el InteractableTrigger.
-//   2. Nada mas: el flag lo toma del trigger, y los sprites tienen valores por
-//      defecto. Todo es ajustable desde el Inspector si hace falta.
+//   2. Nada mas: el flag lo toma del trigger y los sprites tienen valores por
+//      defecto. 'tamanioHalo' y 'tamanioEstrella' regulan que tan grande es.
 //
-// El visual se arma en runtime como hijos: asi no ensucia la escena con dos
-// GameObjects por cada panel, y agregar un panel nuevo es un solo componente.
+// SE VE MIENTRAS LO EDITAS
+// [ExecuteAlways] hace que el brillo se arme tambien fuera de Play, y los
+// tamanios se re-aplican en cada frame: se mueve el slider en el Inspector y se
+// ve el cambio en la Scene view, sin entrar y salir de Play para calibrar.
+//
+// Los hijos se crean con HideAndDontSave: no ensucian la jerarquia ni se
+// guardan en la escena, asi que no quedan dos GameObjects por panel en el .unity
+// ni se duplican al recompilar.
+[ExecuteAlways]
 public class BrilloInteractuable : MonoBehaviour
 {
     [Header("Cuando deja de brillar")]
     [Tooltip("None = lo toma del InteractableTrigger que este en este objeto.")]
     [SerializeField] private StoryFlag flagQueLoApaga = StoryFlag.None;
 
+    [Header("Tamanio (en tiles)")]
+    [Tooltip("Alto del halo. 1 = un tile.")]
+    [Range(0.1f, 4f)]
+    [SerializeField] private float tamanioHalo = 1.15f;
+    [Tooltip("Alto de la estrellita. 0 = sin estrella.")]
+    [Range(0f, 2f)]
+    [SerializeField] private float tamanioEstrella = 0.4f;
+    [Tooltip("Escala todo junto, para agrandar o achicar sin tocar los dos de arriba.")]
+    [Range(0.1f, 4f)]
+    [SerializeField] private float escalaGeneral = 1f;
+
     [Header("Aspecto")]
     [SerializeField] private Sprite spriteHalo;
     [SerializeField] private Sprite spriteEstrella;
     [SerializeField] private Color colorHalo = new Color(1f, 0.86f, 0.45f, 0.5f);
     [SerializeField] private Color colorEstrella = new Color(1f, 0.97f, 0.8f, 0.95f);
-    [Tooltip("Alto del halo en tiles.")]
-    [SerializeField] private float tamanioHalo = 1.15f;
-    [Tooltip("Alto de la estrellita en tiles.")]
-    [SerializeField] private float tamanioEstrella = 0.4f;
     [Tooltip("Encima de Colisiones (10) y debajo del jugador (15).")]
     [SerializeField] private int sortingOrder = 12;
     [SerializeField] private Vector2 desplazamiento = new Vector2(0f, 0.1f);
@@ -44,101 +59,186 @@ public class BrilloInteractuable : MonoBehaviour
     [SerializeField] private float amplitud = 0.18f;
     [SerializeField] private float girosPorMinuto = 12f;
 
-    private StoryModel _story;
+    [Header("Editor")]
+    [Tooltip("Mostrarlo tambien fuera de Play, para poder calibrar el tamanio.")]
+    [SerializeField] private bool verEnElEditor = true;
+
     private SpriteRenderer _halo;
     private SpriteRenderer _estrella;
-    private float _escalaHaloBase;
-    private float _fase;   // arranca distinto en cada panel para que no latan al unisono
+    private float _fase;      // desfase por objeto, para que no laten al unisono
     private bool _apagado;
 
-    private void Awake()
+    private void OnEnable()
     {
-        // El flag sale del propio trigger: escribirlo dos veces es una forma
-        // segura de que algun dia queden distintos.
+        // Desfase estable por objeto (no aleatorio): se ve organico pero es
+        // siempre igual entre partidas, asi un bug visual se reproduce.
+        _fase = Mathf.Abs(name.GetHashCode() % 100) / 100f * Mathf.PI * 2f;
+        _apagado = false;
+
         if (flagQueLoApaga == StoryFlag.None)
         {
             var trigger = GetComponent<InteractableTrigger>();
             if (trigger != null) flagQueLoApaga = trigger.OtorgaFlag;
         }
 
-        if (flagQueLoApaga == StoryFlag.None)
+        if (Application.isPlaying && flagQueLoApaga == StoryFlag.None)
             Debug.LogWarning($"[Brillo] '{name}' no tiene flag: va a brillar para siempre.");
 
-        // Desfase estable por objeto (no aleatorio): asi se ve organico pero
-        // siempre igual entre partidas.
-        _fase = Mathf.Abs(name.GetHashCode() % 100) / 100f * Mathf.PI * 2f;
-
-        Armar();
+        // Arrancar siempre de cero. Los hijos llevan HideFlags.DontSave, y esos
+        // objetos NO se destruyen al cambiar de escena ni al entrar a Play: si
+        // no se limpian, los que armo el editor se cuelan en la partida y el
+        // componente ya no los conoce (no los puede apagar).
+        LimpiarHijos();
     }
 
-    private void Armar()
+    private void OnDisable()
     {
-        if (spriteHalo != null)
-        {
-            _halo = NuevoSprite("BrilloHalo", spriteHalo, colorHalo, tamanioHalo);
-            _escalaHaloBase = _halo.transform.localScale.x;
-        }
-        if (spriteEstrella != null)
-            _estrella = NuevoSprite("BrilloEstrella", spriteEstrella, colorEstrella, tamanioEstrella);
+        LimpiarHijos();
     }
 
-    private SpriteRenderer NuevoSprite(string nombre, Sprite sprite, Color color, float altoEnTiles)
-    {
-        var go = new GameObject(nombre);
-        go.transform.SetParent(transform, false);
-        go.transform.localPosition = desplazamiento;
-
-        var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = sprite;
-        sr.color = color;
-        sr.sortingOrder = sortingOrder;
-
-        float alto = sprite.bounds.size.y;
-        float escala = alto > 0f ? altoEnTiles / alto : 1f;
-        go.transform.localScale = new Vector3(escala, escala, 1f);
-        return sr;
-    }
-
-    // Se resuelve el StoryModel en Update y no en Start: lo crea
-    // SceneBootstrapper en SU Start y el orden entre dos Start no esta
-    // garantizado. Es el mismo motivo que en BarreraPorFlag.
     private void Update()
     {
-        if (_apagado) return;
+        // Fuera de Play solo se muestra si lo pidieron, para poder calibrarlo.
+        if (!Application.isPlaying && !verEnElEditor) { LimpiarHijos(); return; }
 
-        if (_story == null)
+        if (Application.isPlaying)
         {
+            if (_apagado) return;
+
+            // Se consulta el flag en cada frame en vez de escuchar
+            // StoryModel.FlagActivated. Es un HashSet.Contains, no cuesta nada,
+            // y evita el problema de quedarse suscripto a un StoryModel viejo:
+            // NewGame crea uno nuevo, y quien se suscribio antes no se entera
+            // nunca mas. Asi tambien cubre el caso de cargar una partida que ya
+            // tenia el subsistema cortado.
             var gm = GameManager.Instance;
-            if (gm != null && gm.Story != null)
+            if (gm != null && gm.Story != null && gm.Story.HasFlag(flagQueLoApaga))
             {
-                _story = gm.Story;
-                _story.FlagActivated += OnFlagActivada;
-                if (_story.HasFlag(flagQueLoApaga)) { Apagar(); return; }
+                Apagar();
+                return;
             }
         }
 
+        Armar();
         Latir();
     }
 
-    private void OnDestroy()
+    // ---- armado ----
+
+    private void Armar()
     {
-        if (_story != null) _story.FlagActivated -= OnFlagActivada;
+        if (spriteHalo != null && _halo == null)
+            _halo = NuevoSprite("BrilloHalo", spriteHalo);
+        if (spriteEstrella != null && _estrella == null && tamanioEstrella > 0f)
+            _estrella = NuevoSprite("BrilloEstrella", spriteEstrella);
+
+        // si le sacaron el sprite desde el Inspector, se va el hijo
+        if (spriteHalo == null && _halo != null) { Borrar(_halo); _halo = null; }
+        if ((spriteEstrella == null || tamanioEstrella <= 0f) && _estrella != null)
+        { Borrar(_estrella); _estrella = null; }
     }
 
-    private void OnFlagActivada(StoryFlag flag)
+    private SpriteRenderer NuevoSprite(string nombre, Sprite sprite)
     {
-        if (flag == flagQueLoApaga) Apagar();
+        var go = new GameObject(nombre);
+        // Ni se guarda en la escena ni aparece en la jerarquia: lo maneja este
+        // componente y se rearma solo.
+        go.hideFlags = HideFlags.HideAndDontSave;
+        go.transform.SetParent(transform, false);
+
+        var sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        return sr;
+    }
+
+    // Borra TODO hijo de brillo, no solo los que este componente tiene
+    // referenciados: los que sobreviven de una sesion de editor o de un
+    // recompilado no estan en _halo/_estrella y quedarian encendidos para
+    // siempre.
+    private void LimpiarHijos()
+    {
+        _halo = null;
+        _estrella = null;
+
+        var previos = GetComponentsInChildren<Transform>(true)
+            .Where(t => t != transform && t.name.StartsWith("Brillo"))
+            .Select(t => t.gameObject)
+            .ToList();
+
+        foreach (var go in previos)
+        {
+            if (go == null) continue;
+            if (Application.isPlaying) Destroy(go);
+            else DestroyImmediate(go);
+        }
+    }
+
+    private void Borrar(SpriteRenderer sr)
+    {
+        if (sr == null) return;
+        if (Application.isPlaying) Destroy(sr.gameObject);
+        else DestroyImmediate(sr.gameObject);
+    }
+
+    // ---- animacion ----
+
+    // El tamanio se recalcula en CADA frame a proposito: asi mover el slider en
+    // el Inspector se ve al instante, sin reiniciar ni volver a entrar a Play.
+    private float EscalaPara(Sprite sprite, float altoEnTiles)
+    {
+        float alto = sprite == null ? 0f : sprite.bounds.size.y;
+        if (alto <= 0f) return 1f;
+        return altoEnTiles * Mathf.Max(0.01f, escalaGeneral) / alto;
+    }
+
+    // Unity llama a esto apenas se toca un valor en el Inspector, tenga foco o
+    // no y sin depender de que corra Update. Es lo que hace que mover el slider
+    // de tamanio se vea al toque en la Scene view.
+    //
+    // OJO: aca NO se pueden crear ni destruir objetos (Unity lo prohibe durante
+    // OnValidate). Solo se ajusta lo que ya existe; de armar y desarmar se
+    // encarga Update.
+    private void OnValidate()
+    {
+        AplicarTamanios();
+    }
+
+    private void AplicarTamanios()
+    {
+        if (_halo != null)
+        {
+            float e = EscalaPara(spriteHalo, tamanioHalo);
+            _halo.transform.localPosition = desplazamiento;
+            _halo.transform.localScale = new Vector3(e, e, 1f);
+            _halo.sortingOrder = sortingOrder;
+            _halo.color = colorHalo;
+        }
+
+        if (_estrella != null)
+        {
+            float e = EscalaPara(spriteEstrella, tamanioEstrella);
+            _estrella.transform.localPosition = desplazamiento;
+            _estrella.transform.localScale = new Vector3(e, e, 1f);
+            _estrella.sortingOrder = sortingOrder + 1;
+            _estrella.color = colorEstrella;
+        }
     }
 
     private void Latir()
     {
-        float t = Time.time / Mathf.Max(0.05f, periodo) * Mathf.PI * 2f + _fase;
+        // realtimeSinceStartup y no Time.time: en el editor, fuera de Play,
+        // Time.time no avanza y el brillo quedaria congelado.
+        float ahora = Application.isPlaying ? Time.time : Time.realtimeSinceStartup;
+        float t = ahora / Mathf.Max(0.05f, periodo) * Mathf.PI * 2f + _fase;
         float onda = (Mathf.Sin(t) + 1f) * 0.5f;   // 0..1
 
         if (_halo != null)
         {
-            float escala = _escalaHaloBase * (1f + amplitud * (onda - 0.5f) * 2f);
+            float baseEscala = EscalaPara(spriteHalo, tamanioHalo);
+            float escala = baseEscala * (1f + amplitud * (onda - 0.5f) * 2f);
+            _halo.transform.localPosition = desplazamiento;
             _halo.transform.localScale = new Vector3(escala, escala, 1f);
+            _halo.sortingOrder = sortingOrder;
 
             var c = colorHalo;
             c.a = colorHalo.a * Mathf.Lerp(0.55f, 1f, onda);
@@ -147,21 +247,27 @@ public class BrilloInteractuable : MonoBehaviour
 
         if (_estrella != null)
         {
-            // La estrella va en contrafase: cuando el halo baja, ella destella.
+            float escala = EscalaPara(spriteEstrella, tamanioEstrella);
+            _estrella.transform.localPosition = desplazamiento;
+            _estrella.transform.localScale = new Vector3(escala, escala, 1f);
+            _estrella.sortingOrder = sortingOrder + 1;
+
+            // En contrafase con el halo: cuando el halo baja, ella destella.
             float destello = (Mathf.Sin(t + Mathf.PI) + 1f) * 0.5f;
             var c = colorEstrella;
             c.a = colorEstrella.a * Mathf.Lerp(0.35f, 1f, destello);
             _estrella.color = c;
 
             _estrella.transform.localRotation =
-                Quaternion.Euler(0f, 0f, Time.time * girosPorMinuto * 6f);
+                Quaternion.Euler(0f, 0f, ahora * girosPorMinuto * 6f);
         }
     }
 
     private void Apagar()
     {
+        // El flag primero: Destroy es diferido, y sin esto el Update del mismo
+        // frame volveria a armar el brillo antes de que se borren los hijos.
         _apagado = true;
-        if (_halo != null) _halo.gameObject.SetActive(false);
-        if (_estrella != null) _estrella.gameObject.SetActive(false);
+        LimpiarHijos();
     }
 }
