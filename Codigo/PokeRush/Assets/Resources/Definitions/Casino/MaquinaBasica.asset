@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a09d683020a340479f04e8f77422ae0, type: 3}
+  m_Name: MaquinaBasica
+  m_EditorClassIdentifier: Assembly-CSharp::SlotMachineDefinition
+  maquinaNombre: TRAGAPERRAS
+  descripcion: Maquina basica del piso 1.
+  rodillos: 3
+  filas: 3
+  apuestaMinima: 10
+  apuestaMaxima: 100
+  pasoDeApuesta: 10
+  simbolos:
+  - nombre: Baya
+    icono: {fileID: 0}
+    color: {r: 0.85, g: 0.3, b: 0.35, a: 1}
+    letra: B
+    peso: 34
+    comodin: 0
+    pagos: 0000000001000000
+  - nombre: Pokeball
+    icono: {fileID: 0}
+    color: {r: 0.95, g: 0.62, b: 0.2, a: 1}
+    letra: P
+    peso: 26
+    comodin: 0
+    pagos: 0000000002000000
+  - nombre: Rayo
+    icono: {fileID: 0}
+    color: {r: 0.98, g: 0.85, b: 0.25, a: 1}
+    letra: R
+    peso: 18
+    comodin: 0
+    pagos: 0000000004000000
+  - nombre: Estrella
+    icono: {fileID: 0}
+    color: {r: 0.4, g: 0.75, b: 0.95, a: 1}
+    letra: E
+    peso: 11
+    comodin: 0
+    pagos: 0000000008000000
+  - nombre: Siete
+    icono: {fileID: 0}
+    color: {r: 0.6, g: 0.45, b: 0.9, a: 1}
+    letra: 7
+    peso: 6
+    comodin: 0
+    pagos: 000000000f000000
+  - nombre: Comodin
+    icono: {fileID: 0}
+    color: {r: 0.35, g: 0.85, b: 0.55, a: 1}
+    letra: W
+    peso: 3
+    comodin: 1
+    pagos: 000000001e000000
+  lineas:
+  - nombre: Fila de arriba
+    filas: 000000000000000000000000
+  - nombre: Fila del medio
+    filas: 010000000100000001000000
+  - nombre: Fila de abajo
+    filas: 020000000200000002000000
+  - nombre: Diagonal baja
+    filas: 000000000100000002000000
+  - nombre: Diagonal alta
+    filas: 020000000100000000000000
+  duracionDelGiro: 0.9
+  retrasoEntreRodillos: 0.3
