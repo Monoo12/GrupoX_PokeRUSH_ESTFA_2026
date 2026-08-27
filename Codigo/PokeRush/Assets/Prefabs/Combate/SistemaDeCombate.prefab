@@ -3230,6 +3230,7 @@ MonoBehaviour:
   - {fileID: -6542999120247514250, guid: 382fd373b305e854a907c642402a2d83, type: 3}
   - {fileID: 2944504391717900842, guid: 382fd373b305e854a907c642402a2d83, type: 3}
   - {fileID: 0}
+  navegacionPorTeclado: 1
 --- !u!1 &2903473868370401496
 GameObject:
   m_ObjectHideFlags: 0
@@ -5851,6 +5852,8 @@ MonoBehaviour:
   backgroundRenderer: {fileID: 9131702754079862893}
   battleCamera: {fileID: 9047884251166185181}
   battleFxView: {fileID: 3067852412414550263}
+  usarMochilaCompartida: 1
+  usarPartyCompartida: 1
   messageDelay: 0.8
   liberationHpThreshold: 0.15
 --- !u!114 &918637474763858302

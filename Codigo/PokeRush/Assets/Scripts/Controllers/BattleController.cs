@@ -26,6 +26,18 @@ public class BattleController : MonoBehaviour
     [Tooltip("Secuencias visuales (transicion, balls, apariciones). Opcional: sin esto el combate arranca directo.")]
     [SerializeField] private BattleFxView battleFxView;
 
+    [Header("Mochila")]
+    [Tooltip("Usar la mochila compartida del sistema de menus (deja elegir a que " +
+             "Poken se le da el objeto). Apagalo para volver a la lista simple " +
+             "del HUD, que cura siempre al Poken activo.")]
+    [SerializeField] private bool usarMochilaCompartida = true;
+
+    [Header("Equipo")]
+    [Tooltip("Usar la pantalla de equipo compartida para elegir relevo y para el " +
+             "reemplazo obligado cuando cae un Poken. Apagalo para volver al " +
+             "panel simple del HUD.")]
+    [SerializeField] private bool usarPartyCompartida = true;
+
     [Header("Ritmo")]
     [Tooltip("Segundos que se muestra cada mensaje de combate.")]
     [SerializeField] private float messageDelay = 1f;
@@ -83,6 +95,7 @@ public class BattleController : MonoBehaviour
             battleHudView.SwitchChosen += OnSwitchChosen;
             battleHudView.FleeChosen += SelectFlee;
             battleHudView.BagChosen += OnBagSelected;
+            if (usarPartyCompartida) battleHudView.TeamRequested += OnTeamRequested;
             battleHudView.ItemChosen += OnItemChosen;
 
             battleHudView.LiberationHealChosen += LiberationHeal;
@@ -249,6 +262,11 @@ public class BattleController : MonoBehaviour
 
         if (playerInputController != null)
             playerInputController.SetBattleMode(true);
+
+        // Los menus compartidos (mochila, party) preguntan por este contexto
+        // para saber que se puede hacer y a quien devolverle el control.
+        if (MenuManager.Instance != null)
+            MenuManager.Instance.SetContext(MenuContextKind.Battle);
 
         // Avisa antes de la intro para que el mapa se esconda a tiempo
         BattleStarted?.Invoke();
@@ -490,8 +508,59 @@ public class BattleController : MonoBehaviour
             return;
         }
 
+        // Turno normal: se abre la MOCHILA COMPARTIDA (la misma del mundo), que
+        // ademas deja elegir sobre que Poken se usa el objeto. En la fase de
+        // liberacion se sigue usando la lista del HUD: ahi la curacion va si o
+        // si al Poken que esta en el campo, asi que un panel de objetivo seria
+        // mentira.
+        if (!enLiberacion && usarMochilaCompartida && MenuManager.Instance != null)
+        {
+            AbrirMochilaCompartida();
+            return;
+        }
+
         if (battleHudView != null) battleHudView.ShowBagMenu(usables);
         else OnItemChosen(0); // sin HUD (modo consola): usa el primero
+    }
+
+    // Abre la mochila del sistema de menus y espera su resultado. El combate no
+    // consume el turno hasta que la mochila diga que se eligio objeto Y objetivo.
+    private void AbrirMochilaCompartida()
+    {
+        MenuManager menus = MenuManager.Instance;
+        menus.SetContext(MenuContextKind.Battle);
+
+        // El HUD se saca del medio mientras la mochila esta abierta: dos menus
+        // encima del combate se tapan y confunden.
+        battleHudView?.HideMenus();
+
+        menus.Open(MenuScreenId.Bag, new BagScreenRequest
+        {
+            Context = MenuContextKind.Battle,
+            Pocket = ItemPocket.Medicine
+        }, raw =>
+        {
+            var resultado = raw as BagScreenResult;
+
+            // Cancelo: se vuelve al menu de comandos sin gastar el turno.
+            if (resultado == null || resultado.Cancelled || resultado.UsedHealItem == null)
+            {
+                if (_battleModel != null) battleHudView?.ShowCommandMenu(_battleModel);
+                return;
+            }
+
+            if (_battleModel == null) return;
+            if (_battleModel.CurrentPhase != BattlePhase.PlayerTurn)
+            {
+                battleHudView?.ShowCommandMenu(_battleModel);
+                return;
+            }
+
+            if (Anticipado(BattleActionKind.UseItem, null)) return;
+
+            StartCoroutine(ResolveTurnRoutine(
+                BattleAction.UseItemOn(resultado.UsedHealItem, resultado.TargetIndex)));
+        });
     }
 
     // El jugador eligio un objeto de la lista que se le mostro.
@@ -591,7 +660,74 @@ public class BattleController : MonoBehaviour
         _reemplazoDesdeLiberacion = desdeLiberacion;
         _battleModel.SetPhase(BattlePhase.PlayerReplacement);
         battleHudView?.HideMenus();
-        battleHudView?.ShowTeamMenu(_battleModel, forzado: true);
+        AbrirEquipo(forzado: true);
+    }
+
+    // ---------- equipo ----------
+
+    // El jugador toco POKEMON en el menu de comandos (o CAMBIAR en liberacion).
+    private void OnTeamRequested()
+    {
+        if (_battleModel == null) return;
+
+        bool enLiberacion = _battleModel.CurrentPhase == BattlePhase.Liberation;
+        if (!enLiberacion && _battleModel.CurrentPhase != BattlePhase.PlayerTurn) return;
+
+        // El rastreo de Nestor bloquea los cambios: se avisa ANTES de abrir la
+        // pantalla, para no hacer elegir un Poken y rechazarlo despues.
+        if (!enLiberacion && _bossConfig != null && !_bossConfig.PermiteCambio)
+        {
+            Announce("El rastreo tiene marcado a tu equipo: no podés cambiar.");
+            return;
+        }
+
+        AbrirEquipo(forzado: false);
+    }
+
+    // Abre la pantalla de equipo COMPARTIDA (la misma del mundo) para elegir
+    // quien sale a pelear.
+    //
+    // 'forzado' es el reemplazo obligado: el Poken activo se debilito y el
+    // combate esta detenido, asi que la pantalla no se puede cancelar.
+    private void AbrirEquipo(bool forzado)
+    {
+        MenuManager menus = usarPartyCompartida ? MenuManager.Instance : null;
+        if (menus == null)
+        {
+            battleHudView?.ShowTeamMenu(_battleModel, forzado);
+            return;
+        }
+
+        menus.SetContext(MenuContextKind.Battle);
+        battleHudView?.HideMenus();
+
+        // El que ya esta en el campo no se puede volver a sacar. Los debilitados
+        // los filtra sola la pantalla.
+        var bloqueados = new HashSet<int> { _battleModel.ActivePlayerIndex };
+
+        menus.Open(MenuScreenId.Party, new PartyScreenRequest
+        {
+            Mode = PartyScreenMode.SelectSwitch,
+            Context = MenuContextKind.Battle,
+            CanCancel = !forzado,
+            BlockedIndices = bloqueados,
+            Prompt = forzado ? "¿A quién mandás ahora?" : null
+        }, raw =>
+        {
+            var resultado = raw as PartyScreenResult;
+
+            // Cancelo: vuelve el menu de comandos sin gastar el turno. En el
+            // reemplazo obligado esto no pasa (la pantalla no deja cancelar).
+            if (resultado == null || resultado.Cancelled || resultado.SelectedIndex < 0)
+            {
+                if (_battleModel == null) return;
+                if (_battleModel.CurrentPhase == BattlePhase.Liberation) AbrirMenuLiberacion();
+                else battleHudView?.ShowCommandMenu(_battleModel);
+                return;
+            }
+
+            OnSwitchChosen(resultado.SelectedIndex);
+        });
     }
 
     // El jugador ya eligio con quien sigue.
@@ -1016,6 +1152,14 @@ public class BattleController : MonoBehaviour
 
         if (playerInputController != null)
             playerInputController.SetBattleMode(false);
+
+        // Cualquier menu que hubiera quedado abierto se cierra con el combate,
+        // y el contexto vuelve al mundo.
+        if (MenuManager.HasInstance)
+        {
+            MenuManager.Instance.CloseAll();
+            MenuManager.Instance.SetContext(MenuContextKind.Overworld);
+        }
 
         battleHudView?.Hide();
         battleFxView?.ClearFieldOverlays();

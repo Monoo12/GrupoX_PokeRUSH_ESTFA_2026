@@ -85,7 +85,7 @@ public class TurnEngine
         if (playerAction.Kind == BattleActionKind.UseItem)
         {
             int marca = events.Count;
-            DoUseItem(playerAction.Item, events);
+            DoUseItem(playerAction.Item, playerAction.ItemTargetIndex, events);
             Sellar(events, marca);
         }
         if (playerAction.Kind == BattleActionKind.Protect)
@@ -181,57 +181,45 @@ public class TurnEngine
 
     // ---------- objetos, proteccion y escudo ----------
 
-    // Usa un objeto de curacion sobre el Poken ACTIVO del jugador.
-    private void DoUseItem(HealItemDefinition item, List<BattleEvent> events)
+    // Usa un objeto de curacion sobre un Poken del equipo del jugador.
+    //
+    // Las reglas (que cura, a quien se le puede aplicar, cuando NO se gasta el
+    // objeto) viven en ItemUsageService, compartidas con la mochila del mundo.
+    // Aca solo queda lo que es propio del combate: resolver el objetivo y
+    // emitir los eventos que anima el BattleController.
+    private void DoUseItem(HealItemDefinition item, int targetIndex, List<BattleEvent> events)
     {
         if (item == null) return;
 
+        // Sin indice (IA, modo consola) se cae al Poken activo, como siempre.
         PokenModel objetivo = _model.ActivePlayerPoken;
-        string nombre = objetivo.Definition.pokenName;
-
-        // Un objeto de curacion sobre un Poken debilitado no revive: la muerte
-        // es definitiva hasta que exista un objeto de revivir y su propio flujo.
-        if (objetivo.IsFainted)
+        bool esElActivo = true;
+        if (targetIndex >= 0 && targetIndex < _model.Player.Team.Count)
         {
-            BattleEvent.Add(events, $"¡{nombre} está debilitado!");
+            objetivo = _model.Player.Team[targetIndex];
+            esElActivo = targetIndex == _model.ActivePlayerIndex;
+        }
+
+        ItemUseResult resultado = ItemUsageService.Apply(item, objetivo, _model.Player.Inventory);
+
+        if (!resultado.Applied)
+        {
+            BattleEvent.Add(events, resultado.Message);
             return;
         }
 
-        // Ya esta al maximo: NO se gasta el objeto. Va ANTES de consumir; si no,
-        // la pocion desaparecia del inventario sin curar nada.
-        if (objetivo.CurrentHP >= objetivo.MaxHP)
-        {
-            BattleEvent.Add(events, $"¡{nombre} ya está al máximo!");
-            return;
-        }
-
-        // Si no hay stock no se hace nada: se chequea ANTES de curar para no
-        // regalar la curacion cuando el objeto ya se gasto.
-        if (!_model.Player.Inventory.ConsumeHealItem(item, 1))
-        {
-            BattleEvent.Add(events, $"No te quedan {item.itemName}.");
-            return;
-        }
-
-        int antes = objetivo.CurrentHP;
-        objetivo.Heal(item.fullHeal ? objetivo.MaxHP : item.healAmount);
-        int curado = objetivo.CurrentHP - antes;
-
-        if (curado > 0)
-        {
+        // La barra de PS que se anima en el HUD es la del activo: curar a uno
+        // del banquillo cambia el modelo pero no dispara HpChanged, o el HUD
+        // animaria la barra equivocada.
+        if (esElActivo && resultado.HealedHp > 0)
             events.Add(BattleEvent.Of(BattleEventKind.HpChanged, true));
 
-            // Pausa extra: la curacion tiene que quedar a la vista ANTES de que
-            // el rival pegue. Sin esto la barra subia y bajaba casi junta y la
-            // pocion parecia amortiguar el golpe en vez de curar.
-            BattleEvent curacion = BattleEvent.Msg($"¡{nombre} recuperó {curado} PS!");
-            curacion.ExtraPause = ItemPauseSeconds;
-            events.Add(curacion);
-        }
-        else
-        {
-            BattleEvent.Add(events, $"¡{nombre} ya está al máximo!");
-        }
+        // Pausa extra: la curacion tiene que quedar a la vista ANTES de que el
+        // rival pegue. Sin esto la barra subia y bajaba casi junta y la pocion
+        // parecia amortiguar el golpe en vez de curar.
+        BattleEvent mensaje = BattleEvent.Msg(resultado.Message);
+        mensaje.ExtraPause = ItemPauseSeconds;
+        events.Add(mensaje);
     }
 
     private void DoProtect(BattlePokenState quien, List<BattleEvent> events)

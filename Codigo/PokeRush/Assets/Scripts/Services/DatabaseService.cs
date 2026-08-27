@@ -28,6 +28,8 @@ public class DatabaseService
         _connection.CreateTable<PlayerCosmeticRow>();
         _connection.CreateTable<ActiveFlagRow>();
         _connection.CreateTable<DialogueRow>();
+        // Opciones del juego (volumen, controles). Ver SettingsService.
+        _connection.CreateTable<SettingRow>();
     }
 
     public void Close()

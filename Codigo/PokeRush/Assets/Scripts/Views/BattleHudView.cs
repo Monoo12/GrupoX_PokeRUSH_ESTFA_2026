@@ -118,6 +118,10 @@ public class BattleHudView : MonoBehaviour
     public event Action<int> SwitchChosen;
     public event Action FleeChosen;
     public event Action BagChosen;
+
+    // El jugador pidio ver el equipo. Si alguien lo escucha (BattleController
+    // con la party compartida), la vista NO abre su panel interno.
+    public event Action TeamRequested;
     // Indice DENTRO de la lista que se le paso a ShowBagMenu, no del inventario
     public event Action<int> ItemChosen;
 
@@ -140,6 +144,23 @@ public class BattleHudView : MonoBehaviour
     // Cuantos objetos tiene la mochila abierta ahora mismo
     private int _bagCount;
 
+    [Header("Teclado")]
+    [Tooltip("Manejar el HUD con las flechas ademas del mouse. El cursor usa el " +
+             "estado 'Selected' que cada boton ya tiene configurado.")]
+    [SerializeField] private bool navegacionPorTeclado = true;
+
+    // Botones navegables del panel que esta abierto, en el orden del Inspector.
+    private readonly List<Button> _navBotones = new List<Button>();
+    private int _navIndice = -1;
+    private Action _navVolver;
+
+    // True mientras el HUD tiene un panel navegable abierto.
+    //
+    // Lo mira PlayerInputController igual que MenuManager.AnyOpen: si no, el
+    // mundo lee la misma tecla y, segun cual de los dos Update corra primero,
+    // se la come antes de que llegue al combate.
+    public static bool IsNavigating { get; private set; }
+
     // HP que se MUESTRA (drena gradualmente hacia el valor real del modelo)
     private float _displayedPlayerHp = -1f;
     private float _displayedEnemyHp = -1f;
@@ -148,7 +169,7 @@ public class BattleHudView : MonoBehaviour
     {
         // Cableado de botones (los refs los asigna el builder en el Inspector)
         if (fightButton != null) fightButton.onClick.AddListener(OpenFightMenu);
-        if (pokemonButton != null) pokemonButton.onClick.AddListener(OpenTeamMenu);
+        if (pokemonButton != null) pokemonButton.onClick.AddListener(SolicitarEquipo);
         if (bagButton != null) bagButton.onClick.AddListener(() => BagChosen?.Invoke());
         if (fleeButton != null) fleeButton.onClick.AddListener(() => FleeChosen?.Invoke());
         if (fightBackButton != null) fightBackButton.onClick.AddListener(ShowCommandMenuInternal);
@@ -185,7 +206,7 @@ public class BattleHudView : MonoBehaviour
         if (liberationAttackButton != null)
             liberationAttackButton.onClick.AddListener(() => LiberationAttackChosen?.Invoke());
         if (liberationSwitchButton != null)
-            liberationSwitchButton.onClick.AddListener(OpenTeamMenu);
+            liberationSwitchButton.onClick.AddListener(SolicitarEquipo);
     }
 
     // ---------- API que usa BattleController ----------
@@ -351,6 +372,7 @@ public class BattleHudView : MonoBehaviour
     // Oculta todos los menus (mientras se resuelve el turno)
     public void HideMenus()
     {
+        LimpiarNavegacion();
         if (commandPanel != null) commandPanel.SetActive(false);
         if (fightPanel != null) fightPanel.SetActive(false);
         if (teamPanel != null) teamPanel.SetActive(false);
@@ -409,6 +431,10 @@ public class BattleHudView : MonoBehaviour
             if (cantidad != null) cantidad.text = $"x{stack.Quantity}";
             bagButtons[i].interactable = stack.Quantity > 0;
         }
+
+        var navegables = new List<Button>(bagButtons);
+        if (bagBackButton != null) navegables.Add(bagBackButton);
+        ArmarNavegacion(navegables, 0, ShowCommandMenuInternal);
     }
 
     // Menu de la fase de liberacion: las tres herramientas mas atacar.
@@ -429,6 +455,7 @@ public class BattleHudView : MonoBehaviour
         if (liberationPanel != null) liberationPanel.SetActive(true);
         else Debug.LogWarning("[HUD] Falta liberationPanel: la fase corre pero sin botones.");
 
+        ArmarNavegacionLiberacion();
         ShowMessage("Aguantá sin atacar.");
     }
 
@@ -455,12 +482,16 @@ public class BattleHudView : MonoBehaviour
         if (_liberationMode)
         {
             if (liberationPanel != null) liberationPanel.SetActive(true);
+            ArmarNavegacionLiberacion();
             return;
         }
 
         if (commandPanel != null) commandPanel.SetActive(true);
         if (_model != null)
             ShowMessage($"¿Qué hará {_model.ActivePlayerPoken.Definition.pokenName}?");
+
+        // Desde el menu de comandos no hay "volver": el turno hay que jugarlo.
+        ArmarNavegacion(new[] { fightButton, pokemonButton, bagButton, fleeButton }, 0, null);
     }
 
     private void OpenFightMenu()
@@ -506,6 +537,10 @@ public class BattleHudView : MonoBehaviour
         }
 
         ShowMoveInfo(0);
+
+        var navegables = new List<Button>(moveButtons);
+        if (fightBackButton != null) navegables.Add(fightBackButton);
+        ArmarNavegacion(navegables, 0, ShowCommandMenuInternal);
     }
 
     // Panel lateral PP/TIPO: se actualiza al pasar el puntero por un movimiento
@@ -531,6 +566,14 @@ public class BattleHudView : MonoBehaviour
     {
         if (_forcedSwitch) return;
         ShowCommandMenuInternal();
+    }
+
+    // Punto unico para "quiero ver el equipo". Con la party compartida enchufada
+    // avisa y se corre; sin ella, abre el panel simple de siempre.
+    private void SolicitarEquipo()
+    {
+        if (TeamRequested != null) { TeamRequested.Invoke(); return; }
+        OpenTeamMenu();
     }
 
     private void OpenTeamMenu()
@@ -562,7 +605,194 @@ public class BattleHudView : MonoBehaviour
                 teamHpTexts[i].text = poken.IsFainted ? "DEBILITADO" : $"PS {poken.CurrentHP}/{poken.MaxHP}";
             teamButtons[i].interactable = !poken.IsFainted && !isActive;
         }
+
+        var navegables = new List<Button>(teamButtons);
+        if (teamBackButton != null) navegables.Add(teamBackButton);
+        ArmarNavegacion(navegables, 0, _forcedSwitch ? null : (Action)VolverDesdeEquipo);
     }
+
+    // ---------- navegacion con teclado ----------
+    //
+    // El HUD se maneja con las flechas ademas del mouse. El "cursor" no es un
+    // objeto nuevo: se usa el estado Selected que cada boton ya tiene
+    // configurado (los de movimiento cambian de sprite segun el tipo), asi que
+    // no hace falta agregar ni un grafico.
+    //
+    // Las teclas salen de GameInputService, las mismas que el resto del juego y
+    // remapeables desde Opciones: aca no hay ninguna tecla escrita a mano.
+
+    private void Update()
+    {
+        if (!navegacionPorTeclado || _navBotones.Count == 0) return;
+
+        // La mochila compartida es una pantalla del MenuManager y se queda con
+        // el input mientras este abierta.
+        if (MenuManager.AnyOpen) return;
+
+        GameInputService input = GameInputService.Instance;
+
+        foreach (GameAction direccion in Direcciones)
+        {
+            if (!input.WasPressedOrRepeated(direccion)) continue;
+            input.Consume(direccion);
+            Navegar(direccion);
+            return;
+        }
+
+        if (input.WasPressed(GameAction.Confirm))
+        {
+            input.Consume(GameAction.Confirm);
+            Button elegido = At(_navBotones, _navIndice);
+            if (elegido != null && elegido.IsActive() && elegido.IsInteractable())
+                elegido.onClick.Invoke();
+            return;
+        }
+
+        // Cancel y Menu comparten tecla: se consumen las dos para que el mundo
+        // no vea la misma Z despues.
+        if (input.WasPressed(GameAction.Cancel) || input.WasPressed(GameAction.Menu))
+        {
+            input.Consume(GameAction.Cancel, GameAction.Menu);
+            _navVolver?.Invoke();
+        }
+    }
+
+    private static readonly GameAction[] Direcciones =
+    {
+        GameAction.Up, GameAction.Down, GameAction.Left, GameAction.Right
+    };
+
+    // Deja listo un panel para navegarlo. 'volver' es lo que hace la tecla de
+    // cancelar; null = no se puede volver (menu de comandos, liberacion).
+    private void ArmarNavegacion(IList<Button> botones, int inicial, Action volver)
+    {
+        _navBotones.Clear();
+        _navIndice = -1;
+        _navVolver = volver;
+        if (!navegacionPorTeclado) return;
+
+        foreach (Button boton in botones)
+        {
+            if (boton == null) continue;
+
+            // La navegacion automatica de Unity es la que despues resuelve que
+            // boton esta arriba/abajo de cual segun donde estan dibujados.
+            Navigation nav = boton.navigation;
+            if (nav.mode != Navigation.Mode.Automatic)
+            {
+                nav.mode = Navigation.Mode.Automatic;
+                boton.navigation = nav;
+            }
+            _navBotones.Add(boton);
+        }
+
+        if (_navBotones.Count == 0) return;
+
+        IsNavigating = true;
+
+        int arranque = Mathf.Clamp(inicial, 0, _navBotones.Count - 1);
+        _navIndice = EsUsable(arranque) ? arranque : SiguienteUsable(arranque, 1);
+
+        // El modulo de input del EventSystem tambien mueve la seleccion con las
+        // flechas. Si se deja prendido, cada flecha salta DOS botones.
+        if (EventSystem.current != null) EventSystem.current.sendNavigationEvents = false;
+        AplicarSeleccion();
+    }
+
+    private void LimpiarNavegacion()
+    {
+        _navBotones.Clear();
+        _navIndice = -1;
+        _navVolver = null;
+        IsNavigating = false;
+
+        if (EventSystem.current == null) return;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.sendNavigationEvents = true;
+    }
+
+    private void Navegar(GameAction direccion)
+    {
+        Button actual = At(_navBotones, _navIndice);
+        Selectable destino = null;
+
+        if (actual != null)
+        {
+            switch (direccion)
+            {
+                case GameAction.Up: destino = actual.FindSelectableOnUp(); break;
+                case GameAction.Down: destino = actual.FindSelectableOnDown(); break;
+                case GameAction.Left: destino = actual.FindSelectableOnLeft(); break;
+                case GameAction.Right: destino = actual.FindSelectableOnRight(); break;
+            }
+        }
+
+        // Primero el vecino REAL segun donde esta dibujado cada boton: asi anda
+        // igual sea el panel una lista o una grilla, sin que este codigo tenga
+        // que saber el layout.
+        int nuevo = destino != null ? _navBotones.IndexOf(destino as Button) : -1;
+
+        // En el borde del panel no hay vecino: se da la vuelta recorriendo la
+        // lista, como en la saga.
+        if (nuevo < 0)
+        {
+            int paso = (direccion == GameAction.Up || direccion == GameAction.Left) ? -1 : 1;
+            nuevo = SiguienteUsable(_navIndice, paso);
+        }
+
+        if (nuevo == _navIndice) return;
+        _navIndice = nuevo;
+        AplicarSeleccion();
+    }
+
+    private bool EsUsable(int indice)
+    {
+        Button boton = At(_navBotones, indice);
+        return boton != null && boton.gameObject.activeInHierarchy && boton.IsInteractable();
+    }
+
+    // Siguiente boton elegible en esa direccion, salteando los apagados (un
+    // slot de movimiento vacio, un Poken debilitado) y dando la vuelta.
+    private int SiguienteUsable(int desde, int paso)
+    {
+        int total = _navBotones.Count;
+        for (int i = 1; i <= total; i++)
+        {
+            int indice = ((desde + paso * i) % total + total) % total;
+            if (EsUsable(indice)) return indice;
+        }
+        return desde;
+    }
+
+    private void AplicarSeleccion()
+    {
+        Button boton = At(_navBotones, _navIndice);
+        if (boton == null) return;
+
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(boton.gameObject);
+
+        // El panel de PP/TIPO sigue al cursor, igual que al pasar el mouse.
+        int movimiento = Array.IndexOf(moveButtons, boton);
+        if (movimiento >= 0) ShowMoveInfo(movimiento);
+    }
+
+    private void ArmarNavegacionLiberacion()
+    {
+        ArmarNavegacion(new[]
+        {
+            liberationHealButton, liberationProtectButton,
+            liberationSwitchButton, liberationAttackButton
+        }, 0, null);
+    }
+
+    // Acceso seguro por indice a una lista (mismo criterio que At para arrays).
+    private static T At<T>(IList<T> lista, int indice) where T : class
+        => (lista != null && indice >= 0 && indice < lista.Count) ? lista[indice] : null;
+
+    // Si el HUD se apaga de golpe (fin de combate, cambio de escena) hay que
+    // soltar el input igual: si no, el mundo queda mudo para siempre.
+    private void OnDisable() => LimpiarNavegacion();
 
     // ---------- utilidades ----------
 

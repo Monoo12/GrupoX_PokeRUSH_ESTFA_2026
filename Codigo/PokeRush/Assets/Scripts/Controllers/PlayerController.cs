@@ -5,6 +5,9 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private PlayerInputController inputController;
+    [Tooltip("LEGADO. El menu de pausa ahora sale del prefab MenuSystem " +
+             "(Resources/Menus) y no hace falta asignar nada aca. Se conserva " +
+             "como respaldo para escenas que todavia usen la vista vieja.")]
     [SerializeField] private PauseMenuView pauseMenuView;
 
     [Header("Movimiento por grilla")]
@@ -124,13 +127,24 @@ public class PlayerController : MonoBehaviour
 
     public void OpenMenu()
     {
-        // La misma tecla abre y cierra el menu de pausa (toggle).
-        if (pauseMenuView == null || _playerModel == null) return;
+        if (_playerModel == null) return;
 
-        if (pauseMenuView.IsOpen)
-            pauseMenuView.Hide();
-        else
-            pauseMenuView.Show(_playerModel);
+        // El menu de pausa vive en el prefab MenuSystem (Resources/Menus), no
+        // en la escena: no hay que arrastrar nada aca. La misma tecla abre y
+        // cierra (toggle) y el MenuManager se ocupa de la pila.
+        MenuManager manager = MenuManager.Instance;
+        if (manager != null)
+        {
+            manager.SetContext(MenuContextKind.Overworld);
+            manager.Toggle(MenuScreenId.Pause);
+            return;
+        }
+
+        // Vista vieja como respaldo, para una escena que todavia la tenga
+        // cableada a mano.
+        if (pauseMenuView == null) return;
+        if (pauseMenuView.IsOpen) pauseMenuView.Hide();
+        else pauseMenuView.Show(_playerModel);
     }
 
     public void SaveGame()
