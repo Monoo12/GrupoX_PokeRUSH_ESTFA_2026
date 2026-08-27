@@ -18,6 +18,9 @@ public class AudioService
     {
         _musicSource = musicSource;
         _sfxSource = sfxSource;
+        // Las fuentes son nuevas en cada arranque: hay que volcarles el volumen
+        // que ya estaba configurado o el menu de Opciones no tendria efecto.
+        AplicarVolumenes();
     }
 
     // Cambia la musica de fondo. Si ya esta sonando la misma, no la reinicia
@@ -42,11 +45,43 @@ public class AudioService
     // quedaria fijo al del primer AudioSource que se haya inicializado.
     public void SetMusicVolume(float volumen)
     {
-        if (_musicSource == null) return;
-        _musicSource.volume = Mathf.Clamp01(volumen);
+        _sceneMusicVolume = Mathf.Clamp01(volumen);
+        AplicarVolumenes();
     }
 
     public float GetMusicVolume() => _musicSource == null ? 0f : _musicSource.volume;
+
+    // ---------- volumen configurado por el jugador ----------
+    //
+    // Son DOS volumenes multiplicandose, no uno: cada escena pide el suyo
+    // (MusicaDeEscena) y el jugador tiene el general del menu de Opciones. Con
+    // un solo valor, entrar a una escena pisaba lo que el jugador habia
+    // elegido, o al reves.
+
+    private float _sceneMusicVolume = 1f;
+    private float _userMusicVolume = 1f;
+    private float _userSfxVolume = 1f;
+
+    public float UserMusicVolume => _userMusicVolume;
+    public float UserSfxVolume => _userSfxVolume;
+
+    public void SetUserMusicVolume(float volumen)
+    {
+        _userMusicVolume = Mathf.Clamp01(volumen);
+        AplicarVolumenes();
+    }
+
+    public void SetUserSfxVolume(float volumen)
+    {
+        _userSfxVolume = Mathf.Clamp01(volumen);
+        AplicarVolumenes();
+    }
+
+    private void AplicarVolumenes()
+    {
+        if (_musicSource != null) _musicSource.volume = _sceneMusicVolume * _userMusicVolume;
+        if (_sfxSource != null) _sfxSource.volume = _userSfxVolume;
+    }
 
     // Para poder confirmar que la musica arranco de verdad. Un clip en
     // Streaming nunca queda en estado 'Loaded', asi que no sirve mirar

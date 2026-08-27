@@ -104,6 +104,20 @@ public class PokenModel
         return result;
     }
 
+    // Intercambia dos movimientos de lugar. Lo usa el Summary: el orden que ve
+    // el jugador ES el orden real de la lista (el que usa el combate y el que
+    // guarda el save), no una copia para la UI.
+    public bool SwapMoves(int a, int b)
+    {
+        if (a == b) return false;
+        if (a < 0 || b < 0 || a >= Moves.Count || b >= Moves.Count) return false;
+
+        MoveModel tmp = Moves[a];
+        Moves[a] = Moves[b];
+        Moves[b] = tmp;
+        return true;
+    }
+
     public bool KnowsMove(MoveDefinition move)
         => Moves.Exists(m => m.Definition == move);
 

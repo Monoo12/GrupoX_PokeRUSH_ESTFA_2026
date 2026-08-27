@@ -19,8 +19,13 @@ public class BattleAction
     // Indice del Poken del equipo al que se cambia.
     public int SwitchIndex { get; private set; } = -1;
 
-    // Objeto de curacion a usar. Solo aplica al Poken activo.
+    // Objeto de curacion a usar.
     public HealItemDefinition Item { get; private set; }
+
+    // A quien se le aplica el objeto: indice en Player.Team.
+    // -1 = al Poken ACTIVO (comportamiento historico, lo usa la IA y el modo
+    // consola). El menu de la mochila siempre manda un indice concreto.
+    public int ItemTargetIndex { get; private set; } = -1;
 
     public bool IsStruggle => Kind == BattleActionKind.UseMove && MoveIndex < 0;
 
@@ -40,12 +45,19 @@ public class BattleAction
     public static BattleAction Flee()
         => new BattleAction { Kind = BattleActionKind.Flee };
 
-    // Usar un objeto de curacion sobre el Poken ACTIVO.
-    // Deliberadamente no apunta a otro del equipo: eso pediria un panel de
-    // seleccion de objetivo entero, y la barra de PS que se anima en el HUD es
-    // solo la del activo, asi que no se veria nada igual.
+    // Usar un objeto de curacion. Sin indice va al Poken ACTIVO.
     public static BattleAction UseItem(HealItemDefinition item)
-        => new BattleAction { Kind = BattleActionKind.UseItem, Item = item };
+        => new BattleAction { Kind = BattleActionKind.UseItem, Item = item, ItemTargetIndex = -1 };
+
+    // Usar un objeto sobre un Poken concreto del equipo.
+    //
+    // Antes esto no existia: el objeto iba si o si al activo porque la unica UI
+    // era la lista de objetos del HUD, sin panel de objetivo. Ahora la mochila
+    // abre la party y elige, asi que la accion tiene que poder decir a quien.
+    // La animacion de la barra de PS sigue siendo solo la del activo; curar a
+    // uno del banquillo cambia el modelo sin animar nada, que es lo correcto.
+    public static BattleAction UseItemOn(HealItemDefinition item, int teamIndex)
+        => new BattleAction { Kind = BattleActionKind.UseItem, Item = item, ItemTargetIndex = teamIndex };
 
     // Aguantar: el ataque que reciba este turno no le hace nada.
     //

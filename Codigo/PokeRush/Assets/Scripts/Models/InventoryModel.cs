@@ -45,6 +45,49 @@ public class InventoryModel
         HealItemStack stack = HealItems.Find(s => s.Definition == definition);
         return stack?.Quantity ?? 0;
     }
+
+    // ---------- objetos de batalla ----------
+    // Mismo patron que los de curacion. Existian como lista pero sin forma de
+    // sumarlos ni gastarlos: la mochila los mostraba y no se podian tocar.
+
+    public void AddBattleItem(BattleItemDefinition definition, int quantity)
+    {
+        if (definition == null || quantity <= 0) return;
+        BattleItemStack stack = BattleItems.Find(s => s.Definition == definition);
+        if (stack != null) stack.AddQuantity(quantity);
+        else BattleItems.Add(new BattleItemStack(definition, quantity));
+    }
+
+    public bool ConsumeBattleItem(BattleItemDefinition definition, int quantity = 1)
+    {
+        if (definition == null || quantity <= 0) return false;
+        BattleItemStack stack = BattleItems.Find(s => s.Definition == definition);
+        if (stack == null || stack.Quantity < quantity) return false;
+
+        stack.Consume(quantity);
+        if (stack.Quantity <= 0) BattleItems.Remove(stack);
+        return true;
+    }
+
+    public int CountBattleItem(BattleItemDefinition definition)
+        => BattleItems.Find(s => s.Definition == definition)?.Quantity ?? 0;
+
+    // ---------- objetos clave ----------
+    // No se gastan al usarse (son llaves, tickets): solo se suman.
+
+    public void AddSpecialItem(SpecialItemDefinition definition, int quantity = 1)
+    {
+        if (definition == null || quantity <= 0) return;
+        SpecialItemStack stack = SpecialItems.Find(s => s.Definition == definition);
+        if (stack != null) stack.AddQuantity(quantity);
+        else SpecialItems.Add(new SpecialItemStack(definition, quantity));
+    }
+
+    public bool HasSpecialItem(SpecialItemDefinition definition)
+        => definition != null && SpecialItems.Exists(s => s.Definition == definition);
+
+    // Cuantos objetos hay en total (para saber si la mochila esta vacia).
+    public int TotalItemCount => HealItems.Count + BattleItems.Count + SpecialItems.Count;
 }
 
 public class HealItemStack
@@ -79,6 +122,16 @@ public class BattleItemStack
         Definition = definition;
         Quantity = quantity;
     }
+
+    public void AddQuantity(int amount)
+    {
+        Quantity += amount;
+    }
+
+    public void Consume(int amount)
+    {
+        Quantity = System.Math.Max(0, Quantity - amount);
+    }
 }
 
 public class SpecialItemStack
@@ -90,5 +143,10 @@ public class SpecialItemStack
     {
         Definition = definition;
         Quantity = quantity;
+    }
+
+    public void AddQuantity(int amount)
+    {
+        Quantity += amount;
     }
 }

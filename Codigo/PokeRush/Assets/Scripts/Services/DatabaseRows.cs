@@ -42,6 +42,11 @@ public class PlayerPokenMoveRow
     public int PlayerPokenId { get; set; }
     public string MoveDefinitionId { get; set; }
     public int CurrentPP { get; set; }
+    // Posicion del movimiento en la lista del Poken. Sin esto el orden al
+    // cargar dependia del orden fisico de las filas, que es un detalle de
+    // SQLite: reordenar movimientos desde el Summary no sobrevivia el save.
+    // La columna la agrega sola sqlite-net via ALTER (saves viejos quedan en 0).
+    public int SlotIndex { get; set; }
 }
 
 [Table("player_inventory")]

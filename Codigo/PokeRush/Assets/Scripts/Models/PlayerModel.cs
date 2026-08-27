@@ -22,6 +22,22 @@ public class PlayerModel
         Inventory = new InventoryModel();
     }
 
+    // Intercambia dos Pokens de posicion en el equipo.
+    //
+    // Modifica la lista REAL: el indice 0 es el que sale primero al combate y el
+    // que SaveService guarda con SlotIndex 0. Reordenar solo en la UI hubiera
+    // dejado la pantalla mintiendo respecto de lo que hace el juego.
+    public bool SwapTeamSlots(int a, int b)
+    {
+        if (a == b) return false;
+        if (a < 0 || b < 0 || a >= Team.Count || b >= Team.Count) return false;
+
+        PokenModel tmp = Team[a];
+        Team[a] = Team[b];
+        Team[b] = tmp;
+        return true;
+    }
+
     public void AddMoney(int amount)
     {
         Money += amount;

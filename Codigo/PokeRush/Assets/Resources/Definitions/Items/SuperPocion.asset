@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealItemDefinition
   itemName: "Superpoci\xF3n"
   description: Restaura 60 PS.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 40c246c5a5d8603419219c0a0da49b73, type: 3}
   buyPrice: 700
   sellPrice: 350
   healAmount: 60
   fullHeal: 0
+  curesStatuses: 
+  curesAllStatuses: 0
+  revives: 0
+  revivePercent: 50

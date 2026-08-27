@@ -93,14 +93,17 @@ public class SaveService
         // pokenRow.Id se llena automaticamente despues del Insert (AutoIncrement)
         // por eso podemos usarlo aca abajo para vincular los movimientos a este Poken
 
-        // Guarda los PP restantes de cada movimiento del Poken
-        foreach (MoveModel move in poken.Moves)
+        // Guarda los PP restantes de cada movimiento del Poken, EN ORDEN: el
+        // Summary deja reordenarlos y ese orden tiene que sobrevivir el save.
+        for (int i = 0; i < poken.Moves.Count; i++)
         {
+            MoveModel move = poken.Moves[i];
             _db.Insert(new PlayerPokenMoveRow
             {
                 PlayerPokenId = pokenRow.Id, // vincula este movimiento al Poken recien guardado
                 MoveDefinitionId = move.Definition.moveName,
-                CurrentPP = move.CurrentPP
+                CurrentPP = move.CurrentPP,
+                SlotIndex = i
             });
         }
     }
@@ -210,7 +213,8 @@ public class SaveService
         // Carga los movimientos de este Poken (vinculados por PlayerPokenId).
         // El constructor ya auto-aprendio movimientos del learnset: si el save
         // trae movimientos propios, se pisan los auto-aprendidos para no duplicar.
-        var moveRows = _db.Table<PlayerPokenMoveRow>().Where(m => m.PlayerPokenId == row.Id).ToList();
+        var moveRows = _db.Table<PlayerPokenMoveRow>().Where(m => m.PlayerPokenId == row.Id)
+            .OrderBy(m => m.SlotIndex).ToList();
         if (moveRows.Count > 0)
             poken.Moves.Clear();
         foreach (var moveRow in moveRows)

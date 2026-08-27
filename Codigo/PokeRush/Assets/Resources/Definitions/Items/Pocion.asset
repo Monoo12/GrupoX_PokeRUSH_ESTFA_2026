@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealItemDefinition
   itemName: "Poci\xF3n"
   description: Restaura 20 PS.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 36af5504ad00bf9439ab7c4d093f521c, type: 3}
   buyPrice: 200
   sellPrice: 100
   healAmount: 20
   fullHeal: 0
+  curesStatuses: 
+  curesAllStatuses: 0
+  revives: 0
+  revivePercent: 50

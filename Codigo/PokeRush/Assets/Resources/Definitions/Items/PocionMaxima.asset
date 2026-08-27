@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealItemDefinition
   itemName: "Poci\xF3n M\xE1xima"
   description: Restaura todos los PS.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ab62abecd2acea94b9c7f0e954d69f15, type: 3}
   buyPrice: 2500
   sellPrice: 1250
   healAmount: 0
   fullHeal: 1
+  curesStatuses: 
+  curesAllStatuses: 0
+  revives: 0
+  revivePercent: 50
