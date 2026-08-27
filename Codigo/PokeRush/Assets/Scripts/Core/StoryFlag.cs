@@ -35,5 +35,14 @@ public enum StoryFlag
     // Objetos del piso: uno por pokeball, para que no reaparezcan al recargar
     // la partida. El InteractableTrigger los usa como 'otorgaFlag'.
     Torre1_PocionesTomadas,
-    Torre1_SuperPocionesTomadas
+    Torre1_SuperPocionesTomadas,
+
+    // Casino (nivel 2): un flag por objetivo de piso. Se guardan solos con el
+    // resto de los flags, asi el jugador no tiene que volver a cumplir una
+    // condicion que ya cumplio, ni siquiera despues de cerrar el juego.
+    Casino_Piso1_Superado,
+    Casino_Ruleta_ObjetivoCumplido,
+    Casino_Piso2_Superado,
+    Casino_Blackjack_Ganado,
+    Casino_Piso3_Superado
 }

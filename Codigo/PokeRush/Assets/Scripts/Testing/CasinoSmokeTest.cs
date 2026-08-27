@@ -60,6 +60,7 @@ public class CasinoSmokeTest : MonoBehaviour
         yield return ProbarAbrirDesdeLaMaquina(jugador, maquina);
         yield return ProbarApostarYGirar(jugador);
         yield return ProbarCierreYControl();
+        yield return ProbarAscensor(jugador);
 
         Debug.Log($"[SmokeCasino] TERMINADO. OK={_ok} FALLOS={_fallos}");
 
@@ -76,15 +77,28 @@ public class CasinoSmokeTest : MonoBehaviour
 
     private SlotsScreen _pantalla;
     private SlotMachineInteractable _maquinaEnEscena;
+    private bool _creadaPorLaPrueba;
 
     private IEnumerator ProbarAbrirDesdeLaMaquina(PlayerModel jugador, SlotMachineDefinition maquina)
     {
-        // Se arma la maquina como la armaria el equipo de nivel: un objeto con
-        // collider y el componente de interaccion encima.
-        var go = new GameObject("[SmokeCasino] Tragaperras");
-        go.AddComponent<BoxCollider2D>().isTrigger = true;
-        _maquinaEnEscena = go.AddComponent<SlotMachineInteractable>();
-        SetCampo(_maquinaEnEscena, "maquina", maquina);
+        // Si la escena abierta es el piso del casino, se prueba con UNA DE SUS
+        // maquinas de verdad: es la unica forma de saber que las que colgo el
+        // builder sobre el arte del equipo responden.
+        _maquinaEnEscena = Object.FindAnyObjectByType<SlotMachineInteractable>();
+        _creadaPorLaPrueba = _maquinaEnEscena == null;
+
+        if (_creadaPorLaPrueba)
+        {
+            var go = new GameObject("[SmokeCasino] Tragaperras");
+            go.AddComponent<BoxCollider2D>().isTrigger = true;
+            _maquinaEnEscena = go.AddComponent<SlotMachineInteractable>();
+            SetCampo(_maquinaEnEscena, "maquina", maquina);
+        }
+
+        Check(_creadaPorLaPrueba
+                  ? "No hay maquinas en la escena: se prueba con una armada al vuelo"
+                  : $"La escena trae maquinas ya colgadas ({Object.FindObjectsByType<SlotMachineInteractable>(FindObjectsSortMode.None).Length})",
+              true);
 
         StoryModel historia = GameManager.Instance.Story;
         bool consumio = _maquinaEnEscena.Interact(jugador, historia);
@@ -92,7 +106,7 @@ public class CasinoSmokeTest : MonoBehaviour
 
         Check("Interactuar con la maquina consume la interaccion", consumio);
         Check("No se cambio de escena para jugar",
-              gameObject.scene == go.scene && Menus != null);
+              gameObject.scene == _maquinaEnEscena.gameObject.scene && Menus != null);
 
         _pantalla = Menus != null ? Menus.Top as SlotsScreen : null;
         Check("Se abre la pantalla de slots encima del nivel", _pantalla != null);
@@ -177,7 +191,69 @@ public class CasinoSmokeTest : MonoBehaviour
         Check("Al cerrar todo, el jugador recupera el control",
               !MenuManager.AnyOpen && Menus.Top == null);
 
-        if (_maquinaEnEscena != null) Destroy(_maquinaEnEscena.gameObject);
+        if (_creadaPorLaPrueba && _maquinaEnEscena != null)
+            Destroy(_maquinaEnEscena.gameObject);
+    }
+
+    // ---------- 4. el ascensor y el requisito del piso ----------
+
+    private IEnumerator ProbarAscensor(PlayerModel jugador)
+    {
+        var ascensor = Object.FindAnyObjectByType<CasinoElevatorInteractable>();
+        if (ascensor == null)
+        {
+            Debug.Log("[SmokeCasino] La escena no tiene ascensor: se saltea esa parte.");
+            yield break;
+        }
+
+        StoryModel historia = GameManager.Instance.Story;
+        int requerido = Campo<int>(ascensor, "dineroRequerido");
+        StoryFlag flagDelPiso = Campo<StoryFlag>(ascensor, "otorgaFlag");
+
+        // Arranca sin el flag: es lo que hace que el requisito se vuelva a mirar.
+        historia.ActiveFlags.Remove(flagDelPiso);
+
+        // --- sin la plata pedida: no sube ---
+        int guardado = jugador.Money;
+        jugador.SpendMoney(jugador.Money);                 // a cero
+        Menus.CloseAll();
+        yield return null;
+
+        ascensor.Interact(jugador, historia);
+        yield return null;
+
+        Check("Sin la plata pedida el ascensor avisa en vez de subir",
+              Menus.Top is MessageBoxScreen);
+        Check("Y el piso NO queda marcado como superado", !historia.HasFlag(flagDelPiso));
+
+        if (Menus.Top is MessageBoxScreen aviso)
+        {
+            aviso.HandleAction(GameAction.Confirm);
+            yield return null;
+        }
+
+        // --- con la plata pedida: pregunta y anota el progreso ---
+        jugador.AddMoney(requerido);
+        ascensor.Interact(jugador, historia);
+        yield return null;
+
+        Check($"Con {requerido} juntados el ascensor pregunta si subir",
+              Menus.Top is MessageBoxScreen);
+        Check("El piso queda marcado como superado", historia.HasFlag(flagDelPiso));
+
+        // Se contesta que NO: subir de verdad cambiaria de escena y cortaria la
+        // prueba. Lo que importa ya quedo verificado.
+        if (Menus.Top is MessageBoxScreen pregunta)
+        {
+            pregunta.HandleAction(GameAction.Cancel);
+            yield return null;
+        }
+
+        Check("Al decir que no, el jugador sigue en el piso y con el control",
+              !MenuManager.AnyOpen);
+
+        jugador.SpendMoney(jugador.Money);
+        jugador.AddMoney(guardado);
     }
 
     // ---------- utilidades ----------
