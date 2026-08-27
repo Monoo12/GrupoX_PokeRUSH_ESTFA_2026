@@ -60,6 +60,54 @@ namespace PokeRush.EditorTools
                       "Abrilas con Window > 2D > Tile Palette.");
         }
 
+        // Arma una sola paleta sin tocar las demas. BuildAll borra y rehace
+        // TODAS las de Assets/Palettes, asi que si ya acomodaste tiles a mano
+        // en alguna, correrlo entero te la pisa. Con esto se suma un tileset
+        // nuevo dejando el resto como esta.
+        [MenuItem("PokeRush/Armar paleta del tileset seleccionado")]
+        public static void BuildSelected()
+        {
+            string[] tilesets = SeleccionDeTilesets();
+            if (tilesets.Length == 0)
+            {
+                Debug.LogError($"[Tiles] Selecciona en el Project una carpeta de tileset dentro de {ChunkDir}.");
+                return;
+            }
+
+            Directory.CreateDirectory(PaletteDir);
+            int totalTiles = 0;
+            try
+            {
+                for (int i = 0; i < tilesets.Length; i++)
+                {
+                    EditorUtility.DisplayProgressBar("Paletas de tiles",
+                        $"{tilesets[i]} ({i + 1}/{tilesets.Length})", (float)i / tilesets.Length);
+                    totalTiles += BuildOne(tilesets[i]);
+                }
+            }
+            finally { EditorUtility.ClearProgressBar(); }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log($"[Tiles] {string.Join(", ", tilesets)}: {totalTiles} tiles en {PaletteDir}/. " +
+                      "Abrila con Window > 2D > Tile Palette.");
+        }
+
+        [MenuItem("PokeRush/Armar paleta del tileset seleccionado", true)]
+        private static bool PuedeArmarSeleccionado() => SeleccionDeTilesets().Length > 0;
+
+        // Solo carpetas que sean hijas directas de ChunkDir: cada una es un
+        // tileset y su nombre termina siendo el de la paleta.
+        private static string[] SeleccionDeTilesets()
+        {
+            return Selection.objects
+                .Select(AssetDatabase.GetAssetPath)
+                .Where(p => !string.IsNullOrEmpty(p) && AssetDatabase.IsValidFolder(p))
+                .Where(p => Path.GetDirectoryName(p).Replace('\\', '/') == ChunkDir)
+                .Select(Path.GetFileName)
+                .Distinct().OrderBy(n => n).ToArray();
+        }
+
         private static int BuildOne(string tileset)
         {
             string dir = $"{ChunkDir}/{tileset}";
