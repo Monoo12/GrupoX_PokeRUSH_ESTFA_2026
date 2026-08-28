@@ -233,15 +233,31 @@ public static class CasinoPrefabBuilder
         GameObject panel = CasinoUiKit.Panel("Mesa", root.transform,
             new Vector2(MenuUiKit.RefWidth, MenuUiKit.RefHeight), out exterior);
 
-        Text titulo = MenuUiKit.Label("Titulo", panel.transform, Vector2.zero,
-            new Vector2(200f, 22f), "RULETA", 16, TextAnchor.MiddleLeft, MenuUiKit.Gold);
-        MenuUiKit.Box(titulo.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(8f, -6f), new Vector2(200f, 22f));
+        // Foco de luz sobre la mesa: el tapete plano se veia muerto.
+        GameObject foco = MenuUiKit.Node("Foco", panel.transform);
+        MenuUiKit.Box(foco, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+            new Vector2(0f, -10f), new Vector2(420f, 340f));
+        Image focoImg = MenuUiKit.AddImage(foco,
+            CasinoUiKit.Importar("Assets/Graphics/Casino/foco.png"),
+            new Color(1f, 1f, 0.92f, 0.16f));
+        focoImg.raycastTarget = false;
 
-        Text saldo = MenuUiKit.Label("Saldo", panel.transform, Vector2.zero,
-            new Vector2(140f, 22f), "$0", 16, TextAnchor.MiddleRight, MenuUiKit.Ink);
-        MenuUiKit.Box(saldo.gameObject, new Vector2(1f, 1f), new Vector2(1f, 1f),
-            new Vector2(-8f, -6f), new Vector2(140f, 22f));
+        // Titulo y saldo sobre chapas, no flotando en el pano.
+        GameObject placaTitulo = CasinoUiKit.Cartel("PlacaTitulo", panel.transform,
+            new Vector2(8f, -6f), new Vector2(132f, 34f),
+            new Color(0.05f, 0.12f, 0.09f, 0.92f));
+        Text titulo = MenuUiKit.Label("Titulo", placaTitulo.transform, Vector2.zero,
+            new Vector2(108f, 22f), "RULETA", 16, TextAnchor.MiddleCenter, MenuUiKit.Gold);
+        MenuUiKit.Box(titulo.gameObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(108f, 22f));
+
+        GameObject placaSaldo = CasinoUiKit.Cartel("PlacaSaldo", panel.transform,
+            new Vector2(346f, -6f), new Vector2(132f, 34f),
+            new Color(0.05f, 0.12f, 0.09f, 0.92f));
+        Text saldo = MenuUiKit.Label("Saldo", placaSaldo.transform, Vector2.zero,
+            new Vector2(108f, 22f), "$0", 16, TextAnchor.MiddleCenter, MenuUiKit.Ink);
+        MenuUiKit.Box(saldo.gameObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(108f, 22f));
 
         // ---- la rueda, grande y al medio ----
         const float ladoRueda = 250f;
@@ -249,6 +265,14 @@ public static class CasinoPrefabBuilder
         GameObject ruedaRaiz = MenuUiKit.Node("Ruleta", panel.transform);
         MenuUiKit.Box(ruedaRaiz, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
             new Vector2(0f, -28f), new Vector2(ladoRueda, ladoRueda));
+
+        GameObject sombra = MenuUiKit.Node("Sombra", ruedaRaiz.transform);
+        MenuUiKit.Box(sombra, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            new Vector2(0f, -10f), new Vector2(ladoRueda * 1.24f, ladoRueda * 1.2f));
+        Image sombraImg = MenuUiKit.AddImage(sombra,
+            CasinoUiKit.Importar("Assets/Graphics/Casino/sombra.png"),
+            new Color(0f, 0f, 0f, 0.45f));
+        sombraImg.raycastTarget = false;
 
         GameObject aro = MenuUiKit.Node("Aro", ruedaRaiz.transform);
         MenuUiKit.Box(aro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),

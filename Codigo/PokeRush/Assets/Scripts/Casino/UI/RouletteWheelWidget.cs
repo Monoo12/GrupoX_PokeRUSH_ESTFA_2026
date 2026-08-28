@@ -164,7 +164,31 @@ public class RouletteWheelWidget : MonoBehaviour
         // Apunta hacia afuera, como los numeros de una ruleta.
         rt.localEulerAngles = new Vector3(0f, 0f, -grados);
 
-        var img = go.AddComponent<Image>();
+        // Chapita oscura atras: sin ella, un simbolo claro sobre una casilla
+        // clara (la estrella sobre el amarillo) directamente no se ve.
+        if (circulo != null)
+        {
+            var fondo = new GameObject("Fondo", typeof(RectTransform));
+            var fondoRt = (RectTransform)fondo.transform;
+            fondoRt.SetParent(rt, false);
+            fondoRt.anchorMin = fondoRt.anchorMax = new Vector2(0.5f, 0.5f);
+            fondoRt.pivot = new Vector2(0.5f, 0.5f);
+            fondoRt.sizeDelta = tamanioDelSimbolo + new Vector2(6f, 6f);
+
+            var fondoImg = fondo.AddComponent<Image>();
+            fondoImg.sprite = circulo;
+            fondoImg.color = new Color(0f, 0f, 0f, 0.35f);
+            fondoImg.raycastTarget = false;
+        }
+
+        var icono = new GameObject("Icono", typeof(RectTransform));
+        var iconoRt = (RectTransform)icono.transform;
+        iconoRt.SetParent(rt, false);
+        iconoRt.anchorMin = iconoRt.anchorMax = new Vector2(0.5f, 0.5f);
+        iconoRt.pivot = new Vector2(0.5f, 0.5f);
+        iconoRt.sizeDelta = tamanioDelSimbolo;
+
+        var img = icono.AddComponent<Image>();
         img.sprite = premio.icono;
         img.preserveAspect = true;
         img.raycastTarget = false;
