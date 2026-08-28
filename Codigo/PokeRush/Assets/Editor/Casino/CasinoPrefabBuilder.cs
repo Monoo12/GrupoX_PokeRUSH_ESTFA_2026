@@ -230,13 +230,23 @@ public static class CasinoPrefabBuilder
         MenuUiKit.Box(ruedaRaiz, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f),
             new Vector2(18f, -6f), new Vector2(216f, 216f));
 
-        GameObject giratorio = MenuUiKit.Node("Rueda", ruedaRaiz.transform);
-        MenuUiKit.Full(giratorio);
+        // Aro de madera con borde dorado, atras de todo: las porciones se dibujan
+        // adentro y lo que asoma es el marco de la ruleta de verdad.
+        GameObject aro = MenuUiKit.Node("Aro", ruedaRaiz.transform);
+        MenuUiKit.Box(aro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(232f, 226f));
+        Image aroImg = MenuUiKit.AddImage(aro, CasinoUiKit.Aro(), Color.white);
+        aroImg.raycastTarget = false;
 
+        GameObject giratorio = MenuUiKit.Node("Rueda", ruedaRaiz.transform);
+        MenuUiKit.Box(giratorio, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(188f, 188f));
+
+        // Buje metalico: tapa el vertice donde se juntan todas las porciones.
         GameObject centro = MenuUiKit.Node("Centro", giratorio.transform);
         MenuUiKit.Box(centro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(64f, 64f));
-        Image tapa = MenuUiKit.AddImage(centro, CirculoBlanco(), new Color(0.08f, 0.10f, 0.12f, 1f));
+            Vector2.zero, new Vector2(56f, 56f));
+        Image tapa = MenuUiKit.AddImage(centro, CasinoUiKit.Centro(), Color.white);
         tapa.raycastTarget = false;
 
         GameObject aguja = MenuUiKit.Node("Aguja", ruedaRaiz.transform);
@@ -264,10 +274,18 @@ public static class CasinoPrefabBuilder
             new Vector2(14f, -14f), new Vector2(186f, 138f));
         tabla.lineSpacing = 1.15f;
 
+        // Ficha de casino al lado del precio del giro: se lee de un vistazo que
+        // eso es lo que se apuesta.
+        GameObject ficha = MenuUiKit.Node("Ficha", panel.transform);
+        MenuUiKit.Box(ficha, new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(248f, -210f), new Vector2(26f, 26f));
+        Image fichaImg = MenuUiKit.AddImage(ficha, CasinoUiKit.Ficha(8), Color.white);
+        fichaImg.raycastTarget = false;
+
         Text costo = MenuUiKit.Label("Costo", panel.transform, Vector2.zero,
             new Vector2(196f, 22f), "GIRO  50", 16, TextAnchor.MiddleLeft, MenuUiKit.Accent);
         MenuUiKit.Box(costo.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(250f, -212f), new Vector2(196f, 22f));
+            new Vector2(280f, -212f), new Vector2(168f, 22f));
 
         GameObject cajaMensaje = CasinoUiKit.Cartel("CajaMensaje", panel.transform,
             new Vector2(244f, -240f), new Vector2(214f, 72f),

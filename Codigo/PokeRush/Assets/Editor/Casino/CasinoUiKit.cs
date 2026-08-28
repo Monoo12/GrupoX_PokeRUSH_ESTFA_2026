@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.U2D.Sprites;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +17,12 @@ using UnityEngine.UI;
 public static class CasinoUiKit
 {
     public const string MarcoPath = "Assets/Graphics/Windowskins/choice 18.png";
-    public const string FieltroPath = "Assets/Graphics/UI/Triple Triad/bg.png";
+    // Tapete de la mesa. Sale de mativallej/casino-roulette-game (CC BY-SA 4.0),
+    // ya reducido a 512x384: ver Documentacion/Creditos_De_Assets.md.
+    public const string FieltroPath = "Assets/Graphics/Casino/mesa_fieltro.png";
+    public const string AroPath = "Assets/Graphics/Casino/ruleta_aro.png";
+    public const string CentroPath = "Assets/Graphics/Casino/ruleta_centro.png";
+    public const string FichasPath = "Assets/Graphics/Casino/fichas.png";
 
     // El marco mide 48x48 y su parte ornamentada ocupa 14 pixeles por lado: ese
     // es el borde que Unity NO estira.
@@ -48,53 +55,108 @@ public static class CasinoUiKit
         return AssetDatabase.LoadAssetAtPath<Sprite>(MarcoPath);
     }
 
-    private const string FieltroRecortado = "Assets/Sprites/UI/Casino/fieltro.png";
+    // El tapete ya viene del tamanio del Canvas: se usa entero, sin recortes ni
+    // mosaicos. Es un degrade, asi que repetirlo se notaria.
+    public static Sprite Fieltro() => Importar(FieltroPath);
 
-    // El tapete del pack sirve por el color y la textura, pero trae DIBUJADA la
-    // grilla 3x3 del Triple Triad, que se ve como marcas sueltas en el fondo.
-    // Se recorta un parche limpio de una esquina y despues se usa en mosaico:
-    // queda el mismo verde del juego, sin la grilla de otro minijuego.
-    public static Sprite Fieltro()
+    public static Sprite Aro() => Importar(AroPath);
+    public static Sprite Centro() => Importar(CentroPath);
+
+    // Deja un PNG del pack listo para usar como sprite: Point y sin comprimir,
+    // que es lo que mantiene los bordes limpios al escalar.
+    public static Sprite Importar(string path)
     {
-        var recortado = AssetDatabase.LoadAssetAtPath<Sprite>(FieltroRecortado);
-        if (recortado != null) return recortado;
+        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        if (sprite != null) return sprite;
 
-        if (!System.IO.File.Exists(FieltroPath))
+        var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+        if (importer == null)
         {
-            Debug.LogWarning($"[CasinoUI] No encontre {FieltroPath}.");
+            Debug.LogWarning($"[CasinoUI] No encontre {path}.");
             return null;
         }
 
-        var fuente = new Texture2D(2, 2, TextureFormat.RGBA32, false);
-        fuente.LoadImage(System.IO.File.ReadAllBytes(FieltroPath));
+        importer.textureType = TextureImporterType.Sprite;
+        importer.spriteImportMode = SpriteImportMode.Single;
+        importer.filterMode = FilterMode.Point;
+        importer.textureCompression = TextureImporterCompression.Uncompressed;
+        importer.mipmapEnabled = false;
+        importer.alphaIsTransparency = true;
+        importer.spritePixelsPerUnit = 100;
+        importer.SaveAndReimport();
 
-        // Zona limpia: arriba a la izquierda, entre el borde y donde arranca la
-        // grilla dibujada.
-        const int lado = 64;
-        var parche = new Texture2D(lado, lado, TextureFormat.RGBA32, false);
-        parche.SetPixels(fuente.GetPixels(40, 300, lado, lado));
-        parche.Apply();
+        return AssetDatabase.LoadAssetAtPath<Sprite>(path);
+    }
 
-        MenuUiKit.EnsureFolder("Assets/Sprites/UI/Casino");
-        System.IO.File.WriteAllBytes(FieltroRecortado, parche.EncodeToPNG());
-        Object.DestroyImmediate(fuente);
-        Object.DestroyImmediate(parche);
+    // Las fichas vienen en una tira de 15 de 32x32. Se corta una vez y quedan
+    // como sprites sueltos, listos para usar de icono de apuesta.
+    public static Sprite Ficha(int indice)
+    {
+        Sprite[] fichas = Fichas();
+        if (fichas == null || fichas.Length == 0) return null;
+        return fichas[Mathf.Clamp(indice, 0, fichas.Length - 1)];
+    }
 
-        AssetDatabase.ImportAsset(FieltroRecortado, ImportAssetOptions.ForceUpdate);
+    public static Sprite[] Fichas()
+    {
+        var yaCortadas = new List<Sprite>();
+        foreach (Object o in AssetDatabase.LoadAllAssetsAtPath(FichasPath))
+            if (o is Sprite sp) yaCortadas.Add(sp);
+        if (yaCortadas.Count > 1) return Ordenar(yaCortadas);
 
-        var importer = AssetImporter.GetAtPath(FieltroRecortado) as TextureImporter;
-        if (importer != null)
+        var importer = AssetImporter.GetAtPath(FichasPath) as TextureImporter;
+        if (importer == null)
         {
-            importer.textureType = TextureImporterType.Sprite;
-            importer.spriteImportMode = SpriteImportMode.Single;
-            importer.filterMode = FilterMode.Point;
-            importer.textureCompression = TextureImporterCompression.Uncompressed;
-            importer.mipmapEnabled = false;
-            importer.wrapMode = TextureWrapMode.Repeat;
-            importer.SaveAndReimport();
+            Debug.LogWarning($"[CasinoUI] No encontre {FichasPath}.");
+            return null;
         }
 
-        return AssetDatabase.LoadAssetAtPath<Sprite>(FieltroRecortado);
+        importer.textureType = TextureImporterType.Sprite;
+        importer.spriteImportMode = SpriteImportMode.Multiple;
+        importer.filterMode = FilterMode.Point;
+        importer.textureCompression = TextureImporterCompression.Uncompressed;
+        importer.mipmapEnabled = false;
+        importer.alphaIsTransparency = true;
+        importer.spritePixelsPerUnit = 100;
+        importer.SaveAndReimport();
+
+        var factories = new SpriteDataProviderFactories();
+        factories.Init();
+        ISpriteEditorDataProvider provider = factories.GetSpriteEditorDataProviderFromObject(importer);
+        provider.InitSpriteEditorDataProvider();
+
+        var rects = new List<SpriteRect>();
+        var pares = new List<SpriteNameFileIdPair>();
+        for (int i = 0; i < 15; i++)
+        {
+            var sr = new SpriteRect
+            {
+                name = $"ficha_{i:00}",
+                spriteID = GUID.Generate(),
+                rect = new Rect(i * 32f, 0f, 32f, 32f),
+                alignment = SpriteAlignment.Center,
+                pivot = new Vector2(0.5f, 0.5f)
+            };
+            rects.Add(sr);
+            pares.Add(new SpriteNameFileIdPair(sr.name, sr.spriteID));
+        }
+
+        provider.SetSpriteRects(rects.ToArray());
+        var nombres = provider.GetDataProvider<ISpriteNameFileIdDataProvider>();
+        if (nombres != null) nombres.SetNameFileIdPairs(pares);
+        provider.Apply();
+        AssetDatabase.ImportAsset(FichasPath, ImportAssetOptions.ForceUpdate);
+
+        var salida = new List<Sprite>();
+        foreach (Object o in AssetDatabase.LoadAllAssetsAtPath(FichasPath))
+            if (o is Sprite sp) salida.Add(sp);
+        return Ordenar(salida);
+    }
+
+    private static Sprite[] Ordenar(List<Sprite> fichas)
+    {
+        fichas.Sort((a, b) => string.CompareOrdinal(a.name, b.name));
+        return fichas.ToArray();
     }
 
     private static bool EsNueveTajadas(string path)
@@ -116,9 +178,7 @@ public static class CasinoUiKit
         GameObject tapete = MenuUiKit.Node("Tapete", exterior.transform);
         MenuUiKit.Full(tapete);
         Image fondo = MenuUiKit.AddImage(tapete, Fieltro(), Color.white);
-        // En mosaico: el parche es chico y se repite, asi el panel puede tener
-        // cualquier tamanio sin estirar la textura.
-        fondo.type = Image.Type.Tiled;
+        fondo.type = Image.Type.Simple;
 
         GameObject marco = MenuUiKit.Node("Marco", exterior.transform);
         MenuUiKit.Full(marco);
