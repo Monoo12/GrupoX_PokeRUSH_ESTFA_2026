@@ -34,11 +34,17 @@ public static class CasinoSceneRigBuilder
 
     private const int CapaObstacles = 3;
 
+    // Equipo inicial copiado de NestorGOD2. Son referencias a assets, asi que
+    // sobreviven al cambio de escena.
+    private static Object[] _equipoInicial;
+    private static int[] _nivelesIniciales;
+
     [MenuItem("PokeRush/Casino/Armar el rig de las escenas del casino")]
     public static void ArmarTodas()
     {
         if (!GuardarSiHaceFalta()) return;
         if (!AsegurarPrefabDeDialogo()) return;
+        LeerEquipoInicialDelModelo();
 
         foreach (string escena in Escenas)
         {
@@ -114,12 +120,104 @@ public static class CasinoSceneRigBuilder
         GameObject player = AsegurarPlayer(scene, mapaRaiz);
         PrepararCamara(mapaRaiz, player);
 
-        AsegurarComponente<GameManager>(AsegurarRaiz(scene, "GameManager"));
+        AsegurarGameManager(scene);
         AsegurarEventSystem(scene);
 
         GameObject combate = AsegurarCombate(scene);
         AsegurarSistema(scene, mapaRaiz, combate, player);
         AsegurarDialogo(scene);
+    }
+
+    // ---------- GameManager ----------
+
+    // Lee de NestorGOD2 con que equipo arranca una partida nueva.
+    //
+    // OJO con que es esto: el casino es el SEGUNDO nivel, asi que en el juego
+    // de verdad el jugador llega con su partida (equipo, dinero y objetos vienen
+    // del save y del run). El GameManager del piso ni siquiera se usa: como es
+    // DontDestroyOnLoad y se deduplica solo, el que manda es el que viene del
+    // nivel anterior.
+    //
+    // Este equipo es el RESPALDO para entrar a un piso suelto con Play y poder
+    // probarlo. Sin el, el SceneBootstrapper crea la partida de prueba con cero
+    // Pokens: los menus de equipo salen vacios y cualquier combate aborta.
+    private static void LeerEquipoInicialDelModelo()
+    {
+        Scene modelo = EditorSceneManager.OpenScene(EscenaModelo, OpenSceneMode.Single);
+        GameObject go = BuscarRaiz(modelo, "GameManager");
+        var gm = go != null ? go.GetComponent<GameManager>() : null;
+        if (gm == null)
+        {
+            Debug.LogWarning($"[CasinoRig] No encontre el GameManager de {EscenaModelo}: " +
+                             "las escenas del casino van a quedar sin equipo inicial.");
+            return;
+        }
+
+        var so = new SerializedObject(gm);
+        SerializedProperty equipo = so.FindProperty("equipoInicial");
+        SerializedProperty niveles = so.FindProperty("nivelesIniciales");
+
+        _equipoInicial = new Object[equipo.arraySize];
+        for (int i = 0; i < equipo.arraySize; i++)
+            _equipoInicial[i] = equipo.GetArrayElementAtIndex(i).objectReferenceValue;
+
+        _nivelesIniciales = new int[niveles.arraySize];
+        for (int i = 0; i < niveles.arraySize; i++)
+            _nivelesIniciales[i] = niveles.GetArrayElementAtIndex(i).intValue;
+
+        Debug.Log($"[CasinoRig] Equipo inicial tomado de NestorGOD2: {_equipoInicial.Length} especies.");
+    }
+
+    private static void AsegurarGameManager(Scene scene)
+    {
+        GameObject go = AsegurarRaiz(scene, "GameManager");
+        var gm = AsegurarComponente<GameManager>(go);
+
+        var so = new SerializedObject(gm);
+
+        // Equipo inicial: solo se completa si esta vacio, para no pisar lo que
+        // el equipo haya elegido a mano para este piso.
+        SerializedProperty equipo = so.FindProperty("equipoInicial");
+        if (equipo != null && equipo.arraySize == 0 && _equipoInicial != null)
+        {
+            equipo.arraySize = _equipoInicial.Length;
+            for (int i = 0; i < _equipoInicial.Length; i++)
+                equipo.GetArrayElementAtIndex(i).objectReferenceValue = _equipoInicial[i];
+
+            SerializedProperty niveles = so.FindProperty("nivelesIniciales");
+            if (niveles != null && _nivelesIniciales != null)
+            {
+                niveles.arraySize = _nivelesIniciales.Length;
+                for (int i = 0; i < _nivelesIniciales.Length; i++)
+                    niveles.GetArrayElementAtIndex(i).intValue = _nivelesIniciales[i];
+            }
+        }
+
+        // Fuentes de audio: sin esto AudioService arranca con las dos en null y
+        // no suena nada, ni la musica del piso ni los efectos de los menus.
+        Transform audio = go.transform.Find("Audio");
+        if (audio == null)
+        {
+            var audioGo = new GameObject("Audio");
+            audioGo.transform.SetParent(go.transform);
+            audio = audioGo.transform;
+
+            var musica = audioGo.AddComponent<AudioSource>();
+            musica.playOnAwake = false;
+            musica.loop = true;
+
+            var sfx = audioGo.AddComponent<AudioSource>();
+            sfx.playOnAwake = false;
+        }
+
+        AudioSource[] fuentes = audio.GetComponents<AudioSource>();
+        if (fuentes.Length >= 2)
+        {
+            so.FindProperty("musicSource").objectReferenceValue = fuentes[0];
+            so.FindProperty("sfxSource").objectReferenceValue = fuentes[1];
+        }
+
+        so.ApplyModifiedPropertiesWithoutUndo();
     }
 
     // ---------- colisiones ----------

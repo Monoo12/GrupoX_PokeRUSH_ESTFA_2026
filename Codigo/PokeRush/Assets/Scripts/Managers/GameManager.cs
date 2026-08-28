@@ -29,6 +29,13 @@ public class GameManager : MonoBehaviour
     [Tooltip("Nivel de cada Poken, en el mismo orden. Si faltan, se usa 5.")]
     [SerializeField] private int[] nivelesIniciales = { 15, 15, 16 };
 
+    [Header("Arranque")]
+    // Con 0 el jugador llega al casino sin poder tirar ni una vez: la apuesta
+    // minima de la tragaperras es 10. Es un valor de arranque, no un premio;
+    // se toca desde el Inspector sin recompilar.
+    [Tooltip("Plata con la que empieza una partida nueva.")]
+    [Min(0)] [SerializeField] private int dineroInicial = 100;
+
     public GameState CurrentState { get; private set; }
     public PlayerModel CurrentPlayer { get; private set; }
     public StoryModel Story { get; private set; }
@@ -87,6 +94,7 @@ public class GameManager : MonoBehaviour
         Story = new StoryModel();
         Tower = new TowerProgressModel(Story);
         CurrentPlayer = new PlayerModel(playerName, genero);
+        if (dineroInicial > 0) CurrentPlayer.AddMoney(dineroInicial);
 
         if (inicial != null)
         {
@@ -102,6 +110,9 @@ public class GameManager : MonoBehaviour
         Story.ActivateFlag(StoryFlag.GameStarted);
         Story.ActivateFlag(StoryFlag.ReceivedStarterPoken);
         ChangeState(GameState.Exploration);
+
+        Debug.Log($"[GameManager] '{playerName}' arranca con {CurrentPlayer.Money} de saldo " +
+                  $"y {CurrentPlayer.Team.Count} Poken.");
     }
 
     // El equipo fijo con el que se entra a la torre 1. Un hueco sin asignar se
