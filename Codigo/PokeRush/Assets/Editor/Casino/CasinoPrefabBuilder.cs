@@ -157,32 +157,31 @@ public static class CasinoPrefabBuilder
         var pikachu = AssetDatabase.LoadAssetAtPath<PokenDefinition>(
             "Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
 
-        // Cada casilla lleva un SIMBOLO, no un numero: el jugador mira la rueda
-        // y ve que puede tocarle.
-        Sprite Icono(string nombre) =>
-            CasinoUiKit.Importar($"Assets/Graphics/Casino/icono_{nombre}.png");
+        // Cada casilla lleva el bicho o el objeto que da, no un numero.
+        Sprite Icono(string archivo) =>
+            CasinoUiKit.Importar($"Assets/Graphics/Casino/{archivo}.png");
 
-        def.casillas = 16;
+        // Doce, porque doce son los sectores DIBUJADOS en la rueda.
+        def.casillas = RouletteWheelWidget.CasillasDelDibujo;
         def.premios = new[]
         {
             Casilla("Nada", new Color(0.28f, 0.30f, 0.36f), 24, RoulettePrizeKind.Nada,
-                    "La bolita cae en el cero. Nada.", icono: Icono("x")),
+                    "La bolita cae en el cero. Nada.", icono: Icono("icono_x")),
             Casilla("Monedas", new Color(0.95f, 0.78f, 0.25f), 24, RoulettePrizeKind.Dinero,
                     "Pagan {0}.", monto: 60, icono: CasinoUiKit.Ficha(5)),
             Casilla("Multa", new Color(0.75f, 0.28f, 0.30f), 14, RoulettePrizeKind.PerderDinero,
-                    "La casa se cobra {0}.", monto: 80, icono: Icono("minus")),
-            Casilla("Objeto", new Color(0.35f, 0.72f, 0.45f), 12, RoulettePrizeKind.Objeto,
-                    "Te dan {0}.", objeto: pocion, cantidad: 2,
-                    icono: CasinoUiKit.Importar("Assets/Graphics/Items/POTION.png")),
+                    "La casa se cobra {0}.", monto: 80, icono: Icono("icono_minus")),
+            Casilla("Pocion", new Color(0.35f, 0.72f, 0.45f), 12, RoulettePrizeKind.Objeto,
+                    "Te dan {0}.", objeto: pocion, cantidad: 2, icono: Icono("item_potion")),
             Casilla("Descarga", new Color(0.55f, 0.35f, 0.75f), 10, RoulettePrizeKind.DanioAlEquipo,
-                    "Salta una chispa de la mesa: {0}.", monto: 25, icono: Icono("heart")),
-            Casilla("Premio grande", new Color(0.98f, 0.55f, 0.15f), 6, RoulettePrizeKind.Dinero,
-                    "Premio grande! {0}.", monto: 250, icono: Icono("star")),
+                    "Salta una chispa de la mesa: {0}.", monto: 25, icono: Icono("icono_heart")),
+            Casilla("Premiazo", new Color(0.98f, 0.55f, 0.15f), 6, RoulettePrizeKind.Dinero,
+                    "Premio grande! {0}.", monto: 250, icono: Icono("icono_star")),
             Casilla("Manotazo", new Color(0.55f, 0.30f, 0.25f), 4, RoulettePrizeKind.PerderObjeto,
                     "Alguien te saca {0} de la mochila.",
                     icono: CasinoUiKit.Importar("Assets/Graphics/Icons/menuBag.png")),
-            Objetivo("Pokemon", new Color(0.35f, 0.80f, 0.95f), 6, pikachu, 15,
-                     "Sale el premio gordo: {0}!", Icono("pikachu"))
+            Objetivo("Pikachu", new Color(0.35f, 0.80f, 0.95f), 6, pikachu, 15,
+                     "Sale el premio gordo: {0}!", Icono("poken_pikachu"))
         };
 
         if (nueva) AssetDatabase.CreateAsset(def, path);
@@ -239,7 +238,7 @@ public static class CasinoPrefabBuilder
             new Vector2(0f, -10f), new Vector2(420f, 340f));
         Image focoImg = MenuUiKit.AddImage(foco,
             CasinoUiKit.Importar("Assets/Graphics/Casino/foco.png"),
-            new Color(1f, 1f, 0.92f, 0.16f));
+            new Color(1f, 1f, 0.92f, 0.10f));
         focoImg.raycastTarget = false;
 
         // Titulo y saldo sobre chapas, no flotando en el pano.
@@ -259,58 +258,53 @@ public static class CasinoPrefabBuilder
         MenuUiKit.Box(saldo.gameObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
             Vector2.zero, new Vector2(108f, 22f));
 
-        // ---- la rueda, grande y al medio ----
-        const float ladoRueda = 250f;
+        // ---- la rueda de premios ----
+        //
+        // Se arma apilando las piezas de Assets/Premios. Todas comparten el
+        // mismo lienzo de 1024x1024, asi que van todas al MISMO rectangulo y
+        // calzan solas: patas, aro de madera, sectores, luces, buje.
+        const float ladoRueda = 268f;
 
         GameObject ruedaRaiz = MenuUiKit.Node("Ruleta", panel.transform);
         MenuUiKit.Box(ruedaRaiz, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
-            new Vector2(0f, -28f), new Vector2(ladoRueda, ladoRueda));
+            new Vector2(0f, -16f), new Vector2(ladoRueda, ladoRueda));
 
-        GameObject sombra = MenuUiKit.Node("Sombra", ruedaRaiz.transform);
-        MenuUiKit.Box(sombra, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            new Vector2(0f, -10f), new Vector2(ladoRueda * 1.24f, ladoRueda * 1.2f));
-        Image sombraImg = MenuUiKit.AddImage(sombra,
-            CasinoUiKit.Importar("Assets/Graphics/Casino/sombra.png"),
-            new Color(0f, 0f, 0f, 0.45f));
-        sombraImg.raycastTarget = false;
+        Image PiezaDeRueda(string nombre, string archivo)
+        {
+            GameObject go = MenuUiKit.Node(nombre, ruedaRaiz.transform);
+            MenuUiKit.Full(go);
+            Image img = MenuUiKit.AddImage(go,
+                CasinoUiKit.Importar($"Assets/Premios/{archivo}.png"), Color.white);
+            img.raycastTarget = false;
+            return img;
+        }
 
-        GameObject aro = MenuUiKit.Node("Aro", ruedaRaiz.transform);
-        MenuUiKit.Box(aro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            // Bien mas grande que las casillas: si no, el aro de madera queda
-            // tapado por ellas y no se ve el borde de la ruleta.
-            Vector2.zero, new Vector2(ladoRueda * 1.18f, ladoRueda * 1.15f));
-        Image aroImg = MenuUiKit.AddImage(aro, CasinoUiKit.Aro(), Color.white);
-        aroImg.raycastTarget = false;
+        PiezaDeRueda("Patas", "Legs_Stand");
+        PiezaDeRueda("Madera", "Base_Wheel_Wood");
 
-        GameObject giratorio = MenuUiKit.Node("Rueda", ruedaRaiz.transform);
-        MenuUiKit.Box(giratorio, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(ladoRueda, ladoRueda));
+        // Sectores y contenido giran; el resto queda quieto.
+        Image sectores = PiezaDeRueda("Sectores", "Wheel_Sectors_Base");
+        GameObject contenido = MenuUiKit.Node("Premios", ruedaRaiz.transform);
+        MenuUiKit.Full(contenido);
 
-        // Disco de la ruleta del repo con el aro de numeros vaciado: por el
-        // hueco se ven nuestras casillas con sus simbolos.
-        // El disco NO ocupa toda la rueda: cuanto mas chico, mas ancho el aro
-        // donde van los premios, que es lo que el jugador mira.
-        GameObject disco = MenuUiKit.Node("Disco", giratorio.transform);
-        MenuUiKit.Box(disco, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(ladoRueda * 0.72f, ladoRueda * 0.72f));
-        Image discoImg = MenuUiKit.AddImage(disco,
-            CasinoUiKit.Importar("Assets/Graphics/Casino/ruleta_disco.png"), Color.white);
-        discoImg.type = Image.Type.Simple;
-        discoImg.preserveAspect = true;
-        discoImg.raycastTarget = false;
+        Image lucesApagadas = PiezaDeRueda("LucesApagadas", "Bulbs_Off");
+        Image lucesEncendidas = PiezaDeRueda("LucesEncendidas", "Bulbs_On");
+        PiezaDeRueda("Buje", "Center_Hub");
 
+        // La aguja apunta hacia abajo desde arriba de la rueda.
         GameObject aguja = MenuUiKit.Node("Aguja", ruedaRaiz.transform);
-        MenuUiKit.Box(aguja, new Vector2(0.5f, 1f), new Vector2(0.5f, 0.5f),
-            new Vector2(0f, 10f), new Vector2(28f, 28f));
-        Image puntero = MenuUiKit.AddImage(aguja, TrianguloBlanco(), MenuUiKit.Gold);
+        MenuUiKit.Box(aguja, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+            new Vector2(0f, 22f), new Vector2(38f, 82f));
+        Image puntero = MenuUiKit.AddImage(aguja,
+            CasinoUiKit.Importar("Assets/Graphics/Casino/aguja_premios.png"), Color.white);
         puntero.raycastTarget = false;
 
         var widget = ruedaRaiz.AddComponent<RouletteWheelWidget>();
-        MenuUiKit.SetField(widget, "circulo", CirculoBlanco());
-        MenuUiKit.SetField(widget, "rueda", giratorio.GetComponent<RectTransform>());
-        MenuUiKit.SetField(widget, "disco", disco.GetComponent<RectTransform>());
-        MenuUiKit.SetField(widget, "tamanioDelSimbolo", new Vector2(40f, 40f));
-        MenuUiKit.SetField(widget, "radioDelSimbolo", 0.36f);
+        MenuUiKit.SetField(widget, "sectores", sectores.GetComponent<RectTransform>());
+        MenuUiKit.SetField(widget, "contenido", contenido.GetComponent<RectTransform>());
+        MenuUiKit.SetField(widget, "lucesApagadas", lucesApagadas);
+        MenuUiKit.SetField(widget, "lucesEncendidas", lucesEncendidas);
+        MenuUiKit.SetField(widget, "fuente", MenuUiKit.PixelFont);
 
         // ---- la ficha de la apuesta, abajo a la izquierda ----
         GameObject ficha = MenuUiKit.Node("Ficha", panel.transform);

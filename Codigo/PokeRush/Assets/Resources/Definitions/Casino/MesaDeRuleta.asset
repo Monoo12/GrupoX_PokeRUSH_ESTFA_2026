@@ -51,9 +51,9 @@ MonoBehaviour:
     nivel: 15
     cumpleObjetivo: 0
     mensaje: La casa se cobra {0}.
-  - nombre: Objeto
+  - nombre: Pocion
     color: {r: 0.35, g: 0.72, b: 0.45, a: 1}
-    icono: {fileID: 21300000, guid: 36af5504ad00bf9439ab7c4d093f521c, type: 3}
+    icono: {fileID: 21300000, guid: e3c49544874c31c45af1713b7bd91ae9, type: 3}
     peso: 12
     tipo: 2
     monto: 0
@@ -75,7 +75,7 @@ MonoBehaviour:
     nivel: 15
     cumpleObjetivo: 0
     mensaje: 'Salta una chispa de la mesa: {0}.'
-  - nombre: Premio grande
+  - nombre: Premiazo
     color: {r: 0.98, g: 0.55, b: 0.15, a: 1}
     icono: {fileID: 21300000, guid: 3eebd60c4637c964cb5cf89f3670c56b, type: 3}
     peso: 6
@@ -99,9 +99,9 @@ MonoBehaviour:
     nivel: 15
     cumpleObjetivo: 0
     mensaje: Alguien te saca {0} de la mochila.
-  - nombre: Pokemon
+  - nombre: Pikachu
     color: {r: 0.35, g: 0.8, b: 0.95, a: 1}
-    icono: {fileID: 21300000, guid: 00d500e44996a504aa171ff846753186, type: 3}
+    icono: {fileID: 21300000, guid: aafb29e16228d0142b830a0313376570, type: 3}
     peso: 6
     tipo: 3
     monto: 100
@@ -112,6 +112,6 @@ MonoBehaviour:
     cumpleObjetivo: 1
     mensaje: 'Sale el premio gordo: {0}!'
   flagObjetivo: 20
-  casillas: 16
+  casillas: 12
   duracionDelGiro: 2.5
   vueltas: 4

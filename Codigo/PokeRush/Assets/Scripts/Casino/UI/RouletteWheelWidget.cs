@@ -2,81 +2,174 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// La rueda de la ruleta.
+// La rueda de premios del casino.
 //
-// Son casillas TODAS IGUALES, como una ruleta de verdad, no porciones de
-// distinto tamanio: la rueda no es un grafico de probabilidades. Lo que hace que
-// un premio salga mas seguido es cuantas casillas ocupa, igual que en una ruleta
-// donde un numero esta repetido: el premio comun aparece en varias casillas y el
-// raro en una sola. Asi se lee de un vistazo sin que diga ningun porcentaje.
+// Se arma con las piezas de Assets/Premios: el aro de madera, los sectores de
+// colores, los dos aros de luces (apagadas y encendidas), el buje central, la
+// aguja y las patas. El dibujo de los sectores son DOCE casillas de 30 grados
+// centradas en el tope, asi que la rueda tiene doce lugares y cada premio ocupa
+// tantos como pesa: el comun aparece en dos o tres y el raro en uno solo. Por
+// eso la rueda no necesita decir ningun porcentaje.
 //
-// En cada casilla va el SIMBOLO del premio, no un numero.
+// En cada lugar van el bicho (o el objeto), su nombre y lo que da.
 public class RouletteWheelWidget : MonoBehaviour
 {
-    [Tooltip("Circulo blanco: cada casilla es este sprite con relleno radial.")]
-    [SerializeField] private Sprite circulo;
-    [Tooltip("Contenedor que gira. Las casillas y los simbolos se crean adentro.")]
-    [SerializeField] private RectTransform rueda;
-    [Tooltip("El disco de la ruleta (centro verde y filo), encima de las casillas. " +
-             "Tiene el aro vaciado para que se vean los colores de abajo.")]
-    [SerializeField] private RectTransform disco;
+    [Header("Piezas de la rueda")]
+    [Tooltip("Aro de sectores de colores. Es lo que gira.")]
+    [SerializeField] private RectTransform sectores;
+    [Tooltip("Contenedor de los premios. Gira junto con los sectores.")]
+    [SerializeField] private RectTransform contenido;
+    [Tooltip("Aro de luces apagadas.")]
+    [SerializeField] private Image lucesApagadas;
+    [Tooltip("Aro de luces encendidas. Parpadea encima del otro.")]
+    [SerializeField] private Image lucesEncendidas;
 
-    [Header("Medidas del aro")]
-    [Tooltip("A que altura del radio va el simbolo, en fraccion del alto de la rueda.")]
-    [Range(0.4f, 0.95f)] [SerializeField] private float radioDelSimbolo = 0.38f;
-    [SerializeField] private Vector2 tamanioDelSimbolo = new Vector2(26f, 26f);
+    [Header("Medidas (en fraccion del alto de la rueda)")]
+    [Tooltip("Altura a la que va el nombre del premio, cerca del borde.")]
+    [Range(0.1f, 0.5f)] [SerializeField] private float radioDelNombre = 0.315f;
+    [Tooltip("Altura a la que va el bicho o el objeto.")]
+    [Range(0.1f, 0.5f)] [SerializeField] private float radioDelIcono = 0.242f;
+    // El buje central del dibujo tapa hasta el 0,15 del alto: lo que se ponga
+    // mas adentro no se ve.
+    [Tooltip("Altura a la que va lo que da el premio, apenas afuera del buje.")]
+    [Range(0.05f, 0.4f)] [SerializeField] private float radioDelPremio = 0.178f;
+    [SerializeField] private Vector2 tamanioDelIcono = new Vector2(40f, 40f);
 
-    // Que premio le toca a cada casilla.
+    [Header("Luces")]
+    [Tooltip("Cada cuanto parpadea el aro de luces, en segundos.")]
+    [Min(0.05f)] [SerializeField] private float parpadeo = 0.4f;
+
+    [Header("Tipografia")]
+    [SerializeField] private Font fuente;
+    [SerializeField] private int cuerpoDelNombre = 11;
+    [SerializeField] private int cuerpoDelPremio = 10;
+
+    // Que premio le toca a cada casilla, y al reves.
     private readonly List<int> _premioPorCasilla = new List<int>();
-    // Y al reves: en que casillas esta cada premio.
     private readonly Dictionary<int, List<int>> _casillasPorPremio = new Dictionary<int, List<int>>();
 
+    private float _tiempoDeLuces;
+
     public int Casillas => _premioPorCasilla.Count;
+
+    // Las casillas dibujadas en el arte: doce de treinta grados.
+    public const int CasillasDelDibujo = 12;
+
+    private void Update()
+    {
+        if (lucesEncendidas == null) return;
+
+        _tiempoDeLuces += Time.unscaledDeltaTime;
+        if (_tiempoDeLuces < parpadeo) return;
+
+        _tiempoDeLuces = 0f;
+        lucesEncendidas.enabled = !lucesEncendidas.enabled;
+    }
 
     public void Construir(RouletteTableDefinition mesa)
     {
         Limpiar();
-        if (mesa == null || mesa.premios == null || rueda == null) return;
+        if (mesa == null || mesa.premios == null || contenido == null) return;
 
         Repartir(mesa);
         if (_premioPorCasilla.Count == 0) return;
 
-        int total = _premioPorCasilla.Count;
-        float porcion = 1f / total;
+        float paso = 360f / _premioPorCasilla.Count;
+        float alto = contenido.rect.height;
 
-        for (int i = 0; i < total; i++)
+        for (int i = 0; i < _premioPorCasilla.Count; i++)
         {
             RoulettePrize premio = mesa.premios[_premioPorCasilla[i]];
+            // Centro de la casilla: el sector 0 del dibujo esta centrado arriba.
+            float grados = i * paso;
 
-            var go = new GameObject($"Casilla_{i:00}", typeof(RectTransform));
-            var rt = (RectTransform)go.transform;
-            rt.SetParent(rueda, false);
-            rt.anchorMin = Vector2.zero;
-            rt.anchorMax = Vector2.one;
-            rt.offsetMin = Vector2.zero;
-            rt.offsetMax = Vector2.zero;
-            rt.localEulerAngles = new Vector3(0f, 0f, -i * porcion * 360f);
+            Poner(Nombre(premio), grados, radioDelNombre * alto, cuerpoDelNombre,
+                  new Color(1f, 1f, 1f, 0.95f), $"Nombre_{i:00}");
 
-            var img = go.AddComponent<Image>();
-            img.sprite = circulo;
-            img.color = premio.color;
-            img.type = Image.Type.Filled;
-            img.fillMethod = Image.FillMethod.Radial360;
-            img.fillOrigin = (int)Image.Origin360.Top;
-            img.fillClockwise = true;
-            img.fillAmount = porcion;
-            img.raycastTarget = false;
+            PonerIcono(premio, grados, radioDelIcono * alto, $"Icono_{i:00}");
 
-            CrearSimbolo(premio, i, porcion);
+            Poner(Detalle(premio), grados, radioDelPremio * alto, cuerpoDelPremio,
+                  new Color(1f, 0.95f, 0.7f, 0.95f), $"Detalle_{i:00}");
         }
-
-        // El disco (el centro de la ruleta) va ADELANTE de todo: tapa el vertice
-        // donde se juntan las casillas y deja ver solo el aro con los simbolos.
-        if (disco != null) disco.SetAsLastSibling();
     }
 
+    // ---------- contenido de cada casilla ----------
+
+    private void Poner(string texto, float grados, float radio, int cuerpo,
+                       Color color, string nombreDelObjeto)
+    {
+        if (string.IsNullOrEmpty(texto)) return;
+
+        var go = new GameObject(nombreDelObjeto, typeof(RectTransform));
+        var rt = (RectTransform)go.transform;
+        Colocar(rt, grados, radio, new Vector2(78f, 18f));
+
+        var t = go.AddComponent<Text>();
+        t.text = texto;
+        t.font = fuente != null ? fuente : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        t.fontSize = cuerpo;
+        t.alignment = TextAnchor.MiddleCenter;
+        t.color = color;
+        t.horizontalOverflow = HorizontalWrapMode.Overflow;
+        t.verticalOverflow = VerticalWrapMode.Overflow;
+        t.raycastTarget = false;
+
+        var sombra = go.AddComponent<Outline>();
+        sombra.effectColor = new Color(0f, 0f, 0f, 0.85f);
+        sombra.effectDistance = new Vector2(1f, -1f);
+    }
+
+    private void PonerIcono(RoulettePrize premio, float grados, float radio, string nombreDelObjeto)
+    {
+        if (premio.icono == null) return;
+
+        var go = new GameObject(nombreDelObjeto, typeof(RectTransform));
+        var rt = (RectTransform)go.transform;
+        Colocar(rt, grados, radio, tamanioDelIcono);
+
+        var img = go.AddComponent<Image>();
+        img.sprite = premio.icono;
+        img.preserveAspect = true;
+        img.raycastTarget = false;
+    }
+
+    // Cada cosa se acuesta sobre su casilla: girada hacia afuera, como los
+    // carteles de una rueda de feria.
+    private void Colocar(RectTransform rt, float grados, float radio, Vector2 tamanio)
+    {
+        rt.SetParent(contenido, false);
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = tamanio;
+
+        float radianes = grados * Mathf.Deg2Rad;
+        rt.anchoredPosition = new Vector2(Mathf.Sin(radianes) * radio,
+                                          Mathf.Cos(radianes) * radio);
+        rt.localEulerAngles = new Vector3(0f, 0f, -grados);
+    }
+
+    private static string Nombre(RoulettePrize premio)
+        => premio.nombre != null ? premio.nombre.ToUpperInvariant() : "";
+
+    // Lo que da, en dos o tres caracteres: es la linea chica de adentro.
+    private static string Detalle(RoulettePrize premio)
+    {
+        switch (premio.tipo)
+        {
+            case RoulettePrizeKind.Dinero: return "+" + premio.monto;
+            case RoulettePrizeKind.PerderDinero: return "-" + premio.monto;
+            case RoulettePrizeKind.Objeto: return premio.cantidad > 1 ? "x" + premio.cantidad : "";
+            case RoulettePrizeKind.Poken: return "Nv" + premio.nivel;
+            case RoulettePrizeKind.DanioAlEquipo: return "-" + premio.monto + "% PS";
+            case RoulettePrizeKind.PerderObjeto: return "-1";
+            default: return "";
+        }
+    }
+
+    // ---------- reparto de casillas ----------
+
     // Un premio ocupa tantas casillas como pesa, con un minimo de una: si pesa
-    // pero no entra en ninguna casilla, nunca se lo veria salir.
+    // pero no entra en ninguna, nunca se lo veria salir.
     private void Repartir(RouletteTableDefinition mesa)
     {
         var conPeso = new List<int>();
@@ -91,9 +184,15 @@ public class RouletteWheelWidget : MonoBehaviour
 
         if (conPeso.Count == 0 || pesoTotal <= 0) return;
 
-        int casillas = Mathf.Max(mesa.casillas, conPeso.Count);
+        // Las casillas las manda el DIBUJO: son doce sectores pintados. Pedir
+        // otra cantidad dejaria los premios corridos respecto de los colores.
+        int casillas = CasillasDelDibujo;
+        if (conPeso.Count > casillas)
+        {
+            Debug.LogWarning($"[Ruleta] La mesa tiene {conPeso.Count} premios y la rueda " +
+                             $"dibujada solo {casillas} casillas: sobran premios.");
+        }
 
-        // Una para cada uno, y el resto por peso (resto mayor).
         var cantidad = new Dictionary<int, int>();
         foreach (int i in conPeso) cantidad[i] = 1;
 
@@ -113,12 +212,12 @@ public class RouletteWheelWidget : MonoBehaviour
             }
 
             sobrantes.Sort((a, b) => b.Value.CompareTo(a.Value));
-            for (int k = 0; k < restantes - repartidas; k++)
+            for (int k = 0; k < restantes - repartidas && sobrantes.Count > 0; k++)
                 cantidad[sobrantes[k % sobrantes.Count].Key]++;
         }
 
-        // Se intercalan en vez de quedar todas juntas: una ruleta con un bloque
-        // gigante del mismo color de un lado se ve mal y se siente amanada.
+        // Intercaladas: dos casillas iguales pegadas se leen como una sola
+        // porcion grande y la rueda parece amanada.
         var pendientes = new Dictionary<int, int>(cantidad);
         while (_premioPorCasilla.Count < casillas)
         {
@@ -143,60 +242,10 @@ public class RouletteWheelWidget : MonoBehaviour
         }
     }
 
-    private void CrearSimbolo(RoulettePrize premio, int casilla, float porcion)
-    {
-        if (premio.icono == null) return;
-
-        var go = new GameObject($"Simbolo_{casilla:00}", typeof(RectTransform));
-        var rt = (RectTransform)go.transform;
-        rt.SetParent(rueda, false);
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.pivot = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta = tamanioDelSimbolo;
-
-        // Centro de su casilla, medido desde arriba y en sentido horario.
-        float grados = (casilla + 0.5f) * porcion * 360f;
-        float radianes = grados * Mathf.Deg2Rad;
-        float radio = rueda.rect.height * radioDelSimbolo;
-
-        rt.anchoredPosition = new Vector2(Mathf.Sin(radianes) * radio,
-                                          Mathf.Cos(radianes) * radio);
-        // Apunta hacia afuera, como los numeros de una ruleta.
-        rt.localEulerAngles = new Vector3(0f, 0f, -grados);
-
-        // Chapita oscura atras: sin ella, un simbolo claro sobre una casilla
-        // clara (la estrella sobre el amarillo) directamente no se ve.
-        if (circulo != null)
-        {
-            var fondo = new GameObject("Fondo", typeof(RectTransform));
-            var fondoRt = (RectTransform)fondo.transform;
-            fondoRt.SetParent(rt, false);
-            fondoRt.anchorMin = fondoRt.anchorMax = new Vector2(0.5f, 0.5f);
-            fondoRt.pivot = new Vector2(0.5f, 0.5f);
-            fondoRt.sizeDelta = tamanioDelSimbolo + new Vector2(6f, 6f);
-
-            var fondoImg = fondo.AddComponent<Image>();
-            fondoImg.sprite = circulo;
-            fondoImg.color = new Color(0f, 0f, 0f, 0.35f);
-            fondoImg.raycastTarget = false;
-        }
-
-        var icono = new GameObject("Icono", typeof(RectTransform));
-        var iconoRt = (RectTransform)icono.transform;
-        iconoRt.SetParent(rt, false);
-        iconoRt.anchorMin = iconoRt.anchorMax = new Vector2(0.5f, 0.5f);
-        iconoRt.pivot = new Vector2(0.5f, 0.5f);
-        iconoRt.sizeDelta = tamanioDelSimbolo;
-
-        var img = icono.AddComponent<Image>();
-        img.sprite = premio.icono;
-        img.preserveAspect = true;
-        img.raycastTarget = false;
-    }
+    // ---------- giro ----------
 
     // Una casilla al azar de las que muestran ese premio. La probabilidad ya la
-    // decidio el motor: esto solo elige donde frenar para que lo que se ve
-    // coincida con lo que salio.
+    // decidio el motor: esto solo elige donde frenar.
     public int CasillaDe(int premio, IBattleRng rng)
     {
         if (!_casillasPorPremio.TryGetValue(premio, out var lista) || lista.Count == 0)
@@ -204,33 +253,30 @@ public class RouletteWheelWidget : MonoBehaviour
         return lista[rng != null ? rng.Range(0, lista.Count) : 0];
     }
 
-    // Cuanto hay que girar para dejar esa casilla debajo de la aguja.
     public float AnguloDeCasilla(int casilla)
     {
         if (casilla < 0 || _premioPorCasilla.Count == 0) return 0f;
-        return (casilla + 0.5f) / _premioPorCasilla.Count * 360f;
+        return casilla * (360f / _premioPorCasilla.Count);
     }
 
     public void SetAngulo(float grados)
     {
-        if (rueda != null) rueda.localEulerAngles = new Vector3(0f, 0f, grados);
+        var giro = new Vector3(0f, 0f, grados);
+        if (sectores != null) sectores.localEulerAngles = giro;
+        if (contenido != null) contenido.localEulerAngles = giro;
     }
 
     private void Limpiar()
     {
         _premioPorCasilla.Clear();
         _casillasPorPremio.Clear();
-        if (rueda == null) return;
+        if (contenido == null) return;
 
-        for (int i = rueda.childCount - 1; i >= 0; i--)
+        for (int i = contenido.childCount - 1; i >= 0; i--)
         {
-            Transform hijo = rueda.GetChild(i);
-            if (disco != null && hijo == disco) continue;
-
+            Transform hijo = contenido.GetChild(i);
             // Se desprende ANTES de destruir: Destroy no borra hasta el final
-            // del frame, y mientras tanto los viejos siguen contando como hijos.
-            // Con eso, el orden de dibujo quedaba mezclado y el disco terminaba
-            // en medio de las casillas, tapando media rueda.
+            // del frame y mientras tanto los viejos siguen contando como hijos.
             hijo.SetParent(null, false);
             Destroy(hijo.gameObject);
         }
