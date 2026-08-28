@@ -24,8 +24,12 @@ public enum RoulettePrizeKind
 public class RoulettePrize
 {
     public string nombre = "Premio";
-    [Tooltip("Color de la porcion en la rueda.")]
+    [Tooltip("Color de la casilla en la rueda.")]
     public Color color = new Color(0.30f, 0.34f, 0.44f, 1f);
+
+    [Tooltip("Simbolo que se dibuja en la casilla y en el cartel del resultado. " +
+             "Es lo que el jugador ve en la rueda: no hay numeros.")]
+    public Sprite icono;
 
     [Tooltip("Cuanto sale esta casilla comparada con las demas. 0 = nunca.")]
     [Min(0)] public int peso = 10;
@@ -69,6 +73,10 @@ public class RouletteTableDefinition : ScriptableObject
     public StoryFlag flagObjetivo = StoryFlag.Casino_Ruleta_ObjetivoCumplido;
 
     [Header("Presentacion")]
+    [Tooltip("Casillas de la rueda, TODAS DEL MISMO TAMANIO. Cada premio ocupa " +
+             "tantas como pesa (minimo una), como un numero repetido en una " +
+             "ruleta de verdad: por eso la rueda no necesita decir porcentajes.")]
+    [Min(4)] public int casillas = 16;
     [Min(0.5f)] public float duracionDelGiro = 2.5f;
     [Tooltip("Vueltas enteras antes de frenar.")]
     [Min(1)] public int vueltas = 4;

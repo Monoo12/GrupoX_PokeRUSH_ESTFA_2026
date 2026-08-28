@@ -17,6 +17,7 @@ MonoBehaviour:
   premios:
   - nombre: Nada
     color: {r: 0.28, g: 0.3, b: 0.36, a: 1}
+    icono: {fileID: 21300000, guid: 90dfb87d6241a52478b95e60c6bd946d, type: 3}
     peso: 24
     tipo: 0
     monto: 0
@@ -28,6 +29,7 @@ MonoBehaviour:
     mensaje: La bolita cae en el cero. Nada.
   - nombre: Monedas
     color: {r: 0.95, g: 0.78, b: 0.25, a: 1}
+    icono: {fileID: -971266358, guid: fef507f534113f247b78ea0de1a6f350, type: 3}
     peso: 24
     tipo: 1
     monto: 60
@@ -39,6 +41,7 @@ MonoBehaviour:
     mensaje: Pagan {0}.
   - nombre: Multa
     color: {r: 0.75, g: 0.28, b: 0.3, a: 1}
+    icono: {fileID: 21300000, guid: 6965a695bca85f74c9535b2d875ac344, type: 3}
     peso: 14
     tipo: 4
     monto: 80
@@ -50,6 +53,7 @@ MonoBehaviour:
     mensaje: La casa se cobra {0}.
   - nombre: Objeto
     color: {r: 0.35, g: 0.72, b: 0.45, a: 1}
+    icono: {fileID: 21300000, guid: 36af5504ad00bf9439ab7c4d093f521c, type: 3}
     peso: 12
     tipo: 2
     monto: 0
@@ -61,6 +65,7 @@ MonoBehaviour:
     mensaje: Te dan {0}.
   - nombre: Descarga
     color: {r: 0.55, g: 0.35, b: 0.75, a: 1}
+    icono: {fileID: 21300000, guid: ab6719c0185bc8146b1120eb444cd802, type: 3}
     peso: 10
     tipo: 6
     monto: 25
@@ -72,6 +77,7 @@ MonoBehaviour:
     mensaje: 'Salta una chispa de la mesa: {0}.'
   - nombre: Premio grande
     color: {r: 0.98, g: 0.55, b: 0.15, a: 1}
+    icono: {fileID: 21300000, guid: 3eebd60c4637c964cb5cf89f3670c56b, type: 3}
     peso: 6
     tipo: 1
     monto: 250
@@ -83,6 +89,7 @@ MonoBehaviour:
     mensaje: Premio grande! {0}.
   - nombre: Manotazo
     color: {r: 0.55, g: 0.3, b: 0.25, a: 1}
+    icono: {fileID: 21300000, guid: 494dc4788bf2985498db54a0ca1ab206, type: 3}
     peso: 4
     tipo: 5
     monto: 0
@@ -94,6 +101,7 @@ MonoBehaviour:
     mensaje: Alguien te saca {0} de la mochila.
   - nombre: Pokemon
     color: {r: 0.35, g: 0.8, b: 0.95, a: 1}
+    icono: {fileID: 21300000, guid: 00d500e44996a504aa171ff846753186, type: 3}
     peso: 6
     tipo: 3
     monto: 100
@@ -104,5 +112,6 @@ MonoBehaviour:
     cumpleObjetivo: 1
     mensaje: 'Sale el premio gordo: {0}!'
   flagObjetivo: 20
+  casillas: 16
   duracionDelGiro: 2.5
   vueltas: 4

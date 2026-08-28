@@ -1,4 +1,3 @@
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +14,10 @@ public class RouletteScreen : MenuScreen
     [SerializeField] private Text saldoText;
     [SerializeField] private Text costoText;
     [SerializeField] private Text mensajeText;
-    [Tooltip("Lista de casillas con su probabilidad.")]
-    [SerializeField] private Text tablaText;
+    [Tooltip("Nombre del premio que acaba de salir.")]
+    [SerializeField] private Text premioText;
+    [Tooltip("Simbolo del premio que acaba de salir.")]
+    [SerializeField] private Image premioIcono;
 
     [Header("Rueda")]
     [SerializeField] private RouletteWheelWidget rueda;
@@ -74,7 +75,7 @@ public class RouletteScreen : MenuScreen
         }
 
         RefrescarTextos();
-        RefrescarTabla();
+        MostrarPremio(null);
         Mensaje("Apoya la ficha y gira.");
     }
 
@@ -144,8 +145,12 @@ public class RouletteScreen : MenuScreen
         _fase = Fase.Girando;
         _tiempo = 0f;
         _anguloInicial = 0f;
-        // Varias vueltas enteras y despues la casilla que salio.
-        _anguloFinal = _mesa.vueltas * 360f + (rueda != null ? rueda.AnguloDe(_tirada.PremioIndex) : 0f);
+
+        // El motor ya decidio QUE premio salio. Aca solo se elige en cual de sus
+        // casillas frenar, para que lo que se ve coincida con lo que toco.
+        int casilla = rueda != null ? rueda.CasillaDe(_tirada.PremioIndex, _rng) : -1;
+        _anguloFinal = _mesa.vueltas * 360f +
+                       (rueda != null ? rueda.AnguloDeCasilla(casilla) : 0f);
 
         Sonar(sonidoGiro);
         Mensaje("Girando...");
@@ -179,6 +184,7 @@ public class RouletteScreen : MenuScreen
 
         if (aplicado.Aplicado) Sonar(sonidoPremio);
 
+        MostrarPremio(_tirada.Premio);
         Mensaje(aplicado.Mensaje);
         RefrescarTextos();
     }
@@ -192,24 +198,16 @@ public class RouletteScreen : MenuScreen
         if (costoText != null && _mesa != null) costoText.text = $"GIRO  {_mesa.costoPorGiro}";
     }
 
-    // La tabla de casillas con su probabilidad real: es la forma honesta de
-    // mostrar el riesgo, y sale sola de los pesos configurados.
-    private void RefrescarTabla()
+    // El cartel del resultado: el simbolo de la casilla que salio y su nombre.
+    // No hay tabla de probabilidades a proposito: la rueda ya cuenta la historia
+    // con cuantas casillas ocupa cada premio.
+    private void MostrarPremio(RoulettePrize premio)
     {
-        if (tablaText == null || _mesa == null || _motor == null) return;
+        if (premioText != null) premioText.text = premio != null ? premio.nombre : "";
 
-        var sb = new StringBuilder();
-        for (int i = 0; i < _mesa.premios.Length; i++)
-        {
-            RoulettePrize p = _mesa.premios[i];
-            if (p == null || p.peso <= 0) continue;
-
-            string color = ColorUtility.ToHtmlStringRGB(p.color);
-            sb.AppendLine($"<color=#{color}>#</color> {p.nombre}  {_motor.Probabilidad(i):P0}");
-        }
-
-        tablaText.supportRichText = true;
-        tablaText.text = sb.ToString();
+        if (premioIcono == null) return;
+        premioIcono.sprite = premio != null ? premio.icono : null;
+        premioIcono.enabled = premioIcono.sprite != null;
     }
 
     private void Mensaje(string texto)

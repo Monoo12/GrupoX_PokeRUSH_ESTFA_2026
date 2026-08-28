@@ -157,24 +157,32 @@ public static class CasinoPrefabBuilder
         var pikachu = AssetDatabase.LoadAssetAtPath<PokenDefinition>(
             "Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
 
+        // Cada casilla lleva un SIMBOLO, no un numero: el jugador mira la rueda
+        // y ve que puede tocarle.
+        Sprite Icono(string nombre) =>
+            CasinoUiKit.Importar($"Assets/Graphics/Casino/icono_{nombre}.png");
+
+        def.casillas = 16;
         def.premios = new[]
         {
             Casilla("Nada", new Color(0.28f, 0.30f, 0.36f), 24, RoulettePrizeKind.Nada,
-                    "La bolita cae en el cero. Nada."),
+                    "La bolita cae en el cero. Nada.", icono: Icono("x")),
             Casilla("Monedas", new Color(0.95f, 0.78f, 0.25f), 24, RoulettePrizeKind.Dinero,
-                    "Pagan {0}.", monto: 60),
+                    "Pagan {0}.", monto: 60, icono: CasinoUiKit.Ficha(5)),
             Casilla("Multa", new Color(0.75f, 0.28f, 0.30f), 14, RoulettePrizeKind.PerderDinero,
-                    "La casa se cobra {0}.", monto: 80),
+                    "La casa se cobra {0}.", monto: 80, icono: Icono("minus")),
             Casilla("Objeto", new Color(0.35f, 0.72f, 0.45f), 12, RoulettePrizeKind.Objeto,
-                    "Te dan {0}.", objeto: pocion, cantidad: 2),
+                    "Te dan {0}.", objeto: pocion, cantidad: 2,
+                    icono: CasinoUiKit.Importar("Assets/Graphics/Items/POTION.png")),
             Casilla("Descarga", new Color(0.55f, 0.35f, 0.75f), 10, RoulettePrizeKind.DanioAlEquipo,
-                    "Salta una chispa de la mesa: {0}.", monto: 25),
+                    "Salta una chispa de la mesa: {0}.", monto: 25, icono: Icono("heart")),
             Casilla("Premio grande", new Color(0.98f, 0.55f, 0.15f), 6, RoulettePrizeKind.Dinero,
-                    "Premio grande! {0}.", monto: 250),
+                    "Premio grande! {0}.", monto: 250, icono: Icono("star")),
             Casilla("Manotazo", new Color(0.55f, 0.30f, 0.25f), 4, RoulettePrizeKind.PerderObjeto,
-                    "Alguien te saca {0} de la mochila."),
+                    "Alguien te saca {0} de la mochila.",
+                    icono: CasinoUiKit.Importar("Assets/Graphics/Icons/menuBag.png")),
             Objetivo("Pokemon", new Color(0.35f, 0.80f, 0.95f), 6, pikachu, 15,
-                     "Sale el premio gordo: {0}!")
+                     "Sale el premio gordo: {0}!", Icono("pikachu"))
         };
 
         if (nueva) AssetDatabase.CreateAsset(def, path);
@@ -185,20 +193,22 @@ public static class CasinoPrefabBuilder
     private static RoulettePrize Casilla(string nombre, Color color, int peso,
                                          RoulettePrizeKind tipo, string mensaje,
                                          int monto = 0, HealItemDefinition objeto = null,
-                                         int cantidad = 1)
+                                         int cantidad = 1, Sprite icono = null)
         => new RoulettePrize
         {
             nombre = nombre, color = color, peso = peso, tipo = tipo,
-            mensaje = mensaje, monto = monto, objeto = objeto, cantidad = cantidad
+            mensaje = mensaje, monto = monto, objeto = objeto, cantidad = cantidad,
+            icono = icono
         };
 
     private static RoulettePrize Objetivo(string nombre, Color color, int peso,
-                                          PokenDefinition especie, int nivel, string mensaje)
+                                          PokenDefinition especie, int nivel, string mensaje,
+                                          Sprite icono)
         => new RoulettePrize
         {
             nombre = nombre, color = color, peso = peso,
             tipo = RoulettePrizeKind.Poken, poken = especie, nivel = nivel,
-            cumpleObjetivo = true, mensaje = mensaje
+            cumpleObjetivo = true, mensaje = mensaje, icono = icono
         };
 
     private static GameObject BuildRouletteScreen()
@@ -234,20 +244,24 @@ public static class CasinoPrefabBuilder
         // adentro y lo que asoma es el marco de la ruleta de verdad.
         GameObject aro = MenuUiKit.Node("Aro", ruedaRaiz.transform);
         MenuUiKit.Box(aro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(232f, 226f));
+            Vector2.zero, new Vector2(238f, 232f));
         Image aroImg = MenuUiKit.AddImage(aro, CasinoUiKit.Aro(), Color.white);
         aroImg.raycastTarget = false;
 
         GameObject giratorio = MenuUiKit.Node("Rueda", ruedaRaiz.transform);
         MenuUiKit.Box(giratorio, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(188f, 188f));
+            Vector2.zero, new Vector2(216f, 214f));
 
-        // Buje metalico: tapa el vertice donde se juntan todas las porciones.
-        GameObject centro = MenuUiKit.Node("Centro", giratorio.transform);
-        MenuUiKit.Box(centro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(56f, 56f));
-        Image tapa = MenuUiKit.AddImage(centro, CasinoUiKit.Centro(), Color.white);
-        tapa.raycastTarget = false;
+        // El disco de la ruleta del repo, con el aro de numeros VACIADO: queda
+        // el centro verde y el filo, y por el hueco se ven las casillas de
+        // colores con nuestros premios.
+        GameObject disco = MenuUiKit.Node("Disco", giratorio.transform);
+        MenuUiKit.Full(disco);
+        Image discoImg = MenuUiKit.AddImage(disco,
+            CasinoUiKit.Importar("Assets/Graphics/Casino/ruleta_disco.png"), Color.white);
+        discoImg.type = Image.Type.Simple;
+        discoImg.preserveAspect = true;
+        discoImg.raycastTarget = false;
 
         GameObject aguja = MenuUiKit.Node("Aguja", ruedaRaiz.transform);
         MenuUiKit.Box(aguja, new Vector2(0.5f, 1f), new Vector2(0.5f, 0.5f),
@@ -258,21 +272,29 @@ public static class CasinoPrefabBuilder
         var widget = ruedaRaiz.AddComponent<RouletteWheelWidget>();
         MenuUiKit.SetField(widget, "circulo", CirculoBlanco());
         MenuUiKit.SetField(widget, "rueda", giratorio.GetComponent<RectTransform>());
-        MenuUiKit.SetField(widget, "centro", centro.GetComponent<RectTransform>());
+        MenuUiKit.SetField(widget, "disco", disco.GetComponent<RectTransform>());
 
         Text saldo = MenuUiKit.Label("Saldo", panel.transform, Vector2.zero,
             new Vector2(120f, 22f), "$0", 16, TextAnchor.UpperRight, MenuUiKit.Ink);
         MenuUiKit.Box(saldo.gameObject, new Vector2(1f, 1f), new Vector2(1f, 1f),
             new Vector2(-16f, -12f), new Vector2(120f, 22f));
 
-        GameObject cajaTabla = CasinoUiKit.Cartel("CajaTabla", panel.transform,
+        // Cartel del resultado: el simbolo grande de lo que salio y su nombre.
+        GameObject cajaPremio = CasinoUiKit.Cartel("CajaPremio", panel.transform,
             new Vector2(244f, -38f), new Vector2(214f, 166f),
             new Color(0.05f, 0.12f, 0.09f, 0.92f));
-        Text tabla = MenuUiKit.Label("Tabla", cajaTabla.transform, Vector2.zero,
-            new Vector2(186f, 138f), "", 13, TextAnchor.UpperLeft, MenuUiKit.Ink);
-        MenuUiKit.Box(tabla.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(14f, -14f), new Vector2(186f, 138f));
-        tabla.lineSpacing = 1.15f;
+
+        GameObject iconoGrande = MenuUiKit.Node("PremioIcono", cajaPremio.transform);
+        MenuUiKit.Box(iconoGrande, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+            new Vector2(0f, -28f), new Vector2(72f, 72f));
+        Image premioIcono = MenuUiKit.AddImage(iconoGrande, null, Color.white);
+        premioIcono.preserveAspect = true;
+        premioIcono.enabled = false;
+
+        Text premioNombre = MenuUiKit.Label("PremioNombre", cajaPremio.transform, Vector2.zero,
+            new Vector2(190f, 24f), "", 16, TextAnchor.MiddleCenter, MenuUiKit.Gold);
+        MenuUiKit.Box(premioNombre.gameObject, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+            new Vector2(0f, -110f), new Vector2(190f, 24f));
 
         // Ficha de casino al lado del precio del giro: se lee de un vistazo que
         // eso es lo que se apuesta.
@@ -308,7 +330,8 @@ public static class CasinoPrefabBuilder
         MenuUiKit.SetField(screen, "saldoText", saldo);
         MenuUiKit.SetField(screen, "costoText", costo);
         MenuUiKit.SetField(screen, "mensajeText", mensaje);
-        MenuUiKit.SetField(screen, "tablaText", tabla);
+        MenuUiKit.SetField(screen, "premioText", premioNombre);
+        MenuUiKit.SetField(screen, "premioIcono", premioIcono);
         MenuUiKit.SetField(screen, "rueda", widget);
 
         root.SetActive(false);

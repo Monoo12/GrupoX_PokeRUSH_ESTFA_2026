@@ -24,9 +24,10 @@ public static class CasinoUiKit
     public const string CentroPath = "Assets/Graphics/Casino/ruleta_centro.png";
     public const string FichasPath = "Assets/Graphics/Casino/fichas.png";
 
-    // El marco mide 48x48 y su parte ornamentada ocupa 14 pixeles por lado: ese
-    // es el borde que Unity NO estira.
-    private const float BordeDelMarco = 14f;
+    // El marco mide 48x48. Se toman 16 pixeles por lado como borde que Unity NO
+    // estira: con 14 quedaba afuera la linea clara interior del dibujo, que al
+    // estirarse aparecia como una raya blanca arriba de cada cartel.
+    private const float BordeDelMarco = 16f;
 
     public static Sprite Marco()
     {
@@ -66,14 +67,22 @@ public static class CasinoUiKit
     // que es lo que mantiene los bordes limpios al escalar.
     public static Sprite Importar(string path)
     {
-        var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-        if (sprite != null) return sprite;
-
         var importer = AssetImporter.GetAtPath(path) as TextureImporter;
         if (importer == null)
         {
             Debug.LogWarning($"[CasinoUI] No encontre {path}.");
             return null;
+        }
+
+        // Se revisa el modo SIEMPRE, no solo cuando no hay sprite. Una textura
+        // que quedo en Multiple devuelve un sub-sprite ('archivo_1') en vez de la
+        // imagen entera, y lo que se dibuja es un pedazo suelto: es exactamente
+        // lo que le pasaba al disco de la ruleta.
+        if (importer.textureType == TextureImporterType.Sprite &&
+            importer.spriteImportMode == SpriteImportMode.Single)
+        {
+            Sprite listo = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            if (listo != null) return listo;
         }
 
         importer.textureType = TextureImporterType.Sprite;
@@ -159,10 +168,13 @@ public static class CasinoUiKit
         return fichas.ToArray();
     }
 
+    // Se compara contra el borde que queremos, no contra "cualquier borde": si
+    // no, cambiar la medida no vuelve a importar y el marco queda como estaba.
     private static bool EsNueveTajadas(string path)
     {
         var importer = AssetImporter.GetAtPath(path) as TextureImporter;
-        return importer != null && importer.spriteBorder.x > 0f;
+        return importer != null &&
+               Mathf.Approximately(importer.spriteBorder.x, BordeDelMarco);
     }
 
     // Panel con tapete y marco: la caja base de cualquier pantalla del casino.
