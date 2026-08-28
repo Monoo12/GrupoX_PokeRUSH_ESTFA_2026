@@ -211,6 +211,11 @@ public static class CasinoPrefabBuilder
             cumpleObjetivo = true, mensaje = mensaje, icono = icono
         };
 
+    // Pantalla de la ruleta.
+    //
+    // Una sola idea por zona, como una mesa de casino de verdad: la RUEDA grande
+    // en el centro, la barra de texto cruzando abajo, y la ficha con la apuesta a
+    // un costado. Sin columnas de cajitas: lo que el jugador mira es la rueda.
     private static GameObject BuildRouletteScreen()
     {
         GameObject root = new GameObject("RouletteScreen", typeof(RectTransform));
@@ -223,38 +228,42 @@ public static class CasinoPrefabBuilder
         MenuUiKit.Full(velo);
         MenuUiKit.AddImage(velo, null, new Color(0f, 0f, 0f, 0.72f));
 
-        // Tapete verde y marco dorado, los dos del pack: la sala se ve como una
-        // sala y no como un cuadrado de color.
+        // La mesa ocupa toda la pantalla: el marco dorado ES el borde del cuadro.
         GameObject exterior;
-        GameObject panel = CasinoUiKit.Panel("Panel", root.transform,
-            new Vector2(500f, 364f), out exterior);
+        GameObject panel = CasinoUiKit.Panel("Mesa", root.transform,
+            new Vector2(MenuUiKit.RefWidth, MenuUiKit.RefHeight), out exterior);
 
         Text titulo = MenuUiKit.Label("Titulo", panel.transform, Vector2.zero,
-            new Vector2(440f, 24f), "RULETA", 18, TextAnchor.UpperCenter, MenuUiKit.Gold);
-        MenuUiKit.Box(titulo.gameObject, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
-            new Vector2(0f, -10f), new Vector2(440f, 24f));
+            new Vector2(200f, 22f), "RULETA", 16, TextAnchor.MiddleLeft, MenuUiKit.Gold);
+        MenuUiKit.Box(titulo.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(8f, -6f), new Vector2(200f, 22f));
 
-        // La rueda ocupa la mitad izquierda del panel: la columna de texto
-        // arranca en x=248, asi que no se pisan.
+        Text saldo = MenuUiKit.Label("Saldo", panel.transform, Vector2.zero,
+            new Vector2(140f, 22f), "$0", 16, TextAnchor.MiddleRight, MenuUiKit.Ink);
+        MenuUiKit.Box(saldo.gameObject, new Vector2(1f, 1f), new Vector2(1f, 1f),
+            new Vector2(-8f, -6f), new Vector2(140f, 22f));
+
+        // ---- la rueda, grande y al medio ----
+        const float ladoRueda = 250f;
+
         GameObject ruedaRaiz = MenuUiKit.Node("Ruleta", panel.transform);
-        MenuUiKit.Box(ruedaRaiz, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f),
-            new Vector2(18f, -6f), new Vector2(216f, 216f));
+        MenuUiKit.Box(ruedaRaiz, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+            new Vector2(0f, -28f), new Vector2(ladoRueda, ladoRueda));
 
-        // Aro de madera con borde dorado, atras de todo: las porciones se dibujan
-        // adentro y lo que asoma es el marco de la ruleta de verdad.
         GameObject aro = MenuUiKit.Node("Aro", ruedaRaiz.transform);
         MenuUiKit.Box(aro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(238f, 232f));
+            // Bien mas grande que las casillas: si no, el aro de madera queda
+            // tapado por ellas y no se ve el borde de la ruleta.
+            Vector2.zero, new Vector2(ladoRueda * 1.18f, ladoRueda * 1.15f));
         Image aroImg = MenuUiKit.AddImage(aro, CasinoUiKit.Aro(), Color.white);
         aroImg.raycastTarget = false;
 
         GameObject giratorio = MenuUiKit.Node("Rueda", ruedaRaiz.transform);
         MenuUiKit.Box(giratorio, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(216f, 214f));
+            Vector2.zero, new Vector2(ladoRueda, ladoRueda));
 
-        // El disco de la ruleta del repo, con el aro de numeros VACIADO: queda
-        // el centro verde y el filo, y por el hueco se ven las casillas de
-        // colores con nuestros premios.
+        // Disco de la ruleta del repo con el aro de numeros vaciado: por el
+        // hueco se ven nuestras casillas con sus simbolos.
         GameObject disco = MenuUiKit.Node("Disco", giratorio.transform);
         MenuUiKit.Full(disco);
         Image discoImg = MenuUiKit.AddImage(disco,
@@ -265,7 +274,7 @@ public static class CasinoPrefabBuilder
 
         GameObject aguja = MenuUiKit.Node("Aguja", ruedaRaiz.transform);
         MenuUiKit.Box(aguja, new Vector2(0.5f, 1f), new Vector2(0.5f, 0.5f),
-            new Vector2(0f, 6f), new Vector2(24f, 24f));
+            new Vector2(0f, 10f), new Vector2(28f, 28f));
         Image puntero = MenuUiKit.AddImage(aguja, TrianguloBlanco(), MenuUiKit.Gold);
         puntero.raycastTarget = false;
 
@@ -273,64 +282,51 @@ public static class CasinoPrefabBuilder
         MenuUiKit.SetField(widget, "circulo", CirculoBlanco());
         MenuUiKit.SetField(widget, "rueda", giratorio.GetComponent<RectTransform>());
         MenuUiKit.SetField(widget, "disco", disco.GetComponent<RectTransform>());
+        MenuUiKit.SetField(widget, "tamanioDelSimbolo", new Vector2(30f, 30f));
 
-        Text saldo = MenuUiKit.Label("Saldo", panel.transform, Vector2.zero,
-            new Vector2(120f, 22f), "$0", 16, TextAnchor.UpperRight, MenuUiKit.Ink);
-        MenuUiKit.Box(saldo.gameObject, new Vector2(1f, 1f), new Vector2(1f, 1f),
-            new Vector2(-16f, -12f), new Vector2(120f, 22f));
-
-        // Cartel del resultado: el simbolo grande de lo que salio y su nombre.
-        GameObject cajaPremio = CasinoUiKit.Cartel("CajaPremio", panel.transform,
-            new Vector2(244f, -38f), new Vector2(214f, 166f),
-            new Color(0.05f, 0.12f, 0.09f, 0.92f));
-
-        GameObject iconoGrande = MenuUiKit.Node("PremioIcono", cajaPremio.transform);
-        MenuUiKit.Box(iconoGrande, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
-            new Vector2(0f, -28f), new Vector2(72f, 72f));
-        Image premioIcono = MenuUiKit.AddImage(iconoGrande, null, Color.white);
-        premioIcono.preserveAspect = true;
-        premioIcono.enabled = false;
-
-        Text premioNombre = MenuUiKit.Label("PremioNombre", cajaPremio.transform, Vector2.zero,
-            new Vector2(190f, 24f), "", 16, TextAnchor.MiddleCenter, MenuUiKit.Gold);
-        MenuUiKit.Box(premioNombre.gameObject, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
-            new Vector2(0f, -110f), new Vector2(190f, 24f));
-
-        // Ficha de casino al lado del precio del giro: se lee de un vistazo que
-        // eso es lo que se apuesta.
+        // ---- la ficha de la apuesta, abajo a la izquierda ----
         GameObject ficha = MenuUiKit.Node("Ficha", panel.transform);
-        MenuUiKit.Box(ficha, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(248f, -210f), new Vector2(26f, 26f));
+        MenuUiKit.Box(ficha, new Vector2(0f, 0f), new Vector2(0f, 0f),
+            new Vector2(12f, 12f), new Vector2(76f, 76f));
         Image fichaImg = MenuUiKit.AddImage(ficha, CasinoUiKit.Ficha(8), Color.white);
         fichaImg.raycastTarget = false;
 
-        Text costo = MenuUiKit.Label("Costo", panel.transform, Vector2.zero,
-            new Vector2(196f, 22f), "GIRO  50", 16, TextAnchor.MiddleLeft, MenuUiKit.Accent);
-        MenuUiKit.Box(costo.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(280f, -212f), new Vector2(168f, 22f));
+        // El numero va ENCIMA de la ficha: la ficha dice que es una apuesta y el
+        // numero cuanto, sin necesidad de escribir la palabra.
+        Text costo = MenuUiKit.Label("Costo", ficha.transform, Vector2.zero,
+            new Vector2(76f, 26f), "50", 20, TextAnchor.MiddleCenter, MenuUiKit.InkDark);
+        MenuUiKit.Box(costo.gameObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(76f, 26f));
 
-        GameObject cajaMensaje = CasinoUiKit.Cartel("CajaMensaje", panel.transform,
-            new Vector2(244f, -240f), new Vector2(214f, 72f),
-            new Color(0.05f, 0.12f, 0.09f, 0.92f));
-        Text mensaje = MenuUiKit.Label("Mensaje", cajaMensaje.transform, Vector2.zero,
-            new Vector2(186f, 44f), "", 14, TextAnchor.UpperLeft, MenuUiKit.Ink);
-        MenuUiKit.Box(mensaje.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(14f, -14f), new Vector2(186f, 44f));
+        // ---- la barra de texto, cruzando abajo ----
+        GameObject barra = CasinoUiKit.Cartel("Barra", panel.transform,
+            new Vector2(82f, -288f), new Vector2(394f, 62f),
+            new Color(0.05f, 0.12f, 0.09f, 0.94f));
+
+        // Simbolo de lo ultimo que salio, pegado al texto.
+        GameObject iconoPremio = MenuUiKit.Node("PremioIcono", barra.transform);
+        MenuUiKit.Box(iconoPremio, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f),
+            new Vector2(16f, 0f), new Vector2(34f, 34f));
+        Image premioIcono = MenuUiKit.AddImage(iconoPremio, null, Color.white);
+        premioIcono.preserveAspect = true;
+        premioIcono.enabled = false;
+
+        Text mensaje = MenuUiKit.Label("Mensaje", barra.transform, Vector2.zero,
+            new Vector2(310f, 44f), "", 14, TextAnchor.MiddleLeft, MenuUiKit.Ink);
+        MenuUiKit.Box(mensaje.gameObject, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f),
+            new Vector2(58f, 0f), new Vector2(310f, 44f));
         mensaje.horizontalOverflow = HorizontalWrapMode.Wrap;
 
-        // En una sola linea: dos renglones no entraban adentro del marco y se
-        // salian del panel.
         Text ayuda = MenuUiKit.Label("Ayuda", panel.transform, Vector2.zero,
-            new Vector2(210f, 22f), "X  girar        Z  salir", 14,
-            TextAnchor.MiddleLeft, MenuUiKit.Border);
-        MenuUiKit.Box(ayuda.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(250f, -314f), new Vector2(210f, 22f));
+            new Vector2(200f, 18f), "X  girar     Z  salir", 12,
+            TextAnchor.MiddleRight, MenuUiKit.Border);
+        MenuUiKit.Box(ayuda.gameObject, new Vector2(1f, 0f), new Vector2(1f, 0f),
+            new Vector2(-10f, 76f), new Vector2(200f, 18f));
 
         MenuUiKit.SetField(screen, "tituloText", titulo);
         MenuUiKit.SetField(screen, "saldoText", saldo);
         MenuUiKit.SetField(screen, "costoText", costo);
         MenuUiKit.SetField(screen, "mensajeText", mensaje);
-        MenuUiKit.SetField(screen, "premioText", premioNombre);
         MenuUiKit.SetField(screen, "premioIcono", premioIcono);
         MenuUiKit.SetField(screen, "rueda", widget);
 

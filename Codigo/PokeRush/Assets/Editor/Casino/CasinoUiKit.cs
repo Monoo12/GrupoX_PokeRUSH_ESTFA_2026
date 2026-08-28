@@ -16,7 +16,12 @@ using UnityEngine.UI;
 // sala y no como tres menus distintos pegados.
 public static class CasinoUiKit
 {
-    public const string MarcoPath = "Assets/Graphics/Windowskins/choice 18.png";
+    // El marco dorado con gemas sale del windowskin 'choice 18' del pack, pero
+    // con el relleno claro del centro VACIADO: ese relleno, al estirarse en las
+    // 9 tajadas, aparecia como una raya blanca arriba de cada cartel. Lo genera
+    // una vez CasinoPrefabBuilder y queda como asset normal.
+    public const string MarcoPath = "Assets/Graphics/Casino/marco_casino.png";
+    public const string MarcoOriginal = "Assets/Graphics/Windowskins/choice 18.png";
     // Tapete de la mesa. Sale de mativallej/casino-roulette-game (CC BY-SA 4.0),
     // ya reducido a 512x384: ver Documentacion/Creditos_De_Assets.md.
     public const string FieltroPath = "Assets/Graphics/Casino/mesa_fieltro.png";
@@ -24,9 +29,9 @@ public static class CasinoUiKit
     public const string CentroPath = "Assets/Graphics/Casino/ruleta_centro.png";
     public const string FichasPath = "Assets/Graphics/Casino/fichas.png";
 
-    // El marco mide 48x48. Se toman 16 pixeles por lado como borde que Unity NO
-    // estira: con 14 quedaba afuera la linea clara interior del dibujo, que al
-    // estirarse aparecia como una raya blanca arriba de cada cartel.
+    // El marco mide 48x48 y las gemas de las esquinas llegan hasta el pixel 16.
+    // Ese es el borde que Unity NO estira: cortar antes (12) partia las gemas al
+    // medio, y como el relleno claro ya no existe, no hay nada que tapar.
     private const float BordeDelMarco = 16f;
 
     public static Sprite Marco()

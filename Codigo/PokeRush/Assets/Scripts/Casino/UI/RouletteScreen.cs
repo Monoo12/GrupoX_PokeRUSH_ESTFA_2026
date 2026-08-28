@@ -195,7 +195,8 @@ public class RouletteScreen : MenuScreen
     {
         PlayerModel jugador = Player;
         if (saldoText != null) saldoText.text = jugador != null ? $"${jugador.Money}" : "$0";
-        if (costoText != null && _mesa != null) costoText.text = $"GIRO  {_mesa.costoPorGiro}";
+        // El numero va sobre la ficha: no hace falta la palabra "giro".
+        if (costoText != null && _mesa != null) costoText.text = _mesa.costoPorGiro.ToString();
     }
 
     // El cartel del resultado: el simbolo de la casilla que salio y su nombre.
