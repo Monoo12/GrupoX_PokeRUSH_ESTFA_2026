@@ -58,6 +58,14 @@ public class MenuScreenshotTaker : MonoBehaviour
             menus.Close(menus.Top);
         }
 
+        var mesa = Resources.Load<RouletteTableDefinition>("Definitions/Casino/MesaDeRuleta");
+        if (mesa != null)
+        {
+            menus.Open(MenuScreenId.Roulette, new RouletteScreenRequest { Mesa = mesa });
+            yield return Foto("0-ruleta");
+            menus.Close(menus.Top);
+        }
+
         menus.Open(MenuScreenId.Bag, new BagScreenRequest { Pocket = ItemPocket.Medicine });
         yield return Foto("2-mochila");
         menus.Close(menus.Top);

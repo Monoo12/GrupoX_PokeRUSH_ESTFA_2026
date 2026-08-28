@@ -24,3 +24,21 @@ public class SlotsScreenResult
     // El premio mas grande de la sesion, para el cartel de despedida.
     public int MayorPremio;
 }
+
+// ---------- ruleta ----------
+
+public class RouletteScreenRequest
+{
+    public RouletteTableDefinition Mesa;
+    // Titulo del cartel. Vacio = el nombre de la mesa.
+    public string Titulo;
+}
+
+public class RouletteScreenResult
+{
+    public int Giros;
+    // Lo ganado menos lo apostado en toda la sesion de esta mesa.
+    public int Neto;
+    // Salio la casilla que cumple el objetivo del piso.
+    public bool ObjetivoCumplido;
+}

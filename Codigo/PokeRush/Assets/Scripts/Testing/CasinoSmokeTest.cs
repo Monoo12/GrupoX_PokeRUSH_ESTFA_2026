@@ -60,6 +60,7 @@ public class CasinoSmokeTest : MonoBehaviour
         yield return ProbarAbrirDesdeLaMaquina(jugador, maquina);
         yield return ProbarApostarYGirar(jugador);
         yield return ProbarCierreYControl();
+        yield return ProbarRuleta(jugador);
         yield return ProbarEnfermeraYDeuda(jugador);
         yield return ProbarAscensor(jugador);
 
@@ -196,6 +197,91 @@ public class CasinoSmokeTest : MonoBehaviour
             Destroy(_maquinaEnEscena.gameObject);
     }
 
+
+    // ---------- la ruleta del piso 2 ----------
+
+    private IEnumerator ProbarRuleta(PlayerModel jugador)
+    {
+        var mesa = Object.FindAnyObjectByType<RouletteInteractable>();
+        if (mesa == null)
+        {
+            Debug.Log("[SmokeCasino] Este piso no tiene ruleta: se saltea esa parte.");
+            yield break;
+        }
+
+        StoryModel historia = GameManager.Instance.Story;
+        Menus.CloseAll();
+        yield return null;
+
+        if (jugador.Money < 500) jugador.AddMoney(500 - jugador.Money);
+
+        mesa.Interact(jugador, historia);
+        yield return null;
+
+        var pantalla = Menus.Top as RouletteScreen;
+        Check("La mesa abre la ruleta encima del piso", pantalla != null);
+        if (pantalla == null) yield break;
+
+        var definicion = Campo<RouletteTableDefinition>(pantalla, "_mesa");
+        Check("La ruleta abre con su mesa cargada", definicion != null);
+        if (definicion == null) yield break;
+
+        // --- un giro normal: cobra la ficha ---
+        int saldoAntes = jugador.Money;
+        pantalla.HandleAction(GameAction.Confirm);
+        yield return null;
+
+        Check($"El giro cobra la ficha ({saldoAntes} -> {jugador.Money})",
+              jugador.Money == saldoAntes - definicion.costoPorGiro);
+
+        // Con la rueda girando no se puede salir con la ficha ya cobrada.
+        pantalla.HandleAction(GameAction.Cancel);
+        yield return null;
+        Check("No se puede salir con la rueda girando", Menus.Top == pantalla);
+
+        // Se fuerza la casilla del OBJETIVO: al 6% de probabilidad, esperarla
+        // seria una prueba de paciencia, y lo que hay que verificar es que al
+        // salir quede anotada la progresion.
+        int objetivo = -1;
+        for (int i = 0; i < definicion.premios.Length; i++)
+            if (definicion.premios[i] != null && definicion.premios[i].cumpleObjetivo) objetivo = i;
+
+        Check("La mesa tiene una casilla que cumple el objetivo del piso", objetivo >= 0);
+        if (objetivo < 0) yield break;
+
+        historia.ActiveFlags.Remove(definicion.flagObjetivo);
+        int equipoAntes = jugador.Team.Count;
+
+        SetCampo(pantalla, "_tirada", new RouletteSpinResult
+        {
+            PremioIndex = objetivo,
+            Premio = definicion.premios[objetivo]
+        });
+
+        float limite = Time.unscaledTime + 10f;
+        while (Campo<object>(pantalla, "_fase").ToString() != "Esperando" && Time.unscaledTime < limite)
+            yield return null;
+
+        Check("La rueda frena sola", Campo<object>(pantalla, "_fase").ToString() == "Esperando");
+        Check($"El premio del objetivo entra al equipo ({equipoAntes} -> {jugador.Team.Count})",
+              jugador.Team.Count == equipoAntes + 1);
+        Check("Y el objetivo del piso queda anotado en la historia",
+              historia.HasFlag(definicion.flagObjetivo));
+
+        // --- cerrar y recuperar el control ---
+        pantalla.HandleAction(GameAction.Cancel);
+        yield return null;
+        Check("La ruleta se cierra", !pantalla.IsOpen);
+
+        if (Menus.Top is MessageBoxScreen resumen)
+        {
+            resumen.HandleAction(GameAction.Confirm);
+            yield return null;
+        }
+
+        Check("Despues de la ruleta el jugador recupera el control", !MenuManager.AnyOpen);
+    }
+
     // ---------- 4. la enfermera y la deuda ----------
 
     private IEnumerator ProbarEnfermeraYDeuda(PlayerModel jugador)
@@ -302,24 +388,34 @@ public class CasinoSmokeTest : MonoBehaviour
         }
 
         StoryModel historia = GameManager.Instance.Story;
-        int requerido = Campo<int>(ascensor, "dineroRequerido");
-        // La deuda tiene su propia prueba: aca interesa el requisito de plata.
+        // La deuda tiene su propia prueba: aca interesa el requisito del piso.
         jugador.PayDebt(jugador.Debt);
-        StoryFlag flagDelPiso = Campo<StoryFlag>(ascensor, "otorgaFlag");
 
-        // Arranca sin el flag: es lo que hace que el requisito se vuelva a mirar.
+        StoryFlag flagDelPiso = Campo<StoryFlag>(ascensor, "otorgaFlag");
+        // Cada piso pide lo suyo: el 1 pide plata y los otros piden un objetivo
+        // cumplido. La prueba se adapta en vez de asumir el piso 1.
+        bool porDinero = Campo<object>(ascensor, "requisito").ToString() == "DineroMinimo";
+        int requerido = Campo<int>(ascensor, "dineroRequerido");
+        StoryFlag flagPedido = Campo<StoryFlag>(ascensor, "flagRequerido");
+
+        // Arranca sin el flag del piso: es lo que hace que el requisito se
+        // vuelva a mirar.
         historia.ActiveFlags.Remove(flagDelPiso);
 
-        // --- sin la plata pedida: no sube ---
+        // --- sin cumplir el requisito: no sube ---
         int guardado = jugador.Money;
-        jugador.SpendMoney(jugador.Money);                 // a cero
+        if (porDinero) jugador.SpendMoney(jugador.Money);      // a cero
+        else historia.ActiveFlags.Remove(flagPedido);
+
         Menus.CloseAll();
         yield return null;
 
         ascensor.Interact(jugador, historia);
         yield return null;
 
-        Check("Sin la plata pedida el ascensor avisa en vez de subir",
+        Check(porDinero
+                  ? "Sin la plata pedida el ascensor avisa en vez de subir"
+                  : $"Sin cumplir '{flagPedido}' el ascensor avisa en vez de subir",
               Menus.Top is MessageBoxScreen);
         Check("Y el piso NO queda marcado como superado", !historia.HasFlag(flagDelPiso));
 
@@ -329,12 +425,16 @@ public class CasinoSmokeTest : MonoBehaviour
             yield return null;
         }
 
-        // --- con la plata pedida: pregunta y anota el progreso ---
-        jugador.AddMoney(requerido);
+        // --- cumpliendolo: pregunta y anota el progreso ---
+        if (porDinero) jugador.AddMoney(requerido);
+        else historia.ActivateFlag(flagPedido);
+
         ascensor.Interact(jugador, historia);
         yield return null;
 
-        Check($"Con {requerido} juntados el ascensor pregunta si subir",
+        Check(porDinero
+                  ? $"Con {requerido} juntados el ascensor pregunta si subir"
+                  : "Con el objetivo cumplido el ascensor pregunta si subir",
               Menus.Top is MessageBoxScreen);
         Check("El piso queda marcado como superado", historia.HasFlag(flagDelPiso));
 

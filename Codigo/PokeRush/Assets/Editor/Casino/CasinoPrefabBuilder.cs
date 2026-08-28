@@ -38,12 +38,15 @@ public static class CasinoPrefabBuilder
         SlotMachineDefinition maquina = BuildMaquinaBasica();
         GameObject slots = BuildSlotsScreen();
 
-        RegistrarEnMenuSystem(new List<GameObject> { slots });
+        RouletteTableDefinition mesa = BuildMesaDeRuleta();
+        GameObject ruleta = BuildRouletteScreen();
+
+        RegistrarEnMenuSystem(new List<GameObject> { slots, ruleta });
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        Debug.Log($"[Casino] Pantalla de slots en {PrefabFolder}, maquina en " +
-                  $"{DefinitionFolder}/{maquina.name}.asset y registrada en MenuSystem.");
+        Debug.Log($"[Casino] Pantallas en {PrefabFolder}; maquina '{maquina.name}' y " +
+                  $"mesa '{mesa.name}' en {DefinitionFolder}. Registradas en MenuSystem.");
     }
 
     // ------------------------------------------------------------- definicion
@@ -123,6 +126,221 @@ public static class CasinoPrefabBuilder
 
     private static SlotPayline Linea(string nombre, params int[] filas)
         => new SlotPayline { nombre = nombre, filas = filas };
+
+    // ----------------------------------------------------------------- ruleta
+
+    // La mesa del piso 2.
+    //
+    // El objetivo del piso es SACAR EL POKEMON: es la casilla marcada con
+    // cumpleObjetivo, y al salir activa el flag que mira el ascensor. Su peso
+    // (6 de 100) es lo que decide cuanto cuesta pasar de piso, y se toca desde
+    // el Inspector sin abrir un script.
+    //
+    // La mesa no regala: entre "Nada", perder monedas, perder un objeto y el
+    // golpe al equipo, la mitad de las casillas juegan en contra.
+    private static RouletteTableDefinition BuildMesaDeRuleta()
+    {
+        string path = DefinitionFolder + "/MesaDeRuleta.asset";
+
+        var def = AssetDatabase.LoadAssetAtPath<RouletteTableDefinition>(path);
+        bool nueva = def == null;
+        if (nueva) def = ScriptableObject.CreateInstance<RouletteTableDefinition>();
+
+        def.mesaNombre = "RULETA";
+        def.costoPorGiro = 50;
+        def.duracionDelGiro = 2.5f;
+        def.vueltas = 4;
+        def.flagObjetivo = StoryFlag.Casino_Ruleta_ObjetivoCumplido;
+
+        var pocion = AssetDatabase.LoadAssetAtPath<HealItemDefinition>(
+            "Assets/Resources/Definitions/Items/Pocion.asset");
+        var pikachu = AssetDatabase.LoadAssetAtPath<PokenDefinition>(
+            "Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
+
+        def.premios = new[]
+        {
+            Casilla("Nada", new Color(0.28f, 0.30f, 0.36f), 24, RoulettePrizeKind.Nada,
+                    "La bolita cae en el cero. Nada."),
+            Casilla("Monedas", new Color(0.95f, 0.78f, 0.25f), 24, RoulettePrizeKind.Dinero,
+                    "Pagan {0}.", monto: 60),
+            Casilla("Multa", new Color(0.75f, 0.28f, 0.30f), 14, RoulettePrizeKind.PerderDinero,
+                    "La casa se cobra {0}.", monto: 80),
+            Casilla("Objeto", new Color(0.35f, 0.72f, 0.45f), 12, RoulettePrizeKind.Objeto,
+                    "Te dan {0}.", objeto: pocion, cantidad: 2),
+            Casilla("Descarga", new Color(0.55f, 0.35f, 0.75f), 10, RoulettePrizeKind.DanioAlEquipo,
+                    "Salta una chispa de la mesa: {0}.", monto: 25),
+            Casilla("Premio grande", new Color(0.98f, 0.55f, 0.15f), 6, RoulettePrizeKind.Dinero,
+                    "Premio grande! {0}.", monto: 250),
+            Casilla("Manotazo", new Color(0.55f, 0.30f, 0.25f), 4, RoulettePrizeKind.PerderObjeto,
+                    "Alguien te saca {0} de la mochila."),
+            Objetivo("Pokemon", new Color(0.35f, 0.80f, 0.95f), 6, pikachu, 15,
+                     "Sale el premio gordo: {0}!")
+        };
+
+        if (nueva) AssetDatabase.CreateAsset(def, path);
+        EditorUtility.SetDirty(def);
+        return def;
+    }
+
+    private static RoulettePrize Casilla(string nombre, Color color, int peso,
+                                         RoulettePrizeKind tipo, string mensaje,
+                                         int monto = 0, HealItemDefinition objeto = null,
+                                         int cantidad = 1)
+        => new RoulettePrize
+        {
+            nombre = nombre, color = color, peso = peso, tipo = tipo,
+            mensaje = mensaje, monto = monto, objeto = objeto, cantidad = cantidad
+        };
+
+    private static RoulettePrize Objetivo(string nombre, Color color, int peso,
+                                          PokenDefinition especie, int nivel, string mensaje)
+        => new RoulettePrize
+        {
+            nombre = nombre, color = color, peso = peso,
+            tipo = RoulettePrizeKind.Poken, poken = especie, nivel = nivel,
+            cumpleObjetivo = true, mensaje = mensaje
+        };
+
+    private static GameObject BuildRouletteScreen()
+    {
+        GameObject root = new GameObject("RouletteScreen", typeof(RectTransform));
+        MenuUiKit.Full(root);
+
+        var screen = root.AddComponent<RouletteScreen>();
+        MenuUiKit.SetField(screen, "screenId", (int)MenuScreenId.Roulette);
+
+        GameObject velo = MenuUiKit.Node("Oscurecedor", root.transform);
+        MenuUiKit.Full(velo);
+        MenuUiKit.AddImage(velo, null, new Color(0f, 0f, 0f, 0.72f));
+
+        GameObject panel = MenuUiKit.Node("Panel", root.transform);
+        MenuUiKit.Box(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(460f, 330f));
+        MenuUiKit.AddImage(panel, null, new Color(0.10f, 0.22f, 0.16f, 0.98f));
+
+        Text titulo = MenuUiKit.Label("Titulo", panel.transform, Vector2.zero,
+            new Vector2(440f, 24f), "RULETA", 18, TextAnchor.UpperCenter, MenuUiKit.Gold);
+        MenuUiKit.Box(titulo.gameObject, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+            new Vector2(0f, -10f), new Vector2(440f, 24f));
+
+        // La rueda ocupa la mitad izquierda del panel: la columna de texto
+        // arranca en x=248, asi que no se pisan.
+        GameObject ruedaRaiz = MenuUiKit.Node("Ruleta", panel.transform);
+        MenuUiKit.Box(ruedaRaiz, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f),
+            new Vector2(18f, -6f), new Vector2(216f, 216f));
+
+        GameObject giratorio = MenuUiKit.Node("Rueda", ruedaRaiz.transform);
+        MenuUiKit.Full(giratorio);
+
+        GameObject centro = MenuUiKit.Node("Centro", giratorio.transform);
+        MenuUiKit.Box(centro, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(64f, 64f));
+        Image tapa = MenuUiKit.AddImage(centro, CirculoBlanco(), new Color(0.08f, 0.10f, 0.12f, 1f));
+        tapa.raycastTarget = false;
+
+        GameObject aguja = MenuUiKit.Node("Aguja", ruedaRaiz.transform);
+        MenuUiKit.Box(aguja, new Vector2(0.5f, 1f), new Vector2(0.5f, 0.5f),
+            new Vector2(0f, 6f), new Vector2(24f, 24f));
+        Image puntero = MenuUiKit.AddImage(aguja, TrianguloBlanco(), MenuUiKit.Gold);
+        puntero.raycastTarget = false;
+
+        var widget = ruedaRaiz.AddComponent<RouletteWheelWidget>();
+        MenuUiKit.SetField(widget, "circulo", CirculoBlanco());
+        MenuUiKit.SetField(widget, "rueda", giratorio.GetComponent<RectTransform>());
+        MenuUiKit.SetField(widget, "centro", centro.GetComponent<RectTransform>());
+
+        Text saldo = MenuUiKit.Label("Saldo", panel.transform, Vector2.zero,
+            new Vector2(120f, 22f), "$0", 16, TextAnchor.UpperRight, MenuUiKit.Ink);
+        MenuUiKit.Box(saldo.gameObject, new Vector2(1f, 1f), new Vector2(1f, 1f),
+            new Vector2(-16f, -12f), new Vector2(120f, 22f));
+
+        Text tabla = MenuUiKit.Label("Tabla", panel.transform, Vector2.zero,
+            new Vector2(196f, 150f), "", 13, TextAnchor.UpperLeft, MenuUiKit.Ink);
+        MenuUiKit.Box(tabla.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(248f, -44f), new Vector2(196f, 150f));
+        tabla.lineSpacing = 1.15f;
+
+        Text costo = MenuUiKit.Label("Costo", panel.transform, Vector2.zero,
+            new Vector2(196f, 22f), "GIRO  50", 16, TextAnchor.MiddleLeft, MenuUiKit.Accent);
+        MenuUiKit.Box(costo.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(248f, -200f), new Vector2(196f, 22f));
+
+        Text mensaje = MenuUiKit.Label("Mensaje", panel.transform, Vector2.zero,
+            new Vector2(196f, 60f), "", 14, TextAnchor.UpperLeft, MenuUiKit.Ink);
+        MenuUiKit.Box(mensaje.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(248f, -228f), new Vector2(196f, 60f));
+        mensaje.horizontalOverflow = HorizontalWrapMode.Wrap;
+
+        Text ayuda = MenuUiKit.Label("Ayuda", panel.transform, Vector2.zero,
+            new Vector2(196f, 40f), "X  girar\nZ  salir", 14, TextAnchor.UpperLeft, MenuUiKit.Border);
+        MenuUiKit.Box(ayuda.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
+            new Vector2(248f, -288f), new Vector2(196f, 40f));
+        ayuda.lineSpacing = 1.25f;
+
+        MenuUiKit.SetField(screen, "tituloText", titulo);
+        MenuUiKit.SetField(screen, "saldoText", saldo);
+        MenuUiKit.SetField(screen, "costoText", costo);
+        MenuUiKit.SetField(screen, "mensajeText", mensaje);
+        MenuUiKit.SetField(screen, "tablaText", tabla);
+        MenuUiKit.SetField(screen, "rueda", widget);
+
+        root.SetActive(false);
+        return MenuUiKit.SavePrefab(root, PrefabFolder + "/RouletteScreen.prefab");
+    }
+
+    // El pack no trae ruleta, asi que el circulo y la aguja se generan una vez y
+    // quedan como assets normales: se reemplazan por arte de verdad soltando
+    // otro sprite en su lugar.
+
+    private const string SpriteFolder = "Assets/Sprites/UI/Casino";
+
+    private static Sprite CirculoBlanco() => SpriteGenerado("circulo.png", 256, 256, (x, y, w, h) =>
+    {
+        float dx = x - w / 2f + 0.5f, dy = y - h / 2f + 0.5f;
+        float r = Mathf.Sqrt(dx * dx + dy * dy);
+        return r <= w / 2f - 1f ? 1f : Mathf.Clamp01(w / 2f - r);
+    });
+
+    private static Sprite TrianguloBlanco() => SpriteGenerado("aguja.png", 64, 64, (x, y, w, h) =>
+    {
+        // Apunta hacia ABAJO: la aguja marca la casilla que quedo arriba.
+        float t = 1f - y / (float)h;
+        float mitad = (w / 2f) * t;
+        return Mathf.Abs(x - w / 2f + 0.5f) <= mitad ? 1f : 0f;
+    });
+
+    private static Sprite SpriteGenerado(string archivo, int ancho, int alto,
+                                         System.Func<int, int, int, int, float> alfa)
+    {
+        string path = SpriteFolder + "/" + archivo;
+        var existente = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        if (existente != null) return existente;
+
+        MenuUiKit.EnsureFolder(SpriteFolder);
+
+        var tex = new Texture2D(ancho, alto, TextureFormat.RGBA32, false);
+        for (int y = 0; y < alto; y++)
+            for (int x = 0; x < ancho; x++)
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, alfa(x, y, ancho, alto)));
+        tex.Apply();
+
+        System.IO.File.WriteAllBytes(path, tex.EncodeToPNG());
+        Object.DestroyImmediate(tex);
+        AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+
+        var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+        if (importer != null)
+        {
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.alphaIsTransparency = true;
+            importer.mipmapEnabled = false;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.SaveAndReimport();
+        }
+
+        return AssetDatabase.LoadAssetAtPath<Sprite>(path);
+    }
 
     // ---------------------------------------------------------------- pantalla
 

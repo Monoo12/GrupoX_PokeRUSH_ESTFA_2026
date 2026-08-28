@@ -22,6 +22,10 @@ public static class CasinoInteractionBuilder
     private const int CapaObstacles = 3;
     private const string Contenedor = "InteraccionesCasino";
     private const string MaquinaBasica = "Assets/Resources/Definitions/Casino/MaquinaBasica.asset";
+    private const string MesaDeRuleta = "Assets/Resources/Definitions/Casino/MesaDeRuleta.asset";
+
+    // Que mecanica lleva el mueble principal de cada piso.
+    private enum Mecanica { Ninguna, Slots, Ruleta }
 
     // Configuracion de un piso. Sale de mirar las escenas con
     // PokeRush/Casino/Analizar los cuatro pisos.
@@ -31,6 +35,7 @@ public static class CasinoInteractionBuilder
         // Forma de los muebles que llevan la mecanica principal, "anchoxalto".
         public string FormaDelMueble;
         public string PrefijoDelMueble;
+        public Mecanica Mecanica;
         // Posicion de las puertas del ascensor (leida de la escena).
         public Vector2 Ascensor;
         public string EscenaDestino;
@@ -47,6 +52,7 @@ public static class CasinoInteractionBuilder
         {
             Escena = "Assets/Scenes/Casino Nivel 1.unity",
             FormaDelMueble = "4x3", PrefijoDelMueble = "Tragaperras",
+            Mecanica = Mecanica.Slots,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino Nivel 2", NombreDelDestino = "el piso 2",
             Requisito = CasinoRequisitoTipo.DineroMinimo, DineroRequerido = 500,
@@ -55,7 +61,9 @@ public static class CasinoInteractionBuilder
         new Piso
         {
             Escena = "Assets/Scenes/Casino Nivel 2.unity",
-            FormaDelMueble = null, PrefijoDelMueble = null,   // la ruleta llega despues
+            // Las seis mesas de ruleta del piso 2 ocupan 4x2 celdas cada una.
+            FormaDelMueble = "4x2", PrefijoDelMueble = "Ruleta",
+            Mecanica = Mecanica.Ruleta,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino nivel 3", NombreDelDestino = "el piso 3",
             Requisito = CasinoRequisitoTipo.Flag,
@@ -148,8 +156,12 @@ public static class CasinoInteractionBuilder
         }
 
         var maquina = AssetDatabase.LoadAssetAtPath<SlotMachineDefinition>(MaquinaBasica);
-        if (maquina == null)
+        var mesa = AssetDatabase.LoadAssetAtPath<RouletteTableDefinition>(MesaDeRuleta);
+
+        if (piso.Mecanica == Mecanica.Slots && maquina == null)
             Debug.LogWarning($"[CasinoInter] Falta {MaquinaBasica}: las maquinas quedan sin definicion.");
+        if (piso.Mecanica == Mecanica.Ruleta && mesa == null)
+            Debug.LogWarning($"[CasinoInter] Falta {MesaDeRuleta}: las mesas quedan sin definicion.");
 
         int puestos = 0;
         foreach (List<Vector3Int> pieza in CasinoDecoradoScanner.Agrupar(colisiones))
@@ -171,12 +183,27 @@ public static class CasinoInteractionBuilder
             col.size = new Vector2(CasinoDecoradoScanner.Ancho(pieza), 1f);
             col.isTrigger = true;
 
-            var slots = go.AddComponent<SlotMachineInteractable>();
-            if (maquina != null)
+            // Cada piso cuelga lo suyo. El collider y la posicion son iguales:
+            // lo unico que cambia es que componente lleva encima.
+            if (piso.Mecanica == Mecanica.Ruleta)
             {
-                var so = new SerializedObject(slots);
-                so.FindProperty("maquina").objectReferenceValue = maquina;
-                so.ApplyModifiedPropertiesWithoutUndo();
+                var comp = go.AddComponent<RouletteInteractable>();
+                if (mesa != null)
+                {
+                    var so = new SerializedObject(comp);
+                    so.FindProperty("mesa").objectReferenceValue = mesa;
+                    so.ApplyModifiedPropertiesWithoutUndo();
+                }
+            }
+            else
+            {
+                var comp = go.AddComponent<SlotMachineInteractable>();
+                if (maquina != null)
+                {
+                    var so = new SerializedObject(comp);
+                    so.FindProperty("maquina").objectReferenceValue = maquina;
+                    so.ApplyModifiedPropertiesWithoutUndo();
+                }
             }
         }
 

@@ -14,7 +14,8 @@ public enum MenuScreenId
     // Casino (nivel 2). Son pantallas del mismo sistema a proposito: asi los
     // minijuegos heredan la pila, el input y la caja de mensajes, y el jugador
     // recupera el control al cerrarlas sin que nadie tenga que acordarse.
-    Slots
+    Slots,
+    Roulette
 }
 
 // Desde donde se abrio el sistema de menus. Las pantallas compartidas (mochila,
