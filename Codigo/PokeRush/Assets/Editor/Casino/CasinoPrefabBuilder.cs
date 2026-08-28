@@ -264,8 +264,11 @@ public static class CasinoPrefabBuilder
 
         // Disco de la ruleta del repo con el aro de numeros vaciado: por el
         // hueco se ven nuestras casillas con sus simbolos.
+        // El disco NO ocupa toda la rueda: cuanto mas chico, mas ancho el aro
+        // donde van los premios, que es lo que el jugador mira.
         GameObject disco = MenuUiKit.Node("Disco", giratorio.transform);
-        MenuUiKit.Full(disco);
+        MenuUiKit.Box(disco, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(ladoRueda * 0.72f, ladoRueda * 0.72f));
         Image discoImg = MenuUiKit.AddImage(disco,
             CasinoUiKit.Importar("Assets/Graphics/Casino/ruleta_disco.png"), Color.white);
         discoImg.type = Image.Type.Simple;
@@ -282,7 +285,8 @@ public static class CasinoPrefabBuilder
         MenuUiKit.SetField(widget, "circulo", CirculoBlanco());
         MenuUiKit.SetField(widget, "rueda", giratorio.GetComponent<RectTransform>());
         MenuUiKit.SetField(widget, "disco", disco.GetComponent<RectTransform>());
-        MenuUiKit.SetField(widget, "tamanioDelSimbolo", new Vector2(30f, 30f));
+        MenuUiKit.SetField(widget, "tamanioDelSimbolo", new Vector2(40f, 40f));
+        MenuUiKit.SetField(widget, "radioDelSimbolo", 0.36f);
 
         // ---- la ficha de la apuesta, abajo a la izquierda ----
         GameObject ficha = MenuUiKit.Node("Ficha", panel.transform);
@@ -294,9 +298,10 @@ public static class CasinoPrefabBuilder
         // El numero va ENCIMA de la ficha: la ficha dice que es una apuesta y el
         // numero cuanto, sin necesidad de escribir la palabra.
         Text costo = MenuUiKit.Label("Costo", ficha.transform, Vector2.zero,
-            new Vector2(76f, 26f), "50", 20, TextAnchor.MiddleCenter, MenuUiKit.InkDark);
+            new Vector2(76f, 34f), "50", 30, TextAnchor.MiddleCenter, MenuUiKit.Ink);
         MenuUiKit.Box(costo.gameObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(76f, 26f));
+            Vector2.zero, new Vector2(76f, 34f));
+        MenuUiKit.Contorno(costo);
 
         // ---- la barra de texto, cruzando abajo ----
         GameObject barra = CasinoUiKit.Cartel("Barra", panel.transform,
