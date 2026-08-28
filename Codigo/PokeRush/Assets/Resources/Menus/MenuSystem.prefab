@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7755987097496515481}
   - component: {fileID: 2883271460331320628}
   - component: {fileID: 983910864190108065}
+  - component: {fileID: 2602007819681122300}
   m_Layer: 0
   m_Name: MenuSystem
   m_TagString: Untagged
@@ -130,6 +131,19 @@ MonoBehaviour:
   navigateClip: {fileID: 0}
   confirmClip: {fileID: 0}
   cancelClip: {fileID: 0}
+--- !u!114 &2602007819681122300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3219884041505904519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c290cd62292bcbf46ba3227e8ea1551d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PixelFontCrisp
+  fuentes: []
 --- !u!1 &4574721729633628784
 GameObject:
   m_ObjectHideFlags: 0

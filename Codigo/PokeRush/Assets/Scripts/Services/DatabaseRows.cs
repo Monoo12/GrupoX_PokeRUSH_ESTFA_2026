@@ -13,6 +13,9 @@ public class PlayerRow
     // en los guardados viejos, que quedan con null y se leen como Varon.
     public string Gender { get; set; }
     public int Money { get; set; }
+    // Lo que el jugador le debe a la enfermeria del casino. sqlite-net agrega la
+    // columna sola en los guardados viejos, que quedan en 0.
+    public int Debt { get; set; }
 }
 
 [Table("player_poken")]

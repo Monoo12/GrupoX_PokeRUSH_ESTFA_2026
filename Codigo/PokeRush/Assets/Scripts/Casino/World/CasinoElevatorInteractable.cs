@@ -43,6 +43,14 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
              "Con esto el piso queda superado para siempre.")]
     [SerializeField] private StoryFlag otorgaFlag = StoryFlag.None;
 
+    [Header("Deuda")]
+    [Tooltip("Con una deuda abierta con la enfermeria, el ascensor no sube. " +
+             "Es lo que le da peso a que te curen fiado.")]
+    [SerializeField] private bool bloqueaConDeuda = true;
+    [Tooltip("Cartel cuando hay deuda. {0} = lo que se debe.")]
+    [SerializeField, TextArea(2, 3)] private string mensajeConDeuda =
+        "El de seguridad te frena: primero pagale las {0} monedas a la enfermeria.";
+
     [Header("Textos")]
     [SerializeField] private string mensajeSubiendo = "El ascensor se abre.";
     [Tooltip("Cartel cuando falta plata. {0} = lo que falta, {1} = lo pedido.")]
@@ -56,6 +64,14 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
     public bool Interact(PlayerModel player, StoryModel story)
     {
         if (player == null) return false;
+
+        // La deuda frena SIEMPRE, incluso si el piso ya estaba superado: si no,
+        // bastaria con subir una vez para no pagarla nunca mas.
+        if (bloqueaConDeuda && player.HasDebt)
+        {
+            Avisar(string.Format(mensajeConDeuda, player.Debt));
+            return true;
+        }
 
         bool yaLoPaso = otorgaFlag != StoryFlag.None && story != null && story.HasFlag(otorgaFlag);
 

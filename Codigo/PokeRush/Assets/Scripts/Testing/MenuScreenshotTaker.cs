@@ -44,6 +44,20 @@ public class MenuScreenshotTaker : MonoBehaviour
         menus.Open(MenuScreenId.Pause);
         yield return Foto("1-pausa");
 
+        // La tragaperras del casino: se abre con plata suficiente para que el
+        // visor de credito muestre algo.
+        if (player.Money < 500) player.AddMoney(500 - player.Money);
+        var maquina = Resources.Load<SlotMachineDefinition>("Definitions/Casino/MaquinaBasica");
+        if (maquina != null)
+        {
+            menus.Open(MenuScreenId.Slots, new SlotsScreenRequest { Maquina = maquina });
+            yield return Foto("0-slots");
+            menus.Top.HandleAction(GameAction.Confirm);
+            yield return new WaitForSecondsRealtime(2.2f);
+            yield return Foto("0-slots-resultado");
+            menus.Close(menus.Top);
+        }
+
         menus.Open(MenuScreenId.Bag, new BagScreenRequest { Pocket = ItemPocket.Medicine });
         yield return Foto("2-mochila");
         menus.Close(menus.Top);

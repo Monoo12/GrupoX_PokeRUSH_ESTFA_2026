@@ -15,6 +15,8 @@ public class SlotsScreen : MenuScreen
     [Header("Textos")]
     [SerializeField] private Text tituloText;
     [SerializeField] private Text saldoText;
+    [Tooltip("Visor PREMIO del gabinete: lo que pago la ultima tirada.")]
+    [SerializeField] private Text premioText;
     [SerializeField] private Text apuestaText;
     [SerializeField] private Text mensajeText;
 
@@ -44,6 +46,7 @@ public class SlotsScreen : MenuScreen
     private float _tiempo;
     private float _proximoRefresco;
     private int _rodillosParados;
+    private int _ultimoPremio;
 
     protected override void OnOpen(object payload)
     {
@@ -78,6 +81,7 @@ public class SlotsScreen : MenuScreen
                 ? _maquina.maquinaNombre
                 : pedido.Titulo;
 
+        _ultimoPremio = 0;
         _apuesta = _maquina.AjustarApuesta(pedido.ApuestaInicial > 0
             ? pedido.ApuestaInicial
             : _maquina.apuestaMinima);
@@ -190,6 +194,7 @@ public class SlotsScreen : MenuScreen
         }
 
         jugador.SpendMoney(_apuesta);
+        _ultimoPremio = 0;
         _tirada = _motor.Girar(_rng, _apuesta);
 
         _fase = Fase.Girando;
@@ -209,6 +214,7 @@ public class SlotsScreen : MenuScreen
 
         PlayerModel jugador = Player;
         if (jugador != null && _tirada.Pago > 0) jugador.AddMoney(_tirada.Pago);
+        _ultimoPremio = _tirada.Pago;
 
         _resultado.Tiradas++;
         _resultado.Neto += _tirada.Neto;
@@ -274,8 +280,11 @@ public class SlotsScreen : MenuScreen
     private void RefrescarTextos()
     {
         PlayerModel jugador = Player;
-        if (saldoText != null) saldoText.text = jugador != null ? "$" + jugador.Money : "$0";
-        if (apuestaText != null) apuestaText.text = "APUESTA  " + _apuesta;
+        // Los visores del gabinete son numeros pelados: la palabra CREDITO y la
+        // palabra PREMIO ya estan dibujadas arriba de cada ventanita.
+        if (saldoText != null) saldoText.text = jugador != null ? jugador.Money.ToString() : "0";
+        if (premioText != null) premioText.text = _ultimoPremio.ToString();
+        if (apuestaText != null) apuestaText.text = "APUESTA " + _apuesta;
     }
 
     private void Mensaje(string texto)

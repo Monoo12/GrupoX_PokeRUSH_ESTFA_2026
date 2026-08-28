@@ -26,7 +26,8 @@ public class SaveService
         {
             // No existe: crear fila nueva
             playerRow = new PlayerRow { Id = playerId, Name = player.PlayerName,
-                                       Gender = player.Genero.ToString(), Money = player.Money };
+                                       Gender = player.Genero.ToString(), Money = player.Money,
+                                       Debt = player.Debt };
             _db.Insert(playerRow);
         }
         else
@@ -35,6 +36,7 @@ public class SaveService
             playerRow.Name = player.PlayerName;
             playerRow.Gender = player.Genero.ToString();
             playerRow.Money = player.Money;
+            playerRow.Debt = player.Debt;
             _db.Update(playerRow);
         }
 
@@ -164,6 +166,7 @@ public class SaveService
         System.Enum.TryParse(playerRow.Gender ?? "", out Genero genero);
         var player = new PlayerModel(playerRow.Name, genero);
         player.AddMoney(playerRow.Money);
+        player.RestoreDebt(playerRow.Debt);
 
         // --- Cargar equipo de Pokens ---
         // OrderBy(SlotIndex) asegura que el equipo se reconstruya en el mismo orden en que se guardo

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerModel
 {
@@ -41,6 +42,41 @@ public class PlayerModel
     public void AddMoney(int amount)
     {
         Money += amount;
+    }
+
+    // ---------- deuda ----------
+    //
+    // La enfermera del casino cura gratis al que no puede pagar, pero le anota
+    // lo que debe. Vive en el jugador y no en el casino porque se guarda con la
+    // partida y porque el ascensor la mira para no dejarlo subir debiendo.
+    public int Debt { get; private set; }
+
+    public bool HasDebt => Debt > 0;
+
+    public void AddDebt(int amount)
+    {
+        if (amount <= 0) return;
+        Debt += amount;
+    }
+
+    // Paga lo que se pueda con la plata que hay y devuelve cuanto se pago.
+    // Nunca deja el saldo en negativo ni la deuda por debajo de cero.
+    public int PayDebt(int amount)
+    {
+        if (amount <= 0 || Debt <= 0) return 0;
+
+        int aPagar = Mathf.Min(Mathf.Min(amount, Debt), Money);
+        if (aPagar <= 0) return 0;
+
+        Money -= aPagar;
+        Debt -= aPagar;
+        return aPagar;
+    }
+
+    // Solo para la carga del guardado: pone la deuda tal cual estaba.
+    public void RestoreDebt(int amount)
+    {
+        Debt = Mathf.Max(0, amount);
     }
 
     public void SpendMoney(int amount)

@@ -41,6 +41,8 @@ public enum StoryFlag
     // resto de los flags, asi el jugador no tiene que volver a cumplir una
     // condicion que ya cumplio, ni siquiera despues de cerrar el juego.
     Casino_Piso1_Superado,
+    // El apostador del piso 1: se pelea una sola vez y paga 100.
+    Casino_ApostadorVencido,
     Casino_Ruleta_ObjetivoCumplido,
     Casino_Piso2_Superado,
     Casino_Blackjack_Ganado,

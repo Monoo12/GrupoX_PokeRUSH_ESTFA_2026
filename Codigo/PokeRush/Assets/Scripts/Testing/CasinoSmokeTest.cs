@@ -60,6 +60,7 @@ public class CasinoSmokeTest : MonoBehaviour
         yield return ProbarAbrirDesdeLaMaquina(jugador, maquina);
         yield return ProbarApostarYGirar(jugador);
         yield return ProbarCierreYControl();
+        yield return ProbarEnfermeraYDeuda(jugador);
         yield return ProbarAscensor(jugador);
 
         Debug.Log($"[SmokeCasino] TERMINADO. OK={_ok} FALLOS={_fallos}");
@@ -195,7 +196,101 @@ public class CasinoSmokeTest : MonoBehaviour
             Destroy(_maquinaEnEscena.gameObject);
     }
 
-    // ---------- 4. el ascensor y el requisito del piso ----------
+    // ---------- 4. la enfermera y la deuda ----------
+
+    private IEnumerator ProbarEnfermeraYDeuda(PlayerModel jugador)
+    {
+        var enfermera = Object.FindAnyObjectByType<CasinoNurseInteractable>();
+        if (enfermera == null)
+        {
+            Debug.Log("[SmokeCasino] La escena no tiene enfermera: se saltea esa parte.");
+            yield break;
+        }
+        if (jugador.Team.Count == 0)
+        {
+            Debug.Log("[SmokeCasino] Sin equipo no se puede probar la curacion.");
+            yield break;
+        }
+
+        StoryModel historia = GameManager.Instance.Story;
+        int costo = Campo<int>(enfermera, "costo");
+
+        // --- cobrando: hay plata, se cura y se paga ---
+        PokenModel primero = jugador.Team[0];
+        primero.TakeDamage(primero.MaxHP / 2);
+        int psHeridos = primero.CurrentHP;
+
+        if (jugador.Money < costo) jugador.AddMoney(costo - jugador.Money);
+        int saldoAntes = jugador.Money;
+
+        Menus.CloseAll();
+        yield return null;
+        enfermera.Interact(jugador, historia);
+        yield return null;
+        yield return Contestar(true);
+
+        Check($"La enfermera cura pagando ({psHeridos} -> {primero.CurrentHP} PS)",
+              primero.CurrentHP == primero.MaxHP);
+        Check($"Y cobra lo suyo ({saldoAntes} -> {jugador.Money})",
+              jugador.Money == saldoAntes - costo);
+        Check("Pagando no queda deuda", !jugador.HasDebt);
+
+        // --- fiando: sin plata, cura igual y anota la deuda ---
+        primero.TakeDamage(primero.MaxHP / 2);
+        jugador.SpendMoney(jugador.Money);
+
+        enfermera.Interact(jugador, historia);
+        yield return null;
+        yield return Contestar(true);
+
+        Check("Sin plata la enfermera cura igual", primero.CurrentHP == primero.MaxHP);
+        Check($"Y queda la deuda anotada ({jugador.Debt})", jugador.Debt == costo);
+
+        // --- el ascensor no deja subir debiendo ---
+        var ascensor = Object.FindAnyObjectByType<CasinoElevatorInteractable>();
+        if (ascensor != null)
+        {
+            jugador.AddMoney(1000);   // plata de sobra: lo unico que frena es la deuda
+            historia.ActivateFlag(Campo<StoryFlag>(ascensor, "otorgaFlag"));
+
+            ascensor.Interact(jugador, historia);
+            yield return null;
+
+            Check("Con deuda encima el ascensor no sube",
+                  Menus.Top is MessageBoxScreen);
+            yield return Contestar(true);
+        }
+
+        // --- pagar la deuda ---
+        enfermera.Interact(jugador, historia);
+        yield return null;
+        yield return Contestar(true);
+
+        Check("Se le puede pagar la deuda a la enfermera", !jugador.HasDebt);
+    }
+
+    // Contesta la caja de mensajes que este arriba de la pila (y la cierra).
+    //
+    // OJO: la caja arranca con el NO resaltado a proposito (una pregunta
+    // destructiva no se contesta que si machacando la tecla). Para decir que si
+    // hay que mover la seleccion ANTES de aceptar, que es lo que hace el jugador.
+    private IEnumerator Contestar(bool si)
+    {
+        if (Menus.Top is MessageBoxScreen caja)
+        {
+            if (si) caja.HandleAction(GameAction.Up);
+            caja.HandleAction(si ? GameAction.Confirm : GameAction.Cancel);
+            yield return null;
+        }
+        // Puede quedar un aviso encima del que se acaba de cerrar.
+        if (Menus.Top is MessageBoxScreen aviso)
+        {
+            aviso.HandleAction(GameAction.Confirm);
+            yield return null;
+        }
+    }
+
+    // ---------- 5. el ascensor y el requisito del piso ----------
 
     private IEnumerator ProbarAscensor(PlayerModel jugador)
     {
@@ -208,6 +303,8 @@ public class CasinoSmokeTest : MonoBehaviour
 
         StoryModel historia = GameManager.Instance.Story;
         int requerido = Campo<int>(ascensor, "dineroRequerido");
+        // La deuda tiene su propia prueba: aca interesa el requisito de plata.
+        jugador.PayDebt(jugador.Debt);
         StoryFlag flagDelPiso = Campo<StoryFlag>(ascensor, "otorgaFlag");
 
         // Arranca sin el flag: es lo que hace que el requisito se vuelva a mirar.

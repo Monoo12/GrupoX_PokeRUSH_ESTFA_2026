@@ -13,65 +13,75 @@ MonoBehaviour:
   m_Name: MaquinaBasica
   m_EditorClassIdentifier: Assembly-CSharp::SlotMachineDefinition
   maquinaNombre: TRAGAPERRAS
-  descripcion: Maquina basica del piso 1.
+  descripcion: Maquina del piso 1 del casino.
   rodillos: 3
   filas: 3
   apuestaMinima: 10
   apuestaMaxima: 100
   pasoDeApuesta: 10
   simbolos:
-  - nombre: Baya
-    icono: {fileID: 0}
-    color: {r: 0.85, g: 0.3, b: 0.35, a: 1}
-    letra: B
-    peso: 34
+  - nombre: Cereza
+    icono: {fileID: -178405902, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
+    letra: C
+    peso: 60
     comodin: 0
-    pagos: 0000000001000000
-  - nombre: Pokeball
-    icono: {fileID: 0}
-    color: {r: 0.95, g: 0.62, b: 0.2, a: 1}
+    pagos: 0000000002000000
+  - nombre: Magnemite
+    icono: {fileID: -1246791933, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
+    letra: M
+    peso: 48
+    comodin: 0
+    pagos: 0000000008000000
+  - nombre: Gastly
+    icono: {fileID: 32580714, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
+    letra: G
+    peso: 36
+    comodin: 0
+    pagos: 0000000008000000
+  - nombre: Psyduck
+    icono: {fileID: 900141721, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
     letra: P
     peso: 26
     comodin: 0
-    pagos: 0000000002000000
-  - nombre: Rayo
-    icono: {fileID: 0}
-    color: {r: 0.98, g: 0.85, b: 0.25, a: 1}
-    letra: R
+    pagos: 000000000f000000
+  - nombre: Pikachu
+    icono: {fileID: 213460890, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
+    letra: P
     peso: 18
     comodin: 0
-    pagos: 0000000004000000
-  - nombre: Estrella
-    icono: {fileID: 0}
-    color: {r: 0.4, g: 0.75, b: 0.95, a: 1}
-    letra: E
-    peso: 11
-    comodin: 0
-    pagos: 0000000008000000
-  - nombre: Siete
-    icono: {fileID: 0}
-    color: {r: 0.6, g: 0.45, b: 0.9, a: 1}
-    letra: 7
-    peso: 6
-    comodin: 0
     pagos: 000000000f000000
-  - nombre: Comodin
-    icono: {fileID: 0}
-    color: {r: 0.35, g: 0.85, b: 0.55, a: 1}
-    letra: W
+  - nombre: Siete azul
+    icono: {fileID: 900985127, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
+    letra: S
+    peso: 8
+    comodin: 0
+    pagos: 000000005a000000
+  - nombre: Siete rojo
+    icono: {fileID: -372628219, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
+    letra: S
     peso: 3
+    comodin: 0
+    pagos: 000000002c010000
+  - nombre: Replay
+    icono: {fileID: 1458053076, guid: 2b1d29a9ada90b649adde85995a82174, type: 3}
+    color: {r: 0.3, g: 0.34, b: 0.44, a: 1}
+    letra: R
+    peso: 1
     comodin: 1
-    pagos: 000000001e000000
+    pagos: 00000000f4010000
   lineas:
-  - nombre: Fila de arriba
+  - nombre: Linea 1 (arriba)
     filas: 000000000000000000000000
-  - nombre: Fila del medio
+  - nombre: Linea 2 (medio)
     filas: 010000000100000001000000
-  - nombre: Fila de abajo
+  - nombre: Linea 3 (abajo)
     filas: 020000000200000002000000
-  - nombre: Diagonal baja
-    filas: 000000000100000002000000
-  - nombre: Diagonal alta
-    filas: 020000000100000000000000
   duracionDelGiro: 0.9
   retrasoEntreRodillos: 0.3
