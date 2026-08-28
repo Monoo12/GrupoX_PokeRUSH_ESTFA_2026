@@ -213,10 +213,11 @@ public static class CasinoPrefabBuilder
         MenuUiKit.Full(velo);
         MenuUiKit.AddImage(velo, null, new Color(0f, 0f, 0f, 0.72f));
 
-        GameObject panel = MenuUiKit.Node("Panel", root.transform);
-        MenuUiKit.Box(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(460f, 330f));
-        MenuUiKit.AddImage(panel, null, new Color(0.10f, 0.22f, 0.16f, 0.98f));
+        // Tapete verde y marco dorado, los dos del pack: la sala se ve como una
+        // sala y no como un cuadrado de color.
+        GameObject exterior;
+        GameObject panel = CasinoUiKit.Panel("Panel", root.transform,
+            new Vector2(500f, 364f), out exterior);
 
         Text titulo = MenuUiKit.Label("Titulo", panel.transform, Vector2.zero,
             new Vector2(440f, 24f), "RULETA", 18, TextAnchor.UpperCenter, MenuUiKit.Gold);
@@ -254,28 +255,36 @@ public static class CasinoPrefabBuilder
         MenuUiKit.Box(saldo.gameObject, new Vector2(1f, 1f), new Vector2(1f, 1f),
             new Vector2(-16f, -12f), new Vector2(120f, 22f));
 
-        Text tabla = MenuUiKit.Label("Tabla", panel.transform, Vector2.zero,
-            new Vector2(196f, 150f), "", 13, TextAnchor.UpperLeft, MenuUiKit.Ink);
+        GameObject cajaTabla = CasinoUiKit.Cartel("CajaTabla", panel.transform,
+            new Vector2(244f, -38f), new Vector2(214f, 166f),
+            new Color(0.05f, 0.12f, 0.09f, 0.92f));
+        Text tabla = MenuUiKit.Label("Tabla", cajaTabla.transform, Vector2.zero,
+            new Vector2(186f, 138f), "", 13, TextAnchor.UpperLeft, MenuUiKit.Ink);
         MenuUiKit.Box(tabla.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(248f, -44f), new Vector2(196f, 150f));
+            new Vector2(14f, -14f), new Vector2(186f, 138f));
         tabla.lineSpacing = 1.15f;
 
         Text costo = MenuUiKit.Label("Costo", panel.transform, Vector2.zero,
             new Vector2(196f, 22f), "GIRO  50", 16, TextAnchor.MiddleLeft, MenuUiKit.Accent);
         MenuUiKit.Box(costo.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(248f, -200f), new Vector2(196f, 22f));
+            new Vector2(250f, -212f), new Vector2(196f, 22f));
 
-        Text mensaje = MenuUiKit.Label("Mensaje", panel.transform, Vector2.zero,
-            new Vector2(196f, 60f), "", 14, TextAnchor.UpperLeft, MenuUiKit.Ink);
+        GameObject cajaMensaje = CasinoUiKit.Cartel("CajaMensaje", panel.transform,
+            new Vector2(244f, -240f), new Vector2(214f, 72f),
+            new Color(0.05f, 0.12f, 0.09f, 0.92f));
+        Text mensaje = MenuUiKit.Label("Mensaje", cajaMensaje.transform, Vector2.zero,
+            new Vector2(186f, 44f), "", 14, TextAnchor.UpperLeft, MenuUiKit.Ink);
         MenuUiKit.Box(mensaje.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(248f, -228f), new Vector2(196f, 60f));
+            new Vector2(14f, -14f), new Vector2(186f, 44f));
         mensaje.horizontalOverflow = HorizontalWrapMode.Wrap;
 
+        // En una sola linea: dos renglones no entraban adentro del marco y se
+        // salian del panel.
         Text ayuda = MenuUiKit.Label("Ayuda", panel.transform, Vector2.zero,
-            new Vector2(196f, 40f), "X  girar\nZ  salir", 14, TextAnchor.UpperLeft, MenuUiKit.Border);
+            new Vector2(210f, 22f), "X  girar        Z  salir", 14,
+            TextAnchor.MiddleLeft, MenuUiKit.Border);
         MenuUiKit.Box(ayuda.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f),
-            new Vector2(248f, -288f), new Vector2(196f, 40f));
-        ayuda.lineSpacing = 1.25f;
+            new Vector2(250f, -314f), new Vector2(210f, 22f));
 
         MenuUiKit.SetField(screen, "tituloText", titulo);
         MenuUiKit.SetField(screen, "saldoText", saldo);
