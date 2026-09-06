@@ -18,7 +18,14 @@ public enum MenuScreenId
 
     // La ruleta de premios: el minijuego de regalos que se abre encima del mapa
     // sin tapar el escenario. Reemplazo la mesa de apuestas que habia antes.
-    PrizeWheel
+    PrizeWheel,
+
+    // La mesa de ruleta: apuestas a numero, rojo y negro. Va SIEMPRE al final
+    // del enum. Los prefabs guardan el screenId como numero, asi que meter un
+    // valor en el medio le cambia la identidad a las pantallas de abajo y hay
+    // que regenerarlas todas (ya paso al sacar la mesa vieja: PrizeWheel se
+    // movio de 8 a 7 y hubo que rehacer su prefab).
+    Roulette
 }
 
 // Desde donde se abrio el sistema de menus. Las pantallas compartidas (mochila,
