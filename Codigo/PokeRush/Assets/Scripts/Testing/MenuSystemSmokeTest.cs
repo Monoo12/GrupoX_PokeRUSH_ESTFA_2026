@@ -111,6 +111,14 @@ public class MenuSystemSmokeTest : MonoBehaviour
             yield break;
         }
 
+        // El servicio de input arma sus InputAction al primer acceso, y una
+        // accion recien habilitada NO ve la tecla que se encolo en ese mismo
+        // frame. Sin este toque previo la prueba depende de quien inicializo el
+        // servicio primero: cualquier cambio de timing hacia fallar las dos
+        // pulsaciones que abren la pausa (y despues las del HUD de combate).
+        GameInputService.Instance.GetBindings(GameAction.Menu);
+        yield return null;
+
         yield return ApretarYSoltar(Key.Z);
         Check("La tecla de menu abre la pausa", MenuManager.AnyOpen);
 
@@ -330,6 +338,59 @@ public class MenuSystemSmokeTest : MonoBehaviour
             SettingsService.Instance.GetString("input.Confirm", "").StartsWith("<Keyboard>/k"));
 
         GameInputService.Instance.SetPrimaryBinding(GameAction.Confirm, "<Keyboard>/x");
+
+        // Teclas repetidas: la misma tecla no puede quedar en dos acciones.
+        // Antes se podia poner la misma en las diez filas y el juego se
+        // quedaba sin forma de navegar.
+        GameInputService input = GameInputService.Instance;
+
+        Check("La tecla de Aceptar choca con otra accion",
+            input.FindConflicts("<Keyboard>/x", GameAction.Run).Contains(GameAction.Confirm));
+        Check("El choque tambien mira los alias (W de Arriba)",
+            input.FindConflicts("<Keyboard>/w", GameAction.Run).Contains(GameAction.Up));
+        Check("Una accion no choca consigo misma",
+            input.FindConflicts("<Keyboard>/x", GameAction.Confirm).Count == 0);
+        Check("Una tecla libre no choca con nadie",
+            input.FindConflicts("<Keyboard>/k", GameAction.Run).Count == 0);
+
+        input.RemoveBinding(GameAction.Up, "<Keyboard>/w");
+        Check("Sacarle el alias a Arriba lo deja sin la W",
+            !input.UsesPath(GameAction.Up, "<Keyboard>/w"));
+        Check("Sacarle el alias a Arriba le deja la flecha",
+            input.UsesPath(GameAction.Up, "<Keyboard>/upArrow"));
+
+        // La ultima tecla no se saca nunca: quedarse sin ninguna es justo el
+        // estado que la validacion tiene que evitar.
+        while (input.BindingCount(GameAction.Run) > 1)
+            input.RemoveBinding(GameAction.Run, input.GetBindings(GameAction.Run)[0]);
+        string ultima = input.GetBindings(GameAction.Run)[0];
+        input.RemoveBinding(GameAction.Run, ultima);
+        Check("La ultima tecla de una accion no se puede sacar",
+            input.BindingCount(GameAction.Run) == 1);
+
+        // Menu no tiene tecla propia: es la de Volver. No aparece como fila en
+        // Opciones y sigue a Volver cuando se la reasigna.
+        Check("Menu no se ofrece para reasignar",
+            System.Array.IndexOf(GameInputService.RebindableActions, GameAction.Menu) < 0);
+        Check("Menu comparte la tecla de Volver",
+            input.UsesPath(GameAction.Menu, input.GetBindings(GameAction.Cancel)[0]));
+        Check("Volver y Menu no se avisan como choque",
+            input.FindConflicts(input.GetBindings(GameAction.Cancel)[0], GameAction.Cancel).Count == 0);
+
+        input.SetPrimaryBinding(GameAction.Cancel, "<Keyboard>/k");
+        Check("Reasignar Volver arrastra a Menu",
+            input.UsesPath(GameAction.Menu, "<Keyboard>/k"));
+        Check("Menu conserva el Escape como atajo fijo",
+            input.UsesPath(GameAction.Menu, "<Keyboard>/escape"));
+        Check("Escape sigue reservada para el menu",
+            GameInputService.IsMenuShortcut("<Keyboard>/escape"));
+
+        input.ResetToDefaults();
+        Check("Restaurar defaults devuelve la W a Arriba",
+            input.UsesPath(GameAction.Up, "<Keyboard>/w"));
+        Check("Restaurar defaults devuelve la Z a Volver y a Menu",
+            input.UsesPath(GameAction.Cancel, "<Keyboard>/z") &&
+            input.UsesPath(GameAction.Menu, "<Keyboard>/z"));
 
         opciones.HandleAction(GameAction.Cancel);
         yield return null;

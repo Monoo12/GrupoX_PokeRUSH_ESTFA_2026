@@ -91,7 +91,7 @@ public class GameInputService
             case GameAction.Right: return new[] { "<Keyboard>/rightArrow", "<Keyboard>/d", "<Gamepad>/dpad/right" };
             case GameAction.Confirm: return new[] { "<Keyboard>/x", "<Keyboard>/enter", "<Gamepad>/buttonSouth" };
             case GameAction.Cancel: return new[] { "<Keyboard>/z", "<Keyboard>/backspace", "<Gamepad>/buttonEast" };
-            case GameAction.Menu: return new[] { "<Keyboard>/z", "<Keyboard>/escape", "<Gamepad>/start" };
+            case GameAction.Menu: return MenuBindingsFrom(DefaultBindings(GameAction.Cancel));
             case GameAction.Run: return new[] { "<Keyboard>/leftShift", "<Keyboard>/rightShift", "<Gamepad>/buttonWest" };
             case GameAction.PageLeft: return new[] { "<Keyboard>/q", "<Gamepad>/leftShoulder" };
             case GameAction.PageRight: return new[] { "<Keyboard>/e", "<Gamepad>/rightShoulder" };
@@ -105,12 +105,44 @@ public class GameInputService
     // Acciones que tiene sentido ofrecer para reasignar en el menu de Opciones.
     // Las direcciones van juntas al principio para que la lista se lea como el
     // pad de un mando.
+    //
+    // Menu NO esta: no tiene tecla propia. La tecla de "Volver" es la que abre
+    // el menu desde el mundo, que es lo que el jugador ya espera, y tenerla como
+    // fila aparte solo servia para poder desincronizarlas.
     public static readonly GameAction[] RebindableActions =
     {
         GameAction.Up, GameAction.Down, GameAction.Left, GameAction.Right,
-        GameAction.Confirm, GameAction.Cancel, GameAction.Menu, GameAction.Run,
+        GameAction.Confirm, GameAction.Cancel, GameAction.Run,
         GameAction.PageLeft, GameAction.PageRight
     };
+
+    // Acciones que no se configuran porque salen de otra. Las salteamos al
+    // buscar teclas repetidas: Menu comparte tecla con Volver a proposito, y
+    // avisar de ese choque seria avisar de algo que el jugador no puede evitar.
+    public static bool IsDerived(GameAction action) => action == GameAction.Menu;
+
+    // Atajos fijos que abren el menu ademas de la tecla de Volver. No se
+    // reasignan y ninguna otra accion puede quedarse con ellos.
+    private static readonly string[] MenuShortcuts =
+    {
+        "<Keyboard>/escape", "<Gamepad>/start"
+    };
+
+    public static bool IsMenuShortcut(string path)
+    {
+        foreach (string atajo in MenuShortcuts)
+            if (string.Equals(atajo, path, StringComparison.OrdinalIgnoreCase)) return true;
+        return false;
+    }
+
+    // Menu = la tecla de Volver + los atajos fijos.
+    private static string[] MenuBindingsFrom(string[] cancelPaths)
+    {
+        var paths = new List<string>(cancelPaths);
+        foreach (string atajo in MenuShortcuts)
+            if (!paths.Contains(atajo)) paths.Add(atajo);
+        return paths.ToArray();
+    }
 
     // Etiqueta que se muestra en el menu de Opciones para cada accion.
     public static string DisplayLabel(GameAction action)
@@ -122,7 +154,7 @@ public class GameInputService
             case GameAction.Left: return "Izquierda";
             case GameAction.Right: return "Derecha";
             case GameAction.Confirm: return "Aceptar";
-            case GameAction.Cancel: return "Volver";
+            case GameAction.Cancel: return "Volver / Menú";
             case GameAction.Menu: return "Menu";
             case GameAction.Run: return "Correr";
             case GameAction.PageLeft: return "Pagina anterior";
@@ -137,13 +169,24 @@ public class GameInputService
     {
         foreach (GameAction action in AllActions())
         {
+            _heldTime[action] = -1f;
+            _nextRepeat[action] = 0f;
+
+            // Las derivadas se arman abajo. Se borra lo que haya guardado de
+            // cuando Menu era configurable, asi no revive una tecla vieja.
+            if (IsDerived(action))
+            {
+                SettingsService.Instance.Delete(SettingKey(action));
+                continue;
+            }
+
             string guardado = SettingsService.Instance.GetString(SettingKey(action), null);
             string[] paths = ParseBindings(guardado) ?? DefaultBindings(action);
             _bindings[action] = paths;
             _actions[action] = BuildAction(action, paths);
-            _heldTime[action] = -1f;
-            _nextRepeat[action] = 0f;
         }
+
+        SyncMenuConVolver();
 
         if (Application.isPlaying) GameInputRuntime.Ensure();
     }
@@ -284,36 +327,106 @@ public class GameInputService
     public string GetDisplayName(GameAction action)
     {
         string[] paths = GetBindings(action);
-        if (paths.Length == 0) return "---";
+        return paths.Length == 0 ? "---" : DisplayNameForPath(paths[0]);
+    }
+
+    // Lo mismo para un control suelto: "<Keyboard>/leftShift" -> "LEFT SHIFT".
+    // Lo usa el aviso de tecla repetida, que tiene el path pero no la accion.
+    public static string DisplayNameForPath(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return "---";
         string legible = InputControlPath.ToHumanReadableString(
-            paths[0], InputControlPath.HumanReadableStringOptions.OmitDevice);
-        return string.IsNullOrEmpty(legible) ? paths[0] : legible.ToUpperInvariant();
+            path, InputControlPath.HumanReadableStringOptions.OmitDevice);
+        return string.IsNullOrEmpty(legible) ? path : legible.ToUpperInvariant();
+    }
+
+    public bool UsesPath(GameAction action, string path)
+    {
+        foreach (string actual in GetBindings(action))
+            if (string.Equals(actual, path, StringComparison.OrdinalIgnoreCase)) return true;
+        return false;
+    }
+
+    // Cuantos controles le quedan a una accion. Opciones lo mira antes de
+    // ofrecer sacarle una tecla: dejarla en cero la mostraria como "---" y
+    // encima el guardado vacio le devolveria los defaults al proximo arranque.
+    public int BindingCount(GameAction action) => GetBindings(action).Length;
+
+    // Acciones que YA tienen ese control, sea como tecla principal o como
+    // alias. Sin esto, Opciones deja poner la misma tecla en las diez filas y
+    // el juego se queda sin forma de navegar.
+    public List<GameAction> FindConflicts(string path, GameAction exceptuada)
+    {
+        var choques = new List<GameAction>();
+        if (string.IsNullOrEmpty(path)) return choques;
+
+        foreach (GameAction action in AllActions())
+        {
+            if (action == exceptuada || IsDerived(action)) continue;
+            if (UsesPath(action, path)) choques.Add(action);
+        }
+        return choques;
     }
 
     // Reemplaza SOLO la tecla principal y conserva los alias: reasignar
     // "Aceptar" a la K no deberia hacerte perder el boton del gamepad.
     public void SetPrimaryBinding(GameAction action, string path)
     {
-        if (string.IsNullOrEmpty(path)) return;
+        if (string.IsNullOrEmpty(path) || IsDerived(action)) return;
 
         string[] actuales = GetBindings(action);
         var nuevos = new List<string> { path };
         for (int i = 1; i < actuales.Length; i++)
-            if (actuales[i] != path) nuevos.Add(actuales[i]);
+            if (!string.Equals(actuales[i], path, StringComparison.OrdinalIgnoreCase))
+                nuevos.Add(actuales[i]);
 
-        ApplyBindings(action, nuevos.ToArray());
+        SaveBindings(action, nuevos.ToArray());
+    }
+
+    // Le saca ese control a una accion (lo pide Opciones cuando el jugador
+    // acepta robarle la tecla a otra fila). Si era la principal, el primer
+    // alias pasa a mostrarse. Nunca la deja sin ninguno.
+    public void RemoveBinding(GameAction action, string path)
+    {
+        if (string.IsNullOrEmpty(path) || IsDerived(action)) return;
+
+        string[] actuales = GetBindings(action);
+        var nuevos = new List<string>();
+        foreach (string actual in actuales)
+            if (!string.Equals(actual, path, StringComparison.OrdinalIgnoreCase))
+                nuevos.Add(actual);
+
+        // No la tenia, o es la unica que le queda: no se toca nada.
+        if (nuevos.Count == actuales.Length || nuevos.Count == 0) return;
+
+        SaveBindings(action, nuevos.ToArray());
+    }
+
+    private void SaveBindings(GameAction action, string[] paths)
+    {
+        ApplyBindings(action, paths);
         SettingsService.Instance.SetString(SettingKey(action),
-            string.Join(BindingSeparator.ToString(), nuevos));
+            string.Join(BindingSeparator.ToString(), paths));
+
+        // Menu no se guarda: sigue a Volver siempre.
+        if (action == GameAction.Cancel) SyncMenuConVolver();
+
         BindingsChanged?.Invoke();
     }
+
+    private void SyncMenuConVolver()
+        => ApplyBindings(GameAction.Menu,
+            MenuBindingsFrom(GetBindings(GameAction.Cancel)));
 
     public void ResetToDefaults()
     {
         foreach (GameAction action in AllActions())
         {
+            if (IsDerived(action)) continue;
             ApplyBindings(action, DefaultBindings(action));
             SettingsService.Instance.Delete(SettingKey(action));
         }
+        SyncMenuConVolver();
         BindingsChanged?.Invoke();
     }
 

@@ -267,10 +267,66 @@ public class OptionsScreen : MenuScreen
 
         // Escape cancela: dejar que se asigne haria imposible salir de un menu
         // si alguien la elige para todo.
-        if (!path.EndsWith("/escape"))
-            GameInputService.Instance.SetPrimaryBinding(_rebindTarget, path);
+        if (path.EndsWith("/escape")) { Refresh(); return; }
 
-        Refresh();
+        // Los otros atajos fijos que abren el menu tampoco se pueden robar.
+        if (GameInputService.IsMenuShortcut(path))
+        {
+            ShowMessage(GameInputService.DisplayNameForPath(path) +
+                " está reservada para abrir el menú.", Refresh);
+            return;
+        }
+
+        ResolveRebind(_rebindTarget, path);
+    }
+
+    // Una tecla no puede quedar en dos acciones a la vez: sin esto se podia
+    // poner la misma en las diez filas y quedarse sin forma de navegar.
+    // Si la tecla ya esta usada se pregunta antes de sacarsela a la otra, y si
+    // es la unica que le queda ni se ofrece.
+    private void ResolveRebind(GameAction target, string path)
+    {
+        GameInputService input = GameInputService.Instance;
+        List<GameAction> choques = input.FindConflicts(path, target);
+
+        if (choques.Count == 0)
+        {
+            input.SetPrimaryBinding(target, path);
+            Refresh();
+            return;
+        }
+
+        string tecla = GameInputService.DisplayNameForPath(path);
+
+        foreach (GameAction otra in choques)
+            if (input.BindingCount(otra) <= 1)
+            {
+                ShowMessage(tecla + " es la única tecla de " +
+                    GameInputService.DisplayLabel(otra) + ". Elegí otra.", Refresh);
+                return;
+            }
+
+        Ask(tecla + " ya la usa " + Listar(choques) + ". ¿Se la saco?", confirmado =>
+        {
+            if (confirmado)
+            {
+                foreach (GameAction otra in choques) input.RemoveBinding(otra, path);
+                input.SetPrimaryBinding(target, path);
+            }
+            Refresh();
+        });
+    }
+
+    // "Volver", "Volver y Menu", "Volver, Menu y Correr".
+    private static string Listar(List<GameAction> acciones)
+    {
+        var nombres = new List<string>();
+        foreach (GameAction a in acciones) nombres.Add(GameInputService.DisplayLabel(a));
+        if (nombres.Count == 1) return nombres[0];
+
+        string ultimo = nombres[nombres.Count - 1];
+        nombres.RemoveAt(nombres.Count - 1);
+        return string.Join(", ", nombres) + " y " + ultimo;
     }
 
     private void CancelRebind()
