@@ -22,6 +22,11 @@ public abstract class MenuScreen : MonoBehaviour
     // Contexto efectivo: el de la peticion si vino, si no el global del manager.
     public MenuContextKind Context { get; internal set; }
 
+    // Si esta pantalla quiere el fondo oscuro del MenuManager. La ruleta de
+    // premios lo apaga: se abre ENCIMA del mapa y el jugador tiene que seguir
+    // viendo el escenario detras.
+    public virtual bool DimsBackground => true;
+
     // Resultado que se le devuelve a quien la abrio. Las subclases lo llenan
     // antes de cerrarse.
     protected object Result { get; set; }

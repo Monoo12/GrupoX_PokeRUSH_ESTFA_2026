@@ -42,3 +42,22 @@ public class RouletteScreenResult
     // Salio la casilla que cumple el objetivo del piso.
     public bool ObjetivoCumplido;
 }
+
+// ---------- ruleta de premios ----------
+// Ojo: no tiene nada que ver con RouletteScreenRequest. Aquella es la mesa de
+// apuestas del piso 2; esta es el minijuego de regalos que se abre encima del
+// mapa sin tapar el escenario.
+
+public class PrizeWheelRequest
+{
+    // Premios de ESTA maquina. Vacio = los que trae cargados el prefab.
+    public Prize[] Prizes;
+}
+
+public class PrizeWheelResult
+{
+    public int Giros;
+    // El ultimo premio que salio, para que la maquina del mundo pueda
+    // reaccionar sin espiar la mochila.
+    public Prize UltimoPremio;
+}

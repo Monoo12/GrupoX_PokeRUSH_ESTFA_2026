@@ -142,7 +142,7 @@ public class MenuManager : MonoBehaviour
         MenuContextKind context = ResolveContext(payload);
         _stack.Add(new Entry { Screen = screen, OnClosed = onClosed });
 
-        if (dimmer != null) dimmer.SetActive(true);
+        RefreshDimmer();
         screen.OpenInternal(payload, context);
         return screen;
     }
@@ -173,7 +173,7 @@ public class MenuManager : MonoBehaviour
         }
 
         if (_stack.Count > 0) _stack[_stack.Count - 1].Screen.OnFocusGained();
-        else if (dimmer != null) dimmer.SetActive(false);
+        RefreshDimmer();
 
         // Los callbacks van al FINAL y con la pila ya consistente: uno de ellos
         // puede abrir o cerrar otra pantalla (el "¿guardar?" que abre el
@@ -187,6 +187,16 @@ public class MenuManager : MonoBehaviour
     {
         if (_stack.Count == 0) return;
         Close(_stack[0].Screen);
+    }
+
+    // El oscurecedor lo decide la pantalla RAIZ de la pila, no la de arriba.
+    // Si mirara la de arriba, la caja de mensajes que abre la ruleta de premios
+    // volveria a oscurecer el mapa que la ruleta justamente deja a la vista, y
+    // el cartel del premio se veria sobre un fondo negro.
+    private void RefreshDimmer()
+    {
+        if (dimmer == null) return;
+        dimmer.SetActive(_stack.Count > 0 && _stack[0].Screen.DimsBackground);
     }
 
     private MenuContextKind ResolveContext(object payload)

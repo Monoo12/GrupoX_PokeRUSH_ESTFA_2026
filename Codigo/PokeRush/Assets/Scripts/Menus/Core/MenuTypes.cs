@@ -15,7 +15,11 @@ public enum MenuScreenId
     // minijuegos heredan la pila, el input y la caja de mensajes, y el jugador
     // recupera el control al cerrarlas sin que nadie tenga que acordarse.
     Slots,
-    Roulette
+    Roulette,
+
+    // Ruleta de premios: no es una mesa de apuestas, es el minijuego de regalos
+    // que se abre encima del mapa sin tapar el escenario.
+    PrizeWheel
 }
 
 // Desde donde se abrio el sistema de menus. Las pantallas compartidas (mochila,
