@@ -30,11 +30,25 @@ public class PrizeWheelInteractable : MonoBehaviour, IInteractable
     [Tooltip("Lo que dice antes de abrir. Vacio = abre de una.")]
     [SerializeField, TextArea(2, 3)] private string mensajeDeBienvenida = "";
 
+    [Header("Objetivo del piso (opcional)")]
+    [Tooltip("Flag que activa despues del primer giro. En el casino esto es lo " +
+             "que destraba el ascensor: el CasinoElevatorInteractable no deja " +
+             "subir hasta que alguien otorga Casino_Ruleta_ObjetivoCumplido.")]
+    [SerializeField] private StoryFlag otorgaFlag = StoryFlag.None;
+    [Tooltip("Cartel al cumplir el objetivo del piso. Se muestra una sola vez.")]
+    [SerializeField, TextArea(2, 3)] private string mensajeObjetivo =
+        "El de seguridad te mira distinto. El ascensor ya te deja subir.";
+
     private bool _yaUsada;
+    private StoryModel _story;
 
     public bool Interact(PlayerModel player, StoryModel story)
     {
         if (player == null) return false;
+
+        // Se guarda para poder otorgar el flag al cerrar la ruleta: para ese
+        // entonces ya no hay nadie llamando a Interact.
+        _story = story;
 
         if (requiereFlag != StoryFlag.None && (story == null || !story.HasFlag(requiereFlag)))
         {
@@ -71,7 +85,18 @@ public class PrizeWheelInteractable : MonoBehaviour, IInteractable
 
     private void AlCerrar(PrizeWheelResult resultado)
     {
-        if (resultado != null && resultado.Giros > 0) _yaUsada = true;
+        if (resultado == null || resultado.Giros <= 0) return;
+
+        _yaUsada = true;
+
+        // El objetivo del piso se cumple con haber girado, no con lo que salio:
+        // atarlo a un premio puntual dejaria al jugador encerrado si tiene mala
+        // suerte, y el ascensor es progresion, no azar.
+        if (otorgaFlag == StoryFlag.None || _story == null) return;
+        if (_story.HasFlag(otorgaFlag)) return;
+
+        _story.ActivateFlag(otorgaFlag);
+        Avisar(mensajeObjetivo);
     }
 
     private void Avisar(string mensaje, System.Action alCerrar = null)

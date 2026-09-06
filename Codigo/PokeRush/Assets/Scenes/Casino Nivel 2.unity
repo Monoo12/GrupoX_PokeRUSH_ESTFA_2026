@@ -25256,14 +25256,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 149594795}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6b56f5a7d0c3042997738425212caf, type: 3}
+  m_Script: {fileID: 11500000, guid: dfa65c094f99ceb468e023868156172e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RouletteInteractable
-  mesa: {fileID: 11400000, guid: fae5f2fdb3ace704e9e0df8ad09d79b2, type: 2}
-  titulo: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrizeWheelInteractable
+  premios: []
   requiereFlag: 0
-  mensajeBloqueada: Esta mesa esta cerrada.
-  mostrarResumen: 1
+  mensajeBloqueada: La ruleta esta apagada.
+  unSoloUso: 0
+  mensajeYaUsada: Ya giraste hoy. Volve manana.
+  mensajeDeBienvenida: 
+  otorgaFlag: 20
   mensajeObjetivo: El de seguridad te mira distinto. El ascensor ya te deja subir.
 --- !u!61 &149594798
 
@@ -25357,14 +25359,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 877625830}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6b56f5a7d0c3042997738425212caf, type: 3}
+  m_Script: {fileID: 11500000, guid: dfa65c094f99ceb468e023868156172e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RouletteInteractable
-  mesa: {fileID: 11400000, guid: fae5f2fdb3ace704e9e0df8ad09d79b2, type: 2}
-  titulo: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrizeWheelInteractable
+  premios: []
   requiereFlag: 0
-  mensajeBloqueada: Esta mesa esta cerrada.
-  mostrarResumen: 1
+  mensajeBloqueada: La ruleta esta apagada.
+  unSoloUso: 0
+  mensajeYaUsada: Ya giraste hoy. Volve manana.
+  mensajeDeBienvenida: 
+  otorgaFlag: 0
   mensajeObjetivo: El de seguridad te mira distinto. El ascensor ya te deja subir.
 --- !u!61 &877625833
 
@@ -25458,14 +25462,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 892521662}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6b56f5a7d0c3042997738425212caf, type: 3}
+  m_Script: {fileID: 11500000, guid: dfa65c094f99ceb468e023868156172e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RouletteInteractable
-  mesa: {fileID: 11400000, guid: fae5f2fdb3ace704e9e0df8ad09d79b2, type: 2}
-  titulo: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrizeWheelInteractable
+  premios: []
   requiereFlag: 0
-  mensajeBloqueada: Esta mesa esta cerrada.
-  mostrarResumen: 1
+  mensajeBloqueada: La ruleta esta apagada.
+  unSoloUso: 0
+  mensajeYaUsada: Ya giraste hoy. Volve manana.
+  mensajeDeBienvenida: 
+  otorgaFlag: 0
   mensajeObjetivo: El de seguridad te mira distinto. El ascensor ya te deja subir.
 --- !u!61 &892521665
 
@@ -25599,14 +25605,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1112605113}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6b56f5a7d0c3042997738425212caf, type: 3}
+  m_Script: {fileID: 11500000, guid: dfa65c094f99ceb468e023868156172e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RouletteInteractable
-  mesa: {fileID: 11400000, guid: fae5f2fdb3ace704e9e0df8ad09d79b2, type: 2}
-  titulo: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrizeWheelInteractable
+  premios: []
   requiereFlag: 0
-  mensajeBloqueada: Esta mesa esta cerrada.
-  mostrarResumen: 1
+  mensajeBloqueada: La ruleta esta apagada.
+  unSoloUso: 0
+  mensajeYaUsada: Ya giraste hoy. Volve manana.
+  mensajeDeBienvenida: 
+  otorgaFlag: 0
   mensajeObjetivo: El de seguridad te mira distinto. El ascensor ya te deja subir.
 --- !u!61 &1112605116
 
@@ -25700,14 +25708,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1754322173}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6b56f5a7d0c3042997738425212caf, type: 3}
+  m_Script: {fileID: 11500000, guid: dfa65c094f99ceb468e023868156172e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RouletteInteractable
-  mesa: {fileID: 11400000, guid: fae5f2fdb3ace704e9e0df8ad09d79b2, type: 2}
-  titulo: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrizeWheelInteractable
+  premios: []
   requiereFlag: 0
-  mensajeBloqueada: Esta mesa esta cerrada.
-  mostrarResumen: 1
+  mensajeBloqueada: La ruleta esta apagada.
+  unSoloUso: 0
+  mensajeYaUsada: Ya giraste hoy. Volve manana.
+  mensajeDeBienvenida: 
+  otorgaFlag: 0
   mensajeObjetivo: El de seguridad te mira distinto. El ascensor ya te deja subir.
 --- !u!61 &1754322176
 
@@ -25909,14 +25919,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2100964175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6b56f5a7d0c3042997738425212caf, type: 3}
+  m_Script: {fileID: 11500000, guid: dfa65c094f99ceb468e023868156172e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RouletteInteractable
-  mesa: {fileID: 11400000, guid: fae5f2fdb3ace704e9e0df8ad09d79b2, type: 2}
-  titulo: 
+  m_EditorClassIdentifier: Assembly-CSharp::PrizeWheelInteractable
+  premios: []
   requiereFlag: 0
-  mensajeBloqueada: Esta mesa esta cerrada.
-  mostrarResumen: 1
+  mensajeBloqueada: La ruleta esta apagada.
+  unSoloUso: 0
+  mensajeYaUsada: Ya giraste hoy. Volve manana.
+  mensajeDeBienvenida: 
+  otorgaFlag: 0
   mensajeObjetivo: El de seguridad te mira distinto. El ascensor ya te deja subir.
 --- !u!61 &2100964178
 

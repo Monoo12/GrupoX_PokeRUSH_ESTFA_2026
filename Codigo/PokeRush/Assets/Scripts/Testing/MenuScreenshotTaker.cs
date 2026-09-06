@@ -58,13 +58,11 @@ public class MenuScreenshotTaker : MonoBehaviour
             menus.Close(menus.Top);
         }
 
-        var mesa = Resources.Load<RouletteTableDefinition>("Definitions/Casino/MesaDeRuleta");
-        if (mesa != null)
-        {
-            menus.Open(MenuScreenId.Roulette, new RouletteScreenRequest { Mesa = mesa });
-            yield return Foto("0-ruleta");
-            menus.Close(menus.Top);
-        }
+        // La ruleta de premios no necesita definicion: los ocho premios ya
+        // vienen cargados en el prefab de la pantalla.
+        menus.Open(MenuScreenId.PrizeWheel, new PrizeWheelRequest());
+        yield return Foto("0-ruleta-de-premios");
+        menus.Close(menus.Top);
 
         menus.Open(MenuScreenId.Bag, new BagScreenRequest { Pocket = ItemPocket.Medicine });
         yield return Foto("2-mochila");

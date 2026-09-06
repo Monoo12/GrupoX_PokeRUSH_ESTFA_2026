@@ -22,10 +22,9 @@ public static class CasinoInteractionBuilder
     private const int CapaObstacles = 3;
     private const string Contenedor = "InteraccionesCasino";
     private const string MaquinaBasica = "Assets/Resources/Definitions/Casino/MaquinaBasica.asset";
-    private const string MesaDeRuleta = "Assets/Resources/Definitions/Casino/MesaDeRuleta.asset";
 
     // Que mecanica lleva el mueble principal de cada piso.
-    private enum Mecanica { Ninguna, Slots, Ruleta }
+    private enum Mecanica { Ninguna, Slots, RuletaDePremios }
 
     // Configuracion de un piso. Sale de mirar las escenas con
     // PokeRush/Casino/Analizar los cuatro pisos.
@@ -63,7 +62,7 @@ public static class CasinoInteractionBuilder
             Escena = "Assets/Scenes/Casino Nivel 2.unity",
             // Las seis mesas de ruleta del piso 2 ocupan 4x2 celdas cada una.
             FormaDelMueble = "4x2", PrefijoDelMueble = "Ruleta",
-            Mecanica = Mecanica.Ruleta,
+            Mecanica = Mecanica.RuletaDePremios,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino nivel 3", NombreDelDestino = "el piso 3",
             Requisito = CasinoRequisitoTipo.Flag,
@@ -156,12 +155,9 @@ public static class CasinoInteractionBuilder
         }
 
         var maquina = AssetDatabase.LoadAssetAtPath<SlotMachineDefinition>(MaquinaBasica);
-        var mesa = AssetDatabase.LoadAssetAtPath<RouletteTableDefinition>(MesaDeRuleta);
 
         if (piso.Mecanica == Mecanica.Slots && maquina == null)
             Debug.LogWarning($"[CasinoInter] Falta {MaquinaBasica}: las maquinas quedan sin definicion.");
-        if (piso.Mecanica == Mecanica.Ruleta && mesa == null)
-            Debug.LogWarning($"[CasinoInter] Falta {MesaDeRuleta}: las mesas quedan sin definicion.");
 
         int puestos = 0;
         foreach (List<Vector3Int> pieza in CasinoDecoradoScanner.Agrupar(colisiones))
@@ -185,15 +181,18 @@ public static class CasinoInteractionBuilder
 
             // Cada piso cuelga lo suyo. El collider y la posicion son iguales:
             // lo unico que cambia es que componente lleva encima.
-            if (piso.Mecanica == Mecanica.Ruleta)
+            if (piso.Mecanica == Mecanica.RuletaDePremios)
             {
-                var comp = go.AddComponent<RouletteInteractable>();
-                if (mesa != null)
-                {
-                    var so = new SerializedObject(comp);
-                    so.FindProperty("mesa").objectReferenceValue = mesa;
-                    so.ApplyModifiedPropertiesWithoutUndo();
-                }
+                // Sin premios asignados: se queda con los ocho que trae cargados
+                // el prefab de la pantalla. La primera mesa es la que destraba
+                // el ascensor; las otras son las mismas pero sin el flag, para
+                // que girar de nuevo no vuelva a cantar el cartel del objetivo.
+                var comp = go.AddComponent<PrizeWheelInteractable>();
+                var so = new SerializedObject(comp);
+                so.FindProperty("otorgaFlag").enumValueIndex =
+                    puestos == 1 ? (int)StoryFlag.Casino_Ruleta_ObjetivoCumplido
+                                 : (int)StoryFlag.None;
+                so.ApplyModifiedPropertiesWithoutUndo();
             }
             else
             {

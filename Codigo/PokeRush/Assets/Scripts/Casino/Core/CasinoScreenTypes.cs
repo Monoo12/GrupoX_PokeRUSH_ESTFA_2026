@@ -25,28 +25,7 @@ public class SlotsScreenResult
     public int MayorPremio;
 }
 
-// ---------- ruleta ----------
-
-public class RouletteScreenRequest
-{
-    public RouletteTableDefinition Mesa;
-    // Titulo del cartel. Vacio = el nombre de la mesa.
-    public string Titulo;
-}
-
-public class RouletteScreenResult
-{
-    public int Giros;
-    // Lo ganado menos lo apostado en toda la sesion de esta mesa.
-    public int Neto;
-    // Salio la casilla que cumple el objetivo del piso.
-    public bool ObjetivoCumplido;
-}
-
 // ---------- ruleta de premios ----------
-// Ojo: no tiene nada que ver con RouletteScreenRequest. Aquella es la mesa de
-// apuestas del piso 2; esta es el minijuego de regalos que se abre encima del
-// mapa sin tapar el escenario.
 
 public class PrizeWheelRequest
 {

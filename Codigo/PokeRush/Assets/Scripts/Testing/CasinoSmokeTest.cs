@@ -198,11 +198,11 @@ public class CasinoSmokeTest : MonoBehaviour
     }
 
 
-    // ---------- la ruleta del piso 2 ----------
+    // ---------- la ruleta de premios del piso 2 ----------
 
     private IEnumerator ProbarRuleta(PlayerModel jugador)
     {
-        var mesa = Object.FindAnyObjectByType<RouletteInteractable>();
+        var mesa = Object.FindAnyObjectByType<PrizeWheelInteractable>();
         if (mesa == null)
         {
             Debug.Log("[SmokeCasino] Este piso no tiene ruleta: se saltea esa parte.");
@@ -213,72 +213,60 @@ public class CasinoSmokeTest : MonoBehaviour
         Menus.CloseAll();
         yield return null;
 
-        if (jugador.Money < 500) jugador.AddMoney(500 - jugador.Money);
-
         mesa.Interact(jugador, historia);
         yield return null;
 
-        var pantalla = Menus.Top as RouletteScreen;
+        var pantalla = Menus.Top as PrizeWheelController;
         Check("La mesa abre la ruleta encima del piso", pantalla != null);
         if (pantalla == null) yield break;
 
-        var definicion = Campo<RouletteTableDefinition>(pantalla, "_mesa");
-        Check("La ruleta abre con su mesa cargada", definicion != null);
-        if (definicion == null) yield break;
+        Check("La ruleta no oscurece el mapa", !pantalla.DimsBackground);
 
-        // --- un giro normal: cobra la ficha ---
-        int saldoAntes = jugador.Money;
-        pantalla.HandleAction(GameAction.Confirm);
+        int objetosAntes = jugador.Inventory.HealItems.Count;
+
+        // --- un giro ---
+        pantalla.OnSpinButton();
         yield return null;
 
-        Check($"El giro cobra la ficha ({saldoAntes} -> {jugador.Money})",
-              jugador.Money == saldoAntes - definicion.costoPorGiro);
-
-        // Con la rueda girando no se puede salir con la ficha ya cobrada.
+        // Con la rueda girando no se puede salir ni encadenar otro giro.
         pantalla.HandleAction(GameAction.Cancel);
         yield return null;
         Check("No se puede salir con la rueda girando", Menus.Top == pantalla);
 
-        // Se fuerza la casilla del OBJETIVO: al 6% de probabilidad, esperarla
-        // seria una prueba de paciencia, y lo que hay que verificar es que al
-        // salir quede anotada la progresion.
-        int objetivo = -1;
-        for (int i = 0; i < definicion.premios.Length; i++)
-            if (definicion.premios[i] != null && definicion.premios[i].cumpleObjetivo) objetivo = i;
-
-        Check("La mesa tiene una casilla que cumple el objetivo del piso", objetivo >= 0);
-        if (objetivo < 0) yield break;
-
-        historia.ActiveFlags.Remove(definicion.flagObjetivo);
-        int equipoAntes = jugador.Team.Count;
-
-        SetCampo(pantalla, "_tirada", new RouletteSpinResult
-        {
-            PremioIndex = objetivo,
-            Premio = definicion.premios[objetivo]
-        });
-
-        float limite = Time.unscaledTime + 10f;
-        while (Campo<object>(pantalla, "_fase").ToString() != "Esperando" && Time.unscaledTime < limite)
+        // Frena sola y el premio sale por la caja de texto de siempre, no por
+        // un panel propio.
+        float limite = Time.unscaledTime + 12f;
+        while (!(Menus.Top is MessageBoxScreen) && Time.unscaledTime < limite)
             yield return null;
 
-        Check("La rueda frena sola", Campo<object>(pantalla, "_fase").ToString() == "Esperando");
-        Check($"El premio del objetivo entra al equipo ({equipoAntes} -> {jugador.Team.Count})",
-              jugador.Team.Count == equipoAntes + 1);
-        Check("Y el objetivo del piso queda anotado en la historia",
-              historia.HasFlag(definicion.flagObjetivo));
+        Check("La rueda frena sola y canta el premio", Menus.Top is MessageBoxScreen);
+        Check("El premio sale por la caja de texto del juego, sin panel aparte",
+              Menus.Top is MessageBoxScreen);
 
-        // --- cerrar y recuperar el control ---
-        pantalla.HandleAction(GameAction.Cancel);
-        yield return null;
-        Check("La ruleta se cierra", !pantalla.IsOpen);
-
-        if (Menus.Top is MessageBoxScreen resumen)
+        if (Menus.Top is MessageBoxScreen cartel)
         {
-            resumen.HandleAction(GameAction.Confirm);
+            cartel.HandleAction(GameAction.Confirm);
             yield return null;
         }
 
+        Check($"Algo entro a la mochila o el premio era solo de cartel " +
+              $"({objetosAntes} -> {jugador.Inventory.HealItems.Count})",
+              jugador.Inventory.HealItems.Count >= objetosAntes);
+
+        // --- cerrar y recuperar el control ---
+        pantalla.OnBackButton();
+        yield return null;
+        Check("La ruleta se cierra", !pantalla.IsOpen);
+
+        // El cartel del objetivo del piso puede quedar arriba: se descarta.
+        if (Menus.Top is MessageBoxScreen objetivo)
+        {
+            objetivo.HandleAction(GameAction.Confirm);
+            yield return null;
+        }
+
+        Check("El objetivo del piso queda anotado en la historia",
+              historia.HasFlag(StoryFlag.Casino_Ruleta_ObjetivoCumplido));
         Check("Despues de la ruleta el jugador recupera el control", !MenuManager.AnyOpen);
     }
 
