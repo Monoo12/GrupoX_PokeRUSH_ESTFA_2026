@@ -107,12 +107,30 @@ public static class RouletteTableBuilder
         var screen = root.AddComponent<RouletteScreen>();
         MenuUiKit.SetField(screen, "screenId", (int)MenuScreenId.Roulette);
 
+        // Telon opaco a pantalla completa, DETRAS del marco de 512x384.
+        //
+        // El CanvasScaler encaja la referencia 4:3 dentro de la ventana, asi
+        // que en cualquier pantalla mas ancha (16:9 incluido) sobran franjas a
+        // los costados. Sin esto, por esas franjas se ve el mapa del casino y
+        // la mesa parece flotar. El color sale del borde exterior de fondo.png
+        // oscurecido, para que se lea como la sombra alrededor de la mesa.
+        GameObject telon = MenuUiKit.Node("Telon", root.transform);
+        MenuUiKit.Full(telon);
+        MenuUiKit.AddImage(telon, null, new Color(0.159f, 0.073f, 0.043f, 1f));
+
         // Marco de 512x384 centrado: este nodo existe solo para que las
         // coordenadas de adentro sean pixeles del arte y no porcentajes de una
         // pantalla que cambia de ancho.
         GameObject marco = MenuUiKit.Node("Marco", root.transform);
         MenuUiKit.Box(marco, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
             Vector2.zero, new Vector2(MenuUiKit.RefWidth, MenuUiKit.RefHeight));
+
+        // El fondo va PRIMERO: UGUI dibuja en orden de jerarquia, asi que ser
+        // el primer hijo es lo que lo deja detras de todo lo demas. Ocupa las
+        // 512x384 enteras, o sea que la mesa ya no se abre sobre el mapa: el
+        // marco de madera del dibujo hace de borde de la pantalla.
+        Imagen(marco.transform, "Fondo", "roulette_background", Vector2.zero,
+            new Vector2(MenuUiKit.RefWidth, MenuUiKit.RefHeight));
 
         ArmarCabecera(marco.transform, screen);
         ArmarRueda(marco.transform, screen);

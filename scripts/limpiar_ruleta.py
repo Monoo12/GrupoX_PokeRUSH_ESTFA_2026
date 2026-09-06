@@ -51,6 +51,8 @@ HOJA = os.path.join(CARPETA, "sprite_sheet_completo.png")
 
 # Fondo de la hoja y dibujo estan bien separados: el histograma de alpha es
 # bimodal (fondo 7..63, dibujo 240..252) con un valle vacio en el medio.
+RefWidth, RefHeight = 512, 384   # resolucion de referencia del Canvas
+
 ALPHA_FONDO = 60.0
 ALPHA_DIBUJO = 250.0
 
@@ -510,6 +512,56 @@ def vaciar_regiones(im, regiones, muestra):
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
 
 
+def fondo_de_mesa():
+    """El fondo sobre el que se apoya toda la mesa.
+
+    fondo.png lo paso Augusto y viene 1536x1024, o sea 3:2, pero el Canvas es
+    512x384 = 4:3. Estirarlo sin mas deja las pokeballs del marco ovaladas (un
+    11% mas angostas), que es justo lo que se mira en un marco decorado.
+
+    Asi que se comprime SOLO el fieltro. El dibujo se parte en cinco tramos:
+    marco izquierdo, fieltro, placa central, fieltro, marco derecho. Los tres
+    tramos "duros" van a escala natural y los dos de fieltro absorben toda la
+    diferencia (factor ~0.76). El fieltro es un patron de rombos suave, asi que
+    comprimirlo no se ve; y como los tramos duros son simetricos, la placa
+    central queda centrada igual.
+
+    NO pasa por PALETA: este dibujo ya viene con la paleta que buscamos (verde,
+    dorado y rojo). El remapeo de caoba a dorado le arruinaria el marco.
+
+    Sale a resolucion completa: el fondo ocupa las 512x384 unidades del Canvas,
+    que a 1920 de ancho son 1920x1440 px reales, asi que 1365 de ancho ya se
+    queda corto. Achicarlo seria regalar nitidez.
+    """
+    ruta = os.path.join(CARPETA, "fondo.png")
+    if not os.path.isfile(ruta):
+        return None
+
+    im = Image.open(ruta).convert("RGB")
+    ancho, alto = im.size
+    destino = int(round(alto * RefWidth / RefHeight))
+
+    # Cortes medidos sobre el dibujo: marco + esquinas hasta 260, placa central
+    # entre 618 y 918. Lo de al medio es fieltro liso.
+    tramos = [(0, 260, True), (260, 618, False), (618, 918, True),
+              (918, 1276, False), (1276, ancho, True)]
+
+    duros = sum(b - a for a, b, fijo in tramos if fijo)
+    blandos = sum(b - a for a, b, fijo in tramos if not fijo)
+    factor = (destino - duros) / float(blandos)
+
+    out = Image.new("RGB", (destino, alto))
+    x = 0
+    for a, b, fijo in tramos:
+        w = int(round((b - a) * (1.0 if fijo else factor)))
+        out.paste(im.crop((a, 0, b, alto)).resize((w, alto), Image.LANCZOS), (x, 0))
+        x += w
+    if x < destino:   # redondeo: se estira la ultima columna
+        out.paste(out.crop((x - 1, 0, x, alto)).resize((destino - x, alto)), (x, 0))
+
+    return out
+
+
 def panel_fieltro(tabla, lado=128, borde=20):
     """Panel verde con marco dorado para el area de apuestas, en 9 tajadas.
 
@@ -649,6 +701,11 @@ def main():
     token = ficha_apostada()
     token.save(os.path.join(CARPETA, "roulette_token.png"))
     hechos.append(("roulette_token", token.size))
+
+    fondo = fondo_de_mesa()
+    if fondo is not None:
+        fondo.save(os.path.join(CARPETA, "roulette_background.png"))
+        hechos.append(("roulette_background", fondo.size))
 
     fieltro = panel_fieltro(Image.open(os.path.join(CARPETA, "roulette_table.png")))
     fieltro.save(os.path.join(CARPETA, "roulette_felt.png"))
