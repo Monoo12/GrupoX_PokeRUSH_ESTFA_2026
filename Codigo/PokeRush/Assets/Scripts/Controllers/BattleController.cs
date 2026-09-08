@@ -211,18 +211,13 @@ public class BattleController : MonoBehaviour
                 _bossConfig.PermiteCambio && HayBancoDisponible();
             _prediction.TieneObjetos = () =>
                 _playerModel.Inventory.HealItems.Exists(s => s.Quantity > 0);
-            // Un movimiento de estado CON PP alcanza como salida: la Prediccion
-            // de Ataque solo anula los de dano, asi que el jugador igual puede
-            // actuar. Sin esto, con un solo Poken y sin objetos no habia
-            // ninguna categoria anulable y Nestor no leia nunca.
-            _prediction.TieneMovimientoDeEstado = () =>
-            {
-                PokenModel activo = _battleModel.ActivePlayerPoken;
-                if (activo == null) return false;
-                return activo.Moves.Exists(m =>
-                    m.HasPP && m.Definition != null &&
-                    (m.Definition.attackType == AttackType.Status || m.Definition.power <= 0));
-            };
+            // Los movimientos CON PP son dos salidas distintas, no una: la
+            // lectura de Ataque anula solo los de dano y la de Estado solo los
+            // de estado, asi que siempre le queda la otra mitad del menu. Sin
+            // separarlas, el que llega con un solo Poken y la mochila vacia
+            // tenia una unica categoria anulable y Nestor leia siempre igual.
+            _prediction.TieneMovimientoDeEstado = () => TieneMovimientoConPP(false);
+            _prediction.TieneMovimientoDeDano = () => TieneMovimientoConPP(true);
         }
         if (_bossConfig != null)
             Debug.Log($"[Combate] Config del boss: {_bossConfig.Resumen()}");
@@ -756,6 +751,18 @@ public class BattleController : MonoBehaviour
         }
 
         yield return ContinuarDespuesDelTurno();
+    }
+
+    // Le queda al Poken activo algun movimiento con PP de ese tipo? Clasifica
+    // con PredictionState para que la SALIDA que se le informa a la Prediccion
+    // y el bloqueo que despues aplica usen exactamente el mismo criterio.
+    private bool TieneMovimientoConPP(bool deDano)
+    {
+        PokenModel activo = _battleModel != null ? _battleModel.ActivePlayerPoken : null;
+        if (activo == null) return false;
+        return activo.Moves.Exists(m => m.HasPP && (deDano
+            ? PredictionState.EsDeDano(m.Definition)
+            : PredictionState.EsDeEstado(m.Definition)));
     }
 
     // ---------- fase de liberacion ----------

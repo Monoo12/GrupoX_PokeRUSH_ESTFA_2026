@@ -58,6 +58,14 @@ namespace PokeRush.EditorTools
             TestCadaSubsistemaAflojaLoSuyo();
             TestFirewallEsParcialPeroMelmetalEsTodoONada();
 
+            // La lectura de Nestor: que varie y que el aviso no mienta
+            TestLecturaVariaConElEquipoDelPrimerNivel();
+            TestLecturaNoAnulaLaUnicaSalida();
+            TestLecturaDeLaMochilaNoEsperaAlCriticoDeVida();
+            TestLecturaNoLeeLoQueElJugadorNoPuedeHacer();
+            TestLecturaCadaTresTurnos();
+            TestAvisoAnticipadoNoMiente();
+
             if (_failed == 0)
                 Debug.Log($"[SmokeTests] TODOS OK: {_passed} checks pasaron.");
             else
@@ -933,6 +941,206 @@ namespace PokeRush.EditorTools
                             StoryFlag.Torre1_RastreoCortado,
                             StoryFlag.Torre1_EnergiaAuxiliarCortada).SinMelmetal,
                 "Melmetal: con los CUATRO subsistemas cortados, Nestor pelea sin el");
+        }
+
+        // ---------- la lectura de Nestor ----------
+        //
+        // El bug que cubren: en las condiciones en las que se llega al primer
+        // boss (un Poken o dos, mochila vacia, rastreo activo asi que no se
+        // puede cambiar) la heuristica se quedaba con UNA sola candidata y
+        // Nestor anulaba siempre la misma categoria, lectura tras lectura.
+
+        // Poken con un movimiento de dano y uno de estado, para que las dos
+        // categorias de movimiento existan de verdad.
+        private static PokenModel MakePokenDeLectura(string nombre)
+        {
+            var especie = MakeSpecies(nombre, PokenType.Normal, PokenType.None,
+                80, 70, 70, 70, 70, 70);
+            return MakePoken(especie, 30,
+                MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 60, 100, 20),
+                MakeMove("Gruñido", PokenType.Normal, AttackType.Status, 0, 100, 20));
+        }
+
+        private static BattleModel MakeBattleDeLectura(int pokensDelJugador)
+        {
+            var player = new PlayerModel("Tester");
+            for (int i = 0; i < pokensDelJugador; i++)
+                player.Team.Add(MakePokenDeLectura($"Lector{i}"));
+
+            PokenModel rival = MakePokenDeLectura("Rival");
+            var enemy = new EnemyModel(rival.Definition, rival.Level);
+            enemy.Team.Clear();
+            enemy.Team.Add(rival);
+
+            var model = new BattleModel(player, enemy);
+            model.SwitchPlayerPoken(0);
+            model.SwitchEnemyPoken(0);
+            return model;
+        }
+
+        // Las salidas se cablean a mano (en el juego las cablea BattleController
+        // mirando la mochila, el banco y los PP) para poder reproducir una
+        // condicion exacta sin montar media pelea.
+        private static PredictionState MakeLectura(bool conAviso,
+            bool dano, bool estado, bool objetos, bool cambio)
+        {
+            var prediction = new PredictionState(conAviso, 3);
+            prediction.TieneMovimientoDeDano = () => dano;
+            prediction.TieneMovimientoDeEstado = () => estado;
+            prediction.TieneObjetos = () => objetos;
+            prediction.PuedeCambiar = () => cambio;
+            return prediction;
+        }
+
+        // Corre N turnos y devuelve las categorias que se anularon de verdad.
+        private static List<PredictedCategory> Lecturas(
+            PredictionState prediction, BattleModel model, int turnos, int semilla = 7)
+        {
+            var rng = new SeededRng(semilla);
+            var salieron = new List<PredictedCategory>();
+            for (int t = 0; t < turnos; t++)
+            {
+                prediction.Avanzar(model, rng);
+                if (prediction.Categoria != PredictedCategory.None)
+                    salieron.Add(prediction.Categoria);
+            }
+            return salieron;
+        }
+
+        private static bool Variadas(List<PredictedCategory> lecturas)
+            => lecturas.Count > 0 && lecturas.Exists(c => c != lecturas[0]);
+
+        private static bool RepiteSeguidas(List<PredictedCategory> lecturas)
+        {
+            for (int i = 1; i < lecturas.Count; i++)
+                if (lecturas[i] == lecturas[i - 1]) return true;
+            return false;
+        }
+
+        private static void TestLecturaVariaConElEquipoDelPrimerNivel()
+        {
+            // Como se llega a Nestor la primera vez: un solo Poken, mochila
+            // vacia y el rastreo activo (no se puede cambiar).
+            BattleModel model = MakeBattleDeLectura(1);
+            PredictionState prediction = MakeLectura(false,
+                dano: true, estado: true, objetos: false, cambio: false);
+
+            List<PredictedCategory> lecturas = Lecturas(prediction, model, 30);
+
+            Check(lecturas.Count > 0,
+                "Lectura de Nestor: con un solo Poken y sin objetos igual lee");
+            Check(Variadas(lecturas),
+                "Lectura de Nestor: con el equipo del primer nivel NO anula siempre lo mismo");
+            Check(!RepiteSeguidas(lecturas),
+                "Lectura de Nestor: no repite categoria dos lecturas seguidas");
+        }
+
+        private static void TestLecturaNoAnulaLaUnicaSalida()
+        {
+            // Un Poken, solo movimientos de dano, sin objetos y sin cambio:
+            // anularle el ataque lo deja sin ninguna accion valida.
+            BattleModel model = MakeBattleDeLectura(1);
+            PredictionState prediction = MakeLectura(false,
+                dano: true, estado: false, objetos: false, cambio: false);
+
+            List<PredictedCategory> lecturas = Lecturas(prediction, model, 15);
+            Check(lecturas.Count == 0,
+                "Lectura de Nestor: no anula la unica salida que le queda al jugador");
+
+            MoveDefinition golpe = model.ActivePlayerPoken.Moves[0].Definition;
+            Check(!prediction.Bloquea(BattleActionKind.UseMove, golpe),
+                "Lectura de Nestor: sin candidatas no bloquea nada");
+        }
+
+        private static void TestLecturaDeLaMochilaNoEsperaAlCriticoDeVida()
+        {
+            // Con el activo tocado y objetos en la mochila, la lectura de
+            // Objeto tiene que entrar en la rotacion. Antes pedia menos del 35%
+            // de PS: llegando al boss con el equipo entero no se cumplia nunca
+            // y la categoria quedaba muerta media pelea.
+            BattleModel model = MakeBattleDeLectura(1);
+            model.ActivePlayerPoken.TakeDamage(model.ActivePlayerPoken.MaxHP / 4);
+
+            PredictionState prediction = MakeLectura(false,
+                dano: true, estado: false, objetos: true, cambio: false);
+
+            List<PredictedCategory> lecturas = Lecturas(prediction, model, 30);
+            Check(lecturas.Contains(PredictedCategory.Objeto),
+                "Lectura de Nestor: con el activo tocado tambien lee la mochila");
+            Check(Variadas(lecturas),
+                "Lectura de Nestor: la mochila entra en la rotacion, no la monopoliza");
+        }
+
+        private static void TestLecturaNoLeeLoQueElJugadorNoPuedeHacer()
+        {
+            // Banco disponible pero rastreo activo: el cambio ya esta cerrado,
+            // leerlo seria regalarle el turno.
+            BattleModel model = MakeBattleDeLectura(3);
+            PredictionState prediction = MakeLectura(false,
+                dano: true, estado: true, objetos: false, cambio: false);
+
+            List<PredictedCategory> lecturas = Lecturas(prediction, model, 30);
+            Check(!lecturas.Contains(PredictedCategory.Cambio),
+                "Lectura de Nestor: con el rastreo activo no anula el cambio");
+            Check(!lecturas.Contains(PredictedCategory.Objeto),
+                "Lectura de Nestor: con la mochila vacia no anula los objetos");
+
+            // Con el rastreo cortado si aparece: es lo que se gana al cortarlo.
+            PredictionState conCambio = MakeLectura(false,
+                dano: true, estado: true, objetos: false, cambio: true);
+            Check(Lecturas(conCambio, model, 30).Contains(PredictedCategory.Cambio),
+                "Lectura de Nestor: con el rastreo cortado el cambio si se lee");
+        }
+
+        private static void TestLecturaCadaTresTurnos()
+        {
+            BattleModel model = MakeBattleDeLectura(1);
+            PredictionState prediction = MakeLectura(false,
+                dano: true, estado: true, objetos: false, cambio: false);
+            var rng = new SeededRng(3);
+
+            prediction.Avanzar(model, rng);
+            bool turno1Libre = prediction.Categoria == PredictedCategory.None;
+            prediction.Avanzar(model, rng);
+            bool turno2Libre = prediction.Categoria == PredictedCategory.None;
+            prediction.Avanzar(model, rng);
+            bool turno3Anula = prediction.Categoria != PredictedCategory.None;
+
+            Check(turno1Libre && turno2Libre && turno3Anula,
+                "Lectura de Nestor: turnos 1 y 2 libres, el 3 condicionado");
+        }
+
+        private static void TestAvisoAnticipadoNoMiente()
+        {
+            // Camaras cortadas: lo que se avisa un turno antes tiene que ser
+            // exactamente lo que despues se anula. Antes se sorteaba dos veces
+            // (una para avisar y otra para bloquear) y el aviso podia mentir.
+            BattleModel model = MakeBattleDeLectura(3);
+            PredictionState prediction = MakeLectura(true,
+                dano: true, estado: true, objetos: false, cambio: true);
+            var rng = new SeededRng(11);
+
+            int avisos = 0;
+            bool cumplio = true;
+            PredictedCategory anunciada = PredictedCategory.None;
+
+            for (int t = 0; t < 30; t++)
+            {
+                prediction.Avanzar(model, rng);
+
+                if (anunciada != PredictedCategory.None)
+                {
+                    if (prediction.Categoria != anunciada) cumplio = false;
+                    avisos++;
+                    anunciada = PredictedCategory.None;
+                }
+
+                if (prediction.Anticipada != PredictedCategory.None)
+                    anunciada = prediction.Anticipada;
+            }
+
+            Check(avisos > 0, "Aviso anticipado: con las camaras cortadas se avisa");
+            Check(cumplio, "Aviso anticipado: Nestor anula exactamente lo que aviso");
         }
     }
 }

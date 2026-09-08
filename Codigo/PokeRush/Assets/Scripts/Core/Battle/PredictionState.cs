@@ -6,9 +6,12 @@ using System.Collections.Generic;
 public enum PredictedCategory
 {
     None,
-    Ataque,   // no podes usar movimientos de ataque (los de estado siguen)
+    Ataque,   // no podes usar movimientos de dano (los de estado siguen)
     Cambio,   // no podes cambiar de Poken
-    Objeto    // no podes usar la mochila
+    Objeto,   // no podes usar la mochila
+    // Va ULTIMO a proposito: BattlePredictionView indexa su lista de iconos por
+    // el valor del enum, meterlo en el medio corria los sprites ya asignados.
+    Estado    // no podes usar movimientos de estado (los de dano siguen)
 }
 
 // Foto del estado de la Prediccion para la UI. Es SOLO datos: no sabe de
@@ -74,19 +77,28 @@ public class PredictionState
     private readonly bool _conAviso;
     private int _turno;
 
-    // Que salidas tiene el jugador aparte de atacar. Si no tiene ninguna, la
-    // Prediccion NO puede anularle el ataque: el GDD dice "nunca anula dos
-    // categorias a la vez, siempre hay salida", y con el rastreo activo el
-    // cambio YA esta cerrado de entrada. Sin esto se puede quedar sin ninguna
-    // accion valida y el combate se traba.
+    // Lo que ya se ANUNCIO y todavia no se aplico. Sin esto el aviso mentia:
+    // se sorteaba una categoria para avisar y otra distinta al bloquear, asi
+    // que cortar las camaras podia darte informacion falsa.
+    private PredictedCategory _pendiente;
+
+    // Ultima categoria que se anulo DE VERDAD. Se usa para no repetirla dos
+    // lecturas seguidas cuando hay con que variar.
+    private PredictedCategory _ultima;
+
+    // Que salidas tiene el jugador. La Prediccion no puede anular la unica que
+    // le queda: el GDD dice "nunca anula dos categorias a la vez, siempre hay
+    // salida", y con el rastreo activo el cambio YA esta cerrado de entrada.
+    // Sin esto se puede quedar sin ninguna accion valida y el combate se traba.
     public System.Func<bool> PuedeCambiar;
     public System.Func<bool> TieneObjetos;
 
-    // Los movimientos de ESTADO tambien son una salida: Bloquea() solo anula los
-    // de dano. Sin contarlos, un jugador con un solo Poken y la mochila vacia no
-    // tenia ninguna categoria anulable y Nestor no leia NUNCA — pasaban los
-    // turnos y no bloqueaba nada.
+    // Los movimientos son DOS salidas distintas, no una: Ataque anula solo los
+    // de dano y Estado solo los de estado. Sin separarlos, un jugador con un
+    // solo Poken y la mochila vacia — que es como se llega al primer boss —
+    // tenia una unica categoria anulable y Nestor leia siempre lo mismo.
     public System.Func<bool> TieneMovimientoDeEstado;
+    public System.Func<bool> TieneMovimientoDeDano;
 
     public PredictionState(bool conAviso, int turnosEntrePredicciones)
     {
@@ -97,14 +109,6 @@ public class PredictionState
         TurnosParaProxima = TurnosEntrePredicciones;
     }
 
-    private bool HaySalidaSinAtacar()
-    {
-        bool cambio = PuedeCambiar == null || PuedeCambiar();
-        bool objetos = TieneObjetos == null || TieneObjetos();
-        bool estado = TieneMovimientoDeEstado == null || TieneMovimientoDeEstado();
-        return cambio || objetos || estado;
-    }
-
     // Se llama al empezar cada turno del jugador, antes de mostrarle el menu.
     // Devuelve el mensaje a mostrar, o null si no hay nada que decir.
     public string Avanzar(BattleModel model, IBattleRng rng)
@@ -112,23 +116,35 @@ public class PredictionState
         _turno++;
 
         bool tocaAhora = _turno % TurnosEntrePredicciones == 0;
-        Categoria = tocaAhora ? Elegir(model, rng) : PredictedCategory.None;
         TurnosParaProxima = TurnosEntrePredicciones - (_turno % TurnosEntrePredicciones);
-        if (TurnosParaProxima == TurnosEntrePredicciones && !tocaAhora)
-            TurnosParaProxima = TurnosEntrePredicciones;
 
         if (tocaAhora)
         {
+            Categoria = Confirmar(_pendiente, model, rng);
+            _pendiente = PredictedCategory.None;
             Anticipada = PredictedCategory.None;
+
+            // None = no habia nada anulable sin dejarlo sin acciones. Se dice,
+            // en vez de cantar un bloqueo que despues no bloquea nada (antes
+            // salia "no podes actuar" y el jugador podia hacer de todo).
+            if (Categoria == PredictedCategory.None)
+                return "Nestor no te encontró la vuelta: este turno es libre.";
+
+            _ultima = Categoria;
             return MensajeBloqueo(Categoria);
         }
+
+        Categoria = PredictedCategory.None;
 
         // Con las camaras cortadas, el turno anterior al bloqueo se avisa.
         // Es la MISMA informacion, un turno antes: alcanza para planificar.
         if (_conAviso && TurnosParaProxima == 1)
         {
-            Anticipada = Elegir(model, rng);
-            return $"Nestor esta calculando: el proximo turno te va a leer {Texto(Anticipada)}.";
+            _pendiente = Elegir(model, rng);
+            Anticipada = _pendiente;
+            if (Anticipada != PredictedCategory.None)
+                return $"Nestor esta calculando: el proximo turno te va a leer {Texto(Anticipada)}.";
+            return null;
         }
 
         Anticipada = PredictedCategory.None;
@@ -141,11 +157,12 @@ public class PredictionState
         switch (Categoria)
         {
             case PredictedCategory.Ataque:
-                // Solo los de ataque: los de estado son la salida que deja abierta
-                return tipo == BattleActionKind.UseMove
-                       && movimiento != null
-                       && movimiento.attackType != AttackType.Status
-                       && movimiento.power > 0;
+                // Solo los de dano: los de estado son la salida que deja abierta
+                return tipo == BattleActionKind.UseMove && EsDeDano(movimiento);
+
+            case PredictedCategory.Estado:
+                // El espejo del anterior: pegar sigue disponible
+                return tipo == BattleActionKind.UseMove && EsDeEstado(movimiento);
 
             case PredictedCategory.Cambio:
                 return tipo == BattleActionKind.SwitchPoken;
@@ -158,11 +175,21 @@ public class PredictionState
         }
     }
 
+    // Un movimiento es de dano o de estado, nunca las dos cosas. Publicos para
+    // que el que cablea las salidas (BattleController) clasifique con el mismo
+    // criterio que el que bloquea, en vez de repetir la condicion a mano.
+    public static bool EsDeDano(MoveDefinition m) =>
+        m != null && m.attackType != AttackType.Status && m.power > 0;
+
+    public static bool EsDeEstado(MoveDefinition m) =>
+        m != null && (m.attackType == AttackType.Status || m.power <= 0);
+
     public string MensajeRechazo()
     {
         switch (Categoria)
         {
             case PredictedCategory.Ataque: return "Nestor anticipo tu ataque. Probá otra cosa.";
+            case PredictedCategory.Estado: return "Nestor te leyó el movimiento de estado. Probá otra cosa.";
             case PredictedCategory.Cambio: return "Nestor bloqueo el cambio.";
             case PredictedCategory.Objeto: return "Nestor te vio buscar en la mochila.";
             default: return "Nestor anticipo tu accion.";
@@ -183,7 +210,7 @@ public class PredictionState
 
         if (Categoria != PredictedCategory.None)
         {
-            snap.Titulo = "ANULADO: " + Texto(Categoria).ToUpperInvariant();
+            snap.Titulo = "ANULADO: " + TituloDe(Categoria);
             snap.Detalle = "Nestor te leyó la jugada.";
         }
         else if (Anticipada != PredictedCategory.None)
@@ -214,47 +241,111 @@ public class PredictionState
         switch (c)
         {
             case PredictedCategory.Ataque: return "atacar";
+            case PredictedCategory.Estado: return "usar movimientos de estado";
             case PredictedCategory.Cambio: return "cambiar de Poken";
             case PredictedCategory.Objeto: return "usar objetos";
             default: return "actuar";
         }
     }
 
-    // Elige que anular. Heuristica corta que mira el estado real para que
-    // moleste de verdad, en vez de sortear al azar.
-    private PredictedCategory Elegir(BattleModel model, IBattleRng rng)
+    // Version corta para la banda de la UI: "ANULADO: USAR MOVIMIENTOS DE
+    // ESTADO" no entra en el panel.
+    private static string TituloDe(PredictedCategory c) =>
+        c == PredictedCategory.Estado
+            ? "MOVIMIENTOS DE ESTADO"
+            : Texto(c).ToUpperInvariant();
+
+    // Que puede hacer el jugador ahora mismo. Es la base de las dos reglas:
+    // no anular algo que ya no podia hacer (turno regalado) y no anular lo
+    // unico que le queda (combate trabado).
+    private struct Salidas
     {
-        var candidatas = new List<PredictedCategory>();
+        public bool Dano;
+        public bool Estado;
+        public bool Objetos;
+        public bool Cambio;
 
+        public int Cuantas =>
+            (Dano ? 1 : 0) + (Estado ? 1 : 0) + (Objetos ? 1 : 0) + (Cambio ? 1 : 0);
+    }
+
+    // Los Func en null (un test que no los cablea) se leen como "esa salida
+    // existe": es el mismo criterio permisivo que tenia HaySalidaSinAtacar.
+    private Salidas SalidasDe(BattleModel model)
+    {
+        int vivos = 0;
         if (model != null)
-        {
-            PokenModel activo = model.ActivePlayerPoken;
-
-            // Con poca vida el jugador quiere curarse: anularle la mochila duele.
-            // Solo si REALMENTE tiene objetos, si no la Prediccion se desperdicia
-            // anulando algo que ya no podia hacer.
-            if (activo != null && activo.MaxHP > 0 &&
-                activo.CurrentHP / (float)activo.MaxHP < 0.35f &&
-                (TieneObjetos == null || TieneObjetos()))
-                candidatas.Add(PredictedCategory.Objeto);
-
-            // Si tiene banco disponible, cortarle el cambio lo deja expuesto.
-            // Con el rastreo activo el cambio ya esta cerrado: no tiene sentido.
-            int vivos = 0;
             foreach (PokenModel p in model.Player.Team)
                 if (!p.IsFainted) vivos++;
-            if (vivos > 1 && (PuedeCambiar == null || PuedeCambiar()))
-                candidatas.Add(PredictedCategory.Cambio);
+
+        return new Salidas
+        {
+            Dano = TieneMovimientoDeDano == null || TieneMovimientoDeDano(),
+            Estado = TieneMovimientoDeEstado == null || TieneMovimientoDeEstado(),
+            Objetos = TieneObjetos == null || TieneObjetos(),
+            // Con el rastreo activo PuedeCambiar ya devuelve false: el cambio
+            // esta cerrado de entrada y leerlo seria regalar el turno.
+            Cambio = vivos > 1 && (PuedeCambiar == null || PuedeCambiar())
+        };
+    }
+
+    // Que puede anular Nestor este turno. Una categoria entra solo si el
+    // jugador PODIA usarla y ademas le queda otra cosa por hacer.
+    private List<PredictedCategory> Candidatas(BattleModel model)
+    {
+        Salidas s = SalidasDe(model);
+        var candidatas = new List<PredictedCategory>();
+        if (s.Cuantas < 2) return candidatas;
+
+        if (s.Dano) candidatas.Add(PredictedCategory.Ataque);
+        if (s.Estado) candidatas.Add(PredictedCategory.Estado);
+        if (s.Cambio) candidatas.Add(PredictedCategory.Cambio);
+
+        // La mochila solo se lee si hay algo que curar: anularla con el activo
+        // al maximo es un turno regalado. Antes el corte era 35% de PS, que
+        // llegando al boss con el equipo entero no se cumplia nunca y dejaba la
+        // categoria muerta media pelea.
+        PokenModel activo = model != null ? model.ActivePlayerPoken : null;
+        bool valeLaMochila = activo != null && activo.CurrentHP < activo.MaxHP;
+        if (s.Objetos && valeLaMochila)
+        {
+            candidatas.Add(PredictedCategory.Objeto);
+
+            // Con poca vida el jugador quiere curarse si o si: entra dos veces
+            // en el sorteo para que duela mas seguido. Es peso, no obligacion:
+            // forzarla la repetia lectura tras lectura mientras siguiera bajo.
+            if (activo.MaxHP > 0 && activo.CurrentHP / (float)activo.MaxHP < 0.35f)
+                candidatas.Add(PredictedCategory.Objeto);
         }
 
-        // Anular el ataque solo si al jugador le queda otra salida. Si no puede
-        // cambiar (rastreo activo) y no tiene objetos, atacar es lo unico que
-        // le queda y quitarselo lo dejaria sin ninguna accion valida.
-        if (HaySalidaSinAtacar()) candidatas.Add(PredictedCategory.Ataque);
+        return candidatas;
+    }
 
-        // Si no quedo ninguna candidata, este turno no se anula nada. Es
-        // preferible una Prediccion que a veces no pega a un combate trabado.
+    // Respeta lo que se anuncio el turno anterior. Solo vuelve a elegir si eso
+    // dejo de tener sentido (gasto el ultimo objeto, se quedo sin banco): asi
+    // el aviso no miente pero tampoco anula algo que ya no podia hacer.
+    private PredictedCategory Confirmar(PredictedCategory anunciada, BattleModel model, IBattleRng rng)
+    {
+        if (anunciada != PredictedCategory.None && Candidatas(model).Contains(anunciada))
+            return anunciada;
+        return Elegir(model, rng);
+    }
+
+    // Elige que anular entre lo que el jugador realmente podia hacer.
+    private PredictedCategory Elegir(BattleModel model, IBattleRng rng)
+    {
+        List<PredictedCategory> candidatas = Candidatas(model);
+
+        // Nada anulable sin dejarlo sin acciones: este turno no se anula nada.
+        // Es preferible una Prediccion que a veces no pega a un combate trabado.
         if (candidatas.Count == 0) return PredictedCategory.None;
+
+        // No repetir la lectura anterior si hay con que variar. Es lo que se
+        // veia en el primer nivel: con las condiciones en las que llega el
+        // equipo quedaba una sola candidata y Nestor cantaba siempre lo mismo,
+        // lectura tras lectura.
+        if (_ultima != PredictedCategory.None && candidatas.Exists(c => c != _ultima))
+            candidatas.RemoveAll(c => c == _ultima);
 
         return candidatas[rng != null ? rng.Range(0, candidatas.Count) : 0];
     }

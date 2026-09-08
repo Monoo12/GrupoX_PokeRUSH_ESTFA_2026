@@ -25,7 +25,7 @@ public class BattlePredictionView : MonoBehaviour
     [SerializeField] private Text detailText;
 
     [Header("Icono de la categoria (opcional)")]
-    [Tooltip("Indice = enum PredictedCategory (0=None, 1=Ataque, 2=Cambio, 3=Objeto).")]
+    [Tooltip("Indice = enum PredictedCategory (0=None, 1=Ataque, 2=Cambio, 3=Objeto, 4=Estado).")]
     [SerializeField] private Sprite[] iconsByCategory;
     [SerializeField] private Image categoryIcon;
 
