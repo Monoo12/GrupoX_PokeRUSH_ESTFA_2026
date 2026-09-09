@@ -96,6 +96,47 @@ namespace PokeRush.EditorTools
         [MenuItem("PokeRush/Armar paleta del tileset seleccionado", true)]
         private static bool PuedeArmarSeleccionado() => SeleccionDeTilesets().Length > 0;
 
+        // Arma solo los tilesets que todavia no tienen paleta. Es la via segura
+        // cuando no hay como seleccionar en el Project (batchmode, MCP): BuildAll
+        // rehace TODAS y pisa las que se acomodaron a mano.
+        [MenuItem("PokeRush/Armar paletas faltantes")]
+        public static void BuildMissing()
+        {
+            if (!Directory.Exists(ChunkDir))
+            {
+                Debug.LogError($"[Tiles] No existe {ChunkDir}.");
+                return;
+            }
+
+            Directory.CreateDirectory(PaletteDir);
+            string[] faltantes = Directory.GetDirectories(ChunkDir)
+                .Select(Path.GetFileName)
+                .Where(n => !File.Exists($"{PaletteDir}/{n}.prefab"))
+                .OrderBy(n => n).ToArray();
+            if (faltantes.Length == 0)
+            {
+                Debug.Log("[Tiles] Todos los tilesets ya tienen paleta.");
+                return;
+            }
+
+            int totalTiles = 0;
+            try
+            {
+                for (int i = 0; i < faltantes.Length; i++)
+                {
+                    EditorUtility.DisplayProgressBar("Paletas de tiles",
+                        $"{faltantes[i]} ({i + 1}/{faltantes.Length})", (float)i / faltantes.Length);
+                    totalTiles += BuildOne(faltantes[i]);
+                }
+            }
+            finally { EditorUtility.ClearProgressBar(); }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log($"[Tiles] {string.Join(", ", faltantes)}: {totalTiles} tiles en {PaletteDir}/. " +
+                      "Abrilas con Window > 2D > Tile Palette.");
+        }
+
         // Solo carpetas que sean hijas directas de ChunkDir: cada una es un
         // tileset y su nombre termina siendo el de la paleta.
         private static string[] SeleccionDeTilesets()
