@@ -93,6 +93,12 @@ public class TurnEngine
         if (enemyAction.Kind == BattleActionKind.Protect)
             DoProtect(_model.EnemyState, events);
 
+        // NOTA sobre BattleActionKind.Wait: no aparece en ningun paso de este
+        // pipeline y es a proposito. El lado que la trae no cambia, no usa
+        // objeto, no aguanta y no ataca — pierde el turno y nada mas. La pone
+        // NestorPredictionSystem sobre la accion que la IA rival ya habia
+        // elegido, ANTES de llamar aca; el motor no tiene que saber por que.
+
         // 2) Movimientos
         bool playerUsesMove = playerAction.Kind == BattleActionKind.UseMove;
         bool enemyUsesMove = enemyAction.Kind == BattleActionKind.UseMove;

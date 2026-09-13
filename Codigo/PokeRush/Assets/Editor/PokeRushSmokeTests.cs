@@ -66,6 +66,18 @@ namespace PokeRush.EditorTools
             TestLecturaCadaTresTurnos();
             TestAvisoAnticipadoNoMiente();
 
+            // La lectura ALIADA de Nestor (nivel 2): que sea rara, que salga de
+            // la accion que la IA eligio, y que el bloqueo se note en el motor
+            TestNestorNoLeeEnLosPrimerosTurnos();
+            TestNestorRespetaCooldownYTope();
+            TestNestorEsRaroConLosValoresPorDefecto();
+            TestNestorLeeElRemateYLeSacaElTurno();
+            TestNestorNoQuemaElTurnoPorUnGolpeFlojo();
+            TestNestorLeeLaCuracionDelRival();
+            TestNestorNoLeeElForcejeo();
+            TestWaitDejaAlRivalSinActuar();
+            TestElEnumDeAccionesNoSeCorrio();
+
             if (_failed == 0)
                 Debug.Log($"[SmokeTests] TODOS OK: {_passed} checks pasaron.");
             else
@@ -1141,6 +1153,232 @@ namespace PokeRush.EditorTools
 
             Check(avisos > 0, "Aviso anticipado: con las camaras cortadas se avisa");
             Check(cumplio, "Aviso anticipado: Nestor anula exactamente lo que aviso");
+        }
+
+        // ---------- la lectura ALIADA de Nestor (nivel 2) ----------
+
+        // Nestor con todos los frenos abiertos: interviene siempre que pueda.
+        // Cada test cierra a mano el freno que quiere probar.
+        private static NestorPredictionSystem MakeNestorSinFrenos()
+        {
+            return new NestorPredictionSystem
+            {
+                Probabilidad = 1f,
+                CooldownTurnos = 0,
+                TurnosDeGracia = 0,
+                MaximoPorCombate = 99
+            };
+        }
+
+        // Rival con dos golpes: 'fuerte' se lleva al jugador puesto, 'flojo' no.
+        private static BattleModel MakeBattleParaNestor(int hpActualDelJugador)
+        {
+            var fuerte = MakeMove("Cañonazo", PokenType.Normal, AttackType.Physical, 120, 100, 5);
+            var flojo = MakeMove("Ataque Rapido", PokenType.Normal, AttackType.Physical, 40, 100, 30);
+
+            var rival = MakePoken(
+                MakeSpecies("Rival", PokenType.Normal, PokenType.None, 90, 110, 50, 60, 50, 70),
+                40, fuerte, flojo);
+            var jugador = MakePoken(
+                MakeSpecies("Aliado", PokenType.Normal, PokenType.None, 140, 60, 60, 60, 60, 50),
+                35, MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35));
+            jugador.SetCurrentHP(hpActualDelJugador);
+
+            return MakeBattle(jugador, rival);
+        }
+
+        private static AiContext ContextoDeNestor(BattleModel model)
+            => MakeEnemyContext(model, BattleAIFactory.CreateDefaultProfile(BattleAIType.Trainer));
+
+        // El freno mas visible: los primeros turnos Nestor solo mira. Sin esto
+        // la lectura puede caer en el turno 1 y arruina la entrada del combate.
+        private static void TestNestorNoLeeEnLosPrimerosTurnos()
+        {
+            BattleModel model = MakeBattleParaNestor(12); // el rival lo remata
+            AiContext ctx = ContextoDeNestor(model);
+            var rng = new SeededRng(3);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            nestor.TurnosDeGracia = 2;
+
+            bool leyoEnLaGracia = false;
+            for (int t = 0; t < 2; t++)
+                if (nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino) leyoEnLaGracia = true;
+
+            bool leyoDespues = nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino;
+
+            Check(!leyoEnLaGracia, "Nestor aliado: no lee durante los turnos de gracia");
+            Check(leyoDespues, "Nestor aliado: pasada la gracia si lee");
+        }
+
+        // Cooldown y tope por combate: los dos frenos que evitan que Nestor
+        // anule al rival todos los turnos.
+        private static void TestNestorRespetaCooldownYTope()
+        {
+            BattleModel model = MakeBattleParaNestor(12);
+            AiContext ctx = ContextoDeNestor(model);
+            var rng = new SeededRng(9);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            nestor.CooldownTurnos = 4;
+            nestor.MaximoPorCombate = 2;
+
+            var turnosQueLeyo = new List<int>();
+            for (int t = 1; t <= 30; t++)
+                if (nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino)
+                    turnosQueLeyo.Add(t);
+
+            Check(turnosQueLeyo.Count == 2,
+                $"Nestor aliado: nunca pasa del tope por combate (leyo {turnosQueLeyo.Count} veces en 30 turnos)");
+
+            bool separadas = turnosQueLeyo.Count < 2
+                || turnosQueLeyo[1] - turnosQueLeyo[0] > nestor.CooldownTurnos;
+            Check(separadas, "Nestor aliado: dos lecturas nunca caen dentro del cooldown");
+        }
+
+        // Con la probabilidad conservadora que trae de fabrica, la lectura tiene
+        // que ser RARA. Este test es el que se rompe si alguien sube el numero
+        // sin querer.
+        private static void TestNestorEsRaroConLosValoresPorDefecto()
+        {
+            BattleModel model = MakeBattleParaNestor(12);
+            AiContext ctx = ContextoDeNestor(model);
+
+            int lecturas = 0;
+            int turnos = 0;
+            for (int pelea = 0; pelea < 200; pelea++)
+            {
+                var nestor = new NestorPredictionSystem();   // valores de fabrica
+                var rng = new SeededRng(pelea);
+                for (int t = 0; t < 10; t++)                 // pelea tipica
+                {
+                    turnos++;
+                    if (nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino) lecturas++;
+                }
+            }
+
+            float porTurno = (float)lecturas / turnos;
+            Check(porTurno < 0.15f,
+                $"Nestor aliado: interviene en menos del 15% de los turnos ({porTurno:P1})");
+            Check(lecturas > 0, "Nestor aliado: pero interviene alguna vez");
+        }
+
+        // Lo que se pidio: la lectura tiene que salir de la accion que la IA
+        // REALMENTE eligio. Un remate le cuesta el turno entero al rival.
+        private static void TestNestorLeeElRemateYLeSacaElTurno()
+        {
+            BattleModel model = MakeBattleParaNestor(12); // muere con cualquiera
+            AiContext ctx = ContextoDeNestor(model);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            NestorIntervention lectura =
+                nestor.Evaluar(ctx, BattleAction.Move(0), new SeededRng(4));
+
+            Check(lectura.Plan.Kind == EnemyPlanKind.Remate,
+                "Nestor aliado: reconoce el remate del rival");
+            Check(lectura.Intervino && lectura.PerdioElTurno,
+                "Nestor aliado: al remate le saca el turno entero");
+            Check(lectura.AccionFinal.Kind == BattleActionKind.Wait,
+                "Nestor aliado: la accion del rival queda en Wait (no hace nada)");
+        }
+
+        // El espejo del anterior: un golpe flojo NO le cuesta el turno. Solo
+        // pierde su mejor opcion y juega la segunda, que sigue saliendo del
+        // MoveScorer de la IA y no de un sorteo.
+        private static void TestNestorNoQuemaElTurnoPorUnGolpeFlojo()
+        {
+            BattleModel model = MakeBattleParaNestor(140); // full: nada lo remata
+            AiContext ctx = ContextoDeNestor(model);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            NestorIntervention lectura =
+                nestor.Evaluar(ctx, BattleAction.Move(1), new SeededRng(6)); // el flojo
+
+            Check(lectura.Plan.Kind == EnemyPlanKind.Ataque && !lectura.Plan.EsJugadaFuerte,
+                "Nestor aliado: un golpe flojo no cuenta como jugada fuerte");
+            Check(lectura.Intervino && !lectura.PerdioElTurno,
+                "Nestor aliado: por un golpe flojo el rival no pierde el turno");
+            Check(lectura.AccionFinal.Kind == BattleActionKind.UseMove
+                  && lectura.AccionFinal.MoveIndex != 1,
+                "Nestor aliado: el rival cae a otro movimiento, no a Wait");
+        }
+
+        // Un rival que se cura es de las jugadas que mas duele no cortar.
+        private static void TestNestorLeeLaCuracionDelRival()
+        {
+            var cura = MakeMove("Recuperacion", PokenType.Normal, AttackType.Status, 0, 100, 10);
+            cura.healPercent = 50;
+            var golpe = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+
+            var rival = MakePoken(
+                MakeSpecies("Curandero", PokenType.Normal, PokenType.None, 120, 60, 60, 60, 60, 60),
+                35, cura, golpe);
+            rival.SetCurrentHP(30); // le falta vida: la curacion sirve
+
+            var jugador = MakePoken(
+                MakeSpecies("Aliado", PokenType.Normal, PokenType.None, 120, 60, 60, 60, 60, 55),
+                35, golpe);
+
+            BattleModel model = MakeBattle(jugador, rival);
+            AiContext ctx = ContextoDeNestor(model);
+
+            NestorIntervention lectura =
+                MakeNestorSinFrenos().Evaluar(ctx, BattleAction.Move(0), new SeededRng(8));
+
+            Check(lectura.Plan.Kind == EnemyPlanKind.Curacion,
+                "Nestor aliado: reconoce que el rival se iba a curar");
+            Check(lectura.Intervino && lectura.PerdioElTurno,
+                "Nestor aliado: la curacion le cuesta el turno al rival");
+        }
+
+        // Un rival sin PP forcejeando ya esta en su peor momento: leerselo no
+        // demuestra nada y ademas seria gratis todos los turnos.
+        private static void TestNestorNoLeeElForcejeo()
+        {
+            BattleModel model = MakeBattleParaNestor(12);
+            AiContext ctx = ContextoDeNestor(model);
+            var rng = new SeededRng(2);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+
+            bool leyoAlguna = false;
+            for (int t = 0; t < 20; t++)
+                if (nestor.Evaluar(ctx, BattleAction.Struggle(), rng).Intervino) leyoAlguna = true;
+
+            Check(!leyoAlguna, "Nestor aliado: nunca lee un forcejeo");
+        }
+
+        // El bloqueo tiene que traducirse en que el rival NO actua. Se prueba
+        // contra el motor de verdad, no contra la intencion.
+        private static void TestWaitDejaAlRivalSinActuar()
+        {
+            BattleModel model = MakeBattleParaNestor(140);
+            var engine = new TurnEngine(model, new SeededRng(5));
+
+            int hpAntes = model.ActivePlayerPoken.CurrentHP;
+            engine.ResolveTurn(BattleAction.Wait(), BattleAction.Wait());
+            int hpConWait = model.ActivePlayerPoken.CurrentHP;
+
+            engine.ResolveTurn(BattleAction.Wait(), BattleAction.Move(0));
+            int hpConAtaque = model.ActivePlayerPoken.CurrentHP;
+
+            Check(hpConWait == hpAntes,
+                "Wait: el rival con Wait no le hace nada al jugador");
+            Check(hpConAtaque < hpConWait,
+                "Wait: el mismo rival sin Wait si pega (el test no es un falso positivo)");
+        }
+
+        // Los valores del enum se serializan por numero. Si alguien mete algo
+        // en el medio, todo lo guardado con Flee o Protect cambia de accion.
+        private static void TestElEnumDeAccionesNoSeCorrio()
+        {
+            Check((int)BattleActionKind.UseMove == 0
+                  && (int)BattleActionKind.SwitchPoken == 1
+                  && (int)BattleActionKind.UseItem == 2
+                  && (int)BattleActionKind.Flee == 3
+                  && (int)BattleActionKind.Protect == 4
+                  && (int)BattleActionKind.Wait == 5,
+                "BattleActionKind: Wait quedo ULTIMO y no corrio a los demas");
         }
     }
 }

@@ -6,7 +6,18 @@ public enum BattleActionKind
     SwitchPoken,
     UseItem,   // mochila en combate (solo objetos de curacion, al Poken activo)
     Flee,      // huir de salvajes
-    Protect    // aguantar el golpe del turno. Ver nota en BattleAction.Protect()
+    Protect,   // aguantar el golpe del turno. Ver nota en BattleAction.Protect()
+
+    // Este lado NO hace nada este turno. Va ULTIMO: el enum se serializa por
+    // valor, meterlo en el medio corre a Flee y Protect en todo lo ya guardado.
+    //
+    // Existe para la lectura aliada de Nestor (nivel 2): cuando le lee una
+    // jugada fuerte al rival, la accion que la IA ya habia elegido se cambia
+    // por esta. El TurnEngine no la nombra en ningun lado, y por eso el lado
+    // que la trae se queda quieto: no cambia, no usa objeto, no ataca y no
+    // aguanta. Es exactamente lo que tiene que pasar, sin tocar una sola
+    // regla del motor.
+    Wait
 }
 
 public class BattleAction
@@ -68,4 +79,12 @@ public class BattleAction
     // mapee a esta misma accion.
     public static BattleAction Protect()
         => new BattleAction { Kind = BattleActionKind.Protect };
+
+    // Quedarse quieto: este lado pierde el turno.
+    //
+    // La usa NestorPredictionSystem para reemplazar la jugada que la IA rival
+    // ya habia elegido, cuando Nestor le lee una jugada fuerte. No es una
+    // accion que nadie pueda elegir desde un menu.
+    public static BattleAction Wait()
+        => new BattleAction { Kind = BattleActionKind.Wait };
 }
