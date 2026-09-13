@@ -24,7 +24,11 @@ public static class CasinoInteractionBuilder
     private const string MaquinaBasica = "Assets/Resources/Definitions/Casino/MaquinaBasica.asset";
 
     // Que mecanica lleva el mueble principal de cada piso.
-    private enum Mecanica { Ninguna, Slots, RuletaDePremios }
+    //
+    // RuletaDePremios ya no la usa ningun piso: quedo del minijuego de regalos
+    // que estuvo un rato en el piso 2 antes de que llegara la mesa de apuestas.
+    // Se deja porque el componente sigue existiendo y se puede volver a colgar.
+    private enum Mecanica { Ninguna, Slots, RuletaDePremios, MesaDeRuleta, Blackjack }
 
     // Configuracion de un piso. Sale de mirar las escenas con
     // PokeRush/Casino/Analizar los cuatro pisos.
@@ -62,7 +66,7 @@ public static class CasinoInteractionBuilder
             Escena = "Assets/Scenes/Casino Nivel 2.unity",
             // Las seis mesas de ruleta del piso 2 ocupan 4x2 celdas cada una.
             FormaDelMueble = "4x2", PrefijoDelMueble = "Ruleta",
-            Mecanica = Mecanica.RuletaDePremios,
+            Mecanica = Mecanica.MesaDeRuleta,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino nivel 3", NombreDelDestino = "el piso 3",
             Requisito = CasinoRequisitoTipo.Flag,
@@ -72,7 +76,11 @@ public static class CasinoInteractionBuilder
         new Piso
         {
             Escena = "Assets/Scenes/Casino nivel 3.unity",
-            FormaDelMueble = null, PrefijoDelMueble = null,   // el blackjack llega despues
+            // Las cuatro mesas de cartas del piso 3 ocupan 4x3 celdas cada una.
+            // Son las semicirculares con fieltro verde de la mitad izquierda;
+            // las 2x2 de la derecha son las mesas del bar y no llevan nada.
+            FormaDelMueble = "4x3", PrefijoDelMueble = "Blackjack",
+            Mecanica = Mecanica.Blackjack,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino piso FINAL", NombreDelDestino = "el ultimo piso",
             Requisito = CasinoRequisitoTipo.Flag,
@@ -191,18 +199,25 @@ public static class CasinoInteractionBuilder
 
             // Cada piso cuelga lo suyo. El collider y la posicion son iguales:
             // lo unico que cambia es que componente lleva encima.
-            if (piso.Mecanica == Mecanica.RuletaDePremios)
+            // En los tres casos vale la misma regla: solo el PRIMER mueble
+            // otorga el flag del piso. Si lo dieran todos, volver a jugar en
+            // otra mesa cantaria de nuevo el cartel del objetivo.
+            if (piso.Mecanica == Mecanica.Blackjack)
+            {
+                OtorgarSoloElPrimero(go.AddComponent<BlackjackTableInteractable>(),
+                    puestos, StoryFlag.Casino_Blackjack_Ganado);
+            }
+            else if (piso.Mecanica == Mecanica.MesaDeRuleta)
+            {
+                OtorgarSoloElPrimero(go.AddComponent<RouletteTableInteractable>(),
+                    puestos, StoryFlag.Casino_Ruleta_ObjetivoCumplido);
+            }
+            else if (piso.Mecanica == Mecanica.RuletaDePremios)
             {
                 // Sin premios asignados: se queda con los ocho que trae cargados
-                // el prefab de la pantalla. La primera mesa es la que destraba
-                // el ascensor; las otras son las mismas pero sin el flag, para
-                // que girar de nuevo no vuelva a cantar el cartel del objetivo.
-                var comp = go.AddComponent<PrizeWheelInteractable>();
-                var so = new SerializedObject(comp);
-                so.FindProperty("otorgaFlag").enumValueIndex =
-                    puestos == 1 ? (int)StoryFlag.Casino_Ruleta_ObjetivoCumplido
-                                 : (int)StoryFlag.None;
-                so.ApplyModifiedPropertiesWithoutUndo();
+                // el prefab de la pantalla.
+                OtorgarSoloElPrimero(go.AddComponent<PrizeWheelInteractable>(),
+                    puestos, StoryFlag.Casino_Ruleta_ObjetivoCumplido);
             }
             else
             {
@@ -217,6 +232,23 @@ public static class CasinoInteractionBuilder
         }
 
         return puestos;
+    }
+
+    // Le pone el flag del piso al primer mueble y None a los demas. Los tres
+    // interactuables lo declaran con el mismo nombre de campo, asi que sale una
+    // sola vez en vez de tres copias de lo mismo.
+    private static void OtorgarSoloElPrimero(Component comp, int cual, StoryFlag flag)
+    {
+        var so = new SerializedObject(comp);
+        SerializedProperty prop = so.FindProperty("otorgaFlag");
+        if (prop == null)
+        {
+            Debug.LogWarning($"[CasinoInter] {comp.GetType().Name} no tiene 'otorgaFlag'.");
+            return;
+        }
+
+        prop.enumValueIndex = cual == 1 ? (int)flag : (int)StoryFlag.None;
+        so.ApplyModifiedPropertiesWithoutUndo();
     }
 
     private static void ColgarAscensor(GameObject raiz, Piso piso)

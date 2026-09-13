@@ -40,9 +40,35 @@ se cambian los PNG de `Graphics/Casino/` y listo.
   - `Graphics/Windowskins/choice 18.png` — el marco dorado de las pantallas
   - `Graphics/Characters/enfermera.png` y `Lider 1 bw.png` — los NPC del piso 1
   - `Graphics/Trainers/JUGON.png` — el retrato del apostador
+  - `Graphics/Characters/noble.png` — el croupier del blackjack (piso 3). Se le
+    copian los cuatro cuadros de frente a `bj_croupier.png`; el PNG original no
+    se toca porque los mapas lo usan como sprite entero.
+  - `Graphics/Battlebacks/InteriorNegro_bg.png` — la sala en penumbra que hace de
+    fondo de la mesa de blackjack
 - **Nota:** es material de fan game basado en propiedad de Nintendo/Game Freak.
   Sirve para un trabajo académico sin fines de lucro; no se puede publicar ni
   vender el juego con estos assets.
+
+---
+
+## Blackjack — mesa, cartas, fichas y carteles
+
+- **Dónde:** `Codigo/PokeRush/Assets/BlackJack God/`
+- **Origen:** arte generado para este proyecto (no es de terceros). Entró con la
+  hoja `blackjack_sprite_sheet_completo.png` y los recortes sueltos al lado.
+- **Qué le hicimos:** los recortes vienen bien de color y con alpha de verdad,
+  pero no se pueden usar tal cual. `scripts/cortar_arte_blackjack.py` genera los
+  `bj_*.png` a partir de ellos:
+  - `bj_cartas.png` — las 52 cartas en una grilla exacta. En la hoja están a un
+    paso de 48,46 px y cada una de un tamaño distinto, así que una grilla regular
+    parte las cartas de la mitad para la derecha. De paso arregla dos cartas que
+    la hoja trajo mal dibujadas (en el 3 de tréboles había un 2, y la K tenía la
+    letra pisada) trasplantando el número de la carta de picas equivalente.
+  - `bj_fichas.png` — los ocho discos sin el valor escrito debajo, que en la
+    mitad de las fichas venía cortado al medio. El número lo dibuja la UI.
+  - `bj_croupier.png` — los cuadros del NPC (ver Essentials, arriba).
+  - `bj_dialogo.png` — el cuadro de diálogo sin el «¿Qué harás?» de ejemplo.
+- Los originales quedan intactos: si hay que rehacer algo, se corre el script.
 
 ---
 
