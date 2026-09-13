@@ -252,6 +252,12 @@ public static class CasinoSceneRigBuilder
             col.compositeOperation = Collider2D.CompositeOperation.Merge;
             comp.geometryType = CompositeCollider2D.GeometryType.Polygons;
 
+            // El override de arriba se pierde en silencio cada vez que alguien
+            // pinta y vuelve a guardar la escena: los pisos 1 y 3 quedaron con
+            // la pared de arriba y los muebles atravesables. Este componente lo
+            // repone en Awake, asi el juego no depende de volver a correr esto.
+            AsegurarComponente<ColisionesTilemapRuntimeFix>(go);
+
             // OJO: la capa 'Colisiones' de estas escenas NO son paredes
             // invisibles. El equipo pinto ahi los muebles del casino (las
             // tragaperras, las mesas), asi que su TilemapRenderer tiene que

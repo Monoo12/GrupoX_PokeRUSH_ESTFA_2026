@@ -55,7 +55,11 @@ tc.enabled = false; tc.enabled = true;   // sin esto el shapeCount sigue en 0
 cc.GenerateGeometry();
 ```
 
-> **Lo definitivo:** el GameObject `Colisiones` de `NestorGOD2` lleva el componente **`ColisionesTilemapRuntimeFix`**, que repone los `colliderType` en `Awake`. Con eso el **juego** arranca bien siempre, aunque la escena se haya guardado con las colisiones perdidas. Copialo a cualquier mapa nuevo: es la única forma de no depender de acordarse.
+> **Lo definitivo:** el GameObject `Colisiones` de `NestorGOD2` y de los cuatro pisos del casino lleva el componente **`ColisionesTilemapRuntimeFix`**, que repone los `colliderType` en `Awake`. Con eso el **juego** arranca bien siempre, aunque la escena se haya guardado con las colisiones perdidas. Copialo a cualquier mapa nuevo: es la única forma de no depender de acordarse.
+>
+> No es teórico: hasta el 13-sep-2026 los pisos del casino no lo tenían, y entre un guardado y otro la pared de arriba y todos los muebles quedaron sin `Grid`. El jugador atravesaba las tragaperras y se salía del mapa por arriba.
+
+Para auditar una escena sin abrir Unity: el override queda en el YAML, en `m_AllTileFlags` de cada tile. **Bit 31 = `Grid`, bit 30 = `Sprite`** (los bits bajos son los TileFlags). Las celdas que frenan tienen el valor en `2147483648` o más: `grep -cE "m_AllTileFlags: 21474836(49|5[01])"` las cuenta (`2147483649` y `2147483651` son `Grid` con distintos TileFlags; contar solo `214748365` se come la mitad). `1073741827` parece un override y es `Sprite`, que con estos tiles no frena.
 
 > **Para el editor:** está el menú **`PokeRush > Reparar colisiones del mapa`**, que hace todo esto de una sobre la escena abierta. Correlo cada vez que toques la capa `Colisiones` — pintar o borrar tiles **pierde los overrides en silencio**, y el síntoma es siempre el mismo: el jugador atraviesa las paredes.
 
@@ -90,6 +94,8 @@ Player          Rigidbody2D (Kinematic), CapsuleCollider2D,
 El prefab usa **15**: encima de `Colisiones` (10) para que las paredes y muebles no le tapen la cabeza, y debajo de `Techos` (20) para que los aleros sigan escondiéndolo.
 
 > Ojo: el comentario de `MapSceneBuilder.cs` dice 5. Con 5 los muebles de `Colisiones` se dibujan **encima** del personaje. Vale 15.
+
+Los NPCs van en el **mismo 15** que el jugador, y entre ellos se tapan según la altura: el que está más al sur se dibuja adelante. Eso lo hace el `Assets/Settings/Renderer2D.asset`, con **Transparency Sort Mode = Custom Axis (0, 1, 0)**. Hasta el 13-sep-2026 estaba en `Default`, que con cámara ortográfica ignora el eje: jugador y NPC con el mismo orden se tapaban al azar. El eje solo desempata dentro del mismo sorting order, así que no cambia nada de lo que ya tiene órdenes distintos (tiles, combate, UI).
 
 ---
 

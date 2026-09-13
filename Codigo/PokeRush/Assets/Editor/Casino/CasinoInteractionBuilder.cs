@@ -173,10 +173,20 @@ public static class CasinoInteractionBuilder
             go.transform.position = centroAbajo;
             go.layer = CapaObstacles;
 
-            // El collider cubre SOLO la fila de abajo del mueble: es la celda a
-            // la que mira el jugador cuando se para delante y aprieta X.
+            // El collider cubre la fila de abajo del mueble: es la celda a la
+            // que mira el jugador cuando se para delante y aprieta X.
+            //
+            // Las tragaperras ademas llevan la fila del medio, porque tienen los
+            // banquitos a los costados: sentado ahi el jugador mira esa fila, y
+            // como el mueble frena (Colisiones con Grid) no hay otra forma de
+            // llegarle. La fila de arriba queda afuera para que no se juegue
+            // desde atras de la maquina.
+            int filas = piso.Mecanica == Mecanica.Slots
+                ? Mathf.Max(1, CasinoDecoradoScanner.Alto(pieza) - 1)
+                : 1;
             var col = go.AddComponent<BoxCollider2D>();
-            col.size = new Vector2(CasinoDecoradoScanner.Ancho(pieza), 1f);
+            col.size = new Vector2(CasinoDecoradoScanner.Ancho(pieza), filas);
+            col.offset = new Vector2(0f, (filas - 1) * 0.5f);
             col.isTrigger = true;
 
             // Cada piso cuelga lo suyo. El collider y la posicion son iguales:
