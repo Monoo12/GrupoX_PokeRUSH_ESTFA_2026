@@ -1,16 +1,16 @@
 # Graph Report - GrupoX_PokeRUSH_ESTFA_2026  (2026-09-13)
 
 ## Corpus Check
-- 2112 files · ~23,856,354 words
+- 2112 files · ~23,856,377 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3819 nodes · 8208 edges · 228 communities (167 shown, 61 thin omitted)
+- 3819 nodes · 8208 edges · 226 communities (165 shown, 61 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 461 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b3608c22`
+- Built from commit: `bf4dd7e1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -231,7 +231,6 @@
 - BlackjackSmokeTestRunner
 - HealItemDefinition
 - SeededRng
-- .AnimateHp
 - MapSceneBuilder
 - ExperienceTableGenerator
 - BlackjackScreen.cs
@@ -239,7 +238,6 @@
 - .EligibleParticipants
 - BlackjackTableInteractable
 - La mesa de blackjack (piso 3 del casino)
-- GameInputRuntime
 - RouletteScreen.cs
 - PrizeWheelArtImporter
 - BattlePhase
@@ -271,7 +269,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (228 total, 61 thin omitted)
+## Communities (226 total, 61 thin omitted)
 
 ### Community 0 - "BattlePokenState"
 Cohesion: 0.09
@@ -478,8 +476,8 @@ Cohesion: 0.23
 Nodes (9): CasinoPrefabBuilder, float, GameObject, List, MenuItem, string, Text, Transform (+1 more)
 
 ### Community 52 - "ScriptableObject"
-Cohesion: 0.07
-Nodes (29): AbilityEffects, float, int, List, BattleEvent, BattleEventKind, bool, float (+21 more)
+Cohesion: 0.06
+Nodes (32): AbilityEffects, float, int, List, BattleEvent, BattleEventKind, bool, float (+24 more)
 
 ### Community 53 - "InventoryModel"
 Cohesion: 0.09
@@ -510,8 +508,8 @@ Cohesion: 0.24
 Nodes (6): AnimationShowcaseView, bool, float, IEnumerator, string, Text
 
 ### Community 60 - ".TriggerEvent"
-Cohesion: 0.40
-Nodes (4): List, Transform, WidgetPool, IReadOnlyList
+Cohesion: 0.21
+Nodes (5): Sprite, List, Transform, WidgetPool, IReadOnlyList
 
 ### Community 61 - "HealItemDefinition"
 Cohesion: 0.13
@@ -550,8 +548,8 @@ Cohesion: 0.11
 Nodes (11): GameObject, Image, Text, SlotCellWidget, AudioClip, float, int, Text (+3 more)
 
 ### Community 70 - "dependencies"
-Cohesion: 0.06
-Nodes (33): AiContext, int, List, FinalBossAI, float, List, GymLeaderAI, IBattleAI (+25 more)
+Cohesion: 0.05
+Nodes (36): AiContext, int, List, FinalBossAI, float, List, GymLeaderAI, IBattleAI (+28 more)
 
 ### Community 71 - "com.unity.collections"
 Cohesion: 0.18
@@ -586,8 +584,8 @@ Cohesion: 0.33
 Nodes (5): abilities, downloadedAt, moves, species, tool
 
 ### Community 80 - "PartyScreen"
-Cohesion: 0.13
-Nodes (8): bool, GameObject, int, List, string, Text, Transform, PartyScreen
+Cohesion: 0.10
+Nodes (14): bool, GameObject, int, List, string, Text, Transform, PartyScreen (+6 more)
 
 ### Community 83 - "com.unity.modules.androidjni"
 Cohesion: 0.15
@@ -690,24 +688,20 @@ Cohesion: 0.23
 Nodes (5): bool, Dictionary, SQLiteConnection, SettingRow, SettingsService
 
 ### Community 157 - ".EligibleParticipants"
-Cohesion: 0.24
-Nodes (6): BlackjackTable, Func, IList, int, List, BlackjackCard
+Cohesion: 0.15
+Nodes (12): BlackjackTable, Func, IList, int, List, BlackjackCard, BlackjackScreenRequest, BlackjackScreenResult (+4 more)
 
 ### Community 158 - "TilesetPaletteBuilder"
 Cohesion: 0.20
 Nodes (7): int, MenuItem, Rect, Sprite, string, Texture2D, TilesetPaletteBuilder
-
-### Community 159 - "CameraFollow"
-Cohesion: 0.25
-Nodes (6): Color, GameObject, Image, string, Text, PartyPanelWidget
 
 ### Community 160 - ".EsIndiceVivo"
 Cohesion: 0.15
 Nodes (8): SpriteRenderer, Dictionary, int, MenuItem, Sprite, string, TextureImporter, BattleUiAssetImporter
 
 ### Community 161 - ".CloseSelf"
-Cohesion: 0.12
-Nodes (10): bool, float, GameObject, Text, MessageBoxScreen, Image, Sprite, string (+2 more)
+Cohesion: 0.13
+Nodes (9): bool, float, GameObject, Text, MessageBoxScreen, Image, string, Text (+1 more)
 
 ### Community 162 - "MoveRowWidget"
 Cohesion: 0.21
@@ -792,6 +786,10 @@ Nodes (9): bool, float, int, Sprite, SpriteRenderer, Vector2, DirectionalAnimati
 ### Community 182 - ".EsIndiceVivo"
 Cohesion: 0.30
 Nodes (4): int, MenuItem, string, CasinoSmokeTests
+
+### Community 183 - "MapBattleBridge"
+Cohesion: 0.18
+Nodes (6): BlackjackHand, List, float, Image, Vector2, Vuelo
 
 ### Community 184 - "ExperienceTableGenerator"
 Cohesion: 0.06
@@ -909,17 +907,13 @@ Nodes (5): BlackjackSmokeTestRunner, InitializeOnLoadMethod, MenuItem, PlayModeS
 Cohesion: 0.10
 Nodes (14): BossDefinition, AudioClip, bool, int, Sprite, Sprite, string, DialogueDefinition (+6 more)
 
-### Community 217 - ".AnimateHp"
-Cohesion: 0.29
-Nodes (3): Random, SeededRng, UnityRng
-
 ### Community 219 - "ExperienceTableGenerator"
 Cohesion: 0.36
 Nodes (8): componentes(), es_texto(), excluida(), main(), mascara_fondo(), Convierte juliTILE.png en un tileset real de 32x32 que Unity pueda usar.  Por qu, Fondo = todo lo alcanzable desde el borde con color parecido., seccion_de()
 
 ### Community 221 - "BlackjackScreen.cs"
-Cohesion: 0.15
-Nodes (15): BlackjackHand, BlackjackScreenRequest, BlackjackScreenResult, BlackjackSuit, bool, int, List, string (+7 more)
+Cohesion: 0.50
+Nodes (3): Accion, Fase, Zona
 
 ### Community 224 - ".EligibleParticipants"
 Cohesion: 0.29
@@ -932,10 +926,6 @@ Nodes (4): bool, int, List, GenerateReport
 ### Community 226 - "La mesa de blackjack (piso 3 del casino)"
 Cohesion: 0.18
 Nodes (10): Cómo se arma y cómo se prueba, Cómo se destraba el piso, El arte derivado, El flujo y los botones, La mesa de blackjack (piso 3 del casino), Las piezas, Las reglas que se implementaron, Lo que se ve (+2 more)
-
-### Community 230 - "GameInputRuntime"
-Cohesion: 0.40
-Nodes (3): Accion, int, LiberationEngine
 
 ### Community 232 - "PrizeWheelArtImporter"
 Cohesion: 0.40
@@ -953,7 +943,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.107) - this node is a cross-community bridge._
 - **Why does `PlayerModel` connect `PokenModel` to `PauseMenuView`, `.LiberationTurnRoutine`, `NPCDefinition`, `com.unity.mathematics`, `MonoBehaviour`, `StoryFlag`, `BattleController`, `PokeRush.EditorTools.PokeApi`, `PlayerInputController`, `BattleSystemRoot`, `StartScreenView`, `MapSceneBuilder`, `ScriptableObject`, `NPCModel`, `InventoryModel`, `ExperienceTableGenerator`, `com.unity.searcher`, `.ActivateFlag`, `SlotMachineInteractable`, `ParedInvisibleTile`, `.Label`?**
   _High betweenness centrality (0.078) - this node is a cross-community bridge._
-- **Why does `BlackjackScreen` connect `PlayerView` to `BattlePokenState`, `com.gilzoide.sqlite-net`, `MenuOptionWidget`, `com.unity.mathematics`, `.AvanzarDealer`, `.EligibleParticipants`, `MapBattleBridge`, `BlackjackScreen.cs`, `PokeRush.EditorTools.PokeApi`?**
+- **Why does `BlackjackScreen` connect `PlayerView` to `BattlePokenState`, `com.gilzoide.sqlite-net`, `MenuOptionWidget`, `com.unity.mathematics`, `.AvanzarDealer`, `.EligibleParticipants`, `MapBattleBridge`, `PokeRush.EditorTools.PokeApi`, `BlackjackScreen.cs`, `CameraFollow`?**
   _High betweenness centrality (0.075) - this node is a cross-community bridge._
 - **What connects `Mecanica`, `Coverage`, `Fase` to the rest of the system?**
   _560 weakly-connected nodes found - possible documentation gaps or missing edges._
