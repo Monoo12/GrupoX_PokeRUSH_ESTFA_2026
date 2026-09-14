@@ -16,6 +16,10 @@ using UnityEngine;
 //      por el combate. Por eso lo que haya que decir se deja pendiente y corre
 //      cuando el mapa vuelve (OnEnable), un frame despues.
 //
+// Todas sus peleas llevan a Nestor de ayudante (la lectura aliada del
+// BattleController). Se pide en cada combate, asi no depende del flag
+// Torre1_NestorLiberado ni de como este configurada la escena.
+//
 // No otorga flags por su cuenta: eso lo decide cada NPC. Las escenas del casino
 // no tienen EventController, asi que el defeatGrantsFlag del enemigo NO se
 // aplica solo; cada NPC lo activa al ganar.
@@ -84,7 +88,7 @@ public abstract class CasinoNpcConCombate : MonoBehaviour
         EsperandoCombate = true;
         _alTerminar = alTerminar;
         battleController.BattleEnded += OnBattleEnded;
-        battleController.StartBattle(jugador, rival);
+        battleController.StartBattle(jugador, rival, conNestorAliado: true);
         return true;
     }
 

@@ -379,7 +379,8 @@ Con estos valores, en una pelea típica de 10 turnos Nestor interviene **una vez
 dos y a veces ninguna** (≈11% de los turnos). Que a veces no aparezca es parte del diseño.
 
 `nestorAliado` (`Auto` / `SiempreOn` / `SiempreOff`) sirve para probar sin caminar la torre.
-`SiempreOn` **igual** respeta el candado del primer Data Center.
+`SiempreOn` **igual** respeta el candado del boss, y `SiempreOff` lo apaga incluso en las
+peleas que lo piden.
 
 ### Cuándo está disponible
 
@@ -392,6 +393,13 @@ rompiera, el otro sigue tapando el agujero:
 2. **Hace falta `StoryFlag.Torre1_NestorLiberado`.** Ese flag se enciende recién cuando
    termina la fase de liberación, o sea al final de esa pelea. Todo lo anterior del primer
    nivel pasa con el flag apagado.
+
+**Las peleas del casino lo piden.** `StartBattle(..., conNestorAliado: true)` saltea el
+candado 2, pero no el 1. Lo usa `CasinoNpcConCombate` en todas sus peleas, así Néstor está de
+ayudante en todo el casino aunque la partida no traiga el flag (por ejemplo, entrando directo
+a un piso con Play). En el primer nivel nadie lo pide. La decisión entera vive en
+`BattleController.LecturaAliadaDisponible()`, que es estática y la cubre
+`TestNestorAliadoDisponible`.
 
 ### El retrato
 

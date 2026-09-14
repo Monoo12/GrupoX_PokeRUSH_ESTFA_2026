@@ -75,6 +75,7 @@ namespace PokeRush.EditorTools
             TestNestorNoQuemaElTurnoPorUnGolpeFlojo();
             TestNestorLeeLaCuracionDelRival();
             TestNestorNoLeeElForcejeo();
+            TestNestorAliadoDisponible();
             TestWaitDejaAlRivalSinActuar();
             TestElEnumDeAccionesNoSeCorrio();
 
@@ -1189,6 +1190,25 @@ namespace PokeRush.EditorTools
 
         private static AiContext ContextoDeNestor(BattleModel model)
             => MakeEnemyContext(model, BattleAIFactory.CreateDefaultProfile(BattleAIType.Trainer));
+
+        // Cuando hay Nestor de ayudante. Los NPCs del casino lo piden en todas
+        // sus peleas, asi que tiene que aparecer aunque la partida no traiga el
+        // flag de la torre; pero nunca en la pelea contra el propio Nestor.
+        private static void TestNestorAliadoDisponible()
+        {
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, false, false, false),
+                "Nestor aliado: sin el flag y sin pedirlo no aparece (primer nivel)");
+            Check(BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, false, false, true),
+                "Nestor aliado: con la torre 1 liberada aparece");
+            Check(BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, false, true, false),
+                "Nestor aliado: una pelea del casino lo tiene aunque falte el flag");
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, true, true, true),
+                "Nestor aliado: nunca en la pelea contra el propio Nestor, aunque se pida");
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.SiempreOn, true, false, true),
+                "Nestor aliado: SiempreOn tampoco saltea el candado del boss");
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.SiempreOff, false, true, true),
+                "Nestor aliado: SiempreOff lo apaga incluso en el casino");
+        }
 
         // El freno mas visible: los primeros turnos Nestor solo mira. Sin esto
         // la lectura puede caer en el turno 1 y arruina la entrada del combate.

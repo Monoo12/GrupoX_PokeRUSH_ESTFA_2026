@@ -68,6 +68,9 @@ public class BattleController : MonoBehaviour
     // Nestor ya esta de nuestro lado. Null en todo el resto, incluido el primer
     // Data Center entero — ver HayLecturaAliada().
     private NestorPredictionSystem _nestorAlly;
+    // La pelea en curso pidio a Nestor de ayudante (los NPCs del casino lo
+    // piden en todas las suyas). Se vuelve a decidir en cada Start*.
+    private bool _nestorPedidoPorLaPelea;
 
     // Fase de liberacion: se dispara cuando el ULTIMO Poken del boss llega a PS
     // criticos. Null mientras no este activa.
@@ -83,8 +86,9 @@ public class BattleController : MonoBehaviour
 
     [Header("Lectura aliada de Nestor (nivel 2)")]
     [Tooltip("Cuando esta disponible la ayuda de Nestor. Auto = con el flag " +
-             "Torre1_NestorLiberado puesto, y nunca en la pelea contra el propio " +
-             "Nestor. SiempreOn es para probar sin caminar la torre.")]
+             "Torre1_NestorLiberado puesto o si la pelea lo pide (los NPCs del " +
+             "casino), y nunca en la pelea contra el propio Nestor. SiempreOn es " +
+             "para probar sin caminar la torre.")]
     [SerializeField] private NestorAllyMode nestorAliado = NestorAllyMode.Auto;
     [Tooltip("Chance de que Nestor lea la jugada, cumplidos el cooldown y la gracia.")]
     [SerializeField, Range(0f, 1f)] private float nestorProbabilidad = 0.20f;
@@ -134,9 +138,13 @@ public class BattleController : MonoBehaviour
     // (EventController, BattleTester) y porque solo el boss lo usa. Contra el
     // boss sin config se arma sola desde el GameManager; pasarla a mano sirve
     // para probar combinaciones de subsistemas sin caminar la torre.
+    //
+    // 'conNestorAliado' pide la lectura aliada de Nestor para ESTA pelea aunque
+    // falte el flag. La usan los NPCs del casino (ver HayLecturaAliada).
     public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition,
-        BossBattleConfig config = null)
+        BossBattleConfig config = null, bool conNestorAliado = false)
     {
+        _nestorPedidoPorLaPelea = conNestorAliado;
         _bossConfig = enemyDefinition is BossDefinition
             ? (config ?? BossBattleConfig.DesdeTorre(GameManager.Instance?.Tower))
             : null;
@@ -192,6 +200,7 @@ public class BattleController : MonoBehaviour
         // combate ANTERIOR y el salvaje heredaba EnemyCannotFaint: no podia
         // morir y el combate no terminaba nunca.
         _bossConfig = null;
+        _nestorPedidoPorLaPelea = false;
         BeginBattle(player, enemy, encounter.battleBackground);
     }
 
@@ -655,18 +664,31 @@ public class BattleController : MonoBehaviour
     //   2. El flag Torre1_NestorLiberado se enciende recien cuando termina la
     //      fase de liberacion, o sea al final de esa pelea. Todo lo anterior
     //      del primer nivel pasa con el flag apagado.
+    //
+    // La pelea que PIDE a Nestor (conNestorAliado) saltea el candado 2 pero no
+    // el 1. Solo la piden los NPCs del casino, que no existen en el primer
+    // nivel: asi el casino lo tiene siempre, tambien entrando directo a un piso
+    // con una partida de prueba que no camino la torre.
     private bool HayLecturaAliada()
     {
-        if (nestorAliado == NestorAllyMode.SiempreOff) return false;
+        StoryModel story = GameManager.Instance != null ? GameManager.Instance.Story : null;
+        return LecturaAliadaDisponible(nestorAliado, _bossConfig != null, _nestorPedidoPorLaPelea,
+            story != null && story.HasFlag(StoryFlag.Torre1_NestorLiberado));
+    }
+
+    // La decision de HayLecturaAliada sin escena ni GameManager, para probarla sola.
+    public static bool LecturaAliadaDisponible(NestorAllyMode modo, bool contraElBoss,
+        bool pedidoPorLaPelea, bool nestorLiberado)
+    {
+        if (modo == NestorAllyMode.SiempreOff) return false;
 
         // Candado 1: nunca en la pelea contra el propio Nestor.
-        if (_bossConfig != null) return false;
+        if (contraElBoss) return false;
 
-        if (nestorAliado == NestorAllyMode.SiempreOn) return true;
+        if (modo == NestorAllyMode.SiempreOn || pedidoPorLaPelea) return true;
 
         // Candado 2: recien despues de liberarlo.
-        StoryModel story = GameManager.Instance != null ? GameManager.Instance.Story : null;
-        return story != null && story.HasFlag(StoryFlag.Torre1_NestorLiberado);
+        return nestorLiberado;
     }
 
     // Los tres tiempos de una lectura. Corre ANTES de resolver el turno, asi

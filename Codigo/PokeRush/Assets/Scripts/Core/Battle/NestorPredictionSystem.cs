@@ -19,7 +19,7 @@ public enum NestorMood
 // el Inspector; los dos modos forzados son para probar sin caminar la torre.
 public enum NestorAllyMode
 {
-    Auto,       // segun el flag Torre1_NestorLiberado (lo normal)
+    Auto,       // segun el flag Torre1_NestorLiberado, o si la pelea lo pide (casino)
     SiempreOn,  // forzado, para probar la mecanica en cualquier combate
     SiempreOff  // apagado, para comparar contra el combate sin Nestor
 }
@@ -453,22 +453,22 @@ public class NestorPredictionSystem
         if (!pierdeElTurno)
         {
             return plan.Kind == EnemyPlanKind.Cambio
-                ? $"¡Nestor le corta la retirada! {rival} tiene que quedarse."
-                : $"¡Nestor le tapa la jugada a {rival}!";
+                ? $"¡Néstor le corta la retirada! {rival} tiene que quedarse."
+                : $"¡Néstor le tapa la jugada a {rival}!";
         }
 
         switch (plan.Kind)
         {
             case EnemyPlanKind.Remate:
-                return $"¡Nestor le leyó el remate! {rival} pierde el turno.";
+                return $"¡Néstor le leyó el remate! {rival} pierde el turno.";
             case EnemyPlanKind.Curacion:
-                return $"¡Nestor lo vio venir! {rival} no llega a curarse.";
+                return $"¡Néstor lo vio venir! {rival} no llega a curarse.";
             case EnemyPlanKind.Preparacion:
-                return $"¡Nestor le arruina la preparación a {rival}!";
+                return $"¡Néstor le arruina la preparación a {rival}!";
             case EnemyPlanKind.Estado:
-                return $"¡Nestor se le adelanta! {rival} no llega a usar {plan.Movimiento}.";
+                return $"¡Néstor se le adelanta! {rival} no llega a usar {plan.Movimiento}.";
             default:
-                return $"¡Nestor anticipó el golpe! {rival} se queda sin turno.";
+                return $"¡Néstor anticipó el golpe! {rival} se queda sin turno.";
         }
     }
 

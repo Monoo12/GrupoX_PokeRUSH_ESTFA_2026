@@ -21,22 +21,20 @@ Todo lo arma el menú **`PokeRush > Casino > Poner los personajes de los pisos 1
 > Las frases de los ocho jugadores de tragaperras (`JugadorTragaperras*.asset`) también son
 > provisorias, pero no son de historia.
 
-> ## ⚠️ Pendiente: Néstor de ayudante en todos los combates del casino
->
-> **Requisito:** en **todos** los combates de los pisos del casino, Néstor tiene que estar
-> como ayudante.
->
-> Hoy la ayuda existe: es la lectura aliada de `NestorPredictionSystem`, con su retrato en el
-> HUD (ver `Sistema_De_Combate_Y_IA.md`). Se prende con el campo `nestorAliado` del
-> `BattleController` (prefab `SistemaDeCombate`). En modo `Auto` (el que tienen las escenas)
-> solo aparece con el flag `Torre1_NestorLiberado`, que se enciende al terminar la torre 1:
->
-> - en una partida real ya llega al casino con Néstor;
-> - entrando directo a un piso con Play (partida `DEMO`), el flag no está y Néstor no aparece.
->
-> Falta decidir cómo se garantiza en el casino (por ejemplo `SiempreOn` en las escenas del
-> casino, o que la partida de prueba traiga el flag) y revisar si "ayudante" es solo la lectura
-> aliada o algo más.
+## Néstor de ayudante en todos los combates
+
+Todas las peleas de los pisos del casino (el guardia y los doce que pelean una vez) traen a
+Néstor de ayudante: la lectura aliada de `NestorPredictionSystem`, con su retrato arriba a la
+derecha del HUD. Cómo lee y cada cuánto está en `Sistema_De_Combate_Y_IA.md`.
+
+No depende de la escena ni de la partida: `CasinoNpcConCombate` lo pide en cada combate con
+`StartBattle(..., conNestorAliado: true)`. Por eso aparece también entrando directo a un piso
+con Play, con la partida `DEMO` que no trae `Torre1_NestorLiberado`. Un NPC nuevo que herede
+de `CasinoNpcConCombate` lo tiene sin hacer nada.
+
+Para comparar una pelea sin él, poner `nestorAliado` en `SiempreOff` en el `BattleController`
+de la escena. Contra un boss (el del piso final, cuando exista) nunca aparece: ese candado no
+lo saltea nada.
 
 ---
 
