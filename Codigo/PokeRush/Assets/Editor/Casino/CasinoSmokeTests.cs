@@ -33,15 +33,25 @@ namespace PokeRush.EditorTools
             TestElDineroDelJugadorCierra();
             TestDevolucionDeLaMaquinaBasica();
 
-            TestRuletaDeNpcsConLosDoceDelProyecto();
+            TestRuletaDeNpcsConLosDelProyecto();
             TestRuletaDeNpcsSaleUnaCadaDosCombates();
             TestRuletaDeNpcsNoSonSiempreLosMismos();
             TestRuletaDeNpcsNuncaPasaDeCuatro();
             TestRuletaDeNpcsSoloLosDeLaLista();
             TestPremioDePlata();
             TestPremioPokemonSeSumaAlEquipo();
-            TestPremioPokemonConEquipoLlenoPagaPlata();
+            TestPremioPokemonConEquipoLlenoVaAlPc();
+            TestPremioPokemonConPcLlenoPagaPlata();
+            TestPremioObjetoClave();
             TestTablasDeRuletaDelProyecto();
+
+            TestPcReglas();
+            TestRecibirPokemonVaAlPc();
+            TestShinyUsaSusSprites();
+            TestGananciaDeColor();
+            TestAscensorPideElShiny();
+            TestApuestaDeTacconi();
+            TestRevendedorDeLaTarjeta();
 
             if (_failed == 0)
                 Debug.Log($"[CasinoSmokeTests] TODOS OK: {_passed} checks pasaron.");
@@ -332,10 +342,14 @@ namespace PokeRush.EditorTools
             StoryFlag.Casino_MediumVencido,
             StoryFlag.Casino_LadronVencido,
             StoryFlag.Casino_VeteranoVencido,
-            StoryFlag.Casino_KaratekaVencido
+            StoryFlag.Casino_KaratekaVencido,
+            StoryFlag.Casino_TahurVencido,
+            StoryFlag.Casino_BailarinaVencida,
+            StoryFlag.Casino_GangsterVencido,
+            StoryFlag.Casino_CrupieraVencida
         };
 
-        private static void TestRuletaDeNpcsConLosDoceDelProyecto()
+        private static void TestRuletaDeNpcsConLosDelProyecto()
         {
             var rng = new SeededRng(123);
             var veces = new System.Collections.Generic.Dictionary<StoryFlag, int>();
@@ -347,17 +361,18 @@ namespace PokeRush.EditorTools
                 if (dieron.Count != CasinoRuletaDeNpcs.MaximoPorPartida) siempreCuatro = false;
                 foreach (StoryFlag f in dieron) veces[f] = veces.TryGetValue(f, out int v) ? v + 1 : 1;
             }
-            Check(siempreCuatro, "con los doce NPCs del proyecto, ganandole a todos la ruleta sale exactamente 4 veces");
+            Check(siempreCuatro, $"con los {ElegiblesDelProyecto.Length} NPCs del proyecto, ganandole a todos la ruleta sale exactamente 4 veces");
 
-            // Peleando en cualquier orden, cada uno deberia estar en 4 de cada 12
-            // partidas (~33%).
+            // Peleando en cualquier orden, cada uno deberia estar en 4 de cada N
+            // partidas.
+            float esperado = 4f / ElegiblesDelProyecto.Length;
             bool parejo = true;
             foreach (StoryFlag f in ElegiblesDelProyecto)
             {
                 float p = (veces.TryGetValue(f, out int v) ? v : 0) / (float)partidas;
-                if (p < 0.30f || p > 0.37f) parejo = false;
+                if (Mathf.Abs(p - esperado) > 0.03f) parejo = false;
             }
-            Check(parejo, "y ninguno de los doce la da mas seguido que otro");
+            Check(parejo, $"y ninguno la da mas seguido que otro (~{esperado:P0} cada uno)");
         }
 
         // Una partida: le gana a los primeros 'cuantos' NPCs de la lista (en ese
@@ -516,7 +531,7 @@ namespace PokeRush.EditorTools
             Check(texto.Contains(especie.pokenName), $"y el cartel lo nombra ({texto})");
         }
 
-        private static void TestPremioPokemonConEquipoLlenoPagaPlata()
+        private static void TestPremioPokemonConEquipoLlenoVaAlPc()
         {
             var especie = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
             if (especie == null) return;
@@ -526,8 +541,48 @@ namespace PokeRush.EditorTools
 
             string texto = PrizeGranter.Entregar(new Prize { poken = especie, pokenLevel = 15, moneyIfTeamFull = 300 }, jugador);
             Check(jugador.Team.Count == PrizeGranter.EquipoMaximo, "con el equipo lleno no se pasa de 6");
-            Check(jugador.Money == 300, "y se paga la plata de compensacion");
+            Check(jugador.Storage.Count == 1 && jugador.Storage.Get(0, 0)?.Definition == especie,
+                  "y el Pokemon va a la primera caja del PC");
+            Check(jugador.Money == 0, "sin pagar compensacion");
+            Check(texto.Contains("PC"), $"y el cartel dice que fue al PC ({texto})");
+        }
+
+        private static void TestPremioPokemonConPcLlenoPagaPlata()
+        {
+            var especie = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
+            if (especie == null) return;
+
+            var jugador = new PlayerModel("Test");
+            for (int i = 0; i < PrizeGranter.EquipoMaximo; i++) jugador.Team.Add(new PokenModel(especie, 5));
+            var relleno = new PokenModel(especie, 5);
+            while (jugador.Storage.TryAgregar(relleno, out _, out _)) { }
+
+            string texto = PrizeGranter.Entregar(new Prize { poken = especie, pokenLevel = 15, moneyIfTeamFull = 300 }, jugador);
+            Check(jugador.Money == 300, "con el equipo y el PC llenos se paga la plata de compensacion");
             Check(texto.Contains("300"), $"y el cartel lo avisa ({texto})");
+        }
+
+        private static void TestPremioObjetoClave()
+        {
+            var tarjeta = ScriptableObject.CreateInstance<SpecialItemDefinition>();
+            tarjeta.itemName = "Tarjeta VIP";
+            try
+            {
+                var jugador = new PlayerModel("Test");
+                var premio = new Prize { prizeName = "Tarjeta VIP", article = "la", specialItem = tarjeta, moneyIfOwned = 250 };
+
+                PrizeGranter.Entregar(premio, jugador);
+                Check(jugador.Inventory.HasSpecialItem(tarjeta), "un premio de objeto clave lo mete en la mochila");
+
+                string texto = PrizeGranter.Entregar(premio, jugador);
+                Check(jugador.Inventory.SpecialItems.Count == 1 && jugador.Inventory.SpecialItems[0].Quantity == 1,
+                      "ganarlo otra vez no lo repite");
+                Check(jugador.Money == 250, $"y paga la plata en su lugar ({texto})");
+            }
+            finally
+            {
+                Object.DestroyImmediate(tarjeta);
+            }
         }
 
         // Las tablas que arma el builder de personajes: si alguien las rebalancea
@@ -544,17 +599,19 @@ namespace PokeRush.EditorTools
             }
 
             float pokemon = npcs.Porcentaje(p => p.poken != null);
-            float curativos = npcs.Porcentaje(p => p.poken == null && p.item != null);
-            float plata = npcs.Porcentaje(p => p.poken == null && p.item == null && p.money > 0);
-            Check(Mathf.Abs(pokemon - 0.35f) < 0.005f, $"la ruleta de los NPCs da Pokemon el 35% de las veces ({pokemon:P1})");
+            float tarjeta = npcs.Porcentaje(p => p.poken == null && p.specialItem != null);
+            float curativos = npcs.Porcentaje(p => p.poken == null && p.specialItem == null && p.item != null);
+            float plata = npcs.Porcentaje(p => p.poken == null && p.specialItem == null && p.item == null && p.money > 0);
+            Check(pokemon >= 0.25f, $"la ruleta de los NPCs da Pokemon ({pokemon:P1})");
+            Check(Mathf.Abs(tarjeta - 0.15f) < 0.02f, $"y la Tarjeta VIP cerca del 15% ({tarjeta:P1})");
             Check(curativos > 0f && plata > 0f, $"y el resto se reparte entre curativos ({curativos:P0}) y plata ({plata:P0})");
-            Check(Mathf.Abs(pokemon + curativos + plata - 1f) < 0.001f, "y no hay gajos que no den nada");
+            Check(Mathf.Abs(pokemon + tarjeta + curativos + plata - 1f) < 0.001f, "y no hay gajos que no den nada");
             Check(npcs.premios.Length <= 8, "entra en los 8 gajos de la rueda");
             bool listaCompleta = npcs.npcsQueLaPuedenDar != null &&
                                  npcs.npcsQueLaPuedenDar.Length == ElegiblesDelProyecto.Length;
             foreach (StoryFlag f in ElegiblesDelProyecto)
                 if (npcs.npcsQueLaPuedenDar == null || System.Array.IndexOf(npcs.npcsQueLaPuedenDar, f) < 0) listaCompleta = false;
-            Check(listaCompleta, "la lista de NPCs que la dan tiene a los doce que pelean");
+            Check(listaCompleta, $"la lista de NPCs que la dan tiene a los {ElegiblesDelProyecto.Length} que pelean");
 
             bool todosPokemon = guardia.premios.Length > 0;
             float menor = float.MaxValue, mayor = 0f;
@@ -568,6 +625,242 @@ namespace PokeRush.EditorTools
             Check(todosPokemon, "la ruleta del guardia da un Pokemon si o si");
             Check(menor < mayor, "y tiene Pokemon mas raros que otros");
             Check(guardia.premios.Length <= 8, "la ruleta del guardia entra en los 8 gajos");
+
+            // Todas las ruletas de premios tienen que dar alguna chance de Pokemon.
+            var mesa = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDeLaMesa.asset");
+            var guardiaVip = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDelGuardiaVip.asset");
+            if (mesa == null || guardiaVip == null)
+            {
+                Debug.LogWarning("[CasinoSmokeTests] Todavia no estan las ruletas del piso 2. " +
+                                 "Corre PokeRush/Casino/Poner los personajes de los pisos 2 y 3.");
+                return;
+            }
+
+            Check(mesa.Porcentaje(p => p.poken != null) > 0f,
+                  $"la ruleta de las mesas da Pokemon ({mesa.Porcentaje(p => p.poken != null):P0})");
+            Check(mesa.premios.Length <= 8, "la ruleta de las mesas entra en los 8 gajos");
+
+            bool vipTodosPokemon = guardiaVip.premios.Length > 0;
+            foreach (Prize p in guardiaVip.premios)
+                if (p == null || p.poken == null || p.probability <= 0f) vipTodosPokemon = false;
+            Check(vipTodosPokemon, "la ruleta del guardia VIP da un Pokemon si o si");
+            Check(guardiaVip.premios.Length <= 8, "la ruleta del guardia VIP entra en los 8 gajos");
+        }
+
+        // ---------- PC, shiny y lo nuevo de los pisos 2 y 3 ----------
+
+        private static PokenDefinition Especie(string archivo)
+            => AssetDatabase.LoadAssetAtPath<PokenDefinition>($"Assets/Resources/Definitions/Pokens/{archivo}.asset");
+
+        private static void TestPcReglas()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), eevee = Especie("0133_Eevee");
+            if (pikachu == null || eevee == null) return;
+
+            var jugador = new PlayerModel("Test");
+            var a = new PokenModel(pikachu, 10);
+            var b = new PokenModel(eevee, 10);
+            jugador.Team.Add(a);
+            jugador.Team.Add(b);
+
+            Check(PcReglas.Mover(jugador, PcLugar.DelEquipo(1), PcLugar.DeCaja(0, 5)) == null &&
+                  jugador.Team.Count == 1 && jugador.Storage.Get(0, 5) == b,
+                  "PC: dejar un Pokemon en una caja lo saca del equipo");
+
+            string error = PcReglas.Mover(jugador, PcLugar.DelEquipo(0), PcLugar.DeCaja(0, 6));
+            Check(error != null && jugador.Team.Count == 1 && jugador.Storage.Get(0, 6) == null,
+                  "PC: no deja el equipo vacio");
+
+            Check(PcReglas.Mover(jugador, PcLugar.DeCaja(0, 5), PcLugar.DelEquipo(jugador.Team.Count)) == null &&
+                  jugador.Team.Count == 2 && jugador.Team[1] == b && jugador.Storage.Get(0, 5) == null,
+                  "PC: retirar a un hueco vacio lo suma al final del equipo");
+
+            var c = new PokenModel(pikachu, 3);
+            jugador.Storage.Set(1, 0, c);
+            Check(PcReglas.Mover(jugador, PcLugar.DeCaja(1, 0), PcLugar.DelEquipo(0)) == null &&
+                  jugador.Team[0] == c && jugador.Storage.Get(1, 0) == a,
+                  "PC: soltar sobre alguien del equipo los intercambia");
+
+            Check(PcReglas.Mover(jugador, PcLugar.DeCaja(1, 0), PcLugar.DeCaja(2, 9)) == null &&
+                  jugador.Storage.Get(2, 9) == a && jugador.Storage.Get(1, 0) == null,
+                  "PC: mover entre cajas");
+
+            // Con un debilitado: el equipo no puede quedar solo con el.
+            b.TakeDamage(9999);
+            error = PcReglas.Mover(jugador, PcLugar.DelEquipo(0), PcLugar.DeCaja(0, 0));
+            Check(error != null && jugador.Team.Count == 2,
+                  "PC: no deja al equipo solo con un Pokemon debilitado");
+
+            for (int i = jugador.Team.Count; i < PlayerModel.EquipoMaximo; i++) jugador.Team.Add(new PokenModel(pikachu, 5));
+            error = PcReglas.Mover(jugador, PcLugar.DeCaja(2, 9), PcLugar.DelEquipo(PlayerModel.EquipoMaximo));
+            Check(error != null && jugador.Storage.Get(2, 9) == a, "PC: con el equipo lleno no se retira a un hueco vacio");
+        }
+
+        private static void TestRecibirPokemonVaAlPc()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu");
+            if (pikachu == null) return;
+
+            var jugador = new PlayerModel("Test");
+            for (int i = 0; i < PlayerModel.EquipoMaximo - 1; i++) jugador.Team.Add(new PokenModel(pikachu, 5));
+
+            PokenRecibido r1 = jugador.RecibirPokemon(new PokenModel(pikachu, 5));
+            PokenRecibido r2 = jugador.RecibirPokemon(new PokenModel(pikachu, 5));
+            Check(r1.Destino == DestinoDePokemon.Equipo && jugador.Team.Count == PlayerModel.EquipoMaximo,
+                  "Recibir: con lugar va al equipo");
+            Check(r2.Destino == DestinoDePokemon.Pc && r2.Caja == 0 && jugador.Storage.Count == 1,
+                  "Recibir: con el equipo lleno va a la primera caja del PC");
+        }
+
+        private static void TestShinyUsaSusSprites()
+        {
+            PokenDefinition cosmog = Especie("0789_Cosmog");
+            if (cosmog == null || cosmog.inventoryShinySprite == null) return;
+
+            var normal = new PokenModel(cosmog, 5);
+            var shiny = new PokenModel(cosmog, 5);
+            shiny.SetShiny(true);
+            Check(normal.IconSprite == cosmog.inventorySprite && shiny.IconSprite == cosmog.inventoryShinySprite,
+                  "Shiny: el icono es el shiny solo si el ejemplar lo es");
+            Check(shiny.FrontFrames == cosmog.battleFrontShinyFrames || cosmog.battleFrontShinyFrames == null || cosmog.battleFrontShinyFrames.Length == 0,
+                  "Shiny: en combate usa los frames shiny");
+        }
+
+        private static void TestGananciaDeColor()
+        {
+            var apuestas = new System.Collections.Generic.Dictionary<RouletteBet, int>
+            {
+                [RouletteBet.AlRojo()] = 250,
+                [RouletteBet.AlNumero(1)] = 50
+            };
+
+            // El 1 es rojo: cobran las dos, pero solo cuenta la del color.
+            int alRojo = RouletteBoard.GananciaDeColor(apuestas, 1);
+            Check(alRojo == 250, $"Ruleta: la ganancia al color no cuenta el pleno ({alRojo})");
+            Check(RouletteBoard.DaRuletaDePremios(alRojo, 200), "Ruleta: ganar 250 al color abre la ruleta de premios");
+            Check(RouletteBoard.GananciaDeColor(apuestas, 2) == 0, "Ruleta: si sale negro, el rojo no gana nada");
+            Check(RouletteBoard.GananciaDeColor(apuestas, 0) == 0, "Ruleta: con el cero pierden los colores");
+
+            var justo = new System.Collections.Generic.Dictionary<RouletteBet, int> { [RouletteBet.AlNegro()] = 200 };
+            Check(!RouletteBoard.DaRuletaDePremios(RouletteBoard.GananciaDeColor(justo, 2), 200),
+                  "Ruleta: ganar 200 justos no alcanza (tiene que ser MAS de 200)");
+        }
+
+        private static void TestAscensorPideElShiny()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), cosmog = Especie("0789_Cosmog");
+            if (pikachu == null || cosmog == null) return;
+
+            // RequireComponent(Collider2D) no se puede cumplir solo: Collider2D es
+            // abstracto, asi que sin un collider concreto AddComponent devuelve null.
+            var go = new GameObject("AscensorDePrueba");
+            go.AddComponent<BoxCollider2D>();
+            try
+            {
+                var ascensor = go.AddComponent<CasinoElevatorInteractable>();
+                var so = new SerializedObject(ascensor);
+                so.FindProperty("requisito").enumValueIndex = (int)CasinoRequisitoTipo.TenerPokemon;
+                so.FindProperty("especieRequerida").objectReferenceValue = cosmog;
+                so.FindProperty("debeSerShiny").boolValue = true;
+                so.ApplyModifiedPropertiesWithoutUndo();
+
+                var story = new StoryModel();
+                var jugador = new PlayerModel("Test");
+                jugador.Team.Add(new PokenModel(pikachu, 10));
+
+                Check(!ascensor.CumpleRequisito(jugador, story, out string mensaje) && mensaje.Contains(cosmog.pokenName),
+                      $"Ascensor 3: sin el Cosmog shiny no sube ({mensaje})");
+
+                jugador.Team.Add(new PokenModel(cosmog, 15));
+                Check(!ascensor.CumpleRequisito(jugador, story, out _), "Ascensor 3: un Cosmog que no es shiny no alcanza");
+
+                var shiny = new PokenModel(cosmog, 15);
+                shiny.SetShiny(true);
+                jugador.Storage.Set(0, 0, shiny);
+                Check(ascensor.CumpleRequisito(jugador, story, out _), "Ascensor 3: con el Cosmog shiny, aunque este en el PC, sube");
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        private static void TestApuestaDeTacconi()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), eevee = Especie("0133_Eevee"), cosmog = Especie("0789_Cosmog");
+            if (pikachu == null || eevee == null || cosmog == null) return;
+
+            var go = new GameObject("TacconiDePrueba");
+            go.AddComponent<BoxCollider2D>();
+            try
+            {
+                var tacconi = go.AddComponent<CasinoTacconiNpc>();
+                var so = new SerializedObject(tacconi);
+                so.FindProperty("especiePremio").objectReferenceValue = cosmog;
+                so.ApplyModifiedPropertiesWithoutUndo();
+
+                var story = new StoryModel();
+                var jugador = new PlayerModel("Test");
+                var a = new PokenModel(pikachu, 10);
+                var b = new PokenModel(eevee, 10);
+
+                jugador.Team.Add(a);
+                Check(CasinoTacconiNpc.MotivoParaNoAceptar(jugador, a) != null, "Tacconi: con un solo Pokemon no acepta la apuesta");
+
+                jugador.Team.Add(b);
+                b.TakeDamage(9999);
+                Check(CasinoTacconiNpc.MotivoParaNoAceptar(jugador, a) != null,
+                      "Tacconi: no acepta si al perder solo queda un debilitado");
+                Check(CasinoTacconiNpc.MotivoParaNoAceptar(jugador, b) == null, "Tacconi: apostar al debilitado si se puede");
+                b.Heal(9999);
+
+                tacconi.AplicarResultado(jugador, story, a, BlackjackOutcome.Pierde);
+                Check(!jugador.Team.Contains(a) && jugador.Team.Count == 1, "Tacconi: perdiendo, se queda con el Pokemon apostado");
+                Check(!story.HasFlag(StoryFlag.Casino_TacconiVencido), "Tacconi: perdiendo no queda anotado como ganado");
+
+                tacconi.AplicarResultado(jugador, story, b, BlackjackOutcome.Empata);
+                Check(jugador.Team.Count == 1 && jugador.Team.Contains(b), "Tacconi: empatando no pasa nada");
+
+                tacconi.AplicarResultado(jugador, story, b, BlackjackOutcome.Gana);
+                Check(jugador.Team.Exists(p => p.Definition == cosmog && p.IsShiny), "Tacconi: ganando, el Cosmog shiny se suma al equipo");
+                Check(jugador.Team.Contains(b), "Tacconi: y el jugador no pierde el suyo");
+                Check(story.HasFlag(StoryFlag.Casino_TacconiVencido), "Tacconi: y queda anotado");
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        private static void TestRevendedorDeLaTarjeta()
+        {
+            var tarjeta = ScriptableObject.CreateInstance<SpecialItemDefinition>();
+            tarjeta.itemName = "Tarjeta VIP";
+            var go = new GameObject("RevendedorDePrueba");
+            go.AddComponent<BoxCollider2D>();
+            try
+            {
+                var vendedor = go.AddComponent<CasinoVendedorNpc>();
+                var so = new SerializedObject(vendedor);
+                so.FindProperty("objeto").objectReferenceValue = tarjeta;
+                so.FindProperty("precio").intValue = 1500;
+                so.ApplyModifiedPropertiesWithoutUndo();
+
+                var jugador = new PlayerModel("Test");
+                jugador.AddMoney(1000);
+                Check(!vendedor.Comprar(jugador) && jugador.Money == 1000 && !jugador.Inventory.HasSpecialItem(tarjeta),
+                      "Revendedor: sin 1500 no la vende");
+
+                jugador.AddMoney(600);
+                Check(vendedor.Comprar(jugador) && jugador.Money == 100 && jugador.Inventory.HasSpecialItem(tarjeta),
+                      "Revendedor: con 1500 la vende y la cobra");
+                Check(!vendedor.Comprar(jugador) && jugador.Money == 100, "Revendedor: no la vende dos veces");
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+                Object.DestroyImmediate(tarjeta);
+            }
         }
     }
 }

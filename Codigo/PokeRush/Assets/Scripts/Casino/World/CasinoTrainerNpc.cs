@@ -25,6 +25,13 @@ public class CasinoTrainerNpc : CasinoNpcConCombate, IInteractable
              "'npcsQueLaPuedenDar' de la tabla.")]
     [SerializeField] private CasinoPrizeTable ruleta;
 
+    [Header("Objeto clave al ganar (opcional)")]
+    [Tooltip("Objeto clave que da al ganarle (piso 2: el magnate da la Tarjeta VIP). " +
+             "Si ya lo tenes, no lo vuelve a dar.")]
+    [SerializeField] private SpecialItemDefinition objetoAlGanar;
+    [Tooltip("{0} = el objeto.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeObjeto = "Tomá, te la ganaste: la {0} es tuya.";
+
     [Header("Textos")]
     [SerializeField, TextArea(2, 4)] private string pregunta = "¿Peleamos?";
     [SerializeField] private string opcionSi = "Dale";
@@ -39,6 +46,7 @@ public class CasinoTrainerNpc : CasinoNpcConCombate, IInteractable
     public EnemyDefinition Rival => rival;
     public StoryFlag FlagVencido => flagVencido;
     public CasinoPrizeTable Ruleta => ruleta;
+    public SpecialItemDefinition ObjetoAlGanar => objetoAlGanar;
 
     public bool Interact(PlayerModel player, StoryModel story)
     {
@@ -71,17 +79,28 @@ public class CasinoTrainerNpc : CasinoNpcConCombate, IInteractable
         if (ruleta != null && ruleta.premios != null && ruleta.premios.Length > 0)
             daRuleta = CasinoRuletaDeNpcs.Sortear(story, ruleta.npcsQueLaPuedenDar, flagVencido, Random.value);
 
+        // El objeto va a la partida en curso (AlTerminar no recibe al jugador:
+        // la firma la usa por reflexion el banco de pruebas).
+        PlayerModel jugador = GameManager.Instance != null ? GameManager.Instance.CurrentPlayer : null;
+        bool daObjeto = objetoAlGanar != null && jugador != null && !jugador.Inventory.HasSpecialItem(objetoAlGanar);
+        if (daObjeto) jugador.Inventory.AddSpecialItem(objetoAlGanar);
+
         Activar(story, flagVencido);
         if (rival != null) Activar(story, rival.defeatGrantsFlag);
         CasinoDialogo.Guardar();
 
         Debug.Log($"[Casino] '{name}' vencido. Ruleta: {(daRuleta ? "SI" : "no")} " +
-                  $"({CasinoRuletaDeNpcs.Usadas(story)}/{CasinoRuletaDeNpcs.MaximoPorPartida} usadas).");
+                  $"({CasinoRuletaDeNpcs.Usadas(story)}/{CasinoRuletaDeNpcs.MaximoPorPartida} usadas)" +
+                  (daObjeto ? $", da {objetoAlGanar.itemName}." : "."));
+
+        string lineaObjeto = daObjeto
+            ? string.Format(mensajeObjeto, string.IsNullOrEmpty(objetoAlGanar.itemName) ? objetoAlGanar.name : objetoAlGanar.itemName)
+            : null;
 
         AlVolverAlMapa(() =>
         {
-            if (!daRuleta) { Decir(mensajeVictoria); return; }
-            Decir(new[] { mensajeVictoria, mensajeRuleta }, () => CasinoDialogo.AbrirRuletaDePremio(ruleta));
+            if (!daRuleta) { Decir(new[] { mensajeVictoria, lineaObjeto }); return; }
+            Decir(new[] { mensajeVictoria, lineaObjeto, mensajeRuleta }, () => CasinoDialogo.AbrirRuletaDePremio(ruleta));
         });
     }
 }

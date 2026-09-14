@@ -7,23 +7,34 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
-// Pone los personajes de los pisos 1 a 3 del casino.
+// Pone los personajes de los pisos 1 a 3 del casino. Son dos menus, para que
+// rehacer un piso no toque el otro (el piso 1 quedo terminado a mano):
+//
+//   PokeRush > Casino > Poner los personajes del piso 1
+//   PokeRush > Casino > Poner los personajes de los pisos 2 y 3
 //
 //   Piso 1: el guardia del ascensor (se le paga o se le gana; ganarle da la
 //           ruleta de Pokemon), cuatro que pelean una vez (apostador,
 //           malabarista, motorista y pokemaniaco), la enfermera, un anciano que
 //           cuenta historia y ocho personas jugando a las tragaperras.
-//   Piso 2: cuatro que pelean una vez (joven rica, modelo, medium y ladron), la
-//           enfermera y una damisela que cuenta historia.
-//   Piso 3: cuatro que pelean una vez (macarra, guay, veterano y karateka), la
-//           enfermera y un empresario que cuenta historia.
+//   Piso 2: el guardia VIP del ascensor (se le muestra la Tarjeta VIP o se le
+//           gana; ganarle da su ruleta exclusiva), el magnate que da la tarjeta
+//           al ganarle, el revendedor que la vende por 1500, seis que pelean una
+//           vez (joven rica, modelo, medium, ladron, tahur y bailarina), la
+//           enfermera, dos que cuentan historia y seis jugando a la ruleta.
+//   Piso 3: Tacconi (juega su Cosmog shiny al blackjack contra uno de tus
+//           Pokemon), seis que pelean una vez (macarra, guay, veterano,
+//           karateka, gangster y crupiera), la enfermera, dos que cuentan
+//           historia y cuatro jugando al blackjack.
+//
+// Tambien configura los ascensores de los pisos 2 y 3 (que piden, a donde bajan)
+// y las seis mesas de ruleta del piso 2 (la ruleta de premios por ganar al color).
 //
 // Los textos que ve el jugador van con tildes y enies: la caja de dialogo usa
 // la fuente legacy de Unity, que las dibuja bien.
 //
-// Los que pelean una vez pueden dar la ruleta de premios de los NPCs (maximo dos
-// por partida, ver CasinoRuletaDeNpcs). El ascensor del piso 1 pasa a pedir el
-// pase del guardia en vez de plata juntada.
+// Los que pelean una vez pueden dar la ruleta de premios de los NPCs (una cada
+// dos combates, ver CasinoRuletaDeNpcs).
 //
 // Idempotente: borra el contenedor 'PersonajesCasino' de cada piso y lo vuelve a
 // crear. Los assets que el equipo va a retocar (dialogos de historia y tablas de
@@ -72,7 +83,56 @@ public static class CasinoNpcBuilder
         StoryFlag.Casino_MediumVencido,
         StoryFlag.Casino_LadronVencido,
         StoryFlag.Casino_VeteranoVencido,
-        StoryFlag.Casino_KaratekaVencido
+        StoryFlag.Casino_KaratekaVencido,
+        StoryFlag.Casino_TahurVencido,
+        StoryFlag.Casino_BailarinaVencida,
+        StoryFlag.Casino_GangsterVencido,
+        StoryFlag.Casino_CrupieraVencida
+    };
+
+    // La Tarjeta VIP: la pide el guardia del piso 2. Se gana venciendo al
+    // magnate, sale en la ruleta de premios de los combates (~15%) o se compra.
+    private const string TarjetaPath = "Assets/Resources/Definitions/Items/TarjetaVip.asset";
+    private const int PrecioTarjeta = 1500;
+    private const float PesoTarjetaEnLaRuleta = 15f;
+
+    // Ganar MAS que esto al color (rojo o negro) en un giro abre la ruleta de premios.
+    private const int UmbralRuletaPorColor = 200;
+
+    // El Pokemon de Tacconi, que pide el ascensor del piso 3.
+    private const string EspecieDeTacconi = "0789_Cosmog";
+
+    // Gente jugando a la ruleta del piso 2: una persona del lado de ARRIBA de
+    // cada mesa, mirandola. Las mesas se usan desde abajo, asi que no tapan nada.
+    private static readonly (string nombre, Vector2 celda, string hoja, string hablante, string linea)[] JugadoresDeRuleta =
+    {
+        ("JugadorRuleta1", new Vector2(5.5f, 10.5f), "ricachona", "JUGADORA",
+            "Rojo, rojo, rojo... ¡negro! Siempre sale negro cuando le voy al rojo."),
+        ("JugadorRuleta2", new Vector2(12.5f, 10.5f), "presidente", "JUGADOR",
+            "Dicen que si le ganás más de 200 al color, la casa te hace girar la ruleta de premios."),
+        ("JugadorRuleta3", new Vector2(6.5f, 14.5f), "guaya", "JUGADORA",
+            "Yo le voy al 17. Siempre al 17. Algún día va a salir."),
+        ("JugadorRuleta4", new Vector2(11.5f, 14.5f), "chica1", "JUGADORA",
+            "A mi hermana le salió una Tarjeta VIP en una ruleta de premios. Yo sigo esperando."),
+        ("JugadorRuleta5", new Vector2(5.5f, 18.5f), "chaval2", "JUGADOR",
+            "El guardia del ascensor no deja subir a nadie sin la Tarjeta VIP."),
+        ("JugadorRuleta6", new Vector2(12.5f, 18.5f), "estudianta", "JUGADORA",
+            "El revendedor de la esquina tiene tarjetas VIP... a precio de oro.")
+    };
+
+    // Gente jugando al blackjack del piso 3: parada justo debajo de los banquitos,
+    // del lado curvo de la mesa, que es el de los jugadores. Del lado recto
+    // (arriba) va el croupier: ahi parecian empleados y no clientes.
+    private static readonly (string nombre, Vector2 celda, string hoja, string hablante, string linea)[] JugadoresDeBlackjack =
+    {
+        ("JugadorBlackjack1", new Vector2(-11.5f, 13.5f), "gabriel", "JUGADOR",
+            "Diecinueve... me planto. No, pido. No, me planto."),
+        ("JugadorBlackjack2", new Vector2(-5.5f, 13.5f), "sachiko", "JUGADORA",
+            "Tacconi no pierde nunca. Dicen que tiene un Cosmog shiny y que lo apuesta."),
+        ("JugadorBlackjack3", new Vector2(-12.5f, 7.5f), "guayo", "JUGADOR",
+            "Al ascensor de este piso solo suben los que tienen un Pokémon shiny de verdad."),
+        ("JugadorBlackjack4", new Vector2(-6.5f, 7.5f), "chica2", "JUGADORA",
+            "¡Blackjack! ...ah, no, eran 22.")
     };
 
     // Gente jugando a las tragaperras del piso 1: cada uno en un taburete,
@@ -100,8 +160,13 @@ public static class CasinoNpcBuilder
 
     private static readonly Dictionary<string, Sprite[]> _hojas = new Dictionary<string, Sprite[]>();
 
-    [MenuItem("PokeRush/Casino/Poner los personajes de los pisos 1 a 3")]
-    public static void PonerTodos()
+    [MenuItem("PokeRush/Casino/Poner los personajes del piso 1")]
+    public static void PonerPiso1() => Poner(piso1: true, pisos2y3: false);
+
+    [MenuItem("PokeRush/Casino/Poner los personajes de los pisos 2 y 3")]
+    public static void PonerPisos2y3() => Poner(piso1: false, pisos2y3: true);
+
+    private static void Poner(bool piso1, bool pisos2y3)
     {
         if (EditorApplication.isPlaying)
         {
@@ -109,7 +174,8 @@ public static class CasinoNpcBuilder
             return;
         }
 
-        foreach (string path in Escenas)
+        string[] escenas = piso1 && pisos2y3 ? Escenas : piso1 ? new[] { Piso1 } : new[] { Piso2, Piso3 };
+        foreach (string path in escenas)
         {
             Scene abierta = SceneManager.GetSceneByPath(path);
             if (abierta.IsValid() && abierta.isLoaded && abierta.isDirty)
@@ -151,9 +217,30 @@ public static class CasinoNpcBuilder
         EnemyDefinition karateka = Enemigo("KaratekaCasino", "Karateka", 210, StoryFlag.Casino_KaratekaVencido,
             "KARATEKA", "Trainer", ("0057_Primeape", 18), ("0447_Riolu", 18));
 
+        // Piso 2. El guardia VIP es mas dificil que el del piso 1 (4 Pokemon,
+        // nivel 21-23, IA de lider); el magnate, "algo complicado" (3 Pokemon
+        // de nivel 19-20 cuando el resto del piso anda por el 15-17).
+        EnemyDefinition guardiaVip = Enemigo("GuardiaVipCasino", "Guardia VIP", 500, StoryFlag.Casino_GuardiaVipVencido,
+            "ELITEROCKET", "GymLeader", ("0215_Sneasel", 21), ("0093_Haunter", 22), ("0552_Krokorok", 22), ("0082_Magneton", 23));
+        EnemyDefinition magnate = Enemigo("MagnateCasino", "Magnate", 400, StoryFlag.Casino_MagnateVencido,
+            "CABALLERO", "Trainer", ("0281_Kirlia", 19), ("0233_Porygon2", 20), ("0608_Lampent", 20));
+        EnemyDefinition tahur = Enemigo("TahurCasino", "Tahúr", 170, StoryFlag.Casino_TahurVencido,
+            "MAXIMO", "Trainer", ("0562_Yamask", 16), ("0679_Honedge", 17));
+        EnemyDefinition bailarina = Enemigo("BailarinaCasino", "Bailarina", 160, StoryFlag.Casino_BailarinaVencida,
+            "CHICA", "Trainer", ("0333_Swablu", 16), ("0315_Roselia", 17));
+        // Piso 3.
+        EnemyDefinition gangster = Enemigo("GangsterCasino", "Gángster", 230, StoryFlag.Casino_GangsterVencido,
+            "ROCKETO", "Trainer", ("0228_Houndour", 18), ("0451_Skorupi", 19));
+        EnemyDefinition crupiera = Enemigo("CrupieraCasino", "Crupiera", 220, StoryFlag.Casino_CrupieraVencida,
+            "VETERANA", "Trainer", ("0137_Porygon", 18), ("0608_Lampent", 19));
+
+        SpecialItemDefinition tarjeta = TarjetaVip();
+
         // ---------- ruletas y dialogos (solo si no existen) ----------
-        CasinoPrizeTable ruletaNpcs = TablaDeLosNpcs();
+        CasinoPrizeTable ruletaNpcs = TablaDeLosNpcs(tarjeta);
         CasinoPrizeTable ruletaGuardia = TablaDelGuardia();
+        CasinoPrizeTable ruletaGuardiaVip = TablaDelGuardiaVip();
+        CasinoPrizeTable ruletaMesa = TablaDeLaMesa();
 
         DialogueDefinition anciano = Dialogo("Historia_Piso1_Anciano", "ANCIANO",
             "Llevo cuarenta años viniendo a este casino.",
@@ -167,15 +254,25 @@ public static class CasinoNpcBuilder
             "El blackjack es el único juego donde la casa no siempre gana.",
             "Por eso los de arriba vigilan cada mesa.",
             "Si ganás, hacelo sin llamar la atención.");
+        // Relleno igual que los de arriba: se reescriben cuando llegue la historia.
+        DialogueDefinition secretaria = Dialogo("Historia_Piso2_Secretaria", "SECRETARIA",
+            "Trabajo para la administración del casino desde hace años.",
+            "Arriba de todo hay alguien que decide quién gana y quién pierde.",
+            "Pero eso no te lo dije yo.");
+        DialogueDefinition jubilado = Dialogo("Historia_Piso3_Jubilado", "JUBILADO",
+            "Yo antes tenía un equipo entero. Se lo aposté a Tacconi, uno por uno.",
+            "Dicen que el dueño del casino le presta los Pokémon raros para que los apueste.",
+            "Si le ganás, no le digas a nadie cómo lo hiciste.");
 
         AssetDatabase.SaveAssets();
 
         int ok = 0;
 
-        if (ArmarPiso(Piso1, raiz =>
+        if (piso1 && ArmarPiso(Piso1, raiz =>
             {
                 var g = Personaje(raiz, "GuardiaAscensor", new Vector2(3.5f, 19.5f), "maton", Abajo);
-                ConfigurarGuardia(g.AddComponent<CasinoElevatorGuard>(), guardia, ruletaGuardia);
+                ConfigurarGuardia(g.AddComponent<CasinoElevatorGuard>(), "GUARDIA", guardia, ruletaGuardia,
+                    StoryFlag.Casino_Piso1_PaseAscensor, StoryFlag.Casino_GuardiaVencido, 500, null);
 
                 var a = Personaje(raiz, "ApostadorCasino", new Vector2(-3.5f, 12.5f), "Lider 1 bw", Izquierda);
                 ConfigurarEntrenador(a.AddComponent<CasinoTrainerNpc>(), "APOSTADOR", apostador,
@@ -225,7 +322,7 @@ public static class CasinoNpcBuilder
             },
             PedirPaseEnElAscensor)) ok++;
 
-        if (ArmarPiso(Piso2, raiz =>
+        if (pisos2y3 && ArmarPiso(Piso2, raiz =>
             {
                 var j = Personaje(raiz, "JovenRicaCasino", new Vector2(-10.5f, 13.5f), "jovenrica", Abajo);
                 ConfigurarEntrenador(j.AddComponent<CasinoTrainerNpc>(), "JOVEN RICA", jovenRica,
@@ -264,9 +361,54 @@ public static class CasinoNpcBuilder
 
                 ConfigurarQueHabla(Personaje(raiz, "DamiselaHistoria", new Vector2(-13.5f, 18.5f), "damisela", Abajo)
                     .AddComponent<NpcQueHabla>(), damisela);
-            })) ok++;
 
-        if (ArmarPiso(Piso3, raiz =>
+                // ---- el guardia VIP y la Tarjeta VIP ----
+                var gv = Personaje(raiz, "GuardiaVip", new Vector2(3.5f, 19.5f), "rocketElite", Abajo);
+                ConfigurarGuardia(gv.AddComponent<CasinoElevatorGuard>(), "GUARDIA VIP", guardiaVip, ruletaGuardiaVip,
+                    StoryFlag.Casino_Piso2_PaseAscensor, StoryFlag.Casino_GuardiaVipVencido, 0, tarjeta);
+
+                var mg = Personaje(raiz, "MagnateCasino", new Vector2(14.5f, 18.5f), "ricachon", Abajo);
+                ConfigurarEntrenador(mg.AddComponent<CasinoTrainerNpc>(), "MAGNATE", magnate,
+                    StoryFlag.Casino_MagnateVencido, null,
+                    "¿La Tarjeta VIP? Tengo una de sobra. Si me ganás, es tuya. Pero no me gusta perder.",
+                    "Pelear", "Ahora no", "Lo imaginaba.",
+                    "Increíble... Un trato es un trato.",
+                    "Ya tenés mi tarjeta. No me la gastes toda.",
+                    tarjeta);
+
+                var rv = Personaje(raiz, "RevendedorVip", new Vector2(-13.5f, 4.5f), "hombrenegro", Derecha);
+                ConfigurarVendedor(rv.AddComponent<CasinoVendedorNpc>(), "REVENDEDOR", "ROCKETO", tarjeta, PrecioTarjeta);
+
+                // ---- mas gente que pelea una vez ----
+                var th = Personaje(raiz, "TahurCasino", new Vector2(-9.5f, 9.5f), "maximo", Abajo);
+                ConfigurarEntrenador(th.AddComponent<CasinoTrainerNpc>(), "TAHÚR", tahur,
+                    StoryFlag.Casino_TahurVencido, ruletaNpcs,
+                    "Las ruletas están arregladas, pero una pelea no. ¿Probamos suerte?",
+                    "Probemos", "No", "Cobarde.",
+                    "Me limpiaste. Ni en la ruleta pierdo tanto.",
+                    "Ya me ganaste. Andá a apostar lo que me sacaste.");
+
+                var bl = Personaje(raiz, "BailarinaCasino", new Vector2(0.5f, 13.5f), "kimono", Abajo);
+                ConfigurarEntrenador(bl.AddComponent<CasinoTrainerNpc>(), "BAILARINA", bailarina,
+                    StoryFlag.Casino_BailarinaVencida, ruletaNpcs,
+                    "Mi número empieza en diez minutos. ¿Me ayudás a calentar con una pelea?",
+                    "Dale", "Ahora no", "Bueno, bailo sola.",
+                    "¡Qué ritmo tenés! Me ganaste.",
+                    "Ya me ganaste. Ahora, a bailar.");
+
+                ConfigurarQueHabla(Personaje(raiz, "SecretariaHistoria", new Vector2(15.5f, 7.5f), "secretaria", Izquierda)
+                    .AddComponent<NpcQueHabla>(), secretaria);
+
+                foreach (var jr in JugadoresDeRuleta)
+                {
+                    var jugador = Personaje(raiz, jr.nombre, jr.celda, jr.hoja, Abajo);
+                    ConfigurarQueHabla(jugador.AddComponent<NpcQueHabla>(), Dialogo(jr.nombre, jr.hablante, jr.linea));
+                    jugador.AddComponent<NpcJugandoMaquina>();
+                }
+            },
+            escena => ConfigurarPiso2(escena, ruletaMesa))) ok++;
+
+        if (pisos2y3 && ArmarPiso(Piso3, raiz =>
             {
                 var ma = Personaje(raiz, "MacarraCasino", new Vector2(4.5f, 10.5f), "macarra", Izquierda);
                 ConfigurarEntrenador(ma.AddComponent<CasinoTrainerNpc>(), "MACARRA", macarra,
@@ -305,14 +447,115 @@ public static class CasinoNpcBuilder
 
                 ConfigurarQueHabla(Personaje(raiz, "EmpresarioHistoria", new Vector2(-9.5f, 13.5f), "empresario", Abajo)
                     .AddComponent<NpcQueHabla>(), empresario);
-            })) ok++;
+
+                // ---- Tacconi y su Cosmog shiny ----
+                // Sprites provisorios (Giovanni): el equipo va a pasar los de Tacconi.
+                var tc = Personaje(raiz, "Tacconi", new Vector2(-3.5f, 16.5f), "giovanni", Izquierda);
+                ConfigurarTacconi(tc.AddComponent<CasinoTacconiNpc>(), "GIOVANNI1");
+
+                // ---- mas gente que pelea una vez ----
+                var gg = Personaje(raiz, "GangsterCasino", new Vector2(3.5f, 18.5f), "rocketo", Abajo);
+                ConfigurarEntrenador(gg.AddComponent<CasinoTrainerNpc>(), "GÁNGSTER", gangster,
+                    StoryFlag.Casino_GangsterVencido, ruletaNpcs,
+                    "Nadie se acerca a la mesa de Tacconi sin pasar por mí. ¿Peleamos?",
+                    "Pelear", "Me voy", "Eso pensé.",
+                    "Está bien, está bien. Tacconi te espera.",
+                    "Ya me ganaste. Andá con Tacconi, pero cuidá tus Pokémon.");
+
+                var cr = Personaje(raiz, "CrupieraCasino", new Vector2(7.5f, 6.5f), "veterana", Abajo);
+                ConfigurarEntrenador(cr.AddComponent<CasinoTrainerNpc>(), "CRUPIERA", crupiera,
+                    StoryFlag.Casino_CrupieraVencida, ruletaNpcs,
+                    "Estoy en mi descanso. Si querés, repartimos Pokémon en vez de cartas.",
+                    "Repartí", "No", "Otra vez será.",
+                    "La casa perdió esta mano.",
+                    "Ya me ganaste. Vuelvo a la mesa.");
+
+                ConfigurarQueHabla(Personaje(raiz, "JubiladoHistoria", new Vector2(-14.5f, 6.5f), "anciano2", Derecha)
+                    .AddComponent<NpcQueHabla>(), jubilado);
+
+                foreach (var j in JugadoresDeBlackjack)
+                {
+                    var jugador = Personaje(raiz, j.nombre, j.celda, j.hoja, Arriba);
+                    ConfigurarQueHabla(jugador.AddComponent<NpcQueHabla>(), Dialogo(j.nombre, j.hablante, j.linea));
+                    jugador.AddComponent<NpcJugandoMaquina>();
+                }
+            },
+            ConfigurarPiso3)) ok++;
 
         AssetDatabase.SaveAssets();
 
-        if (ok == Escenas.Length)
-            Debug.Log("[CasinoNPC] TERMINADO: personajes puestos en los tres pisos.");
+        int esperados = (piso1 ? 1 : 0) + (pisos2y3 ? 2 : 0);
+        if (ok == esperados)
+            Debug.Log($"[CasinoNPC] TERMINADO: personajes puestos en {ok} piso(s).");
         else
-            Debug.LogError($"[CasinoNPC] Solo {ok} de {Escenas.Length} pisos quedaron guardados. Mira los errores de arriba.");
+            Debug.LogError($"[CasinoNPC] Solo {ok} de {esperados} pisos quedaron guardados. Mira los errores de arriba.");
+    }
+
+    // ---------- ascensores y mesas ----------
+
+    private static IEnumerable<T> Componentes<T>(Scene scene) where T : Component
+        => scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<T>(true));
+
+    // Piso 2: el ascensor pide el pase del guardia VIP y baja al piso 1; las seis
+    // mesas abren la ruleta de premios al ganarle fuerte al color.
+    private static void ConfigurarPiso2(Scene scene, CasinoPrizeTable ruletaMesa)
+    {
+        ConfigurarAscensor(scene, CasinoRequisitoTipo.Flag, StoryFlag.Casino_Piso2_PaseAscensor, null,
+            "El guardia VIP no te deja subir. Hablá con él: con la Tarjeta VIP o ganándole.",
+            ("Casino Nivel 1", "PISO 1"));
+
+        int mesas = 0;
+        foreach (RouletteTableInteractable mesa in Componentes<RouletteTableInteractable>(scene))
+        {
+            var so = new SerializedObject(mesa);
+            so.FindProperty("ruletaPorColor").objectReferenceValue = ruletaMesa;
+            so.FindProperty("umbralRuletaPorColor").intValue = UmbralRuletaPorColor;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            mesas++;
+        }
+
+        if (mesas == 0) Debug.LogError("[CasinoNPC] El piso 2 no tiene mesas de ruleta (RouletteTableInteractable).");
+        else Debug.Log($"[CasinoNPC] Piso 2: {mesas} mesas abren la ruleta de premios al ganar mas de {UmbralRuletaPorColor} al color.");
+    }
+
+    // Piso 3: el ascensor pide el Cosmog shiny de Tacconi y baja a los pisos 2 y 1.
+    private static void ConfigurarPiso3(Scene scene)
+    {
+        var cosmog = AssetDatabase.LoadAssetAtPath<PokenDefinition>($"{Pokens}{EspecieDeTacconi}.asset");
+        if (cosmog == null) Debug.LogError($"[CasinoNPC] No existe la especie {EspecieDeTacconi}.");
+
+        ConfigurarAscensor(scene, CasinoRequisitoTipo.TenerPokemon, StoryFlag.None, cosmog,
+            "El de seguridad no te deja subir: arriba solo entran los que tienen un {0} shiny. Dicen que Tacconi tiene uno.",
+            ("Casino Nivel 2", "PISO 2"), ("Casino Nivel 1", "PISO 1"));
+    }
+
+    private static void ConfigurarAscensor(Scene scene, CasinoRequisitoTipo requisito, StoryFlag flag,
+        PokenDefinition especie, string mensaje, params (string escena, string nombre)[] abajo)
+    {
+        CasinoElevatorInteractable ascensor = Componentes<CasinoElevatorInteractable>(scene).FirstOrDefault();
+        if (ascensor == null)
+        {
+            Debug.LogError($"[CasinoNPC] '{scene.name}' no tiene CasinoElevatorInteractable.");
+            return;
+        }
+
+        var so = new SerializedObject(ascensor);
+        so.FindProperty("requisito").enumValueIndex = (int)requisito;
+        so.FindProperty("flagRequerido").enumValueIndex = (int)flag;
+        so.FindProperty("especieRequerida").objectReferenceValue = especie;
+        so.FindProperty("debeSerShiny").boolValue = true;
+        so.FindProperty(requisito == CasinoRequisitoTipo.TenerPokemon ? "mensajeFaltaPokemon" : "mensajeFaltaObjetivo")
+            .stringValue = mensaje;
+
+        SerializedProperty pisos = so.FindProperty("pisosDeAbajo");
+        pisos.arraySize = abajo.Length;
+        for (int i = 0; i < abajo.Length; i++)
+        {
+            SerializedProperty piso = pisos.GetArrayElementAtIndex(i);
+            piso.FindPropertyRelative("escena").stringValue = abajo[i].escena;
+            piso.FindPropertyRelative("nombre").stringValue = abajo[i].nombre;
+        }
+        so.ApplyModifiedPropertiesWithoutUndo();
     }
 
     // ---------- escenas ----------
@@ -543,8 +786,12 @@ public static class CasinoNpcBuilder
 
     private static void ConfigurarEntrenador(CasinoTrainerNpc npc, string nombre, EnemyDefinition rival,
         StoryFlag flagVencido, CasinoPrizeTable ruleta, string pregunta, string si, string no,
-        string rechazo, string victoria, string yaVencido)
+        string rechazo, string victoria, string yaVencido, SpecialItemDefinition objetoAlGanar = null)
     {
+        var soObjeto = new SerializedObject(npc);
+        soObjeto.FindProperty("objetoAlGanar").objectReferenceValue = objetoAlGanar;
+        soObjeto.ApplyModifiedPropertiesWithoutUndo();
+
         var so = new SerializedObject(npc);
         so.FindProperty("nombre").stringValue = nombre;
         so.FindProperty("retrato").objectReferenceValue = rival != null ? rival.battleFrontSprite : null;
@@ -560,16 +807,45 @@ public static class CasinoNpcBuilder
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 
-    private static void ConfigurarGuardia(CasinoElevatorGuard npc, EnemyDefinition rival, CasinoPrizeTable ruleta)
+    // Con 'objeto' puesto el guardia no cobra: pide ver el objeto (o que le ganes).
+    private static void ConfigurarGuardia(CasinoElevatorGuard npc, string nombre, EnemyDefinition rival,
+        CasinoPrizeTable ruleta, StoryFlag flagPase, StoryFlag flagVencido, int precio, SpecialItemDefinition objeto)
     {
         var so = new SerializedObject(npc);
-        so.FindProperty("nombre").stringValue = "GUARDIA";
+        so.FindProperty("nombre").stringValue = nombre;
         so.FindProperty("retrato").objectReferenceValue = rival != null ? rival.battleFrontSprite : null;
         so.FindProperty("rival").objectReferenceValue = rival;
         so.FindProperty("ruletaDePokemon").objectReferenceValue = ruleta;
-        so.FindProperty("precio").intValue = 500;
-        so.FindProperty("flagPase").enumValueIndex = (int)StoryFlag.Casino_Piso1_PaseAscensor;
-        so.FindProperty("flagVencido").enumValueIndex = (int)StoryFlag.Casino_GuardiaVencido;
+        so.FindProperty("precio").intValue = precio;
+        so.FindProperty("objetoRequerido").objectReferenceValue = objeto;
+        so.FindProperty("flagPase").enumValueIndex = (int)flagPase;
+        so.FindProperty("flagVencido").enumValueIndex = (int)flagVencido;
+        so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
+    private static void ConfigurarVendedor(CasinoVendedorNpc npc, string nombre, string retrato,
+        SpecialItemDefinition objeto, int precio)
+    {
+        var so = new SerializedObject(npc);
+        so.FindProperty("nombre").stringValue = nombre;
+        so.FindProperty("retrato").objectReferenceValue = SpriteRetrato($"{Retratos}{retrato}.png");
+        so.FindProperty("objeto").objectReferenceValue = objeto;
+        so.FindProperty("precio").intValue = precio;
+        so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
+    private static void ConfigurarTacconi(CasinoTacconiNpc npc, string retrato)
+    {
+        var cosmog = AssetDatabase.LoadAssetAtPath<PokenDefinition>($"{Pokens}{EspecieDeTacconi}.asset");
+        if (cosmog == null) Debug.LogError($"[CasinoNPC] No existe la especie {EspecieDeTacconi}.");
+
+        var so = new SerializedObject(npc);
+        so.FindProperty("nombre").stringValue = "TACCONI";
+        so.FindProperty("retrato").objectReferenceValue = SpriteRetrato($"{Retratos}{retrato}.png");
+        so.FindProperty("especiePremio").objectReferenceValue = cosmog;
+        so.FindProperty("nivelPremio").intValue = 15;
+        so.FindProperty("premioShiny").boolValue = true;
+        so.FindProperty("flagGanado").enumValueIndex = (int)StoryFlag.Casino_TacconiVencido;
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 
@@ -623,26 +899,45 @@ public static class CasinoNpcBuilder
         return def;
     }
 
-    // La ruleta de los NPCs: 35% Pokemon, 40% curativos, 25% plata.
-    private static CasinoPrizeTable TablaDeLosNpcs()
+    // La Tarjeta VIP como asset. Se actualiza siempre (texto e icono): el nombre
+    // es la clave con la que la guarda SaveService, asi que no hay que cambiarlo.
+    private static SpecialItemDefinition TarjetaVip()
+    {
+        var def = AssetDatabase.LoadAssetAtPath<SpecialItemDefinition>(TarjetaPath);
+        bool nueva = def == null;
+        if (nueva) def = ScriptableObject.CreateInstance<SpecialItemDefinition>();
+
+        def.itemName = "Tarjeta VIP";
+        def.description = "Tarjeta dorada del casino. El guardia del ascensor del piso 2 deja subir a quien la muestra.";
+        def.effectDescription = "Abre el ascensor del piso 2.";
+        def.buyPrice = PrecioTarjeta;
+        def.icon = SpriteSimple("Assets/Sprites/Casino/tarjeta_vip.png");
+
+        if (nueva) AssetDatabase.CreateAsset(def, TarjetaPath);
+        EditorUtility.SetDirty(def);
+        return def;
+    }
+
+    // La ruleta de los NPCs: ~33% Pokemon, 15% la Tarjeta VIP, 31% curativos y
+    // 21% plata.
+    //
+    // Si la tabla ya existia de antes de la tarjeta, se rehace UNA vez con el
+    // reparto nuevo (lo pidio el enunciado: ~15% de tarjeta en los combates).
+    // Despues de eso no se vuelve a pisar.
+    private static CasinoPrizeTable TablaDeLosNpcs(SpecialItemDefinition tarjeta)
     {
         string path = $"{DefinitionFolder}/RuletaDeLosNpcs.asset";
         var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(path);
         if (tabla == null)
         {
             tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
-            tabla.premios = new[]
-            {
-                PremioPokemon("0025_Pikachu", 15, 13, "icon_pokeball", 300),
-                PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 17, "icon_pocion"),
-                PremioPlata(150, 17),
-                PremioPokemon("0133_Eevee", 15, 12, "icon_greatball", 300),
-                PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 15, "icon_superpocion"),
-                PremioPokemon("0175_Togepi", 15, 10, "icon_pokeball", 300),
-                PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 8, "icon_hiperpocion"),
-                PremioPlata(400, 8)
-            };
+            tabla.premios = PremiosDeLosNpcs(tarjeta);
             AssetDatabase.CreateAsset(tabla, path);
+        }
+        else if (tarjeta != null && (tabla.premios == null || !tabla.premios.Any(p => p != null && p.specialItem != null)))
+        {
+            tabla.premios = PremiosDeLosNpcs(tarjeta);
+            Debug.Log("[CasinoNPC] RuletaDeLosNpcs: se sumo la Tarjeta VIP (15%) y se rehizo el reparto.");
         }
 
         // La lista de quienes la dan si se mantiene al dia: depende de los NPCs
@@ -677,6 +972,85 @@ public static class CasinoNpcBuilder
         };
         AssetDatabase.CreateAsset(tabla, path);
         return tabla;
+    }
+
+    private static Prize[] PremiosDeLosNpcs(SpecialItemDefinition tarjeta) => new[]
+    {
+        PremioPokemon("0025_Pikachu", 15, 12, "icon_pokeball", 300),
+        PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 17, "icon_pocion"),
+        PremioObjetoClave(tarjeta, PesoTarjetaEnLaRuleta),
+        PremioPokemon("0133_Eevee", 15, 11, "icon_greatball", 300),
+        PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 14, "icon_superpocion"),
+        PremioPlata(150, 13),
+        PremioPokemon("0175_Togepi", 15, 10, "icon_pokeball", 300),
+        PremioPlata(400, 8)
+    };
+
+    // La ruleta exclusiva del guardia VIP: siempre un Pokemon, mejores que los
+    // del guardia del piso 1. El icono marca la rareza.
+    //   Poke Ball  (comun):    4 x 15% = 60%
+    //   Great Ball (bueno):    2 x 12% = 24%
+    //   Ultra Ball (raro):     1 x 12% = 12%
+    //   Master Ball (muy raro): 1 x 4% =  4%
+    private static CasinoPrizeTable TablaDelGuardiaVip()
+    {
+        string path = $"{DefinitionFolder}/RuletaDelGuardiaVip.asset";
+        var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(path);
+        if (tabla != null) return tabla;
+
+        tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
+        tabla.premios = new[]
+        {
+            PremioPokemon("0403_Shinx", 21, 15, "icon_pokeball", 800),
+            PremioPokemon("0610_Axew", 22, 12, "icon_greatball", 800),
+            PremioPokemon("0529_Drilbur", 21, 15, "icon_pokeball", 800),
+            PremioPokemon("0246_Larvitar", 22, 12, "icon_ultraball", 800),
+            PremioPokemon("0361_Snorunt", 21, 15, "icon_pokeball", 800),
+            PremioPokemon("0443_Gible", 22, 12, "icon_greatball", 800),
+            PremioPokemon("0231_Phanpy", 21, 15, "icon_pokeball", 800),
+            PremioPokemon("0371_Bagon", 23, 4, "icon_masterball", 800)
+        };
+        AssetDatabase.CreateAsset(tabla, path);
+        return tabla;
+    }
+
+    // La ruleta que abren las mesas del piso 2 al ganar mas de 200 al color:
+    // 25% Pokemon, 40% curativos y 35% plata.
+    private static CasinoPrizeTable TablaDeLaMesa()
+    {
+        string path = $"{DefinitionFolder}/RuletaDeLaMesa.asset";
+        var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(path);
+        if (tabla != null) return tabla;
+
+        tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
+        tabla.premios = new[]
+        {
+            PremioPokemon("0172_Pichu", 15, 13, "icon_pokeball", 300),
+            PremioPlata(250, 16),
+            PremioObjeto("Pocion", "Poción", "Pociones", "una", 2, 18, "icon_pocion"),
+            PremioPokemon("0440_Happiny", 15, 12, "icon_greatball", 300),
+            PremioPlata(500, 12),
+            PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 1, 14, "icon_superpocion"),
+            PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 8, "icon_hiperpocion"),
+            PremioPlata(1000, 7)
+        };
+        AssetDatabase.CreateAsset(tabla, path);
+        return tabla;
+    }
+
+    private static Prize PremioObjetoClave(SpecialItemDefinition objeto, float peso)
+    {
+        if (objeto == null) Debug.LogError("[CasinoNPC] Falta el objeto clave del premio.");
+        return new Prize
+        {
+            prizeName = objeto != null ? objeto.itemName : "Objeto clave",
+            article = "la",
+            amount = 1,
+            probability = peso,
+            icon = SpriteSimple("Assets/Sprites/Casino/icon_tarjeta_vip.png"),
+            specialItem = objeto,
+            moneyIfOwned = 400
+        };
     }
 
     private static Prize PremioPokemon(string especie, int nivel, float peso, string icono, int siEquipoLleno)
@@ -763,6 +1137,8 @@ public static class CasinoNpcBuilder
         var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
         if (sprite != null) return sprite;
 
+        // Un PNG recien copiado puede no estar importado todavia.
+        if (AssetImporter.GetAtPath(path) == null) AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
         var importer = AssetImporter.GetAtPath(path) as TextureImporter;
         if (importer == null) { Debug.LogError($"[CasinoNPC] No existe {path}."); return null; }
 

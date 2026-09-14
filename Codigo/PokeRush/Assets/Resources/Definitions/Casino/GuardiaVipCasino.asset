@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
+  m_Name: GuardiaVipCasino
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  characterName: Guardia VIP
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: c14771cba571264409e12420a170e213, type: 2}
+    level: 21
+  - species: {fileID: 11400000, guid: 88ffb66d991a81046a5d207da29644d3, type: 2}
+    level: 22
+  - species: {fileID: 11400000, guid: 911a38ae2f95a3a4ca298dddc6672c51, type: 2}
+    level: 22
+  - species: {fileID: 11400000, guid: 6a25ddde6a3903b41a80c111e08b8f85, type: 2}
+    level: 23
+  battleFrontSprite: {fileID: 21300000, guid: 1c67032061d8cb34681a045aad61da63, type: 3}
+  battleBackSprite: {fileID: 0}
+  battleMusic: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  moneyReward: 500
+  itemRewards: []
+  defeatGrantsFlag: 42
+  fleeIfWeak: 0
+  aiProfile: {fileID: 11400000, guid: e4e7bcb582789584a88898f642a0d19d, type: 2}
+  battleBackground: {fileID: 0}

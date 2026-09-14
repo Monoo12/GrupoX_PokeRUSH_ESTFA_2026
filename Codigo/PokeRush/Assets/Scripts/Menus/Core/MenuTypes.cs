@@ -28,7 +28,10 @@ public enum MenuScreenId
     // medio le cambia la identidad a las pantallas de abajo y hay que
     // regenerarlas todas (ya paso al sacar la mesa vieja: PrizeWheel se movio
     // de 8 a 7 y hubo que rehacer su prefab).
-    Blackjack
+    Blackjack,
+
+    // El PC de almacenamiento de Pokemon. Al final por lo mismo que Blackjack.
+    PcStorage
 }
 
 // Desde donde se abrio el sistema de menus. Las pantallas compartidas (mochila,
@@ -80,7 +83,10 @@ public enum PartyScreenMode
     // Elegir un Poken como objetivo de un objeto.
     SelectTarget,
     // Elegir un Poken para mandar al campo (cambio en combate).
-    SelectSwitch
+    SelectSwitch,
+    // Elegir cualquier Poken y devolverlo, sin submenu (ej: cual apostar con
+    // Tacconi). Respeta BlockedIndices.
+    SelectAny
 }
 
 public class PartyScreenRequest
@@ -134,4 +140,7 @@ public class MessageBoxRequest
 public class MessageBoxResult
 {
     public bool Confirmed;
+    // Se cerro con Volver. En una pregunta con dos opciones propias (SUBIR /
+    // BAJAR) Volver no puede contar como la segunda opcion.
+    public bool Cancelled;
 }

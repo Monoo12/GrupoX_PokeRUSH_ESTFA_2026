@@ -32,8 +32,17 @@ public class Prize
     [Tooltip("Pokemon que se suma al equipo al ganarlo. Vacio = no da Pokemon.")]
     public PokenDefinition poken;
     [Min(1)] public int pokenLevel = 15;
-    [Tooltip("Plata que se da en su lugar si el equipo ya tiene 6.")]
+    [Tooltip("Sale shiny.")]
+    public bool shiny;
+    [Tooltip("Plata que se da en su lugar si el equipo Y el PC estan llenos. Con " +
+             "el equipo lleno solamente, el Pokemon va al PC.")]
     [Min(0)] public int moneyIfTeamFull = 300;
+
+    [Header("Objeto clave (opcional)")]
+    [Tooltip("Objeto clave que va a la mochila al ganarlo (ej: la Tarjeta VIP).")]
+    public SpecialItemDefinition specialItem;
+    [Tooltip("Plata que se da en su lugar si el jugador ya lo tenia.")]
+    [Min(0)] public int moneyIfOwned = 300;
 
     [Tooltip("Pisa el texto del cartel. Vacio = se arma solo con nombre y cantidad.")]
     [TextArea(2, 3)] public string customMessage = "";

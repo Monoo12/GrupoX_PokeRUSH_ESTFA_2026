@@ -20,6 +20,9 @@ public class CasinoElevatorGuard : CasinoNpcConCombate, IInteractable
     [Tooltip("Flag que deja usar el ascensor. El ascensor del piso lo pide con requisito = Flag.")]
     [SerializeField] private StoryFlag flagPase = StoryFlag.Casino_Piso1_PaseAscensor;
     [Min(0)] [SerializeField] private int precio = 500;
+    [Tooltip("Si esta puesto, el guardia no cobra: pide ver este objeto clave " +
+             "(piso 2: la Tarjeta VIP). Sin el objeto, igual se le puede ganar.")]
+    [SerializeField] private SpecialItemDefinition objetoRequerido;
 
     [Header("Combate")]
     [SerializeField] private EnemyDefinition rival;
@@ -54,7 +57,22 @@ public class CasinoElevatorGuard : CasinoNpcConCombate, IInteractable
     [SerializeField, TextArea(2, 4)] private string mensajeYaTienePase =
         "Ya tenés el pase. Adelante.";
 
+    [Header("Textos con objeto (objetoRequerido puesto)")]
+    [Tooltip("{0} = el objeto.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeMuestraObjeto =
+        "¿La {0}? Pasá, pasá. El ascensor es todo tuyo.";
+    [Tooltip("{0} = el objeto.")]
+    [SerializeField, TextArea(2, 4)] private string preguntaPelearSinObjeto =
+        "Arriba solo suben los que tienen la {0}. Si no la tenés, ganame una pelea. ¿Te animás?";
+    [Tooltip("{0} = el objeto.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeRechazoSinObjeto =
+        "Sin la {0} no subís. Dicen que se consigue en este mismo piso.";
+
     public StoryFlag FlagPase => flagPase;
+    public SpecialItemDefinition ObjetoRequerido => objetoRequerido;
+
+    private string NombreDelObjeto => objetoRequerido == null ? ""
+        : string.IsNullOrEmpty(objetoRequerido.itemName) ? objetoRequerido.name : objetoRequerido.itemName;
     public StoryFlag FlagVencido => flagVencido;
     public int Precio => precio;
     public EnemyDefinition Rival => rival;
@@ -68,6 +86,22 @@ public class CasinoElevatorGuard : CasinoNpcConCombate, IInteractable
         if (story.HasFlag(flagPase))
         {
             Decir(mensajeYaTienePase);
+            return true;
+        }
+
+        // Guardia de objeto: con el objeto pasa, sin el ofrece la pelea.
+        if (objetoRequerido != null)
+        {
+            if (player.Inventory.HasSpecialItem(objetoRequerido))
+            {
+                Activar(story, flagPase);
+                CasinoDialogo.Guardar();
+                Decir(string.Format(mensajeMuestraObjeto, NombreDelObjeto));
+            }
+            else
+            {
+                OfrecerPelea(player, story, string.Format(preguntaPelearSinObjeto, NombreDelObjeto));
+            }
             return true;
         }
 
@@ -108,7 +142,13 @@ public class CasinoElevatorGuard : CasinoNpcConCombate, IInteractable
     {
         Preguntar(pregunta, opcionPelear, opcionNoPelear, pelear =>
         {
-            if (!pelear) { Decir(mensajeRechazo); return; }
+            if (!pelear)
+            {
+                Decir(objetoRequerido != null
+                    ? string.Format(mensajeRechazoSinObjeto, NombreDelObjeto)
+                    : mensajeRechazo);
+                return;
+            }
             LanzarCombate(player, rival, outcome => AlTerminar(outcome, story));
         });
     }

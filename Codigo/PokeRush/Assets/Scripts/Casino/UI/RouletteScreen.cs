@@ -158,6 +158,12 @@ public class RouletteScreen : MenuScreen
 
     // ---------------------------------------------------------------- abrir
 
+    // La ruleta de premios por ganarle fuerte al color. La trae el pedido de la
+    // mesa; sin tabla, no se abre nunca.
+    private CasinoPrizeTable _ruletaPorColor;
+    private int _umbralRuletaPorColor = 200;
+    private bool _premioPendiente;
+
     protected override void OnOpen(object payload)
     {
         var pedido = payload as RouletteScreenRequest;
@@ -166,6 +172,10 @@ public class RouletteScreen : MenuScreen
             if (pedido.ApuestaMinima > 0) minBet = pedido.ApuestaMinima;
             if (pedido.ApuestaMaxima > 0) maxBet = pedido.ApuestaMaxima;
         }
+        _ruletaPorColor = pedido != null ? pedido.RuletaPorColor : null;
+        _umbralRuletaPorColor = pedido != null ? pedido.UmbralRuletaPorColor : 200;
+        _premioPendiente = false;
+        _result.RuletasDePremio = 0;
 
         _result.Giros = 0;
         _result.Neto = 0;
@@ -205,10 +215,33 @@ public class RouletteScreen : MenuScreen
     {
         if (_fase != Fase.Cartel) return;
 
+        // Primero el premio, si lo hubo. La ruleta se abre desde el callback
+        // del aviso: para ese momento esta pantalla ya volvio a Apostando (el
+        // aviso le devuelve el foco antes de correr su callback), asi que al
+        // cerrar la ruleta de premios la mesa queda lista para seguir.
+        if (_premioPendiente)
+        {
+            _premioPendiente = false;
+            AbrirRuletaDePremio();
+            return;
+        }
+
         ApagarEfectos();
         _apuestas.Clear();
         _fase = Fase.Apostando;
         Refrescar();
+    }
+
+    private void AbrirRuletaDePremio()
+    {
+        _result.RuletasDePremio++;
+        ShowMessage($"¡Le ganaste más de {_umbralRuletaPorColor} al color! Te toca la ruleta de premios.", () =>
+        {
+            if (Manager == null || _ruletaPorColor == null) return;
+            Manager.Open(MenuScreenId.PrizeWheel,
+                new PrizeWheelRequest { Prizes = _ruletaPorColor.premios, RecompensaUnica = true },
+                _ => CasinoDialogo.Guardar());
+        });
     }
 
     private void ApagarEfectos()
@@ -527,6 +560,13 @@ public class RouletteScreen : MenuScreen
         if (_pagado > 0 && Player != null) Player.AddMoney(_pagado);
         _result.Neto += _pagado;
         if (_pagado > _result.MayorPremio) _result.MayorPremio = _pagado;
+
+        // Ganarle fuerte al color destraba la ruleta de premios. Se abre recien
+        // cuando el jugador cierra el cartel del resultado (OnFocusGained).
+        int ganadoAlColor = RouletteBoard.GananciaDeColor(_apuestas, _ganador);
+        _premioPendiente = _ruletaPorColor != null && _ruletaPorColor.premios != null &&
+                           _ruletaPorColor.premios.Length > 0 &&
+                           RouletteBoard.DaRuletaDePremios(ganadoAlColor, _umbralRuletaPorColor);
 
         _historial.Add(_ganador);
         int tope = historyChips != null && historyChips.Length > 0 ? historyChips.Length : 10;

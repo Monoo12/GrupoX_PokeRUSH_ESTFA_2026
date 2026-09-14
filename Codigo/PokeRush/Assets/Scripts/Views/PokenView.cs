@@ -22,8 +22,9 @@ public class PokenView : MonoBehaviour
     {
         PokenDefinition definition = pokenModel.Definition;
 
-        // Con frames animados los usa; si no hay, cae al sprite estatico
-        _frames = isPlayerSide ? definition.battleBackFrames : definition.battleFrontFrames;
+        // Con frames animados los usa; si no hay, cae al sprite estatico. Los
+        // pide al modelo y no a la definicion: un shiny trae sus propios frames.
+        _frames = isPlayerSide ? pokenModel.BackFrames : pokenModel.FrontFrames;
         _frameIndex = 0;
         _frameTimer = 0f;
 
@@ -33,9 +34,7 @@ public class PokenView : MonoBehaviour
         }
         else
         {
-            spriteRenderer.sprite = isPlayerSide
-                ? definition.battleBackSprite
-                : definition.battleFrontSprite;
+            spriteRenderer.sprite = isPlayerSide ? pokenModel.BackSprite : pokenModel.FrontSprite;
         }
 
         if (definition.battleAnimator != null && animator != null)

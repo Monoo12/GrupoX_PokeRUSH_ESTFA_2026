@@ -49,6 +49,15 @@ public static class CasinoInteractionBuilder
         public StoryFlag OtorgaFlag;
         // Cartel del ascensor cuando falta el objetivo. Vacio = el del componente.
         public string MensajeFaltaObjetivo;
+        // Con requisito = TenerPokemon: path de la especie que hay que tener shiny,
+        // y el cartel cuando falta ({0} = la especie).
+        public string EspecieRequerida;
+        public string MensajeFaltaPokemon;
+        // Pisos a los que baja el ascensor, del mas cercano al mas lejano.
+        public (string escena, string nombre)[] PisosDeAbajo;
+        // Mesas de ruleta: la ruleta de premios que abren al ganar al color.
+        public string RuletaPorColor;
+        public int UmbralRuletaPorColor;
     }
 
     private static readonly Piso[] Pisos =
@@ -75,9 +84,15 @@ public static class CasinoInteractionBuilder
             Mecanica = Mecanica.MesaDeRuleta,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino nivel 3", NombreDelDestino = "el piso 3",
+            // El pase lo da el guardia VIP de al lado: mostrandole la Tarjeta VIP
+            // o ganandole (ver CasinoElevatorGuard y CasinoNpcBuilder).
             Requisito = CasinoRequisitoTipo.Flag,
-            FlagRequerido = StoryFlag.Casino_Ruleta_ObjetivoCumplido,
-            OtorgaFlag = StoryFlag.Casino_Piso2_Superado
+            FlagRequerido = StoryFlag.Casino_Piso2_PaseAscensor,
+            MensajeFaltaObjetivo = "El guardia VIP no te deja subir. Hablá con él: con la Tarjeta VIP o ganándole.",
+            OtorgaFlag = StoryFlag.Casino_Piso2_Superado,
+            PisosDeAbajo = new[] { ("Casino Nivel 1", "PISO 1") },
+            RuletaPorColor = "Assets/Resources/Definitions/Casino/RuletaDeLaMesa.asset",
+            UmbralRuletaPorColor = 200
         },
         new Piso
         {
@@ -89,9 +104,12 @@ public static class CasinoInteractionBuilder
             Mecanica = Mecanica.Blackjack,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino piso FINAL", NombreDelDestino = "el ultimo piso",
-            Requisito = CasinoRequisitoTipo.Flag,
-            FlagRequerido = StoryFlag.Casino_Blackjack_Ganado,
-            OtorgaFlag = StoryFlag.Casino_Piso3_Superado
+            // Hay que tener el Cosmog shiny, que solo se le gana a Tacconi.
+            Requisito = CasinoRequisitoTipo.TenerPokemon,
+            EspecieRequerida = "Assets/Resources/Definitions/Pokens/0789_Cosmog.asset",
+            MensajeFaltaPokemon = "El de seguridad no te deja subir: arriba solo entran los que tienen un {0} shiny. Dicen que Tacconi tiene uno.",
+            OtorgaFlag = StoryFlag.Casino_Piso3_Superado,
+            PisosDeAbajo = new[] { ("Casino Nivel 2", "PISO 2"), ("Casino Nivel 1", "PISO 1") }
         }
     };
 
@@ -215,8 +233,18 @@ public static class CasinoInteractionBuilder
             }
             else if (piso.Mecanica == Mecanica.MesaDeRuleta)
             {
-                OtorgarSoloElPrimero(go.AddComponent<RouletteTableInteractable>(),
-                    puestos, StoryFlag.Casino_Ruleta_ObjetivoCumplido);
+                var mesa = go.AddComponent<RouletteTableInteractable>();
+                OtorgarSoloElPrimero(mesa, puestos, StoryFlag.Casino_Ruleta_ObjetivoCumplido);
+
+                // Todas las mesas abren la ruleta de premios al ganar al color.
+                if (!string.IsNullOrEmpty(piso.RuletaPorColor))
+                {
+                    var so = new SerializedObject(mesa);
+                    so.FindProperty("ruletaPorColor").objectReferenceValue =
+                        AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(piso.RuletaPorColor);
+                    so.FindProperty("umbralRuletaPorColor").intValue = piso.UmbralRuletaPorColor;
+                    so.ApplyModifiedPropertiesWithoutUndo();
+                }
             }
             else if (piso.Mecanica == Mecanica.RuletaDePremios)
             {
@@ -280,6 +308,24 @@ public static class CasinoInteractionBuilder
         so.FindProperty("otorgaFlag").enumValueIndex = (int)piso.OtorgaFlag;
         if (!string.IsNullOrEmpty(piso.MensajeFaltaObjetivo))
             so.FindProperty("mensajeFaltaObjetivo").stringValue = piso.MensajeFaltaObjetivo;
+
+        if (!string.IsNullOrEmpty(piso.EspecieRequerida))
+        {
+            so.FindProperty("especieRequerida").objectReferenceValue =
+                AssetDatabase.LoadAssetAtPath<PokenDefinition>(piso.EspecieRequerida);
+            so.FindProperty("debeSerShiny").boolValue = true;
+        }
+        if (!string.IsNullOrEmpty(piso.MensajeFaltaPokemon))
+            so.FindProperty("mensajeFaltaPokemon").stringValue = piso.MensajeFaltaPokemon;
+
+        var abajo = piso.PisosDeAbajo ?? new (string escena, string nombre)[0];
+        SerializedProperty pisos = so.FindProperty("pisosDeAbajo");
+        pisos.arraySize = abajo.Length;
+        for (int i = 0; i < abajo.Length; i++)
+        {
+            pisos.GetArrayElementAtIndex(i).FindPropertyRelative("escena").stringValue = abajo[i].escena;
+            pisos.GetArrayElementAtIndex(i).FindPropertyRelative("nombre").stringValue = abajo[i].nombre;
+        }
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 }

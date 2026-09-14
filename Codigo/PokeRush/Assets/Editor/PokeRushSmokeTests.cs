@@ -77,6 +77,7 @@ namespace PokeRush.EditorTools
             TestNestorNoLeeElForcejeo();
             TestNestorAliadoDisponible();
             TestTamanioDeLosPokemonEnCombate();
+            TestPcYShinySobrevivenAlGuardado();
             TestWaitDejaAlRivalSinActuar();
             TestElEnumDeAccionesNoSeCorrio();
 
@@ -1235,6 +1236,46 @@ namespace PokeRush.EditorTools
                 ? def.battleFrontFrames[0]
                 : def.battleFrontSprite;
             return s != null ? s.rect.height / s.pixelsPerUnit : 0f;
+        }
+
+        // El PC y el shiny se guardan en la misma tabla que el equipo: todo tiene
+        // que volver a su lugar, sin mezclar el equipo con las cajas.
+        private static void TestPcYShinySobrevivenAlGuardado()
+        {
+            const int slot = 777;
+            DefinitionRepository.Instance.LoadAll();
+            PokenDefinition pikachu = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
+            PokenDefinition cosmog = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0789_Cosmog.asset");
+            if (pikachu == null || cosmog == null)
+            {
+                Debug.LogWarning("[SmokeTests] Faltan Pikachu o Cosmog: se saltea la prueba del guardado del PC.");
+                return;
+            }
+
+            var jugador = new PlayerModel("PruebaPC");
+            jugador.Team.Add(new PokenModel(pikachu, 12));
+            var shiny = new PokenModel(cosmog, 15);
+            shiny.SetShiny(true);
+            jugador.Team.Add(shiny);
+            jugador.Storage.Set(2, 7, new PokenModel(pikachu, 30));
+
+            try
+            {
+                SaveService.Instance.SavePlayer(jugador, new StoryModel(), slot);
+                PlayerModel cargado = SaveService.Instance.LoadPlayer(new StoryModel(), slot);
+
+                Check(cargado != null && cargado.Team.Count == 2,
+                    "Guardado del PC: el equipo vuelve entero y sin mezclarse con las cajas");
+                Check(cargado != null && cargado.Team.Count == 2 && cargado.Team[1].IsShiny && !cargado.Team[0].IsShiny,
+                    "Guardado del PC: el shiny sigue siendo shiny");
+                PokenModel enCaja = cargado?.Storage.Get(2, 7);
+                Check(enCaja != null && enCaja.Level == 30 && cargado.Storage.Count == 1,
+                    "Guardado del PC: el Pokemon de la caja vuelve a su caja y a su lugar");
+            }
+            finally
+            {
+                SaveService.Instance.DeleteSave(slot);
+            }
         }
 
         // El freno mas visible: los primeros turnos Nestor solo mira. Sin esto

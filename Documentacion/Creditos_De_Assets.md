@@ -59,6 +59,24 @@ se cambian los PNG de `Graphics/Casino/` y listo.
     se toca porque los mapas lo usan como sprite entero.
   - `Graphics/Battlebacks/InteriorNegro_bg.png` — la sala en penumbra que hace de
     fondo de la mesa de blackjack
+  - Pisos 2 y 3, personajes nuevos:
+    - `Graphics/Characters/rocketElite.png` y `Graphics/Trainers/ELITEROCKET.png` — el
+      guardia VIP;
+    - `ricachon.png` y `CABALLERO.png` — el magnate;
+    - `hombrenegro.png` y el retrato `ROCKETO.png` — el revendedor;
+    - `maximo.png` y `MAXIMO.png` — el tahúr;
+    - `kimono.png` y `CHICA.png` — la bailarina;
+    - `rocketo.png` y `ROCKETO.png` — el gángster;
+    - `veterana.png` y `VETERANA.png` — la crupiera;
+    - `secretaria.png` y `anciano2.png` — los que cuentan historia;
+    - `ricachona.png`, `presidente.png`, `guaya.png`, `chica1.png`, `chaval2.png` y
+      `estudianta.png` — la gente jugando a la ruleta;
+    - `gabriel.png`, `sachiko.png`, `guayo.png` y `chica2.png` — la gente jugando al
+      blackjack;
+    - `giovanni.png` y `GIOVANNI1.png` — **Tacconi, provisorio** hasta que lleguen sus
+      sprites.
+- **PC de almacenamiento:** `Graphics/UI/Storage/` entero (fondo, cajas `box_0..39`,
+  paneles y manos) para la pantalla del PC.
 - **Nota:** es material de fan game basado en propiedad de Nintendo/Game Freak.
   Sirve para un trabajo académico sin fines de lucro; no se puede publicar ni
   vender el juego con estos assets.
@@ -87,6 +105,11 @@ se cambian los PNG de `Graphics/Casino/` y listo.
 ---
 
 ## Nuestro
+
+- `Assets/Sprites/Mundo/pc.png` — el PC que se pone en cada nivel (32×48, pixel art
+  dibujado por código para este proyecto).
+- `Assets/Sprites/Casino/tarjeta_vip.png` e `icon_tarjeta_vip.png` — la Tarjeta VIP en
+  la mochila y en la ruleta de premios (mismo origen).
 
 Todo lo de `Assets/Sprites/UI/Casino/` (círculo y aguja de la ruleta) lo genera
 `CasinoPrefabBuilder` con código, y `Assets/Sprites/UI/Casino/fieltro.png` fue un

@@ -3,23 +3,38 @@
 Qué gente hay en los pisos del casino, qué hace cada uno y cómo se tocan los textos
 y los porcentajes sin escribir código.
 
-Todo lo arma el menú **`PokeRush > Casino > Poner los personajes de los pisos 1 a 3`**
-(`Assets/Editor/Casino/CasinoNpcBuilder.cs`).
+Lo arman dos menús (`Assets/Editor/Casino/CasinoNpcBuilder.cs`), separados para que rehacer
+un piso no toque el otro:
+
+- **`PokeRush > Casino > Poner los personajes del piso 1`**
+- **`PokeRush > Casino > Poner los personajes de los pisos 2 y 3`**: además configura los
+  ascensores de esos pisos y las seis mesas de ruleta del piso 2.
 
 > ## ⚠️ Pendiente: los diálogos de la historia
 >
-> **Los textos de historia son de relleno.** Faltan los diálogos definitivos del anciano
-> (piso 1), la damisela (piso 2) y el empresario (piso 3). Van cuando esté escrita la
-> historia del casino.
+> **Los textos de historia son de relleno.** Faltan los diálogos definitivos de:
 >
-> Se cargan en `Assets/Resources/Definitions/Casino/Dialogos/`:
-> `Historia_Piso1_Anciano.asset`, `Historia_Piso2_Damisela.asset` y
-> `Historia_Piso3_Empresario.asset`. Hay que tocar solo el asset, sin abrir las escenas.
-> Volver a correr el builder no pisa los textos. Si un NPC tiene que decir otra cosa la
-> segunda vez, ponerle un `grantsFlag` al diálogo y un `dialogoRepetido` al `NpcQueHabla`.
+> - el anciano (piso 1);
+> - la damisela y la secretaria (piso 2);
+> - el empresario y el jubilado (piso 3).
 >
-> Las frases de los ocho jugadores de tragaperras (`JugadorTragaperras*.asset`) también son
+> Van cuando esté escrita la historia del casino.
+>
+> Se cargan en `Assets/Resources/Definitions/Casino/Dialogos/`: `Historia_Piso1_Anciano`,
+> `Historia_Piso2_Damisela`, `Historia_Piso2_Secretaria`, `Historia_Piso3_Empresario` y
+> `Historia_Piso3_Jubilado`. Hay que tocar solo el asset, sin abrir las escenas. Volver a
+> correr el builder no pisa los textos. Si un NPC tiene que decir otra cosa la segunda vez,
+> ponerle un `grantsFlag` al diálogo y un `dialogoRepetido` al `NpcQueHabla`.
+>
+> Las frases de los jugadores (tragaperras, ruleta y blackjack: `Jugador*.asset`) también son
 > provisorias, pero no son de historia.
+
+> ## ⚠️ Pendiente: los sprites de Tacconi
+>
+> Tacconi usa sprites **provisorios**: la hoja `Graphics/Characters/giovanni.png` y el retrato
+> `Graphics/Trainers/GIOVANNI1.png`. Cuando lleguen los suyos, cambiar `"giovanni"` y
+> `"GIOVANNI1"` en el bloque del piso 3 de `CasinoNpcBuilder` y volver a correr
+> `Poner los personajes de los pisos 2 y 3`.
 
 ## Néstor de ayudante en todos los combates
 
@@ -54,14 +69,32 @@ lo saltea nada.
 | 2 | Modelo | Pelea una vez (Litwick Nv15, Shuppet Nv16) | (-5.5, 6.5) |
 | 2 | Médium | Pelea una vez (Duskull y Gastly, Nv16) | (-10.5, 18.5) |
 | 2 | Ladrón | Pelea una vez (Pawniard Nv16, Mawile Nv17) | (14.5, 10.5) |
+| 2 | **Guardia VIP** (`GuardiaVipCasino`) | Pide la **Tarjeta VIP** o que le ganes para usar el ascensor. Ganarle da su ruleta exclusiva | (3.5, 19.5), al lado del ascensor |
+| 2 | **Magnate** | Pelea una vez (Kirlia Nv19, Porygon2 y Lampent Nv20). **Ganarle da la Tarjeta VIP** | (14.5, 18.5) |
+| 2 | **Revendedor** | Vende la Tarjeta VIP por 1500 | (-13.5, 4.5) |
+| 2 | Tahúr | Pelea una vez (Yamask Nv16, Honedge Nv17) | (-9.5, 9.5) |
+| 2 | Bailarina | Pelea una vez (Swablu Nv16, Roselia Nv17) | (0.5, 13.5) |
 | 2 | Enfermera | Cura | (-3.5, 4.5) |
 | 2 | Damisela | Historia | (-13.5, 18.5) |
+| 2 | Secretaria | Historia | (15.5, 7.5) |
+| 2 | 6 jugadores (`JugadorRuleta1..6`) | Juegan a la ruleta, del lado de arriba de cada mesa. Algunos dan pistas | ver abajo |
+| 3 | **Tacconi** | Juega su **Cosmog shiny** a una mano de blackjack contra uno de tus Pokémon | (-3.5, 16.5), al lado de una mesa |
 | 3 | Macarra | Pelea una vez (Sneasel y Sandile, Nv17) | (4.5, 10.5) |
 | 3 | Guay | Pelea una vez (Gligar Nv17, Skarmory y Absol Nv18) | (10.5, 5.5) |
 | 3 | Veterano | Pelea una vez (Donphan y Lairon, Nv18) | (-13.5, 12.5) |
 | 3 | Karateka | Pelea una vez (Primeape y Riolu, Nv18) | (6.5, 4.5) |
+| 3 | Gángster | Pelea una vez (Houndour Nv18, Skorupi Nv19) | (3.5, 18.5) |
+| 3 | Crupiera | Pelea una vez (Porygon Nv18, Lampent Nv19) | (7.5, 6.5) |
 | 3 | Enfermera | Cura | (-5.5, 4.5) |
 | 3 | Empresario | Historia | (-9.5, 13.5) |
+| 3 | Jubilado | Historia | (-14.5, 6.5) |
+| 3 | 4 jugadores (`JugadorBlackjack1..4`) | Juegan al blackjack: parados debajo de los banquitos (el lado curvo de la mesa), mirando a la mesa. Del lado recto va el croupier | ver abajo |
+
+Además hay **un PC en cada piso** (ver `PC_De_Almacenamiento.md`).
+
+Los jugadores de ruleta y de blackjack usan los mismos dos componentes que los de las
+tragaperras (abajo). Están del lado de **arriba** de cada mesa: las mesas se usan desde abajo,
+así que no tapan nada.
 
 Las enfermeras de los pisos 2 y 3 son nuevas: **perder un combate no cura al equipo**,
 así que sin ellas una derrota dejaba al jugador sin poder pelear por el resto del piso.
@@ -144,17 +177,21 @@ que el guardado ya persiste. La pelea del guardia no cuenta: tiene su propia rul
 
 | Premio | Peso |
 |---|---|
-| Pikachu Nv15 | 13 |
-| Eevee Nv15 | 12 |
+| Pikachu Nv15 | 12 |
+| Eevee Nv15 | 11 |
 | Togepi Nv15 | 10 |
+| **Tarjeta VIP** | 15 |
 | Poción x3 | 17 |
-| Superpoción x2 | 15 |
-| Hiperpoción | 8 |
-| 150 monedas | 17 |
+| Superpoción x2 | 14 |
+| 150 monedas | 13 |
 | 400 monedas | 8 |
 
-**35% Pokémon, 40% curativos, 25% plata.** El campo `npcsQueLaPuedenDar` lista los flags de
-los doce NPCs que la dan; el guardia no está porque tiene la suya.
+**33% Pokémon, 15% Tarjeta VIP, 31% curativos y 21% plata.** El campo `npcsQueLaPuedenDar`
+lista los flags de los dieciséis NPCs que la dan. No están los guardias, que tienen la suya, ni el
+magnate, que da la tarjeta directo.
+
+> Antes de la tarjeta esta tabla era 35% Pokémon. El builder la rehízo **una sola vez** para
+> meter la tarjeta; de ahí en adelante no la vuelve a pisar.
 
 ---
 
@@ -172,13 +209,135 @@ marca la rareza:
 
 ---
 
+## El ascensor: subir y bajar
+
+`CasinoElevatorInteractable`. En los pisos 2 y 3 el ascensor pregunta **¿Adónde vas?**
+(SUBIR / BAJAR):
+
+- **Subir** pide la condición del piso.
+- **Bajar no pide nada**: volver a un piso anterior tiene que poder hacerse siempre. Con dos pisos
+  debajo pregunta a cuál (PISO 2 / PISO 1). Con más, va de a uno ("MÁS ABAJO").
+- **Volver no elige nada**: cancelar la pregunta no te baja de piso (`MessageBoxResult.Cancelled`).
+- **La deuda con la enfermería frena solo la subida.** Bloquear la bajada podría dejarte encerrado
+  sin forma de juntar la plata.
+- **Al llegar por el ascensor** aparecés frente a las puertas del piso de destino, no en el spawn
+  de la escena.
+
+| Piso | Para subir | Baja a |
+|---|---|---|
+| 1 | El pase del guardia (`Casino_Piso1_PaseAscensor`) | — |
+| 2 | El pase del guardia VIP (`Casino_Piso2_PaseAscensor`) | Piso 1 |
+| 3 | Tener un **Cosmog shiny** (en el equipo o en el PC) | Pisos 2 y 1 |
+
+Una vez que se sube, el piso queda superado (`Casino_PisoN_Superado`) y no vuelve a pedir nada.
+
+---
+
+## Piso 2: el guardia VIP y la Tarjeta VIP
+
+El guardia VIP es un `CasinoElevatorGuard` con **`objetoRequerido`**: no cobra, pide ver la
+Tarjeta VIP.
+
+- **Con la tarjeta** te da el pase.
+- **Sin la tarjeta** ofrece pelear. Es más difícil que el del piso 1: Sneasel Nv21, Haunter y
+  Krokorok Nv22 y Magneton Nv23, con IA de líder.
+- **Ganándole** te da el pase y **su ruleta exclusiva**, que siempre da un Pokémon.
+
+**La Tarjeta VIP** (`Resources/Definitions/Items/TarjetaVip.asset`, objeto clave) se consigue de
+tres formas:
+
+1. **Ganándole al magnate** (`CasinoTrainerNpc.objetoAlGanar`): tres Pokémon de nivel 19-20,
+   cuando el resto del piso anda por el 15-17.
+2. **En la ruleta de premios de los combates**: es uno de los gajos, con ~15%. Si ya la tenés,
+   paga 400 monedas en su lugar (`moneyIfOwned`).
+3. **Comprándosela al revendedor** por 1500 (`CasinoVendedorNpc`).
+
+### La ruleta exclusiva del guardia VIP (`RuletaDelGuardiaVip.asset`)
+
+| Rareza | Ícono | Pokémon | Peso |
+|---|---|---|---|
+| Común | Poké Ball | Shinx, Drilbur, Snorunt, Phanpy (Nv21) | 15 c/u (60%) |
+| Bueno | Great Ball | Axew, Gible (Nv22) | 12 c/u (24%) |
+| Raro | Ultra Ball | Larvitar (Nv22) | 12% |
+| Muy raro | Master Ball | Bagon (Nv23) | 4% |
+
+---
+
+## Piso 2: la ruleta de premios por ganarle al color
+
+En **las seis mesas** de ruleta, si en un giro le ganás **más de 200 en limpio** apostando a rojo
+o negro, se abre la ruleta de premios apenas cerrás el cartel del resultado.
+
+- **Solo cuenta lo ganado al color:** un pleno ganado en el mismo giro no suma.
+- **Tiene que ser más:** 200 justos no alcanza.
+- **Cómo se configura:** la tabla y el umbral están en cada `RouletteTableInteractable`
+  (`ruletaPorColor` y `umbralRuletaPorColor`).
+- **Dónde está la regla:** `RouletteBoard.GananciaDeColor` y `DaRuletaDePremios`.
+
+### Premios (`RuletaDeLaMesa.asset`)
+
+| Premio | Peso |
+|---|---|
+| Pichu Nv15 | 13 |
+| Happiny Nv15 | 12 |
+| Poción x2 | 18 |
+| Superpoción | 14 |
+| Hiperpoción | 8 |
+| 250 monedas | 16 |
+| 500 monedas | 12 |
+| 1000 monedas | 7 |
+
+**25% Pokémon.** Todas las ruletas de premios del casino dan alguna chance de Pokémon.
+
+---
+
+## Piso 3: Tacconi y el Cosmog shiny
+
+Para subir del piso 3 hay que tener un **Cosmog shiny**. La única forma de conseguirlo es
+**Tacconi** (`CasinoTacconiNpc`), que lo juega a **una mano de blackjack contra uno de tus Pokémon**:
+
+1. Hablás con él y aceptás.
+2. Elegís qué Pokémon apostás (pantalla del equipo, modo `SelectAny`) y confirmás.
+3. Se abre la mesa en **modo apuesta de Pokémon** (`BlackjackScreenRequest.ApuestaPokemon`):
+   - sin fichas;
+   - una sola mano, sin doblar ni dividir;
+   - la mesa se cierra sola al terminar.
+4. Según cómo sale la mano:
+   - **Ganás:** el Cosmog shiny va a tu equipo, o al PC si el equipo está lleno.
+   - **Perdés:** Tacconi se queda con el Pokémon apostado.
+   - **Empate:** no pasa nada y se puede volver a jugar.
+
+**Nunca te deja sin equipo:** no acepta la apuesta si tenés un solo Pokémon o si, al perder,
+no quedaría nadie que pueda pelear.
+
+**Por qué un Cosmog shiny.** El pedido era un Pokémon raro, no muy poderoso, shiny y medio meme:
+
+- en los juegos Cosmog **no puede salir shiny**;
+- pelea con Salpicadura y Teletransporte;
+- es el "Nebby, get in the bag" de Sol y Luna.
+
+Se cambia en `CasinoTacconiNpc.especiePremio` y en `EspecieDeTacconi` del builder.
+
+---
+
+## Premios con el equipo lleno
+
+Si un premio da un Pokémon y el equipo está lleno, **va al PC** y el cartel dice a qué caja. Solo
+si el equipo **y** el PC están llenos se paga `moneyIfTeamFull`. Lo mismo vale para los Pokémon
+liberados de la torre y para el de Tacconi.
+
+---
+
 ## Cómo se cambia
 
 - **Porcentajes o Pokémon de una ruleta:** abrir el asset de la tabla y tocar los `premios`.
   Los pesos son relativos, no hace falta que sumen 100. Cada premio puede dar un objeto
   (`item` + `amount`), plata (`money`) o un Pokémon (`poken` + `pokenLevel`).
-- **Equipo lleno:** si sale un Pokémon con 6 en el equipo, se paga `moneyIfTeamFull` en su
-  lugar y el cartel lo avisa (no hay PC adonde mandarlo).
+- **Equipo lleno:** si sale un Pokémon con 6 en el equipo, va al PC. Solo con el PC también
+  lleno se paga `moneyIfTeamFull`.
+- **Umbral de la ruleta por color:** `umbralRuletaPorColor` en cada mesa de ruleta del piso 2
+  (o `UmbralRuletaPorColor` en el builder, que lo pone en las seis).
+- **Precio de la Tarjeta VIP:** `precio` del revendedor (o `PrecioTarjeta` en el builder).
 - **Textos de historia:** `Resources/Definitions/Casino/Dialogos/Historia_*.asset`. Son
   **provisorios**: se reescriben en el asset sin abrir la escena. `NpcQueHabla` también
   acepta un `dialogoRepetido` para las veces siguientes.
@@ -204,8 +363,10 @@ marca la rareza:
   desde el spawn y que ningún personaje esté sobre una pared. Si algo falla, ese piso no
   se guarda.
 
-> `CasinoInteractionBuilder` también configura el ascensor del piso 1 con el pase del
-> guardia, así que correr cualquiera de los dos deja el requisito igual.
+> `CasinoInteractionBuilder` también configura los ascensores (el pase de los guardias, el
+> Cosmog del piso 3 y a dónde bajan) y la ruleta por color de las mesas, así que correr
+> cualquiera de los dos deja lo mismo. Ojo que ese builder **rehace las interacciones de los
+> cuatro pisos**, incluido el piso 1.
 
 ---
 
@@ -215,9 +376,24 @@ marca la rareza:
   - la regla de la ruleta sobre miles de partidas (siempre dos si se les gana a todos, sin
     favoritos, nunca más de dos);
   - la entrega de premios (plata, Pokémon y equipo lleno);
-  - que las tablas del proyecto sigan dando 35% de Pokémon y un Pokémon seguro en la del
-    guardia.
+  - que las tablas del proyecto sigan dando chance de Pokémon (la de los NPCs, 33%; el test
+    pide al menos 25%) y un Pokémon seguro en la del guardia.
+- Los mismos smoke tests prueban también lo de los pisos 2 y 3:
+  - la ganancia al color y el umbral de la ruleta por color;
+  - que el ascensor del piso 3 pida el Cosmog shiny, aunque esté en el PC;
+  - la apuesta de Tacconi (ganar, perder, empatar y cuándo no acepta);
+  - el revendedor;
+  - que todas las tablas den chance de Pokémon y la del guardia VIP lo dé siempre.
+- `PokeRush > UI > Probar y capturar la mesa de Tacconi`: entra en Play, abre la mesa como la
+  abre Tacconi (apostando un Pokémon, sin fichas), juega una mano y cierra el cartel. Chequea
+  que la mesa se cierre sola, que devuelva el resultado y que no se juegue plata. Capturas en
+  `Codigo/PokeRush/Capturas/Tacconi/`, resultado `[CapturaTacconi]` en el Editor.log.
 - En Play, recorrido completo:
   1. hablar con el guardia sin plata, perder y volver;
   2. ganarle y girar su ruleta;
-  3. ganarles a los NPCs y ver que la ruleta sale una cada dos combates, hasta cuatro.
+  3. ganarles a los NPCs y ver que la ruleta sale una cada dos combates, hasta cuatro;
+  4. en el piso 2, conseguir la Tarjeta VIP (magnate, ruleta o revendedor) y mostrársela al
+     guardia VIP;
+  5. ganarle más de 200 al rojo en una mesa y girar la ruleta de premios;
+  6. en el piso 3, apostarle un Pokémon a Tacconi hasta ganarle el Cosmog shiny, y subir;
+  7. bajar con el ascensor al piso 1 y al 2.

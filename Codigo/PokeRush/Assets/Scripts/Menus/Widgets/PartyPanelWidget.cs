@@ -40,7 +40,7 @@ public class PartyPanelWidget : MenuWidget
 
         if (pokenSprite != null)
         {
-            Sprite sprite = def != null ? def.inventorySprite : null;
+            Sprite sprite = def != null ? poken.IconSprite : null;
             pokenSprite.sprite = sprite;
             pokenSprite.enabled = sprite != null;
             pokenSprite.preserveAspect = true;

@@ -211,6 +211,22 @@ ShowMessage("¡No le hace nada!");
 Ask("¿Guardar la partida?", ok => { if (ok) Guardar(); });
 ```
 
+Una pregunta puede traer sus propias opciones (`YesLabel` / `NoLabel`, por ejemplo
+SUBIR / BAJAR en el ascensor del casino). En ese caso hay que mirar
+`MessageBoxResult.Cancelled`: cerrar con Volver da `Confirmed = false`, igual que
+elegir la segunda opción, y no es lo mismo.
+
+### PC de almacenamiento — `PcStorageScreen`
+
+Las cajas del PC y el equipo en una sola pantalla, con el arte de
+`Graphics/UI/Storage`. Se abre desde un `PcInteractable` del mapa. Reglas, guardado y
+cómo se pone un PC en un nivel: ver `PC_De_Almacenamiento.md`. El prefab lo genera
+`PokeRush > UI > Construir la pantalla del PC`, que lo agrega al MenuSystem sin
+rehacer las otras pantallas.
+
+La pantalla del equipo tiene un modo `PartyScreenMode.SelectAny`: elegir cualquier
+Pokémon y devolverlo, sin submenú (lo usa Tacconi para elegir qué apostar).
+
 ---
 
 ## ⌨️ El HUD de combate con las flechas

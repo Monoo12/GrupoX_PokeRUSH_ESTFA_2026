@@ -10,6 +10,12 @@ public class PlayerModel
     public List<PokenModel> Team { get; private set; }
     public InventoryModel Inventory { get; private set; }
 
+    // El PC: los Pokemon que no entran en el equipo. Ver PokenStorageModel.
+    public PokenStorageModel Storage { get; private set; }
+
+    // Tope clasico de 6: es lo que dibuja el HUD de combate.
+    public const int EquipoMaximo = 6;
+
     public bool HasAlivePoken => Team.Exists(p => !p.IsFainted);
 
     public PlayerModel(string playerName) : this(playerName, Genero.Varon) { }
@@ -21,6 +27,25 @@ public class PlayerModel
         Money = 0;
         Team = new List<PokenModel>();
         Inventory = new InventoryModel();
+        Storage = new PokenStorageModel();
+    }
+
+    // Un Pokemon que se consigue (premio, liberado, ganado en una apuesta) va al
+    // equipo si hay lugar y al PC si no. Es el unico lugar donde se decide eso,
+    // asi ninguna fuente de Pokemon se olvida del PC.
+    public PokenRecibido RecibirPokemon(PokenModel poken)
+    {
+        if (poken == null) return PokenRecibido.SinLugar;
+
+        if (Team.Count < EquipoMaximo)
+        {
+            Team.Add(poken);
+            return new PokenRecibido(DestinoDePokemon.Equipo, -1);
+        }
+
+        return Storage.TryAgregar(poken, out int caja, out _)
+            ? new PokenRecibido(DestinoDePokemon.Pc, caja)
+            : PokenRecibido.SinLugar;
     }
 
     // Intercambia dos Pokens de posicion en el equipo.

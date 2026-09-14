@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6be7c5f4f0d4364dafe1703178aac54, type: 3}
+  m_Name: RuletaDeLaMesa
+  m_EditorClassIdentifier: Assembly-CSharp::CasinoPrizeTable
+  premios:
+  - prizeName: Pichu
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
+    amount: 1
+    probability: 13
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 511c69913a7fb3d44893da42e3c0a749, type: 2}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: 250 monedas
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 48c37a14cf525b446a5c4bb3e653cdd3, type: 3}
+    amount: 1
+    probability: 16
+    item: {fileID: 0}
+    money: 250
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: "Poci\xF3n"
+    prizePlural: Pociones
+    article: una
+    icon: {fileID: 21300000, guid: 9520bf7f4166dc44ab4dfdb082584fde, type: 3}
+    amount: 2
+    probability: 18
+    item: {fileID: 11400000, guid: ccfc97a284e7c644d8775a8988b1e571, type: 2}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: Happiny
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 220baf3919fd9b848b1574420ae682a8, type: 3}
+    amount: 1
+    probability: 12
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 37fcc2274102e1f4b979671d28505885, type: 2}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: 500 monedas
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 48c37a14cf525b446a5c4bb3e653cdd3, type: 3}
+    amount: 1
+    probability: 12
+    item: {fileID: 0}
+    money: 500
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: "Superpoci\xF3n"
+    prizePlural: Superpociones
+    article: una
+    icon: {fileID: 21300000, guid: d8f186deb4bb20841946dd199822888d, type: 3}
+    amount: 1
+    probability: 14
+    item: {fileID: 11400000, guid: 591415124781d9f4d965a386828fc48d, type: 2}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: "Hiperpoci\xF3n"
+    prizePlural: Hiperpociones
+    article: una
+    icon: {fileID: 21300000, guid: b3b9606978dc8bb468c8c5d5498a907d, type: 3}
+    amount: 1
+    probability: 8
+    item: {fileID: 11400000, guid: 2ec7aa1bf32fb5645a1a380a1f2331f7, type: 2}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: 1000 monedas
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 48c37a14cf525b446a5c4bb3e653cdd3, type: 3}
+    amount: 1
+    probability: 7
+    item: {fileID: 0}
+    money: 1000
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  npcsQueLaPuedenDar: 

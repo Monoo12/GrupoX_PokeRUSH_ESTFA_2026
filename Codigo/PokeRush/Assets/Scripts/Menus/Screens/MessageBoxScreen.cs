@@ -27,6 +27,7 @@ public class MessageBoxScreen : MenuScreen
     {
         _request = payload as MessageBoxRequest ?? new MessageBoxRequest { Message = payload as string };
         _result.Confirmed = false;
+        _result.Cancelled = false;
         Result = _result;
 
         if (messageText != null) messageText.text = _request.Message ?? string.Empty;
@@ -79,6 +80,7 @@ public class MessageBoxScreen : MenuScreen
 
                 case GameAction.Cancel:
                     _result.Confirmed = false;
+                    _result.Cancelled = true;
                     CloseSelf();
                     return;
             }
@@ -90,6 +92,7 @@ public class MessageBoxScreen : MenuScreen
         if (action == GameAction.Confirm || action == GameAction.Cancel)
         {
             _result.Confirmed = action == GameAction.Confirm;
+            _result.Cancelled = action == GameAction.Cancel;
             CloseSelf();
         }
     }

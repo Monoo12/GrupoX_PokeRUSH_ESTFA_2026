@@ -185,6 +185,11 @@ public class BlackjackScreen : MenuScreen
 
     private int Plata => Player != null ? Player.Money : 0;
 
+    // La apuesta de Pokemon de Tacconi (ver BlackjackScreenRequest.ApuestaPokemon):
+    // una sola mano, sin fichas, sin doblar ni dividir, y la mesa se cierra sola.
+    private BlackjackScreenRequest _pedido;
+    private bool ModoPokemon => _pedido != null && !string.IsNullOrEmpty(_pedido.ApuestaPokemon);
+
     private BlackjackHand Mano =>
         _manoActual >= 0 && _manoActual < _manos.Count ? _manos[_manoActual] : null;
 
@@ -200,6 +205,7 @@ public class BlackjackScreen : MenuScreen
     protected override void OnOpen(object payload)
     {
         var pedido = payload as BlackjackScreenRequest;
+        _pedido = pedido;
         if (pedido != null)
         {
             if (pedido.ApuestaMinima > 0) minBet = pedido.ApuestaMinima;
@@ -211,6 +217,7 @@ public class BlackjackScreen : MenuScreen
         _result.MayorPremio = 0;
         _result.GanoAlgunaMano = false;
         _result.HizoBlackjack = false;
+        _result.ResultadoApuestaPokemon = BlackjackOutcome.Pendiente;
         Result = _result;
 
         RearmarZapato();
@@ -227,6 +234,13 @@ public class BlackjackScreen : MenuScreen
         _ficha = IndiceDeFichaInicial();
         _zona = Zona.Fichas;
         _boton = (int)Accion.Pedir;
+
+        // Apostando un Pokemon no hay fichas: se arranca parado en PEDIR.
+        if (ModoPokemon)
+        {
+            _apuesta = 0;
+            _zona = Zona.Botones;
+        }
 
         _fase = Fase.Apostando;
         _tapadaAbajo = true;
@@ -251,6 +265,15 @@ public class BlackjackScreen : MenuScreen
     public override void OnFocusGained()
     {
         if (_fase != Fase.Cartel) return;
+
+        // La apuesta de un Pokemon es a una sola mano: cerrado el cartel, se
+        // vuelve con Tacconi, que es quien entrega o se queda con el Pokemon.
+        if (ModoPokemon)
+        {
+            CloseSelf();
+            return;
+        }
+
         NuevaRonda(false);
     }
 
@@ -299,6 +322,8 @@ public class BlackjackScreen : MenuScreen
 
     private void Mover(int dx, int dy)
     {
+        if (ModoPokemon && _zona == Zona.Fichas) _zona = Zona.Botones;
+
         if (_fase == Fase.Apostando && _zona == Zona.Fichas)
         {
             if (dx != 0) _ficha = Mathf.Clamp(_ficha + dx, 0, CantidadDeFichas - 1);
@@ -308,7 +333,7 @@ public class BlackjackScreen : MenuScreen
         }
 
         if (dx != 0) _boton = BotonVecino(_boton, dx);
-        else if (dy < 0 && _fase == Fase.Apostando) _zona = Zona.Fichas;
+        else if (dy < 0 && _fase == Fase.Apostando && !ModoPokemon) _zona = Zona.Fichas;
         else if (dy != 0) _boton = BotonVecino(_boton, dy > 0 ? 1 : -1);
 
         Refrescar();
@@ -342,23 +367,23 @@ public class BlackjackScreen : MenuScreen
         {
             case Accion.Pedir:
                 // En apuestas reparte; en el turno, roba.
-                if (_fase == Fase.Apostando) return _apuesta >= minBet && _apuesta <= Plata;
+                if (_fase == Fase.Apostando) return ModoPokemon || (_apuesta >= minBet && _apuesta <= Plata);
                 return _fase == Fase.TurnoJugador && Mano != null && !Mano.Cerrada;
 
             case Accion.Plantarse:
                 return _fase == Fase.TurnoJugador && Mano != null && !Mano.Cerrada;
 
             case Accion.Doblar:
-                return _fase == Fase.TurnoJugador
+                return _fase == Fase.TurnoJugador && !ModoPokemon
                        && BlackjackTable.SePuedeDoblar(Mano, Plata);
 
             case Accion.Dividir:
-                return _fase == Fase.TurnoJugador
+                return _fase == Fase.TurnoJugador && !ModoPokemon
                        && BlackjackTable.SePuedeDividir(Mano, _manos.Count, Plata);
 
             case Accion.Reiniciar:
                 // Solo entre manos: a mitad de una ronda ya hay plata puesta.
-                return _fase == Fase.Apostando;
+                return _fase == Fase.Apostando && !ModoPokemon;
 
             case Accion.Salir:
                 return _fase == Fase.Apostando;
@@ -370,7 +395,7 @@ public class BlackjackScreen : MenuScreen
 
     private void Confirmar()
     {
-        if (_fase == Fase.Apostando && _zona == Zona.Fichas)
+        if (_fase == Fase.Apostando && _zona == Zona.Fichas && !ModoPokemon)
         {
             Apostar(ValorDeFicha);
             return;
@@ -385,7 +410,7 @@ public class BlackjackScreen : MenuScreen
 
         // Con fichas puestas, cancelar limpia la apuesta; con la mesa limpia,
         // se va. Es el mismo "volver atras" de siempre, en dos pasos.
-        if (_apuesta > 0) LimpiarApuesta();
+        if (_apuesta > 0 && !ModoPokemon) LimpiarApuesta();
         else CloseSelf();
     }
 
@@ -449,7 +474,7 @@ public class BlackjackScreen : MenuScreen
 
     public void OnChipButton(int indice)
     {
-        if (_fase != Fase.Apostando) return;
+        if (_fase != Fase.Apostando || ModoPokemon) return;
 
         _zona = Zona.Fichas;
         _ficha = Mathf.Clamp(indice, 0, CantidadDeFichas - 1);
@@ -498,7 +523,7 @@ public class BlackjackScreen : MenuScreen
 
     private void Repartir()
     {
-        if (_apuesta < minBet || _apuesta > Plata) return;
+        if (!ModoPokemon && (_apuesta < minBet || _apuesta > Plata)) return;
 
         // Se rearma el zapato ENTRE manos, nunca a mitad de una: cambiar las
         // cartas con una mano abierta es exactamente lo que una mesa de verdad
@@ -506,7 +531,7 @@ public class BlackjackScreen : MenuScreen
         if (_zapato.Count < BlackjackTable.CorteDelZapato) RearmarZapato();
 
         _manos.Clear();
-        BlackjackHand mano = new BlackjackHand { Bet = _apuesta };
+        BlackjackHand mano = new BlackjackHand { Bet = ModoPokemon ? 0 : _apuesta };
         _manos.Add(mano);
         _croupier.Limpiar();
         _manoActual = 0;
@@ -515,8 +540,12 @@ public class BlackjackScreen : MenuScreen
 
         // Recien aca se cobra: hasta este momento la apuesta era un numero en
         // un cartel.
-        if (Player != null) Player.SpendMoney(_apuesta);
-        _result.Neto -= _apuesta;
+        // Apostando un Pokemon no se toca la plata.
+        if (!ModoPokemon)
+        {
+            if (Player != null) Player.SpendMoney(_apuesta);
+            _result.Neto -= _apuesta;
+        }
         _result.Manos++;
 
         ApagarCartas();
@@ -710,6 +739,17 @@ public class BlackjackScreen : MenuScreen
             textos.Add(TextoDe(mano, resultado, pago, _manos.Count > 1, i));
         }
 
+        // Apostando un Pokemon lo que importa es quien se queda con quien: el
+        // cartel lo dice con nombres y el resultado queda para Tacconi.
+        if (ModoPokemon)
+        {
+            _result.ResultadoApuestaPokemon = _manos.Count > 0
+                ? BlackjackTable.Resolver(_manos[0], _croupier)
+                : BlackjackOutcome.Pierde;
+            textos.Clear();
+            textos.Add(TextoDeApuestaPokemon(_result.ResultadoApuestaPokemon));
+        }
+
         // El premio se entrega ACA, no cuando se cierra el cartel: si el juego
         // se corta con la caja abierta, la plata ya es del jugador.
         if (_pagoDeLaRonda > 0 && Player != null) Player.AddMoney(_pagoDeLaRonda);
@@ -758,6 +798,24 @@ public class BlackjackScreen : MenuScreen
                 return mano.SePaso
                     ? $"{quien}Te pasaste con {mano.Total}."
                     : $"{quien}Gana la casa con {_croupier.Total}.";
+        }
+    }
+
+    private string TextoDeApuestaPokemon(BlackjackOutcome resultado)
+    {
+        string rival = string.IsNullOrEmpty(_pedido.Rival) ? "La casa" : _pedido.Rival;
+        string premio = string.IsNullOrEmpty(_pedido.PremioPokemon) ? "su Pokémon" : _pedido.PremioPokemon;
+
+        switch (resultado)
+        {
+            case BlackjackOutcome.Blackjack:
+                return $"¡Blackjack! {rival} te tiene que dar {premio}.";
+            case BlackjackOutcome.Gana:
+                return $"¡Ganaste! {rival} te tiene que dar {premio}.";
+            case BlackjackOutcome.Empata:
+                return "Empate: nadie pierde nada.";
+            default:
+                return $"Perdiste: {rival} se queda con tu {_pedido.ApuestaPokemon}.";
         }
     }
 
@@ -1143,7 +1201,7 @@ public class BlackjackScreen : MenuScreen
     private void Refrescar()
     {
         if (moneyLabel != null) moneyLabel.text = Plata.ToString();
-        if (betLabel != null) betLabel.text = ApuestaEnJuego().ToString();
+        if (betLabel != null) betLabel.text = ModoPokemon ? _pedido.ApuestaPokemon : ApuestaEnJuego().ToString();
 
         PintarTotales();
         PintarFichas();
@@ -1238,7 +1296,7 @@ public class BlackjackScreen : MenuScreen
 
     private void PintarFichas()
     {
-        bool apostando = _fase == Fase.Apostando;
+        bool apostando = _fase == Fase.Apostando && !ModoPokemon;
         bool enFichas = apostando && _zona == Zona.Fichas;
 
         for (int i = 0; i < chipButtons.Length; i++)
@@ -1247,6 +1305,16 @@ public class BlackjackScreen : MenuScreen
                 chipGlows[i].gameObject.SetActive(enFichas && i == _ficha);
 
             if (chipButtons[i] == null) continue;
+
+            // Apostando un Pokemon no hay fichas: ni se dibujan, asi no parece
+            // que se esta jugando plata. El valor escrito es un hermano suelto
+            // (ver BlackjackTableBuilder), por eso se busca por nombre.
+            chipButtons[i].gameObject.SetActive(!ModoPokemon);
+            Transform valor = chipButtons[i].transform.parent != null
+                ? chipButtons[i].transform.parent.Find($"ValorFicha{i}")
+                : null;
+            if (valor != null) valor.gameObject.SetActive(!ModoPokemon);
+            if (ModoPokemon) continue;
 
             // Apagadas cuando no se puede apostar, y a media luz las que no
             // alcanzan: el jugador ve de una que fichas puede poner.
@@ -1290,6 +1358,7 @@ public class BlackjackScreen : MenuScreen
         switch (_fase)
         {
             case Fase.Apostando:
+                if (ModoPokemon) return $"Apostás a {_pedido.ApuestaPokemon}  ·  PEDIR reparte";
                 if (_apuesta <= 0) return "Elegí una ficha para apostar";
                 if (_apuesta < minBet) return $"La apuesta mínima es {minBet}";
                 return "PEDIR reparte  ·  B limpia la apuesta";

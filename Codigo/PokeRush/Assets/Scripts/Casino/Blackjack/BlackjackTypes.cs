@@ -116,6 +116,16 @@ public class BlackjackScreenRequest
     // Apuesta minima y maxima por mano. 0 = las que traiga el prefab.
     public int ApuestaMinima;
     public int ApuestaMaxima;
+
+    // Apuesta de un Pokemon en vez de plata (Tacconi, piso 3). Con esto puesto
+    // no hay fichas: se juega UNA sola mano, sin doblar ni dividir, y la mesa se
+    // cierra sola al terminar. Es el nombre para los carteles; el Pokemon lo
+    // maneja quien abre la mesa.
+    public string ApuestaPokemon;
+    // Lo que se lleva el jugador si gana, para el cartel. Ej: "su Cosmog shiny".
+    public string PremioPokemon;
+    // Contra quien se juega, para los carteles. Ej: "Tacconi".
+    public string Rival;
 }
 
 // Lo que devuelve al cerrarse, para que la mesa del mundo pueda reaccionar sin
@@ -123,6 +133,8 @@ public class BlackjackScreenRequest
 public class BlackjackScreenResult
 {
     public int Manos;
+    // Como termino la mano de una apuesta de Pokemon. Pendiente = se fue sin jugar.
+    public BlackjackOutcome ResultadoApuestaPokemon = BlackjackOutcome.Pendiente;
     // Ganado menos apostado en toda la sesion de esta mesa.
     public int Neto;
     // El premio mas grande de la sesion, para el cartel de despedida.

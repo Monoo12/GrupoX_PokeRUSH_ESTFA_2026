@@ -34,6 +34,28 @@ public class PokenModel
 
     public bool IsFainted => CurrentHP <= 0;
 
+    // Variante de color. No toca los stats: cambia que sprites se dibujan. La
+    // guarda SaveService (columna IsShiny de player_poken).
+    public bool IsShiny { get; private set; }
+
+    public void SetShiny(bool shiny) => IsShiny = shiny;
+
+    // ---------- sprites de ESTE ejemplar ----------
+    // Los shiny si lo es y la especie los trae; si no, los normales. Las
+    // pantallas preguntan aca y no a la definicion: asi un shiny se ve shiny en
+    // el combate, el equipo, el resumen y el PC sin que cada una lo sepa.
+    public UnityEngine.Sprite IconSprite => Elegir(Definition?.inventoryShinySprite, Definition?.inventorySprite);
+    public UnityEngine.Sprite FrontSprite => Elegir(Definition?.battleFrontShinySprite, Definition?.battleFrontSprite);
+    public UnityEngine.Sprite BackSprite => Elegir(Definition?.battleBackShinySprite, Definition?.battleBackSprite);
+    public UnityEngine.Sprite[] FrontFrames => ElegirFrames(Definition?.battleFrontShinyFrames, Definition?.battleFrontFrames);
+    public UnityEngine.Sprite[] BackFrames => ElegirFrames(Definition?.battleBackShinyFrames, Definition?.battleBackFrames);
+
+    private UnityEngine.Sprite Elegir(UnityEngine.Sprite shiny, UnityEngine.Sprite normal)
+        => IsShiny && shiny != null ? shiny : normal;
+
+    private UnityEngine.Sprite[] ElegirFrames(UnityEngine.Sprite[] shiny, UnityEngine.Sprite[] normal)
+        => IsShiny && shiny != null && shiny.Length > 0 ? shiny : normal;
+
     private ExperienceTableDefinition _xpTable;
 
     // Constructor normal: genera IVs al azar (cada ejemplar sale distinto).

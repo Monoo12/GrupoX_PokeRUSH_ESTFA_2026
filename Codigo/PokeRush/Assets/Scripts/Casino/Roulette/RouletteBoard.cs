@@ -107,6 +107,27 @@ public static class RouletteBoard
         }
     }
 
+    // Lo que se gano EN LIMPIO solo con las apuestas a color (rojo o negro) en un
+    // giro: la ficha apostada no cuenta, solo el pago. Lo mira la mesa para
+    // abrir la ruleta de premios cuando se le gana fuerte al color.
+    public static int GananciaDeColor(IEnumerable<KeyValuePair<RouletteBet, int>> apuestas, int numero)
+    {
+        if (apuestas == null) return 0;
+
+        int ganancia = 0;
+        foreach (KeyValuePair<RouletteBet, int> par in apuestas)
+        {
+            if (par.Key.Kind == RouletteBetKind.Numero) continue;
+            if (!Gana(par.Key, numero)) continue;
+            ganancia += par.Value * PagoDe(par.Key.Kind);
+        }
+        return ganancia;
+    }
+
+    // Hay que ganar MAS que el umbral (con 200, ganar 200 justos no alcanza).
+    public static bool DaRuletaDePremios(int gananciaDeColor, int umbral)
+        => umbral >= 0 && gananciaDeColor > umbral;
+
     // Si una apuesta cobra con el numero que salio.
     //
     // Ojo con el cero: no es ni rojo ni negro, asi que se lleva puestas las dos
