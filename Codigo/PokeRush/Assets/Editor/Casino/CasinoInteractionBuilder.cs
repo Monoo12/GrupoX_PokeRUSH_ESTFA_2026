@@ -47,6 +47,8 @@ public static class CasinoInteractionBuilder
         public int DineroRequerido;
         public StoryFlag FlagRequerido;
         public StoryFlag OtorgaFlag;
+        // Cartel del ascensor cuando falta el objetivo. Vacio = el del componente.
+        public string MensajeFaltaObjetivo;
     }
 
     private static readonly Piso[] Pisos =
@@ -58,7 +60,11 @@ public static class CasinoInteractionBuilder
             Mecanica = Mecanica.Slots,
             Ascensor = new Vector2(0.5f, 20.5f),
             EscenaDestino = "Casino Nivel 2", NombreDelDestino = "el piso 2",
-            Requisito = CasinoRequisitoTipo.DineroMinimo, DineroRequerido = 500,
+            // El pase lo da el guardia de al lado (pagandole o ganandole), ver
+            // CasinoElevatorGuard. Antes pedia tener 500 juntados.
+            Requisito = CasinoRequisitoTipo.Flag,
+            FlagRequerido = StoryFlag.Casino_Piso1_PaseAscensor,
+            MensajeFaltaObjetivo = "El guardia no te deja subir. Habla con el: se le paga o se le gana.",
             OtorgaFlag = StoryFlag.Casino_Piso1_Superado
         },
         new Piso
@@ -272,6 +278,8 @@ public static class CasinoInteractionBuilder
         so.FindProperty("dineroRequerido").intValue = piso.DineroRequerido;
         so.FindProperty("flagRequerido").enumValueIndex = (int)piso.FlagRequerido;
         so.FindProperty("otorgaFlag").enumValueIndex = (int)piso.OtorgaFlag;
+        if (!string.IsNullOrEmpty(piso.MensajeFaltaObjetivo))
+            so.FindProperty("mensajeFaltaObjetivo").stringValue = piso.MensajeFaltaObjetivo;
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 }

@@ -1,0 +1,67 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+// Entrega lo que dice un premio de la ruleta y devuelve el texto del cartel.
+//
+// Vive aparte de la pantalla por dos razones: se puede probar sin UI
+// (CasinoSmokeTests), y la ruleta y quien la abre no pueden tener dos ideas
+// distintas de que significa "ganar un Pokemon".
+//
+// Un premio puede combinar cosas (un objeto y plata, por ejemplo): se entrega
+// todo lo que tenga cargado.
+public static class PrizeGranter
+{
+    // Tope clasico de 6: es lo que dibuja el HUD de combate.
+    public const int EquipoMaximo = 6;
+
+    public static string Entregar(Prize premio, PlayerModel jugador)
+    {
+        if (premio == null) return "¡Has obtenido un premio!";
+        if (jugador == null) return premio.BuildMessage();
+
+        var partes = new List<string>();
+        bool compensado = false;
+
+        if (premio.poken != null)
+        {
+            string nombre = string.IsNullOrEmpty(premio.poken.pokenName)
+                ? premio.poken.name
+                : premio.poken.pokenName;
+
+            if (jugador.Team.Count >= EquipoMaximo)
+            {
+                // No hay PC donde mandarlo: se paga en plata, asi el giro no se
+                // siente perdido.
+                int compensacion = Mathf.Max(0, premio.moneyIfTeamFull);
+                if (compensacion > 0) jugador.AddMoney(compensacion);
+                partes.Add($"¡Salio {nombre}! Tu equipo esta lleno: te llevas {compensacion} monedas en su lugar.");
+                compensado = true;
+            }
+            else
+            {
+                jugador.Team.Add(new PokenModel(premio.poken, Mathf.Max(1, premio.pokenLevel)));
+                partes.Add($"¡{nombre} se unio a tu equipo!");
+            }
+        }
+
+        if (premio.item != null && premio.amount > 0)
+        {
+            jugador.Inventory.AddHealItem(premio.item, premio.amount);
+            if (premio.poken == null) partes.Add(premio.BuildMessage());
+        }
+
+        if (premio.money > 0)
+        {
+            jugador.AddMoney(premio.money);
+            if (premio.poken == null && premio.item == null)
+                partes.Add($"¡Ganaste {premio.money} monedas!");
+        }
+
+        // El texto a mano manda, salvo que haya habido que compensar: ese aviso
+        // no se puede tapar, el jugador tiene que saber por que no le llego.
+        if (!compensado && !string.IsNullOrEmpty(premio.customMessage))
+            return premio.customMessage;
+
+        return partes.Count > 0 ? string.Join(" ", partes) : premio.BuildMessage();
+    }
+}

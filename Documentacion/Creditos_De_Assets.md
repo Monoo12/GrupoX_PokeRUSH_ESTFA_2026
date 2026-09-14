@@ -40,6 +40,15 @@ se cambian los PNG de `Graphics/Casino/` y listo.
   - `Graphics/Windowskins/choice 18.png` — el marco dorado de las pantallas
   - `Graphics/Characters/enfermera.png` y `Lider 1 bw.png` — los NPC del piso 1
   - `Graphics/Trainers/JUGON.png` — el retrato del apostador
+  - `Graphics/Characters/maton.png`, `malabarista.png`, `jovenrica.png`,
+    `modelo.png`, `macarra.png`, `guay.png`, `anciano1.png`, `damisela.png` y
+    `empresario.png` — los personajes de los pisos 1 a 3 (guardia del ascensor,
+    los que pelean una vez y los que cuentan historia)
+  - `Graphics/Characters/gordo.png`, `mujer1.png`, `mujer2.png`, `guiri.png`,
+    `anciana2.png`, `hombre1.png`, `empresariaa.png` y `nobla.png` — la gente
+    jugando a las tragaperras del piso 1
+  - `Graphics/Trainers/MATON.png`, `MALABARISTA.png`, `JOVENRICA.png`,
+    `MODELO.png`, `MACARRA.png` y `GUAY.png` — sus retratos de combate
   - `Graphics/Characters/noble.png` — el croupier del blackjack (piso 3). Se le
     copian los cuatro cuadros de frente a `bj_croupier.png`; el PNG original no
     se toca porque los mapas lo usan como sprite entero.

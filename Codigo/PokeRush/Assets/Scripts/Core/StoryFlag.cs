@@ -46,5 +46,22 @@ public enum StoryFlag
     Casino_Ruleta_ObjetivoCumplido,
     Casino_Piso2_Superado,
     Casino_Blackjack_Ganado,
-    Casino_Piso3_Superado
+    Casino_Piso3_Superado,
+
+    // Casino, piso 1: el guardia del ascensor. El pase sale pagando o
+    // ganandole; ganarle ademas da su ruleta de Pokemon, una sola vez.
+    Casino_Piso1_PaseAscensor,
+    Casino_GuardiaVencido,
+
+    // Casino: los que pelean una sola vez, uno por NPC.
+    Casino_MalabaristaVencido,
+    Casino_JovenRicaVencida,
+    Casino_ModeloVencida,
+    Casino_MacarraVencido,
+    Casino_GuayVencido,
+
+    // Ruleta de premios por ganarle a un NPC: un flag por uso. Hay dos porque
+    // es el maximo por partida (ver CasinoRuletaDeNpcs).
+    Casino_RuletaNpc_1,
+    Casino_RuletaNpc_2
 }

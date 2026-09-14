@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
+  m_Name: GuayCasino
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  characterName: Guay
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: 80600478963f03c4ea209c1bd55551e1, type: 2}
+    level: 17
+  - species: {fileID: 11400000, guid: 10cac8bf4c399a14c8514286f5364d09, type: 2}
+    level: 18
+  - species: {fileID: 11400000, guid: 88511479c1b84f44fb7e925f8d6fa137, type: 2}
+    level: 18
+  battleFrontSprite: {fileID: 3502360888856454849, guid: 01910792a58ff6743b9ee6d02aaef4a0, type: 3}
+  battleBackSprite: {fileID: 0}
+  battleMusic: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  moneyReward: 220
+  itemRewards: []
+  defeatGrantsFlag: 30
+  fleeIfWeak: 0
+  aiProfile: {fileID: 11400000, guid: b45cec9649f49d543a98946e5e8f48e2, type: 2}
+  battleBackground: {fileID: 0}

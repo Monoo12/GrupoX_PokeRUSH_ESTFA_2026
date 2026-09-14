@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
+  m_Name: MacarraCasino
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  characterName: Macarra
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: c14771cba571264409e12420a170e213, type: 2}
+    level: 17
+  - species: {fileID: 11400000, guid: bc8a23d9bc996534eac3bcf60f0bddf7, type: 2}
+    level: 17
+  battleFrontSprite: {fileID: 1435385749810490284, guid: b0f4f88cc7ed494418ab531a9c4ea398, type: 3}
+  battleBackSprite: {fileID: 0}
+  battleMusic: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  moneyReward: 180
+  itemRewards: []
+  defeatGrantsFlag: 29
+  fleeIfWeak: 0
+  aiProfile: {fileID: 11400000, guid: b45cec9649f49d543a98946e5e8f48e2, type: 2}
+  battleBackground: {fileID: 0}

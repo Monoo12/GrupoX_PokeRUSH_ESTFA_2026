@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6be7c5f4f0d4364dafe1703178aac54, type: 3}
+  m_Name: RuletaDeLosNpcs
+  m_EditorClassIdentifier: Assembly-CSharp::CasinoPrizeTable
+  premios:
+  - prizeName: Pikachu
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
+    amount: 1
+    probability: 13
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: e1d2ee9d3d84c6b4085aee132d24968e, type: 2}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  - prizeName: Pocion
+    prizePlural: Pociones
+    article: una
+    icon: {fileID: 21300000, guid: 9520bf7f4166dc44ab4dfdb082584fde, type: 3}
+    amount: 3
+    probability: 17
+    item: {fileID: 11400000, guid: ccfc97a284e7c644d8775a8988b1e571, type: 2}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  - prizeName: 150 monedas
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 48c37a14cf525b446a5c4bb3e653cdd3, type: 3}
+    amount: 1
+    probability: 17
+    item: {fileID: 0}
+    money: 150
+    poken: {fileID: 0}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  - prizeName: Eevee
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 220baf3919fd9b848b1574420ae682a8, type: 3}
+    amount: 1
+    probability: 12
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 633e41c5f5326594e9ef2dbb95d7aa34, type: 2}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  - prizeName: Superpocion
+    prizePlural: Superpociones
+    article: una
+    icon: {fileID: 21300000, guid: d8f186deb4bb20841946dd199822888d, type: 3}
+    amount: 2
+    probability: 15
+    item: {fileID: 11400000, guid: 591415124781d9f4d965a386828fc48d, type: 2}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  - prizeName: Togepi
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
+    amount: 1
+    probability: 10
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: aba0b1490e2efb44a9153270a5918f7b, type: 2}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  - prizeName: Hiperpocion
+    prizePlural: Hiperpociones
+    article: una
+    icon: {fileID: 21300000, guid: b3b9606978dc8bb468c8c5d5498a907d, type: 3}
+    amount: 1
+    probability: 8
+    item: {fileID: 11400000, guid: 2ec7aa1bf32fb5645a1a380a1f2331f7, type: 2}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  - prizeName: 400 monedas
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 48c37a14cf525b446a5c4bb3e653cdd3, type: 3}
+    amount: 1
+    probability: 8
+    item: {fileID: 0}
+    money: 400
+    poken: {fileID: 0}
+    pokenLevel: 15
+    moneyIfTeamFull: 300
+    customMessage: 
+  npcsQueLaPuedenDar: 130000001a0000001b0000001c0000001d0000001e000000

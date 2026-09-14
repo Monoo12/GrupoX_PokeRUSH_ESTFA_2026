@@ -57,13 +57,20 @@ public class CasinoSmokeTest : MonoBehaviour
         // partida cargada.
         if (jugador.Money < 500) jugador.AddMoney(500 - jugador.Money);
 
+        // Las peleas simuladas no pueden guardar la partida DEMO encima del save.
+        bool guardadoAntes = CasinoDialogo.GuardadoAutomatico;
+        CasinoDialogo.GuardadoAutomatico = false;
+
         yield return ProbarAbrirDesdeLaMaquina(jugador, maquina);
         yield return ProbarApostarYGirar(jugador);
         yield return ProbarCierreYControl();
         yield return ProbarRuleta(jugador);
         yield return ProbarEnfermeraYDeuda(jugador);
+        yield return ProbarGuardia(jugador);
+        yield return ProbarNpcConRuleta(jugador);
         yield return ProbarAscensor(jugador);
 
+        CasinoDialogo.GuardadoAutomatico = guardadoAntes;
         Debug.Log($"[SmokeCasino] TERMINADO. OK={_ok} FALLOS={_fallos}");
 
 #if UNITY_EDITOR
@@ -442,6 +449,192 @@ public class CasinoSmokeTest : MonoBehaviour
     }
 
     // ---------- utilidades ----------
+
+    // ---------- 6. el guardia del ascensor ----------
+
+    // Las peleas no se juegan: se llama al mismo callback que dispara el combate
+    // al terminar, con una victoria armada. Lo que se prueba es lo que pasa
+    // DESPUES (flags, cartel, ruleta), que es lo nuevo; el combate ya tiene sus
+    // propias pruebas.
+    private IEnumerator ProbarGuardia(PlayerModel jugador)
+    {
+        var guardia = Object.FindAnyObjectByType<CasinoElevatorGuard>();
+        var dialogo = Object.FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
+        if (guardia == null || dialogo == null)
+        {
+            Debug.Log("[SmokeCasino] Este piso no tiene guardia (o caja de dialogo): se saltea esa parte.");
+            yield break;
+        }
+
+        StoryModel historia = GameManager.Instance.Story;
+        historia.ActiveFlags.Remove(guardia.FlagPase);
+        historia.ActiveFlags.Remove(guardia.FlagVencido);
+        jugador.PayDebt(jugador.Debt);
+        Menus.CloseAll();
+        yield return null;
+
+        // --- pagando ---
+        if (jugador.Money < guardia.Precio + 100) jugador.AddMoney(guardia.Precio + 100 - jugador.Money);
+        int antes = jugador.Money;
+
+        guardia.Interact(jugador, historia);
+        yield return null;
+        Check("El guardia pregunta si le pagas", dialogo.IsOpen);
+
+        dialogo.OnConfirm();               // "Pagar 500" es la primera opcion
+        yield return null;
+        Check($"Pagar le cobra {guardia.Precio}", jugador.Money == antes - guardia.Precio);
+        Check("Pagar da el pase del ascensor", historia.HasFlag(guardia.FlagPase));
+        Check("Y no cuenta como haberle ganado", !historia.HasFlag(guardia.FlagVencido));
+        yield return CerrarDialogo(dialogo);
+
+        // --- con el pase ya no cobra ---
+        int conPase = jugador.Money;
+        guardia.Interact(jugador, historia);
+        yield return null;
+        Check("Con el pase el guardia solo deja pasar", dialogo.IsOpen && jugador.Money == conPase);
+        yield return CerrarDialogo(dialogo);
+
+        // --- sin plata ofrece pelear; decir que no no da nada ---
+        historia.ActiveFlags.Remove(guardia.FlagPase);
+        jugador.SpendMoney(jugador.Money);
+        guardia.Interact(jugador, historia);
+        yield return null;
+        Check("Sin plata el guardia ofrece pelear", dialogo.IsOpen);
+        dialogo.OnNavigate(1);             // "Todavia no"
+        dialogo.OnConfirm();
+        yield return null;
+        Check("Rechazar la pelea no da el pase", !historia.HasFlag(guardia.FlagPase));
+        yield return CerrarDialogo(dialogo);
+
+        // --- ganandole: pase, cartel y ruleta de Pokemon ---
+        int equipoAntes = jugador.Team.Count;
+        int plataAntes = jugador.Money;
+        Llamar(guardia, "AlTerminar", new BattleOutcome { PlayerVictory = true }, historia);
+
+        Check("Ganarle marca al guardia como vencido", historia.HasFlag(guardia.FlagVencido));
+        Check("Ganarle tambien da el pase", historia.HasFlag(guardia.FlagPase));
+
+        yield return EsperarHasta(() => dialogo.IsOpen, 2f);
+        Check("Al volver al mapa el guardia dice algo", dialogo.IsOpen);
+
+        yield return AvanzarHastaQueSeCierre(dialogo);
+        yield return EsperarHasta(() => Menus.Top is PrizeWheelController, 2f);
+        var ruleta = Menus.Top as PrizeWheelController;
+        Check("Despues del cartel se abre su ruleta", ruleta != null);
+        if (ruleta == null) yield break;
+
+        yield return ProbarRuletaDePremio(ruleta);
+
+        bool llegoPokemon = jugador.Team.Count == equipoAntes + 1;
+        bool compenso = equipoAntes >= PrizeGranter.EquipoMaximo && jugador.Money > plataAntes;
+        Check("La ruleta del guardia da un Pokemon (o plata si el equipo estaba lleno)", llegoPokemon || compenso);
+    }
+
+    // ---------- 7. un NPC que pelea una vez y da la ruleta ----------
+
+    private IEnumerator ProbarNpcConRuleta(PlayerModel jugador)
+    {
+        CasinoTrainerNpc npc = null;
+        foreach (var n in Object.FindObjectsByType<CasinoTrainerNpc>(FindObjectsSortMode.None))
+            if (n.Ruleta != null && System.Array.IndexOf(n.Ruleta.npcsQueLaPuedenDar, n.FlagVencido) >= 0) { npc = n; break; }
+
+        var dialogo = Object.FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
+        if (npc == null || dialogo == null)
+        {
+            Debug.Log("[SmokeCasino] Este piso no tiene NPCs que den la ruleta: se saltea esa parte.");
+            yield break;
+        }
+
+        StoryModel historia = GameManager.Instance.Story;
+        Menus.CloseAll();
+        yield return null;
+
+        // Se fuerza que le toque: todos los demas de la lista ya vencidos y las
+        // dos ruletas sin usar -> k/m = 2/1.
+        historia.ActiveFlags.Remove(StoryFlag.Casino_RuletaNpc_1);
+        historia.ActiveFlags.Remove(StoryFlag.Casino_RuletaNpc_2);
+        foreach (StoryFlag otro in npc.Ruleta.npcsQueLaPuedenDar)
+            if (otro != npc.FlagVencido) historia.ActivateFlag(otro);
+        historia.ActiveFlags.Remove(npc.FlagVencido);
+
+        Check($"Con todos los demas vencidos a '{npc.name}' le toca la ruleta seguro",
+              CasinoRuletaDeNpcs.Probabilidad(historia, npc.Ruleta.npcsQueLaPuedenDar, npc.FlagVencido) >= 1f);
+
+        Llamar(npc, "AlTerminar", new BattleOutcome { PlayerVictory = true }, historia);
+        Check("Ganarle lo marca vencido", historia.HasFlag(npc.FlagVencido));
+        Check("Y gasta una de las dos ruletas", CasinoRuletaDeNpcs.Usadas(historia) == 1);
+
+        yield return EsperarHasta(() => dialogo.IsOpen, 2f);
+        Check("Al volver al mapa el NPC dice algo", dialogo.IsOpen);
+        yield return AvanzarHastaQueSeCierre(dialogo);
+        yield return EsperarHasta(() => Menus.Top is PrizeWheelController, 2f);
+        var ruleta = Menus.Top as PrizeWheelController;
+        Check("Despues del cartel se abre la ruleta de premios", ruleta != null);
+        if (ruleta != null) yield return ProbarRuletaDePremio(ruleta);
+
+        // --- ya vencido: no vuelve a pelear ---
+        npc.Interact(jugador, historia);
+        yield return null;
+        Check("Ya vencido, el NPC solo habla", dialogo.IsOpen && !MenuManager.AnyOpen);
+        yield return CerrarDialogo(dialogo);
+
+        // --- con las dos ruletas usadas, ganarle no la da ---
+        historia.ActivateFlag(StoryFlag.Casino_RuletaNpc_2);
+        historia.ActiveFlags.Remove(npc.FlagVencido);
+        Llamar(npc, "AlTerminar", new BattleOutcome { PlayerVictory = true }, historia);
+        yield return EsperarHasta(() => dialogo.IsOpen, 2f);
+        yield return AvanzarHastaQueSeCierre(dialogo);
+        for (int i = 0; i < 5; i++) yield return null;
+        Check("Con las dos ruletas usadas, ganarle no abre la ruleta", !(Menus.Top is PrizeWheelController));
+    }
+
+    // En modo premio: no se puede salir sin girar, entrega y se cierra sola.
+    private IEnumerator ProbarRuletaDePremio(PrizeWheelController ruleta)
+    {
+        ruleta.HandleAction(GameAction.Cancel);
+        yield return null;
+        Check("La ruleta de premio no deja salir sin girar", Menus.Top == ruleta);
+
+        ruleta.HandleAction(GameAction.Confirm);
+        yield return EsperarHasta(() => Menus.Top is MessageBoxScreen, 10f);
+        Check("Girar termina en el cartel del premio", Menus.Top is MessageBoxScreen);
+
+        if (Menus.Top is MessageBoxScreen cartel) cartel.HandleAction(GameAction.Confirm);
+        yield return EsperarHasta(() => !MenuManager.AnyOpen, 2f);
+        Check("Cerrado el cartel, la ruleta de premio se cierra sola", !MenuManager.AnyOpen);
+    }
+
+    private static IEnumerator CerrarDialogo(DialogueController dialogo)
+    {
+        yield return AvanzarHastaQueSeCierre(dialogo);
+    }
+
+    private static IEnumerator AvanzarHastaQueSeCierre(DialogueController dialogo)
+    {
+        for (int i = 0; i < 10 && dialogo.IsOpen; i++)
+        {
+            dialogo.OnConfirm();
+            yield return null;
+        }
+    }
+
+    private static IEnumerator EsperarHasta(System.Func<bool> condicion, float segundos)
+    {
+        float t = 0f;
+        while (!condicion() && t < segundos)
+        {
+            t += Time.unscaledDeltaTime;
+            yield return null;
+        }
+    }
+
+    private static void Llamar(object objetivo, string metodo, params object[] args)
+    {
+        MethodInfo m = objetivo.GetType().GetMethod(metodo, BindingFlags.NonPublic | BindingFlags.Instance);
+        if (m == null) { Debug.LogError($"[SmokeCasino] No existe {objetivo.GetType().Name}.{metodo}"); return; }
+        m.Invoke(objetivo, args);
+    }
 
     private void Check(string que, bool ok)
     {

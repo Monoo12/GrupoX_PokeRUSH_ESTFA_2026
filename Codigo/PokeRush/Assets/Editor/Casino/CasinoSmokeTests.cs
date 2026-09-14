@@ -33,6 +33,15 @@ namespace PokeRush.EditorTools
             TestElDineroDelJugadorCierra();
             TestDevolucionDeLaMaquinaBasica();
 
+            TestRuletaDeNpcsSaleDosVecesSiSeLesGanaATodos();
+            TestRuletaDeNpcsNoSonSiempreLosMismos();
+            TestRuletaDeNpcsNuncaPasaDeDos();
+            TestRuletaDeNpcsSoloLosDeLaLista();
+            TestPremioDePlata();
+            TestPremioPokemonSeSumaAlEquipo();
+            TestPremioPokemonConEquipoLlenoPagaPlata();
+            TestTablasDeRuletaDelProyecto();
+
             if (_failed == 0)
                 Debug.Log($"[CasinoSmokeTests] TODOS OK: {_passed} checks pasaron.");
             else
@@ -292,6 +301,184 @@ namespace PokeRush.EditorTools
                       "de lo apostado (por debajo de 100% la casa gana a la larga).");
             Check(rtp > 0.2f && rtp < 1f,
                   $"la maquina del piso 1 devuelve menos de lo que recauda ({rtp:P1})");
+        }
+
+        // ---------- ruleta de premios de los NPCs ----------
+
+        private static readonly StoryFlag[] Elegibles =
+        {
+            StoryFlag.Casino_ApostadorVencido,
+            StoryFlag.Casino_MalabaristaVencido,
+            StoryFlag.Casino_JovenRicaVencida,
+            StoryFlag.Casino_ModeloVencida,
+            StoryFlag.Casino_MacarraVencido,
+            StoryFlag.Casino_GuayVencido
+        };
+
+        // Una partida: le gana a 'cuantos' NPCs en un orden al azar y devuelve
+        // quienes dieron la ruleta. Replica lo que hace CasinoTrainerNpc al ganar
+        // (sortea y despues marca vencido).
+        private static System.Collections.Generic.List<StoryFlag> JugarPartida(IBattleRng rng, int cuantos)
+        {
+            var story = new StoryModel();
+            var orden = new System.Collections.Generic.List<StoryFlag>(Elegibles);
+            for (int i = orden.Count - 1; i > 0; i--)
+            {
+                int j = rng.Range(0, i + 1);
+                StoryFlag tmp = orden[i]; orden[i] = orden[j]; orden[j] = tmp;
+            }
+
+            var dieron = new System.Collections.Generic.List<StoryFlag>();
+            for (int i = 0; i < cuantos && i < orden.Count; i++)
+            {
+                if (CasinoRuletaDeNpcs.Sortear(story, Elegibles, orden[i], rng.Value()))
+                    dieron.Add(orden[i]);
+                story.ActivateFlag(orden[i]);
+            }
+            return dieron;
+        }
+
+        private static void TestRuletaDeNpcsSaleDosVecesSiSeLesGanaATodos()
+        {
+            var rng = new SeededRng(31);
+            bool siempreDos = true;
+            for (int partida = 0; partida < 2000; partida++)
+                if (JugarPartida(rng, Elegibles.Length).Count != 2) siempreDos = false;
+
+            Check(siempreDos, "ganandole a todos los NPCs, la ruleta sale exactamente 2 veces por partida");
+        }
+
+        private static void TestRuletaDeNpcsNoSonSiempreLosMismos()
+        {
+            var rng = new SeededRng(77);
+            var veces = new System.Collections.Generic.Dictionary<StoryFlag, int>();
+            var pares = new System.Collections.Generic.HashSet<string>();
+            const int partidas = 6000;
+
+            for (int partida = 0; partida < partidas; partida++)
+            {
+                var dieron = JugarPartida(rng, Elegibles.Length);
+                foreach (StoryFlag f in dieron) veces[f] = veces.TryGetValue(f, out int v) ? v + 1 : 1;
+                dieron.Sort();
+                pares.Add(string.Join("+", dieron));
+            }
+
+            // Cada NPC deberia estar en 2 de cada 6 partidas.
+            bool parejo = true;
+            foreach (StoryFlag f in Elegibles)
+            {
+                float proporcion = (veces.TryGetValue(f, out int v) ? v : 0) / (float)partidas;
+                if (proporcion < 0.30f || proporcion > 0.37f) parejo = false;
+            }
+            Check(parejo, "cada NPC da la ruleta en ~1 de cada 3 partidas: no hay favoritos");
+            Check(pares.Count == 15, $"salen los 15 pares posibles de NPCs a lo largo de las partidas (salieron {pares.Count})");
+        }
+
+        private static void TestRuletaDeNpcsNuncaPasaDeDos()
+        {
+            var rng = new SeededRng(5);
+            bool nuncaMas = true;
+            for (int partida = 0; partida < 1000; partida++)
+                for (int cuantos = 0; cuantos <= Elegibles.Length; cuantos++)
+                    if (JugarPartida(rng, cuantos).Count > 2) nuncaMas = false;
+            Check(nuncaMas, "venza a cuantos venza, la ruleta nunca sale mas de 2 veces");
+
+            var story = new StoryModel();
+            story.ActivateFlag(StoryFlag.Casino_RuletaNpc_1);
+            story.ActivateFlag(StoryFlag.Casino_RuletaNpc_2);
+            Check(CasinoRuletaDeNpcs.Probabilidad(story, Elegibles, Elegibles[0]) == 0f,
+                  "con las dos ruletas usadas, la probabilidad es 0");
+
+            // Ganandole solo a uno, con dos ruletas y seis NPCs: 2/6.
+            var nueva = new StoryModel();
+            float p = CasinoRuletaDeNpcs.Probabilidad(nueva, Elegibles, Elegibles[3]);
+            Check(Mathf.Abs(p - 2f / 6f) < 0.001f, $"al primer NPC le toca con 2/6 ({p:0.000})");
+        }
+
+        private static void TestRuletaDeNpcsSoloLosDeLaLista()
+        {
+            var story = new StoryModel();
+            Check(CasinoRuletaDeNpcs.Probabilidad(story, Elegibles, StoryFlag.Casino_GuardiaVencido) == 0f,
+                  "un NPC fuera de la lista no da la ruleta");
+            Check(CasinoRuletaDeNpcs.Probabilidad(story, Elegibles, StoryFlag.None) == 0f,
+                  "un NPC sin flag no da la ruleta");
+            Check(!CasinoRuletaDeNpcs.Sortear(story, Elegibles, StoryFlag.Casino_GuardiaVencido, 0f),
+                  "y aunque la tirada sea 0, no la da");
+            Check(CasinoRuletaDeNpcs.Usadas(story) == 0, "un sorteo fallido no gasta una ruleta");
+        }
+
+        // ---------- entrega de premios ----------
+
+        private static void TestPremioDePlata()
+        {
+            var jugador = new PlayerModel("Test");
+            string texto = PrizeGranter.Entregar(new Prize { prizeName = "150 monedas", money = 150 }, jugador);
+            Check(jugador.Money == 150, "un premio de plata suma las monedas");
+            Check(texto.Contains("150"), $"y el cartel dice cuanto ({texto})");
+        }
+
+        private static void TestPremioPokemonSeSumaAlEquipo()
+        {
+            var especie = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
+            if (especie == null) { Debug.LogWarning("[CasinoSmokeTests] No esta Pikachu: se saltea la prueba."); return; }
+
+            var jugador = new PlayerModel("Test");
+            string texto = PrizeGranter.Entregar(new Prize { poken = especie, pokenLevel = 15 }, jugador);
+            Check(jugador.Team.Count == 1 && jugador.Team[0].Definition == especie,
+                  "un premio de Pokemon lo suma al equipo");
+            Check(jugador.Team.Count == 1 && jugador.Team[0].Level == 15, "con el nivel del premio");
+            Check(texto.Contains(especie.pokenName), $"y el cartel lo nombra ({texto})");
+        }
+
+        private static void TestPremioPokemonConEquipoLlenoPagaPlata()
+        {
+            var especie = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
+            if (especie == null) return;
+
+            var jugador = new PlayerModel("Test");
+            for (int i = 0; i < PrizeGranter.EquipoMaximo; i++) jugador.Team.Add(new PokenModel(especie, 5));
+
+            string texto = PrizeGranter.Entregar(new Prize { poken = especie, pokenLevel = 15, moneyIfTeamFull = 300 }, jugador);
+            Check(jugador.Team.Count == PrizeGranter.EquipoMaximo, "con el equipo lleno no se pasa de 6");
+            Check(jugador.Money == 300, "y se paga la plata de compensacion");
+            Check(texto.Contains("300"), $"y el cartel lo avisa ({texto})");
+        }
+
+        // Las tablas que arma el builder de personajes: si alguien las rebalancea
+        // tiene que seguir cumpliendo lo pedido.
+        private static void TestTablasDeRuletaDelProyecto()
+        {
+            var npcs = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDeLosNpcs.asset");
+            var guardia = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDelGuardia.asset");
+            if (npcs == null || guardia == null)
+            {
+                Debug.LogWarning("[CasinoSmokeTests] Todavia no estan las tablas de ruleta. " +
+                                 "Corre PokeRush/Casino/Poner los personajes de los pisos 1 a 3.");
+                return;
+            }
+
+            float pokemon = npcs.Porcentaje(p => p.poken != null);
+            float curativos = npcs.Porcentaje(p => p.poken == null && p.item != null);
+            float plata = npcs.Porcentaje(p => p.poken == null && p.item == null && p.money > 0);
+            Check(Mathf.Abs(pokemon - 0.35f) < 0.005f, $"la ruleta de los NPCs da Pokemon el 35% de las veces ({pokemon:P1})");
+            Check(curativos > 0f && plata > 0f, $"y el resto se reparte entre curativos ({curativos:P0}) y plata ({plata:P0})");
+            Check(Mathf.Abs(pokemon + curativos + plata - 1f) < 0.001f, "y no hay gajos que no den nada");
+            Check(npcs.premios.Length <= 8, "entra en los 8 gajos de la rueda");
+            Check(npcs.npcsQueLaPuedenDar != null && npcs.npcsQueLaPuedenDar.Length == Elegibles.Length,
+                  "la lista de NPCs que la dan esta completa");
+
+            bool todosPokemon = guardia.premios.Length > 0;
+            float menor = float.MaxValue, mayor = 0f;
+            foreach (Prize p in guardia.premios)
+            {
+                if (p == null || p.poken == null || p.probability <= 0f) todosPokemon = false;
+                if (p == null) continue;
+                menor = Mathf.Min(menor, p.probability);
+                mayor = Mathf.Max(mayor, p.probability);
+            }
+            Check(todosPokemon, "la ruleta del guardia da un Pokemon si o si");
+            Check(menor < mayor, "y tiene Pokemon mas raros que otros");
+            Check(guardia.premios.Length <= 8, "la ruleta del guardia entra en los 8 gajos");
         }
     }
 }

@@ -24,6 +24,17 @@ public class Prize
              "de cartel (util para el premio misterioso).")]
     public HealItemDefinition item;
 
+    [Header("Plata (opcional)")]
+    [Tooltip("Monedas que suma al ganarlo. 0 = ninguna.")]
+    [Min(0)] public int money = 0;
+
+    [Header("Pokemon (opcional)")]
+    [Tooltip("Pokemon que se suma al equipo al ganarlo. Vacio = no da Pokemon.")]
+    public PokenDefinition poken;
+    [Min(1)] public int pokenLevel = 15;
+    [Tooltip("Plata que se da en su lugar si el equipo ya tiene 6.")]
+    [Min(0)] public int moneyIfTeamFull = 300;
+
     [Tooltip("Pisa el texto del cartel. Vacio = se arma solo con nombre y cantidad.")]
     [TextArea(2, 3)] public string customMessage = "";
 
@@ -130,6 +141,17 @@ public class PrizeWheelController : MenuScreen
     private bool _volverSeleccionado;
     private Prize[] _enJuego;
 
+    // Modo premio (lo pide quien abre): un solo giro, sin salir antes de girar,
+    // y se cierra sola despues del cartel.
+    private bool _recompensaUnica;
+    private bool _cerrarEnElProximoTick;
+    private string _mensajeDelPremio;
+
+    // En modo premio no hay VOLVER hasta haber girado: si no, el jugador
+    // podria cerrar la ruleta que se gano y perder el premio.
+    private bool BloqueaSalir => _recompensaUnica && _result.Giros == 0;
+    private bool YaGiroSuPremio => _recompensaUnica && _result.Giros > 0;
+
     // Grados que ocupa cada gajo.
     private float PasoDeGajo => _enJuego != null && _enJuego.Length > 0
         ? 360f / _enJuego.Length
@@ -157,6 +179,9 @@ public class PrizeWheelController : MenuScreen
             ? pedido.Prizes
             : prizes;
 
+        _recompensaUnica = pedido != null && pedido.RecompensaUnica;
+        _cerrarEnElProximoTick = false;
+
         _result.Giros = 0;
         _result.UltimoPremio = null;
         Result = _result;
@@ -177,6 +202,7 @@ public class PrizeWheelController : MenuScreen
         _indiceGanador = -1;
         _celebracion = 0f;
         _volverSeleccionado = false;
+        _mensajeDelPremio = null;
 
         if (wheel != null) wheel.localRotation = Quaternion.identity;
         _anguloInicial = 0f;
@@ -199,6 +225,10 @@ public class PrizeWheelController : MenuScreen
         ApagarEfectos();
         _fase = Fase.Listo;
         RefrescarBotones();
+
+        // El premio ya se cobro: la ruleta se va sola. Se cierra en el tick y no
+        // aca porque este callback corre adentro del Close del cartel.
+        if (_recompensaUnica) _cerrarEnElProximoTick = true;
     }
 
     private void ApagarEfectos()
@@ -249,6 +279,7 @@ public class PrizeWheelController : MenuScreen
 
             case GameAction.Right:
             case GameAction.Down:
+                if (BloqueaSalir) return;
                 _volverSeleccionado = true;
                 RefrescarBotones();
                 return;
@@ -259,6 +290,7 @@ public class PrizeWheelController : MenuScreen
                 return;
 
             case GameAction.Cancel:
+                if (BloqueaSalir) return;
                 CloseSelf();
                 return;
         }
@@ -272,7 +304,7 @@ public class PrizeWheelController : MenuScreen
 
     public void OnBackButton()
     {
-        if (_fase == Fase.Listo) CloseSelf();
+        if (_fase == Fase.Listo && !BloqueaSalir) CloseSelf();
     }
 
     // ---------------------------------------------------------------- girar
@@ -280,6 +312,7 @@ public class PrizeWheelController : MenuScreen
     private void Girar()
     {
         if (_fase != Fase.Listo) return;
+        if (YaGiroSuPremio) return;
         if (_enJuego == null || _enJuego.Length == 0)
         {
             Debug.LogError("[Ruleta] No hay premios cargados: no se puede girar.");
@@ -331,6 +364,13 @@ public class PrizeWheelController : MenuScreen
 
     public override void OnTick(float unscaledDeltaTime)
     {
+        if (_cerrarEnElProximoTick)
+        {
+            _cerrarEnElProximoTick = false;
+            CloseSelf();
+            return;
+        }
+
         AflojarPuntero(unscaledDeltaTime);
 
         switch (_fase)
@@ -382,9 +422,9 @@ public class PrizeWheelController : MenuScreen
         _result.UltimoPremio = premio;
 
         // El premio se entrega ACA, no cuando se cierra el cartel: si el juego
-        // se corta con la caja abierta, el objeto ya es del jugador.
-        if (premio != null && premio.item != null && Player != null)
-            Player.Inventory.AddHealItem(premio.item, premio.amount);
+        // se corta con la caja abierta, el premio ya es del jugador. Objeto,
+        // plata o Pokemon: lo resuelve PrizeGranter, que tambien arma el texto.
+        _mensajeDelPremio = PrizeGranter.Entregar(premio, Player);
 
         PrenderEfectos();
         if (winClip != null) AudioService.Instance.PlaySFX(winClip);
@@ -448,7 +488,9 @@ public class PrizeWheelController : MenuScreen
     private void MostrarCartelDelPremio()
     {
         Prize premio = _enJuego[_indiceGanador];
-        string texto = premio != null ? premio.BuildMessage() : "¡Has obtenido un premio!";
+        string texto = !string.IsNullOrEmpty(_mensajeDelPremio)
+            ? _mensajeDelPremio
+            : premio != null ? premio.BuildMessage() : "¡Has obtenido un premio!";
         ShowMessage(texto);
     }
 
@@ -483,7 +525,9 @@ public class PrizeWheelController : MenuScreen
 
     private void RefrescarBotones()
     {
-        bool sePuedeGirar = _fase == Fase.Listo;
+        bool quieto = _fase == Fase.Listo;
+        bool sePuedeGirar = quieto && !YaGiroSuPremio;
+        bool sePuedeSalir = quieto && !BloqueaSalir;
 
         if (spinButton != null) spinButton.interactable = sePuedeGirar;
         if (spinButtonImage != null)
@@ -492,11 +536,11 @@ public class PrizeWheelController : MenuScreen
             if (s != null) spinButtonImage.sprite = s;
         }
 
-        if (backButton != null) backButton.interactable = sePuedeGirar;
+        if (backButton != null) backButton.interactable = sePuedeSalir;
 
         // La seleccion con teclado se marca agrandando un poco el boton elegido.
         Resaltar(spinButtonImage, sePuedeGirar && !_volverSeleccionado);
-        Resaltar(backButtonImage, sePuedeGirar && _volverSeleccionado);
+        Resaltar(backButtonImage, sePuedeSalir && _volverSeleccionado);
     }
 
     private static void Resaltar(Image boton, bool elegido)
