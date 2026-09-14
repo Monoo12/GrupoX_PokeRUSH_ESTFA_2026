@@ -18,9 +18,9 @@ using UnityEngine;
 //      indexado por dexNumber): MAYUSCULAS sin simbolos (NIDORANF, MRMIME...).
 //   2. Copia el PNG a Assets/Sprites/Pokens/ (idempotente).
 //   3. Lo RECORTA en frames (Multiple), con pivot bottom-center (los pies
-//      apoyan en la plataforma), PPU = alto del frame (cada Poken mide 1
-//      unidad de alto en el mundo) y maxTextureSize suficiente para que
-//      Unity no reescale la tira (la causa del borroso).
+//      apoyan en la plataforma), el PPU que le da su tamaño en combate (ver
+//      PpuDeCombate) y maxTextureSize suficiente para que Unity no reescale
+//      la tira (la causa del borroso).
 //   4. Asigna: campo single = frame 0 (UI/compatibilidad) y el array de
 //      frames completo para la animacion en batalla (PokenView los cicla).
 namespace PokeRush.EditorTools.PokeApi
@@ -120,7 +120,7 @@ namespace PokeRush.EditorTools.PokeApi
                             $"{i + 1}/{uniquePaths.Count} (esto tarda unos minutos la primera vez)",
                             (float)i / uniquePaths.Count))
                         break;
-                    ConfigureStrip(uniquePaths[i]);
+                    ConfigureStrip(uniquePaths[i], EsTiraDeCombate(uniquePaths[i]));
                 }
 
                 // --- Pasada 3: asignar frame 0 + array de frames a cada especie ---
@@ -179,12 +179,86 @@ namespace PokeRush.EditorTools.PokeApi
             EditorUtility.DisplayDialog("Sprites asignados", report, "OK");
         }
 
+        // ---------- tamaño en combate ----------
+
+        // Las tiras vienen recortadas al contenido, asi que el alto del frame ES
+        // el tamaño del Pokemon: Aron mide 32 px y Noivern 182. Con PPU = alto
+        // del frame (la regla vieja) todos median 1 unidad de alto y un Aron
+        // quedaba del tamaño de un Haunter.
+        //
+        // Ahora un frame de AltoDeReferencia px mide 1 unidad (como antes) y el
+        // resto en proporcion, con topes: los muy chicos no bajan de AltoMinimo
+        // para que se vean, y los gigantes no pasan de AltoMaximo para que
+        // entren en pantalla. Encima van las escalas de PokenView (1.1 y 1.7).
+        public const int AltoDeReferencia = 80;   // la mediana de las tiras
+        public const float AltoMinimo = 0.5f;
+        public const float AltoMaximo = 1.5f;
+
+        private static readonly string[] CarpetasDeCombate = { "Front", "Back", "Front shiny", "Back shiny" };
+
+        // Alto en unidades de mundo de un frame de 'altoDelFrame' px.
+        public static float AltoEnCombate(int altoDelFrame)
+            => Mathf.Clamp(altoDelFrame / (float)AltoDeReferencia, AltoMinimo, AltoMaximo);
+
+        public static float PpuDeCombate(int altoDelFrame)
+            => altoDelFrame / AltoEnCombate(altoDelFrame);
+
+        // Las tiras de batalla de Assets/Sprites/Pokens (no los iconos).
+        public static bool EsTiraDeCombate(string assetPath)
+        {
+            string carpeta = Path.GetDirectoryName(assetPath)?.Replace('\\', '/');
+            foreach (string c in CarpetasDeCombate)
+                if (carpeta == $"{DestRoot}/{c}") return true;
+            return false;
+        }
+
+        // Reaplica el tamaño a las tiras ya importadas. Solo toca el PPU: no
+        // copia, no recorta y no cambia las referencias de las especies.
+        [MenuItem("PokeRush/Ajustar tamaño de los Pokémon en combate")]
+        public static void AjustarTamanioEnCombate()
+        {
+            int cambiadas = 0, revisadas = 0;
+            AssetDatabase.StartAssetEditing();
+            try
+            {
+                foreach (string c in CarpetasDeCombate)
+                {
+                    string carpeta = $"{DestRoot}/{c}";
+                    if (!AssetDatabase.IsValidFolder(carpeta)) continue;
+
+                    foreach (string guid in AssetDatabase.FindAssets("t:Texture2D", new[] { carpeta }))
+                    {
+                        string path = AssetDatabase.GUIDToAssetPath(guid);
+                        if (!EsTiraDeCombate(path)) continue;
+                        var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                        if (importer == null) continue;
+                        if (!TryReadPngSize(Path.GetFullPath(path), out _, out int alto)) continue;
+                        revisadas++;
+
+                        float ppu = PpuDeCombate(alto);
+                        if (Mathf.Abs(importer.spritePixelsPerUnit - ppu) < 0.001f) continue;
+                        importer.spritePixelsPerUnit = ppu;
+                        importer.SaveAndReimport();
+                        cambiadas++;
+                    }
+                }
+            }
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
+            }
+
+            Debug.Log($"[SpriteAssigner] Tamaño en combate: {cambiadas} tiras ajustadas de {revisadas} revisadas " +
+                      $"({AltoDeReferencia} px = 1 unidad, entre {AltoMinimo} y {AltoMaximo}).");
+        }
+
         // ---------- recorte de tiras ----------
 
         // Configura un PNG como tira de frames cuadrados: Multiple, pivot abajo,
-        // PPU = alto del frame, sin filtro ni compresion, tamaño sin reescalar.
-        // Publico: BattleUiAssetImporter lo reusa para los sprites de entrenadores.
-        public static void ConfigureStrip(string assetPath)
+        // sin filtro ni compresion, tamaño sin reescalar. El PPU es el de combate
+        // para las tiras de batalla y el alto del frame para el resto: los
+        // iconos y los entrenadores (BattleUiAssetImporter lo reusa para ellos).
+        public static void ConfigureStrip(string assetPath, bool tamanioDeCombate = false)
         {
             var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
             if (importer == null) return;
@@ -213,8 +287,7 @@ namespace PokeRush.EditorTools.PokeApi
 #pragma warning disable 618
             importer.spritesheet = metas.ToArray();
 #pragma warning restore 618
-            // PPU = alto del frame: el Poken mide 1 unidad de alto en el mundo
-            importer.spritePixelsPerUnit = height;
+            importer.spritePixelsPerUnit = tamanioDeCombate ? PpuDeCombate(height) : height;
             importer.filterMode = FilterMode.Point;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             importer.alphaIsTransparency = true;

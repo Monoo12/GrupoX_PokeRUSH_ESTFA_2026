@@ -76,6 +76,7 @@ namespace PokeRush.EditorTools
             TestNestorLeeLaCuracionDelRival();
             TestNestorNoLeeElForcejeo();
             TestNestorAliadoDisponible();
+            TestTamanioDeLosPokemonEnCombate();
             TestWaitDejaAlRivalSinActuar();
             TestElEnumDeAccionesNoSeCorrio();
 
@@ -1208,6 +1209,32 @@ namespace PokeRush.EditorTools
                 "Nestor aliado: SiempreOn tampoco saltea el candado del boss");
             Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.SiempreOff, false, true, true),
                 "Nestor aliado: SiempreOff lo apaga incluso en el casino");
+        }
+
+        // El tamaño en combate sale de los pixeles de la tira. Lo que se pidio
+        // arreglar: Aron (32 px) se veia del alto de un Haunter (85 px).
+        private static void TestTamanioDeLosPokemonEnCombate()
+        {
+            Check(Mathf.Approximately(PokeApi.SpriteAssigner.AltoEnCombate(80), 1f),
+                "Tamaño en combate: un frame de 80 px mide 1 unidad, como antes");
+            Check(Mathf.Approximately(PokeApi.SpriteAssigner.AltoEnCombate(32), 0.5f),
+                "Tamaño en combate: los muy chicos no bajan de 0,5");
+            Check(Mathf.Approximately(PokeApi.SpriteAssigner.AltoEnCombate(182), 1.5f),
+                "Tamaño en combate: los gigantes no pasan de 1,5");
+
+            float aron = AltoDelPrimerFrame(Resources.Load<PokenDefinition>("Definitions/Pokens/0304_Aron"));
+            float haunter = AltoDelPrimerFrame(Resources.Load<PokenDefinition>("Definitions/Pokens/0093_Haunter"));
+            Check(aron > 0f && haunter > 0f && aron < haunter * 0.6f,
+                $"Tamaño en combate: Aron se ve mas chico que Haunter ({aron:0.00} contra {haunter:0.00} unidades)");
+        }
+
+        private static float AltoDelPrimerFrame(PokenDefinition def)
+        {
+            if (def == null) return 0f;
+            Sprite s = def.battleFrontFrames != null && def.battleFrontFrames.Length > 0
+                ? def.battleFrontFrames[0]
+                : def.battleFrontSprite;
+            return s != null ? s.rect.height / s.pixelsPerUnit : 0f;
         }
 
         // El freno mas visible: los primeros turnos Nestor solo mira. Sin esto

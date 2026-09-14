@@ -272,8 +272,18 @@ frames cuadrados en fila, donde **el lado del frame = el alto del PNG**
 - Sube `maxTextureSize` a la potencia de 2 que cubra la tira (hasta 16384):
   el borroso original venía de que Unity reescalaba las tiras al límite
   default de 2048.
-- **PPU = alto del frame**: cada Pokémon mide exactamente 1 unidad de alto en
-  el mundo, así las escalas del builder son directas (enemigo 1.1, jugador 1.7).
+- **El tamaño sale de los píxeles.** Las tiras vienen recortadas al contenido,
+  así que el alto del frame *es* el tamaño del Pokémon: Aron mide 32 px y
+  Noivern 182. Un frame de **80 px** (la mediana de las tiras) mide 1 unidad de
+  alto, y el resto en proporción, con topes de **0,5** (para que los muy chicos
+  se vean) y **1,5** (para que los gigantes entren en pantalla). Encima van las
+  escalas del builder (enemigo 1.1, jugador 1.7). Lo calcula
+  `SpriteAssigner.PpuDeCombate()`; los íconos y los entrenadores siguen con PPU =
+  alto.
+  - Antes el PPU era el alto del frame y **todos medían 1 unidad**: un Aron
+    quedaba del alto de un Haunter. Para reaplicar la regla sin volver a copiar
+    ni recortar nada: **`PokeRush > Ajustar tamaño de los Pokémon en combate`**
+    (solo cambia el PPU de las tiras de Front/Back y sus shiny).
 - Llena en `PokenDefinition` los arrays `battleFrontFrames` / `battleBackFrames`
   (+ shiny) con todos los frames; los campos single quedan con el frame 0.
 - `PokenView` cicla los frames en loop (`frameRate` serializado, default 30 fps),
