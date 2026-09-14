@@ -44,6 +44,11 @@ se cambian los PNG de `Graphics/Casino/` y listo.
     `modelo.png`, `macarra.png`, `guay.png`, `anciano1.png`, `damisela.png` y
     `empresario.png` — los personajes de los pisos 1 a 3 (guardia del ascensor,
     los que pelean una vez y los que cuentan historia)
+  - `Graphics/Characters/motorista.png`, `pokemaniaco.png`, `medium.png`,
+    `ladron.png`, `veterano.png` y `luchador.png`, con sus retratos
+    `Graphics/Trainers/MOTORISTA.png`, `POKEMANIACO.png`, `MEDIUM.png`,
+    `LADRON.png`, `VETERANO.png` y `KARATEKA.png` — la segunda tanda de NPCs
+    que pelean en los pisos 1 a 3
   - `Graphics/Characters/gordo.png`, `mujer1.png`, `mujer2.png`, `guiri.png`,
     `anciana2.png`, `hombre1.png`, `empresariaa.png` y `nobla.png` — la gente
     jugando a las tragaperras del piso 1

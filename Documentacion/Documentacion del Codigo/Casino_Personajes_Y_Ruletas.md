@@ -21,6 +21,23 @@ Todo lo arma el menú **`PokeRush > Casino > Poner los personajes de los pisos 1
 > Las frases de los ocho jugadores de tragaperras (`JugadorTragaperras*.asset`) también son
 > provisorias, pero no son de historia.
 
+> ## ⚠️ Pendiente: Néstor de ayudante en todos los combates del casino
+>
+> **Requisito:** en **todos** los combates de los pisos del casino, Néstor tiene que estar
+> como ayudante.
+>
+> Hoy la ayuda existe: es la lectura aliada de `NestorPredictionSystem`, con su retrato en el
+> HUD (ver `Sistema_De_Combate_Y_IA.md`). Se prende con el campo `nestorAliado` del
+> `BattleController` (prefab `SistemaDeCombate`). En modo `Auto` (el que tienen las escenas)
+> solo aparece con el flag `Torre1_NestorLiberado`, que se enciende al terminar la torre 1:
+>
+> - en una partida real ya llega al casino con Néstor;
+> - entrando directo a un piso con Play (partida `DEMO`), el flag no está y Néstor no aparece.
+>
+> Falta decidir cómo se garantiza en el casino (por ejemplo `SiempreOn` en las escenas del
+> casino, o que la partida de prueba traiga el flag) y revisar si "ayudante" es solo la lectura
+> aliada o algo más.
+
 ---
 
 ## Quién está en cada piso
@@ -30,15 +47,21 @@ Todo lo arma el menú **`PokeRush > Casino > Poner los personajes de los pisos 1
 | 1 | **Guardia** (`GuardiaAscensor`) | Pide 500 monedas o que le ganes para usar el ascensor. Ganarle da la ruleta de Pokémon | (3.5, 19.5), al lado del ascensor |
 | 1 | Apostador | Pelea una vez (Raticate y Kadabra, Nv12). Paga 100 | (-3.5, 12.5) |
 | 1 | Malabarista | Pelea una vez (Mimikyu y Klefki, Nv14) | (9.5, 15.5) |
+| 1 | Motorista | Pelea una vez (Magby Nv13, Rhyhorn Nv14) | (-10.5, 4.5) |
+| 1 | Pokemaníaco | Pelea una vez (Elekid Nv13, Aron Nv14) | (-9.5, 15.5) |
 | 1 | Enfermera | Cura por 30 monedas o fiado | (4.5, 12.5) |
 | 1 | Anciano | Historia | (5.5, 4.5) |
 | 1 | 8 jugadores (`JugadorTragaperras1..8`) | Juegan a las tragaperras: dan saltitos y dicen una frase | en taburetes, ver abajo |
 | 2 | Joven rica | Pelea una vez (Togepi Nv15, Sableye Nv16) | (-10.5, 13.5) |
 | 2 | Modelo | Pelea una vez (Litwick Nv15, Shuppet Nv16) | (-5.5, 6.5) |
+| 2 | Médium | Pelea una vez (Duskull y Gastly, Nv16) | (-10.5, 18.5) |
+| 2 | Ladrón | Pelea una vez (Pawniard Nv16, Mawile Nv17) | (14.5, 10.5) |
 | 2 | Enfermera | Cura | (-3.5, 4.5) |
 | 2 | Damisela | Historia | (-13.5, 18.5) |
 | 3 | Macarra | Pelea una vez (Sneasel y Sandile, Nv17) | (4.5, 10.5) |
 | 3 | Guay | Pelea una vez (Gligar Nv17, Skarmory y Absol Nv18) | (10.5, 5.5) |
+| 3 | Veterano | Pelea una vez (Donphan y Lairon, Nv18) | (-13.5, 12.5) |
+| 3 | Karateka | Pelea una vez (Primeape y Riolu, Nv18) | (6.5, 4.5) |
 | 3 | Enfermera | Cura | (-5.5, 4.5) |
 | 3 | Empresario | Historia | (-9.5, 13.5) |
 
@@ -130,7 +153,7 @@ flags de uso (`Casino_RuletaNpc_1` y `_2`), que el guardado ya persiste.
 | 400 monedas | 8 |
 
 **35% Pokémon, 40% curativos, 25% plata.** El campo `npcsQueLaPuedenDar` lista los flags de
-los seis NPCs que la dan; el guardia no está porque tiene la suya.
+los doce NPCs que la dan; el guardia no está porque tiene la suya.
 
 ---
 
@@ -159,6 +182,12 @@ marca la rareza:
   **provisorios**: se reescriben en el asset sin abrir la escena. `NpcQueHabla` también
   acepta un `dialogoRepetido` para las veces siguientes.
 - **Rivales:** `Resources/Definitions/Casino/*Casino.asset` y `GuardiaAscensor.asset`.
+- **Retratos:** son los PNG de `Graphics/Trainers` y se usan en la caja de diálogo y en el
+  combate. El builder los fuerza a **imagen entera (Single), Point y sin compresión**. Venían
+  del pack con importaciones sueltas: `MALABARISTA.png` estaba partido en 4 por el recorte
+  automático y el retrato mostraba un pedazo agrandado, y todos estaban borrosos por el filtro
+  bilinear.
+- **Textos:** van con tildes, ñ y `¿¡`. La caja usa la fuente legacy de Unity, que los dibuja.
 - **Precio del guardia y textos de los NPCs:** en el componente de cada personaje, en la
   escena.
 

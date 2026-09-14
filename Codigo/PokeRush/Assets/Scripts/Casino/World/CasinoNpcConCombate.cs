@@ -29,7 +29,7 @@ public abstract class CasinoNpcConCombate : MonoBehaviour
     [SerializeField] protected string nombre = "NPC";
     [SerializeField] protected Sprite retrato;
     [SerializeField, TextArea(2, 3)] protected string mensajeSinEquipo =
-        "Con el equipo asi no se puede pelear. Pasa por la enfermeria.";
+        "Con el equipo así no se puede pelear. Pasá por la enfermería.";
 
     protected bool EsperandoCombate { get; private set; }
 

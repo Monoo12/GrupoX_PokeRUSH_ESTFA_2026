@@ -25,13 +25,13 @@ public class CasinoTrainerNpc : CasinoNpcConCombate, IInteractable
     [SerializeField] private CasinoPrizeTable ruleta;
 
     [Header("Textos")]
-    [SerializeField, TextArea(2, 4)] private string pregunta = "Peleamos?";
+    [SerializeField, TextArea(2, 4)] private string pregunta = "¿Peleamos?";
     [SerializeField] private string opcionSi = "Dale";
     [SerializeField] private string opcionNo = "Paso";
     [SerializeField, TextArea(2, 4)] private string mensajeSiRechaza = "";
     [SerializeField, TextArea(2, 4)] private string mensajeVictoria = "Me ganaste.";
     [SerializeField, TextArea(2, 4)] private string mensajeRuleta =
-        "Y encima te toca la ruleta de premios. Gira.";
+        "Y encima te toca la ruleta de premios. ¡Girá!";
     [SerializeField, TextArea(2, 4)] private string mensajeDerrota = "";
     [SerializeField, TextArea(2, 4)] private string mensajeYaVencido = "Ya me ganaste. Dejame tranquilo.";
 

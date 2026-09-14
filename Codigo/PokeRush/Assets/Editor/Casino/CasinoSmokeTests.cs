@@ -33,6 +33,7 @@ namespace PokeRush.EditorTools
             TestElDineroDelJugadorCierra();
             TestDevolucionDeLaMaquinaBasica();
 
+            TestRuletaDeNpcsConLosDoceDelProyecto();
             TestRuletaDeNpcsSaleDosVecesSiSeLesGanaATodos();
             TestRuletaDeNpcsNoSonSiempreLosMismos();
             TestRuletaDeNpcsNuncaPasaDeDos();
@@ -315,11 +316,60 @@ namespace PokeRush.EditorTools
             StoryFlag.Casino_GuayVencido
         };
 
+        // Los doce que pelean una vez en los pisos 1 a 3 (los que pone
+        // CasinoNpcBuilder). Las pruebas de la regla usan los primeros seis; esta
+        // lista es para comprobar que con el proyecto real sigue valiendo.
+        private static readonly StoryFlag[] ElegiblesDelProyecto =
+        {
+            StoryFlag.Casino_ApostadorVencido,
+            StoryFlag.Casino_MalabaristaVencido,
+            StoryFlag.Casino_JovenRicaVencida,
+            StoryFlag.Casino_ModeloVencida,
+            StoryFlag.Casino_MacarraVencido,
+            StoryFlag.Casino_GuayVencido,
+            StoryFlag.Casino_MotoristaVencido,
+            StoryFlag.Casino_PokemaniacoVencido,
+            StoryFlag.Casino_MediumVencido,
+            StoryFlag.Casino_LadronVencido,
+            StoryFlag.Casino_VeteranoVencido,
+            StoryFlag.Casino_KaratekaVencido
+        };
+
+        private static void TestRuletaDeNpcsConLosDoceDelProyecto()
+        {
+            var rng = new SeededRng(123);
+            var veces = new System.Collections.Generic.Dictionary<StoryFlag, int>();
+            bool siempreDos = true;
+            const int partidas = 6000;
+            for (int partida = 0; partida < partidas; partida++)
+            {
+                var dieron = JugarPartida(rng, ElegiblesDelProyecto.Length, ElegiblesDelProyecto);
+                if (dieron.Count != 2) siempreDos = false;
+                foreach (StoryFlag f in dieron) veces[f] = veces.TryGetValue(f, out int v) ? v + 1 : 1;
+            }
+            Check(siempreDos, "con los doce NPCs del proyecto, ganandole a todos la ruleta sale exactamente 2 veces");
+
+            // Cada uno deberia estar en 2 de cada 12 partidas (~16,7%).
+            bool parejo = true;
+            foreach (StoryFlag f in ElegiblesDelProyecto)
+            {
+                float p = (veces.TryGetValue(f, out int v) ? v : 0) / (float)partidas;
+                if (p < 0.14f || p > 0.195f) parejo = false;
+            }
+            Check(parejo, "y ninguno de los doce la da mas seguido que otro");
+        }
+
         // Una partida: le gana a 'cuantos' NPCs en un orden al azar y devuelve
         // quienes dieron la ruleta. Replica lo que hace CasinoTrainerNpc al ganar
         // (sortea y despues marca vencido).
         private static System.Collections.Generic.List<StoryFlag> JugarPartida(IBattleRng rng, int cuantos)
         {
+            return JugarPartida(rng, cuantos, Elegibles);
+        }
+
+        private static System.Collections.Generic.List<StoryFlag> JugarPartida(IBattleRng rng, int cuantos, StoryFlag[] lista)
+        {
+            StoryFlag[] Elegibles = lista;
             var story = new StoryModel();
             var orden = new System.Collections.Generic.List<StoryFlag>(Elegibles);
             for (int i = orden.Count - 1; i > 0; i--)
@@ -464,8 +514,11 @@ namespace PokeRush.EditorTools
             Check(curativos > 0f && plata > 0f, $"y el resto se reparte entre curativos ({curativos:P0}) y plata ({plata:P0})");
             Check(Mathf.Abs(pokemon + curativos + plata - 1f) < 0.001f, "y no hay gajos que no den nada");
             Check(npcs.premios.Length <= 8, "entra en los 8 gajos de la rueda");
-            Check(npcs.npcsQueLaPuedenDar != null && npcs.npcsQueLaPuedenDar.Length == Elegibles.Length,
-                  "la lista de NPCs que la dan esta completa");
+            bool listaCompleta = npcs.npcsQueLaPuedenDar != null &&
+                                 npcs.npcsQueLaPuedenDar.Length == ElegiblesDelProyecto.Length;
+            foreach (StoryFlag f in ElegiblesDelProyecto)
+                if (npcs.npcsQueLaPuedenDar == null || System.Array.IndexOf(npcs.npcsQueLaPuedenDar, f) < 0) listaCompleta = false;
+            Check(listaCompleta, "la lista de NPCs que la dan tiene a los doce que pelean");
 
             bool todosPokemon = guardia.premios.Length > 0;
             float menor = float.MaxValue, mayor = 0f;

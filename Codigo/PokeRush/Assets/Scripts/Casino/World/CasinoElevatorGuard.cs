@@ -30,29 +30,29 @@ public class CasinoElevatorGuard : CasinoNpcConCombate, IInteractable
     [Header("Textos")]
     [Tooltip("{0} = el precio.")]
     [SerializeField, TextArea(2, 4)] private string preguntaPagar =
-        "Para subir se paga: {0} monedas. Me las das?";
+        "Para subir se paga: {0} monedas. ¿Me las das?";
     [Tooltip("{0} = el precio.")]
     [SerializeField] private string opcionPagar = "Pagar {0}";
     [SerializeField] private string opcionNoPagar = "No";
     [Tooltip("{0} = el precio, {1} = lo que tiene el jugador.")]
     [SerializeField, TextArea(2, 4)] private string preguntaPelearSinPlata =
-        "Para subir son {0} monedas y tenes {1}. Si no pagas, ganame una pelea. Te animas?";
+        "Para subir son {0} monedas y tenés {1}. Si no pagás, ganame una pelea. ¿Te animás?";
     [SerializeField, TextArea(2, 4)] private string preguntaPelear =
-        "Entonces ganame una pelea y te dejo pasar gratis. Te animas?";
+        "Entonces ganame una pelea y te dejo pasar gratis. ¿Te animás?";
     [SerializeField] private string opcionPelear = "Pelear";
-    [SerializeField] private string opcionNoPelear = "Todavia no";
+    [SerializeField] private string opcionNoPelear = "Todavía no";
     [SerializeField, TextArea(2, 4)] private string mensajeRechazo =
-        "Sin pagar o ganarme, de aca no subis.";
+        "Sin pagar o ganarme, de acá no subís.";
     [SerializeField, TextArea(2, 4)] private string mensajePagado =
         "Trato hecho. El ascensor es todo tuyo.";
     [SerializeField, TextArea(2, 4)] private string mensajeVictoria =
-        "Bien jugado. Pasa... y llevate un premio de la casa.";
+        "Bien jugado. Pasá... y llevate un premio de la casa.";
     [SerializeField, TextArea(2, 4)] private string mensajeRuleta =
-        "Gira la ruleta: lo que salga, es tuyo.";
+        "Girá la ruleta: lo que salga, es tuyo.";
     [SerializeField, TextArea(2, 4)] private string mensajeDerrota =
-        "Asi no subis. Volve cuando quieras, o pagame.";
+        "Así no subís. Volvé cuando quieras, o pagame.";
     [SerializeField, TextArea(2, 4)] private string mensajeYaTienePase =
-        "Ya tenes el pase. Adelante.";
+        "Ya tenés el pase. Adelante.";
 
     public StoryFlag FlagPase => flagPase;
     public StoryFlag FlagVencido => flagVencido;

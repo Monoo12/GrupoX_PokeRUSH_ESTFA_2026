@@ -64,7 +64,7 @@ public static class CasinoInteractionBuilder
             // CasinoElevatorGuard. Antes pedia tener 500 juntados.
             Requisito = CasinoRequisitoTipo.Flag,
             FlagRequerido = StoryFlag.Casino_Piso1_PaseAscensor,
-            MensajeFaltaObjetivo = "El guardia no te deja subir. Habla con el: se le paga o se le gana.",
+            MensajeFaltaObjetivo = "El guardia no te deja subir. Hablá con él: se le paga o se le gana.",
             OtorgaFlag = StoryFlag.Casino_Piso1_Superado
         },
         new Piso

@@ -34,13 +34,13 @@ public static class PrizeGranter
                 // siente perdido.
                 int compensacion = Mathf.Max(0, premio.moneyIfTeamFull);
                 if (compensacion > 0) jugador.AddMoney(compensacion);
-                partes.Add($"¡Salio {nombre}! Tu equipo esta lleno: te llevas {compensacion} monedas en su lugar.");
+                partes.Add($"¡Salió {nombre}! Tu equipo está lleno: te llevás {compensacion} monedas en su lugar.");
                 compensado = true;
             }
             else
             {
                 jugador.Team.Add(new PokenModel(premio.poken, Mathf.Max(1, premio.pokenLevel)));
-                partes.Add($"¡{nombre} se unio a tu equipo!");
+                partes.Add($"¡{nombre} se unió a tu equipo!");
             }
         }
 

@@ -10,13 +10,16 @@ using UnityEngine.Tilemaps;
 // Pone los personajes de los pisos 1 a 3 del casino.
 //
 //   Piso 1: el guardia del ascensor (se le paga o se le gana; ganarle da la
-//           ruleta de Pokemon), el apostador y el malabarista (pelean una vez),
-//           la enfermera, un anciano que cuenta historia y ocho personas
-//           jugando a las tragaperras.
-//   Piso 2: la joven rica y la modelo (pelean una vez), la enfermera y una
-//           damisela que cuenta historia.
-//   Piso 3: el macarra y el guay (pelean una vez), la enfermera y un empresario
-//           que cuenta historia.
+//           ruleta de Pokemon), cuatro que pelean una vez (apostador,
+//           malabarista, motorista y pokemaniaco), la enfermera, un anciano que
+//           cuenta historia y ocho personas jugando a las tragaperras.
+//   Piso 2: cuatro que pelean una vez (joven rica, modelo, medium y ladron), la
+//           enfermera y una damisela que cuenta historia.
+//   Piso 3: cuatro que pelean una vez (macarra, guay, veterano y karateka), la
+//           enfermera y un empresario que cuenta historia.
+//
+// Los textos que ve el jugador van con tildes y enies: la caja de dialogo usa
+// la fuente legacy de Unity, que las dibuja bien.
 //
 // Los que pelean una vez pueden dar la ruleta de premios de los NPCs (maximo dos
 // por partida, ver CasinoRuletaDeNpcs). El ascensor del piso 1 pasa a pedir el
@@ -63,7 +66,13 @@ public static class CasinoNpcBuilder
         StoryFlag.Casino_JovenRicaVencida,
         StoryFlag.Casino_ModeloVencida,
         StoryFlag.Casino_MacarraVencido,
-        StoryFlag.Casino_GuayVencido
+        StoryFlag.Casino_GuayVencido,
+        StoryFlag.Casino_MotoristaVencido,
+        StoryFlag.Casino_PokemaniacoVencido,
+        StoryFlag.Casino_MediumVencido,
+        StoryFlag.Casino_LadronVencido,
+        StoryFlag.Casino_VeteranoVencido,
+        StoryFlag.Casino_KaratekaVencido
     };
 
     // Gente jugando a las tragaperras del piso 1: cada uno en un taburete,
@@ -72,21 +81,21 @@ public static class CasinoNpcBuilder
     private static readonly (string nombre, Vector2 celda, string hoja, int mira, string hablante, string linea)[] Jugadores =
     {
         ("JugadorTragaperras1", new Vector2(-14.5f, 7.5f), "gordo", Derecha, "JUGADOR",
-            "Shh... esta maquina esta por pagar. La siento."),
+            "Shh... esta máquina está por pagar. La siento."),
         ("JugadorTragaperras2", new Vector2(-3.5f, 7.5f), "mujer1", Izquierda, "JUGADORA",
-            "Llevo tres dias en esta silla. Ya casi sale."),
+            "Llevo tres días en esta silla. Ya casi sale."),
         ("JugadorTragaperras3", new Vector2(15.5f, 7.5f), "guiri", Izquierda, "TURISTA",
-            "Vine de vacaciones y no sali nunca del casino."),
+            "Vine de vacaciones y no salí nunca del casino."),
         ("JugadorTragaperras4", new Vector2(-9.5f, 12.5f), "anciana2", Izquierda, "ABUELA",
             "Si sale triple, invito yo los caramelos."),
         ("JugadorTragaperras5", new Vector2(10.5f, 12.5f), "hombre1", Derecha, "JUGADOR",
-            "No me mires, que me cortas la racha."),
+            "No me mires, que me cortás la racha."),
         ("JugadorTragaperras6", new Vector2(-14.5f, 17.5f), "empresariaa", Derecha, "EMPRESARIA",
-            "Esto es una inversion, no un vicio."),
+            "Esto es una inversión, no un vicio."),
         ("JugadorTragaperras7", new Vector2(4.5f, 17.5f), "mujer2", Derecha, "JUGADORA",
-            "Perdi todo... pero la proxima sale, lo presiento."),
-        ("JugadorTragaperras8", new Vector2(15.5f, 17.5f), "nobla", Izquierda, "SENIORA",
-            "Dicen que la del fondo esta arreglada. Yo igual juego.")
+            "Perdí todo... pero la próxima sale, lo presiento."),
+        ("JugadorTragaperras8", new Vector2(15.5f, 17.5f), "nobla", Izquierda, "SEÑORA",
+            "Dicen que la del fondo está arreglada. Yo igual juego.")
     };
 
     private static readonly Dictionary<string, Sprite[]> _hojas = new Dictionary<string, Sprite[]>();
@@ -129,23 +138,35 @@ public static class CasinoNpcBuilder
             "MACARRA", "Trainer", ("0215_Sneasel", 17), ("0551_Sandile", 17));
         EnemyDefinition guay = Enemigo("GuayCasino", "Guay", 220, StoryFlag.Casino_GuayVencido,
             "GUAY", "Trainer", ("0207_Gligar", 17), ("0227_Skarmory", 18), ("0359_Absol", 18));
+        EnemyDefinition motorista = Enemigo("MotoristaCasino", "Motorista", 110, StoryFlag.Casino_MotoristaVencido,
+            "MOTORISTA", "Trainer", ("0240_Magby", 13), ("0111_Rhyhorn", 14));
+        EnemyDefinition pokemaniaco = Enemigo("PokemaniacoCasino", "Pokemaníaco", 120, StoryFlag.Casino_PokemaniacoVencido,
+            "POKEMANIACO", "Trainer", ("0239_Elekid", 13), ("0304_Aron", 14));
+        EnemyDefinition medium = Enemigo("MediumCasino", "Médium", 160, StoryFlag.Casino_MediumVencido,
+            "MEDIUM", "Trainer", ("0355_Duskull", 16), ("0092_Gastly", 16));
+        EnemyDefinition ladron = Enemigo("LadronCasino", "Ladrón", 170, StoryFlag.Casino_LadronVencido,
+            "LADRON", "Trainer", ("0624_Pawniard", 16), ("0303_Mawile", 17));
+        EnemyDefinition veterano = Enemigo("VeteranoCasino", "Veterano", 200, StoryFlag.Casino_VeteranoVencido,
+            "VETERANO", "Trainer", ("0232_Donphan", 18), ("0305_Lairon", 18));
+        EnemyDefinition karateka = Enemigo("KaratekaCasino", "Karateka", 210, StoryFlag.Casino_KaratekaVencido,
+            "KARATEKA", "Trainer", ("0057_Primeape", 18), ("0447_Riolu", 18));
 
         // ---------- ruletas y dialogos (solo si no existen) ----------
         CasinoPrizeTable ruletaNpcs = TablaDeLosNpcs();
         CasinoPrizeTable ruletaGuardia = TablaDelGuardia();
 
         DialogueDefinition anciano = Dialogo("Historia_Piso1_Anciano", "ANCIANO",
-            "Llevo cuarenta anios viniendo a este casino.",
-            "Dicen que el duenio nunca baja de la oficina del ultimo piso.",
-            "Si llegas hasta arriba, despues contame como es.");
+            "Llevo cuarenta años viniendo a este casino.",
+            "Dicen que el dueño nunca baja de la oficina del último piso.",
+            "Si llegás hasta arriba, después contame cómo es.");
         DialogueDefinition damisela = Dialogo("Historia_Piso2_Damisela", "DAMISELA",
             "La ruleta de este piso no es lo que parece.",
-            "Vi gente entrar con todo su equipo y salir sin un solo Pokemon.",
-            "Tene cuidado con lo que apostas.");
+            "Vi gente entrar con todo su equipo y salir sin un solo Pokémon.",
+            "Tené cuidado con lo que apostás.");
         DialogueDefinition empresario = Dialogo("Historia_Piso3_Empresario", "EMPRESARIO",
-            "El blackjack es el unico juego donde la casa no siempre gana.",
+            "El blackjack es el único juego donde la casa no siempre gana.",
             "Por eso los de arriba vigilan cada mesa.",
-            "Si ganas, hacelo sin llamar la atencion.");
+            "Si ganás, hacelo sin llamar la atención.");
 
         AssetDatabase.SaveAssets();
 
@@ -159,18 +180,34 @@ public static class CasinoNpcBuilder
                 var a = Personaje(raiz, "ApostadorCasino", new Vector2(-3.5f, 12.5f), "Lider 1 bw", Izquierda);
                 ConfigurarEntrenador(a.AddComponent<CasinoTrainerNpc>(), "APOSTADOR", apostador,
                     StoryFlag.Casino_ApostadorVencido, ruletaNpcs,
-                    "Eh, vos. Me quede sin fichas. Te juego los ultimos 100 a los Pokemon. Dale?",
-                    "Dale", "Paso", "Ma si. Andate.",
-                    "Tomalos... 100. Me voy a la maquina de al lado.",
+                    "Eh, vos. Me quedé sin fichas. Te juego los últimos 100 a los Pokémon. ¿Dale?",
+                    "Dale", "Paso", "Ma sí. Andate.",
+                    "Tomalos... 100. Me voy a la máquina de al lado.",
                     "Ya me dejaste seco. Andate.");
 
                 var m = Personaje(raiz, "MalabaristaCasino", new Vector2(9.5f, 15.5f), "malabarista", Abajo);
                 ConfigurarEntrenador(m.AddComponent<CasinoTrainerNpc>(), "MALABARISTA", malabarista,
                     StoryFlag.Casino_MalabaristaVencido, ruletaNpcs,
-                    "Mientras las maquinas giran, yo hago malabares con Pokemon. Te animas a una pelea?",
-                    "Pelear", "Ahora no", "Otra vez sera.",
-                    "Se me cayo todo... Bien ahi.",
+                    "Mientras las máquinas giran, yo hago malabares con Pokémon. ¿Te animás a una pelea?",
+                    "Pelear", "Ahora no", "Otra vez será.",
+                    "Se me cayó todo... Bien ahí.",
                     "Ya me ganaste. Sigo practicando.");
+
+                var mo2 = Personaje(raiz, "MotoristaCasino", new Vector2(-10.5f, 4.5f), "motorista", Abajo);
+                ConfigurarEntrenador(mo2.AddComponent<CasinoTrainerNpc>(), "MOTORISTA", motorista,
+                    StoryFlag.Casino_MotoristaVencido, ruletaNpcs,
+                    "¿Viste la moto en la puerta? La gané en estas máquinas. ¿Peleamos?",
+                    "Pelear", "Ahora no", "Otra vez será.",
+                    "Me ganaste... Voy a tener que vender la moto.",
+                    "Ya me ganaste. Voy a buscar la moto.");
+
+                var pk = Personaje(raiz, "PokemaniacoCasino", new Vector2(-9.5f, 15.5f), "pokemaniaco", Abajo);
+                ConfigurarEntrenador(pk.AddComponent<CasinoTrainerNpc>(), "POKEMANÍACO", pokemaniaco,
+                    StoryFlag.Casino_PokemaniacoVencido, ruletaNpcs,
+                    "¡Colecciono Pokémon raros! ¿Querés ver mi colección en combate?",
+                    "¡Dale!", "No", "Te lo perdés.",
+                    "Mi colección... ¡nooo!",
+                    "Mi colección necesita un descanso.");
 
                 Personaje(raiz, "EnfermeraCasino", new Vector2(4.5f, 12.5f), "enfermera", Derecha)
                     .AddComponent<CasinoNurseInteractable>();
@@ -193,18 +230,34 @@ public static class CasinoNpcBuilder
                 var j = Personaje(raiz, "JovenRicaCasino", new Vector2(-10.5f, 13.5f), "jovenrica", Abajo);
                 ConfigurarEntrenador(j.AddComponent<CasinoTrainerNpc>(), "JOVEN RICA", jovenRica,
                     StoryFlag.Casino_JovenRicaVencida, ruletaNpcs,
-                    "Las fichas me aburren. Una pelea de verdad me vendria bien. Aceptas?",
-                    "Acepto", "No", "Que decepcion.",
-                    "Que forma tan poco elegante de ganar... pero ganaste.",
-                    "No insistas, ya perdi una vez.");
+                    "Las fichas me aburren. Una pelea de verdad me vendría bien. ¿Aceptás?",
+                    "Acepto", "No", "Qué decepción.",
+                    "Qué forma tan poco elegante de ganar... pero ganaste.",
+                    "No insistas, ya perdí una vez.");
 
                 var mo = Personaje(raiz, "ModeloCasino", new Vector2(-5.5f, 6.5f), "modelo", Abajo);
                 ConfigurarEntrenador(mo.AddComponent<CasinoTrainerNpc>(), "MODELO", modelo,
                     StoryFlag.Casino_ModeloVencida, ruletaNpcs,
-                    "Si me ganas, te dejo sacarte una foto conmigo. Peleamos?",
-                    "Peleamos", "Paso", "Vos te lo perdes.",
-                    "Hoy no era mi dia.",
+                    "Si me ganás, te dejo sacarte una foto conmigo. ¿Peleamos?",
+                    "Peleamos", "Paso", "Vos te lo perdés.",
+                    "Hoy no era mi día.",
                     "Ya tuviste tu foto. Chau.");
+
+                var me = Personaje(raiz, "MediumCasino", new Vector2(-10.5f, 18.5f), "medium", Abajo);
+                ConfigurarEntrenador(me.AddComponent<CasinoTrainerNpc>(), "MÉDIUM", medium,
+                    StoryFlag.Casino_MediumVencido, ruletaNpcs,
+                    "Las cartas me dijeron que ibas a venir. También dicen que vas a perder. ¿Probamos?",
+                    "Probemos", "No", "Ya lo sabía.",
+                    "Esto no estaba en las cartas.",
+                    "Las cartas no me hablan desde que me ganaste.");
+
+                var la = Personaje(raiz, "LadronCasino", new Vector2(14.5f, 10.5f), "ladron", Izquierda);
+                ConfigurarEntrenador(la.AddComponent<CasinoTrainerNpc>(), "LADRÓN", ladron,
+                    StoryFlag.Casino_LadronVencido, ruletaNpcs,
+                    "Shh... nadie vio nada. Si me ganás, no te toco las fichas. ¿Trato?",
+                    "Trato", "Ni loco", "Cuidá tus bolsillos.",
+                    "Está bien, está bien. Tus fichas están a salvo.",
+                    "Yo no fui. Ni me mires.");
 
                 Personaje(raiz, "EnfermeraCasino", new Vector2(-3.5f, 4.5f), "enfermera", Abajo)
                     .AddComponent<CasinoNurseInteractable>();
@@ -218,18 +271,34 @@ public static class CasinoNpcBuilder
                 var ma = Personaje(raiz, "MacarraCasino", new Vector2(4.5f, 10.5f), "macarra", Izquierda);
                 ConfigurarEntrenador(ma.AddComponent<CasinoTrainerNpc>(), "MACARRA", macarra,
                     StoryFlag.Casino_MacarraVencido, ruletaNpcs,
-                    "Este piso es mio. Si queres pasear por aca, primero me ganas.",
-                    "Pelear", "Me voy", "Eso, anda.",
+                    "Este piso es mío. Si querés pasear por acá, primero me ganás.",
+                    "Pelear", "Me voy", "Eso, andá.",
                     "Bueno, bueno... el piso es tuyo.",
-                    "Ya esta, ya esta. Anda nomas.");
+                    "Ya está, ya está. Andá nomás.");
 
                 var gu = Personaje(raiz, "GuayCasino", new Vector2(10.5f, 5.5f), "guay", Abajo);
                 ConfigurarEntrenador(gu.AddComponent<CasinoTrainerNpc>(), "GUAY", guay,
                     StoryFlag.Casino_GuayVencido, ruletaNpcs,
-                    "Llegar al tercer piso no es suerte. Mostrame que sabes pelear.",
-                    "Pelear", "Todavia no", "Cuando quieras.",
-                    "Tenes nivel. Nos vemos arriba.",
+                    "Llegar al tercer piso no es suerte. Mostrame que sabés pelear.",
+                    "Pelear", "Todavía no", "Cuando quieras.",
+                    "Tenés nivel. Nos vemos arriba.",
                     "Ya me ganaste. Respeto.");
+
+                var ve = Personaje(raiz, "VeteranoCasino", new Vector2(-13.5f, 12.5f), "veterano", Abajo);
+                ConfigurarEntrenador(ve.AddComponent<CasinoTrainerNpc>(), "VETERANO", veterano,
+                    StoryFlag.Casino_VeteranoVencido, ruletaNpcs,
+                    "Llevo treinta años en este casino. Vi caer a muchos como vos. ¿Te animás?",
+                    "Me animo", "Todavía no", "Sabia decisión.",
+                    "Hacía años que no perdía así. Bien jugado.",
+                    "Ya me ganaste, pibe. Andá para arriba.");
+
+                var ka = Personaje(raiz, "KaratekaCasino", new Vector2(6.5f, 4.5f), "luchador", Abajo);
+                ConfigurarEntrenador(ka.AddComponent<CasinoTrainerNpc>(), "KARATEKA", karateka,
+                    StoryFlag.Casino_KaratekaVencido, ruletaNpcs,
+                    "En el tercer piso no se juega: se pelea. ¡En guardia!",
+                    "¡En guardia!", "Paso", "Volvé cuando estés listo.",
+                    "Tu técnica es superior. Me inclino.",
+                    "Voy a seguir entrenando.");
 
                 Personaje(raiz, "EnfermeraCasino", new Vector2(-5.5f, 4.5f), "enfermera", Abajo)
                     .AddComponent<CasinoNurseInteractable>();
@@ -338,7 +407,7 @@ public static class CasinoNpcBuilder
         so.FindProperty("requisito").enumValueIndex = (int)CasinoRequisitoTipo.Flag;
         so.FindProperty("flagRequerido").enumValueIndex = (int)StoryFlag.Casino_Piso1_PaseAscensor;
         so.FindProperty("mensajeFaltaObjetivo").stringValue =
-            "El guardia no te deja subir. Habla con el: se le paga o se le gana.";
+            "El guardia no te deja subir. Hablá con él: se le paga o se le gana.";
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 
@@ -534,7 +603,7 @@ public static class CasinoNpcBuilder
             return new EnemyTeamEntry { species = especie, level = e.nivel };
         }).ToArray();
         def.aiProfile = AssetDatabase.LoadAssetAtPath<AIProfileDefinition>($"{PerfilesIA}{perfil}.asset");
-        def.battleFrontSprite = SpriteSimple($"{Retratos}{retrato}.png");
+        def.battleFrontSprite = SpriteRetrato($"{Retratos}{retrato}.png");
 
         if (nueva) AssetDatabase.CreateAsset(def, path);
         EditorUtility.SetDirty(def);
@@ -565,12 +634,12 @@ public static class CasinoNpcBuilder
             tabla.premios = new[]
             {
                 PremioPokemon("0025_Pikachu", 15, 13, "icon_pokeball", 300),
-                PremioObjeto("Pocion", "Pocion", "Pociones", "una", 3, 17, "icon_pocion"),
+                PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 17, "icon_pocion"),
                 PremioPlata(150, 17),
                 PremioPokemon("0133_Eevee", 15, 12, "icon_greatball", 300),
-                PremioObjeto("SuperPocion", "Superpocion", "Superpociones", "una", 2, 15, "icon_superpocion"),
+                PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 15, "icon_superpocion"),
                 PremioPokemon("0175_Togepi", 15, 10, "icon_pokeball", 300),
-                PremioObjeto("HiperPocion", "Hiperpocion", "Hiperpociones", "una", 1, 8, "icon_hiperpocion"),
+                PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 8, "icon_hiperpocion"),
                 PremioPlata(400, 8)
             };
             AssetDatabase.CreateAsset(tabla, path);
@@ -658,6 +727,36 @@ public static class CasinoNpcBuilder
     }
 
     // ---------- sprites ----------
+
+    // Los retratos de rival (Graphics/Trainers) se usan en la caja de dialogo y
+    // en el combate. Vienen del pack con importaciones sueltas: algunos en modo
+    // Multiple con el recorte automatico (MALABARISTA quedo partido en 4 y el
+    // retrato mostraba un pedazo agrandado) y todos con filtro bilinear y
+    // compresion, que los deja borrosos. Se fuerza imagen entera, Point y sin
+    // compresion; solo se reimporta si algo no coincide.
+    private static Sprite SpriteRetrato(string path)
+    {
+        var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+        if (importer == null) { Debug.LogError($"[CasinoNPC] No existe {path}."); return null; }
+
+        bool bien = importer.textureType == TextureImporterType.Sprite &&
+                    importer.spriteImportMode == SpriteImportMode.Single &&
+                    importer.filterMode == FilterMode.Point &&
+                    importer.textureCompression == TextureImporterCompression.Uncompressed &&
+                    !importer.mipmapEnabled;
+        if (!bien)
+        {
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.mipmapEnabled = false;
+            importer.alphaIsTransparency = true;
+            importer.SaveAndReimport();
+            Debug.Log($"[CasinoNPC] Retrato reimportado entero y sin filtro: {path}");
+        }
+        return AssetDatabase.LoadAssetAtPath<Sprite>(path);
+    }
 
     private static Sprite SpriteSimple(string path)
     {

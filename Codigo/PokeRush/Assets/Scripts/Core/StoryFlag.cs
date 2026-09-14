@@ -63,5 +63,15 @@ public enum StoryFlag
     // Ruleta de premios por ganarle a un NPC: un flag por uso. Hay dos porque
     // es el maximo por partida (ver CasinoRuletaDeNpcs).
     Casino_RuletaNpc_1,
-    Casino_RuletaNpc_2
+    Casino_RuletaNpc_2,
+
+    // Casino: la segunda tanda de NPCs que pelean una vez (dos por piso). Van al
+    // final porque las escenas guardan el flag de cada NPC como NUMERO: meterlos
+    // arriba correria a todos los que ya estan puestos.
+    Casino_MotoristaVencido,
+    Casino_PokemaniacoVencido,
+    Casino_MediumVencido,
+    Casino_LadronVencido,
+    Casino_VeteranoVencido,
+    Casino_KaratekaVencido
 }
