@@ -60,8 +60,8 @@ public enum StoryFlag
     Casino_MacarraVencido,
     Casino_GuayVencido,
 
-    // Ruleta de premios por ganarle a un NPC: un flag por uso. Hay dos porque
-    // es el maximo por partida (ver CasinoRuletaDeNpcs).
+    // Ruleta de premios por ganarle a un NPC: un flag por uso, hasta el maximo
+    // por partida (ver CasinoRuletaDeNpcs). El 3 y el 4 estan al final.
     Casino_RuletaNpc_1,
     Casino_RuletaNpc_2,
 
@@ -73,5 +73,10 @@ public enum StoryFlag
     Casino_MediumVencido,
     Casino_LadronVencido,
     Casino_VeteranoVencido,
-    Casino_KaratekaVencido
+    Casino_KaratekaVencido,
+
+    // Ruleta de los NPCs: los usos 3 y 4, de cuando el tope paso de dos a
+    // cuatro. Al final por lo mismo que la tanda de arriba.
+    Casino_RuletaNpc_3,
+    Casino_RuletaNpc_4
 }

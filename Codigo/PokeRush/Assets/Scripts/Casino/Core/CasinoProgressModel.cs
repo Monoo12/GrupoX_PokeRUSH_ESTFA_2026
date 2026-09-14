@@ -21,7 +21,7 @@ public class CasinoProgressModel
     public bool GuardiaVencido => Tiene(StoryFlag.Casino_GuardiaVencido);
     public bool Piso1Superado => Tiene(StoryFlag.Casino_Piso1_Superado);
 
-    // La ruleta de premios que dan los NPCs al ganarles (maximo dos por partida).
+    // La ruleta de premios que dan los NPCs al ganarles (una cada dos combates, hasta cuatro).
     public int RuletasDeNpcUsadas => CasinoRuletaDeNpcs.Usadas(_story);
 
     // Piso 2 (ruleta): el objetivo lo marca la propia ruleta al cumplirse.

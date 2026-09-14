@@ -34,9 +34,9 @@ namespace PokeRush.EditorTools
             TestDevolucionDeLaMaquinaBasica();
 
             TestRuletaDeNpcsConLosDoceDelProyecto();
-            TestRuletaDeNpcsSaleDosVecesSiSeLesGanaATodos();
+            TestRuletaDeNpcsSaleUnaCadaDosCombates();
             TestRuletaDeNpcsNoSonSiempreLosMismos();
-            TestRuletaDeNpcsNuncaPasaDeDos();
+            TestRuletaDeNpcsNuncaPasaDeCuatro();
             TestRuletaDeNpcsSoloLosDeLaLista();
             TestPremioDePlata();
             TestPremioPokemonSeSumaAlEquipo();
@@ -317,8 +317,8 @@ namespace PokeRush.EditorTools
         };
 
         // Los doce que pelean una vez en los pisos 1 a 3 (los que pone
-        // CasinoNpcBuilder). Las pruebas de la regla usan los primeros seis; esta
-        // lista es para comprobar que con el proyecto real sigue valiendo.
+        // CasinoNpcBuilder). Las pruebas de la regla usan esta lista; la de seis
+        // de arriba queda para los casos que no dependen de cuantos son.
         private static readonly StoryFlag[] ElegiblesDelProyecto =
         {
             StoryFlag.Casino_ApostadorVencido,
@@ -339,110 +339,146 @@ namespace PokeRush.EditorTools
         {
             var rng = new SeededRng(123);
             var veces = new System.Collections.Generic.Dictionary<StoryFlag, int>();
-            bool siempreDos = true;
+            bool siempreCuatro = true;
             const int partidas = 6000;
             for (int partida = 0; partida < partidas; partida++)
             {
-                var dieron = JugarPartida(rng, ElegiblesDelProyecto.Length, ElegiblesDelProyecto);
-                if (dieron.Count != 2) siempreDos = false;
+                var dieron = JugarPartida(rng, ElegiblesDelProyecto.Length, ElegiblesDelProyecto, mezclar: true);
+                if (dieron.Count != CasinoRuletaDeNpcs.MaximoPorPartida) siempreCuatro = false;
                 foreach (StoryFlag f in dieron) veces[f] = veces.TryGetValue(f, out int v) ? v + 1 : 1;
             }
-            Check(siempreDos, "con los doce NPCs del proyecto, ganandole a todos la ruleta sale exactamente 2 veces");
+            Check(siempreCuatro, "con los doce NPCs del proyecto, ganandole a todos la ruleta sale exactamente 4 veces");
 
-            // Cada uno deberia estar en 2 de cada 12 partidas (~16,7%).
+            // Peleando en cualquier orden, cada uno deberia estar en 4 de cada 12
+            // partidas (~33%).
             bool parejo = true;
             foreach (StoryFlag f in ElegiblesDelProyecto)
             {
                 float p = (veces.TryGetValue(f, out int v) ? v : 0) / (float)partidas;
-                if (p < 0.14f || p > 0.195f) parejo = false;
+                if (p < 0.30f || p > 0.37f) parejo = false;
             }
             Check(parejo, "y ninguno de los doce la da mas seguido que otro");
         }
 
-        // Una partida: le gana a 'cuantos' NPCs en un orden al azar y devuelve
-        // quienes dieron la ruleta. Replica lo que hace CasinoTrainerNpc al ganar
-        // (sortea y despues marca vencido).
-        private static System.Collections.Generic.List<StoryFlag> JugarPartida(IBattleRng rng, int cuantos)
+        // Una partida: le gana a los primeros 'cuantos' NPCs de la lista (en ese
+        // orden o mezclados) y devuelve quienes dieron la ruleta. Replica lo que
+        // hace CasinoTrainerNpc al ganar (sortea y despues marca vencido).
+        private static System.Collections.Generic.List<StoryFlag> JugarPartida(IBattleRng rng, int cuantos,
+            StoryFlag[] lista, bool mezclar)
         {
-            return JugarPartida(rng, cuantos, Elegibles);
-        }
-
-        private static System.Collections.Generic.List<StoryFlag> JugarPartida(IBattleRng rng, int cuantos, StoryFlag[] lista)
-        {
-            StoryFlag[] Elegibles = lista;
             var story = new StoryModel();
-            var orden = new System.Collections.Generic.List<StoryFlag>(Elegibles);
-            for (int i = orden.Count - 1; i > 0; i--)
+            var orden = new System.Collections.Generic.List<StoryFlag>(lista);
+            if (mezclar)
             {
-                int j = rng.Range(0, i + 1);
-                StoryFlag tmp = orden[i]; orden[i] = orden[j]; orden[j] = tmp;
+                for (int i = orden.Count - 1; i > 0; i--)
+                {
+                    int j = rng.Range(0, i + 1);
+                    StoryFlag tmp = orden[i]; orden[i] = orden[j]; orden[j] = tmp;
+                }
             }
 
             var dieron = new System.Collections.Generic.List<StoryFlag>();
             for (int i = 0; i < cuantos && i < orden.Count; i++)
             {
-                if (CasinoRuletaDeNpcs.Sortear(story, Elegibles, orden[i], rng.Value()))
+                if (CasinoRuletaDeNpcs.Sortear(story, lista, orden[i], rng.Value()))
                     dieron.Add(orden[i]);
                 story.ActivateFlag(orden[i]);
             }
             return dieron;
         }
 
-        private static void TestRuletaDeNpcsSaleDosVecesSiSeLesGanaATodos()
+        // Lo pedido: una cada dos combates. Despues de cada combate ganado se
+        // mira cuantas salieron: al cerrar cada par, una por par; en el medio,
+        // como mucho la de ese par. Y nunca mas de cuatro.
+        private static void TestRuletaDeNpcsSaleUnaCadaDosCombates()
         {
             var rng = new SeededRng(31);
-            bool siempreDos = true;
+            int maximo = CasinoRuletaDeNpcs.MaximoPorPartida;
+            bool cadaDos = true;
             for (int partida = 0; partida < 2000; partida++)
-                if (JugarPartida(rng, Elegibles.Length).Count != 2) siempreDos = false;
+            {
+                var story = new StoryModel();
+                var orden = new System.Collections.Generic.List<StoryFlag>(ElegiblesDelProyecto);
+                for (int i = orden.Count - 1; i > 0; i--)
+                {
+                    int j = rng.Range(0, i + 1);
+                    StoryFlag tmp = orden[i]; orden[i] = orden[j]; orden[j] = tmp;
+                }
 
-            Check(siempreDos, "ganandole a todos los NPCs, la ruleta sale exactamente 2 veces por partida");
+                for (int i = 0; i < orden.Count; i++)
+                {
+                    CasinoRuletaDeNpcs.Sortear(story, ElegiblesDelProyecto, orden[i], rng.Value());
+                    story.ActivateFlag(orden[i]);
+
+                    int ganados = i + 1;
+                    int usadas = CasinoRuletaDeNpcs.Usadas(story);
+                    if (usadas < Mathf.Min(ganados / 2, maximo) || usadas > Mathf.Min((ganados + 1) / 2, maximo))
+                        cadaDos = false;
+                }
+            }
+            Check(cadaDos, "sale una ruleta cada dos combates ganados, hasta 4 por partida");
         }
 
+        // Aunque el jugador pelee SIEMPRE en el mismo orden, la ruleta no la
+        // dan siempre los mismos: en cada par la puede dar cualquiera de los dos.
         private static void TestRuletaDeNpcsNoSonSiempreLosMismos()
         {
             var rng = new SeededRng(77);
             var veces = new System.Collections.Generic.Dictionary<StoryFlag, int>();
-            var pares = new System.Collections.Generic.HashSet<string>();
-            const int partidas = 6000;
+            var combinaciones = new System.Collections.Generic.HashSet<string>();
+            const int partidas = 4000;
 
             for (int partida = 0; partida < partidas; partida++)
             {
-                var dieron = JugarPartida(rng, Elegibles.Length);
+                var dieron = JugarPartida(rng, ElegiblesDelProyecto.Length, ElegiblesDelProyecto, mezclar: false);
                 foreach (StoryFlag f in dieron) veces[f] = veces.TryGetValue(f, out int v) ? v + 1 : 1;
-                dieron.Sort();
-                pares.Add(string.Join("+", dieron));
+                combinaciones.Add(string.Join("+", dieron));
             }
 
-            // Cada NPC deberia estar en 2 de cada 6 partidas.
+            // Los ocho primeros del orden caen en un par con ruleta: ~50% cada uno.
             bool parejo = true;
-            foreach (StoryFlag f in Elegibles)
+            for (int i = 0; i < 8; i++)
             {
-                float proporcion = (veces.TryGetValue(f, out int v) ? v : 0) / (float)partidas;
-                if (proporcion < 0.30f || proporcion > 0.37f) parejo = false;
+                float proporcion = (veces.TryGetValue(ElegiblesDelProyecto[i], out int v) ? v : 0) / (float)partidas;
+                if (proporcion < 0.46f || proporcion > 0.54f) parejo = false;
             }
-            Check(parejo, "cada NPC da la ruleta en ~1 de cada 3 partidas: no hay favoritos");
-            Check(pares.Count == 15, $"salen los 15 pares posibles de NPCs a lo largo de las partidas (salieron {pares.Count})");
+            bool despuesNoSale = true;
+            for (int i = 8; i < ElegiblesDelProyecto.Length; i++)
+                if (veces.ContainsKey(ElegiblesDelProyecto[i])) despuesNoSale = false;
+
+            Check(parejo, "con el mismo orden de peleas, cada NPC de los cuatro primeros pares la da ~1 de cada 2 partidas");
+            Check(despuesNoSale, "del noveno combate en adelante ya no sale (tope de 4)");
+            Check(combinaciones.Count == 16, $"salen las 16 combinaciones posibles (salieron {combinaciones.Count})");
         }
 
-        private static void TestRuletaDeNpcsNuncaPasaDeDos()
+        private static void TestRuletaDeNpcsNuncaPasaDeCuatro()
         {
             var rng = new SeededRng(5);
             bool nuncaMas = true;
             for (int partida = 0; partida < 1000; partida++)
-                for (int cuantos = 0; cuantos <= Elegibles.Length; cuantos++)
-                    if (JugarPartida(rng, cuantos).Count > 2) nuncaMas = false;
-            Check(nuncaMas, "venza a cuantos venza, la ruleta nunca sale mas de 2 veces");
+                for (int cuantos = 0; cuantos <= ElegiblesDelProyecto.Length; cuantos++)
+                    if (JugarPartida(rng, cuantos, ElegiblesDelProyecto, mezclar: true).Count > CasinoRuletaDeNpcs.MaximoPorPartida)
+                        nuncaMas = false;
+            Check(nuncaMas, "venza a cuantos venza, la ruleta nunca sale mas de 4 veces");
 
             var story = new StoryModel();
-            story.ActivateFlag(StoryFlag.Casino_RuletaNpc_1);
-            story.ActivateFlag(StoryFlag.Casino_RuletaNpc_2);
-            Check(CasinoRuletaDeNpcs.Probabilidad(story, Elegibles, Elegibles[0]) == 0f,
-                  "con las dos ruletas usadas, la probabilidad es 0");
+            foreach (StoryFlag uso in CasinoRuletaDeNpcs.FlagsDeUso) story.ActivateFlag(uso);
+            Check(CasinoRuletaDeNpcs.Probabilidad(story, ElegiblesDelProyecto, ElegiblesDelProyecto[0]) == 0f,
+                  "con las cuatro ruletas usadas, la probabilidad es 0");
 
-            // Ganandole solo a uno, con dos ruletas y seis NPCs: 2/6.
+            // El primer combate: 1/2. El segundo: seguro si el primero no la dio,
+            // nada si la dio.
             var nueva = new StoryModel();
-            float p = CasinoRuletaDeNpcs.Probabilidad(nueva, Elegibles, Elegibles[3]);
-            Check(Mathf.Abs(p - 2f / 6f) < 0.001f, $"al primer NPC le toca con 2/6 ({p:0.000})");
+            float p = CasinoRuletaDeNpcs.Probabilidad(nueva, ElegiblesDelProyecto, ElegiblesDelProyecto[3]);
+            Check(Mathf.Abs(p - 0.5f) < 0.001f, $"al primer NPC le toca con 1/2 ({p:0.000})");
+
+            nueva.ActivateFlag(ElegiblesDelProyecto[3]);
+            Check(CasinoRuletaDeNpcs.Probabilidad(nueva, ElegiblesDelProyecto, ElegiblesDelProyecto[5]) == 1f,
+                  "si el primero del par no la dio, al segundo le toca seguro");
+
+            nueva.ActivateFlag(StoryFlag.Casino_RuletaNpc_1);
+            Check(CasinoRuletaDeNpcs.Probabilidad(nueva, ElegiblesDelProyecto, ElegiblesDelProyecto[5]) == 0f,
+                  "si el primero del par la dio, el segundo no");
         }
 
         private static void TestRuletaDeNpcsSoloLosDeLaLista()

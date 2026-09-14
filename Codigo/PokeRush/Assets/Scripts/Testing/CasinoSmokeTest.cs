@@ -550,10 +550,9 @@ public class CasinoSmokeTest : MonoBehaviour
         Menus.CloseAll();
         yield return null;
 
-        // Se fuerza que le toque: todos los demas de la lista ya vencidos y las
-        // dos ruletas sin usar -> k/m = 2/1.
-        historia.ActiveFlags.Remove(StoryFlag.Casino_RuletaNpc_1);
-        historia.ActiveFlags.Remove(StoryFlag.Casino_RuletaNpc_2);
+        // Se fuerza que le toque: todos los demas de la lista ya vencidos y
+        // ninguna ruleta usada -> es el ultimo combate y le deben las cuatro.
+        foreach (StoryFlag uso in CasinoRuletaDeNpcs.FlagsDeUso) historia.ActiveFlags.Remove(uso);
         foreach (StoryFlag otro in npc.Ruleta.npcsQueLaPuedenDar)
             if (otro != npc.FlagVencido) historia.ActivateFlag(otro);
         historia.ActiveFlags.Remove(npc.FlagVencido);
@@ -563,7 +562,7 @@ public class CasinoSmokeTest : MonoBehaviour
 
         Llamar(npc, "AlTerminar", new BattleOutcome { PlayerVictory = true }, historia);
         Check("Ganarle lo marca vencido", historia.HasFlag(npc.FlagVencido));
-        Check("Y gasta una de las dos ruletas", CasinoRuletaDeNpcs.Usadas(historia) == 1);
+        Check("Y gasta una de las ruletas de la partida", CasinoRuletaDeNpcs.Usadas(historia) == 1);
 
         yield return EsperarHasta(() => dialogo.IsOpen, 2f);
         Check("Al volver al mapa el NPC dice algo", dialogo.IsOpen);
@@ -579,14 +578,14 @@ public class CasinoSmokeTest : MonoBehaviour
         Check("Ya vencido, el NPC solo habla", dialogo.IsOpen && !MenuManager.AnyOpen);
         yield return CerrarDialogo(dialogo);
 
-        // --- con las dos ruletas usadas, ganarle no la da ---
-        historia.ActivateFlag(StoryFlag.Casino_RuletaNpc_2);
+        // --- con las cuatro ruletas usadas, ganarle no la da ---
+        foreach (StoryFlag uso in CasinoRuletaDeNpcs.FlagsDeUso) historia.ActivateFlag(uso);
         historia.ActiveFlags.Remove(npc.FlagVencido);
         Llamar(npc, "AlTerminar", new BattleOutcome { PlayerVictory = true }, historia);
         yield return EsperarHasta(() => dialogo.IsOpen, 2f);
         yield return AvanzarHastaQueSeCierre(dialogo);
         for (int i = 0; i < 5; i++) yield return null;
-        Check("Con las dos ruletas usadas, ganarle no abre la ruleta", !(Menus.Top is PrizeWheelController));
+        Check("Con las cuatro ruletas usadas, ganarle no abre la ruleta", !(Menus.Top is PrizeWheelController));
     }
 
     // En modo premio: no se puede salir sin girar, entrega y se cierra sola.

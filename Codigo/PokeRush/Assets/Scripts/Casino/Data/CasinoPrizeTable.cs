@@ -13,8 +13,8 @@ public class CasinoPrizeTable : ScriptableObject
     public Prize[] premios = new Prize[0];
 
     [Tooltip("Solo para la ruleta de los NPCs: el flag de 'vencido' de cada NPC " +
-             "que la puede dar. La regla de maximo dos por partida se calcula " +
-             "sobre esta lista (ver CasinoRuletaDeNpcs).")]
+             "que la puede dar. La regla de una cada dos combates (hasta cuatro " +
+             "por partida) se cuenta sobre esta lista (ver CasinoRuletaDeNpcs).")]
     public StoryFlag[] npcsQueLaPuedenDar = new StoryFlag[0];
 
     // Porcentaje (0-1) del peso total que se lleva lo que cumpla 'que'.

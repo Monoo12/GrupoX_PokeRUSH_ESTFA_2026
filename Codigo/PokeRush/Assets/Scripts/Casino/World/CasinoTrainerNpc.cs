@@ -5,7 +5,8 @@ using UnityEngine;
 // Pregunta antes, lanza el combate y, si el jugador gana:
 //   1. activa su flag de vencido, que es lo que impide repetir la pelea;
 //   2. si esta en la lista de la tabla de ruleta, la sortea con
-//      CasinoRuletaDeNpcs (maximo dos por partida, no siempre los mismos);
+//      CasinoRuletaDeNpcs (una cada dos combates ganados, hasta cuatro por
+//      partida, no siempre los mismos);
 //   3. guarda la partida.
 //
 // El cartel de victoria y la ruleta salen cuando el mapa vuelve (ver

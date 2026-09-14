@@ -120,22 +120,25 @@ vive adentro. Eso lo resuelve la base `CasinoNpcConCombate`.
 
 ## La ruleta de premios de los NPCs
 
-**Máximo dos veces por partida, y no siempre con los mismos NPCs.**
+**Una cada dos combates ganados, hasta cuatro por partida, y no siempre con los mismos NPCs.**
 
-Regla (`CasinoRuletaDeNpcs`): cada vez que le ganás a un NPC de la lista, la ruleta sale con
-probabilidad **k / m**:
+Regla (`CasinoRuletaDeNpcs`): los combates contra los NPCs de la lista se agrupan de a dos, en
+el orden en que los ganás (1.º y 2.º, 3.º y 4.º, …). En cada par sale **exactamente una**
+ruleta:
 
-- **k** = ruletas que quedan (2 menos las usadas);
-- **m** = NPCs de la lista que todavía no venciste, contando al de recién.
+- al ganarle al primero del par, sale con probabilidad **1/2**;
+- si no salió, al ganarle al segundo sale seguro.
 
 Con eso:
 
-- si les ganás a todos, salen **exactamente dos** ruletas;
-- cualquier par de NPCs tiene la misma chance de ser el que la dio, en el orden que sea;
-- si te salteás NPCs, salen menos (nunca más de dos).
+- ganando 2, 4, 6 u 8 combates salen 1, 2, 3 o 4 ruletas; del noveno en adelante ya no sale;
+- aunque pelees siempre en el mismo orden, cuál de los dos NPCs del par la da cambia de
+  partida en partida (hay 16 combinaciones posibles);
+- peleando en cualquier orden, ninguno de los doce la da más seguido que otro.
 
-No hace falta guardar "quiénes son los elegidos": alcanza con los flags de vencido y los dos
-flags de uso (`Casino_RuletaNpc_1` y `_2`), que el guardado ya persiste.
+No hace falta guardar "quiénes son los elegidos" ni contar combates aparte: los combates
+ganados son los flags de vencido, y los usos son cuatro flags (`Casino_RuletaNpc_1` a `_4`)
+que el guardado ya persiste. La pelea del guardia no cuenta: tiene su propia ruleta.
 
 ### Premios (`Resources/Definitions/Casino/RuletaDeLosNpcs.asset`)
 
@@ -217,4 +220,4 @@ marca la rareza:
 - En Play, recorrido completo:
   1. hablar con el guardia sin plata, perder y volver;
   2. ganarle y girar su ruleta;
-  3. ganarles a los NPCs y ver que la ruleta sale como mucho dos veces.
+  3. ganarles a los NPCs y ver que la ruleta sale una cada dos combates, hasta cuatro.
