@@ -105,6 +105,28 @@ Agregale **`CameraFollow`** a la `Main Camera` y arrastrale el `Player` al campo
 
 `smoothTime` 0.15 va bien; 0 la deja pegada al jugador. La cámara solo lee la posición del target en `LateUpdate`, así que el jugador no depende de la cámara ni al revés.
 
+### Las rayas finas entre tiles
+
+Si ves una raya de 1 pixel entre tiles que **aparece y desaparece al caminar**, no es el tileset:
+es la cámara. Los tiles se dibujan a escala no entera y el suavizado deja la cámara en
+posiciones sub-pixel. Cuando el borde entre dos tiles cae justo en el centro de un pixel, la
+GPU lee el pixel del tile de al lado en la hoja.
+
+`CameraFollow` lo evita con **`evitarRayasEntreTiles`** (prendido por defecto):
+
+- ajusta apenas el zoom para que cada celda mida una cantidad **entera** de pixeles. A 1080p
+  no cambia nada (7,5 = 72 px por celda); a 1366×768 queda en 7,53;
+- pega la cámara a la grilla de pixeles.
+
+El suavizado se calcula sobre la posición sin redondear, así que se mueve igual que antes.
+Verificado renderizando el piso 1 del casino con las funciones de `CameraFollow` a
+1920×1080, 1600×900, 1366×768, 1280×720 y 1313×464, en 150 posiciones de cámara cada una.
+Sin el arreglo aparecían hasta 11 rayas según la posición; con el arreglo, ninguna. El zoom
+cambió como mucho un 0,4%.
+
+> Una cámara que no usa `CameraFollow` no tiene este arreglo. Si es fija no se nota, porque
+> la raya solo va y viene cuando la cámara se mueve.
+
 ---
 
 ## 5. Animación del personaje
