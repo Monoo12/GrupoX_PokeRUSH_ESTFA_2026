@@ -65,36 +65,37 @@ lo saltea nada.
 | 1 | Enfermera | Cura por 30 monedas o fiado | (4.5, 12.5) |
 | 1 | Anciano | Historia | (5.5, 4.5) |
 | 1 | 8 jugadores (`JugadorTragaperras1..8`) | Juegan a las tragaperras: dan saltitos y dicen una frase | en taburetes, ver abajo |
-| 2 | Joven rica | Pelea una vez (Togepi Nv15, Sableye Nv16) | (-10.5, 13.5) |
-| 2 | Modelo | Pelea una vez (Litwick Nv15, Shuppet Nv16) | (-5.5, 6.5) |
-| 2 | Médium | Pelea una vez (Duskull y Gastly, Nv16) | (-10.5, 18.5) |
-| 2 | Ladrón | Pelea una vez (Pawniard Nv16, Mawile Nv17) | (14.5, 10.5) |
-| 2 | **Guardia VIP** (`GuardiaVipCasino`) | Pide la **Tarjeta VIP** o que le ganes para usar el ascensor. Ganarle da su ruleta exclusiva | (3.5, 19.5), al lado del ascensor |
-| 2 | **Magnate** | Pelea una vez (Kirlia Nv19, Porygon2 y Lampent Nv20). **Ganarle da la Tarjeta VIP** | (14.5, 18.5) |
-| 2 | **Revendedor** | Vende la Tarjeta VIP por 1500 | (-13.5, 4.5) |
-| 2 | Tahúr | Pelea una vez (Yamask Nv16, Honedge Nv17) | (-9.5, 9.5) |
-| 2 | Bailarina | Pelea una vez (Swablu Nv16, Roselia Nv17) | (0.5, 13.5) |
-| 2 | Enfermera | Cura | (-3.5, 4.5) |
-| 2 | Damisela | Historia | (-13.5, 18.5) |
-| 2 | Secretaria | Historia | (15.5, 7.5) |
-| 2 | 6 jugadores (`JugadorRuleta1..6`) | Juegan a la ruleta, del lado de arriba de cada mesa. Algunos dan pistas | ver abajo |
-| 3 | **Tacconi** | Juega su **Cosmog shiny** a una mano de blackjack contra uno de tus Pokémon | (-3.5, 16.5), al lado de una mesa |
-| 3 | Macarra | Pelea una vez (Sneasel y Sandile, Nv17) | (4.5, 10.5) |
-| 3 | Guay | Pelea una vez (Gligar Nv17, Skarmory y Absol Nv18) | (10.5, 5.5) |
-| 3 | Veterano | Pelea una vez (Donphan y Lairon, Nv18) | (-13.5, 12.5) |
-| 3 | Karateka | Pelea una vez (Primeape y Riolu, Nv18) | (6.5, 4.5) |
-| 3 | Gángster | Pelea una vez (Houndour Nv18, Skorupi Nv19) | (3.5, 18.5) |
-| 3 | Crupiera | Pelea una vez (Porygon Nv18, Lampent Nv19) | (7.5, 6.5) |
-| 3 | Enfermera | Cura | (-5.5, 4.5) |
-| 3 | Empresario | Historia | (-9.5, 13.5) |
-| 3 | Jubilado | Historia | (-14.5, 6.5) |
-| 3 | 4 jugadores (`JugadorBlackjack1..4`) | Juegan al blackjack: parados debajo de los banquitos (el lado curvo de la mesa), mirando a la mesa. Del lado recto va el croupier | ver abajo |
+| 2 | Joven rica | Pelea una vez (Togepi Nv15, Sableye Nv16) | (-10.5, 10.5), charlando con la damisela entre las mesas de la izquierda |
+| 2 | Modelo | Pelea una vez (Litwick Nv15, Shuppet Nv16) | (0.5, 5.5), posando al final de la alfombra |
+| 2 | Médium | Pelea una vez (Duskull y Gastly, Nv16) | (-13.5, 15.5), en la mesa de arriba a la izquierda |
+| 2 | Ladrón | Pelea una vez (Pawniard Nv16, Mawile Nv17) | (13.5, 11.5), pegado a una jugadora de la mesa 04 |
+| 2 | **Guardia VIP** (`GuardiaVipCasino`) | Pide la **Tarjeta VIP** o que le ganes para usar el ascensor. Ganarle da su ruleta exclusiva | (2.5, 19.5), a la derecha de la puerta del ascensor |
+| 2 | **Magnate** | Pelea una vez (Kirlia Nv19, Porygon2 y Lampent Nv20). **Ganarle da la Tarjeta VIP** | (12.5, 18.5), en la cabecera de la mesa 06, al lado de la esquina VIP |
+| 2 | **Revendedor** | Vende la Tarjeta VIP por 1500 | (15.5, 19.5), en la esquina de arriba a la derecha |
+| 2 | Tahúr | Pelea una vez (Yamask Nv16, Honedge Nv17) | (-5.5, 16.5), en la mesa decorativa más cerca de la alfombra |
+| 2 | Bailarina | Pelea una vez (Swablu Nv16, Roselia Nv17) | (-7.5, 5.5), calentando en el espacio libre de abajo |
+| 2 | Enfermera | Cura | (-13.5, 19.5), arriba a la izquierda, con el PC al lado |
+| 2 | Damisela | Historia | (-8.5, 10.5), charlando con la joven rica |
+| 2 | Secretaria | Historia | (-1.5, 19.5), a la izquierda de la puerta del ascensor |
+| 2 | 6 jugadores (`JugadorRuleta1..6`) | Juegan a la ruleta, uno en el frente de cada mesa. Algunos dan pistas | ver abajo |
+| 3 | **Tacconi** | Juega su **Cosmog shiny** a una mano de blackjack contra uno de tus Pokémon | (-6.5, 18.5), del lado del croupier de **su** mesa (la de arriba a la derecha) |
+| 3 | Macarra | Pelea una vez (Sneasel y Sandile, Nv17) | (3.5, 12.5), al costado de la alfombra |
+| 3 | Guay | Pelea una vez (Gligar Nv17, Skarmory y Absol Nv18) | (5.5, 19.5), al lado de la rockola |
+| 3 | Veterano | Pelea una vez (Donphan y Lairon, Nv18) | (-8.5, 16.5), mirando la mesa de Tacconi desde el pasillo |
+| 3 | Karateka | Pelea una vez (Primeape y Riolu, Nv18) | (4.5, 5.5), en el espacio libre de abajo |
+| 3 | Gángster | Pelea una vez (Houndour Nv18, Skorupi Nv19) | (-3.5, 16.5), al costado de la mesa de Tacconi, mirando a la alfombra |
+| 3 | Crupiera | Pelea una vez (Porygon Nv18, Lampent Nv19) | (5.5, 16.5), en su descanso, apoyada en la barra |
+| 3 | Enfermera | Cura | (-13.5, 19.5), arriba a la izquierda, con el PC al lado |
+| 3 | Empresario | Historia | (11.5, 14.5), sentado en el restaurante |
+| 3 | Jubilado | Historia | (5.5, 9.5), sentado en el restaurante |
+| 3 | 4 jugadores (`JugadorBlackjack1..4`) | Juegan al blackjack: parados debajo de los banquitos (el lado curvo de la mesa), mirando a la mesa. Del lado recto va el croupier. Uno juega en la mesa de Tacconi | ver abajo |
 
-Además hay **un PC en cada piso** (ver `PC_De_Almacenamiento.md`).
+Además hay **un PC en cada piso** (ver `PC_De_Almacenamiento.md`). En los pisos 2 y 3 está arriba a
+la izquierda, al lado de la enfermera: es lo primero que se ve al salir del ascensor.
 
 Los jugadores de ruleta y de blackjack usan los mismos dos componentes que los de las
-tragaperras (abajo). Están del lado de **arriba** de cada mesa: las mesas se usan desde abajo,
-así que no tapan nada.
+tragaperras (abajo). Están en el **frente** de cada mesa (el lado desde el que se juega) y ocupan
+una sola celda: al jugador le quedan lugares libres para usarla.
 
 Las enfermeras de los pisos 2 y 3 son nuevas: **perder un combate no cura al equipo**,
 así que sin ellas una derrota dejaba al jugador sin poder pelear por el resto del piso.
@@ -173,7 +174,27 @@ No hace falta guardar "quiénes son los elegidos" ni contar combates aparte: los
 ganados son los flags de vencido, y los usos son cuatro flags (`Casino_RuletaNpc_1` a `_4`)
 que el guardado ya persiste. La pelea del guardia no cuenta: tiene su propia ruleta.
 
-### Premios (`Resources/Definitions/Casino/RuletaDeLosNpcs.asset`)
+### Premios
+
+Hay **dos tablas**, porque la Tarjeta VIP solo tiene sentido en el piso 2 (en el 1 todavía no
+sirve y en el 3 ya no).
+
+**Pisos 1 y 3** (`Resources/Definitions/Casino/RuletaDeLosNpcs.asset`), sin tarjeta:
+
+| Premio | Peso |
+|---|---|
+| Pikachu Nv15 | 13 |
+| Eevee Nv15 | 12 |
+| Togepi Nv15 | 10 |
+| Poción x3 | 17 |
+| Superpoción x2 | 15 |
+| Hiperpoción x1 | 8 |
+| 150 monedas | 17 |
+| 400 monedas | 8 |
+
+**35% Pokémon, 40% curativos y 25% plata.**
+
+**Piso 2** (`Resources/Definitions/Casino/RuletaDeLosNpcsPiso2.asset`), con la tarjeta:
 
 | Premio | Peso |
 |---|---|
@@ -186,12 +207,15 @@ que el guardado ya persiste. La pelea del guardia no cuenta: tiene su propia rul
 | 150 monedas | 13 |
 | 400 monedas | 8 |
 
-**33% Pokémon, 15% Tarjeta VIP, 31% curativos y 21% plata.** El campo `npcsQueLaPuedenDar`
-lista los flags de los dieciséis NPCs que la dan. No están los guardias, que tienen la suya, ni el
-magnate, que da la tarjeta directo.
+**33% Pokémon, 15% Tarjeta VIP, 31% curativos y 21% plata.**
 
-> Antes de la tarjeta esta tabla era 35% Pokémon. El builder la rehízo **una sola vez** para
-> meter la tarjeta; de ahí en adelante no la vuelve a pisar.
+Las dos tienen **la misma** lista en `npcsQueLaPuedenDar`: los flags de los dieciséis NPCs que
+dan ruleta, de los tres pisos. La regla de "una cada dos combates, hasta cuatro" cuenta a todos
+juntos; la tabla solo decide **qué premios** tiene la rueda que sale. No están los guardias, que
+tienen la suya, ni el magnate, que da la tarjeta directo.
+
+> Durante un tiempo la tarjeta estuvo también en la tabla de los pisos 1 y 3. El builder la saca
+> **una sola vez** si la encuentra ahí y vuelve al reparto de arriba.
 
 ---
 
@@ -248,8 +272,9 @@ tres formas:
 
 1. **Ganándole al magnate** (`CasinoTrainerNpc.objetoAlGanar`): tres Pokémon de nivel 19-20,
    cuando el resto del piso anda por el 15-17.
-2. **En la ruleta de premios de los combates**: es uno de los gajos, con ~15%. Si ya la tenés,
-   paga 400 monedas en su lugar (`moneyIfOwned`).
+2. **En la ruleta de premios de los combates del piso 2**: es uno de los gajos, con ~15%. Si ya
+   la tenés, paga 400 monedas en su lugar (`moneyIfOwned`). En las ruletas de los NPCs de los
+   pisos 1 y 3 no sale.
 3. **Comprándosela al revendedor** por 1500 (`CasinoVendedorNpc`).
 
 ### La ruleta exclusiva del guardia VIP (`RuletaDelGuardiaVip.asset`)

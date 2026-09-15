@@ -102,21 +102,25 @@ public static class CasinoNpcBuilder
     // El Pokemon de Tacconi, que pide el ascensor del piso 3.
     private const string EspecieDeTacconi = "0789_Cosmog";
 
-    // Gente jugando a la ruleta del piso 2: una persona del lado de ARRIBA de
-    // cada mesa, mirandola. Las mesas se usan desde abajo, asi que no tapan nada.
+    // Gente jugando a la ruleta del piso 2: una persona en el FRENTE de cada mesa
+    // (abajo, donde se ve el borde de la mesa y se apuesta), mirandola. Cada mesa
+    // tiene 4 celdas de frente, asi que al jugador le quedan lugares para usarla.
+    // Mesas: 01 y 02 abajo, 03 y 04 al medio, 05 y 06 arriba (las mas cerca del
+    // ascensor). El que habla del guardia esta en la 05 y el que habla del
+    // revendedor "de la esquina" en la 06, que es la de esa esquina.
     private static readonly (string nombre, Vector2 celda, string hoja, string hablante, string linea)[] JugadoresDeRuleta =
     {
-        ("JugadorRuleta1", new Vector2(5.5f, 10.5f), "ricachona", "JUGADORA",
+        ("JugadorRuleta1", new Vector2(6.5f, 7.5f), "ricachona", "JUGADORA",
             "Rojo, rojo, rojo... ¡negro! Siempre sale negro cuando le voy al rojo."),
-        ("JugadorRuleta2", new Vector2(12.5f, 10.5f), "presidente", "JUGADOR",
+        ("JugadorRuleta2", new Vector2(11.5f, 7.5f), "presidente", "JUGADOR",
             "Dicen que si le ganás más de 200 al color, la casa te hace girar la ruleta de premios."),
-        ("JugadorRuleta3", new Vector2(6.5f, 14.5f), "guaya", "JUGADORA",
+        ("JugadorRuleta3", new Vector2(5.5f, 11.5f), "guaya", "JUGADORA",
             "Yo le voy al 17. Siempre al 17. Algún día va a salir."),
-        ("JugadorRuleta4", new Vector2(11.5f, 14.5f), "chica1", "JUGADORA",
+        ("JugadorRuleta4", new Vector2(12.5f, 11.5f), "chica1", "JUGADORA",
             "A mi hermana le salió una Tarjeta VIP en una ruleta de premios. Yo sigo esperando."),
-        ("JugadorRuleta5", new Vector2(5.5f, 18.5f), "chaval2", "JUGADOR",
+        ("JugadorRuleta5", new Vector2(6.5f, 15.5f), "chaval2", "JUGADOR",
             "El guardia del ascensor no deja subir a nadie sin la Tarjeta VIP."),
-        ("JugadorRuleta6", new Vector2(12.5f, 18.5f), "estudianta", "JUGADORA",
+        ("JugadorRuleta6", new Vector2(12.5f, 15.5f), "estudianta", "JUGADORA",
             "El revendedor de la esquina tiene tarjetas VIP... a precio de oro.")
     };
 
@@ -237,7 +241,10 @@ public static class CasinoNpcBuilder
         SpecialItemDefinition tarjeta = TarjetaVip();
 
         // ---------- ruletas y dialogos (solo si no existen) ----------
-        CasinoPrizeTable ruletaNpcs = TablaDeLosNpcs(tarjeta);
+        // La ruleta de los NPCs de los pisos 1 y 3 NO da la Tarjeta VIP (solo
+        // sirve para el ascensor del piso 2); la de los NPCs del piso 2 si (~15%).
+        CasinoPrizeTable ruletaNpcs = TablaDeLosNpcs();
+        CasinoPrizeTable ruletaNpcsPiso2 = TablaDeLosNpcsDelPiso2(tarjeta);
         CasinoPrizeTable ruletaGuardia = TablaDelGuardia();
         CasinoPrizeTable ruletaGuardiaVip = TablaDelGuardiaVip();
         CasinoPrizeTable ruletaMesa = TablaDeLaMesa();
@@ -324,50 +331,55 @@ public static class CasinoNpcBuilder
 
         if (pisos2y3 && ArmarPiso(Piso2, raiz =>
             {
-                var j = Personaje(raiz, "JovenRicaCasino", new Vector2(-10.5f, 13.5f), "jovenrica", Abajo);
+                var j = Personaje(raiz, "JovenRicaCasino", new Vector2(-10.5f, 10.5f), "jovenrica", Derecha);
                 ConfigurarEntrenador(j.AddComponent<CasinoTrainerNpc>(), "JOVEN RICA", jovenRica,
-                    StoryFlag.Casino_JovenRicaVencida, ruletaNpcs,
+                    StoryFlag.Casino_JovenRicaVencida, ruletaNpcsPiso2,
                     "Las fichas me aburren. Una pelea de verdad me vendría bien. ¿Aceptás?",
                     "Acepto", "No", "Qué decepción.",
                     "Qué forma tan poco elegante de ganar... pero ganaste.",
                     "No insistas, ya perdí una vez.");
 
-                var mo = Personaje(raiz, "ModeloCasino", new Vector2(-5.5f, 6.5f), "modelo", Abajo);
+                var mo = Personaje(raiz, "ModeloCasino", new Vector2(0.5f, 5.5f), "modelo", Abajo);
                 ConfigurarEntrenador(mo.AddComponent<CasinoTrainerNpc>(), "MODELO", modelo,
-                    StoryFlag.Casino_ModeloVencida, ruletaNpcs,
+                    StoryFlag.Casino_ModeloVencida, ruletaNpcsPiso2,
                     "Si me ganás, te dejo sacarte una foto conmigo. ¿Peleamos?",
                     "Peleamos", "Paso", "Vos te lo perdés.",
                     "Hoy no era mi día.",
                     "Ya tuviste tu foto. Chau.");
 
-                var me = Personaje(raiz, "MediumCasino", new Vector2(-10.5f, 18.5f), "medium", Abajo);
+                var me = Personaje(raiz, "MediumCasino", new Vector2(-13.5f, 15.5f), "medium", Derecha);
                 ConfigurarEntrenador(me.AddComponent<CasinoTrainerNpc>(), "MÉDIUM", medium,
-                    StoryFlag.Casino_MediumVencido, ruletaNpcs,
+                    StoryFlag.Casino_MediumVencido, ruletaNpcsPiso2,
                     "Las cartas me dijeron que ibas a venir. También dicen que vas a perder. ¿Probamos?",
                     "Probemos", "No", "Ya lo sabía.",
                     "Esto no estaba en las cartas.",
                     "Las cartas no me hablan desde que me ganaste.");
 
-                var la = Personaje(raiz, "LadronCasino", new Vector2(14.5f, 10.5f), "ladron", Izquierda);
+                var la = Personaje(raiz, "LadronCasino", new Vector2(13.5f, 11.5f), "ladron", Izquierda);
                 ConfigurarEntrenador(la.AddComponent<CasinoTrainerNpc>(), "LADRÓN", ladron,
-                    StoryFlag.Casino_LadronVencido, ruletaNpcs,
+                    StoryFlag.Casino_LadronVencido, ruletaNpcsPiso2,
                     "Shh... nadie vio nada. Si me ganás, no te toco las fichas. ¿Trato?",
                     "Trato", "Ni loco", "Cuidá tus bolsillos.",
                     "Está bien, está bien. Tus fichas están a salvo.",
                     "Yo no fui. Ni me mires.");
 
-                Personaje(raiz, "EnfermeraCasino", new Vector2(-3.5f, 4.5f), "enfermera", Abajo)
+                // Enfermera y PC juntos arriba a la izquierda, cerca del ascensor,
+                // que es por donde se llega (ver PcEnLosNivelesBuilder).
+                Personaje(raiz, "EnfermeraCasino", new Vector2(-13.5f, 19.5f), "enfermera", Abajo)
                     .AddComponent<CasinoNurseInteractable>();
 
-                ConfigurarQueHabla(Personaje(raiz, "DamiselaHistoria", new Vector2(-13.5f, 18.5f), "damisela", Abajo)
+                ConfigurarQueHabla(Personaje(raiz, "DamiselaHistoria", new Vector2(-8.5f, 10.5f), "damisela", Izquierda)
                     .AddComponent<NpcQueHabla>(), damisela);
 
                 // ---- el guardia VIP y la Tarjeta VIP ----
-                var gv = Personaje(raiz, "GuardiaVip", new Vector2(3.5f, 19.5f), "rocketElite", Abajo);
+                // El guardia y la secretaria flanquean la puerta del ascensor; el
+                // magnate (que tiene una tarjeta) y el revendedor (que la vende)
+                // quedan en la esquina de arriba a la derecha, al lado.
+                var gv = Personaje(raiz, "GuardiaVip", new Vector2(2.5f, 19.5f), "rocketElite", Abajo);
                 ConfigurarGuardia(gv.AddComponent<CasinoElevatorGuard>(), "GUARDIA VIP", guardiaVip, ruletaGuardiaVip,
                     StoryFlag.Casino_Piso2_PaseAscensor, StoryFlag.Casino_GuardiaVipVencido, 0, tarjeta);
 
-                var mg = Personaje(raiz, "MagnateCasino", new Vector2(14.5f, 18.5f), "ricachon", Abajo);
+                var mg = Personaje(raiz, "MagnateCasino", new Vector2(12.5f, 18.5f), "ricachon", Abajo);
                 ConfigurarEntrenador(mg.AddComponent<CasinoTrainerNpc>(), "MAGNATE", magnate,
                     StoryFlag.Casino_MagnateVencido, null,
                     "¿La Tarjeta VIP? Tengo una de sobra. Si me ganás, es tuya. Pero no me gusta perder.",
@@ -376,32 +388,32 @@ public static class CasinoNpcBuilder
                     "Ya tenés mi tarjeta. No me la gastes toda.",
                     tarjeta);
 
-                var rv = Personaje(raiz, "RevendedorVip", new Vector2(-13.5f, 4.5f), "hombrenegro", Derecha);
+                var rv = Personaje(raiz, "RevendedorVip", new Vector2(15.5f, 19.5f), "hombrenegro", Izquierda);
                 ConfigurarVendedor(rv.AddComponent<CasinoVendedorNpc>(), "REVENDEDOR", "ROCKETO", tarjeta, PrecioTarjeta);
 
                 // ---- mas gente que pelea una vez ----
-                var th = Personaje(raiz, "TahurCasino", new Vector2(-9.5f, 9.5f), "maximo", Abajo);
+                var th = Personaje(raiz, "TahurCasino", new Vector2(-5.5f, 16.5f), "maximo", Izquierda);
                 ConfigurarEntrenador(th.AddComponent<CasinoTrainerNpc>(), "TAHÚR", tahur,
-                    StoryFlag.Casino_TahurVencido, ruletaNpcs,
+                    StoryFlag.Casino_TahurVencido, ruletaNpcsPiso2,
                     "Las ruletas están arregladas, pero una pelea no. ¿Probamos suerte?",
                     "Probemos", "No", "Cobarde.",
                     "Me limpiaste. Ni en la ruleta pierdo tanto.",
                     "Ya me ganaste. Andá a apostar lo que me sacaste.");
 
-                var bl = Personaje(raiz, "BailarinaCasino", new Vector2(0.5f, 13.5f), "kimono", Abajo);
+                var bl = Personaje(raiz, "BailarinaCasino", new Vector2(-7.5f, 5.5f), "kimono", Abajo);
                 ConfigurarEntrenador(bl.AddComponent<CasinoTrainerNpc>(), "BAILARINA", bailarina,
-                    StoryFlag.Casino_BailarinaVencida, ruletaNpcs,
+                    StoryFlag.Casino_BailarinaVencida, ruletaNpcsPiso2,
                     "Mi número empieza en diez minutos. ¿Me ayudás a calentar con una pelea?",
                     "Dale", "Ahora no", "Bueno, bailo sola.",
                     "¡Qué ritmo tenés! Me ganaste.",
                     "Ya me ganaste. Ahora, a bailar.");
 
-                ConfigurarQueHabla(Personaje(raiz, "SecretariaHistoria", new Vector2(15.5f, 7.5f), "secretaria", Izquierda)
+                ConfigurarQueHabla(Personaje(raiz, "SecretariaHistoria", new Vector2(-1.5f, 19.5f), "secretaria", Abajo)
                     .AddComponent<NpcQueHabla>(), secretaria);
 
                 foreach (var jr in JugadoresDeRuleta)
                 {
-                    var jugador = Personaje(raiz, jr.nombre, jr.celda, jr.hoja, Abajo);
+                    var jugador = Personaje(raiz, jr.nombre, jr.celda, jr.hoja, Arriba);
                     ConfigurarQueHabla(jugador.AddComponent<NpcQueHabla>(), Dialogo(jr.nombre, jr.hablante, jr.linea));
                     jugador.AddComponent<NpcJugandoMaquina>();
                 }
@@ -410,7 +422,7 @@ public static class CasinoNpcBuilder
 
         if (pisos2y3 && ArmarPiso(Piso3, raiz =>
             {
-                var ma = Personaje(raiz, "MacarraCasino", new Vector2(4.5f, 10.5f), "macarra", Izquierda);
+                var ma = Personaje(raiz, "MacarraCasino", new Vector2(3.5f, 12.5f), "macarra", Izquierda);
                 ConfigurarEntrenador(ma.AddComponent<CasinoTrainerNpc>(), "MACARRA", macarra,
                     StoryFlag.Casino_MacarraVencido, ruletaNpcs,
                     "Este piso es mío. Si querés pasear por acá, primero me ganás.",
@@ -418,7 +430,7 @@ public static class CasinoNpcBuilder
                     "Bueno, bueno... el piso es tuyo.",
                     "Ya está, ya está. Andá nomás.");
 
-                var gu = Personaje(raiz, "GuayCasino", new Vector2(10.5f, 5.5f), "guay", Abajo);
+                var gu = Personaje(raiz, "GuayCasino", new Vector2(5.5f, 19.5f), "guay", Abajo);
                 ConfigurarEntrenador(gu.AddComponent<CasinoTrainerNpc>(), "GUAY", guay,
                     StoryFlag.Casino_GuayVencido, ruletaNpcs,
                     "Llegar al tercer piso no es suerte. Mostrame que sabés pelear.",
@@ -426,7 +438,7 @@ public static class CasinoNpcBuilder
                     "Tenés nivel. Nos vemos arriba.",
                     "Ya me ganaste. Respeto.");
 
-                var ve = Personaje(raiz, "VeteranoCasino", new Vector2(-13.5f, 12.5f), "veterano", Abajo);
+                var ve = Personaje(raiz, "VeteranoCasino", new Vector2(-8.5f, 16.5f), "veterano", Derecha);
                 ConfigurarEntrenador(ve.AddComponent<CasinoTrainerNpc>(), "VETERANO", veterano,
                     StoryFlag.Casino_VeteranoVencido, ruletaNpcs,
                     "Llevo treinta años en este casino. Vi caer a muchos como vos. ¿Te animás?",
@@ -434,7 +446,7 @@ public static class CasinoNpcBuilder
                     "Hacía años que no perdía así. Bien jugado.",
                     "Ya me ganaste, pibe. Andá para arriba.");
 
-                var ka = Personaje(raiz, "KaratekaCasino", new Vector2(6.5f, 4.5f), "luchador", Abajo);
+                var ka = Personaje(raiz, "KaratekaCasino", new Vector2(4.5f, 5.5f), "luchador", Izquierda);
                 ConfigurarEntrenador(ka.AddComponent<CasinoTrainerNpc>(), "KARATEKA", karateka,
                     StoryFlag.Casino_KaratekaVencido, ruletaNpcs,
                     "En el tercer piso no se juega: se pelea. ¡En guardia!",
@@ -442,19 +454,24 @@ public static class CasinoNpcBuilder
                     "Tu técnica es superior. Me inclino.",
                     "Voy a seguir entrenando.");
 
-                Personaje(raiz, "EnfermeraCasino", new Vector2(-5.5f, 4.5f), "enfermera", Abajo)
+                // Enfermera y PC arriba a la izquierda, como en el piso 2.
+                Personaje(raiz, "EnfermeraCasino", new Vector2(-13.5f, 19.5f), "enfermera", Abajo)
                     .AddComponent<CasinoNurseInteractable>();
 
-                ConfigurarQueHabla(Personaje(raiz, "EmpresarioHistoria", new Vector2(-9.5f, 13.5f), "empresario", Abajo)
+                ConfigurarQueHabla(Personaje(raiz, "EmpresarioHistoria", new Vector2(11.5f, 14.5f), "empresario", Abajo)
                     .AddComponent<NpcQueHabla>(), empresario);
 
                 // ---- Tacconi y su Cosmog shiny ----
                 // Sprites provisorios (Giovanni): el equipo va a pasar los de Tacconi.
-                var tc = Personaje(raiz, "Tacconi", new Vector2(-3.5f, 16.5f), "giovanni", Izquierda);
+                // Tiene SU mesa: la de arriba a la derecha (la mas cerca de la
+                // alfombra). Esta del lado del croupier, porque es el que reparte;
+                // su guardaespaldas se para al costado de la mesa mirando a la
+                // alfombra y el veterano la mira desde el pasillo entre mesas.
+                var tc = Personaje(raiz, "Tacconi", new Vector2(-6.5f, 18.5f), "giovanni", Abajo);
                 ConfigurarTacconi(tc.AddComponent<CasinoTacconiNpc>(), "GIOVANNI1");
 
                 // ---- mas gente que pelea una vez ----
-                var gg = Personaje(raiz, "GangsterCasino", new Vector2(3.5f, 18.5f), "rocketo", Abajo);
+                var gg = Personaje(raiz, "GangsterCasino", new Vector2(-3.5f, 16.5f), "rocketo", Derecha);
                 ConfigurarEntrenador(gg.AddComponent<CasinoTrainerNpc>(), "GÁNGSTER", gangster,
                     StoryFlag.Casino_GangsterVencido, ruletaNpcs,
                     "Nadie se acerca a la mesa de Tacconi sin pasar por mí. ¿Peleamos?",
@@ -462,7 +479,7 @@ public static class CasinoNpcBuilder
                     "Está bien, está bien. Tacconi te espera.",
                     "Ya me ganaste. Andá con Tacconi, pero cuidá tus Pokémon.");
 
-                var cr = Personaje(raiz, "CrupieraCasino", new Vector2(7.5f, 6.5f), "veterana", Abajo);
+                var cr = Personaje(raiz, "CrupieraCasino", new Vector2(5.5f, 16.5f), "veterana", Derecha);
                 ConfigurarEntrenador(cr.AddComponent<CasinoTrainerNpc>(), "CRUPIERA", crupiera,
                     StoryFlag.Casino_CrupieraVencida, ruletaNpcs,
                     "Estoy en mi descanso. Si querés, repartimos Pokémon en vez de cartas.",
@@ -470,7 +487,7 @@ public static class CasinoNpcBuilder
                     "La casa perdió esta mano.",
                     "Ya me ganaste. Vuelvo a la mesa.");
 
-                ConfigurarQueHabla(Personaje(raiz, "JubiladoHistoria", new Vector2(-14.5f, 6.5f), "anciano2", Derecha)
+                ConfigurarQueHabla(Personaje(raiz, "JubiladoHistoria", new Vector2(5.5f, 9.5f), "anciano2", Abajo)
                     .AddComponent<NpcQueHabla>(), jubilado);
 
                 foreach (var j in JugadoresDeBlackjack)
@@ -918,30 +935,51 @@ public static class CasinoNpcBuilder
         return def;
     }
 
-    // La ruleta de los NPCs: ~33% Pokemon, 15% la Tarjeta VIP, 31% curativos y
-    // 21% plata.
+    // La ruleta de los NPCs de los pisos 1 y 3: 35% Pokemon, 40% curativos y
+    // 25% plata. SIN Tarjeta VIP: en el piso 1 todavia no sirve y en el 3 ya no.
     //
-    // Si la tabla ya existia de antes de la tarjeta, se rehace UNA vez con el
-    // reparto nuevo (lo pidio el enunciado: ~15% de tarjeta en los combates).
-    // Despues de eso no se vuelve a pisar.
-    private static CasinoPrizeTable TablaDeLosNpcs(SpecialItemDefinition tarjeta)
+    // Si la tabla quedo con la tarjeta (se le metio el 14-sep y despues se
+    // pidio que solo saliera en el piso 2), se vuelve UNA vez al reparto de antes.
+    private static CasinoPrizeTable TablaDeLosNpcs()
     {
         string path = $"{DefinitionFolder}/RuletaDeLosNpcs.asset";
         var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(path);
         if (tabla == null)
         {
             tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
-            tabla.premios = PremiosDeLosNpcs(tarjeta);
+            tabla.premios = PremiosDeLosNpcs();
             AssetDatabase.CreateAsset(tabla, path);
         }
-        else if (tarjeta != null && (tabla.premios == null || !tabla.premios.Any(p => p != null && p.specialItem != null)))
+        else if (tabla.premios != null && tabla.premios.Any(p => p != null && p.specialItem != null))
         {
-            tabla.premios = PremiosDeLosNpcs(tarjeta);
-            Debug.Log("[CasinoNPC] RuletaDeLosNpcs: se sumo la Tarjeta VIP (15%) y se rehizo el reparto.");
+            tabla.premios = PremiosDeLosNpcs();
+            Debug.Log("[CasinoNPC] RuletaDeLosNpcs: se saco la Tarjeta VIP (ahora sale solo en la de los NPCs del piso 2).");
         }
 
         // La lista de quienes la dan si se mantiene al dia: depende de los NPCs
         // que pone este builder, no es balance.
+        tabla.npcsQueLaPuedenDar = (StoryFlag[])DanRuleta.Clone();
+        EditorUtility.SetDirty(tabla);
+        return tabla;
+    }
+
+    // La ruleta de los NPCs del piso 2: ~33% Pokemon, 15% la Tarjeta VIP, 31%
+    // curativos y 21% plata (lo pidio el enunciado: ~15% de tarjeta en los
+    // combates del piso 2).
+    private static CasinoPrizeTable TablaDeLosNpcsDelPiso2(SpecialItemDefinition tarjeta)
+    {
+        string path = $"{DefinitionFolder}/RuletaDeLosNpcsPiso2.asset";
+        var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(path);
+        if (tabla == null)
+        {
+            tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
+            tabla.premios = PremiosDeLosNpcsDelPiso2(tarjeta);
+            AssetDatabase.CreateAsset(tabla, path);
+        }
+
+        // La MISMA lista que la de los pisos 1 y 3: la regla de "una cada dos
+        // combates, hasta cuatro" cuenta a todos los NPCs juntos, sin importar
+        // de que piso son ni de que tabla sacan el premio.
         tabla.npcsQueLaPuedenDar = (StoryFlag[])DanRuleta.Clone();
         EditorUtility.SetDirty(tabla);
         return tabla;
@@ -974,7 +1012,19 @@ public static class CasinoNpcBuilder
         return tabla;
     }
 
-    private static Prize[] PremiosDeLosNpcs(SpecialItemDefinition tarjeta) => new[]
+    private static Prize[] PremiosDeLosNpcs() => new[]
+    {
+        PremioPokemon("0025_Pikachu", 15, 13, "icon_pokeball", 300),
+        PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 17, "icon_pocion"),
+        PremioPlata(150, 17),
+        PremioPokemon("0133_Eevee", 15, 12, "icon_greatball", 300),
+        PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 15, "icon_superpocion"),
+        PremioPokemon("0175_Togepi", 15, 10, "icon_pokeball", 300),
+        PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 8, "icon_hiperpocion"),
+        PremioPlata(400, 8)
+    };
+
+    private static Prize[] PremiosDeLosNpcsDelPiso2(SpecialItemDefinition tarjeta) => new[]
     {
         PremioPokemon("0025_Pikachu", 15, 12, "icon_pokeball", 300),
         PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 17, "icon_pocion"),

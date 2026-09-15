@@ -31,10 +31,11 @@ public static class PcEnLosNivelesBuilder
         ("Assets/Scenes/NestorGOD2.unity", new Vector2(5.5f, 1.5f)),
         // Casino, piso 1: el pasillo de la entrada, a la izquierda del spawn.
         ("Assets/Scenes/Casino Nivel 1.unity", new Vector2(-2.5f, -1.5f)),
-        // Piso 2: al lado de la enfermera.
-        ("Assets/Scenes/Casino Nivel 2.unity", new Vector2(-0.5f, 4.5f)),
-        // Piso 3: al lado de la enfermera.
-        ("Assets/Scenes/Casino nivel 3.unity", new Vector2(-7.5f, 4.5f)),
+        // Piso 2: arriba a la izquierda, al lado de la enfermera y cerca del
+        // ascensor, que es por donde se llega.
+        ("Assets/Scenes/Casino Nivel 2.unity", new Vector2(-14.5f, 19.5f)),
+        // Piso 3: igual que en el piso 2.
+        ("Assets/Scenes/Casino nivel 3.unity", new Vector2(-14.5f, 19.5f)),
         // Piso final: al lado del spawn.
         ("Assets/Scenes/Casino piso FINAL.unity", new Vector2(-3.5f, 4.5f))
     };

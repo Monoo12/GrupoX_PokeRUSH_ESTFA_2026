@@ -590,28 +590,45 @@ namespace PokeRush.EditorTools
         private static void TestTablasDeRuletaDelProyecto()
         {
             var npcs = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDeLosNpcs.asset");
+            var npcsPiso2 = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDeLosNpcsPiso2.asset");
             var guardia = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDelGuardia.asset");
-            if (npcs == null || guardia == null)
+            if (npcs == null || npcsPiso2 == null || guardia == null)
             {
                 Debug.LogWarning("[CasinoSmokeTests] Todavia no estan las tablas de ruleta. " +
-                                 "Corre PokeRush/Casino/Poner los personajes de los pisos 1 a 3.");
+                                 "Corre PokeRush/Casino/Poner los personajes del piso 1 y los de los pisos 2 y 3.");
                 return;
             }
 
+            // Pisos 1 y 3: Pokemon, curativos y plata. La Tarjeta VIP NO.
             float pokemon = npcs.Porcentaje(p => p.poken != null);
-            float tarjeta = npcs.Porcentaje(p => p.poken == null && p.specialItem != null);
+            float tarjeta = npcs.Porcentaje(p => p.specialItem != null);
             float curativos = npcs.Porcentaje(p => p.poken == null && p.specialItem == null && p.item != null);
             float plata = npcs.Porcentaje(p => p.poken == null && p.specialItem == null && p.item == null && p.money > 0);
-            Check(pokemon >= 0.25f, $"la ruleta de los NPCs da Pokemon ({pokemon:P1})");
-            Check(Mathf.Abs(tarjeta - 0.15f) < 0.02f, $"y la Tarjeta VIP cerca del 15% ({tarjeta:P1})");
+            Check(pokemon >= 0.25f, $"la ruleta de los NPCs de los pisos 1 y 3 da Pokemon ({pokemon:P1})");
+            Check(tarjeta == 0f, "y NO da la Tarjeta VIP");
             Check(curativos > 0f && plata > 0f, $"y el resto se reparte entre curativos ({curativos:P0}) y plata ({plata:P0})");
-            Check(Mathf.Abs(pokemon + tarjeta + curativos + plata - 1f) < 0.001f, "y no hay gajos que no den nada");
+            Check(Mathf.Abs(pokemon + curativos + plata - 1f) < 0.001f, "y no hay gajos que no den nada");
             Check(npcs.premios.Length <= 8, "entra en los 8 gajos de la rueda");
-            bool listaCompleta = npcs.npcsQueLaPuedenDar != null &&
-                                 npcs.npcsQueLaPuedenDar.Length == ElegiblesDelProyecto.Length;
-            foreach (StoryFlag f in ElegiblesDelProyecto)
-                if (npcs.npcsQueLaPuedenDar == null || System.Array.IndexOf(npcs.npcsQueLaPuedenDar, f) < 0) listaCompleta = false;
-            Check(listaCompleta, $"la lista de NPCs que la dan tiene a los {ElegiblesDelProyecto.Length} que pelean");
+
+            // Piso 2: lo mismo, mas la Tarjeta VIP cerca del 15%.
+            float pokemon2 = npcsPiso2.Porcentaje(p => p.poken != null);
+            float tarjeta2 = npcsPiso2.Porcentaje(p => p.poken == null && p.specialItem != null);
+            float curativos2 = npcsPiso2.Porcentaje(p => p.poken == null && p.specialItem == null && p.item != null);
+            float plata2 = npcsPiso2.Porcentaje(p => p.poken == null && p.specialItem == null && p.item == null && p.money > 0);
+            Check(pokemon2 >= 0.25f, $"la ruleta de los NPCs del piso 2 da Pokemon ({pokemon2:P1})");
+            Check(Mathf.Abs(tarjeta2 - 0.15f) < 0.02f, $"y la Tarjeta VIP cerca del 15% ({tarjeta2:P1})");
+            Check(Mathf.Abs(pokemon2 + tarjeta2 + curativos2 + plata2 - 1f) < 0.001f, "y no hay gajos que no den nada");
+            Check(npcsPiso2.premios.Length <= 8, "entra en los 8 gajos de la rueda");
+
+            // Las dos con la lista entera: la regla de "una cada dos" cuenta a todos juntos.
+            foreach (CasinoPrizeTable tabla in new[] { npcs, npcsPiso2 })
+            {
+                bool listaCompleta = tabla.npcsQueLaPuedenDar != null &&
+                                     tabla.npcsQueLaPuedenDar.Length == ElegiblesDelProyecto.Length;
+                foreach (StoryFlag f in ElegiblesDelProyecto)
+                    if (tabla.npcsQueLaPuedenDar == null || System.Array.IndexOf(tabla.npcsQueLaPuedenDar, f) < 0) listaCompleta = false;
+                Check(listaCompleta, $"la lista de NPCs que dan la ruleta de {tabla.name} tiene a los {ElegiblesDelProyecto.Length} que pelean");
+            }
 
             bool todosPokemon = guardia.premios.Length > 0;
             float menor = float.MaxValue, mayor = 0f;

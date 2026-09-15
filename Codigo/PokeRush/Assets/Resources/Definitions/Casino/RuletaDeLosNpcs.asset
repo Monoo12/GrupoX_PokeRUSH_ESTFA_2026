@@ -18,7 +18,7 @@ MonoBehaviour:
     article: 
     icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
     amount: 1
-    probability: 12
+    probability: 13
     item: {fileID: 0}
     money: 0
     poken: {fileID: 11400000, guid: e1d2ee9d3d84c6b4085aee132d24968e, type: 2}
@@ -43,27 +43,27 @@ MonoBehaviour:
     specialItem: {fileID: 0}
     moneyIfOwned: 300
     customMessage: 
-  - prizeName: Tarjeta VIP
+  - prizeName: 150 monedas
     prizePlural: 
-    article: la
-    icon: {fileID: 2217540449070841751, guid: af98d80a9ff200a40abbfabe9a633ccf, type: 3}
+    article: 
+    icon: {fileID: 21300000, guid: 48c37a14cf525b446a5c4bb3e653cdd3, type: 3}
     amount: 1
-    probability: 15
+    probability: 17
     item: {fileID: 0}
-    money: 0
+    money: 150
     poken: {fileID: 0}
     pokenLevel: 15
     shiny: 0
     moneyIfTeamFull: 300
-    specialItem: {fileID: 11400000, guid: 067a7cc907524964883a11796fc45e9a, type: 2}
-    moneyIfOwned: 400
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
     customMessage: 
   - prizeName: Eevee
     prizePlural: 
     article: 
     icon: {fileID: 21300000, guid: 220baf3919fd9b848b1574420ae682a8, type: 3}
     amount: 1
-    probability: 11
+    probability: 12
     item: {fileID: 0}
     money: 0
     poken: {fileID: 11400000, guid: 633e41c5f5326594e9ef2dbb95d7aa34, type: 2}
@@ -78,24 +78,9 @@ MonoBehaviour:
     article: una
     icon: {fileID: 21300000, guid: d8f186deb4bb20841946dd199822888d, type: 3}
     amount: 2
-    probability: 14
+    probability: 15
     item: {fileID: 11400000, guid: 591415124781d9f4d965a386828fc48d, type: 2}
     money: 0
-    poken: {fileID: 0}
-    pokenLevel: 15
-    shiny: 0
-    moneyIfTeamFull: 300
-    specialItem: {fileID: 0}
-    moneyIfOwned: 300
-    customMessage: 
-  - prizeName: 150 monedas
-    prizePlural: 
-    article: 
-    icon: {fileID: 21300000, guid: 48c37a14cf525b446a5c4bb3e653cdd3, type: 3}
-    amount: 1
-    probability: 13
-    item: {fileID: 0}
-    money: 150
     poken: {fileID: 0}
     pokenLevel: 15
     shiny: 0
@@ -112,6 +97,21 @@ MonoBehaviour:
     item: {fileID: 0}
     money: 0
     poken: {fileID: 11400000, guid: aba0b1490e2efb44a9153270a5918f7b, type: 2}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    customMessage: 
+  - prizeName: "Hiperpoci\xF3n"
+    prizePlural: Hiperpociones
+    article: una
+    icon: {fileID: 21300000, guid: b3b9606978dc8bb468c8c5d5498a907d, type: 3}
+    amount: 1
+    probability: 8
+    item: {fileID: 11400000, guid: 2ec7aa1bf32fb5645a1a380a1f2331f7, type: 2}
+    money: 0
+    poken: {fileID: 0}
     pokenLevel: 15
     shiny: 0
     moneyIfTeamFull: 300
