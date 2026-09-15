@@ -67,6 +67,13 @@ public class TurnEngine
             return events;
         }
 
+        // Cargar y recargar: el que esta cargando un movimiento (Rayo Solar,
+        // Vuelo...) o tiene que descansar (Hiperrayo...) no elige este turno.
+        // Se fuerza aca y no solo en el BattleController para que ni la IA ni
+        // los tests puedan saltearlo.
+        playerAction = AplicarAccionForzada(_model.PlayerState, playerAction);
+        enemyAction = AplicarAccionForzada(_model.EnemyState, enemyAction);
+
         // 0) Huir (solo de salvajes): se resuelve antes que todo, como en la saga.
         //    Si falla, el jugador pierde su accion y el rival ataca igual.
         if (playerAction.Kind == BattleActionKind.Flee)
@@ -100,8 +107,12 @@ public class TurnEngine
         // elegido, ANTES de llamar aca; el motor no tiene que saber por que.
 
         // 2) Movimientos
-        bool playerUsesMove = playerAction.Kind == BattleActionKind.UseMove;
-        bool enemyUsesMove = enemyAction.Kind == BattleActionKind.UseMove;
+        // El descanso de Hiperrayo va en el orden de los movimientos, como en
+        // la saga ("X necesita descansar" sale cuando le tocaria actuar).
+        bool playerUsesMove = playerAction.Kind == BattleActionKind.UseMove
+                              || playerAction.Kind == BattleActionKind.Recharge;
+        bool enemyUsesMove = enemyAction.Kind == BattleActionKind.UseMove
+                             || enemyAction.Kind == BattleActionKind.Recharge;
 
         if (playerUsesMove && enemyUsesMove)
         {
@@ -302,6 +313,48 @@ public class TurnEngine
         return actor.Poken.Moves[action.MoveIndex].Definition.priority;
     }
 
+    // ---------- carga y recarga ----------
+
+    // Lo que un lado esta obligado a hacer este turno, o null si elige libre.
+    // Lo usa el BattleController para no mostrar el menu (ni consultar a la
+    // IA), y el motor para que nadie lo saltee.
+    public static BattleAction AccionForzada(BattlePokenState estado)
+    {
+        if (estado == null) return null;
+        if (estado.MustRecharge) return BattleAction.Recharge();
+        if (estado.ChargingMoveIndex >= 0) return BattleAction.Move(estado.ChargingMoveIndex);
+        return null;
+    }
+
+    private static BattleAction AplicarAccionForzada(BattlePokenState estado, BattleAction elegida)
+    {
+        // Wait lo pone la lectura de Nestor sobre la jugada del rival: se la
+        // anula. Si esa jugada era soltar una carga o descansar, tambien se pierde.
+        if (elegida != null && elegida.Kind == BattleActionKind.Wait)
+        {
+            estado.CancelarCarga();
+            estado.MustRecharge = false;
+            return elegida;
+        }
+        return AccionForzada(estado) ?? elegida;
+    }
+
+    // Primer turno de un movimiento de carga: mensaje, stats del turno de carga
+    // (Cabezazo sube Defensa) y, si corresponde, queda fuera de alcance.
+    private void EmpezarCarga(BattlePokenState atacante, int indice, MoveDefinition move, List<BattleEvent> events)
+    {
+        atacante.ChargingMoveIndex = indice;
+        atacante.SemiInvulnerable = move.turnRule == MoveTurnRule.ChargeInvulnerable;
+        BattleEvent.Add(events, MoveTurnRules.MensajeDeCarga(move, atacante.Poken.Definition.pokenName));
+
+        if (move.chargeStatChanges == null) return;
+        foreach (StatChangeEntry cambio in move.chargeStatChanges)
+        {
+            if (cambio == null || cambio.stages == 0) continue;
+            MoveEffectExecutor.ApplyStatChange(atacante, cambio.stat, cambio.stages, events);
+        }
+    }
+
     // ---------- cambio de Poken ----------
 
     private void DoSwitch(bool isPlayer, int index, List<BattleEvent> events)
@@ -342,11 +395,24 @@ public class TurnEngine
 
         // Sin atacante o sin objetivo (debilitado a mitad de turno): no hay
         // accion. Un Poken caido no ataca ni puede ser atacado.
-        if (!BattleTeamRules.PuedeActuar(attacker) || !BattleTeamRules.PuedeActuar(defender)) return;
+        if (!BattleTeamRules.PuedeActuar(attacker)) return;
+
+        // Turno de descanso despues de Hiperrayo y compania. Se pierde aunque el
+        // rival de antes ya no este (cayo con el golpe y entro otro).
+        if (action.Kind == BattleActionKind.Recharge)
+        {
+            attacker.MustRecharge = false;
+            BattleEvent.Add(events, $"¡{attacker.Poken.Definition.pokenName} necesita descansar este turno!");
+            return;
+        }
+
+        if (!BattleTeamRules.PuedeActuar(defender)) return;
 
         // Retroceso, sueño, congelado, paralisis, confusion...
         if (!StatusEffects.CanAct(attacker, events, _rng))
         {
+            // Si estaba cargando, la carga se pierde (y vuelve a estar al alcance).
+            attacker.CancelarCarga();
             AnnounceFaintIfNeeded(attacker, events); // el autogolpe de confusion puede debilitar
             return;
         }
@@ -371,7 +437,23 @@ public class TurnEngine
         string attackerName = attacker.Poken.Definition.pokenName;
         string defenderName = defender.Poken.Definition.pokenName;
 
-        moveModel.ConsumePP();
+        // Movimientos de dos turnos. El PP se gasta al empezar a cargar y no al
+        // soltar el golpe, como en la saga.
+        bool sueltaLaCarga = attacker.ChargingMoveIndex >= 0 && attacker.ChargingMoveIndex == action.MoveIndex;
+        if (sueltaLaCarga)
+        {
+            attacker.CancelarCarga();
+        }
+        else
+        {
+            moveModel.ConsumePP();
+            if (MoveTurnRules.Carga(move) && !MoveTurnRules.SaltaLaCarga(move, _model.CurrentWeather))
+            {
+                EmpezarCarga(attacker, action.MoveIndex, move, events);
+                return;
+            }
+        }
+
         var moveUsedEvent = BattleEvent.Of(BattleEventKind.MoveUsed, attackerIsPlayer,
             $"¡{attackerName} usó {move.moveName}!");
         moveUsedEvent.Move = move; // para que la presentacion elija la animacion
@@ -381,6 +463,14 @@ public class TurnEngine
         if (move.implementation == MoveImplementation.NotImplemented)
         {
             BattleEvent.Add(events, "¡Pero falló!");
+            return;
+        }
+
+        // Vuelo, Excavar, Buceo...: mientras el rival esta fuera de alcance, lo
+        // que va dirigido a el falla (lo que el atacante se aplica a si mismo, no).
+        if (defender.SemiInvulnerable && MoveTurnRules.ApuntaAlRival(move))
+        {
+            BattleEvent.Add(events, $"¡{defenderName} está fuera de alcance! ¡El ataque falló!");
             return;
         }
 
@@ -453,6 +543,11 @@ public class TurnEngine
             events.Add(BattleEvent.Of(BattleEventKind.HpChanged, defender.IsPlayerSide));
         }
 
+        // Hiperrayo y compania: si pego, el turno que viene descansa (aunque el
+        // rival haya caido). Si fallo, lo aguantaron o no le hizo nada, no.
+        if (move.turnRule == MoveTurnRule.Recharge && landedHits > 0)
+            attacker.MustRecharge = true;
+
         if (anyCrit) BattleEvent.Add(events, "¡Golpe crítico!");
         string effMsg = EffectivenessMessage(effectiveness);
         if (effMsg != null) BattleEvent.Add(events, effMsg);
@@ -503,6 +598,12 @@ public class TurnEngine
         string attackerName = attacker.Poken.Definition.pokenName;
         events.Add(BattleEvent.Of(BattleEventKind.MoveUsed, attacker.IsPlayerSide,
             $"¡{attackerName} no tiene PP! ¡Usó Forcejeo!"));
+
+        if (defender.SemiInvulnerable)
+        {
+            BattleEvent.Add(events, $"¡{defender.Poken.Definition.pokenName} está fuera de alcance! ¡El ataque falló!");
+            return;
+        }
 
         DamageResult result = DamageCalculator.CalculateStruggle(attacker, defender, _rng, _model);
         int damage = AbilityEffects.ModifyIncomingDamage(defender, result.Damage, out bool endured);

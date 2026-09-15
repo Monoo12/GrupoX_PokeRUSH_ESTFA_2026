@@ -260,6 +260,10 @@ public class SaveService
             }
         }
 
+        // Un Pokemon guardado sin ningun ataque (de antes de que existiera esta
+        // regla, como los Abra de la ruleta) recupera uno al cargar.
+        poken.AsegurarUnAtaque();
+
         return poken;
     }
 

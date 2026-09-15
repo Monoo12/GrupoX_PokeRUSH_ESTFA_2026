@@ -7,6 +7,11 @@ public class PokenModel
     // pisarla con una tabla propia.
     public static ExperienceTableDefinition DefaultXpTable;
 
+    // Ataque de ultimo recurso para una especie que no trae ninguno (ver
+    // AsegurarUnAtaque). Lo inyecta GameManager (Placaje); sin inyectar, no se
+    // agrega nada.
+    public static MoveDefinition DefaultMove;
+
     // RNG propio para generar IVs sin depender de UnityEngine (clase pura).
     private static readonly System.Random IvRandom = new System.Random();
 
@@ -74,6 +79,7 @@ public class PokenModel
         CurrentStatus = StatusEffect.None;
         Moves = new List<MoveModel>();
         LearnInitialMoves();
+        AsegurarUnAtaque();
         RecalculateStats();
         CurrentHP = MaxHP;
     }
@@ -90,6 +96,7 @@ public class PokenModel
             foreach (LearnsetEntry entry in Definition.learnset)
             {
                 if (entry == null || entry.move == null || entry.level > Level) continue;
+                if (entry.move.implementation == MoveImplementation.NotImplemented) continue;
                 if (learnable.Exists(e => e.move == entry.move)) continue;
                 learnable.Add(entry);
             }
@@ -105,11 +112,80 @@ public class PokenModel
         {
             foreach (MoveDefinition moveDef in Definition.moves)
             {
-                if (moveDef == null) continue;
+                if (moveDef == null || moveDef.implementation == MoveImplementation.NotImplemented) continue;
                 Moves.Add(new MoveModel(moveDef));
                 if (Moves.Count >= 4) break;
             }
         }
+    }
+
+    // ---------- que siempre tenga con que pegar ----------
+
+    // Un movimiento que sirve para pegar: hace daño y esta implementado.
+    public static bool SirveParaPegar(MoveDefinition move)
+        => move != null && move.implementation != MoveImplementation.NotImplemented
+           && move.power > 0 && move.attackType != AttackType.Status;
+
+    // Todo Pokemon tiene que poder pegar. Con learnset, "los ultimos 4" pueden
+    // ser todos de estado (Togepi a nivel 15), y hay especies que por nivel no
+    // aprenden nada util (Abra solo sabe Teletransporte). Si no tiene ningun
+    // ataque se le da uno: el mas nuevo de su learnset que ya pueda conocer; si
+    // no, el primero que aprenderia; si su learnset no trae ninguno, DefaultMove.
+    // Con lugar lo suma; si no, reemplaza al primero que no sirve (uno no
+    // implementado antes que uno de estado).
+    //
+    // Lo llama el constructor y tambien SaveService al cargar, asi un Pokemon
+    // guardado sin ataques (los Abra de la ruleta) los recupera.
+    public void AsegurarUnAtaque()
+    {
+        if (Definition == null) return;
+        if (Moves.Exists(m => m != null && SirveParaPegar(m.Definition))) return;
+
+        MoveDefinition ataque = AtaqueDeRespaldo();
+        if (ataque == null) return;
+
+        if (Moves.Count < 4)
+        {
+            Moves.Add(new MoveModel(ataque));
+            return;
+        }
+
+        int lugar = Moves.FindIndex(m => m == null || m.Definition == null
+                                        || m.Definition.implementation == MoveImplementation.NotImplemented);
+        if (lugar < 0) lugar = 0; // el mas viejo: la lista inicial va de menor a mayor nivel
+        Moves[lugar] = new MoveModel(ataque);
+    }
+
+    private MoveDefinition AtaqueDeRespaldo()
+    {
+        MoveDefinition masNuevoYaAprendible = null, primeroQueAprenderia = null;
+        int nivelMasNuevo = -1, nivelPrimero = int.MaxValue;
+
+        if (Definition.learnset != null)
+        {
+            foreach (LearnsetEntry entry in Definition.learnset)
+            {
+                if (entry == null || !SirveParaPegar(entry.move)) continue;
+                if (entry.level <= Level && entry.level > nivelMasNuevo)
+                {
+                    masNuevoYaAprendible = entry.move;
+                    nivelMasNuevo = entry.level;
+                }
+                if (entry.level < nivelPrimero)
+                {
+                    primeroQueAprenderia = entry.move;
+                    nivelPrimero = entry.level;
+                }
+            }
+        }
+        if (masNuevoYaAprendible != null) return masNuevoYaAprendible;
+        if (primeroQueAprenderia != null) return primeroQueAprenderia;
+
+        if (Definition.moves != null)
+            foreach (MoveDefinition move in Definition.moves)
+                if (SirveParaPegar(move)) return move;
+
+        return SirveParaPegar(DefaultMove) ? DefaultMove : null;
     }
 
     // Movimientos del learnset que se aprenden exactamente al nivel dado

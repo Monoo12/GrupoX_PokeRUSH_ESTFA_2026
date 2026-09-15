@@ -36,6 +36,25 @@ public class BattlePokenState
     // Ya se emitio el evento "se debilitó" (evita anunciarlo dos veces)
     public bool FaintAnnounced;
 
+    // ---- movimientos de dos turnos (ver MoveTurnRules) ----
+    // Como todo lo de esta clase, se pierde al cambiar de Poken.
+
+    // Indice (en Poken.Moves) del movimiento que esta cargando y sale el turno
+    // que viene. -1 = no esta cargando nada.
+    public int ChargingMoveIndex = -1;
+
+    // Volando, bajo tierra o bajo el agua mientras carga: lo que apunta a el falla.
+    public bool SemiInvulnerable;
+
+    // Pego con Hiperrayo (o similar): pierde el turno que viene.
+    public bool MustRecharge;
+
+    public void CancelarCarga()
+    {
+        ChargingMoveIndex = -1;
+        SemiInvulnerable = false;
+    }
+
     public AbilityId Ability => Poken.Definition.abilityId;
 
     public BattlePokenState(PokenModel poken, bool isPlayerSide)

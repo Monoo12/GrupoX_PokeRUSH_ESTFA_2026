@@ -52,6 +52,17 @@ public static class MenuPrefabBuilder
                   " y MenuSystem en " + ResourcesFolder + ".");
     }
 
+    // Solo la biblioteca de iconos, sin rehacer los prefabs de las pantallas
+    // (que el equipo puede haber retocado a mano).
+    [MenuItem("PokeRush/UI/Rehacer iconos de tipos y estados")]
+    public static void RehacerIconos()
+    {
+        MenuUiKit.EnsureFolder(ResourcesFolder);
+        BuildIconLibrary();
+        AssetDatabase.SaveAssets();
+        Debug.Log("[Menus] Iconos de tipos y estados rehechos en " + ResourcesFolder + "/MenuIcons.asset.");
+    }
+
     // ---------------------------------------------------------------- iconos
 
     private static void BuildIconLibrary()
@@ -66,15 +77,27 @@ public static class MenuPrefabBuilder
 
         // Las hojas ya vienen cortadas para el HUD de combate: se reusan tal
         // cual en vez de recortar otras iguales.
-        var types = new Sprite[19];
-        for (int i = 0; i < types.Length; i++)
-            types[i] = MenuUiKit.SubSprite(TypeSheet, $"type_{i}_0");
+        //
+        // OJO: las filas de las hojas estan en el orden de Essentials (Normal,
+        // Lucha, Volador... / Dormido, Envenenado...), NO en el de los enums. El
+        // indice de la biblioteca es el enum y la fila la da el mismo mapa que
+        // usa el HUD de combate. Antes se tomaba fila = enum y el Resumen
+        // mostraba Psiquico como Agua (y el resto de los tipos corridos).
+        var types = new Sprite[System.Enum.GetValues(typeof(PokenType)).Length];
+        foreach (PokenType tipo in System.Enum.GetValues(typeof(PokenType)))
+        {
+            if (tipo == PokenType.None) continue;
+            if (PokeRush.EditorTools.BattleUiAssetImporter.TypeRow.TryGetValue(tipo, out int fila))
+                types[(int)tipo] = MenuUiKit.SubSprite(TypeSheet, $"type_{fila}_0");
+        }
 
-        // El enum StatusEffect arranca en None (sin icono), asi que el primer
-        // recorte de la hoja es el estado 1.
-        var statuses = new Sprite[7];
-        for (int i = 1; i < statuses.Length; i++)
-            statuses[i] = MenuUiKit.SubSprite(StatusSheet, $"status_{i - 1}_0");
+        // None y Confundido no tienen icono en la hoja.
+        var statuses = new Sprite[System.Enum.GetValues(typeof(StatusEffect)).Length];
+        foreach (StatusEffect estado in System.Enum.GetValues(typeof(StatusEffect)))
+        {
+            if (PokeRush.EditorTools.BattleUiAssetImporter.StatusRow.TryGetValue(estado, out int fila))
+                statuses[(int)estado] = MenuUiKit.SubSprite(StatusSheet, $"status_{fila}_0");
+        }
 
         library.typeIcons = types;
         library.statusIcons = statuses;

@@ -557,7 +557,58 @@ correspondientes a ese nivel (si tiene menos de 4). Si ya tiene 4, por ahora sol
 
 Cada especie tiene un **learnset** (`LearnsetEntry[]`): qué movimiento aprende y a qué
 nivel. Al crear un Pokémon, se le asignan los **4 movimientos de mayor nivel** que ya puede
-conocer.
+conocer (salteando los `NotImplemented`).
+
+### Todo Pokémon puede pegar
+
+`PokenModel.AsegurarUnAtaque()` garantiza que **siempre haya al menos un ataque** (un
+movimiento implementado, con potencia y que no sea de estado). Hacía falta porque:
+
+- "los 4 de mayor nivel" pueden ser todos de estado (Togepi a nivel 15);
+- hay especies que por nivel no aprenden nada usable (Abra solo sabe Teletransporte; Cosmog,
+  Salpicadura), y salían de la ruleta **sin ataques**.
+
+Si no tiene ninguno, se le da el más nuevo de su learnset que ya pueda conocer; si no llega al
+nivel, el primero que aprendería; y si su learnset no trae ninguno, `PokenModel.DefaultMove`
+(Placaje, lo inyecta `GameManager`). Con lugar lo suma; si no, reemplaza al primero que no sirve.
+Lo llaman el constructor y `SaveService` al cargar, así que un Pokémon ya guardado sin ataques
+los recupera.
+
+Además, a las especies que no aprenden **ningún** ataque por nivel se les agregaron al nivel 1
+ataques que sí aprenden por MT, tutor o huevo (o uno básico de su tipo si no hay): lo hace el
+importador al generar y, sobre lo ya importado, `PokeRush > Combate > Dar ataques a las
+especies que no tienen`.
+
+### Movimientos de dos turnos
+
+`MoveDefinition.turnRule` (`MoveTurnRule`) dice cómo usa los turnos un movimiento:
+
+| Regla | Qué hace | Ejemplos |
+|---|---|---|
+| `Normal` | Pega el turno en que se elige | casi todos |
+| `Charge` | Carga un turno (mensaje de carga) y pega el siguiente | Rayo Solar, Cuchilla Solar, Ataque Aéreo, Cabezazo, Electrorrayo |
+| `ChargeInvulnerable` | Igual, pero mientras carga lo que apunta a él falla | Vuelo, Excavar, Buceo, Bote, Golpe Fantasma, Golpe Umbrío |
+| `Recharge` | Pega y el turno siguiente **descansa** | Hiperrayo, Gigaimpacto, Romperrocas, Distorsión, Láser Prisma |
+
+Reglas (en `TurnEngine` y `MoveTurnRules`):
+
+- El turno obligado (soltar la carga o descansar) **no se elige**: `TurnEngine.AccionForzada`
+  lo devuelve, el `BattleController` no muestra el menú ni consulta a la IA, y el motor lo
+  impone igual aunque le pasen otra acción.
+- El PP se gasta al **empezar** a cargar, no al soltar el golpe. Descansar no gasta PP.
+- Rayo Solar y Cuchilla Solar no cargan **con sol**; Electrorrayo, con lluvia
+  (`skipChargeInWeather`).
+- Cabezazo sube la Defensa y Electrorrayo el Ataque Especial **en el turno de carga**
+  (`chargeStatChanges`).
+- Si al soltar la carga no puede actuar (dormido, paralizado, retroceso…), la carga se pierde.
+- Hiperrayo solo obliga a descansar **si pegó**: si falla, se lo aguantan o no le hace nada al
+  rival, no. Si el rival cae con el golpe, igual descansa.
+- Todo esto es estado volátil (`BattlePokenState`): se pierde al cambiar de Pokémon.
+- Si la lectura de Néstor le anula la jugada a un rival que estaba cargando o por descansar,
+  eso también se pierde.
+
+Las reglas salen de un catálogo por nombre en `PokeApiMapper` (PokeAPI no trae ese dato). Para
+aplicarlas a lo ya importado: `PokeRush > Combate > Aplicar carga y recarga a los movimientos`.
 
 ---
 
@@ -588,9 +639,12 @@ generar los assets, o hacer ambos. **Ya se corrió**: hay 435 especies y 595 mov
   existentes y **preserva los sprites** asignados a mano.
 - **Cache en el repo**: los JSON crudos quedan en `Tools/PokeApiCache/` (fuera de `Assets/`)
   para regenerar sin internet y ver los cambios en los diffs.
-- **Movimientos complejos**: los que tienen efectos que aún no se implementan (dos turnos,
-  trampas, KO fulminante...) se marcan como `DamageOnly` (funcionan como daño simple) o
-  `NotImplemented` (excluidos de los learnsets, pero el asset queda para el futuro).
+- **Movimientos complejos**: los que tienen efectos que aún no se implementan (trampas, KO
+  fulminante, cambiar de Pokémon al pegar...) se marcan como `DamageOnly` (funcionan como daño
+  simple) o `NotImplemented` (excluidos de los learnsets, pero el asset queda para el futuro).
+  Los de **dos turnos ya están implementados** (ver "Movimientos de dos turnos").
+- **Siempre con ataques**: si una especie no aprende ningún ataque por nivel, se le suman al
+  nivel 1 de MT/tutor/huevo (ver "Todo Pokémon puede pegar").
 
 ---
 

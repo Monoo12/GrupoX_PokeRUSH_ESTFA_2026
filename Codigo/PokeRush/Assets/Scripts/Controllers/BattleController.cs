@@ -745,7 +745,10 @@ public class BattleController : MonoBehaviour
         // uno armara el suyo, Nestor podria estar leyendo una foto distinta de
         // la que uso la IA para decidir.
         AiContext contextoRival = AiContext.ForEnemy(_battleModel, _aiProfile);
-        BattleAction enemyAction = _enemyAI.ChooseAction(contextoRival, _rng);
+        // Si el rival esta cargando (Rayo Solar, Vuelo) o tiene que descansar
+        // (Hiperrayo), no elige: ni se le pregunta a la IA.
+        BattleAction enemyAction = TurnEngine.AccionForzada(_battleModel.EnemyState)
+                                   ?? _enemyAI.ChooseAction(contextoRival, _rng);
 
         // La lectura de Nestor va JUSTO ACA: la IA ya eligio, el motor todavia
         // no arranco. Es la unica ventana en la que se puede anular una accion
@@ -804,6 +807,16 @@ public class BattleController : MonoBehaviour
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
         battleHudView?.UpdateHud(_battleModel);
         yield return AvanzarPrediccion();
+
+        // Cargando un movimiento o descansando despues de Hiperrayo: este turno
+        // no hay nada que elegir y se juega solo.
+        BattleAction forzada = TurnEngine.AccionForzada(_battleModel.PlayerState);
+        if (forzada != null)
+        {
+            yield return ResolveTurnRoutine(forzada);
+            yield break;
+        }
+
         battleHudView?.ShowCommandMenu(_battleModel);
     }
 

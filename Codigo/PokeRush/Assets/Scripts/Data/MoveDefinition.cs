@@ -62,6 +62,16 @@ public class MoveDefinition : ScriptableObject
     [Tooltip("Efecto de campo que genera (pantallas, trampas de entrada, terrenos).")]
     public FieldEffectKind fieldEffect = FieldEffectKind.None;
 
+    [Header("Turnos (carga y recarga)")]
+    [Tooltip("Normal, carga un turno (Rayo Solar), carga fuera de alcance (Vuelo) o descansa el turno siguiente (Hiperrayo).")]
+    public MoveTurnRule turnRule = MoveTurnRule.Normal;
+    [Tooltip("Mensaje del turno de carga. {0} = el Poken. Vacio = mensaje generico.")]
+    public string chargeMessage;
+    [Tooltip("Stats que sube el usuario en el turno de carga (Cabezazo: Defensa +1). Se aplican siempre al usuario.")]
+    public StatChangeEntry[] chargeStatChanges;
+    [Tooltip("Con este clima no carga: pega en el acto (Rayo Solar con sol).")]
+    public WeatherKind skipChargeInWeather = WeatherKind.None;
+
     [Header("Animacion")]
     [Tooltip("Animacion propia de este movimiento (opcional). Vacio = animacion generica segun categoria y tipo. El importador de PokeAPI nunca toca este campo.")]
     public MoveAnimationDefinition animationOverride;

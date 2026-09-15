@@ -77,7 +77,7 @@ los menús y también el movimiento del Overworld usan la K.
 | Qué | Dónde |
 |---|---|
 | Prefab raíz (auto-instanciable) | `Assets/Resources/Menus/MenuSystem.prefab` |
-| Iconos compartidos (tipos, estados) | `Assets/Resources/Menus/MenuIcons.asset` |
+| Iconos compartidos (tipos, estados) | `Assets/Resources/Menus/MenuIcons.asset` (ver nota abajo) |
 | Prefabs de pantalla | `Assets/Prefabs/UI/Menus/*.prefab` |
 | Prefabs de widget | `Assets/Prefabs/UI/Menus/Widgets/*.prefab` |
 | Código del framework | `Assets/Scripts/Menus/Core/` |
@@ -86,6 +86,14 @@ los menús y también el movimiento del Overworld usan la K.
 | Uso de objetos (lógica pura) | `Assets/Scripts/Menus/Items/` |
 | Opciones y persistencia | `Assets/Scripts/Menus/Settings/` |
 | Generador de prefabs | `Assets/Editor/Menus/` |
+
+> **Ojo con los iconos de tipo y de estado.** Las hojas `icon_types.png` e `icon_statuses.png`
+> están en el orden de Essentials (Normal, Lucha, Volador… / Dormido, Envenenado…), **no** en el
+> de los enums `PokenType` y `StatusEffect`. `MenuIcons.asset` se indexa por el enum y la fila
+> sale de `BattleUiAssetImporter.TypeRow` / `StatusRow`, el mismo mapa que usa el HUD de combate.
+> Hasta el 14-sep se tomaba fila = enum y el Resumen mostraba mal todos los tipos (Psíquico
+> salía como Agua). Para rehacer solo los iconos, sin tocar los prefabs:
+> `PokeRush > UI > Rehacer iconos de tipos y estados`.
 
 ---
 

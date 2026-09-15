@@ -76,6 +76,7 @@ public class BattleTester : MonoBehaviour
         {
             DefinitionRepository.Instance.LoadAll();
             PokenModel.DefaultXpTable = DefinitionRepository.Instance.ExperienceTable;
+            PokenModel.DefaultMove = DefinitionRepository.Instance.GetMove("Placaje");
         }
 
         if (startOnPlay) Launch();

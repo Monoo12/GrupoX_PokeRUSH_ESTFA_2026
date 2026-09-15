@@ -69,6 +69,9 @@ public class GameManager : MonoBehaviour
         // Tabla de XP compartida: sin esto AddXP no sube de nivel
         PokenModel.DefaultXpTable = DefinitionRepository.Instance.ExperienceTable;
 
+        // Ataque de ultimo recurso para especies sin ninguno (PokenModel.AsegurarUnAtaque)
+        PokenModel.DefaultMove = DefinitionRepository.Instance.GetMove("Placaje");
+
         // Conecta las fuentes de audio de la escena al servicio de audio
         AudioService.Instance.Initialize(musicSource, sfxSource);
     }

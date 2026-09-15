@@ -81,6 +81,20 @@ namespace PokeRush.EditorTools
             TestWaitDejaAlRivalSinActuar();
             TestElEnumDeAccionesNoSeCorrio();
 
+            // Movimientos de dos turnos (cargar / fuera de alcance / recargar)
+            TestHiperrayoObligaADescansar();
+            TestHiperrayoQueNoPegaNoDescansa();
+            TestRayoSolarCargaUnTurno();
+            TestRayoSolarConSolNoCarga();
+            TestVueloQuedaFueraDeAlcance();
+            TestCabezazoSubeLaDefensaAlCargar();
+            TestLosMovimientosDelProyectoTienenSuRegla();
+
+            // Que todo Pokemon pueda pegar, y que el menu muestre bien los tipos
+            TestSiempreHayUnAtaque();
+            TestLasEspeciesDelProyectoPuedenPegar();
+            TestIconosDeTiposYEstadosDelMenu();
+
             if (_failed == 0)
                 Debug.Log($"[SmokeTests] TODOS OK: {_passed} checks pasaron.");
             else
@@ -1456,6 +1470,309 @@ namespace PokeRush.EditorTools
                 "Wait: el mismo rival sin Wait si pega (el test no es un falso positivo)");
         }
 
+        // ---------- movimientos de dos turnos ----------
+
+        private static MoveDefinition MakeMoveDeTurnos(string name, PokenType type, int power, MoveTurnRule regla)
+        {
+            var move = MakeMove(name, type, AttackType.Special, power, 100, 10);
+            move.turnRule = regla;
+            return move;
+        }
+
+        // Un rival duro y lento que aguanta varios golpes y pega poco.
+        private static PokenModel MakeTanque(params MoveDefinition[] moves)
+            => MakePoken(MakeSpecies("Tanque", PokenType.Normal, PokenType.None, 250, 40, 200, 40, 200, 10), 50, moves);
+
+        private static void TestHiperrayoObligaADescansar()
+        {
+            var hiperrayo = MakeMoveDeTurnos("Hiperrayo", PokenType.Normal, 150, MoveTurnRule.Recharge);
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Rayo", PokenType.Normal, PokenType.None, 100, 50, 60, 80, 60, 100), 30, hiperrayo);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+            var engine = new TurnEngine(model, new SeededRng(11));
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            int hpTrasElGolpe = rival.CurrentHP;
+            Check(hpTrasElGolpe < rival.MaxHP, "Hiperrayo: pega");
+            Check(model.PlayerState.MustRecharge, "Hiperrayo: despues de pegar tiene que descansar");
+            BattleAction forzada = TurnEngine.AccionForzada(model.PlayerState);
+            Check(forzada != null && forzada.Kind == BattleActionKind.Recharge,
+                "Hiperrayo: el turno siguiente la accion obligada es descansar");
+
+            // Aunque se le pida pegar otra vez, descansa.
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP == hpTrasElGolpe, "Hiperrayo: en el turno de descanso no pega");
+            Check(TurnEngine.AccionForzada(model.PlayerState) == null, "Hiperrayo: descansado, vuelve a elegir");
+            Check(jugador.Moves[0].CurrentPP == hiperrayo.maxPP - 1, "Hiperrayo: descansar no gasta PP");
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP < hpTrasElGolpe, "Hiperrayo: el turno siguiente pega de nuevo");
+        }
+
+        private static void TestHiperrayoQueNoPegaNoDescansa()
+        {
+            var hiperrayo = MakeMoveDeTurnos("Hiperrayo", PokenType.Normal, 150, MoveTurnRule.Recharge);
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+
+            var jugador = MakePoken(
+                MakeSpecies("Rayo", PokenType.Normal, PokenType.None, 100, 50, 60, 80, 60, 100), 30, hiperrayo);
+            var model = MakeBattle(jugador, MakeTanque(placaje));
+            new TurnEngine(model, new SeededRng(12)).ResolveTurn(BattleAction.Move(0), BattleAction.Protect());
+            Check(!model.PlayerState.MustRecharge, "Hiperrayo: si se lo aguantan, no descansa");
+
+            var jugador2 = MakePoken(
+                MakeSpecies("Rayo", PokenType.Normal, PokenType.None, 100, 50, 60, 80, 60, 100), 30, hiperrayo);
+            var fantasma = MakePoken(
+                MakeSpecies("Fantasma", PokenType.Ghost, PokenType.None, 100, 40, 60, 40, 60, 10), 30, placaje);
+            var model2 = MakeBattle(jugador2, fantasma);
+            new TurnEngine(model2, new SeededRng(12)).ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(!model2.PlayerState.MustRecharge, "Hiperrayo: si no le hace nada al rival (Fantasma), no descansa");
+        }
+
+        private static void TestRayoSolarCargaUnTurno()
+        {
+            var rayoSolar = MakeMoveDeTurnos("Rayo Solar", PokenType.Grass, 120, MoveTurnRule.Charge);
+            rayoSolar.skipChargeInWeather = WeatherKind.Sun;
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Planta", PokenType.Grass, PokenType.None, 100, 50, 60, 80, 60, 100), 30, rayoSolar);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+            var engine = new TurnEngine(model, new SeededRng(13));
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP == rival.MaxHP, "Rayo Solar: el primer turno carga y no pega");
+            Check(model.PlayerState.ChargingMoveIndex == 0, "Rayo Solar: queda cargando");
+            Check(jugador.Moves[0].CurrentPP == rayoSolar.maxPP - 1, "Rayo Solar: el PP se gasta al cargar");
+            BattleAction forzada = TurnEngine.AccionForzada(model.PlayerState);
+            Check(forzada != null && forzada.Kind == BattleActionKind.UseMove && forzada.MoveIndex == 0,
+                "Rayo Solar: el turno siguiente sale solo");
+
+            // Aunque se pida otra cosa (cambiar), suelta el golpe.
+            engine.ResolveTurn(BattleAction.Switch(1), BattleAction.Move(0));
+            Check(rival.CurrentHP < rival.MaxHP, "Rayo Solar: el segundo turno pega");
+            Check(model.PlayerState.ChargingMoveIndex < 0, "Rayo Solar: termino la carga");
+            Check(jugador.Moves[0].CurrentPP == rayoSolar.maxPP - 1, "Rayo Solar: soltar el golpe no gasta otro PP");
+        }
+
+        private static void TestRayoSolarConSolNoCarga()
+        {
+            var rayoSolar = MakeMoveDeTurnos("Rayo Solar", PokenType.Grass, 120, MoveTurnRule.Charge);
+            rayoSolar.skipChargeInWeather = WeatherKind.Sun;
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Planta", PokenType.Grass, PokenType.None, 100, 50, 60, 80, 60, 100), 30, rayoSolar);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+            model.SetWeather(WeatherKind.Sun, 5);
+
+            new TurnEngine(model, new SeededRng(14)).ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP < rival.MaxHP, "Rayo Solar: con sol pega en el acto");
+            Check(model.PlayerState.ChargingMoveIndex < 0, "Rayo Solar: con sol no queda cargando");
+        }
+
+        private static void TestVueloQuedaFueraDeAlcance()
+        {
+            var vuelo = MakeMoveDeTurnos("Vuelo", PokenType.Flying, 90, MoveTurnRule.ChargeInvulnerable);
+            vuelo.attackType = AttackType.Physical;
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Pajaro", PokenType.Flying, PokenType.None, 100, 80, 60, 50, 60, 120), 30, vuelo);
+            var rival = MakePoken(
+                MakeSpecies("Lento", PokenType.Normal, PokenType.None, 150, 60, 80, 40, 80, 10), 40, placaje);
+            var model = MakeBattle(jugador, rival);
+            var engine = new TurnEngine(model, new SeededRng(15));
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(jugador.CurrentHP == jugador.MaxHP, "Vuelo: mientras esta en el aire, el Placaje del rival falla");
+            Check(model.PlayerState.SemiInvulnerable, "Vuelo: queda fuera de alcance");
+
+            int hpRival = rival.CurrentHP;
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP < hpRival, "Vuelo: el segundo turno pega");
+            Check(!model.PlayerState.SemiInvulnerable, "Vuelo: al pegar vuelve a estar al alcance");
+            Check(jugador.CurrentHP < jugador.MaxHP, "Vuelo: y ya lo pueden golpear");
+        }
+
+        private static void TestCabezazoSubeLaDefensaAlCargar()
+        {
+            var cabezazo = MakeMoveDeTurnos("Cabezazo", PokenType.Normal, 130, MoveTurnRule.Charge);
+            cabezazo.attackType = AttackType.Physical;
+            cabezazo.chargeStatChanges = new[] { new StatChangeEntry { stat = Stat.Defense, stages = 1, targetSelf = true } };
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Cabezon", PokenType.Normal, PokenType.None, 100, 80, 60, 50, 60, 100), 30, cabezazo);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+
+            new TurnEngine(model, new SeededRng(16)).ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(model.PlayerState.GetStage(Stat.Defense) == 1, "Cabezazo: al agachar la cabeza sube la Defensa");
+            Check(rival.CurrentHP == rival.MaxHP, "Cabezazo: y ese turno no pega");
+        }
+
+        // Los assets del proyecto: que el importador (o el menu que lo aplica a
+        // lo ya importado) les haya puesto su regla a los movimientos conocidos.
+        private static void TestLosMovimientosDelProyectoTienenSuRegla()
+        {
+            var porNombre = new Dictionary<string, MoveDefinition>();
+            foreach (MoveDefinition m in Resources.LoadAll<MoveDefinition>("Definitions/Moves"))
+                if (!string.IsNullOrEmpty(m.englishName)) porNombre[m.englishName] = m;
+
+            void Regla(string nombre, MoveTurnRule esperada)
+            {
+                if (!porNombre.TryGetValue(nombre, out MoveDefinition m)) return; // no esta en el proyecto
+                Check(m.turnRule == esperada && m.implementation == MoveImplementation.Full,
+                    $"Movimientos del proyecto: {m.moveName} es {esperada} y esta implementado ({m.turnRule}, {m.implementation})");
+            }
+
+            Regla("hyper-beam", MoveTurnRule.Recharge);
+            Regla("giga-impact", MoveTurnRule.Recharge);
+            Regla("solar-beam", MoveTurnRule.Charge);
+            Regla("sky-attack", MoveTurnRule.Charge);
+            Regla("skull-bash", MoveTurnRule.Charge);
+            Regla("fly", MoveTurnRule.ChargeInvulnerable);
+            Regla("dig", MoveTurnRule.ChargeInvulnerable);
+            Regla("tackle", MoveTurnRule.Normal);
+
+            if (porNombre.TryGetValue("solar-beam", out MoveDefinition rayoSolar))
+                Check(rayoSolar.skipChargeInWeather == WeatherKind.Sun, "Movimientos del proyecto: Rayo Solar no carga con sol");
+        }
+
+        // ---------- que todo Pokemon pueda pegar ----------
+
+        private static void TestSiempreHayUnAtaque()
+        {
+            MoveDefinition antes = PokenModel.DefaultMove;
+            var respaldo = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            PokenModel.DefaultMove = respaldo;
+            try
+            {
+                // El ataque se aprende primero y despues cuatro de estado: "los
+                // ultimos 4" lo dejarian afuera (Togepi a nivel 15).
+                var destructor = MakeMove("Destructor", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+                var togepiSp = MakeSpecies("Togepito", PokenType.Fairy, PokenType.None, 35, 20, 65, 40, 65, 20);
+                togepiSp.learnset = new[]
+                {
+                    new LearnsetEntry { move = destructor, level = 1 },
+                    new LearnsetEntry { move = MakeMove("Encanto", PokenType.Fairy, AttackType.Status, 0, 100, 20), level = 4 },
+                    new LearnsetEntry { move = MakeMove("Beso", PokenType.Fairy, AttackType.Status, 0, 75, 10), level = 8 },
+                    new LearnsetEntry { move = MakeMove("Gruñido", PokenType.Normal, AttackType.Status, 0, 100, 40), level = 12 },
+                    new LearnsetEntry { move = MakeMove("Camaraderia", PokenType.Normal, AttackType.Status, 0, 100, 20), level = 14 }
+                };
+                var togepi = new PokenModel(togepiSp, 15, FixedIvs);
+                Check(togepi.Moves.Count == 4 && togepi.Moves.Exists(m => m.Definition == destructor),
+                    "Ataques: con 4 movimientos de estado, uno se cambia por el ataque que ya sabia");
+
+                // Nada que pegue en todo el learnset, y lo unico que tiene no esta
+                // implementado (Abra y Teletransporte): recibe el de respaldo.
+                var teletransporte = MakeMove("Teletransporte", PokenType.Psychic, AttackType.Status, 0, 100, 20);
+                teletransporte.implementation = MoveImplementation.NotImplemented;
+                var abraSp = MakeSpecies("Abrita", PokenType.Psychic, PokenType.None, 25, 20, 15, 105, 55, 90);
+                abraSp.learnset = new[] { new LearnsetEntry { move = teletransporte, level = 1 } };
+                var abra = new PokenModel(abraSp, 15, FixedIvs);
+                Check(abra.Moves.Count == 1 && abra.Moves[0].Definition == respaldo,
+                    "Ataques: una especie que no aprende ningun ataque recibe el de respaldo (y no el no implementado)");
+
+                // Todavia no llega al nivel de su primer ataque (Feebas: Placaje a nivel 15): se le da ese.
+                var salpicadura = MakeMove("Salpicadura", PokenType.Normal, AttackType.Status, 0, 100, 40);
+                salpicadura.implementation = MoveImplementation.NotImplemented;
+                var placajeFeebas = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+                var feebasSp = MakeSpecies("Feebita", PokenType.Water, PokenType.None, 20, 15, 20, 10, 55, 80);
+                feebasSp.learnset = new[]
+                {
+                    new LearnsetEntry { move = salpicadura, level = 1 },
+                    new LearnsetEntry { move = placajeFeebas, level = 15 }
+                };
+                var feebas = new PokenModel(feebasSp, 5, FixedIvs);
+                Check(feebas.Moves.Exists(m => m.Definition == placajeFeebas),
+                    "Ataques: si todavia no llega al nivel de su primer ataque, se le da ese");
+
+                // Uno guardado sin ataques (el Abra de la ruleta) recupera uno al cargar.
+                abra.Moves.Clear();
+                abra.AsegurarUnAtaque();
+                Check(abra.Moves.Count == 1 && PokenModel.SirveParaPegar(abra.Moves[0].Definition),
+                    "Ataques: un Pokemon guardado sin movimientos recupera uno");
+            }
+            finally
+            {
+                PokenModel.DefaultMove = antes;
+            }
+        }
+
+        // Todas las especies del proyecto, a los niveles en que se consiguen o se pelean.
+        private static void TestLasEspeciesDelProyectoPuedenPegar()
+        {
+            MoveDefinition antes = PokenModel.DefaultMove;
+            foreach (MoveDefinition m in Resources.LoadAll<MoveDefinition>("Definitions/Moves"))
+                if (m.moveName == "Placaje") PokenModel.DefaultMove = m;
+            try
+            {
+                var sinAtaque = new List<string>();
+                foreach (PokenDefinition especie in Resources.LoadAll<PokenDefinition>("Definitions/Pokens"))
+                {
+                    foreach (int nivel in new[] { 1, 5, 15, 25, 50 })
+                    {
+                        var poken = new PokenModel(especie, nivel, FixedIvs);
+                        if (!poken.Moves.Exists(m => PokenModel.SirveParaPegar(m.Definition)))
+                            sinAtaque.Add($"{especie.pokenName} Nv{nivel}");
+                    }
+                }
+                Check(sinAtaque.Count == 0,
+                    $"Ataques: todas las especies del proyecto pueden pegar a cualquier nivel ({sinAtaque.Count} no pueden: {string.Join(", ", sinAtaque.GetRange(0, Mathf.Min(10, sinAtaque.Count)))})");
+
+                // Las que por nivel no aprendian nada traen ataques en el learnset,
+                // no dependen solo del de respaldo.
+                foreach (string nombre in new[] { "0063_Abra", "0789_Cosmog" })
+                {
+                    var especie = Resources.Load<PokenDefinition>("Definitions/Pokens/" + nombre);
+                    if (especie == null) continue;
+                    bool tiene = especie.learnset != null &&
+                                 System.Array.Exists(especie.learnset, e => e != null && PokenModel.SirveParaPegar(e.move));
+                    Check(tiene, $"Ataques: {especie.pokenName} tiene al menos un ataque en su learnset");
+                }
+            }
+            finally
+            {
+                PokenModel.DefaultMove = antes;
+            }
+        }
+
+        // El Resumen mostraba Psiquico como Agua: la biblioteca de iconos tomaba
+        // fila = enum, pero la hoja esta en el orden de Essentials.
+        private static void TestIconosDeTiposYEstadosDelMenu()
+        {
+            MenuIconLibrary lib = MenuIconLibrary.Instance;
+            if (lib == null)
+            {
+                Debug.LogWarning("[SmokeTests] No esta la biblioteca de iconos de los menus (Resources/Menus/MenuIcons).");
+                return;
+            }
+
+            string primerError = null;
+            foreach (PokenType tipo in System.Enum.GetValues(typeof(PokenType)))
+            {
+                if (tipo == PokenType.None) continue;
+                Sprite s = lib.GetTypeIcon(tipo);
+                string esperado = $"type_{BattleUiAssetImporter.TypeRow[tipo]}_0";
+                if ((s == null || s.name != esperado) && primerError == null)
+                    primerError = $"{tipo} muestra {(s != null ? s.name : "nada")} en vez de {esperado}";
+            }
+            Check(primerError == null, $"Iconos del menu: cada tipo usa su fila de la hoja ({primerError ?? "ok"})");
+
+            Sprite psiquico = lib.GetTypeIcon(PokenType.Psychic);
+            Check(psiquico != null && psiquico.name == "type_14_0", "Iconos del menu: Psiquico ya no se ve como Agua");
+
+            bool estadosBien = true;
+            foreach (KeyValuePair<StatusEffect, int> par in BattleUiAssetImporter.StatusRow)
+            {
+                Sprite s = lib.GetStatusIcon(par.Key);
+                if (s == null || s.name != $"status_{par.Value}_0") estadosBien = false;
+            }
+            Check(estadosBien, "Iconos del menu: cada estado usa su fila de la hoja");
+        }
+
         // Los valores del enum se serializan por numero. Si alguien mete algo
         // en el medio, todo lo guardado con Flee o Protect cambia de accion.
         private static void TestElEnumDeAccionesNoSeCorrio()
@@ -1465,8 +1782,9 @@ namespace PokeRush.EditorTools
                   && (int)BattleActionKind.UseItem == 2
                   && (int)BattleActionKind.Flee == 3
                   && (int)BattleActionKind.Protect == 4
-                  && (int)BattleActionKind.Wait == 5,
-                "BattleActionKind: Wait quedo ULTIMO y no corrio a los demas");
+                  && (int)BattleActionKind.Wait == 5
+                  && (int)BattleActionKind.Recharge == 6,
+                "BattleActionKind: Wait y Recharge quedaron al final y no corrieron a los demas");
         }
     }
 }

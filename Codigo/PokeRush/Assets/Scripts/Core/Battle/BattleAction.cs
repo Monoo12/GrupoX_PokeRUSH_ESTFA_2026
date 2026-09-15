@@ -17,7 +17,12 @@ public enum BattleActionKind
     // que la trae se queda quieto: no cambia, no usa objeto, no ataca y no
     // aguanta. Es exactamente lo que tiene que pasar, sin tocar una sola
     // regla del motor.
-    Wait
+    Wait,
+
+    // Turno de descanso despues de Hiperrayo y compania. Nadie lo elige: lo
+    // pone el TurnEngine (ver TurnEngine.AccionForzada). Tambien va al final,
+    // por lo mismo que Wait.
+    Recharge
 }
 
 public class BattleAction
@@ -87,4 +92,8 @@ public class BattleAction
     // accion que nadie pueda elegir desde un menu.
     public static BattleAction Wait()
         => new BattleAction { Kind = BattleActionKind.Wait };
+
+    // Descansar el turno despues de Hiperrayo y compania.
+    public static BattleAction Recharge()
+        => new BattleAction { Kind = BattleActionKind.Recharge };
 }

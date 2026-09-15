@@ -25,8 +25,8 @@ MonoBehaviour:
   critRateStage: 0
   effect: 3
   effectChance: 30
-  effectDescription: "User bounces high into the air, dodging all attacks, and hits
-    next turn. [Efecto secundario no implementado: solo hace da\xF1o]"
+  effectDescription: User bounces high into the air, dodging all attacks, and hits
+    next turn.
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -36,7 +36,11 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 1
-  implementation: 1
+  implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 2
+  chargeMessage: "\xA1{0} dio un gran salto!"
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}
