@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
+  m_Name: JefeFinalCasino
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  characterName: Reymar
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: 88511479c1b84f44fb7e925f8d6fa137, type: 2}
+    level: 26
+  - species: {fileID: 11400000, guid: ba96205515ab1d4448735d59e7aa3795, type: 2}
+    level: 26
+  - species: {fileID: 11400000, guid: d1e84afd5452a96459760a092f073705, type: 2}
+    level: 27
+  - species: {fileID: 11400000, guid: e1590ec7a4a21ec4192e222b8a9b3c4e, type: 2}
+    level: 27
+  - species: {fileID: 11400000, guid: cf52fcf69d7dd2d4f8dda30d4749941e, type: 2}
+    level: 28
+  - species: {fileID: 11400000, guid: 88540799f22a50943b266132505a5e35, type: 2}
+    level: 29
+  battleFrontSprite: {fileID: 21300000, guid: 1ae58ac8b11c3af44b576b8b572a32d6, type: 3}
+  battleBackSprite: {fileID: 0}
+  battleMusic: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  moneyReward: 3000
+  itemRewards: []
+  defeatGrantsFlag: 49
+  fleeIfWeak: 0
+  aiProfile: {fileID: 11400000, guid: 0bd02e502ab2eec4ea3a823281291e4a, type: 2}
+  battleBackground: {fileID: 21300000, guid: 98558bd2e2e91d94da91bbaaeaafc9d8, type: 3}

@@ -53,6 +53,15 @@ namespace PokeRush.EditorTools
             TestApuestaDeTacconi();
             TestRevendedorDeLaTarjeta();
 
+            TestRuletaDeCombateCadencia();
+            TestRuletaDeCombateSubeYBaja();
+            TestRuletaDeCombateNoPuedeDebilitar();
+            TestRuletaDeCombateCuraYBloquea();
+            TestCambioDeTipoCambiaLaEfectividad();
+            TestManoDelJefeFinal();
+            TestRuletaDelJefeDelProyecto();
+            TestSorteoDeLaRuedaDePremios();
+
             if (_failed == 0)
                 Debug.Log($"[CasinoSmokeTests] TODOS OK: {_passed} checks pasaron.");
             else
@@ -665,6 +674,263 @@ namespace PokeRush.EditorTools
         }
 
         // ---------- PC, shiny y lo nuevo de los pisos 2 y 3 ----------
+
+        // ---------- ruleta de combate y jefe final ----------
+
+        // Un combate armado a mano, con el estado volatil ya creado: es lo
+        // minimo que necesita CasinoRuletaDeCombate.Aplicar.
+        private static BattleModel Combate(PokenDefinition mio, PokenDefinition suyo)
+        {
+            var jugador = new PlayerModel("Test");
+            jugador.Team.Add(new PokenModel(mio, 25));
+
+            var modelo = new BattleModel(jugador, new EnemyModel(suyo, 25));
+            modelo.SwitchPlayerPoken(0);
+            modelo.SwitchEnemyPoken(0);
+            return modelo;
+        }
+
+        private static CasinoRuletaDeCombate RuletaDePrueba(int cada = 2)
+        {
+            return new CasinoRuletaDeCombate(
+                new[] { new Prize { efectoDeCombate = EfectoDeRuleta.SubirAtaque, probability = 1f } }, cada);
+        }
+
+        private static void TestRuletaDeCombateCadencia()
+        {
+            CasinoRuletaDeCombate cada2 = RuletaDePrueba();
+            Check(!cada2.TocaGirar(1), "Ruleta de combate: el turno 1 va limpio");
+            Check(cada2.TocaGirar(2), "Ruleta de combate: gira en el turno 2");
+            Check(!cada2.TocaGirar(3), "Ruleta de combate: no gira en el turno 3");
+            Check(cada2.TocaGirar(4) && cada2.TocaGirar(6), "Ruleta de combate: gira en los turnos pares");
+
+            CasinoRuletaDeCombate cada3 = RuletaDePrueba(3);
+            Check(!cada3.TocaGirar(2) && cada3.TocaGirar(3) && cada3.TocaGirar(6),
+                  "Ruleta de combate: la cadencia se puede cambiar");
+
+            var sinPremios = new CasinoRuletaDeCombate(new Prize[0]);
+            Check(!sinPremios.TocaGirar(2), "Ruleta de combate: sin premios cargados no gira nunca");
+        }
+
+        private static void TestRuletaDeCombateSubeYBaja()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), eevee = Especie("0133_Eevee");
+            if (pikachu == null || eevee == null) return;
+
+            BattleModel m = Combate(pikachu, eevee);
+            var rng = new SeededRng(11);
+
+            CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.SubirAtaque, m, rng);
+            Check(m.PlayerState.GetStage(Stat.Attack) == CasinoRuletaDeCombate.EtapasPorGajo,
+                  "Ruleta de combate: SubirAtaque sube dos escalones");
+
+            CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.BajarAtaque, m, rng);
+            Check(m.PlayerState.GetStage(Stat.Attack) == 0, "Ruleta de combate: BajarAtaque los devuelve");
+
+            CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.BajarDefensa, m, rng);
+            Check(m.PlayerState.GetStage(Stat.Defense) == -CasinoRuletaDeCombate.EtapasPorGajo,
+                  "Ruleta de combate: BajarDefensa baja dos escalones");
+
+            var eventos = CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.Ninguno, m, rng);
+            Check(eventos.Count == 0, "Ruleta de combate: un premio de mapa no hace nada en la pelea");
+
+            // El rival no se toca nunca: la ruleta es contra el Poken del jugador.
+            Check(m.EnemyState.GetStage(Stat.Attack) == 0 && m.EnemyState.GetStage(Stat.Defense) == 0,
+                  "Ruleta de combate: el rival no se ve afectado");
+        }
+
+        private static void TestRuletaDeCombateNoPuedeDebilitar()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), eevee = Especie("0133_Eevee");
+            if (pikachu == null || eevee == null) return;
+
+            BattleModel m = Combate(pikachu, eevee);
+            var rng = new SeededRng(22);
+            PokenModel mio = m.PlayerState.Poken;
+
+            CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.SacarVida, m, rng);
+            Check(mio.CurrentHP < mio.MaxHP && mio.CurrentHP > 0, "Ruleta de combate: SacarVida saca PS");
+
+            // Con un solo PS no lo puede tumbar: un KO fuera de turno dejaria el
+            // combate pidiendo reemplazo cuando el motor no lo espera.
+            mio.SetCurrentHP(1);
+            CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.SacarVida, m, rng);
+            Check(mio.CurrentHP == 1 && !mio.IsFainted, "Ruleta de combate: SacarVida nunca debilita");
+        }
+
+        private static void TestRuletaDeCombateCuraYBloquea()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), eevee = Especie("0133_Eevee");
+            if (pikachu == null || eevee == null) return;
+
+            BattleModel m = Combate(pikachu, eevee);
+            var rng = new SeededRng(33);
+            PokenModel mio = m.PlayerState.Poken;
+
+            mio.SetCurrentHP(1);
+            CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.DarPocion, m, rng);
+            Check(mio.CurrentHP > 1, "Ruleta de combate: DarPocion cura");
+
+            mio.SetCurrentHP(mio.MaxHP);
+            var eventos = CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.DarPocion, m, rng);
+            Check(mio.CurrentHP == mio.MaxHP && eventos.Count == 1,
+                  "Ruleta de combate: con la barra llena la pocion solo avisa");
+
+            Check(!m.PlayerState.Flinched, "Ruleta de combate: arranca sin el turno bloqueado");
+            CasinoRuletaDeCombate.Aplicar(EfectoDeRuleta.BloquearTurno, m, rng);
+            Check(m.PlayerState.Flinched, "Ruleta de combate: BloquearTurno usa el retroceso");
+        }
+
+        // El cambio de tipo tiene que valer para la efectividad, para el STAB y
+        // para las inmunidades de estado, que es lo que se rompe facil si algun
+        // lugar sigue preguntandole el tipo a la especie.
+        private static void TestCambioDeTipoCambiaLaEfectividad()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), eevee = Especie("0133_Eevee");
+            if (pikachu == null || eevee == null) return;
+
+            BattleModel m = Combate(pikachu, eevee);
+            BattlePokenState mio = m.PlayerState;
+            PokenType original = mio.Poken.Definition.type;
+
+            PokenType nuevo = original == PokenType.Fire ? PokenType.Water : PokenType.Fire;
+            mio.TipoCambiado = nuevo;
+
+            Check(mio.Tipo1 == nuevo && mio.Tipo2 == PokenType.None,
+                  "Cambio de tipo: queda de un solo tipo");
+            Check(mio.EsDeTipo(nuevo) && !mio.EsDeTipo(original),
+                  "Cambio de tipo: ya no es del tipo de su especie");
+
+            Check(DamageCalculator.HasStab(mio, nuevo), "Cambio de tipo: el STAB sigue al tipo nuevo");
+            Check(!DamageCalculator.HasStab(mio, original), "Cambio de tipo: pierde el STAB del viejo");
+
+            float contraElNuevo = DamageCalculator.DualEffectiveness(
+                nuevo == PokenType.Fire ? PokenType.Water : PokenType.Electric, mio);
+            Check(contraElNuevo > 1f, "Cambio de tipo: la efectividad se calcula contra el tipo nuevo");
+
+            // Pasar a Fuego tiene que dar la inmunidad a la quemadura.
+            mio.TipoCambiado = PokenType.Fire;
+            Check(StatusEffects.IsImmuneByType(StatusEffect.Burned, mio),
+                  "Cambio de tipo: de Fuego no se puede quemar");
+
+            mio.TipoCambiado = PokenType.None;
+            Check(mio.Tipo1 == original, "Cambio de tipo: en None vuelve al de su especie");
+        }
+
+        private static void TestManoDelJefeFinal()
+        {
+            PokenDefinition pikachu = Especie("0025_Pikachu"), eevee = Especie("0133_Eevee");
+            if (pikachu == null || eevee == null) return;
+
+            // La mano la reparte siempre el jugador: cuando el derrotado es el
+            // jefe, ganar la mano es que el jefe NO se levante.
+            Check(CasinoJefeFinalNpc.QuienGana(BlackjackOutcome.Gana, true) == BlackjackOutcome.Gana,
+                  "Mano del jefe: perdiendo la pelea, ganar la mano te levanta a vos");
+            Check(CasinoJefeFinalNpc.QuienGana(BlackjackOutcome.Gana, false) == BlackjackOutcome.Pierde,
+                  "Mano del jefe: ganando la pelea, ganar la mano deja al jefe afuera");
+            Check(CasinoJefeFinalNpc.QuienGana(BlackjackOutcome.Pierde, false) == BlackjackOutcome.Gana,
+                  "Mano del jefe: ganando la pelea, perder la mano lo levanta a el");
+            Check(CasinoJefeFinalNpc.QuienGana(BlackjackOutcome.Empata, true) == BlackjackOutcome.Empata
+                  && CasinoJefeFinalNpc.QuienGana(BlackjackOutcome.Empata, false) == BlackjackOutcome.Empata,
+                  "Mano del jefe: el empate se lee igual de los dos lados");
+
+            var caido = new PokenModel(pikachu, 25);
+            caido.TakeDamage(9999);
+
+            Check(CasinoJefeFinalNpc.PsAlRevivir(caido, BlackjackOutcome.Gana) == caido.MaxHP,
+                  "Mano del jefe: ganando revive con la vida llena");
+            Check(CasinoJefeFinalNpc.PsAlRevivir(caido, BlackjackOutcome.Blackjack) == caido.MaxHP,
+                  "Mano del jefe: el blackjack tambien revive entero");
+            Check(CasinoJefeFinalNpc.PsAlRevivir(caido, BlackjackOutcome.Empata) == caido.MaxHP / 2,
+                  "Mano del jefe: empatando revive con la mitad");
+            Check(CasinoJefeFinalNpc.PsAlRevivir(caido, BlackjackOutcome.Pierde) == 0,
+                  "Mano del jefe: perdiendo no revive nadie");
+
+            var equipo = new System.Collections.Generic.List<PokenModel>();
+            var sano = new PokenModel(eevee, 25);
+            equipo.Add(sano);
+            Check(CasinoJefeFinalNpc.ElegirParaRevivir(equipo, 0.5f) == null,
+                  "Mano del jefe: sin debilitados no hay a quien revivir");
+
+            equipo.Add(caido);
+            Check(CasinoJefeFinalNpc.ElegirParaRevivir(equipo, 0f) == caido
+                  && CasinoJefeFinalNpc.ElegirParaRevivir(equipo, 0.99f) == caido,
+                  "Mano del jefe: solo elige entre los debilitados");
+
+            CasinoJefeFinalNpc.Revivir(caido, CasinoJefeFinalNpc.PsAlRevivir(caido, BlackjackOutcome.Empata));
+            Check(!caido.IsFainted && caido.CurrentHP == caido.MaxHP / 2,
+                  "Mano del jefe: el revivido queda en pie con la mitad");
+            Check(caido.CurrentStatus == StatusEffect.None,
+                  "Mano del jefe: y sin estado alterado");
+        }
+
+        // Que gajo sale segun los pesos. Vale para TODAS las ruletas del juego,
+        // no solo la del jefe: es la misma cuenta.
+        //
+        // Se agrego despues de ver tres POCIÓN seguidas jugando el piso final y
+        // no poder descartar un sesgo a ojo (eran 14%: tres seguidas son 0,3%,
+        // raro pero posible). El sorteo estaba bien; lo que faltaba era el test.
+        private static void TestSorteoDeLaRuedaDePremios()
+        {
+            var premios = new[]
+            {
+                new Prize { prizeName = "A", probability = 50f },
+                new Prize { prizeName = "B", probability = 0f },   // no puede salir nunca
+                new Prize { prizeName = "C", probability = 30f },
+                new Prize { prizeName = "D", probability = 20f }
+            };
+
+            // Los bordes: la tirada 0 cae en el primero y la 1 en el ultimo con peso.
+            Check(PrizeWheelController.SortearIndice(premios, 0f) == 0, "Rueda: la tirada 0 cae en el primer gajo");
+            Check(PrizeWheelController.SortearIndice(premios, 1f) == 3, "Rueda: la tirada 1 cae en el ultimo con peso");
+            Check(PrizeWheelController.SortearIndice(premios, 0.49f) == 0, "Rueda: justo antes del corte sigue el primero");
+            Check(PrizeWheelController.SortearIndice(premios, 0.51f) == 2, "Rueda: pasado el corte salta al siguiente con peso");
+
+            // El reparto: 2000 tiradas parejas tienen que dar los pesos.
+            var cuenta = new int[premios.Length];
+            const int tiradas = 2000;
+            for (int i = 0; i < tiradas; i++)
+            {
+                int gajo = PrizeWheelController.SortearIndice(premios, (i + 0.5f) / tiradas);
+                if (gajo >= 0) cuenta[gajo]++;
+            }
+
+            Check(cuenta[1] == 0, "Rueda: un gajo con peso 0 no sale nunca");
+            Check(Mathf.Abs(cuenta[0] / (float)tiradas - 0.5f) < 0.02f, "Rueda: el gajo de 50% sale la mitad de las veces");
+            Check(Mathf.Abs(cuenta[2] / (float)tiradas - 0.3f) < 0.02f, "Rueda: el de 30% sale un tercio menos");
+            Check(Mathf.Abs(cuenta[3] / (float)tiradas - 0.2f) < 0.02f, "Rueda: el de 20% sale un quinto");
+
+            // Casos borde que no tienen que explotar.
+            Check(PrizeWheelController.SortearIndice(null, 0.5f) < 0, "Rueda: sin premios devuelve -1");
+            Check(PrizeWheelController.SortearIndice(new Prize[0], 0.5f) < 0, "Rueda: con la lista vacia devuelve -1");
+
+            // Todos en cero: cualquier gajo vale, pero tiene que ser uno valido.
+            var sinPesos = new[] { new Prize { probability = 0f }, new Prize { probability = 0f } };
+            int elegido = PrizeWheelController.SortearIndice(sinPesos, 0.9f);
+            Check(elegido >= 0 && elegido < sinPesos.Length, "Rueda: sin pesos igual devuelve un gajo valido");
+        }
+
+        // La tabla del jefe tal como la deja el builder del piso final.
+        private static void TestRuletaDelJefeDelProyecto()
+        {
+            var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(
+                "Assets/Resources/Definitions/Casino/RuletaDelJefeFinal.asset");
+            if (tabla == null) return;
+
+            Check(tabla.premios != null && tabla.premios.Length == CasinoRuletaDeCombate.Gajos,
+                  "Ruleta del jefe: tiene los ocho gajos que dibuja la rueda");
+
+            bool todosConEfecto = true, todosConIcono = true;
+            foreach (Prize p in tabla.premios)
+            {
+                if (p == null || p.efectoDeCombate == EfectoDeRuleta.Ninguno) todosConEfecto = false;
+                if (p == null || p.icon == null) todosConIcono = false;
+            }
+            Check(todosConEfecto, "Ruleta del jefe: todos los gajos hacen algo en la pelea");
+            Check(todosConIcono, "Ruleta del jefe: todos los gajos tienen icono");
+            Check(tabla.Porcentaje(p => p.efectoDeCombate == EfectoDeRuleta.TirarDeNuevo) < 0.2f,
+                  "Ruleta del jefe: TirarDeNuevo no se lleva la rueda");
+        }
 
         private static PokenDefinition Especie(string archivo)
             => AssetDatabase.LoadAssetAtPath<PokenDefinition>($"Assets/Resources/Definitions/Pokens/{archivo}.asset");
