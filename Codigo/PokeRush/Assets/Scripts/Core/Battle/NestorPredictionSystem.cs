@@ -350,7 +350,7 @@ public class NestorPredictionSystem
     {
         if (move.effect == StatusEffect.Confused) return !ctx.Foe.IsConfused;
         if (ctx.Foe.Poken.CurrentStatus != StatusEffect.None) return false;
-        return !StatusEffects.IsImmuneByType(move.effect, ctx.Foe.Poken.Definition);
+        return !StatusEffects.IsImmuneByType(move.effect, ctx.Foe);
     }
 
     // La mejor jugada del rival SIN contar la que Nestor le tapo. Sale del

@@ -72,6 +72,14 @@ public class BattleController : MonoBehaviour
     // piden en todas las suyas). Se vuelve a decidir en cada Start*.
     private bool _nestorPedidoPorLaPelea;
 
+    // La ruleta que aparece cada dos turnos en la pelea del jefe del ultimo
+    // piso del casino. Null en todos los demas combates. La pasa el NPC que
+    // lanza la pelea: el combate no sabe nada del casino mas alla de esto.
+    private CasinoRuletaDeCombate _ruletaDeCombate;
+    // Lo que dejo el ultimo giro, para reproducirlo al cerrarse la ruleta.
+    private List<BattleEvent> _eventosDeLaRuleta;
+    private bool _laRuletaDebeOtroGiro;
+
     // Fase de liberacion: se dispara cuando el ULTIMO Poken del boss llega a PS
     // criticos. Null mientras no este activa.
     private LiberationEngine _liberation;
@@ -141,10 +149,16 @@ public class BattleController : MonoBehaviour
     //
     // 'conNestorAliado' pide la lectura aliada de Nestor para ESTA pelea aunque
     // falte el flag. La usan los NPCs del casino (ver HayLecturaAliada).
+    // 'ruletaDeCombate' es la ruleta que aparece cada dos turnos en la pelea
+    // del jefe del casino. Null (lo normal) = no aparece ninguna.
     public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition,
-        BossBattleConfig config = null, bool conNestorAliado = false)
+        BossBattleConfig config = null, bool conNestorAliado = false,
+        CasinoRuletaDeCombate ruletaDeCombate = null)
     {
         _nestorPedidoPorLaPelea = conNestorAliado;
+        _ruletaDeCombate = ruletaDeCombate != null && ruletaDeCombate.Configurada
+            ? ruletaDeCombate
+            : null;
         _bossConfig = enemyDefinition is BossDefinition
             ? (config ?? BossBattleConfig.DesdeTorre(GameManager.Instance?.Tower))
             : null;
@@ -201,6 +215,7 @@ public class BattleController : MonoBehaviour
         // morir y el combate no terminaba nunca.
         _bossConfig = null;
         _nestorPedidoPorLaPelea = false;
+        _ruletaDeCombate = null;
         BeginBattle(player, enemy, encounter.battleBackground);
     }
 
@@ -808,6 +823,16 @@ public class BattleController : MonoBehaviour
         battleHudView?.UpdateHud(_battleModel);
         yield return AvanzarPrediccion();
 
+        // La ruleta del jefe del casino: cada dos turnos, ANTES de que el
+        // jugador elija. Va aca y no despues por la misma razon que la
+        // Prediccion: lo que sale cambia que conviene hacer este turno, asi que
+        // tiene que verse antes de abrir el menu de comandos.
+        if (_ruletaDeCombate != null && _ruletaDeCombate.TocaGirar(_battleModel.CurrentTurn))
+        {
+            yield return RuletaDeCombateRoutine();
+            if (_battleModel == null) yield break;
+        }
+
         // Cargando un movimiento o descansando despues de Hiperrayo: este turno
         // no hay nada que elegir y se juega solo.
         BattleAction forzada = TurnEngine.AccionForzada(_battleModel.PlayerState);
@@ -818,6 +843,120 @@ public class BattleController : MonoBehaviour
         }
 
         battleHudView?.ShowCommandMenu(_battleModel);
+    }
+
+    // ---------- ruleta del jefe del casino ----------
+
+    // Abre la ruleta de premios encima del combate y aplica lo que salga sobre
+    // el Poken que el jugador tiene en el campo.
+    //
+    // Es la MISMA pantalla que las ruletas del mapa: se reusa entera (rueda,
+    // puntero, giro, cartel) y lo unico que cambia es quien cobra el premio,
+    // que se pasa por PrizeWheelRequest.Entregar. El efecto se aplica adentro
+    // de ese callback -igual que un premio de mapa se mete en la mochila ahi
+    // mismo- y los eventos que devuelve se reproducen despues, con el ritmo de
+    // siempre, para que la barra de PS y los mensajes se lean como los de un
+    // turno normal.
+    private IEnumerator RuletaDeCombateRoutine()
+    {
+        MenuManager menus = MenuManager.HasInstance ? MenuManager.Instance : null;
+        if (menus == null)
+        {
+            Debug.LogError("[Combate] No hay MenuManager: la ruleta del jefe no se puede abrir.");
+            yield break;
+        }
+
+        for (int giro = 0; giro < CasinoRuletaDeCombate.MaximoDeGirosEncadenados; giro++)
+        {
+            _eventosDeLaRuleta = null;
+            _laRuletaDebeOtroGiro = false;
+            bool cerrada = false;
+
+            // El HUD se saca del medio: la ruleta no oscurece el fondo (asi se
+            // sigue viendo la pelea detras), y con el menu de comandos prendido
+            // los dos se pisan.
+            menus.SetContext(MenuContextKind.Battle);
+            battleHudView?.HideMenus();
+
+            MenuScreen abierta = menus.Open(MenuScreenId.PrizeWheel,
+                new PrizeWheelRequest
+                {
+                    Prizes = _ruletaDeCombate.Premios,
+                    RecompensaUnica = true,
+                    Entregar = CobrarGajoDeLaRuleta
+                },
+                _ => cerrada = true);
+
+            // Sin prefab registrado, Open devuelve null y NO llama al callback:
+            // esperar ahi dejaria el combate colgado sin menu y sin salida. Se
+            // apaga la ruleta para el resto de la pelea y se sigue jugando.
+            if (abierta == null)
+            {
+                Debug.LogError("[Combate] No esta registrada la pantalla de la ruleta (MenuScreenId.PrizeWheel): " +
+                               "la pelea sigue sin ella. Corre PokeRush/Casino/Armar la ruleta de premios.");
+                _ruletaDeCombate = null;
+                yield break;
+            }
+
+            // La segunda condicion es la red de seguridad: si el combate se
+            // desarma mientras la ruleta esta abierta, la corrutina no se queda
+            // esperando un cierre que ya no va a llegar.
+            yield return new WaitUntil(() => cerrada || _battleModel == null);
+
+            if (_battleModel == null) yield break;
+
+            if (_eventosDeLaRuleta != null && _eventosDeLaRuleta.Count > 0)
+                yield return PlayEvents(_eventosDeLaRuleta);
+
+            if (_battleModel == null) yield break;
+            battleHudView?.UpdateHud(_battleModel);
+
+            if (!_laRuletaDebeOtroGiro) yield break;
+        }
+
+        // Se acabaron los giros encadenados. El tope existe para que un
+        // TirarDeNuevo detras de otro no deje la ruleta girando sola.
+        Announce("La casa cierra la ruleta por hoy.");
+        yield return new WaitForSeconds(messageDelay);
+    }
+
+    // Que hace el gajo que salio. Corre adentro de la pantalla de la ruleta,
+    // justo cuando frena: si el juego se corta con el cartel abierto, el efecto
+    // ya esta aplicado (mismo criterio que los premios de mapa).
+    private string CobrarGajoDeLaRuleta(Prize premio)
+    {
+        if (premio == null) return "La ruleta se detiene en un gajo vacio.";
+
+        _eventosDeLaRuleta = CasinoRuletaDeCombate.Aplicar(premio.efectoDeCombate, _battleModel, _rng);
+        _laRuletaDebeOtroGiro = premio.efectoDeCombate == EfectoDeRuleta.TirarDeNuevo;
+        return premio.BuildMessage();
+    }
+
+    // ---------- revancha (jefe del casino) ----------
+
+    // Vuelve a empezar la pelea que acaba de terminar, con los equipos COMO
+    // QUEDARON: el rival es el mismo EnemyModel, no uno nuevo.
+    //
+    // Es lo que hace falta para la mano de blackjack del ultimo piso: al que
+    // perdio se le revive un Pokemon y la pelea sigue. Rearmar el rival desde
+    // su definicion lo traeria con los seis Pokemon enteros y la mano no
+    // significaria nada.
+    //
+    // Devuelve false si no hay con que seguir (algun lado sin nadie en pie),
+    // asi quien la llama puede decir algo en vez de quedarse esperando un
+    // BattleEnded que no va a llegar.
+    public bool Revancha(PlayerModel player)
+    {
+        if (_enemyModel == null)
+        {
+            Debug.LogError("[Combate] No hay una pelea anterior de la que hacer revancha.");
+            return false;
+        }
+
+        if (player == null || !player.HasAlivePoken || !_enemyModel.HasAlivePoken) return false;
+
+        BeginBattle(player, _enemyModel);
+        return _battleModel != null;
     }
 
     // ---------- cambio de Poken al caer el activo ----------

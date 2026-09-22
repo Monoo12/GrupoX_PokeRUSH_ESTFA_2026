@@ -44,6 +44,12 @@ public class Prize
     [Tooltip("Plata que se da en su lugar si el jugador ya lo tenia.")]
     [Min(0)] public int moneyIfOwned = 300;
 
+    [Header("Combate (solo en la pelea del jefe)")]
+    [Tooltip("Que le hace este gajo al Poken que el jugador tiene en el campo " +
+             "cuando la ruleta se gira DENTRO de un combate. Ninguno = premio " +
+             "normal de mapa. Ver CasinoRuletaDeCombate.")]
+    public EfectoDeRuleta efectoDeCombate = EfectoDeRuleta.Ninguno;
+
     [Tooltip("Pisa el texto del cartel. Vacio = se arma solo con nombre y cantidad.")]
     [TextArea(2, 3)] public string customMessage = "";
 
@@ -121,6 +127,10 @@ public class PrizeWheelController : MenuScreen
     [Tooltip("Uno por gajo, en el orden en que estan dibujados en la rueda.")]
     [SerializeField] private Prize[] prizes = new Prize[0];
 
+    // Lo mas grande que puede medir un icono sin salirse del gajo. El gajo mide
+    // unos 34 px de arco al radio al que estan puestos los iconos.
+    private const float LadoMaximoDelIcono = 30f;
+
     [Header("Giro")]
     [SerializeField] private float spinSeconds = 3.6f;
     [Tooltip("Vueltas enteras antes de frenar en el premio.")]
@@ -155,6 +165,8 @@ public class PrizeWheelController : MenuScreen
     private bool _recompensaUnica;
     private bool _cerrarEnElProximoTick;
     private string _mensajeDelPremio;
+    // Quien cobra el premio. Null = PrizeGranter (ver PrizeWheelRequest).
+    private System.Func<Prize, string> _entregar;
 
     // En modo premio no hay VOLVER hasta haber girado: si no, el jugador
     // podria cerrar la ruleta que se gano y perder el premio.
@@ -189,6 +201,7 @@ public class PrizeWheelController : MenuScreen
             : prizes;
 
         _recompensaUnica = pedido != null && pedido.RecompensaUnica;
+        _entregar = pedido != null ? pedido.Entregar : null;
         _cerrarEnElProximoTick = false;
 
         _result.Giros = 0;
@@ -266,7 +279,26 @@ public class PrizeWheelController : MenuScreen
             // Tamano nativo y no un cuadro fijo: los iconos miden distinto cada
             // uno y estirarlos a una caja comun rompe la grilla del pixel art.
             slot.SetNativeSize();
+            Achicar(slot);
         }
+    }
+
+    // Un icono mas grande que el gajo se sale de la rueda y pisa al de al lado.
+    // Paso con los iconos de item del pack (48 px) contra los de la ruleta
+    // (20-28 px) al armar la ruleta del jefe del ultimo piso.
+    //
+    // Se achica por un divisor ENTERO y no al tamano exacto: en pixel art una
+    // escala no entera deja el dibujo sucio, y bajar a la mitad o a un tercio
+    // por lo menos mantiene la relacion entre pixeles. Los iconos que ya
+    // entraban no se tocan.
+    private static void Achicar(Image slot)
+    {
+        var rt = (RectTransform)slot.transform;
+        float lado = Mathf.Max(rt.sizeDelta.x, rt.sizeDelta.y);
+        if (lado <= LadoMaximoDelIcono) return;
+
+        int divisor = Mathf.CeilToInt(lado / LadoMaximoDelIcono);
+        rt.sizeDelta /= divisor;
     }
 
     // ---------------------------------------------------------------- input
@@ -349,24 +381,38 @@ public class PrizeWheelController : MenuScreen
         RefrescarBotones();
     }
 
+    private int Sortear() => SortearIndice(_enJuego, Random.value);
+
     // Sorteo por peso. Los pesos son relativos: se normalizan solos.
-    private int Sortear()
+    //
+    // La tirada (0 a 1) entra de afuera, como en CasinoRuletaDeNpcs.Sortear:
+    // asi la regla de que gajo sale se puede probar sin abrir la pantalla y sin
+    // depender del azar. Es la misma cuenta para todas las ruletas del juego.
+    public static int SortearIndice(Prize[] premios, float tirada01)
     {
+        if (premios == null || premios.Length == 0) return -1;
+
         float total = 0f;
-        foreach (Prize p in _enJuego)
+        foreach (Prize p in premios)
             if (p != null) total += Mathf.Max(0f, p.probability);
 
         // Sin pesos utiles, todos los gajos valen lo mismo.
-        if (total <= 0f) return Random.Range(0, _enJuego.Length);
+        if (total <= 0f) return Mathf.Min((int)(Mathf.Clamp01(tirada01) * premios.Length), premios.Length - 1);
 
-        float tirada = Random.value * total;
-        for (int i = 0; i < _enJuego.Length; i++)
+        float tirada = Mathf.Clamp01(tirada01) * total;
+        for (int i = 0; i < premios.Length; i++)
         {
-            if (_enJuego[i] == null) continue;
-            tirada -= Mathf.Max(0f, _enJuego[i].probability);
+            if (premios[i] == null) continue;
+            tirada -= Mathf.Max(0f, premios[i].probability);
             if (tirada <= 0f) return i;
         }
-        return _enJuego.Length - 1;
+
+        // Ultimo gajo con peso: con tirada01 = 1 exacto la resta puede no llegar
+        // a cero por redondeo, y devolver el ultimo del array (que podria ser
+        // null o de peso 0) seria un premio que no tenia que salir.
+        for (int i = premios.Length - 1; i >= 0; i--)
+            if (premios[i] != null && premios[i].probability > 0f) return i;
+        return premios.Length - 1;
     }
 
     // ----------------------------------------------------------------- tick
@@ -433,7 +479,11 @@ public class PrizeWheelController : MenuScreen
         // El premio se entrega ACA, no cuando se cierra el cartel: si el juego
         // se corta con la caja abierta, el premio ya es del jugador. Objeto,
         // plata o Pokemon: lo resuelve PrizeGranter, que tambien arma el texto.
-        _mensajeDelPremio = PrizeGranter.Entregar(premio, Player);
+        // Adentro de un combate lo cobra quien abrio la ruleta (el efecto va al
+        // Poken que esta peleando, no a la mochila).
+        _mensajeDelPremio = _entregar != null
+            ? _entregar(premio)
+            : PrizeGranter.Entregar(premio, Player);
 
         PrenderEfectos();
         if (winClip != null) AudioService.Instance.PlaySFX(winClip);

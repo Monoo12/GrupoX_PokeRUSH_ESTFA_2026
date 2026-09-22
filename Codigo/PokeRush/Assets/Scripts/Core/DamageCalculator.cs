@@ -39,6 +39,24 @@ public static class DamageCalculator
            (moveType == attacker.type ||
             (attacker.type2 != PokenType.None && moveType == attacker.type2));
 
+    // Las dos mismas cuentas pero contra los tipos ACTUALES del Poken en el
+    // campo, que pueden no ser los de su especie: la ruleta del jefe del casino
+    // le cambia el tipo al que esta peleando (ver BattlePokenState.TipoCambiado).
+    //
+    // Las versiones de arriba, que toman la PokenDefinition, siguen existiendo
+    // para quien mira un Poken que NO esta en el campo (la IA evaluando a quien
+    // mandar): ahi no hay estado volatil que consultar.
+    public static float DualEffectiveness(PokenType moveType, BattlePokenState defender)
+    {
+        float eff = TypeChart.Effectiveness(moveType, defender.Tipo1);
+        if (defender.Tipo2 != PokenType.None && defender.Tipo2 != defender.Tipo1)
+            eff *= TypeChart.Effectiveness(moveType, defender.Tipo2);
+        return eff;
+    }
+
+    public static bool HasStab(BattlePokenState attacker, PokenType moveType)
+        => attacker.EsDeTipo(moveType);
+
     // Daño real de un movimiento (con azar: critico + roll 0.85-1.0).
     // 'field' (opcional) aplica clima, terreno y pantallas del defensor.
     public static DamageResult Calculate(
@@ -53,7 +71,7 @@ public static class DamageCalculator
         float abilityMult = AbilityEffects.AttackerDamageMultiplier(attacker, move.type, move.attackType);
 
         return Compute(attacker, defender, move.power, move.type, move.attackType,
-            HasStab(attacker.Poken.Definition, move.type), abilityMult, crit, roll, field);
+            HasStab(attacker, move.type), abilityMult, crit, roll, field);
     }
 
     // Forcejeo: potencia 50, sin tipo (efectividad 1 contra todo), fisico.
@@ -149,8 +167,7 @@ public static class DamageCalculator
 
         // Tormenta de arena: Defensa Especial x1.5 para los tipo Roca
         if (field != null && field.CurrentWeather == WeatherKind.Sandstorm && !physical
-            && (defender.Poken.Definition.type == PokenType.Rock
-                || defender.Poken.Definition.type2 == PokenType.Rock))
+            && defender.EsDeTipo(PokenType.Rock))
             defStat *= 1.5f;
 
         if (defStat < 1f) defStat = 1f;

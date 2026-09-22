@@ -24,7 +24,7 @@ public class WildPokemonAI : IBattleAI
             // los de estado pesan 1 (los usa "porque si", como un salvaje)
             float weight = 1f;
             if (def.attackType != AttackType.Status && def.power > 0)
-                weight = 1f + DamageCalculator.DualEffectiveness(def.type, context.Foe.Poken.Definition);
+                weight = 1f + DamageCalculator.DualEffectiveness(def.type, context.Foe);
 
             indices.Add(i);
             weights.Add(weight);

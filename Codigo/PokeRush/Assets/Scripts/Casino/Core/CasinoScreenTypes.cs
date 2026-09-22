@@ -34,6 +34,14 @@ public class PrizeWheelRequest
     // Premio por ganar un combate: se gira UNA sola vez, no se puede salir sin
     // girar y la pantalla se cierra sola al cerrar el cartel del premio.
     public bool RecompensaUnica;
+
+    // Quien cobra el premio, y que dice el cartel. Vacio = PrizeGranter, que es
+    // lo que hacen todas las ruletas del mapa (objeto, plata o Pokemon).
+    //
+    // Existe para la ruleta del jefe del ultimo piso, donde el gajo no va a la
+    // mochila sino al Poken que esta peleando: la pantalla es la misma y lo
+    // unico que cambia es quien aplica el premio (ver CasinoRuletaDeCombate).
+    public System.Func<Prize, string> Entregar;
 }
 
 public class PrizeWheelResult
