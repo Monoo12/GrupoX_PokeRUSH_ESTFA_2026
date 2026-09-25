@@ -20,12 +20,18 @@ public enum MenuScreenId
     // sin tapar el escenario. Reemplazo la mesa de apuestas que habia antes.
     PrizeWheel,
 
-    // La mesa de ruleta: apuestas a numero, rojo y negro. Va SIEMPRE al final
-    // del enum. Los prefabs guardan el screenId como numero, asi que meter un
-    // valor en el medio le cambia la identidad a las pantallas de abajo y hay
-    // que regenerarlas todas (ya paso al sacar la mesa vieja: PrizeWheel se
-    // movio de 8 a 7 y hubo que rehacer su prefab).
-    Roulette
+    // La mesa de ruleta: apuestas a numero, rojo y negro.
+    Roulette,
+
+    // La mesa de blackjack del piso 3. Lo NUEVO va SIEMPRE al final del enum.
+    // Los prefabs guardan el screenId como numero, asi que meter un valor en el
+    // medio le cambia la identidad a las pantallas de abajo y hay que
+    // regenerarlas todas (ya paso al sacar la mesa vieja: PrizeWheel se movio
+    // de 8 a 7 y hubo que rehacer su prefab).
+    Blackjack,
+
+    // El PC de almacenamiento de Pokemon. Al final por lo mismo que Blackjack.
+    PcStorage
 }
 
 // Desde donde se abrio el sistema de menus. Las pantallas compartidas (mochila,
@@ -77,7 +83,10 @@ public enum PartyScreenMode
     // Elegir un Poken como objetivo de un objeto.
     SelectTarget,
     // Elegir un Poken para mandar al campo (cambio en combate).
-    SelectSwitch
+    SelectSwitch,
+    // Elegir cualquier Poken y devolverlo, sin submenu (ej: cual apostar con
+    // Tacconi). Respeta BlockedIndices.
+    SelectAny
 }
 
 public class PartyScreenRequest
@@ -131,4 +140,7 @@ public class MessageBoxRequest
 public class MessageBoxResult
 {
     public bool Confirmed;
+    // Se cerro con Volver. En una pregunta con dos opciones propias (SUBIR /
+    // BAJAR) Volver no puede contar como la segunda opcion.
+    public bool Cancelled;
 }

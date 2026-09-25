@@ -50,6 +50,12 @@ public class BattleHudView : MonoBehaviour
     [Tooltip("Respaldo si no hay BattlePredictionView: un solo Text con el titulo.")]
     [SerializeField] private Text predictionBannerText;
 
+    [Header("Nestor aliado (nivel 2)")]
+    [Tooltip("Retrato de Nestor arriba del combate. Es el ESPEJO del panel de " +
+             "arriba: aquel es Nestor jefe leyendote a vos en el primer Data " +
+             "Center, este es Nestor de tu lado leyendo al rival. Opcional.")]
+    [SerializeField] private NestorPortraitView nestorPortraitView;
+
     [Header("Menu de comandos")]
     [SerializeField] private GameObject commandPanel;
     [SerializeField] private Button fightButton;
@@ -358,6 +364,15 @@ public class BattleHudView : MonoBehaviour
         string texto = snapshot.Activa ? snapshot.Titulo : null;
         predictionBannerText.text = texto;
         predictionBannerText.gameObject.SetActive(!string.IsNullOrEmpty(texto));
+    }
+
+    // Estado del retrato de Nestor aliado. Igual que SetPrediction: recibe
+    // DATOS, no texto armado ni sprites elegidos. Sin NestorPortraitView
+    // cableado no pasa nada — los mensajes de la lectura salen igual por la
+    // barra de mensajes, asi que el combate se entiende sin el retrato.
+    public void SetNestorPortrait(NestorPortraitSnapshot snapshot)
+    {
+        if (nestorPortraitView != null) nestorPortraitView.Render(snapshot);
     }
 
     // Turno del jugador: muestra los comandos y la pregunta clasica

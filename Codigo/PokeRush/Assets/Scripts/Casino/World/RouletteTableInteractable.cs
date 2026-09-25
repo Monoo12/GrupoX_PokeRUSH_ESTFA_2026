@@ -37,6 +37,17 @@ public class RouletteTableInteractable : MonoBehaviour, IInteractable
     [SerializeField, TextArea(2, 3)] private string mensajePerdiste =
         "La casa siempre gana. Volvé cuando quieras la revancha.";
 
+    [Header("Ruleta de premios por ganar al color")]
+    [Tooltip("Ruleta que se abre al ganar en limpio MAS que el umbral apostando a " +
+             "rojo o negro en un giro. Vacio = nunca.")]
+    [SerializeField] private CasinoPrizeTable ruletaPorColor;
+    [Tooltip("Cuanto hay que ganar al color en un giro (en limpio, sin contar la ficha).")]
+    [Min(0)] [SerializeField] private int umbralRuletaPorColor = 200;
+
+    public CasinoPrizeTable RuletaPorColor => ruletaPorColor;
+    public int UmbralRuletaPorColor => umbralRuletaPorColor;
+    public int ApuestaMaxima => apuestaMaxima;
+
     [Header("Objetivo del piso (opcional)")]
     [Tooltip("Flag que activa despues del primer giro. Sirve para destrabar el " +
              "ascensor sin atarlo a tener suerte.")]
@@ -87,7 +98,9 @@ public class RouletteTableInteractable : MonoBehaviour, IInteractable
             {
                 Titulo = titulo,
                 ApuestaMinima = apuestaMinima,
-                ApuestaMaxima = apuestaMaxima
+                ApuestaMaxima = apuestaMaxima,
+                RuletaPorColor = ruletaPorColor,
+                UmbralRuletaPorColor = umbralRuletaPorColor
             },
             resultado => AlCerrar(resultado as RouletteScreenResult));
     }

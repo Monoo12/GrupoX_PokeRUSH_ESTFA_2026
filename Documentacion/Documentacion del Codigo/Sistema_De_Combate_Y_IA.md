@@ -279,6 +279,144 @@ la clase correspondiente. Cada `EnemyDefinition` y `BossDefinition` tiene ahora 
 
 ---
 
+---
+
+## 🧠 La lectura de Nestor: dos mecánicas espejadas
+
+Nestor tiene una mecánica de predicción en **los dos niveles**, pero son cosas distintas y
+viven en clases distintas. Confundirlas es el error fácil, así que:
+
+| | **Nivel 1 — Data Center** | **Nivel 2 — el casino** |
+|---|---|---|
+| Quién es Nestor | El **jefe** que te pelea | Un **aliado** que mira desde arriba |
+| A quién lee | A **vos** | Al **rival** |
+| Clase | `PredictionState` | `NestorPredictionSystem` |
+| Cuándo actúa | **Antes** de que elijas: es un gate de input | **Después** de que la IA eligió, antes de resolver |
+| Qué hace | Anula una **categoría** (atacar / estado / cambiar / objetos) | Corta la **acción concreta** que la IA ya había elegido |
+| Cadencia | **Fija**, cada 3 turnos | Probabilidad + cooldown + tope por combate |
+| Vista | `BattlePredictionView` | `NestorPortraitView` |
+
+**No coexisten nunca.** El código lo garantiza en `BattleController.HayLecturaAliada()`.
+
+### Por qué una es fija y la otra al azar
+
+Contra un jefe, un ritmo predecible es lo que te deja **planificar**: sabés que el turno 3
+te lo condicionan y guardás la jugada fuerte para el 1 y el 2. Además es inmune a
+save/load, que era el agujero de la versión probabilística.
+
+Con Nestor de aliado pasa lo contrario: si leyera cada 3 turnos fijos, el jugador guardaría
+la jugada floja para el turno de Nestor y la mecánica sería un metrónomo. Por eso es rara y
+no anunciada — tiene que sentirse como una ayuda que llega, no como un recurso que se
+administra.
+
+### Cómo funciona la lectura aliada
+
+Todo pasa en `BattleController.ResolveTurnRoutine()`, en la ventana entre que la IA decide y
+que el motor resuelve:
+
+```
+El jugador elige su acción
+        ↓
+_enemyAI.ChooseAction(...)      ← la IA rival elige normalmente, sin tocarla
+        ↓
+_nestorAlly.Evaluar(...)        ← Nestor clasifica ESA acción y decide
+        ↓
+   ┌────┴────┐
+  sí         no  → el turno sigue igual, Nestor solo cambia de cara
+   ↓
+Retrato concentrado + frase
+Parpadeo frío sobre el Poken rival (BattleFxView.PulseTint, que ya existía)
+Mensaje del bloqueo + retrato confiado
+        ↓
+_engine.ResolveTurn(accionDelJugador, accionYaCambiada)
+```
+
+Es la **única** ventana donde se puede anular una acción rival sin que haya empezado a
+ejecutarse. Cuando el `TurnEngine` arranca, la acción final ya está decidida — por eso
+Nestor no puede interrumpir nada a mitad de camino.
+
+### Qué lee: la acción real de la IA, no un sorteo aparte
+
+`NestorPredictionSystem.Clasificar()` traduce la acción que devolvió `IBattleAI` a un
+`EnemyPlanKind`, usando el **mismo `DamageCalculator` que usa `MoveScorer`** para puntuar.
+Que un golpe "te mata" significa lo mismo para Nestor que para la IA:
+
+| Plan | Qué es | ¿Jugada fuerte? |
+|---|---|---|
+| `Remate` | Un movimiento que te debilita este turno | **Sí** |
+| `Curacion` | Se cura, y de verdad le falta vida | **Sí** |
+| `Preparacion` | Se sube stats, o pone clima / terreno / pantallas | **Sí** |
+| `Estado` | Te aplica un estado alterado (que le entra) o te baja stats | **Sí** |
+| `Ataque` | Golpe común | Solo si pega ≥ 45% de tus PS máximos |
+| `Cambio` | Se va y manda otro | No |
+| `Ninguna` | Forcejeo, o algo que no vale la pena leer | — nunca se lee |
+
+### Qué pasa con la acción bloqueada
+
+- **Jugada fuerte** → el rival **pierde el turno entero**. La acción se reemplaza por
+  `BattleAction.Wait()`, una acción que el `TurnEngine` no nombra en ningún paso: el lado
+  que la trae no cambia, no usa objeto, no aguanta y no ataca. Ni una regla del motor tuvo
+  que cambiar.
+- **Jugada floja** → el rival **cae a su segunda opción**, que sale del mismo `MoveScorer`
+  de siempre. Nestor le saca la mejor jugada; no le elige la peor.
+- Si la jugada era floja y **no hay segunda opción**, Nestor **deja pasar** y no gasta la
+  lectura. Quemarle el turno al rival por un placaje sería justo lo que no se quiere.
+
+### Los números de balance
+
+Todos viven en dos lugares: los valores de fábrica en `NestorPredictionSystem`, y los que
+manda el Inspector en `BattleController` (sección **"Lectura aliada de Nestor (nivel 2)"**).
+
+| Campo | Por defecto | Qué hace |
+|---|---|---|
+| `nestorProbabilidad` | **20%** | Chance por turno, una vez pasados los otros frenos |
+| `nestorCooldownTurnos` | **4** | Turnos mínimos entre dos lecturas |
+| `nestorTurnosDeGracia` | **2** | Al principio Nestor solo mira |
+| `nestorMaximoPorCombate` | **2** | El freno más importante |
+| `nestorFraccionDeGolpeFuerte` | **0.45** | Cuánto tiene que pegar un golpe común para costarle el turno |
+
+Con estos valores, en una pelea típica de 10 turnos Nestor interviene **una vez, a veces
+dos y a veces ninguna** (≈11% de los turnos). Que a veces no aparezca es parte del diseño.
+
+`nestorAliado` (`Auto` / `SiempreOn` / `SiempreOff`) sirve para probar sin caminar la torre.
+`SiempreOn` **igual** respeta el candado del boss, y `SiempreOff` lo apaga incluso en las
+peleas que lo piden.
+
+### Cuándo está disponible
+
+`BattleController.HayLecturaAliada()`, con **dos candados independientes** — si uno se
+rompiera, el otro sigue tapando el agujero:
+
+1. **`_bossConfig != null` → nunca.** Esa config solo existe en la pelea contra el boss de
+   la torre, o sea contra el propio Nestor. No se puede leer a sí mismo, y además ahí ya
+   corre `PredictionState`.
+2. **Hace falta `StoryFlag.Torre1_NestorLiberado`.** Ese flag se enciende recién cuando
+   termina la fase de liberación, o sea al final de esa pelea. Todo lo anterior del primer
+   nivel pasa con el flag apagado.
+
+**Las peleas del casino lo piden.** `StartBattle(..., conNestorAliado: true)` saltea el
+candado 2, pero no el 1. Lo usa `CasinoNpcConCombate` en todas sus peleas, así Néstor está de
+ayudante en todo el casino aunque la partida no traiga el flag (por ejemplo, entrando directo
+a un piso con Play). En el primer nivel nadie lo pide. La decisión entera vive en
+`BattleController.LecturaAliadaDisponible()`, que es estática y la cubre
+`TestNestorAliadoDisponible`.
+
+### El retrato
+
+`NestorPortraitView` recibe un `NestorPortraitSnapshot` (datos puros) y decide cómo se ve.
+**Todas las referencias son opcionales**: sin el retrato cableado, la mecánica funciona
+igual y los mensajes salen por la barra de siempre.
+
+Los seis `NESTOR_retrato_*.png` de `Assets/Sprites/Nestor/` se mapean a siete ánimos
+(`NestorMood`). Cambian solos según lo que pasa: preocupado si vas perdiendo, furioso si el
+rival está contra las cuerdas, concentrado cuando lee, confiado cuando le salió.
+
+Para montarlo: **`PokeRush > Nestor aliado > Agregar retrato al prefab de combate`**. Es
+**aditivo e idempotente** — no rehace el prefab como sí lo hace `Armar prefab de combate`,
+así que no pisa el HUD que diseñe el equipo. Queda **arriba a la derecha**, que es la zona
+libre de este HUD (arriba a la izquierda ya están el databox del rival y la barra del
+escudo).
+
 ## 🧬 Mecánicas de combate implementadas
 
 Todas siguen las reglas de la saga principal.
@@ -419,7 +557,58 @@ correspondientes a ese nivel (si tiene menos de 4). Si ya tiene 4, por ahora sol
 
 Cada especie tiene un **learnset** (`LearnsetEntry[]`): qué movimiento aprende y a qué
 nivel. Al crear un Pokémon, se le asignan los **4 movimientos de mayor nivel** que ya puede
-conocer.
+conocer (salteando los `NotImplemented`).
+
+### Todo Pokémon puede pegar
+
+`PokenModel.AsegurarUnAtaque()` garantiza que **siempre haya al menos un ataque** (un
+movimiento implementado, con potencia y que no sea de estado). Hacía falta porque:
+
+- "los 4 de mayor nivel" pueden ser todos de estado (Togepi a nivel 15);
+- hay especies que por nivel no aprenden nada usable (Abra solo sabe Teletransporte; Cosmog,
+  Salpicadura), y salían de la ruleta **sin ataques**.
+
+Si no tiene ninguno, se le da el más nuevo de su learnset que ya pueda conocer; si no llega al
+nivel, el primero que aprendería; y si su learnset no trae ninguno, `PokenModel.DefaultMove`
+(Placaje, lo inyecta `GameManager`). Con lugar lo suma; si no, reemplaza al primero que no sirve.
+Lo llaman el constructor y `SaveService` al cargar, así que un Pokémon ya guardado sin ataques
+los recupera.
+
+Además, a las especies que no aprenden **ningún** ataque por nivel se les agregaron al nivel 1
+ataques que sí aprenden por MT, tutor o huevo (o uno básico de su tipo si no hay): lo hace el
+importador al generar y, sobre lo ya importado, `PokeRush > Combate > Dar ataques a las
+especies que no tienen`.
+
+### Movimientos de dos turnos
+
+`MoveDefinition.turnRule` (`MoveTurnRule`) dice cómo usa los turnos un movimiento:
+
+| Regla | Qué hace | Ejemplos |
+|---|---|---|
+| `Normal` | Pega el turno en que se elige | casi todos |
+| `Charge` | Carga un turno (mensaje de carga) y pega el siguiente | Rayo Solar, Cuchilla Solar, Ataque Aéreo, Cabezazo, Electrorrayo |
+| `ChargeInvulnerable` | Igual, pero mientras carga lo que apunta a él falla | Vuelo, Excavar, Buceo, Bote, Golpe Fantasma, Golpe Umbrío |
+| `Recharge` | Pega y el turno siguiente **descansa** | Hiperrayo, Gigaimpacto, Romperrocas, Distorsión, Láser Prisma |
+
+Reglas (en `TurnEngine` y `MoveTurnRules`):
+
+- El turno obligado (soltar la carga o descansar) **no se elige**: `TurnEngine.AccionForzada`
+  lo devuelve, el `BattleController` no muestra el menú ni consulta a la IA, y el motor lo
+  impone igual aunque le pasen otra acción.
+- El PP se gasta al **empezar** a cargar, no al soltar el golpe. Descansar no gasta PP.
+- Rayo Solar y Cuchilla Solar no cargan **con sol**; Electrorrayo, con lluvia
+  (`skipChargeInWeather`).
+- Cabezazo sube la Defensa y Electrorrayo el Ataque Especial **en el turno de carga**
+  (`chargeStatChanges`).
+- Si al soltar la carga no puede actuar (dormido, paralizado, retroceso…), la carga se pierde.
+- Hiperrayo solo obliga a descansar **si pegó**: si falla, se lo aguantan o no le hace nada al
+  rival, no. Si el rival cae con el golpe, igual descansa.
+- Todo esto es estado volátil (`BattlePokenState`): se pierde al cambiar de Pokémon.
+- Si la lectura de Néstor le anula la jugada a un rival que estaba cargando o por descansar,
+  eso también se pierde.
+
+Las reglas salen de un catálogo por nombre en `PokeApiMapper` (PokeAPI no trae ese dato). Para
+aplicarlas a lo ya importado: `PokeRush > Combate > Aplicar carga y recarga a los movimientos`.
 
 ---
 
@@ -450,17 +639,25 @@ generar los assets, o hacer ambos. **Ya se corrió**: hay 435 especies y 595 mov
   existentes y **preserva los sprites** asignados a mano.
 - **Cache en el repo**: los JSON crudos quedan en `Tools/PokeApiCache/` (fuera de `Assets/`)
   para regenerar sin internet y ver los cambios en los diffs.
-- **Movimientos complejos**: los que tienen efectos que aún no se implementan (dos turnos,
-  trampas, KO fulminante...) se marcan como `DamageOnly` (funcionan como daño simple) o
-  `NotImplemented` (excluidos de los learnsets, pero el asset queda para el futuro).
+- **Movimientos complejos**: los que tienen efectos que aún no se implementan (trampas, KO
+  fulminante, cambiar de Pokémon al pegar...) se marcan como `DamageOnly` (funcionan como daño
+  simple) o `NotImplemented` (excluidos de los learnsets, pero el asset queda para el futuro).
+  Los de **dos turnos ya están implementados** (ver "Movimientos de dos turnos").
+- **Siempre con ataques**: si una especie no aprende ningún ataque por nivel, se le suman al
+  nivel 1 de MT/tutor/huevo (ver "Todo Pokémon puede pegar").
 
 ---
 
 ## ✅ Verificación
 
-`PokeRush > Correr smoke tests` corre 20 pruebas automáticas con azar reproducible que
-validan las fórmulas, los estados, las habilidades y el comportamiento de cada IA. La
-consola debe decir **"TODOS OK"**.
+`PokeRush > Correr smoke tests` corre las pruebas automáticas con azar reproducible que
+validan las fórmulas, los estados, las habilidades, el comportamiento de cada IA y las dos
+lecturas de Nestor (la del jefe y la aliada). La consola debe decir **"TODOS OK"**.
+
+Las de la lectura aliada son las que cuidan el balance: `TestNestorEsRaroConLosValoresPorDefecto`
+se rompe si alguien sube la probabilidad sin querer, y `TestElEnumDeAccionesNoSeCorrio`
+avisa si alguien mete un valor en el medio de `BattleActionKind` (eso rompería todo lo
+guardado con `Flee` o `Protect`).
 
 Para probar el combate a mano: `PokeRush > Armar combate de prueba` genera una escena lista
 con todo cableado. En Play:
@@ -489,6 +686,8 @@ Assets/Scripts/Core/
 │   ├── StatusEffects.cs                       (estados alterados)
 │   ├── MoveEffectExecutor.cs                  (efectos de movimientos)
 │   ├── AbilityEffects.cs                      (habilidades)
+│   ├── PredictionState.cs                     (Nestor JEFE te lee a vos - nivel 1)
+│   ├── NestorPredictionSystem.cs              (Nestor ALIADO lee al rival - nivel 2)
 │   ├── StatStageTable.cs                      (multiplicadores de stages)
 │   ├── RewardCalculator.cs                    (experiencia)
 │   └── BattleOutcome.cs                       (resultado del combate)

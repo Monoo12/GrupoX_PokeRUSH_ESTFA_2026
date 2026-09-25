@@ -252,6 +252,17 @@ public class PartyScreen : MenuScreen
                 AplicarObjeto();
                 break;
 
+            case PartyScreenMode.SelectAny:
+                if (!EsSeleccionable(_cursor))
+                {
+                    ShowMessage("Ese Pokémon no se puede elegir.");
+                    return;
+                }
+                _result.Cancelled = false;
+                _result.SelectedIndex = _cursor;
+                CloseSelf();
+                break;
+
             case PartyScreenMode.SelectSwitch:
                 if (!EsSeleccionable(_cursor))
                 {

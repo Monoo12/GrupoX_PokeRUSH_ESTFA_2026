@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
+  m_Name: MagnateCasino
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  characterName: Magnate
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: 97f4c7e8e6aafb946989ddafa6102d81, type: 2}
+    level: 19
+  - species: {fileID: 11400000, guid: 7410bb52c4d54c348baf1c64dc13603a, type: 2}
+    level: 20
+  - species: {fileID: 11400000, guid: 4b48ef4ae0fc7204e89f5a3f35c8b68a, type: 2}
+    level: 20
+  battleFrontSprite: {fileID: 21300000, guid: c44d81c578cdf814ba545305cacd4d16, type: 3}
+  battleBackSprite: {fileID: 0}
+  battleMusic: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  moneyReward: 400
+  itemRewards: []
+  defeatGrantsFlag: 43
+  fleeIfWeak: 0
+  aiProfile: {fileID: 11400000, guid: b45cec9649f49d543a98946e5e8f48e2, type: 2}
+  battleBackground: {fileID: 0}

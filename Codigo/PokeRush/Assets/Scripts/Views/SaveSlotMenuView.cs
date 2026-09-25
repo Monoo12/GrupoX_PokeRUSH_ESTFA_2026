@@ -121,7 +121,7 @@ public class SaveSlotMenuView : MonoBehaviour
             bool tienePoken = i < player.Team.Count;
             pokenSlots[i].enabled = tienePoken; // slot vacio = no se dibuja
             if (tienePoken)
-                pokenSlots[i].sprite = player.Team[i].Definition.inventorySprite;
+                pokenSlots[i].sprite = player.Team[i].IconSprite;
         }
     }
 

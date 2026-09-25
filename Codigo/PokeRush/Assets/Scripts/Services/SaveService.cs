@@ -40,17 +40,27 @@ public class SaveService
             _db.Update(playerRow);
         }
 
-        // --- Equipo de Pokens ---
-        // Borra todas las filas viejas del equipo de este jugador antes de guardar las nuevas
-        // (mas simple que actualizar una por una)
-        _db.Table<PlayerPokenRow>().Where(p => p.PlayerId == playerId).ToList()
-            .ForEach(row => _db.Delete(row));
+        // --- Equipo de Pokens y PC ---
+        // Borra todas las filas viejas de este jugador (equipo y PC, con sus
+        // movimientos) antes de guardar las nuevas: mas simple que actualizar
+        // una por una. Antes los movimientos quedaban huerfanos en cada guardado.
+        foreach (var viejo in _db.Table<PlayerPokenRow>().Where(p => p.PlayerId == playerId).ToList())
+        {
+            int pokenId = viejo.Id;
+            _db.Table<PlayerPokenMoveRow>().Where(m => m.PlayerPokenId == pokenId).ToList()
+                .ForEach(row => _db.Delete(row));
+            _db.Delete(viejo);
+        }
 
         // Guarda cada Poken del equipo actual, en orden (slotIndex = posicion en el equipo)
         for (int i = 0; i < player.Team.Count; i++)
         {
-            SavePoken(player.Team[i], playerId, i);
+            SavePoken(player.Team[i], playerId, i, null);
         }
+
+        // Y los del PC: BoxIndex = caja, SlotIndex = lugar dentro de la caja.
+        foreach (var (caja, lugar, poken) in player.Storage.Todos())
+            SavePoken(poken, playerId, lugar, caja);
 
         // --- Inventario ---
         // Mismo patron: borrar todo lo viejo y volver a insertar
@@ -72,7 +82,7 @@ public class SaveService
     }
 
     // Guarda un PokenModel individual y sus movimientos
-    private void SavePoken(PokenModel poken, int playerId, int slotIndex)
+    private void SavePoken(PokenModel poken, int playerId, int slotIndex, int? boxIndex)
     {
         var pokenRow = new PlayerPokenRow
         {
@@ -89,7 +99,10 @@ public class SaveService
             // Si no tiene cosmetico equipado, se guarda null
             EquippedCosmetic = poken.EquippedCosmetic != null ? poken.EquippedCosmetic.cosmeticName : null,
             // IVs como texto "hp,atk,def,spa,spd,spe"
-            Ivs = poken.Ivs.Serialize()
+            Ivs = poken.Ivs.Serialize(),
+            IsShiny = poken.IsShiny,
+            // null = equipo; un numero = caja del PC
+            BoxIndex = boxIndex
         };
         _db.Insert(pokenRow);
         // pokenRow.Id se llena automaticamente despues del Insert (AutoIncrement)
@@ -174,8 +187,22 @@ public class SaveService
         foreach (var pokenRow in pokenRows)
         {
             PokenModel poken = LoadPoken(pokenRow);
-            if (poken != null) // si la Definition no se encontro, se omite ese Poken
+            if (poken == null) continue; // si la Definition no se encontro, se omite ese Poken
+
+            if (pokenRow.BoxIndex == null)
+            {
                 player.Team.Add(poken);
+                continue;
+            }
+
+            // En el PC. Si el lugar guardado no existe o ya esta ocupado (un
+            // guardado de una version con otras cajas), va al primero libre:
+            // perder un Pokemon por eso seria peor que moverlo de lugar.
+            int caja = pokenRow.BoxIndex.Value;
+            if (player.Storage.Get(caja, pokenRow.SlotIndex) == null &&
+                player.Storage.Set(caja, pokenRow.SlotIndex, poken)) continue;
+            if (!player.Storage.TryAgregar(poken, out _, out _))
+                UnityEngine.Debug.LogWarning($"[Save] No entro '{pokenRow.PokenDefinitionId}' en el PC: se omite.");
         }
 
         // --- Cargar inventario ---
@@ -213,6 +240,8 @@ public class SaveService
         if (System.Enum.TryParse<StatusEffect>(row.StatusEffect, out StatusEffect status))
             poken.SetStatus(status);
 
+        poken.SetShiny(row.IsShiny);
+
         // Carga los movimientos de este Poken (vinculados por PlayerPokenId).
         // El constructor ya auto-aprendio movimientos del learnset: si el save
         // trae movimientos propios, se pisan los auto-aprendidos para no duplicar.
@@ -230,6 +259,10 @@ public class SaveService
                 poken.Moves.Add(move);
             }
         }
+
+        // Un Pokemon guardado sin ningun ataque (de antes de que existiera esta
+        // regla, como los Abra de la ruleta) recupera uno al cargar.
+        poken.AsegurarUnAtaque();
 
         return poken;
     }

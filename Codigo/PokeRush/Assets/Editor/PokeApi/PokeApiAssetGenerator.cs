@@ -196,6 +196,111 @@ namespace PokeRush.EditorTools.PokeApi
             if (asset.weatherEffect != WeatherKind.None || asset.fieldEffect != FieldEffectKind.None)
                 asset.implementation = MoveImplementation.Full;
             asset.effectDescription = BuildEffectDescription(dto, asset.implementation);
+            AplicarReglaDeTurnos(asset);
+        }
+
+        // Carga, fuera de alcance y recarga (ver PokeApiMapper.TryGetTurnRule).
+        // Publico: lo usa tambien el menu que lo aplica a los assets ya
+        // importados sin volver a descargar nada. Devuelve true si cambio algo.
+        public static bool AplicarReglaDeTurnos(MoveDefinition asset)
+        {
+            if (asset == null) return false;
+
+            if (!PokeApiMapper.TryGetTurnRule(asset.englishName, out var regla))
+            {
+                if (asset.turnRule == MoveTurnRule.Normal) return false;
+                asset.turnRule = MoveTurnRule.Normal;
+                asset.chargeMessage = null;
+                asset.chargeStatChanges = new StatChangeEntry[0];
+                asset.skipChargeInWeather = WeatherKind.None;
+                return true;
+            }
+
+            string antes = JsonUtility.ToJson(asset);
+
+            asset.turnRule = regla.Regla;
+            asset.chargeMessage = regla.MensajeDeCarga;
+            asset.skipChargeInWeather = regla.SinCargaCon;
+
+            // Cabezazo sube la Defensa al AGACHAR la cabeza, no al pegar: los
+            // cambios de stats del movimiento pasan al turno de carga.
+            if (regla.SubeStatsAlCargar && asset.statChanges != null && asset.statChanges.Length > 0)
+            {
+                asset.chargeStatChanges = asset.statChanges;
+                asset.statChanges = new StatChangeEntry[0];
+                asset.statChangeChance = 0;
+            }
+            else if (!regla.SubeStatsAlCargar)
+            {
+                asset.chargeStatChanges = new StatChangeEntry[0];
+            }
+
+            // Antes eran DamageOnly ("solo hace daño"): ahora el efecto es completo.
+            if (asset.power > 0 && asset.implementation == MoveImplementation.DamageOnly)
+                asset.implementation = MoveImplementation.Full;
+            if (!string.IsNullOrEmpty(asset.effectDescription))
+                asset.effectDescription = asset.effectDescription
+                    .Replace(" [Efecto secundario no implementado: solo hace daño]", "")
+                    .Replace("[Efecto secundario no implementado: solo hace daño]", "").Trim();
+
+            return JsonUtility.ToJson(asset) != antes;
+        }
+
+        // Especies que no aprenden por nivel NINGUN movimiento que pegue (Abra
+        // solo sabe Teletransporte; Cosmog, Salpicadura). Se les suman al nivel 1
+        // hasta dos ataques de MT/tutor/huevo (primero los de su tipo, y los mas
+        // flojos primero para no regalar poder), y si no hay ninguno, el basico
+        // de su tipo y Placaje. Devuelve los nombres agregados (vacio = no hacia falta).
+        public static List<string> CompletarAtaques(PokenDefinition asset, PokemonDto pokemon,
+            Func<int, MoveDefinition> porId, Func<string, MoveDefinition> porNombreIngles)
+        {
+            var agregados = new List<string>();
+            if (asset == null) return agregados;
+
+            bool yaTiene = (asset.learnset != null && asset.learnset.Any(e => e != null && PokenModel.SirveParaPegar(e.move)))
+                           || (asset.moves != null && asset.moves.Any(PokenModel.SirveParaPegar));
+            if (yaTiene) return agregados;
+
+            var candidatos = new List<MoveDefinition>();
+            if (pokemon != null)
+            {
+                foreach (int id in PokeApiMapper.ExtractOtherMethodMoveIds(pokemon))
+                {
+                    MoveDefinition m = porId(id);
+                    if (PokenModel.SirveParaPegar(m) && !candidatos.Contains(m)) candidatos.Add(m);
+                }
+            }
+
+            bool EsDeSuTipo(MoveDefinition m)
+                => m.type == asset.type || (asset.type2 != PokenType.None && m.type == asset.type2);
+
+            // Sin dos turnos ni retroceso: el ataque de respaldo tiene que ser simple.
+            var elegidos = candidatos
+                .Where(m => m.turnRule == MoveTurnRule.Normal && m.recoilPercent == 0)
+                .OrderByDescending(EsDeSuTipo).ThenBy(m => m.power).ThenByDescending(m => m.accuracy)
+                .Take(2).ToList();
+
+            if (elegidos.Count == 0)
+            {
+                if (PokeApiMapper.AtaqueBasicoPorTipo.TryGetValue(asset.type, out string basico))
+                {
+                    MoveDefinition m = porNombreIngles(basico);
+                    if (PokenModel.SirveParaPegar(m)) elegidos.Add(m);
+                }
+                MoveDefinition placaje = porNombreIngles("tackle");
+                if (PokenModel.SirveParaPegar(placaje) && !elegidos.Contains(placaje)) elegidos.Add(placaje);
+            }
+
+            if (elegidos.Count == 0) return agregados;
+
+            var learnset = new List<LearnsetEntry>(asset.learnset ?? new LearnsetEntry[0]);
+            foreach (MoveDefinition m in elegidos)
+            {
+                learnset.Insert(0, new LearnsetEntry { move = m, level = 1 });
+                agregados.Add(m.moveName);
+            }
+            asset.learnset = learnset.OrderBy(e => e.level).ToArray(); // OrderBy es estable
+            return agregados;
         }
 
         private static string BuildEffectDescription(MoveDto dto, MoveImplementation implementation)
@@ -287,7 +392,14 @@ namespace PokeRush.EditorTools.PokeApi
             learnset.Sort((a, b) => a.level.CompareTo(b.level));
             asset.learnset = learnset.ToArray();
 
-            if (learnset.Count == 0)
+            // Todo Pokemon tiene que poder pegar: si por nivel no aprende ningun
+            // ataque, se le suman de MT/tutor/huevo (o uno basico de su tipo).
+            List<string> agregados = CompletarAtaques(asset, pokemon,
+                id => movesByApiId.TryGetValue(id, out MoveDefinition m) ? m : null,
+                nombre => movesByApiId.Values.FirstOrDefault(m => m != null && m.englishName == nombre));
+            if (agregados.Count > 0)
+                report.Warnings.Add($"{asset.pokenName}: no aprendia ningun ataque por nivel; se le sumo {string.Join(" y ", agregados)} al nivel 1");
+            else if (asset.learnset.Length == 0)
                 report.Warnings.Add($"{asset.pokenName}: learnset vacio (todos sus movimientos quedaron excluidos)");
 
             // Habilidad: nombre/descripcion en español + enum si esta implementada

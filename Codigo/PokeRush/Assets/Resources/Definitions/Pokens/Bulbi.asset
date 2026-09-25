@@ -11,14 +11,19 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a23a67a7f669bd643b3b756a853a4ffe, type: 3}
   m_Name: Bulbi
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   pokenName: Bulbi
+  dexNumber: 0
   type: 4
   type2: 8
   battleFrontSprite: {fileID: 7414721067839332293, guid: 30f952dae3142314cb0d8a907b06f466, type: 3}
   battleBackSprite: {fileID: 7414721067839332293, guid: 30f952dae3142314cb0d8a907b06f466, type: 3}
   battleFrontShinySprite: {fileID: 0}
   battleBackShinySprite: {fileID: 0}
+  battleFrontFrames: []
+  battleBackFrames: []
+  battleFrontShinyFrames: []
+  battleBackShinyFrames: []
   worldFrontSprite: {fileID: 0}
   worldBackSprite: {fileID: 0}
   worldSideSprite: {fileID: 0}
@@ -35,6 +40,13 @@ MonoBehaviour:
   baseSpecialAttack: 65
   baseSpecialDefense: 65
   baseSpeed: 45
+  learnset:
+  - move: {fileID: 11400000, guid: 8c2db65257309954fb7bef31e5469045, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 342b3cbb3dbd6ef4785ad0a265890166, type: 2}
+    level: 1
   moves: []
+  baseXpYield: 60
+  abilityId: 0
   ability: Espesura
   abilityDescription: Potencia los ataques de planta cuando le queda poca vida.

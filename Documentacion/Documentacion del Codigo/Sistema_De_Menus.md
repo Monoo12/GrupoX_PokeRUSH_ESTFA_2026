@@ -77,7 +77,7 @@ los menús y también el movimiento del Overworld usan la K.
 | Qué | Dónde |
 |---|---|
 | Prefab raíz (auto-instanciable) | `Assets/Resources/Menus/MenuSystem.prefab` |
-| Iconos compartidos (tipos, estados) | `Assets/Resources/Menus/MenuIcons.asset` |
+| Iconos compartidos (tipos, estados) | `Assets/Resources/Menus/MenuIcons.asset` (ver nota abajo) |
 | Prefabs de pantalla | `Assets/Prefabs/UI/Menus/*.prefab` |
 | Prefabs de widget | `Assets/Prefabs/UI/Menus/Widgets/*.prefab` |
 | Código del framework | `Assets/Scripts/Menus/Core/` |
@@ -86,6 +86,14 @@ los menús y también el movimiento del Overworld usan la K.
 | Uso de objetos (lógica pura) | `Assets/Scripts/Menus/Items/` |
 | Opciones y persistencia | `Assets/Scripts/Menus/Settings/` |
 | Generador de prefabs | `Assets/Editor/Menus/` |
+
+> **Ojo con los iconos de tipo y de estado.** Las hojas `icon_types.png` e `icon_statuses.png`
+> están en el orden de Essentials (Normal, Lucha, Volador… / Dormido, Envenenado…), **no** en el
+> de los enums `PokenType` y `StatusEffect`. `MenuIcons.asset` se indexa por el enum y la fila
+> sale de `BattleUiAssetImporter.TypeRow` / `StatusRow`, el mismo mapa que usa el HUD de combate.
+> Hasta el 14-sep se tomaba fila = enum y el Resumen mostraba mal todos los tipos (Psíquico
+> salía como Agua). Para rehacer solo los iconos, sin tocar los prefabs:
+> `PokeRush > UI > Rehacer iconos de tipos y estados`.
 
 ---
 
@@ -210,6 +218,22 @@ teclas solo. Desde cualquier pantalla:
 ShowMessage("¡No le hace nada!");
 Ask("¿Guardar la partida?", ok => { if (ok) Guardar(); });
 ```
+
+Una pregunta puede traer sus propias opciones (`YesLabel` / `NoLabel`, por ejemplo
+SUBIR / BAJAR en el ascensor del casino). En ese caso hay que mirar
+`MessageBoxResult.Cancelled`: cerrar con Volver da `Confirmed = false`, igual que
+elegir la segunda opción, y no es lo mismo.
+
+### PC de almacenamiento — `PcStorageScreen`
+
+Las cajas del PC y el equipo en una sola pantalla, con el arte de
+`Graphics/UI/Storage`. Se abre desde un `PcInteractable` del mapa. Reglas, guardado y
+cómo se pone un PC en un nivel: ver `PC_De_Almacenamiento.md`. El prefab lo genera
+`PokeRush > UI > Construir la pantalla del PC`, que lo agrega al MenuSystem sin
+rehacer las otras pantallas.
+
+La pantalla del equipo tiene un modo `PartyScreenMode.SelectAny`: elegir cualquier
+Pokémon y devolverlo, sin submenú (lo usa Tacconi para elegir qué apostar).
 
 ---
 

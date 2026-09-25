@@ -25,11 +25,8 @@ MonoBehaviour:
   critRateStage: 0
   effect: 0
   effectChance: 0
-  effectDescription: "[Efecto secundario no implementado: solo hace da\xF1o]"
-  statChanges:
-  - stat: 2
-    stages: 1
-    targetSelf: 0
+  effectDescription: 
+  statChanges: []
   statChangeChance: 0
   flinchChance: 0
   minHits: 0
@@ -38,7 +35,14 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 0
-  implementation: 1
+  implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 1
+  chargeMessage: "\xA1{0} est\xE1 absorbiendo electricidad!"
+  chargeStatChanges:
+  - stat: 2
+    stages: 1
+    targetSelf: 0
+  skipChargeInWeather: 1
   animationOverride: {fileID: 0}

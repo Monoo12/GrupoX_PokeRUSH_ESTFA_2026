@@ -245,7 +245,7 @@ public class SummaryScreen : MenuScreen
 
         if (pokenSprite != null)
         {
-            Sprite sprite = def != null ? (def.battleFrontSprite ?? def.inventorySprite) : null;
+            Sprite sprite = def != null ? (poken.FrontSprite ?? poken.IconSprite) : null;
             pokenSprite.sprite = sprite;
             pokenSprite.enabled = sprite != null;
             pokenSprite.preserveAspect = true;

@@ -45,6 +45,42 @@ public static class MenuSmokeTestRunner
         EditorApplication.EnterPlaymode();
     }
 
+    [MenuItem("PokeRush/UI/Probar y capturar el PC")]
+    public static void CapturasDelPc()
+    {
+        if (EditorApplication.isPlaying)
+        {
+            Debug.LogWarning("[SmokeMenus] Ya estas en Play Mode. Sali y volve a intentar.");
+            return;
+        }
+
+        Limpiar();
+
+        var go = new GameObject(ObjectName);
+        go.AddComponent<PcScreenshotTaker>();
+
+        SessionState.SetBool(PendingKey, true);
+        EditorApplication.EnterPlaymode();
+    }
+
+    [MenuItem("PokeRush/UI/Probar y capturar la mesa de Tacconi")]
+    public static void CapturasDeTacconi()
+    {
+        if (EditorApplication.isPlaying)
+        {
+            Debug.LogWarning("[SmokeMenus] Ya estas en Play Mode. Sali y volve a intentar.");
+            return;
+        }
+
+        Limpiar();
+
+        var go = new GameObject(ObjectName);
+        go.AddComponent<TacconiScreenshotTaker>();
+
+        SessionState.SetBool(PendingKey, true);
+        EditorApplication.EnterPlaymode();
+    }
+
     [InitializeOnLoadMethod]
     private static void Enganchar()
     {
@@ -75,6 +111,18 @@ public static class MenuSmokeTestRunner
                      FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             if (c != null) Object.DestroyImmediate(c.gameObject);
+        }
+
+        foreach (var p in Object.FindObjectsByType<PcScreenshotTaker>(
+                     FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (p != null) Object.DestroyImmediate(p.gameObject);
+        }
+
+        foreach (var t in Object.FindObjectsByType<TacconiScreenshotTaker>(
+                     FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (t != null) Object.DestroyImmediate(t.gameObject);
         }
     }
 }

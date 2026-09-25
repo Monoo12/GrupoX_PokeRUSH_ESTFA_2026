@@ -24,7 +24,7 @@ public class PrizeWheelInteractable : MonoBehaviour, IInteractable
     [Tooltip("Con esto prendido la ruleta se puede girar una sola vez en toda " +
              "la partida. Apagado = se puede volver cuantas veces quiera.")]
     [SerializeField] private bool unSoloUso = false;
-    [SerializeField] private string mensajeYaUsada = "Ya giraste hoy. Volve manana.";
+    [SerializeField] private string mensajeYaUsada = "Ya giraste hoy. Volvé mañana.";
 
     [Header("Textos")]
     [Tooltip("Lo que dice antes de abrir. Vacio = abre de una.")]

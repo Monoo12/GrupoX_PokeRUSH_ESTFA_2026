@@ -37,7 +37,9 @@ public class LiberarPokenTrigger : MonoBehaviour, IInteractable
     [Tooltip("{0} se reemplaza por el nombre del Poken.")]
     [SerializeField, TextArea(2, 4)] private string mensajeSi = "{0} se solto y te sigue. Se unio al equipo!";
     [SerializeField, TextArea(2, 4)] private string mensajeNo = "Lo dejaste donde estaba.";
-    [SerializeField, TextArea(2, 4)] private string mensajeEquipoLleno = "Tu equipo ya esta completo. No podes llevarlo.";
+    [SerializeField, TextArea(2, 4)] private string mensajeEquipoLleno = "Tu equipo y el PC están llenos. No podés llevarlo.";
+    [Tooltip("Con el equipo lleno va al PC. {0} = el Poken, {1} = la caja.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeAlPc = "{0} se soltó. Tu equipo está completo: lo mandaste al PC ({1}).";
     [SerializeField, TextArea(2, 4)] private string mensajeYaLiberado = "Ya no hay nadie aca.";
 
     [Header("Comportamiento")]
@@ -52,9 +54,6 @@ public class LiberarPokenTrigger : MonoBehaviour, IInteractable
 
     [Header("Referencias (opcional: se buscan solas)")]
     [SerializeField] private DialogueController dialogueController;
-
-    // Tope clasico de 6: es lo que dibuja el HUD de combate (teamNameTexts).
-    private const int EquipoMaximo = 6;
 
     private bool _liberado;
     private bool _dialogoAbierto;
@@ -123,7 +122,8 @@ public class LiberarPokenTrigger : MonoBehaviour, IInteractable
 
         if (poken == null) return false;
 
-        if (player.Team.Count >= EquipoMaximo)
+        // Con el equipo lleno va al PC; solo se niega si tampoco entra ahi.
+        if (player.Team.Count >= PlayerModel.EquipoMaximo && player.Storage.EstaLleno)
         {
             Mensaje(mensajeEquipoLleno);
             return true;
@@ -143,18 +143,23 @@ public class LiberarPokenTrigger : MonoBehaviour, IInteractable
 
     private void Liberar(PlayerModel player, StoryModel story)
     {
-        player.Team.Add(new PokenModel(poken, nivel));
+        PokenRecibido recibido = player.RecibirPokemon(new PokenModel(poken, nivel));
         _liberado = true;
 
         if (otorgaFlag != StoryFlag.None && story != null)
             story.ActivateFlag(otorgaFlag);
 
         string nombre = string.IsNullOrEmpty(poken.pokenName) ? poken.name : poken.pokenName;
-        Debug.Log($"[Liberar] '{nombre}' Nv{nivel} se sumo al equipo ({player.Team.Count}/{EquipoMaximo}).");
+        Debug.Log($"[Liberar] '{nombre}' Nv{nivel} -> {recibido.Destino} " +
+                  $"(equipo {player.Team.Count}/{PlayerModel.EquipoMaximo}).");
+
+        string texto = recibido.Destino == DestinoDePokemon.Pc
+            ? string.Format(mensajeAlPc, nombre, PokenStorageModel.NombreDeCaja(recibido.Caja))
+            : string.Format(mensajeSi, nombre);
 
         // El objeto se esconde recien cuando el jugador cierra el cartel: si se
         // apaga antes, muere el callback y la caja queda abierta para siempre.
-        Mensaje(string.Format(mensajeSi, nombre), () =>
+        Mensaje(texto, () =>
         {
             if (desaparecerAlLiberar) gameObject.SetActive(false);
         });

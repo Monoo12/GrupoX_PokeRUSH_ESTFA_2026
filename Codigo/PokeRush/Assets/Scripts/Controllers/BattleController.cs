@@ -64,6 +64,14 @@ public class BattleController : MonoBehaviour
     // Definicion del boss en curso: de aca sale a QUIEN se libera
     private BossDefinition _bossDefinition;
 
+    // La LECTURA ALIADA de Nestor. Solo existe en el nivel 2 (el casino), donde
+    // Nestor ya esta de nuestro lado. Null en todo el resto, incluido el primer
+    // Data Center entero — ver HayLecturaAliada().
+    private NestorPredictionSystem _nestorAlly;
+    // La pelea en curso pidio a Nestor de ayudante (los NPCs del casino lo
+    // piden en todas las suyas). Se vuelve a decidir en cada Start*.
+    private bool _nestorPedidoPorLaPelea;
+
     // Fase de liberacion: se dispara cuando el ULTIMO Poken del boss llega a PS
     // criticos. Null mientras no este activa.
     private LiberationEngine _liberation;
@@ -75,6 +83,25 @@ public class BattleController : MonoBehaviour
     [Header("Fase de liberacion")]
     [Tooltip("Porcentaje de PS del ultimo Poken del boss al que arranca la fase.")]
     [SerializeField, Range(0.05f, 0.5f)] private float liberationHpThreshold = 0.15f;
+
+    [Header("Lectura aliada de Nestor (nivel 2)")]
+    [Tooltip("Cuando esta disponible la ayuda de Nestor. Auto = con el flag " +
+             "Torre1_NestorLiberado puesto o si la pelea lo pide (los NPCs del " +
+             "casino), y nunca en la pelea contra el propio Nestor. SiempreOn es " +
+             "para probar sin caminar la torre.")]
+    [SerializeField] private NestorAllyMode nestorAliado = NestorAllyMode.Auto;
+    [Tooltip("Chance de que Nestor lea la jugada, cumplidos el cooldown y la gracia.")]
+    [SerializeField, Range(0f, 1f)] private float nestorProbabilidad = 0.20f;
+    [Tooltip("Turnos minimos entre dos lecturas.")]
+    [SerializeField, Min(0)] private int nestorCooldownTurnos = 4;
+    [Tooltip("Turnos del arranque en los que Nestor solo mira.")]
+    [SerializeField, Min(0)] private int nestorTurnosDeGracia = 2;
+    [Tooltip("Tope de lecturas por combate. Es el freno mas importante.")]
+    [SerializeField, Min(1)] private int nestorMaximoPorCombate = 2;
+    [Tooltip("Cuanto tiene que pegar un ataque comun, en fraccion de tus PS " +
+             "maximos, para que el rival pierda el turno entero en vez de caer " +
+             "a su segunda opcion.")]
+    [SerializeField, Range(0.1f, 1f)] private float nestorFraccionDeGolpeFuerte = 0.45f;
 
     // El reemplazo que se esta pidiendo viene de la fase de liberacion: al
     // elegir hay que volver a esa fase y no al menu de comandos normal.
@@ -111,9 +138,13 @@ public class BattleController : MonoBehaviour
     // (EventController, BattleTester) y porque solo el boss lo usa. Contra el
     // boss sin config se arma sola desde el GameManager; pasarla a mano sirve
     // para probar combinaciones de subsistemas sin caminar la torre.
+    //
+    // 'conNestorAliado' pide la lectura aliada de Nestor para ESTA pelea aunque
+    // falte el flag. La usan los NPCs del casino (ver HayLecturaAliada).
     public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition,
-        BossBattleConfig config = null)
+        BossBattleConfig config = null, bool conNestorAliado = false)
     {
+        _nestorPedidoPorLaPelea = conNestorAliado;
         _bossConfig = enemyDefinition is BossDefinition
             ? (config ?? BossBattleConfig.DesdeTorre(GameManager.Instance?.Tower))
             : null;
@@ -169,6 +200,7 @@ public class BattleController : MonoBehaviour
         // combate ANTERIOR y el salvaje heredaba EnemyCannotFaint: no podia
         // morir y el combate no terminaba nunca.
         _bossConfig = null;
+        _nestorPedidoPorLaPelea = false;
         BeginBattle(player, enemy, encounter.battleBackground);
     }
 
@@ -221,6 +253,25 @@ public class BattleController : MonoBehaviour
         }
         if (_bossConfig != null)
             Debug.Log($"[Combate] Config del boss: {_bossConfig.Resumen()}");
+
+        // Nivel 2: aca Nestor ya no es el rival, esta de nuestro lado. Lee la
+        // jugada que la IA rival ya eligio y a veces se la corta. Es el ESPEJO
+        // de _prediction: aquella anula categorias del jugador ANTES de que
+        // elija, esta corrige la accion del rival DESPUES de que la IA la
+        // eligio. Ninguna de las dos toca el TurnEngine.
+        _nestorAlly = HayLecturaAliada()
+            ? new NestorPredictionSystem
+            {
+                Probabilidad = nestorProbabilidad,
+                CooldownTurnos = nestorCooldownTurnos,
+                TurnosDeGracia = nestorTurnosDeGracia,
+                MaximoPorCombate = nestorMaximoPorCombate,
+                FraccionDeGolpeFuerte = nestorFraccionDeGolpeFuerte
+            }
+            : null;
+        if (_nestorAlly != null)
+            Debug.Log($"[Combate] Nestor aliado activo: {nestorProbabilidad:P0} de chance, " +
+                      $"cooldown {nestorCooldownTurnos}t, {nestorMaximoPorCombate} por combate.");
 
         _engine = new TurnEngine(_battleModel, _rng);
         _aiProfile = enemy.AiProfile != null
@@ -350,6 +401,11 @@ public class BattleController : MonoBehaviour
     // vea la categoria anulada antes de elegir.
     private IEnumerator AvanzarPrediccion()
     {
+        // Nestor aliado vuelve a su cara de ambiente al empezar el turno. Va
+        // antes del early return de abajo: el retrato del nivel 2 no depende
+        // de que exista la prediccion del boss (nunca coexisten).
+        RefrescarRetratoDeNestor();
+
         if (_prediction == null)
         {
             // Combate normal: la UI de prediccion se apaga sola
@@ -593,6 +649,91 @@ public class BattleController : MonoBehaviour
         return true;
     }
 
+    // ---------- lectura aliada de Nestor (nivel 2) ----------
+
+    // Esta disponible la ayuda de Nestor en ESTA pelea?
+    //
+    // Lo importante de este metodo es lo que NO deja pasar. El primer Data
+    // Center queda afuera por dos candados independientes, a proposito: si
+    // alguno se rompiera, el otro sigue tapando el agujero.
+    //
+    //   1. _bossConfig != null significa que el rival de esta pelea es el boss
+    //      de la torre, o sea Nestor. Nestor no se puede leer a si mismo, y
+    //      ademas ahi ya corre _prediction (la lectura CONTRA el jugador).
+    //      Este candado vale incluso con el modo forzado en SiempreOn.
+    //   2. El flag Torre1_NestorLiberado se enciende recien cuando termina la
+    //      fase de liberacion, o sea al final de esa pelea. Todo lo anterior
+    //      del primer nivel pasa con el flag apagado.
+    //
+    // La pelea que PIDE a Nestor (conNestorAliado) saltea el candado 2 pero no
+    // el 1. Solo la piden los NPCs del casino, que no existen en el primer
+    // nivel: asi el casino lo tiene siempre, tambien entrando directo a un piso
+    // con una partida de prueba que no camino la torre.
+    private bool HayLecturaAliada()
+    {
+        StoryModel story = GameManager.Instance != null ? GameManager.Instance.Story : null;
+        return LecturaAliadaDisponible(nestorAliado, _bossConfig != null, _nestorPedidoPorLaPelea,
+            story != null && story.HasFlag(StoryFlag.Torre1_NestorLiberado));
+    }
+
+    // La decision de HayLecturaAliada sin escena ni GameManager, para probarla sola.
+    public static bool LecturaAliadaDisponible(NestorAllyMode modo, bool contraElBoss,
+        bool pedidoPorLaPelea, bool nestorLiberado)
+    {
+        if (modo == NestorAllyMode.SiempreOff) return false;
+
+        // Candado 1: nunca en la pelea contra el propio Nestor.
+        if (contraElBoss) return false;
+
+        if (modo == NestorAllyMode.SiempreOn || pedidoPorLaPelea) return true;
+
+        // Candado 2: recien despues de liberarlo.
+        return nestorLiberado;
+    }
+
+    // Los tres tiempos de una lectura. Corre ANTES de resolver el turno, asi
+    // que cuando termina, lo que se ve en pantalla ya es el turno con la
+    // jugada rival cambiada.
+    private IEnumerator LecturaDeNestorRoutine(NestorIntervention lectura)
+    {
+        // 1) La ve venir: cara de concentracion y lo que dice.
+        battleHudView?.SetNestorPortrait(_nestorAlly.Snapshot());
+        if (!string.IsNullOrEmpty(lectura.DialogoDeteccion))
+        {
+            Announce(lectura.DialogoDeteccion);
+            yield return new WaitForSeconds(messageDelay);
+        }
+
+        // 2) El feedback del bloqueo, con el FX que YA existe: el rival
+        //    parpadea en frio. No hace falta una animacion nueva para que se
+        //    entienda que algo le pasa al rival y no al jugador.
+        if (battleFxView != null && enemyPokenView != null
+            && enemyPokenView.gameObject.activeSelf)
+            yield return battleFxView.PulseTint(enemyPokenView, new Color(0.45f, 0.75f, 1f), 2);
+
+        // 3) Que paso, en la barra de mensajes, y Nestor festejando.
+        Announce(lectura.MensajeBloqueo);
+        _nestorAlly.MarcarExito(lectura.DialogoExito);
+        battleHudView?.SetNestorPortrait(_nestorAlly.Snapshot());
+        yield return new WaitForSeconds(messageDelay);
+    }
+
+    // Cara de ambiente. Se llama al empezar cada turno del jugador: la cara de
+    // la lectura ya se mostro durante la resolucion y no tiene que quedarse
+    // congelada el resto de la pelea.
+    private void RefrescarRetratoDeNestor()
+    {
+        if (_nestorAlly == null)
+        {
+            // Combate sin Nestor: el retrato se apaga solo.
+            battleHudView?.SetNestorPortrait(default);
+            return;
+        }
+
+        _nestorAlly.Ambiente(AiContext.ForEnemy(_battleModel, _aiProfile));
+        battleHudView?.SetNestorPortrait(_nestorAlly.Snapshot());
+    }
+
     // ---------- resolucion y reproduccion del turno ----------
 
     private IEnumerator ResolveTurnRoutine(BattleAction playerAction)
@@ -600,8 +741,32 @@ public class BattleController : MonoBehaviour
         _battleModel.SetPhase(BattlePhase.CalculatingResult);
         battleHudView?.HideMenus();
 
-        BattleAction enemyAction = _enemyAI.ChooseAction(
-            AiContext.ForEnemy(_battleModel, _aiProfile), _rng);
+        // El contexto se arma UNA vez y lo comparten la IA y Nestor: si cada
+        // uno armara el suyo, Nestor podria estar leyendo una foto distinta de
+        // la que uso la IA para decidir.
+        AiContext contextoRival = AiContext.ForEnemy(_battleModel, _aiProfile);
+        // Si el rival esta cargando (Rayo Solar, Vuelo) o tiene que descansar
+        // (Hiperrayo), no elige: ni se le pregunta a la IA.
+        BattleAction enemyAction = TurnEngine.AccionForzada(_battleModel.EnemyState)
+                                   ?? _enemyAI.ChooseAction(contextoRival, _rng);
+
+        // La lectura de Nestor va JUSTO ACA: la IA ya eligio, el motor todavia
+        // no arranco. Es la unica ventana en la que se puede anular una accion
+        // rival sin que haya empezado a ejecutarse, que es lo que se pidio.
+        if (_nestorAlly != null)
+        {
+            NestorIntervention lectura = _nestorAlly.Evaluar(contextoRival, enemyAction, _rng);
+            if (lectura.Intervino)
+            {
+                yield return LecturaDeNestorRoutine(lectura);
+                enemyAction = lectura.AccionFinal;
+            }
+            else
+            {
+                // Turno normal: Nestor sigue mirando, solo cambia la cara.
+                battleHudView?.SetNestorPortrait(_nestorAlly.Snapshot());
+            }
+        }
 
         List<BattleEvent> events = _engine.ResolveTurn(playerAction, enemyAction);
         yield return PlayEvents(events);
@@ -642,6 +807,16 @@ public class BattleController : MonoBehaviour
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
         battleHudView?.UpdateHud(_battleModel);
         yield return AvanzarPrediccion();
+
+        // Cargando un movimiento o descansando despues de Hiperrayo: este turno
+        // no hay nada que elegir y se juega solo.
+        BattleAction forzada = TurnEngine.AccionForzada(_battleModel.PlayerState);
+        if (forzada != null)
+        {
+            yield return ResolveTurnRoutine(forzada);
+            yield break;
+        }
+
         battleHudView?.ShowCommandMenu(_battleModel);
     }
 
@@ -1065,6 +1240,15 @@ public class BattleController : MonoBehaviour
                     if (ev.TargetIsPlayer) _playerFaintedPendingSwitch = true;
                     else _enemyFaintedPendingSwitch = true;
 
+                    // Nestor reacciona a la caida: festeja la del rival, se
+                    // asusta con la propia. Sin esto la cara queda congelada
+                    // en la del ultimo turno.
+                    if (_nestorAlly != null)
+                    {
+                        _nestorAlly.ReaccionarACaida(!ev.TargetIsPlayer);
+                        battleHudView?.SetNestorPortrait(_nestorAlly.Snapshot());
+                    }
+
                     if (battleFxView != null && view != null && view.gameObject.activeSelf)
                         yield return battleFxView.FaintAnim(view);
                     battleHudView?.UpdateHud(_battleModel);
@@ -1134,6 +1318,10 @@ public class BattleController : MonoBehaviour
     {
         bool victory = _battleModel.IsPlayerVictory;
         bool escaped = _battleModel.PlayerEscaped;
+
+        // El retrato se apaga con el combate. Si queda prendido, el Canvas se
+        // esconde con Nestor dibujado y reaparece asi en la pelea siguiente.
+        battleHudView?.SetNestorPortrait(default);
 
         // Si escapo, el mensaje "¡Escapaste sin problemas!" ya salio como evento
         if (!escaped)

@@ -25,8 +25,7 @@ MonoBehaviour:
   critRateStage: 0
   effect: 0
   effectChance: 0
-  effectDescription: "User dives underwater, dodging all attacks, and hits next turn.
-    [Efecto secundario no implementado: solo hace da\xF1o]"
+  effectDescription: User dives underwater, dodging all attacks, and hits next turn.
   statChanges: []
   statChangeChance: 0
   flinchChance: 0
@@ -36,7 +35,11 @@ MonoBehaviour:
   drainPercent: 0
   healPercent: 0
   makesContact: 1
-  implementation: 1
+  implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 2
+  chargeMessage: "\xA1{0} se sumergi\xF3!"
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 5503c37a97e0a4844bd2e4a878364c85, type: 2}

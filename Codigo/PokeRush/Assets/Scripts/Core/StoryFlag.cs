@@ -46,5 +46,53 @@ public enum StoryFlag
     Casino_Ruleta_ObjetivoCumplido,
     Casino_Piso2_Superado,
     Casino_Blackjack_Ganado,
-    Casino_Piso3_Superado
+    Casino_Piso3_Superado,
+
+    // Casino, piso 1: el guardia del ascensor. El pase sale pagando o
+    // ganandole; ganarle ademas da su ruleta de Pokemon, una sola vez.
+    Casino_Piso1_PaseAscensor,
+    Casino_GuardiaVencido,
+
+    // Casino: los que pelean una sola vez, uno por NPC.
+    Casino_MalabaristaVencido,
+    Casino_JovenRicaVencida,
+    Casino_ModeloVencida,
+    Casino_MacarraVencido,
+    Casino_GuayVencido,
+
+    // Ruleta de premios por ganarle a un NPC: un flag por uso, hasta el maximo
+    // por partida (ver CasinoRuletaDeNpcs). El 3 y el 4 estan al final.
+    Casino_RuletaNpc_1,
+    Casino_RuletaNpc_2,
+
+    // Casino: la segunda tanda de NPCs que pelean una vez (dos por piso). Van al
+    // final porque las escenas guardan el flag de cada NPC como NUMERO: meterlos
+    // arriba correria a todos los que ya estan puestos.
+    Casino_MotoristaVencido,
+    Casino_PokemaniacoVencido,
+    Casino_MediumVencido,
+    Casino_LadronVencido,
+    Casino_VeteranoVencido,
+    Casino_KaratekaVencido,
+
+    // Ruleta de los NPCs: los usos 3 y 4, de cuando el tope paso de dos a
+    // cuatro. Al final por lo mismo que la tanda de arriba.
+    Casino_RuletaNpc_3,
+    Casino_RuletaNpc_4,
+
+    // Casino, piso 2: el guardia VIP del ascensor (se le muestra la Tarjeta VIP
+    // o se le gana), el magnate que da la tarjeta al ganarle y los dos que
+    // pelean una vez que se sumaron. Al final por lo mismo que las tandas de
+    // arriba: las escenas guardan el flag como numero.
+    Casino_Piso2_PaseAscensor,
+    Casino_GuardiaVipVencido,
+    Casino_MagnateVencido,
+    Casino_TahurVencido,
+    Casino_BailarinaVencida,
+
+    // Casino, piso 3: Tacconi (se le gana su Cosmog shiny al blackjack) y los
+    // dos que pelean una vez que se sumaron.
+    Casino_TacconiVencido,
+    Casino_GangsterVencido,
+    Casino_CrupieraVencida
 }

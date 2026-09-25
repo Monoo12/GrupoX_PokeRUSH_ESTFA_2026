@@ -42,13 +42,13 @@ public class TeamView : MonoBehaviour
         selectedNameText.text = poken.Definition.pokenName;
         selectedLevelText.text = $"Nv. {poken.Level}";
         selectedHealthBar.SetHealth(poken.CurrentHP, poken.MaxHP);
-        selectedSprite.sprite = poken.Definition.inventorySprite;
+        selectedSprite.sprite = poken.IconSprite;
     }
 
     private void CreateSlot(PokenModel poken)
     {
         GameObject slot = Instantiate(pokenSlotPrefab, pokenSlotContainer);
-        // configuracion del prefab del slot — se implementa cuando exista el prefab
+        // configuracion del prefab del slot ï¿½ se implementa cuando exista el prefab
         _spawnedSlots.Add(slot);
     }
 

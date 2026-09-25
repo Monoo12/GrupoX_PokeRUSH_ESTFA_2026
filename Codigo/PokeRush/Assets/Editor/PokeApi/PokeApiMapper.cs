@@ -33,16 +33,12 @@ namespace PokeRush.EditorTools.PokeApi
             "clangorous-soul", "fillet-away", "sleep-talk", "snore", "dream-eater"
         };
 
-        // Movimientos de daño cuyo efecto real (cargar un turno, recargar,
-        // cambiar de Poken al pegar...) se ignora: quedan como daño simple.
+        // Movimientos de daño cuyo efecto real (cambiar de Poken al pegar) se
+        // ignora: quedan como daño simple. Los de cargar un turno y los de
+        // recargar ya NO van aca: estan implementados (ver ReglasDeTurnos).
         private static readonly HashSet<string> DamageOnlyList = new HashSet<string>
         {
-            "solar-beam", "solar-blade", "hyper-beam", "giga-impact", "fly",
-            "dig", "bounce", "dive", "phantom-force", "shadow-force",
-            "sky-attack", "skull-bash", "freeze-shock", "ice-burn", "razor-wind",
-            "meteor-beam", "electro-shot", "rock-wrecker", "roar-of-time",
-            "blast-burn", "hydro-cannon", "frenzy-plant", "prismatic-laser",
-            "eternabeam", "u-turn", "volt-switch", "flip-turn"
+            "u-turn", "volt-switch", "flip-turn"
         };
 
         // Movimientos FISICOS que NO hacen contacto (excepciones a la heuristica
@@ -221,6 +217,106 @@ namespace PokeRush.EditorTools.PokeApi
             }
 
             result.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+            return result;
+        }
+
+        // ---------- movimientos de dos turnos ----------
+
+        public struct ReglaDeTurnos
+        {
+            public MoveTurnRule Regla;
+            public string MensajeDeCarga;   // {0} = el Poken
+            public bool SubeStatsAlCargar;  // los cambios de stats del movimiento van al turno de carga
+            public WeatherKind SinCargaCon; // con ese clima pega en el acto
+        }
+
+        // PokeAPI no trae un flag de "carga" o "recarga": va por nombre.
+        private static readonly Dictionary<string, ReglaDeTurnos> ReglasDeTurnos = new Dictionary<string, ReglaDeTurnos>
+        {
+            // Cargan un turno
+            ["solar-beam"] = Carga("¡{0} está absorbiendo luz!", sinCargaCon: WeatherKind.Sun),
+            ["solar-blade"] = Carga("¡{0} está absorbiendo luz!", sinCargaCon: WeatherKind.Sun),
+            ["sky-attack"] = Carga("¡{0} se rodeó de una luz intensa!"),
+            ["skull-bash"] = Carga("¡{0} agachó la cabeza!", subeStats: true),
+            ["razor-wind"] = Carga("¡{0} provocó un remolino!"),
+            ["meteor-beam"] = Carga("¡{0} rebosa de energía cósmica!", subeStats: true),
+            ["electro-shot"] = Carga("¡{0} está absorbiendo electricidad!", subeStats: true, sinCargaCon: WeatherKind.Rain),
+            ["freeze-shock"] = Carga("¡{0} se rodeó de un aire gélido!"),
+            ["ice-burn"] = Carga("¡{0} se rodeó de un aire helado!"),
+
+            // Cargan un turno fuera de alcance
+            ["fly"] = FueraDeAlcance("¡{0} voló muy alto!"),
+            ["bounce"] = FueraDeAlcance("¡{0} dio un gran salto!"),
+            ["dig"] = FueraDeAlcance("¡{0} se escondió bajo tierra!"),
+            ["dive"] = FueraDeAlcance("¡{0} se sumergió!"),
+            ["phantom-force"] = FueraDeAlcance("¡{0} desapareció de repente!"),
+            ["shadow-force"] = FueraDeAlcance("¡{0} desapareció de repente!"),
+
+            // Pegan y descansan el turno siguiente
+            ["hyper-beam"] = Recarga(),
+            ["giga-impact"] = Recarga(),
+            ["blast-burn"] = Recarga(),
+            ["hydro-cannon"] = Recarga(),
+            ["frenzy-plant"] = Recarga(),
+            ["rock-wrecker"] = Recarga(),
+            ["roar-of-time"] = Recarga(),
+            ["prismatic-laser"] = Recarga(),
+            ["eternabeam"] = Recarga(),
+            ["meteor-assault"] = Recarga()
+        };
+
+        // Metodos y no campos: el diccionario de arriba se inicializa antes que
+        // cualquier campo estatico declarado despues.
+        private static ReglaDeTurnos Carga(string mensaje, bool subeStats = false, WeatherKind sinCargaCon = WeatherKind.None)
+            => new ReglaDeTurnos
+            {
+                Regla = MoveTurnRule.Charge, MensajeDeCarga = mensaje,
+                SubeStatsAlCargar = subeStats, SinCargaCon = sinCargaCon
+            };
+
+        private static ReglaDeTurnos FueraDeAlcance(string mensaje)
+            => new ReglaDeTurnos { Regla = MoveTurnRule.ChargeInvulnerable, MensajeDeCarga = mensaje };
+
+        private static ReglaDeTurnos Recarga()
+            => new ReglaDeTurnos { Regla = MoveTurnRule.Recharge };
+
+        public static bool TryGetTurnRule(string moveName, out ReglaDeTurnos regla)
+            => ReglasDeTurnos.TryGetValue(moveName ?? "", out regla);
+
+        public static IEnumerable<string> MovimientosConReglaDeTurnos => ReglasDeTurnos.Keys;
+
+        // ---------- ataques de respaldo ----------
+
+        // Un ataque basico por tipo (englishName) para las especies que no
+        // aprenden ninguno ni por nivel ni por MT/tutor/huevo (Cosmog) o que no
+        // vienen de PokeAPI (las de prueba).
+        public static readonly Dictionary<PokenType, string> AtaqueBasicoPorTipo = new Dictionary<PokenType, string>
+        {
+            [PokenType.Normal] = "tackle", [PokenType.Fire] = "ember", [PokenType.Water] = "water-gun",
+            [PokenType.Grass] = "vine-whip", [PokenType.Electric] = "thunder-shock", [PokenType.Ice] = "powder-snow",
+            [PokenType.Fighting] = "karate-chop", [PokenType.Poison] = "poison-sting", [PokenType.Ground] = "mud-slap",
+            [PokenType.Flying] = "gust", [PokenType.Psychic] = "confusion", [PokenType.Bug] = "struggle-bug",
+            [PokenType.Rock] = "rock-throw", [PokenType.Ghost] = "lick", [PokenType.Dragon] = "twister",
+            [PokenType.Dark] = "bite", [PokenType.Steel] = "metal-claw", [PokenType.Fairy] = "fairy-wind"
+        };
+
+        // Todos los movimientos que la especie aprende por un metodo que NO es
+        // subir de nivel (MT, tutor, huevo...) en algun version group de la
+        // lista de preferencia. Sin repetir.
+        public static List<int> ExtractOtherMethodMoveIds(PokemonDto pokemon)
+        {
+            var result = new List<int>();
+            if (pokemon?.Moves == null) return result;
+
+            var grupos = new HashSet<string>(VersionGroupPreference);
+            foreach (var entry in pokemon.Moves)
+            {
+                if (entry.Move == null || entry.VersionGroupDetails == null) continue;
+                bool otroMetodo = entry.VersionGroupDetails.Any(d =>
+                    d.MoveLearnMethod?.Name != "level-up" && grupos.Contains(d.VersionGroup?.Name));
+                int id = entry.Move.IdFromUrl();
+                if (otroMetodo && id > 0 && !result.Contains(id)) result.Add(id);
+            }
             return result;
         }
 

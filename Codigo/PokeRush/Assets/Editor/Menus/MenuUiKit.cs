@@ -308,10 +308,31 @@ public static class MenuUiKit
             case float f: prop.floatValue = f; break;
             case bool b: prop.boolValue = b; break;
             case Color c: prop.colorValue = c; break;
+            case Vector2 v: prop.vector2Value = v; break;
             default:
                 Debug.LogWarning($"[MenuUiKit] Tipo no soportado para '{field}'.");
                 break;
         }
+
+        so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
+    // Llena un campo que es un array de int (valores de ficha, tablas de pago).
+    // Va aparte de SetArrayField porque un array de valores y uno de referencias
+    // se llenan por propiedades distintas del SerializedProperty.
+    public static void SetIntArrayField(Object target, string field, int[] values)
+    {
+        var so = new SerializedObject(target);
+        SerializedProperty prop = so.FindProperty(field);
+        if (prop == null || !prop.isArray)
+        {
+            Debug.LogWarning($"[MenuUiKit] '{target.GetType().Name}' no tiene el array '{field}'.");
+            return;
+        }
+
+        prop.arraySize = values.Length;
+        for (int i = 0; i < values.Length; i++)
+            prop.GetArrayElementAtIndex(i).intValue = values[i];
 
         so.ApplyModifiedPropertiesWithoutUndo();
     }

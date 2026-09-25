@@ -130,7 +130,8 @@ namespace PokeRush.EditorTools
                 foreach (string file in Directory.GetFiles(designTrainers, "*.png"))
                     if (CopyPng(designTrainers, Path.GetFileName(file), TrainersDest)) trainers++;
                 AssetDatabase.Refresh();
-                // Mismas reglas que los Pokens: tira si aplica, pivot abajo, PPU = alto
+                // Tira si aplica y pivot abajo, como los Pokens, pero con PPU = alto:
+                // los entrenadores miden todos lo mismo
                 foreach (string path in Directory.GetFiles(TrainersDest, "*.png"))
                     PokeApi.SpriteAssigner.ConfigureStrip(path.Replace('\\', '/'));
                 Debug.Log($"[BattleUi] {trainers} sprites de entrenadores en {TrainersDest}.");

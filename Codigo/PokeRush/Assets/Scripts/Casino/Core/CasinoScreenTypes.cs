@@ -31,6 +31,9 @@ public class PrizeWheelRequest
 {
     // Premios de ESTA maquina. Vacio = los que trae cargados el prefab.
     public Prize[] Prizes;
+    // Premio por ganar un combate: se gira UNA sola vez, no se puede salir sin
+    // girar y la pantalla se cierra sola al cerrar el cartel del premio.
+    public bool RecompensaUnica;
 }
 
 public class PrizeWheelResult

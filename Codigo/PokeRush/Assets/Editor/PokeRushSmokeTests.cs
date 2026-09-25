@@ -66,6 +66,35 @@ namespace PokeRush.EditorTools
             TestLecturaCadaTresTurnos();
             TestAvisoAnticipadoNoMiente();
 
+            // La lectura ALIADA de Nestor (nivel 2): que sea rara, que salga de
+            // la accion que la IA eligio, y que el bloqueo se note en el motor
+            TestNestorNoLeeEnLosPrimerosTurnos();
+            TestNestorRespetaCooldownYTope();
+            TestNestorEsRaroConLosValoresPorDefecto();
+            TestNestorLeeElRemateYLeSacaElTurno();
+            TestNestorNoQuemaElTurnoPorUnGolpeFlojo();
+            TestNestorLeeLaCuracionDelRival();
+            TestNestorNoLeeElForcejeo();
+            TestNestorAliadoDisponible();
+            TestTamanioDeLosPokemonEnCombate();
+            TestPcYShinySobrevivenAlGuardado();
+            TestWaitDejaAlRivalSinActuar();
+            TestElEnumDeAccionesNoSeCorrio();
+
+            // Movimientos de dos turnos (cargar / fuera de alcance / recargar)
+            TestHiperrayoObligaADescansar();
+            TestHiperrayoQueNoPegaNoDescansa();
+            TestRayoSolarCargaUnTurno();
+            TestRayoSolarConSolNoCarga();
+            TestVueloQuedaFueraDeAlcance();
+            TestCabezazoSubeLaDefensaAlCargar();
+            TestLosMovimientosDelProyectoTienenSuRegla();
+
+            // Que todo Pokemon pueda pegar, y que el menu muestre bien los tipos
+            TestSiempreHayUnAtaque();
+            TestLasEspeciesDelProyectoPuedenPegar();
+            TestIconosDeTiposYEstadosDelMenu();
+
             if (_failed == 0)
                 Debug.Log($"[SmokeTests] TODOS OK: {_passed} checks pasaron.");
             else
@@ -1141,6 +1170,621 @@ namespace PokeRush.EditorTools
 
             Check(avisos > 0, "Aviso anticipado: con las camaras cortadas se avisa");
             Check(cumplio, "Aviso anticipado: Nestor anula exactamente lo que aviso");
+        }
+
+        // ---------- la lectura ALIADA de Nestor (nivel 2) ----------
+
+        // Nestor con todos los frenos abiertos: interviene siempre que pueda.
+        // Cada test cierra a mano el freno que quiere probar.
+        private static NestorPredictionSystem MakeNestorSinFrenos()
+        {
+            return new NestorPredictionSystem
+            {
+                Probabilidad = 1f,
+                CooldownTurnos = 0,
+                TurnosDeGracia = 0,
+                MaximoPorCombate = 99
+            };
+        }
+
+        // Rival con dos golpes: 'fuerte' se lleva al jugador puesto, 'flojo' no.
+        private static BattleModel MakeBattleParaNestor(int hpActualDelJugador)
+        {
+            var fuerte = MakeMove("Cañonazo", PokenType.Normal, AttackType.Physical, 120, 100, 5);
+            var flojo = MakeMove("Ataque Rapido", PokenType.Normal, AttackType.Physical, 40, 100, 30);
+
+            var rival = MakePoken(
+                MakeSpecies("Rival", PokenType.Normal, PokenType.None, 90, 110, 50, 60, 50, 70),
+                40, fuerte, flojo);
+            var jugador = MakePoken(
+                MakeSpecies("Aliado", PokenType.Normal, PokenType.None, 140, 60, 60, 60, 60, 50),
+                35, MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35));
+            jugador.SetCurrentHP(hpActualDelJugador);
+
+            return MakeBattle(jugador, rival);
+        }
+
+        private static AiContext ContextoDeNestor(BattleModel model)
+            => MakeEnemyContext(model, BattleAIFactory.CreateDefaultProfile(BattleAIType.Trainer));
+
+        // Cuando hay Nestor de ayudante. Los NPCs del casino lo piden en todas
+        // sus peleas, asi que tiene que aparecer aunque la partida no traiga el
+        // flag de la torre; pero nunca en la pelea contra el propio Nestor.
+        private static void TestNestorAliadoDisponible()
+        {
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, false, false, false),
+                "Nestor aliado: sin el flag y sin pedirlo no aparece (primer nivel)");
+            Check(BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, false, false, true),
+                "Nestor aliado: con la torre 1 liberada aparece");
+            Check(BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, false, true, false),
+                "Nestor aliado: una pelea del casino lo tiene aunque falte el flag");
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.Auto, true, true, true),
+                "Nestor aliado: nunca en la pelea contra el propio Nestor, aunque se pida");
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.SiempreOn, true, false, true),
+                "Nestor aliado: SiempreOn tampoco saltea el candado del boss");
+            Check(!BattleController.LecturaAliadaDisponible(NestorAllyMode.SiempreOff, false, true, true),
+                "Nestor aliado: SiempreOff lo apaga incluso en el casino");
+        }
+
+        // El tamaño en combate sale de los pixeles de la tira. Lo que se pidio
+        // arreglar: Aron (32 px) se veia del alto de un Haunter (85 px).
+        private static void TestTamanioDeLosPokemonEnCombate()
+        {
+            Check(Mathf.Approximately(PokeApi.SpriteAssigner.AltoEnCombate(80), 1f),
+                "Tamaño en combate: un frame de 80 px mide 1 unidad, como antes");
+            Check(Mathf.Approximately(PokeApi.SpriteAssigner.AltoEnCombate(32), 0.5f),
+                "Tamaño en combate: los muy chicos no bajan de 0,5");
+            Check(Mathf.Approximately(PokeApi.SpriteAssigner.AltoEnCombate(182), 1.5f),
+                "Tamaño en combate: los gigantes no pasan de 1,5");
+
+            float aron = AltoDelPrimerFrame(Resources.Load<PokenDefinition>("Definitions/Pokens/0304_Aron"));
+            float haunter = AltoDelPrimerFrame(Resources.Load<PokenDefinition>("Definitions/Pokens/0093_Haunter"));
+            Check(aron > 0f && haunter > 0f && aron < haunter * 0.6f,
+                $"Tamaño en combate: Aron se ve mas chico que Haunter ({aron:0.00} contra {haunter:0.00} unidades)");
+        }
+
+        private static float AltoDelPrimerFrame(PokenDefinition def)
+        {
+            if (def == null) return 0f;
+            Sprite s = def.battleFrontFrames != null && def.battleFrontFrames.Length > 0
+                ? def.battleFrontFrames[0]
+                : def.battleFrontSprite;
+            return s != null ? s.rect.height / s.pixelsPerUnit : 0f;
+        }
+
+        // El PC y el shiny se guardan en la misma tabla que el equipo: todo tiene
+        // que volver a su lugar, sin mezclar el equipo con las cajas.
+        private static void TestPcYShinySobrevivenAlGuardado()
+        {
+            const int slot = 777;
+            DefinitionRepository.Instance.LoadAll();
+            PokenDefinition pikachu = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0025_Pikachu.asset");
+            PokenDefinition cosmog = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/0789_Cosmog.asset");
+            if (pikachu == null || cosmog == null)
+            {
+                Debug.LogWarning("[SmokeTests] Faltan Pikachu o Cosmog: se saltea la prueba del guardado del PC.");
+                return;
+            }
+
+            var jugador = new PlayerModel("PruebaPC");
+            jugador.Team.Add(new PokenModel(pikachu, 12));
+            var shiny = new PokenModel(cosmog, 15);
+            shiny.SetShiny(true);
+            jugador.Team.Add(shiny);
+            jugador.Storage.Set(2, 7, new PokenModel(pikachu, 30));
+
+            try
+            {
+                SaveService.Instance.SavePlayer(jugador, new StoryModel(), slot);
+                PlayerModel cargado = SaveService.Instance.LoadPlayer(new StoryModel(), slot);
+
+                Check(cargado != null && cargado.Team.Count == 2,
+                    "Guardado del PC: el equipo vuelve entero y sin mezclarse con las cajas");
+                Check(cargado != null && cargado.Team.Count == 2 && cargado.Team[1].IsShiny && !cargado.Team[0].IsShiny,
+                    "Guardado del PC: el shiny sigue siendo shiny");
+                PokenModel enCaja = cargado?.Storage.Get(2, 7);
+                Check(enCaja != null && enCaja.Level == 30 && cargado.Storage.Count == 1,
+                    "Guardado del PC: el Pokemon de la caja vuelve a su caja y a su lugar");
+            }
+            finally
+            {
+                SaveService.Instance.DeleteSave(slot);
+            }
+        }
+
+        // El freno mas visible: los primeros turnos Nestor solo mira. Sin esto
+        // la lectura puede caer en el turno 1 y arruina la entrada del combate.
+        private static void TestNestorNoLeeEnLosPrimerosTurnos()
+        {
+            BattleModel model = MakeBattleParaNestor(12); // el rival lo remata
+            AiContext ctx = ContextoDeNestor(model);
+            var rng = new SeededRng(3);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            nestor.TurnosDeGracia = 2;
+
+            bool leyoEnLaGracia = false;
+            for (int t = 0; t < 2; t++)
+                if (nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino) leyoEnLaGracia = true;
+
+            bool leyoDespues = nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino;
+
+            Check(!leyoEnLaGracia, "Nestor aliado: no lee durante los turnos de gracia");
+            Check(leyoDespues, "Nestor aliado: pasada la gracia si lee");
+        }
+
+        // Cooldown y tope por combate: los dos frenos que evitan que Nestor
+        // anule al rival todos los turnos.
+        private static void TestNestorRespetaCooldownYTope()
+        {
+            BattleModel model = MakeBattleParaNestor(12);
+            AiContext ctx = ContextoDeNestor(model);
+            var rng = new SeededRng(9);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            nestor.CooldownTurnos = 4;
+            nestor.MaximoPorCombate = 2;
+
+            var turnosQueLeyo = new List<int>();
+            for (int t = 1; t <= 30; t++)
+                if (nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino)
+                    turnosQueLeyo.Add(t);
+
+            Check(turnosQueLeyo.Count == 2,
+                $"Nestor aliado: nunca pasa del tope por combate (leyo {turnosQueLeyo.Count} veces en 30 turnos)");
+
+            bool separadas = turnosQueLeyo.Count < 2
+                || turnosQueLeyo[1] - turnosQueLeyo[0] > nestor.CooldownTurnos;
+            Check(separadas, "Nestor aliado: dos lecturas nunca caen dentro del cooldown");
+        }
+
+        // Con la probabilidad conservadora que trae de fabrica, la lectura tiene
+        // que ser RARA. Este test es el que se rompe si alguien sube el numero
+        // sin querer.
+        private static void TestNestorEsRaroConLosValoresPorDefecto()
+        {
+            BattleModel model = MakeBattleParaNestor(12);
+            AiContext ctx = ContextoDeNestor(model);
+
+            int lecturas = 0;
+            int turnos = 0;
+            for (int pelea = 0; pelea < 200; pelea++)
+            {
+                var nestor = new NestorPredictionSystem();   // valores de fabrica
+                var rng = new SeededRng(pelea);
+                for (int t = 0; t < 10; t++)                 // pelea tipica
+                {
+                    turnos++;
+                    if (nestor.Evaluar(ctx, BattleAction.Move(0), rng).Intervino) lecturas++;
+                }
+            }
+
+            float porTurno = (float)lecturas / turnos;
+            Check(porTurno < 0.15f,
+                $"Nestor aliado: interviene en menos del 15% de los turnos ({porTurno:P1})");
+            Check(lecturas > 0, "Nestor aliado: pero interviene alguna vez");
+        }
+
+        // Lo que se pidio: la lectura tiene que salir de la accion que la IA
+        // REALMENTE eligio. Un remate le cuesta el turno entero al rival.
+        private static void TestNestorLeeElRemateYLeSacaElTurno()
+        {
+            BattleModel model = MakeBattleParaNestor(12); // muere con cualquiera
+            AiContext ctx = ContextoDeNestor(model);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            NestorIntervention lectura =
+                nestor.Evaluar(ctx, BattleAction.Move(0), new SeededRng(4));
+
+            Check(lectura.Plan.Kind == EnemyPlanKind.Remate,
+                "Nestor aliado: reconoce el remate del rival");
+            Check(lectura.Intervino && lectura.PerdioElTurno,
+                "Nestor aliado: al remate le saca el turno entero");
+            Check(lectura.AccionFinal.Kind == BattleActionKind.Wait,
+                "Nestor aliado: la accion del rival queda en Wait (no hace nada)");
+        }
+
+        // El espejo del anterior: un golpe flojo NO le cuesta el turno. Solo
+        // pierde su mejor opcion y juega la segunda, que sigue saliendo del
+        // MoveScorer de la IA y no de un sorteo.
+        private static void TestNestorNoQuemaElTurnoPorUnGolpeFlojo()
+        {
+            BattleModel model = MakeBattleParaNestor(140); // full: nada lo remata
+            AiContext ctx = ContextoDeNestor(model);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+            NestorIntervention lectura =
+                nestor.Evaluar(ctx, BattleAction.Move(1), new SeededRng(6)); // el flojo
+
+            Check(lectura.Plan.Kind == EnemyPlanKind.Ataque && !lectura.Plan.EsJugadaFuerte,
+                "Nestor aliado: un golpe flojo no cuenta como jugada fuerte");
+            Check(lectura.Intervino && !lectura.PerdioElTurno,
+                "Nestor aliado: por un golpe flojo el rival no pierde el turno");
+            Check(lectura.AccionFinal.Kind == BattleActionKind.UseMove
+                  && lectura.AccionFinal.MoveIndex != 1,
+                "Nestor aliado: el rival cae a otro movimiento, no a Wait");
+        }
+
+        // Un rival que se cura es de las jugadas que mas duele no cortar.
+        private static void TestNestorLeeLaCuracionDelRival()
+        {
+            var cura = MakeMove("Recuperacion", PokenType.Normal, AttackType.Status, 0, 100, 10);
+            cura.healPercent = 50;
+            var golpe = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+
+            var rival = MakePoken(
+                MakeSpecies("Curandero", PokenType.Normal, PokenType.None, 120, 60, 60, 60, 60, 60),
+                35, cura, golpe);
+            rival.SetCurrentHP(30); // le falta vida: la curacion sirve
+
+            var jugador = MakePoken(
+                MakeSpecies("Aliado", PokenType.Normal, PokenType.None, 120, 60, 60, 60, 60, 55),
+                35, golpe);
+
+            BattleModel model = MakeBattle(jugador, rival);
+            AiContext ctx = ContextoDeNestor(model);
+
+            NestorIntervention lectura =
+                MakeNestorSinFrenos().Evaluar(ctx, BattleAction.Move(0), new SeededRng(8));
+
+            Check(lectura.Plan.Kind == EnemyPlanKind.Curacion,
+                "Nestor aliado: reconoce que el rival se iba a curar");
+            Check(lectura.Intervino && lectura.PerdioElTurno,
+                "Nestor aliado: la curacion le cuesta el turno al rival");
+        }
+
+        // Un rival sin PP forcejeando ya esta en su peor momento: leerselo no
+        // demuestra nada y ademas seria gratis todos los turnos.
+        private static void TestNestorNoLeeElForcejeo()
+        {
+            BattleModel model = MakeBattleParaNestor(12);
+            AiContext ctx = ContextoDeNestor(model);
+            var rng = new SeededRng(2);
+
+            NestorPredictionSystem nestor = MakeNestorSinFrenos();
+
+            bool leyoAlguna = false;
+            for (int t = 0; t < 20; t++)
+                if (nestor.Evaluar(ctx, BattleAction.Struggle(), rng).Intervino) leyoAlguna = true;
+
+            Check(!leyoAlguna, "Nestor aliado: nunca lee un forcejeo");
+        }
+
+        // El bloqueo tiene que traducirse en que el rival NO actua. Se prueba
+        // contra el motor de verdad, no contra la intencion.
+        private static void TestWaitDejaAlRivalSinActuar()
+        {
+            BattleModel model = MakeBattleParaNestor(140);
+            var engine = new TurnEngine(model, new SeededRng(5));
+
+            int hpAntes = model.ActivePlayerPoken.CurrentHP;
+            engine.ResolveTurn(BattleAction.Wait(), BattleAction.Wait());
+            int hpConWait = model.ActivePlayerPoken.CurrentHP;
+
+            engine.ResolveTurn(BattleAction.Wait(), BattleAction.Move(0));
+            int hpConAtaque = model.ActivePlayerPoken.CurrentHP;
+
+            Check(hpConWait == hpAntes,
+                "Wait: el rival con Wait no le hace nada al jugador");
+            Check(hpConAtaque < hpConWait,
+                "Wait: el mismo rival sin Wait si pega (el test no es un falso positivo)");
+        }
+
+        // ---------- movimientos de dos turnos ----------
+
+        private static MoveDefinition MakeMoveDeTurnos(string name, PokenType type, int power, MoveTurnRule regla)
+        {
+            var move = MakeMove(name, type, AttackType.Special, power, 100, 10);
+            move.turnRule = regla;
+            return move;
+        }
+
+        // Un rival duro y lento que aguanta varios golpes y pega poco.
+        private static PokenModel MakeTanque(params MoveDefinition[] moves)
+            => MakePoken(MakeSpecies("Tanque", PokenType.Normal, PokenType.None, 250, 40, 200, 40, 200, 10), 50, moves);
+
+        private static void TestHiperrayoObligaADescansar()
+        {
+            var hiperrayo = MakeMoveDeTurnos("Hiperrayo", PokenType.Normal, 150, MoveTurnRule.Recharge);
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Rayo", PokenType.Normal, PokenType.None, 100, 50, 60, 80, 60, 100), 30, hiperrayo);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+            var engine = new TurnEngine(model, new SeededRng(11));
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            int hpTrasElGolpe = rival.CurrentHP;
+            Check(hpTrasElGolpe < rival.MaxHP, "Hiperrayo: pega");
+            Check(model.PlayerState.MustRecharge, "Hiperrayo: despues de pegar tiene que descansar");
+            BattleAction forzada = TurnEngine.AccionForzada(model.PlayerState);
+            Check(forzada != null && forzada.Kind == BattleActionKind.Recharge,
+                "Hiperrayo: el turno siguiente la accion obligada es descansar");
+
+            // Aunque se le pida pegar otra vez, descansa.
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP == hpTrasElGolpe, "Hiperrayo: en el turno de descanso no pega");
+            Check(TurnEngine.AccionForzada(model.PlayerState) == null, "Hiperrayo: descansado, vuelve a elegir");
+            Check(jugador.Moves[0].CurrentPP == hiperrayo.maxPP - 1, "Hiperrayo: descansar no gasta PP");
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP < hpTrasElGolpe, "Hiperrayo: el turno siguiente pega de nuevo");
+        }
+
+        private static void TestHiperrayoQueNoPegaNoDescansa()
+        {
+            var hiperrayo = MakeMoveDeTurnos("Hiperrayo", PokenType.Normal, 150, MoveTurnRule.Recharge);
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+
+            var jugador = MakePoken(
+                MakeSpecies("Rayo", PokenType.Normal, PokenType.None, 100, 50, 60, 80, 60, 100), 30, hiperrayo);
+            var model = MakeBattle(jugador, MakeTanque(placaje));
+            new TurnEngine(model, new SeededRng(12)).ResolveTurn(BattleAction.Move(0), BattleAction.Protect());
+            Check(!model.PlayerState.MustRecharge, "Hiperrayo: si se lo aguantan, no descansa");
+
+            var jugador2 = MakePoken(
+                MakeSpecies("Rayo", PokenType.Normal, PokenType.None, 100, 50, 60, 80, 60, 100), 30, hiperrayo);
+            var fantasma = MakePoken(
+                MakeSpecies("Fantasma", PokenType.Ghost, PokenType.None, 100, 40, 60, 40, 60, 10), 30, placaje);
+            var model2 = MakeBattle(jugador2, fantasma);
+            new TurnEngine(model2, new SeededRng(12)).ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(!model2.PlayerState.MustRecharge, "Hiperrayo: si no le hace nada al rival (Fantasma), no descansa");
+        }
+
+        private static void TestRayoSolarCargaUnTurno()
+        {
+            var rayoSolar = MakeMoveDeTurnos("Rayo Solar", PokenType.Grass, 120, MoveTurnRule.Charge);
+            rayoSolar.skipChargeInWeather = WeatherKind.Sun;
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Planta", PokenType.Grass, PokenType.None, 100, 50, 60, 80, 60, 100), 30, rayoSolar);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+            var engine = new TurnEngine(model, new SeededRng(13));
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP == rival.MaxHP, "Rayo Solar: el primer turno carga y no pega");
+            Check(model.PlayerState.ChargingMoveIndex == 0, "Rayo Solar: queda cargando");
+            Check(jugador.Moves[0].CurrentPP == rayoSolar.maxPP - 1, "Rayo Solar: el PP se gasta al cargar");
+            BattleAction forzada = TurnEngine.AccionForzada(model.PlayerState);
+            Check(forzada != null && forzada.Kind == BattleActionKind.UseMove && forzada.MoveIndex == 0,
+                "Rayo Solar: el turno siguiente sale solo");
+
+            // Aunque se pida otra cosa (cambiar), suelta el golpe.
+            engine.ResolveTurn(BattleAction.Switch(1), BattleAction.Move(0));
+            Check(rival.CurrentHP < rival.MaxHP, "Rayo Solar: el segundo turno pega");
+            Check(model.PlayerState.ChargingMoveIndex < 0, "Rayo Solar: termino la carga");
+            Check(jugador.Moves[0].CurrentPP == rayoSolar.maxPP - 1, "Rayo Solar: soltar el golpe no gasta otro PP");
+        }
+
+        private static void TestRayoSolarConSolNoCarga()
+        {
+            var rayoSolar = MakeMoveDeTurnos("Rayo Solar", PokenType.Grass, 120, MoveTurnRule.Charge);
+            rayoSolar.skipChargeInWeather = WeatherKind.Sun;
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Planta", PokenType.Grass, PokenType.None, 100, 50, 60, 80, 60, 100), 30, rayoSolar);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+            model.SetWeather(WeatherKind.Sun, 5);
+
+            new TurnEngine(model, new SeededRng(14)).ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP < rival.MaxHP, "Rayo Solar: con sol pega en el acto");
+            Check(model.PlayerState.ChargingMoveIndex < 0, "Rayo Solar: con sol no queda cargando");
+        }
+
+        private static void TestVueloQuedaFueraDeAlcance()
+        {
+            var vuelo = MakeMoveDeTurnos("Vuelo", PokenType.Flying, 90, MoveTurnRule.ChargeInvulnerable);
+            vuelo.attackType = AttackType.Physical;
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Pajaro", PokenType.Flying, PokenType.None, 100, 80, 60, 50, 60, 120), 30, vuelo);
+            var rival = MakePoken(
+                MakeSpecies("Lento", PokenType.Normal, PokenType.None, 150, 60, 80, 40, 80, 10), 40, placaje);
+            var model = MakeBattle(jugador, rival);
+            var engine = new TurnEngine(model, new SeededRng(15));
+
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(jugador.CurrentHP == jugador.MaxHP, "Vuelo: mientras esta en el aire, el Placaje del rival falla");
+            Check(model.PlayerState.SemiInvulnerable, "Vuelo: queda fuera de alcance");
+
+            int hpRival = rival.CurrentHP;
+            engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(rival.CurrentHP < hpRival, "Vuelo: el segundo turno pega");
+            Check(!model.PlayerState.SemiInvulnerable, "Vuelo: al pegar vuelve a estar al alcance");
+            Check(jugador.CurrentHP < jugador.MaxHP, "Vuelo: y ya lo pueden golpear");
+        }
+
+        private static void TestCabezazoSubeLaDefensaAlCargar()
+        {
+            var cabezazo = MakeMoveDeTurnos("Cabezazo", PokenType.Normal, 130, MoveTurnRule.Charge);
+            cabezazo.attackType = AttackType.Physical;
+            cabezazo.chargeStatChanges = new[] { new StatChangeEntry { stat = Stat.Defense, stages = 1, targetSelf = true } };
+            var placaje = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            var jugador = MakePoken(
+                MakeSpecies("Cabezon", PokenType.Normal, PokenType.None, 100, 80, 60, 50, 60, 100), 30, cabezazo);
+            var rival = MakeTanque(placaje);
+            var model = MakeBattle(jugador, rival);
+
+            new TurnEngine(model, new SeededRng(16)).ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(model.PlayerState.GetStage(Stat.Defense) == 1, "Cabezazo: al agachar la cabeza sube la Defensa");
+            Check(rival.CurrentHP == rival.MaxHP, "Cabezazo: y ese turno no pega");
+        }
+
+        // Los assets del proyecto: que el importador (o el menu que lo aplica a
+        // lo ya importado) les haya puesto su regla a los movimientos conocidos.
+        private static void TestLosMovimientosDelProyectoTienenSuRegla()
+        {
+            var porNombre = new Dictionary<string, MoveDefinition>();
+            foreach (MoveDefinition m in Resources.LoadAll<MoveDefinition>("Definitions/Moves"))
+                if (!string.IsNullOrEmpty(m.englishName)) porNombre[m.englishName] = m;
+
+            void Regla(string nombre, MoveTurnRule esperada)
+            {
+                if (!porNombre.TryGetValue(nombre, out MoveDefinition m)) return; // no esta en el proyecto
+                Check(m.turnRule == esperada && m.implementation == MoveImplementation.Full,
+                    $"Movimientos del proyecto: {m.moveName} es {esperada} y esta implementado ({m.turnRule}, {m.implementation})");
+            }
+
+            Regla("hyper-beam", MoveTurnRule.Recharge);
+            Regla("giga-impact", MoveTurnRule.Recharge);
+            Regla("solar-beam", MoveTurnRule.Charge);
+            Regla("sky-attack", MoveTurnRule.Charge);
+            Regla("skull-bash", MoveTurnRule.Charge);
+            Regla("fly", MoveTurnRule.ChargeInvulnerable);
+            Regla("dig", MoveTurnRule.ChargeInvulnerable);
+            Regla("tackle", MoveTurnRule.Normal);
+
+            if (porNombre.TryGetValue("solar-beam", out MoveDefinition rayoSolar))
+                Check(rayoSolar.skipChargeInWeather == WeatherKind.Sun, "Movimientos del proyecto: Rayo Solar no carga con sol");
+        }
+
+        // ---------- que todo Pokemon pueda pegar ----------
+
+        private static void TestSiempreHayUnAtaque()
+        {
+            MoveDefinition antes = PokenModel.DefaultMove;
+            var respaldo = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            PokenModel.DefaultMove = respaldo;
+            try
+            {
+                // El ataque se aprende primero y despues cuatro de estado: "los
+                // ultimos 4" lo dejarian afuera (Togepi a nivel 15).
+                var destructor = MakeMove("Destructor", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+                var togepiSp = MakeSpecies("Togepito", PokenType.Fairy, PokenType.None, 35, 20, 65, 40, 65, 20);
+                togepiSp.learnset = new[]
+                {
+                    new LearnsetEntry { move = destructor, level = 1 },
+                    new LearnsetEntry { move = MakeMove("Encanto", PokenType.Fairy, AttackType.Status, 0, 100, 20), level = 4 },
+                    new LearnsetEntry { move = MakeMove("Beso", PokenType.Fairy, AttackType.Status, 0, 75, 10), level = 8 },
+                    new LearnsetEntry { move = MakeMove("Gruñido", PokenType.Normal, AttackType.Status, 0, 100, 40), level = 12 },
+                    new LearnsetEntry { move = MakeMove("Camaraderia", PokenType.Normal, AttackType.Status, 0, 100, 20), level = 14 }
+                };
+                var togepi = new PokenModel(togepiSp, 15, FixedIvs);
+                Check(togepi.Moves.Count == 4 && togepi.Moves.Exists(m => m.Definition == destructor),
+                    "Ataques: con 4 movimientos de estado, uno se cambia por el ataque que ya sabia");
+
+                // Nada que pegue en todo el learnset, y lo unico que tiene no esta
+                // implementado (Abra y Teletransporte): recibe el de respaldo.
+                var teletransporte = MakeMove("Teletransporte", PokenType.Psychic, AttackType.Status, 0, 100, 20);
+                teletransporte.implementation = MoveImplementation.NotImplemented;
+                var abraSp = MakeSpecies("Abrita", PokenType.Psychic, PokenType.None, 25, 20, 15, 105, 55, 90);
+                abraSp.learnset = new[] { new LearnsetEntry { move = teletransporte, level = 1 } };
+                var abra = new PokenModel(abraSp, 15, FixedIvs);
+                Check(abra.Moves.Count == 1 && abra.Moves[0].Definition == respaldo,
+                    "Ataques: una especie que no aprende ningun ataque recibe el de respaldo (y no el no implementado)");
+
+                // Todavia no llega al nivel de su primer ataque (Feebas: Placaje a nivel 15): se le da ese.
+                var salpicadura = MakeMove("Salpicadura", PokenType.Normal, AttackType.Status, 0, 100, 40);
+                salpicadura.implementation = MoveImplementation.NotImplemented;
+                var placajeFeebas = MakeMove("Placaje", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+                var feebasSp = MakeSpecies("Feebita", PokenType.Water, PokenType.None, 20, 15, 20, 10, 55, 80);
+                feebasSp.learnset = new[]
+                {
+                    new LearnsetEntry { move = salpicadura, level = 1 },
+                    new LearnsetEntry { move = placajeFeebas, level = 15 }
+                };
+                var feebas = new PokenModel(feebasSp, 5, FixedIvs);
+                Check(feebas.Moves.Exists(m => m.Definition == placajeFeebas),
+                    "Ataques: si todavia no llega al nivel de su primer ataque, se le da ese");
+
+                // Uno guardado sin ataques (el Abra de la ruleta) recupera uno al cargar.
+                abra.Moves.Clear();
+                abra.AsegurarUnAtaque();
+                Check(abra.Moves.Count == 1 && PokenModel.SirveParaPegar(abra.Moves[0].Definition),
+                    "Ataques: un Pokemon guardado sin movimientos recupera uno");
+            }
+            finally
+            {
+                PokenModel.DefaultMove = antes;
+            }
+        }
+
+        // Todas las especies del proyecto, a los niveles en que se consiguen o se pelean.
+        private static void TestLasEspeciesDelProyectoPuedenPegar()
+        {
+            MoveDefinition antes = PokenModel.DefaultMove;
+            foreach (MoveDefinition m in Resources.LoadAll<MoveDefinition>("Definitions/Moves"))
+                if (m.moveName == "Placaje") PokenModel.DefaultMove = m;
+            try
+            {
+                var sinAtaque = new List<string>();
+                foreach (PokenDefinition especie in Resources.LoadAll<PokenDefinition>("Definitions/Pokens"))
+                {
+                    foreach (int nivel in new[] { 1, 5, 15, 25, 50 })
+                    {
+                        var poken = new PokenModel(especie, nivel, FixedIvs);
+                        if (!poken.Moves.Exists(m => PokenModel.SirveParaPegar(m.Definition)))
+                            sinAtaque.Add($"{especie.pokenName} Nv{nivel}");
+                    }
+                }
+                Check(sinAtaque.Count == 0,
+                    $"Ataques: todas las especies del proyecto pueden pegar a cualquier nivel ({sinAtaque.Count} no pueden: {string.Join(", ", sinAtaque.GetRange(0, Mathf.Min(10, sinAtaque.Count)))})");
+
+                // Las que por nivel no aprendian nada traen ataques en el learnset,
+                // no dependen solo del de respaldo.
+                foreach (string nombre in new[] { "0063_Abra", "0789_Cosmog" })
+                {
+                    var especie = Resources.Load<PokenDefinition>("Definitions/Pokens/" + nombre);
+                    if (especie == null) continue;
+                    bool tiene = especie.learnset != null &&
+                                 System.Array.Exists(especie.learnset, e => e != null && PokenModel.SirveParaPegar(e.move));
+                    Check(tiene, $"Ataques: {especie.pokenName} tiene al menos un ataque en su learnset");
+                }
+            }
+            finally
+            {
+                PokenModel.DefaultMove = antes;
+            }
+        }
+
+        // El Resumen mostraba Psiquico como Agua: la biblioteca de iconos tomaba
+        // fila = enum, pero la hoja esta en el orden de Essentials.
+        private static void TestIconosDeTiposYEstadosDelMenu()
+        {
+            MenuIconLibrary lib = MenuIconLibrary.Instance;
+            if (lib == null)
+            {
+                Debug.LogWarning("[SmokeTests] No esta la biblioteca de iconos de los menus (Resources/Menus/MenuIcons).");
+                return;
+            }
+
+            string primerError = null;
+            foreach (PokenType tipo in System.Enum.GetValues(typeof(PokenType)))
+            {
+                if (tipo == PokenType.None) continue;
+                Sprite s = lib.GetTypeIcon(tipo);
+                string esperado = $"type_{BattleUiAssetImporter.TypeRow[tipo]}_0";
+                if ((s == null || s.name != esperado) && primerError == null)
+                    primerError = $"{tipo} muestra {(s != null ? s.name : "nada")} en vez de {esperado}";
+            }
+            Check(primerError == null, $"Iconos del menu: cada tipo usa su fila de la hoja ({primerError ?? "ok"})");
+
+            Sprite psiquico = lib.GetTypeIcon(PokenType.Psychic);
+            Check(psiquico != null && psiquico.name == "type_14_0", "Iconos del menu: Psiquico ya no se ve como Agua");
+
+            bool estadosBien = true;
+            foreach (KeyValuePair<StatusEffect, int> par in BattleUiAssetImporter.StatusRow)
+            {
+                Sprite s = lib.GetStatusIcon(par.Key);
+                if (s == null || s.name != $"status_{par.Value}_0") estadosBien = false;
+            }
+            Check(estadosBien, "Iconos del menu: cada estado usa su fila de la hoja");
+        }
+
+        // Los valores del enum se serializan por numero. Si alguien mete algo
+        // en el medio, todo lo guardado con Flee o Protect cambia de accion.
+        private static void TestElEnumDeAccionesNoSeCorrio()
+        {
+            Check((int)BattleActionKind.UseMove == 0
+                  && (int)BattleActionKind.SwitchPoken == 1
+                  && (int)BattleActionKind.UseItem == 2
+                  && (int)BattleActionKind.Flee == 3
+                  && (int)BattleActionKind.Protect == 4
+                  && (int)BattleActionKind.Wait == 5
+                  && (int)BattleActionKind.Recharge == 6,
+                "BattleActionKind: Wait y Recharge quedaron al final y no corrieron a los demas");
         }
     }
 }

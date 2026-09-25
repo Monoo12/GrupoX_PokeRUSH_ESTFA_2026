@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
+  m_Name: GangsterCasino
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  characterName: "G\xE1ngster"
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: 8adf685c4af25ac4ebc01622e92765d7, type: 2}
+    level: 18
+  - species: {fileID: 11400000, guid: 6d3b357a0b4f957419619abd8eab5556, type: 2}
+    level: 19
+  battleFrontSprite: {fileID: 21300000, guid: bb83d80bef73aff4eafbf0dd6154a5a9, type: 3}
+  battleBackSprite: {fileID: 0}
+  battleMusic: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  moneyReward: 230
+  itemRewards: []
+  defeatGrantsFlag: 47
+  fleeIfWeak: 0
+  aiProfile: {fileID: 11400000, guid: b45cec9649f49d543a98946e5e8f48e2, type: 2}
+  battleBackground: {fileID: 0}

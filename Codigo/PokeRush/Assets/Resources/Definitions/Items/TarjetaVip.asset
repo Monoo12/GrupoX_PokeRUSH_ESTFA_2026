@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add55da467d09504c924f5aa415c5bf4, type: 3}
+  m_Name: TarjetaVip
+  m_EditorClassIdentifier: Assembly-CSharp::SpecialItemDefinition
+  itemName: Tarjeta VIP
+  description: Tarjeta dorada del casino. El guardia del ascensor del piso 2 deja
+    subir a quien la muestra.
+  icon: {fileID: -1138072029727220649, guid: 82c51790291498f41bdc0567d6c8f5d7, type: 3}
+  buyPrice: 1500
+  effectDescription: Abre el ascensor del piso 2.
+  triggersFlag: 0

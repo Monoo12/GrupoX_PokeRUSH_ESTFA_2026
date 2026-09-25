@@ -377,7 +377,11 @@ MonoBehaviour:
   baseSpecialAttack: 105
   baseSpecialDefense: 55
   baseSpeed: 90
-  learnset: []
+  learnset:
+  - move: {fileID: 11400000, guid: 586e4c7541aef1d4f926fe58fa0d3c71, type: 2}
+    level: 1
+  - move: {fileID: 11400000, guid: 31f1043e3839e9747bd5bf22368f4b26, type: 2}
+    level: 1
   moves: []
   baseXpYield: 62
   abilityId: 0

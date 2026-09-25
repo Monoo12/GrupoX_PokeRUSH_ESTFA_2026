@@ -61,6 +61,10 @@ public class RouletteScreenRequest
     // Apuesta minima y maxima por ficha. 0 = las que traiga el prefab.
     public int ApuestaMinima;
     public int ApuestaMaxima;
+    // Ruleta de premios que se abre al ganar al color (rojo/negro) MAS que el
+    // umbral en un giro. Null = nunca.
+    public CasinoPrizeTable RuletaPorColor;
+    public int UmbralRuletaPorColor = 200;
 }
 
 // Lo que devuelve al cerrarse, para que la mesa del mundo pueda reaccionar sin
@@ -68,6 +72,8 @@ public class RouletteScreenRequest
 public class RouletteScreenResult
 {
     public int Giros;
+    // Cuantas veces se abrio la ruleta de premios por ganarle al color.
+    public int RuletasDePremio;
     // Ganado menos apostado en toda la sesion de esta mesa.
     public int Neto;
     // El premio mas grande de la sesion, para el cartel de despedida.

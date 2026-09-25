@@ -14,10 +14,15 @@ public class CasinoProgressModel
         _story = story;
     }
 
-    // Piso 1 (tragaperras): superado cuando el jugador junto la plata pedida.
-    // El requisito real vive en el ascensor, que es quien lo puede configurar;
-    // aca solo se lee si ya paso.
+    // Piso 1 (tragaperras): el guardia del ascensor da el pase al pagarle o al
+    // ganarle. El requisito real vive en el ascensor, que es quien lo puede
+    // configurar; aca solo se lee si ya paso.
+    public bool PaseDelPiso1 => Tiene(StoryFlag.Casino_Piso1_PaseAscensor);
+    public bool GuardiaVencido => Tiene(StoryFlag.Casino_GuardiaVencido);
     public bool Piso1Superado => Tiene(StoryFlag.Casino_Piso1_Superado);
+
+    // La ruleta de premios que dan los NPCs al ganarles (una cada dos combates, hasta cuatro).
+    public int RuletasDeNpcUsadas => CasinoRuletaDeNpcs.Usadas(_story);
 
     // Piso 2 (ruleta): el objetivo lo marca la propia ruleta al cumplirse.
     public bool ObjetivoDeRuletaCumplido => Tiene(StoryFlag.Casino_Ruleta_ObjetivoCumplido);

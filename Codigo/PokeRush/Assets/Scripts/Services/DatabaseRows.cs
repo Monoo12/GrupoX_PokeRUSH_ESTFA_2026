@@ -35,6 +35,14 @@ public class PlayerPokenRow
     // Es string y no int para distinguir saves viejos (NULL -> se regeneran)
     // de un IV 0 legitimo. La columna la agrega solo sqlite-net via ALTER.
     public string Ivs { get; set; }
+    // Shiny o no. Los guardados viejos quedan en false (la columna la agrega
+    // sola sqlite-net).
+    public bool IsShiny { get; set; }
+    // Donde esta: null = en el equipo (SlotIndex es su orden); un numero = la
+    // caja del PC (SlotIndex es el lugar dentro de la caja). Es nullable a
+    // proposito: en los guardados viejos la columna nueva queda NULL y esos
+    // Pokemon siguen en el equipo, que es donde estaban.
+    public int? BoxIndex { get; set; }
 }
 
 [Table("player_poken_moves")]
