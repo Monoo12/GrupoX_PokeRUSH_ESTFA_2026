@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: wildbolt-storm
   type: 5
   attackType: 1
+  descripcion: "The user summons a thunderous tempest and savagely attacks with lightning
+    and wind. This may also leave opposing Pok\xE9mon with paralysis."
   power: 100
   accuracy: 80
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: f12917e52f21c0b40b506e7e9ce93ffc, type: 2}

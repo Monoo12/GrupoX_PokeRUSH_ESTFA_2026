@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: water-gun
   type: 3
   attackType: 1
+  descripcion: Ataca disparando agua con gran potencia.
   power: 40
   accuracy: 100
   maxPP: 25
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

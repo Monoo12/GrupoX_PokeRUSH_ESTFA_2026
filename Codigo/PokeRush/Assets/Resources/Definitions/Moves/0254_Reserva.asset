@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: stockpile
   type: 1
   attackType: 2
+  descripcion: "Acumula energ\xEDa y sube la Defensa y la Defensa  Especial. Puede
+    utilizarse hasta tres veces."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -45,4 +47,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

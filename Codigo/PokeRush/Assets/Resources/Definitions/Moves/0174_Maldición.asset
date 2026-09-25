@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: curse
   type: 14
   attackType: 2
+  descripcion: Un movimiento que tiene efectos distintos si el usuario es de tipo
+    Fantasma o no.
   power: 0
   accuracy: 0
   maxPP: 10
@@ -40,4 +42,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 783a6be96d900b044b4bc3b10fd68028, type: 2}

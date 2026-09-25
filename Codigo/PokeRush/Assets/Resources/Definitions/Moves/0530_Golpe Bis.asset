@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dual-chop
   type: 15
   attackType: 0
+  descripcion: "Golpea dos veces seguidas con las partes m\xE1s recias de su cuerpo."
   power: 40
   accuracy: 90
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

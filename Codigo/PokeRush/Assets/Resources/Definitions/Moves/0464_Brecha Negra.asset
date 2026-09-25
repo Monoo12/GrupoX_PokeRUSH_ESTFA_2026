@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dark-void
   type: 16
   attackType: 2
+  descripcion: El objetivo es enviado a un mundo de tinieblas que lo hace dormir.
   power: 0
   accuracy: 50
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: cc680c8b9af2ca9459952c349df4ae8d, type: 2}

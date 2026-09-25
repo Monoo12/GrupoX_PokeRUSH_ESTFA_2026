@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: poison-tail
   type: 8
   attackType: 0
+  descripcion: "Puede envenenar y dar un golpe cr\xEDtico."
   power: 50
   accuracy: 100
   maxPP: 25
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d130107173c5f9b48b40d8fdc88f0baf, type: 2}

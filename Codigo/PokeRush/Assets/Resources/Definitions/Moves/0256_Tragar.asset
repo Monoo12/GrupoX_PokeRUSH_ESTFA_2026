@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: swallow
   type: 1
   attackType: 2
+  descripcion: "Absorbe la energ\xEDa acumulada con Reserva para recobrar salud.
+    Cuanta m\xE1s se haya acumulado, mayor ser\xE1 el n\xFAmero de PS que se recuperen."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

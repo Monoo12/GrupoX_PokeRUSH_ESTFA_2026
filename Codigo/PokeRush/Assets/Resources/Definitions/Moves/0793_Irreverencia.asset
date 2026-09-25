@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: false-surrender
   type: 16
   attackType: 0
+  descripcion: "El usuario finge hacer una reverencia y aprovecha la ocasi\xF3n para
+    ensartar al objetivo con su cabello alborotado. Siempre acierta."
   power: 80
   accuracy: 0
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e2e8bafda8aa1d846b25423334204ab1, type: 2}

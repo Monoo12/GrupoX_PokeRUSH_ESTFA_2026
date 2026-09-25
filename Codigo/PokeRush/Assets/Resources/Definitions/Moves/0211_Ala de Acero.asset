@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: steel-wing
   type: 17
   attackType: 0
+  descripcion: Alas macizas que golpean al objetivo y pueden subir  la Defensa del
+    usuario.
   power: 70
   accuracy: 90
   maxPP: 25
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

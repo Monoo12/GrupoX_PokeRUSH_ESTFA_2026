@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: water-pulse
   type: 3
   attackType: 1
+  descripcion: Ataca con un potente chorro de agua. Puede confundir al objetivo.
   power: 60
   accuracy: 100
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: c5ea93df0e6330744a380f3588e28c1d, type: 2}

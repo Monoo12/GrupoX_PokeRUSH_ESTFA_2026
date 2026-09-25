@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: last-resort
   type: 1
   attackType: 0
+  descripcion: "Este movimiento solo puede utilizarse tras haber usado al menos una
+    vez todos los dem\xE1s conocidos por el Pok\xE9mon."
   power: 140
   accuracy: 100
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

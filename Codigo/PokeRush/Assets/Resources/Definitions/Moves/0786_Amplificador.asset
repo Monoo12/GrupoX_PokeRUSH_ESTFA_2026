@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: overdrive
   type: 5
   attackType: 1
+  descripcion: "El usuario rasguea la guitarra o el bajo para generar enormes vibraciones
+    de intensa reverberaci\xF3n con las que ataca al objetivo."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: forests-curse
   type: 4
   attackType: 2
+  descripcion: "El objetivo es presa de la maldici\xF3n del bosque, por lo que pasa
+    a ser un Pok\xE9mon de tipo Planta, adem\xE1s de conservar sus tipos habituales."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: spirit-shackle
   type: 14
   attackType: 0
+  descripcion: Ataca al oponente y, al mismo tiempo, fija su sombra al terreno para
+    impedir su huida.
   power: 80
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: a73c7a3a478f26d47a23453a6060aabe, type: 2}

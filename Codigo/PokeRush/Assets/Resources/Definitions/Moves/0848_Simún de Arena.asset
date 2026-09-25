@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: sandsear-storm
   type: 9
   attackType: 1
+  descripcion: "The user attacks by wrapping opposing Pok\xE9mon in fierce winds
+    and searingly hot sand. This may also leave them with a burn."
   power: 100
   accuracy: 80
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e39188cf76c1a11468b32f52c2639835, type: 2}

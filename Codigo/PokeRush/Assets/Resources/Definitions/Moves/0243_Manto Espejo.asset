@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: mirror-coat
   type: 11
   attackType: 1
+  descripcion: "Responde a un ataque especial ocasionando el doble  del da\xF1o recibido."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ee076a0e12406794b9f5eefeba5a3f19, type: 2}

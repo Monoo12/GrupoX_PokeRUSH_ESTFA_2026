@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dream-eater
   type: 11
   attackType: 1
+  descripcion: "Restaura al usuario la mitad del da\xF1o causado a un  objetivo dormido."
   power: 100
   accuracy: 100
   maxPP: 15
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: dd3eaed1addeee2488ceb1a3f66dd945, type: 2}

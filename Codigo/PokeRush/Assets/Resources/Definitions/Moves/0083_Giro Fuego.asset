@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: fire-spin
   type: 2
   attackType: 1
+  descripcion: Un aro de fuego que atrapa al objetivo de cuatro a  cinco turnos.
   power: 35
   accuracy: 85
   maxPP: 15
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 14ac6f806f2e2c6418ed64c64b3db361, type: 2}

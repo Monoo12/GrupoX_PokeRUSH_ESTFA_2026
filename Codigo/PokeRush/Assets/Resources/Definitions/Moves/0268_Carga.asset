@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: charge
   type: 5
   attackType: 2
+  descripcion: "Recarga energ\xEDa para potenciar el siguiente movimiento de tipo
+    El\xE9ctrico. Tambi\xE9n sube la Defensa Especial."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

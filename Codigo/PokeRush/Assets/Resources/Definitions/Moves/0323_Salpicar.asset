@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: water-spout
   type: 3
   attackType: 1
+  descripcion: "Chorro de agua. Cuantos menos PS tenga el usuario, menos da\xF1ino
+    ser\xE1."
   power: 150
   accuracy: 100
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

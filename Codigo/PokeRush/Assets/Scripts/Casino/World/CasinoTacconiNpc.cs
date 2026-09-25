@@ -15,6 +15,11 @@ using UnityEngine;
 //
 // Nunca deja al jugador sin equipo: no acepta la apuesta si, perdiendola, el
 // equipo se queda sin nadie que pueda pelear.
+//
+// En la Quarcho Cueva es el MISMO componente con otro premio (un Mew) y con
+// tope de chances: cada mano perdida gasta un flag de 'chances' y, gastados
+// todos, no juega mas. En el casino 'chances' queda vacio y se puede jugar
+// hasta ganar, como siempre.
 [RequireComponent(typeof(Collider2D))]
 public class CasinoTacconiNpc : MonoBehaviour, IInteractable
 {
@@ -60,9 +65,50 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
     [SerializeField, TextArea(2, 4)] private string mensajeYaGanado =
         "Ya te llevaste mi {0}. No me hagas acordar.";
 
+    [Header("Chances (vacio = sin tope, como en el casino)")]
+    [Tooltip("Un flag por mano PERDIDA, en orden. Gastados todos, Tacconi no " +
+             "juega mas. El empate no gasta. En la Quarcho Cueva son tres.")]
+    [SerializeField] private StoryFlag[] chances = new StoryFlag[0];
+    [Tooltip("{0} = cuantas chances hubo.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeSinChances =
+        "Ya tuviste tus {0} chances. Tacconi no vuelve a jugar con vos.";
+    [Tooltip("Se suma al cartel de la mano perdida. {0} = cuantas quedan.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeChancesQueQuedan = "Te quedan {0} chances.";
+    [SerializeField, TextArea(2, 4)] private string mensajeUltimaChance = "Era tu última chance.";
+
     public PokenDefinition EspeciePremio => especiePremio;
     public bool PremioShiny => premioShiny;
     public StoryFlag FlagGanado => flagGanado;
+
+    // ---------- chances ----------
+
+    public int ChancesTotales => chances != null ? chances.Length : 0;
+
+    public int ChancesUsadas(StoryModel story)
+    {
+        if (story == null || chances == null) return 0;
+        int n = 0;
+        foreach (StoryFlag f in chances)
+            if (f != StoryFlag.None && story.HasFlag(f)) n++;
+        return n;
+    }
+
+    // Sin tope nunca se queda sin chances.
+    public bool SinChances(StoryModel story)
+        => ChancesTotales > 0 && ChancesUsadas(story) >= ChancesTotales;
+
+    // Gasta la proxima chance libre. Devuelve cuantas quedan.
+    private int GastarChance(StoryModel story)
+    {
+        if (story == null || ChancesTotales == 0) return int.MaxValue;
+        foreach (StoryFlag f in chances)
+        {
+            if (f == StoryFlag.None || story.HasFlag(f)) continue;
+            story.ActivateFlag(f);
+            break;
+        }
+        return Mathf.Max(0, ChancesTotales - ChancesUsadas(story));
+    }
 
     private bool _jugando;
 
@@ -92,6 +138,12 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
         if (flagGanado != StoryFlag.None && story.HasFlag(flagGanado))
         {
             Decir(string.Format(mensajeYaGanado, NombrePremio));
+            return true;
+        }
+
+        if (SinChances(story))
+        {
+            Decir(string.Format(mensajeSinChances, ChancesTotales));
             return true;
         }
 
@@ -213,11 +265,20 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
             }
 
             case BlackjackOutcome.Pierde:
+            {
                 // Se va de verdad: Tacconi se lo queda. Por referencia y no por
                 // indice, por si el orden del equipo cambio mientras tanto.
                 player.Team.Remove(apuesta);
                 Debug.Log($"[Tacconi] Perdiste: se queda con {NombreDe(apuesta)}.");
-                return string.Format(mensajePerdiste, NombreDe(apuesta));
+
+                string cartel = string.Format(mensajePerdiste, NombreDe(apuesta));
+                if (ChancesTotales == 0) return cartel;
+
+                int quedan = GastarChance(story);
+                return cartel + " " + (quedan > 0
+                    ? string.Format(mensajeChancesQueQuedan, quedan)
+                    : mensajeUltimaChance);
+            }
 
             case BlackjackOutcome.Empata:
                 return mensajeEmpate;

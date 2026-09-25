@@ -1,6 +1,7 @@
 using UnityEngine;
 
-// Maneja la caja de texto del mapa: lineas seguidas y preguntas de Si/No.
+// Maneja la caja de texto del mapa: lineas seguidas, preguntas de Si/No y
+// listas de opciones (StartChoice).
 //
 // No lee input por su cuenta. El unico que lee teclado es PlayerInputController,
 // que mientras 'IsOpen' este en true le manda todo aca en vez de mover al
@@ -28,7 +29,9 @@ public class DialogueController : MonoBehaviour
 
     private string[] _opciones;
     private int _seleccion;
-    private System.Action<bool> _onResultado;
+    private System.Action<int> _onEleccion;
+    // Que opcion elige Escape. En las de Si/No es la segunda (el "No").
+    private int _opcionAlCancelar;
 
     private void Awake()
     {
@@ -72,11 +75,27 @@ public class DialogueController : MonoBehaviour
     public void StartConfirm(string speaker, Sprite portrait, string pregunta,
         string opcionSi, string opcionNo, System.Action<bool> onResultado)
     {
+        StartChoice(speaker, portrait, pregunta, new[] { opcionSi, opcionNo },
+            eleccion => onResultado?.Invoke(eleccion == 0));
+    }
+
+    // Pregunta con una lista de opciones (los menus de los NPCs de la Quarcho
+    // Cueva: comprar, viajar, charlar...). El callback recibe el indice
+    // elegido. Escape elige 'opcionAlCancelar'; -1 = la ultima, que por
+    // convencion es la de "nada".
+    public void StartChoice(string speaker, Sprite portrait, string pregunta,
+        string[] opciones, System.Action<int> onEleccion, int opcionAlCancelar = -1)
+    {
+        if (opciones == null || opciones.Length == 0) { onEleccion?.Invoke(-1); return; }
+
         _speaker = speaker;
         _portrait = portrait;
-        _opciones = new[] { opcionSi, opcionNo };
+        _opciones = opciones;
         _seleccion = 0;
-        _onResultado = onResultado;
+        _onEleccion = onEleccion;
+        _opcionAlCancelar = opcionAlCancelar >= 0 && opcionAlCancelar < opciones.Length
+            ? opcionAlCancelar
+            : opciones.Length - 1;
         _modo = Modo.Pregunta;
 
         dialogueView.Show();
@@ -100,11 +119,12 @@ public class DialogueController : MonoBehaviour
         else if (_modo == Modo.Pregunta) ResolverPregunta();
     }
 
-    // Cancelar equivale a elegir la segunda opcion (el "No").
+    // Cancelar equivale a elegir la segunda opcion (el "No"), o la que haya
+    // pedido la lista.
     public void OnCancel()
     {
         if (_modo != Modo.Pregunta) return;
-        _seleccion = _opciones.Length - 1;
+        _seleccion = _opcionAlCancelar;
         ResolverPregunta();
     }
 
@@ -133,12 +153,12 @@ public class DialogueController : MonoBehaviour
 
     private void ResolverPregunta()
     {
-        bool eligioSi = _seleccion == 0;
+        int eleccion = _seleccion;
         Cerrar();
 
-        var cb = _onResultado;
-        _onResultado = null;
-        cb?.Invoke(eligioSi);
+        var cb = _onEleccion;
+        _onEleccion = null;
+        cb?.Invoke(eleccion);
     }
 
     private void Cerrar()

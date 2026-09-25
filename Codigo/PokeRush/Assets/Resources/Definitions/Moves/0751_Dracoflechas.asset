@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: dragon-darts
   type: 15
   attackType: 0
+  descripcion: El usuario ataca propulsando a ambos Dreepy. En caso de haber dos
+    adversarios, cada Dreepy golpea a su propio objetivo por separado.
   power: 50
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: a8d75f11193217c41a5d8b254863ae44, type: 2}

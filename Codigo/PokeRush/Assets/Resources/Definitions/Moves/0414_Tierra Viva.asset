@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: earth-power
   type: 9
   attackType: 1
+  descripcion: La tierra a los pies del objetivo erupciona violentamente. Puede disminuir
+    la Defensa Especial  del objetivo.
   power: 90
   accuracy: 100
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 33d5a7d1ea10e644287ee1b134be6ca1, type: 2}

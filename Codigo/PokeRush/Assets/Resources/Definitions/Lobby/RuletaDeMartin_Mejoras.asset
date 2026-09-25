@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6be7c5f4f0d4364dafe1703178aac54, type: 3}
+  m_Name: RuletaDeMartin_Mejoras
+  m_EditorClassIdentifier: Assembly-CSharp::CasinoPrizeTable
+  premios:
+  - prizeName: +1 Ataque
+    prizePlural: 
+    article: 
+    icon: {fileID: 9069816148863415319, guid: 5e28bb9bdffdf4249b7b9cb0161c7951, type: 3}
+    amount: 1
+    probability: 16
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 1
+    etapasDeMejora: 1
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: +1 Defensa
+    prizePlural: 
+    article: 
+    icon: {fileID: 4591936660035647926, guid: 687d11c2cc8c168499bd65e3c9cb30ad, type: 3}
+    amount: 1
+    probability: 16
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 2
+    etapasDeMejora: 1
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: +1 Ataque Especial
+    prizePlural: 
+    article: 
+    icon: {fileID: -864905115039634769, guid: ce4b835139183e74383f835874c7ecf3, type: 3}
+    amount: 1
+    probability: 16
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 3
+    etapasDeMejora: 1
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: +1 Defensa Especial
+    prizePlural: 
+    article: 
+    icon: {fileID: 5695252781231400635, guid: 8169c60c8116d794fb92d1d35a781bb4, type: 3}
+    amount: 1
+    probability: 16
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 4
+    etapasDeMejora: 1
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: +1 Velocidad
+    prizePlural: 
+    article: 
+    icon: {fileID: -2041538980869397866, guid: 79e144be5f2c35d479bbf2ab2677f86c, type: 3}
+    amount: 1
+    probability: 14
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 5
+    etapasDeMejora: 1
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: "+1 Precisi\xF3n"
+    prizePlural: 
+    article: 
+    icon: {fileID: -6992494961538699856, guid: ea2881606c6ce434981d03be7eee58b1, type: 3}
+    amount: 1
+    probability: 10
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 6
+    etapasDeMejora: 1
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: +2 Ataque
+    prizePlural: 
+    article: 
+    icon: {fileID: -5586693766344523387, guid: a280a6775a1cfdd4a9399915188381bf, type: 3}
+    amount: 1
+    probability: 8
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 1
+    etapasDeMejora: 2
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: "+1 todas sus estad\xEDsticas"
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 7549fca7b156de84ea9d0c33073a3575, type: 3}
+    amount: 1
+    probability: 4
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 0}
+    pokenLevel: 15
+    shiny: 0
+    moneyIfTeamFull: 300
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    mejora: 7
+    etapasDeMejora: 1
+    efectoDeCombate: 0
+    customMessage: 
+  npcsQueLaPuedenDar: 

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fling
   type: 16
   attackType: 0
+  descripcion: "El usuario lanza contra el objetivo el objeto que lleva. La fuerza
+    del ataque y su efecto var\xEDan seg\xFAn el objeto."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: gust
   type: 10
   attackType: 1
+  descripcion: Crea un tornado con las alas y lo lanza contra el objetivo.
   power: 40
   accuracy: 100
   maxPP: 35
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 3cb09161091955a43b637861e461b2a6, type: 2}

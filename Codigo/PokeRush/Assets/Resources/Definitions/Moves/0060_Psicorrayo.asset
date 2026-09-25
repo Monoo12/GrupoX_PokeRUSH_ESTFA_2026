@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: psybeam
   type: 11
   attackType: 1
+  descripcion: "Extra\xF1o rayo que puede causar confusi\xF3n."
   power: 65
   accuracy: 100
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 195c100967489df40bc01fb559454506, type: 2}

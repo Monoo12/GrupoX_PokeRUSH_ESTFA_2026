@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: bleakwind-storm
   type: 10
   attackType: 1
+  descripcion: "The user attacks with savagely cold winds that cause both body and
+    spirit to tremble. This may also lower the Speed stats of opposing Pok\xE9mon."
   power: 100
   accuracy: 80
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

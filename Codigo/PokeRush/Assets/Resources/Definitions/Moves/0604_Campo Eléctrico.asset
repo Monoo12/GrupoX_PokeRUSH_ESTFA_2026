@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: electric-terrain
   type: 5
   attackType: 2
+  descripcion: "Durante cinco turnos, se potencian los movimientos de tipo El\xE9ctrico
+    y los Pok\xE9mon que est\xE1n en contacto con el suelo no pueden quedarse dormidos."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 8
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: aqua-step
   type: 3
   attackType: 0
+  descripcion: The user toys with the target and attacks it using light and fluid
+    dance steps. This also boosts the user's Speed stat.
   power: 80
   accuracy: 100
   maxPP: 10
@@ -41,4 +43,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 76abf4a2dadd6164782c7c5ed11a1042, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: roost
   type: 10
   attackType: 2
+  descripcion: Aterriza sobre la superficie para descansar. Recupera hasta la mitad
+    del total de sus PS.
   power: 0
   accuracy: 0
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 5e9641a1ce7ebea4db0960b83fab19ef, type: 2}

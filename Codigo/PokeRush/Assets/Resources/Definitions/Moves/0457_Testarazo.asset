@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: head-smash
   type: 13
   attackType: 0
+  descripcion: "El usuario arriesga su vida y lanza un cabezazo con toda su fuerza.
+    El agresor resulta seriamente da\xF1ado."
   power: 150
   accuracy: 80
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

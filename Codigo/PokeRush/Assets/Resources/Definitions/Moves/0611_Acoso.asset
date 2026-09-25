@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: infestation
   type: 12
   attackType: 1
+  descripcion: Hostiga al objetivo durante cuatro o cinco turnos e impide que pueda
+    huir mientras tanto.
   power: 20
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

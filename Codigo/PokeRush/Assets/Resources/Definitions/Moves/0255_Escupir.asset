@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: spit-up
   type: 1
   attackType: 1
+  descripcion: "Libera de una vez la energ\xEDa acumulada con Reserva. La potencia
+    del ataque ser\xE1 proporcional a la cantidad de energ\xEDa acumulada."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: superpower
   type: 7
   attackType: 0
+  descripcion: Ataque de gran potencia, pero que reduce el Ataque y la Defensa del
+    agresor.
   power: 120
   accuracy: 100
   maxPP: 5
@@ -45,4 +47,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: play-nice
   type: 1
   attackType: 2
+  descripcion: "Se hace amigo de su oponente y consigue que a este se le quiten las
+    ganas de combatir. Adem\xE1s, reduce su Ataque."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -41,4 +43,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

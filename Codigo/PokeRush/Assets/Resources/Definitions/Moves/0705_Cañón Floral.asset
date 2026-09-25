@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fleur-cannon
   type: 18
   attackType: 1
+  descripcion: El usuario emite un potente rayo, pero su Ataque Especial se reduce
+    mucho.
   power: 130
   accuracy: 90
   maxPP: 5
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ca00fc73852334a4da80d7d0da556538, type: 2}

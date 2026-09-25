@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: dragon-hammer
   type: 15
   attackType: 0
+  descripcion: "Usa el cuerpo como un martillo para abalanzarse sobre su rival y
+    causarle da\xF1o."
   power: 90
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

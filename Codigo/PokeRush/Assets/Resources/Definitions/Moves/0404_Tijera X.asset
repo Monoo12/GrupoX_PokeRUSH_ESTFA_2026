@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: x-scissor
   type: 12
   attackType: 0
+  descripcion: "Cruza las guada\xF1as o las garras para atacar al objetivo como si
+    fueran unas tijeras."
   power: 80
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1a5295eaed806034eaeb9dcf98f9a366, type: 2}

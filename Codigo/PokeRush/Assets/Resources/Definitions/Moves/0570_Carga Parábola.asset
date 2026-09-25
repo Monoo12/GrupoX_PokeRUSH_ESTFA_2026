@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: parabolic-charge
   type: 5
   attackType: 1
+  descripcion: "Inflige da\xF1o a todos los Pok\xE9mon a su alrededor. El usuario
+    absorbe la mitad del da\xF1o producido para restaurar sus propios PS."
   power: 65
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

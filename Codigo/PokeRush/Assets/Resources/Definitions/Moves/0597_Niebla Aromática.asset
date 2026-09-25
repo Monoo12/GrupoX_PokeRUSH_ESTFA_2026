@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: aromatic-mist
   type: 18
   attackType: 2
+  descripcion: "Consigue aumentar la Defensa Especial de un Pok\xE9mon de su equipo
+    con una fragancia misteriosa. "
   power: 0
   accuracy: 0
   maxPP: 20
@@ -41,4 +43,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

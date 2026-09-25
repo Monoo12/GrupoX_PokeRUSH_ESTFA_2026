@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: poison-jab
   type: 8
   attackType: 0
+  descripcion: "Pincha al objetivo con un tent\xE1culo o brazo envenenado. Puede
+    llegar a envenenar al objetivo. "
   power: 80
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 204012a17ab96104ebb5791c850b8747, type: 2}

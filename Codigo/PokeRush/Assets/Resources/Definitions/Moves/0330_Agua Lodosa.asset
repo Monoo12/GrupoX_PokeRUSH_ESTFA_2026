@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: muddy-water
   type: 3
   attackType: 1
+  descripcion: "Ataque con agua lodosa que puede bajar la Precisi\xF3n del equipo
+    rival."
   power: 90
   accuracy: 85
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

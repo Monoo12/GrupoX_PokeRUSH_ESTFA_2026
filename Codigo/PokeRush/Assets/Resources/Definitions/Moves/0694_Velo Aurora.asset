@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: aurora-veil
   type: 6
   attackType: 2
+  descripcion: "Reduce el da\xF1o de los ataques f\xEDsicos y especiales que ejecuta
+    el rival durante cinco turnos. Solo puede usarse cuando est\xE1 granizando."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 3
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

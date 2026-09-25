@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: drain-punch
   type: 7
   attackType: 0
+  descripcion: "Un golpe que drena energ\xEDa. El Pok\xE9mon recupera la mitad de
+    los PS arrebatados al objetivo."
   power: 75
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 4452755e08a564c4e8a089edd6104546, type: 2}

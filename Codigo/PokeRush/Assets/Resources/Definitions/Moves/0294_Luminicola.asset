@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: tail-glow
   type: 12
   attackType: 2
+  descripcion: "Este movimiento no se puede usar, por lo que ser\xEDa mejor olvidarlo,
+    aunque eso implique que no se pueda recordar posteriormente."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -41,4 +43,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7b60280fdaa5d254ca30f6a322e494d2, type: 2}

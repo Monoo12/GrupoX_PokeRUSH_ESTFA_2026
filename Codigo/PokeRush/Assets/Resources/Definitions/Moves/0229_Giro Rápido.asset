@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: rapid-spin
   type: 1
   attackType: 0
+  descripcion: "Ataque giratorio que puede eliminar movimientos como Atadura, Constricci\xF3n
+    y Drenadoras. Tambi\xE9n aumenta la Velocidad del usuario."
   power: 50
   accuracy: 100
   maxPP: 40
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

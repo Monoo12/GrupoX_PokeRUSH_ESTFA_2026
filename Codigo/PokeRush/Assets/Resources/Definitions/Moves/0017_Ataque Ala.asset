@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: wing-attack
   type: 10
   attackType: 0
+  descripcion: Golpea al objetivo con unas grandes alas.
   power: 60
   accuracy: 100
   maxPP: 35
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

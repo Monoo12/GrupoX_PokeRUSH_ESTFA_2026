@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: incinerate
   type: 2
   attackType: 1
+  descripcion: "Llamas que golpean a los objetivos adyacentes. Si estos llevan bayas
+    o ciertos objetos, se quemar\xE1n y ya no se podr\xE1n usar."
   power: 60
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

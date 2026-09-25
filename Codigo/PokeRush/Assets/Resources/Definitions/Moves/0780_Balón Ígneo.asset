@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: pyro-ball
   type: 2
   attackType: 0
+  descripcion: "El usuario prende una peque\xF1a piedra para crear una bola de fuego
+    con la que ataca al rival. Puede causar quemaduras."
   power: 120
   accuracy: 90
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

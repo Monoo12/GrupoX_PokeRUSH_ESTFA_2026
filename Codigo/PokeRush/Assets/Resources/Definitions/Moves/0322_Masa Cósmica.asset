@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: cosmic-power
   type: 11
   attackType: 2
+  descripcion: "Sube la Defensa y la Defensa Especial propias con  energ\xEDa m\xEDstica."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -44,4 +45,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

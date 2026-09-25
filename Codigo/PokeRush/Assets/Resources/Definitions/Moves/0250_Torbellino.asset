@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: whirlpool
   type: 3
   attackType: 1
+  descripcion: Una tromba de agua atrapa al objetivo durante cuatro o cinco turnos.
   power: 35
   accuracy: 85
   maxPP: 15
@@ -40,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 91e9544741ad9aa4e8d511a877fb091a, type: 2}

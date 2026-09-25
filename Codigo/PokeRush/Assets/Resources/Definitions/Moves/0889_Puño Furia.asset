@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: rage-fist
   type: 14
   attackType: 0
+  descripcion: The user converts its rage into energy to attack. The more times the
+    user has been hit by attacks, the greater the move's power.
   power: 50
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 3171ebbcd3750504cab366ed45c5b56e, type: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: fury-swipes
   type: 1
   attackType: 0
+  descripcion: "Ara\xF1a r\xE1pidamente de dos a cinco veces."
   power: 18
   accuracy: 80
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

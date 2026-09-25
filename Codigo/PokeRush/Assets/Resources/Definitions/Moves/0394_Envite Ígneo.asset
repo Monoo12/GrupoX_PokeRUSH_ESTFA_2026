@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: flare-blitz
   type: 2
   attackType: 0
+  descripcion: "El Pok\xE9mon se cubre de llamas y carga contra el objetivo, aunque
+    \xE9l tambi\xE9n recibe da\xF1o. Puede quemar."
   power: 120
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

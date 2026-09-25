@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: present
   type: 1
   attackType: 0
+  descripcion: "Quien lo usa ataca al objetivo d\xE1ndole un regalo con una bomba
+    trampa. Sin embargo, a veces restaura sus PS. "
   power: 0
   accuracy: 90
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 673b57fdc88818a4f90275af1918f95f, type: 2}

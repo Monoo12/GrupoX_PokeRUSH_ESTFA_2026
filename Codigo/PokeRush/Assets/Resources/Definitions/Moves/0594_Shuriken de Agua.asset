@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: water-shuriken
   type: 3
   attackType: 1
+  descripcion: Golpea al oponente de dos a cinco veces con estrellas arrojadizas
+    hechas de mucosidad. Este movimiento tiene prioridad alta.
   power: 15
   accuracy: 100
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: af39513483d3ae249b795c40ded151fd, type: 2}

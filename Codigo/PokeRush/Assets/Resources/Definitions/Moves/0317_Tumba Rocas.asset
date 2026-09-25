@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: rock-tomb
   type: 13
   attackType: 0
+  descripcion: Tira rocas que detienen al objetivo y bajan su Velocidad.
   power: 60
   accuracy: 95
   maxPP: 15
@@ -42,4 +43,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 77dfd273d3015874096ed03895128d3d, type: 2}

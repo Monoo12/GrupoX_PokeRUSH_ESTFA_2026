@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: bind
   type: 1
   attackType: 0
+  descripcion: Ata y oprime de cuatro a cinco turnos.
   power: 15
   accuracy: 85
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

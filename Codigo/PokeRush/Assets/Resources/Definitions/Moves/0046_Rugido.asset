@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: roar
   type: 1
   attackType: 2
+  descripcion: "Se lleva al objetivo, que es cambiado por otro  Pok\xE9mon. Si es
+    un Pok\xE9mon salvaje, acaba el  combate."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 06c791214efae2f41993323bcc268207, type: 2}

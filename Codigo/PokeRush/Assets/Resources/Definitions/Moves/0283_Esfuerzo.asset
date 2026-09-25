@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: endeavor
   type: 1
   attackType: 0
+  descripcion: Reduce los PS del objetivo para que igualen a los del atacante.
   power: 0
   accuracy: 100
   maxPP: 5
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

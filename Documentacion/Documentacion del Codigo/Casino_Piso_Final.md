@@ -18,6 +18,8 @@ Todo lo visible se genera con un builder del editor, como el resto del casino.
 | `Editor/Casino/CasinoPisoFinalBuilder.cs` | Arma la escena: los seis guardias, el jefe y el ascensor de bajada. Crea el rival y la tabla de la ruleta. |
 | `Resources/Definitions/Casino/JefeFinalCasino.asset` | El rival: seis Pokémon de nivel 26-29, perfil de IA `Elite`. |
 | `Resources/Definitions/Casino/RuletaDelJefeFinal.asset` | Los ocho gajos de la ruleta, con sus pesos. |
+| `Sprites/Casino/martin_sentado.png` | El busto de Martín, 51x52. Lo prepara `scripts/preparar_sprites_casino.py` a partir de `Assets/Martin/`. |
+| `Graphics/Trainers/MARTIN.png` | Su retrato de la caja de diálogo, 160x160. |
 
 Lo demás **ya existía y se reusa entero**: la pantalla de la ruleta
 (`PrizeWheelController`), la mesa de blackjack (`BlackjackScreen`), el combate
@@ -32,18 +34,39 @@ Lo demás **ya existía y se reusa entero**: la pantalla de la ruleta
 solo cuelga los objetos.
 
 ```
-  y=31   [ JEFE ]                 ← atrás de la mesa
-  y=29-30  ▓▓▓ mesa de póker ▓▓▓   ← acá se le habla
-  y=23-28  sala
+  y=30.6   [ MARTIN ]              ← busto, metido atrás de la mesa
+  y=29-30  ▓▓▓ mesa de póker ▓▓▓
+  y=26-29  ░░░ ZONA ░░░            ← pisarla arranca la pelea
+  y=23-25  sala
   y=20-21  puerta angosta
   y=4-19   pasillo: 3 guardias por lado, alfombra en el medio
   y=3      ascensor (solo baja)
 ```
 
-**El jefe se agarra desde la mesa.** El NPC está en (0.5, 31.5) y la mesa lo
-tapa, así que el collider con el que se interactúa es un hijo apoyado sobre la
-mesa. `PlayerController` resuelve con `GetComponentInParent`, así que el jugador
-toca la mesa y contesta el jefe.
+**Al jefe no se le habla: la pelea la dispara una zona.** El objeto `JefeFinal`
+vive donde está la **hitbox** (5x3 celdas delante de la mesa) y su `Collider2D`
+está en *Is Trigger*. Martín es un hijo de ese objeto, con la posición puesta en
+mundo: la zona y el dibujo están en lugares distintos a propósito.
+
+**Martín está sentado.** Su sprite es un **busto** (de la cintura para arriba) y
+se apoya en y = 30,6, o sea 0,4 celdas metido dentro de la mesa. Para que la mesa
+lo tape en vez de taparse él, su `sortingOrder` es **5**: los NPCs van en 15 y la
+mesa vive en el tilemap `Colisiones`, que dibuja en 10.
+
+> **La zona va en la capa `Default`, no en `Obstacles` como el resto de las
+> interacciones del casino.** No es un descuido. El proyecto tiene *Queries Hit
+> Triggers* prendido y el jugador decide si puede pisar una celda con
+> `Physics2D.OverlapCircle(destino, radio, obstacleMask)`, donde `obstacleMask`
+> **es** `Obstacles`. Un trigger puesto en `Obstacles` frena al jugador igual que
+> una pared: se quedaría parado en el borde de la zona y la pelea no arrancaría
+> nunca. En `Default` no lo frena y el trigger igual le llega, porque el jugador
+> está en `Default`, tiene `Rigidbody2D` cinemático y `Default` choca con
+> `Default`.
+
+**La zona se desarma hasta que el jugador sale.** `MapBattleBridge` apaga el mapa
+entero durante la pelea, así que al volver Unity re-dispara el `OnTriggerEnter2D`
+con el jugador todavía parado adentro. Es el mismo cuidado que tiene
+`BattleZoneTrigger`; sin eso, la pelea se relanza en bucle.
 
 **El ascensor solo baja.** El último piso no tiene enfermería: sin una salida,
 perder contra el jefe dejaba al jugador encerrado con el equipo debilitado.
@@ -203,10 +226,6 @@ fuera del editor parece congelado. Se destraba poniendo
    `Resources/Definitions/Casino/Dialogos/Historia_PisoFinal_GuardiaPasillo*.asset`
    y el builder **no los pisa** si ya existen: se reescriben desde el Inspector
    cuando lleguen los diálogos de historia.
-2. **La skin y el retrato del jefe son provisorios** (Giovanni, del pack de
-   Essentials). El personaje es **Martín Reymar**: cuando estén sus sprites, se
-   cambian las constantes `HojaDelJefe` / `RetratoDelJefe` del builder y se
-   vuelve a correr.
-3. **Los iconos de la ruleta son items del pack** (Ataque X, orbe tóxico, cola
+2. **Los iconos de la ruleta son items del pack** (Ataque X, orbe tóxico, cola
    lenta, placa en blanco, monedero). Se leen, pero no son arte propio.
-4. **El ascensor no tiene puertas dibujadas.**
+3. **El ascensor no tiene puertas dibujadas.**

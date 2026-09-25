@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: salt-cure
   type: 13
   attackType: 0
+  descripcion: The user salt cures the target, inflicting damage every turn. Steel
+    and Water types are more strongly affected by this move.
   power: 40
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 979104a0d3b350b4591f08ebd85fb640, type: 2}

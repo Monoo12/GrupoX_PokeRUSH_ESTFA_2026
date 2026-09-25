@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: clear-smog
   type: 8
   attackType: 1
+  descripcion: "Ataca al objetivo con una singular bola de lodo que elimina cualquier
+    cambio en sus caracter\xEDsticas."
   power: 50
   accuracy: 0
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 0da165a6c20840b4bbd1bcbf22c36e63, type: 2}

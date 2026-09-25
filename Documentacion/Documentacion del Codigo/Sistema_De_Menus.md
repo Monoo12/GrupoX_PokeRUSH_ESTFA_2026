@@ -235,6 +235,16 @@ rehacer las otras pantallas.
 La pantalla del equipo tiene un modo `PartyScreenMode.SelectAny`: elegir cualquier
 Pokémon y devolverlo, sin submenú (lo usa Tacconi para elegir qué apostar).
 
+### Tienda — `ShopScreen` y tutor de movimientos — `MoveTutorScreen`
+
+Las dos pantallas de la Quarcho Cueva (`MenuScreenId.Shop` y `MoveTutor`), con el arte
+del pack: la tienda es `Graphics/UI/Mart` (se abre encima del mapa, sin oscurecer) y el
+tutor es el Recordador de movimientos, `Graphics/UI/Move Reminder`. Las reglas no
+viven en las pantallas sino en `ReglasDeTienda` y `TutorDeMovimientos`. Las genera
+`PokeRush > UI > Construir las pantallas de la Quarcho Cueva`, que las agrega al
+MenuSystem sin rehacer las otras. Son de prueba: las finales las diseña el equipo.
+Detalle en `Quarcho_Cueva_Lobby.md`.
+
 ---
 
 ## ⌨️ El HUD de combate con las flechas

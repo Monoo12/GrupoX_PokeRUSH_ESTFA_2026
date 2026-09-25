@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: drum-beating
   type: 4
   attackType: 0
+  descripcion: "El usuario controla un toc\xF3n mediante la percusi\xF3n y al atacar
+    reduce la Velocidad del objetivo."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

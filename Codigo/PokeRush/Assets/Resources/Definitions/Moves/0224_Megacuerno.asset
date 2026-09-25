@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: megahorn
   type: 12
   attackType: 0
+  descripcion: Violenta embestida con cuernos imponentes.
   power: 120
   accuracy: 85
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: fa7706e625af18b4e8043cd795aab02b, type: 2}

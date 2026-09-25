@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: thousand-arrows
   type: 9
   attackType: 0
+  descripcion: "Acierta incluso a Pok\xE9mon que est\xE9n en el aire y los hace caer
+    al suelo."
   power: 90
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

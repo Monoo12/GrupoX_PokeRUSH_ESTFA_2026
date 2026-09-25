@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: calm-mind
   type: 11
   attackType: 2
+  descripcion: "Aumenta la concentraci\xF3n y calma el esp\xEDritu para  subir el
+    Ataque Especial y la Defensa Especial. "
   power: 0
   accuracy: 0
   maxPP: 20
@@ -45,4 +47,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

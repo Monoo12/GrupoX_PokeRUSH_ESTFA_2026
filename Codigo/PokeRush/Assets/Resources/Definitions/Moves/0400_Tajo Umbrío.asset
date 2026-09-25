@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: night-slash
   type: 16
   attackType: 0
+  descripcion: "Ataca al objetivo a la primera oportunidad. Suele ser cr\xEDtico."
   power: 70
   accuracy: 100
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: psyshock
   type: 11
   attackType: 1
+  descripcion: "Crea una onda ps\xEDquica que causa da\xF1o f\xEDsico al  objetivo."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: freeze-dry
   type: 6
   attackType: 1
+  descripcion: "Enfr\xEDa s\xFAbitamente al objetivo e incluso puede congelarlo.
+    Es supereficaz contra Pok\xE9mon de tipo Agua."
   power: 70
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 06b471d543029de4f97b597e86a97ff3, type: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: fire-punch
   type: 2
   attackType: 0
+  descripcion: "Pu\xF1etazo ardiente que puede causar quemaduras."
   power: 75
   accuracy: 100
   maxPP: 15
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: round
   type: 1
   attackType: 1
+  descripcion: "Un canto que ataca al objetivo. Cuantos m\xE1s Pok\xE9mon lo usan,
+    m\xE1s aumenta de potencia."
   power: 60
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

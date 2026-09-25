@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: electro-drift
   type: 5
   attackType: 1
+  descripcion: The user races forward at ultrafast speeds, piercing its target with
+    futuristic electricity. This move's power is boosted more than usual if it's
+    a supereffective hit.
   power: 100
   accuracy: 100
   maxPP: 5
@@ -38,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8a25be85241d7e64c9019f260ca48b45, type: 2}

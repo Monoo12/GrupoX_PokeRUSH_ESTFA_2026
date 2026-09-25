@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: flying-press
   type: 7
   attackType: 0
+  descripcion: "El Pok\xE9mon que lo usa se lanza sobre su oponente.  Este movimiento
+    es de tipo Lucha y tipo Volador al  mismo tiempo."
   power: 100
   accuracy: 95
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: taunt
   type: 16
   attackType: 2
+  descripcion: Enfurece al objetivo para que solo use movimientos de ataque durante
+    tres turnos.
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: c6e929b427f2e0a4faf7adc0d6754538, type: 2}

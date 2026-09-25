@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dragon-breath
   type: 15
   attackType: 1
+  descripcion: "Poderosa r\xE1faga de aliento que golpea al objetivo y  puede paralizarlo."
   power: 60
   accuracy: 100
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

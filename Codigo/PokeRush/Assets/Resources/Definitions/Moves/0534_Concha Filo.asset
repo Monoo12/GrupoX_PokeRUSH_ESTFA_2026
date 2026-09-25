@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: razor-shell
   type: 3
   attackType: 0
+  descripcion: "Una afilada vieira ataca al objetivo. Tambi\xE9n puede  hacer disminuir
+    su Defensa."
   power: 75
   accuracy: 95
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 9a994fb3234238d438800094980b72d3, type: 2}

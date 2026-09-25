@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: foul-play
   type: 16
   attackType: 0
+  descripcion: "El usuario emplea la fuerza del objetivo para atacarlo. Cuanto mayor
+    es el Ataque del objetivo, m\xE1s da\xF1o provoca."
   power: 95
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

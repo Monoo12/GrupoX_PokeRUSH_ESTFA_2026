@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: play-rough
   type: 18
   attackType: 0
+  descripcion: "El Pok\xE9mon que lo usa le hace cucamonas al objetivo y lo ataca.
+    Puede disminuir el Ataque del objetivo."
   power: 90
   accuracy: 90
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

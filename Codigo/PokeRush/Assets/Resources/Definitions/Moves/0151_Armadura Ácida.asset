@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: acid-armor
   type: 8
   attackType: 2
+  descripcion: "Transforma la estructura celular para hacerse l\xEDquido y aumenta
+    mucho la Defensa."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -41,4 +43,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

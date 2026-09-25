@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: natures-madness
   type: 18
   attackType: 1
+  descripcion: Golpea al objetivo con la furia de la naturaleza y reduce sus PS a
+    la mitad.
   power: 0
   accuracy: 90
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: storm-throw
   type: 7
   attackType: 0
+  descripcion: "Lanza un golpe devastador. Siempre asesta un golpe cr\xEDtico."
   power: 60
   accuracy: 100
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

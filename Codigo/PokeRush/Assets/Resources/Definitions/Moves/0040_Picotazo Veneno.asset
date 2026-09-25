@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: poison-sting
   type: 8
   attackType: 0
+  descripcion: "Lanza un aguij\xF3n t\xF3xico que puede envenenar al  objetivo."
   power: 15
   accuracy: 100
   maxPP: 35
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 098b147e038471548ae67aeb3624187d, type: 2}

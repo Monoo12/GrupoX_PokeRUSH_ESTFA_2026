@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: recycle
   type: 1
   attackType: 2
+  descripcion: "Recicla y as\xED recupera un objeto equipado de un solo uso que ya
+    haya sido empleado durante el combate."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e800808d3cd4d5644accf06224867235, type: 2}

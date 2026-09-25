@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: magical-leaf
   type: 4
   attackType: 1
+  descripcion: "Esparce extra\xF1as hojas que persiguen al objetivo.  No se puede
+    esquivar."
   power: 60
   accuracy: 0
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 96dd0da6b9e5a1242bd6678a085f3992, type: 2}

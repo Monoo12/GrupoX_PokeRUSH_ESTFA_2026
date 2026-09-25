@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: worry-seed
   type: 4
   attackType: 2
+  descripcion: Planta una semilla en el objetivo que le causa pesar. Sustituye la
+    habilidad del objetivo por Insomnio y le impide dormirse.
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d59205950a97192498ce60afd10570de, type: 2}

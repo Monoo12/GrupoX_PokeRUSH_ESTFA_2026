@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cefd436c59f8e44cae9148d05a37acf, type: 3}
+  m_Name: CuraTotal
+  m_EditorClassIdentifier: Assembly-CSharp::HealItemDefinition
+  itemName: Cura Total
+  description: "Cura todos los problemas de estado de un Pok\xE9mon."
+  icon: {fileID: 21300000, guid: 657ba8a23fd593d4693665223cf2c621, type: 3}
+  buyPrice: 400
+  sellPrice: 200
+  healAmount: 0
+  fullHeal: 0
+  curesStatuses: 
+  curesAllStatuses: 1
+  revives: 0
+  revivePercent: 50

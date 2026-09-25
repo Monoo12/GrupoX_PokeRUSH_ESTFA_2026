@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: retaliate
   type: 1
   attackType: 0
+  descripcion: "Venga a los amigos ca\xEDdos. Si en el turno anterior han derrotado
+    a alguno, la potencia del ataque aumentar\xE1."
   power: 70
   accuracy: 100
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: cea190d6275657d458b6dcd557c6b072, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: jaw-lock
   type: 16
   attackType: 0
+  descripcion: Impide que tanto el atacante como el defensor puedan ser intercambiados
+    hasta que uno de ellos se debilite o abandone el terreno de combate.
   power: 80
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

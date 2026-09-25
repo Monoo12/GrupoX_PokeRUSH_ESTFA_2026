@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: astonish
   type: 14
   attackType: 0
+  descripcion: Lanza un grito tan tremendo que impresiona y puede amedrentar al objetivo.
   power: 30
   accuracy: 100
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

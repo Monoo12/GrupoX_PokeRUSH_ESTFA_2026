@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: quiver-dance
   type: 12
   attackType: 2
+  descripcion: "Danza m\xEDstica que sube el Ataque Especial, la Defensa Especial
+    y la Velocidad."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -48,4 +50,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 0f7475860bcd8d94583bbb6110fe22c2, type: 2}

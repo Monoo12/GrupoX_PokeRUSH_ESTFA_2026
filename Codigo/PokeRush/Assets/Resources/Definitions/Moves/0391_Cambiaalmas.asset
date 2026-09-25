@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: heart-swap
   type: 11
   attackType: 2
+  descripcion: "Este movimiento no se puede usar, por lo que ser\xEDa mejor olvidarlo,
+    aunque eso implique que no se pueda recordar posteriormente."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

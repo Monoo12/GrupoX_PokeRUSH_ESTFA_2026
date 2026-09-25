@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: mist-ball
   type: 11
   attackType: 1
+  descripcion: Banco de niebla que puede bajar el Ataque Especial del objetivo.
   power: 95
   accuracy: 100
   maxPP: 5
@@ -42,4 +43,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

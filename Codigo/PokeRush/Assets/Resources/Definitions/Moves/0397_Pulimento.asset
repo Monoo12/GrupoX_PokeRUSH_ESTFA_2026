@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: rock-polish
   type: 13
   attackType: 2
+  descripcion: Reduce la resistencia puliendo su cuerpo. Aumenta mucho la Velocidad.
   power: 0
   accuracy: 0
   maxPP: 20
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1888ef938a860104a843f3658dca8261, type: 2}

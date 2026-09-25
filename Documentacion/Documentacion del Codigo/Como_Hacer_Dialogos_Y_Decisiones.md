@@ -169,6 +169,26 @@ Para que desaparezca se le suma un **`BarreraPorFlag`** con el mismo flag, en ve
 
 Ejemplos: `PokeballPociones` y `PokeballSuperPociones` en la sala de Néstor.
 
+### 4b. Un menú con más de dos opciones
+
+Para los NPCs que tienen varias cosas para ofrecer (los de la Quarcho Cueva: comprar, viajar, charlar...):
+
+```csharp
+dialogueController.StartChoice("TIXI", retrato, "¿Qué necesitás?",
+    new[] { "Comprar", "Viajar", "Charlar", "Nada" },
+    eleccion =>
+    {
+        if (eleccion == 0) AbrirTienda();
+        else if (eleccion == 1) Viajar();
+        // ...
+    });
+```
+
+- El callback recibe el **índice** elegido. **Escape elige la última**, así que conviene que la última sea la de "no hacer nada".
+- Con dos opciones se ve igual que `StartConfirm` (de hecho `StartConfirm` ahora es un `StartChoice` de dos).
+- Con más, la ventana de opciones va **arriba de la caja**, a la derecha, con el ancho de la opción más larga. Si no entran todas, la lista se corre con la selección y `^`/`v` avisan que hay más.
+- No hay que tocar el `DialogoCanvas`: los renglones que faltan se clonan del último.
+
 ### 5. Un mensaje del sistema
 
 ```csharp

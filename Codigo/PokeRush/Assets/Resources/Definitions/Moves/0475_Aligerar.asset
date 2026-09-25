@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: autotomize
   type: 17
   attackType: 2
+  descripcion: "El usuario se desprende de partes prescindibles de su cuerpo para
+    hacerse m\xE1s ligero y aumentar mucho su Velocidad."
   power: 0
   accuracy: 0
   maxPP: 15
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 47f1f5e5c85ced243be67d301886a675, type: 2}

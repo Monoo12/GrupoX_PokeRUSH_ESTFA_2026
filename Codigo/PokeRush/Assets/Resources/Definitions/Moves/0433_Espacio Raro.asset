@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: trick-room
   type: 11
   attackType: 2
+  descripcion: "Crea un espacio extra\xF1o en el que los Pok\xE9mon lentos se mueven
+    primero durante cinco turnos."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

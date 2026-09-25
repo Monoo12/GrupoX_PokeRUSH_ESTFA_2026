@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: low-kick
   type: 7
   attackType: 0
+  descripcion: "Patada baja que derriba al oponente. Cuanto m\xE1s pesa el objetivo,
+    m\xE1s da\xF1o le causa."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

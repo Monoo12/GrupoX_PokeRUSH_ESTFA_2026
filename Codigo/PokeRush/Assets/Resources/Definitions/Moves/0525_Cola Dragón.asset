@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: dragon-tail
   type: 15
   attackType: 0
+  descripcion: "Ataca al objetivo y lo obliga a cambiarse por otro  Pok\xE9mon. Si
+    es uno salvaje, acaba el combate."
   power: 60
   accuracy: 90
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e8a555668060a324f8eb5c5247957d51, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: revenge
   type: 7
   attackType: 0
+  descripcion: "Ataque que produce el doble de da\xF1o si el usuario resulta herido
+    en el mismo turno."
   power: 60
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 5c8afd5c272c18543b3960cee22541df, type: 2}

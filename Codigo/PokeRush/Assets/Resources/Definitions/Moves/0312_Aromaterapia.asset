@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: aromatherapy
   type: 4
   attackType: 2
+  descripcion: Cura todos los problemas de estado del equipo con un suave aroma.
   power: 0
   accuracy: 0
   maxPP: 5
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: f1b8d374c384acc46b108a07c2fdc8de, type: 2}

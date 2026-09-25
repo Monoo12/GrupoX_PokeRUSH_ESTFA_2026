@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: twister
   type: 15
   attackType: 1
+  descripcion: Crea un violento tornado para hacer trizas al objetivo. Puede amedrentarlo.
   power: 40
   accuracy: 100
   maxPP: 20
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: f6da091663c6db841be6969235b5bb19, type: 2}

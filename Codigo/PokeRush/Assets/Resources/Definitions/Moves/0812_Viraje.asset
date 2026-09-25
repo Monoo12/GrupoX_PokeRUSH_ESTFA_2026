@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: flip-turn
   type: 3
   attackType: 0
+  descripcion: "Tras atacar, el usuario da paso a toda prisa a otro Pok\xE9mon del
+    equipo."
   power: 60
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

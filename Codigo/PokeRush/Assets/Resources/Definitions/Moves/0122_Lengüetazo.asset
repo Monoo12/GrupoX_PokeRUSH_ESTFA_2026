@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: lick
   type: 14
   attackType: 0
+  descripcion: "Una lengua ataca al objetivo. Puede causar par\xE1lisis. "
   power: 30
   accuracy: 100
   maxPP: 30
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

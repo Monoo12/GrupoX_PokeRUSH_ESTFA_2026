@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: tri-attack
   type: 1
   attackType: 1
+  descripcion: Ataque triple que puede paralizar, quemar o congelar al objetivo.
   power: 80
   accuracy: 100
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: techno-blast
   type: 1
   attackType: 1
+  descripcion: "Ataca al objetivo con un gran l\xE1ser. El tipo del ataque lo determina
+    el cartucho que porta el usuario."
   power: 120
   accuracy: 100
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

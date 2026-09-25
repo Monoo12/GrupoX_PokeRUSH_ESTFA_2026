@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: teeter-dance
   type: 1
   attackType: 2
+  descripcion: "Danza hist\xE9rica que confunde a los Pok\xE9mon que est\xE1n alrededor
+    del usuario."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

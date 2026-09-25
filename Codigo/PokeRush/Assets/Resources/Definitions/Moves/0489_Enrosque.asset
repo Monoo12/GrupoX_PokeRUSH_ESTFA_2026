@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: coil
   type: 8
   attackType: 2
+  descripcion: "El usuario se concentra, lo que le permite aumentar  su Ataque, Defensa
+    y Precisi\xF3n."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -48,4 +50,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: a8254ff8d24a9e84fba39c9783e20ce0, type: 2}

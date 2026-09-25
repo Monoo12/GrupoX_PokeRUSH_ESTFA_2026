@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: sunny-day
   type: 2
   attackType: 2
+  descripcion: Hace que se intensifique el efecto del sol durante cinco turnos, lo
+    que potencia los movimientos de tipo Fuego y debilita los de tipo Agua.
   power: 0
   accuracy: 0
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 2
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

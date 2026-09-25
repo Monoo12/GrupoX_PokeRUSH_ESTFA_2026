@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: shed-tail
   type: 1
   attackType: 2
+  descripcion: "The user creates a substitute for itself using its own HP before
+    switching places with a party Pok\xE9mon in waiting."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7a0e4016c9c01d94f9b0b881a5c27cd8, type: 2}

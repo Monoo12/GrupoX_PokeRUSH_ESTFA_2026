@@ -320,6 +320,28 @@ namespace PokeRush.EditorTools.PokeApi
             return result;
         }
 
+        // Los movimientos que la especie aprende por MT ("machine") o por tutor
+        // en algun version group de la lista de preferencia. Sin repetir. Es lo
+        // que Nestor puede enseñar en la Quarcho Cueva (PokenDefinition.mtMoves).
+        // A diferencia de ExtractOtherMethodMoveIds, el huevo NO cuenta.
+        public static List<int> ExtractMachineAndTutorMoveIds(PokemonDto pokemon)
+        {
+            var result = new List<int>();
+            if (pokemon?.Moves == null) return result;
+
+            var grupos = new HashSet<string>(VersionGroupPreference);
+            foreach (var entry in pokemon.Moves)
+            {
+                if (entry.Move == null || entry.VersionGroupDetails == null) continue;
+                bool deTutor = entry.VersionGroupDetails.Any(d =>
+                    (d.MoveLearnMethod?.Name == "machine" || d.MoveLearnMethod?.Name == "tutor") &&
+                    grupos.Contains(d.VersionGroup?.Name));
+                int id = entry.Move.IdFromUrl();
+                if (deTutor && id > 0 && !result.Contains(id)) result.Add(id);
+            }
+            return result;
+        }
+
         // ---------- clasificacion de movimientos ----------
 
         public static MoveImplementation ClassifyMove(MoveDto move)

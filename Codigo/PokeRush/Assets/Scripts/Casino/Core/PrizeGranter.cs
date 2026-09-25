@@ -92,6 +92,16 @@ public static class PrizeGranter
                 partes.Add($"¡Ganaste {premio.money} monedas!");
         }
 
+        // La ruleta de mejoras de Martin: no va a la mochila, espera a la
+        // proxima batalla (ver PlayerModel.MejorasPendientes).
+        if (premio.mejora != MejoraDeBatalla.Ninguna)
+        {
+            int etapas = Mathf.Max(1, premio.etapasDeMejora);
+            jugador.AgregarMejora(premio.mejora, etapas);
+            partes.Add($"¡Tu equipo va a pelear la próxima batalla con " +
+                       $"{MejorasDeBatalla.Describir(new MejoraPendiente(premio.mejora, etapas))}!");
+        }
+
         if (!avisoObligado && !string.IsNullOrEmpty(premio.customMessage))
             return premio.customMessage;
 

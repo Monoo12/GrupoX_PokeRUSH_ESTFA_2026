@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: wish
   type: 1
   attackType: 2
+  descripcion: "Restaura en el siguiente turno la mitad de los PS m\xE1ximos del
+    usuario o se los pasa al Pok\xE9mon que lo sustituye."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: fc71b6f728987c64fb1ac1620b9eb4fa, type: 2}

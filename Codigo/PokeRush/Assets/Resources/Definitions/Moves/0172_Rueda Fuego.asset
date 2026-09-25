@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: flame-wheel
   type: 2
   attackType: 0
+  descripcion: 'Ataca envuelto en fuego. Puede causar quemaduras. '
   power: 60
   accuracy: 100
   maxPP: 25
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

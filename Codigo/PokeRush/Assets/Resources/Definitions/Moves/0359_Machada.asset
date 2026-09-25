@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: hammer-arm
   type: 7
   attackType: 0
+  descripcion: "Gira con fuerza el pu\xF1o y da un gran golpe. No obstante, baja
+    la Velocidad."
   power: 100
   accuracy: 90
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: precipice-blades
   type: 9
   attackType: 0
+  descripcion: Hace que el poder latente de la tierra se manifieste en forma de hojas
+    afiladas y ataca al objetivo con ellas.
   power: 120
   accuracy: 85
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e9d40745761030b4c87bf81b0b19467b, type: 2}

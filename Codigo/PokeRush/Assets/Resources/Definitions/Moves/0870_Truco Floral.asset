@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: flower-trick
   type: 4
   attackType: 0
+  descripcion: The user throws a rigged bouquet of flowers at the target. This attack
+    never misses and always lands a critical hit.
   power: 70
   accuracy: 0
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8e7c419d68968c844beb25b493a49d5d, type: 2}

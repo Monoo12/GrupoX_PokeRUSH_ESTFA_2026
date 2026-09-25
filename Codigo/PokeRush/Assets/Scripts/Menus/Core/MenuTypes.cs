@@ -31,7 +31,12 @@ public enum MenuScreenId
     Blackjack,
 
     // El PC de almacenamiento de Pokemon. Al final por lo mismo que Blackjack.
-    PcStorage
+    PcStorage,
+
+    // La Quarcho Cueva: la tienda de Tixi y el tutor de MTs de Nestor. Al
+    // final por lo mismo que Blackjack.
+    Shop,
+    MoveTutor
 }
 
 // Desde donde se abrio el sistema de menus. Las pantallas compartidas (mochila,
@@ -143,4 +148,40 @@ public class MessageBoxResult
     // Se cerro con Volver. En una pregunta con dos opciones propias (SUBIR /
     // BAJAR) Volver no puede contar como la segunda opcion.
     public bool Cancelled;
+}
+
+// ---------- tienda (Tixi, en la Quarcho Cueva) ----------
+
+public class ShopScreenRequest
+{
+    // Quien vende: sale en los carteles ("TIXI: ¿Cuántas querés?").
+    public string Vendedor = "TIENDA";
+    public HealItemDefinition[] Objetos;
+}
+
+public class ShopScreenResult
+{
+    // Cuanta plata se gasto y cuantas compras se hicieron mientras estuvo
+    // abierta. Quien la abrio decide si guarda.
+    public int Gastado;
+    public int Compras;
+}
+
+// ---------- tutor de movimientos (Nestor, en la Quarcho Cueva) ----------
+
+public class MoveTutorRequest
+{
+    public PokenModel Poken;
+    public string Maestro = "NÉSTOR";
+    // Null = los precios por defecto de PreciosDelTutor.
+    public PreciosDelTutor Precios;
+}
+
+public class MoveTutorResult
+{
+    // Lo que aprendio (null = se fue sin aprender nada) y lo que olvido para
+    // hacerle lugar (null = tenia lugar libre).
+    public MoveDefinition Aprendido;
+    public MoveDefinition Olvidado;
+    public int Pagado;
 }

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: double-hit
   type: 1
   attackType: 0
+  descripcion: Golpea al objetivo dos veces seguidas con la cola  u otras partes
+    de su cuerpo.
   power: 35
   accuracy: 90
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

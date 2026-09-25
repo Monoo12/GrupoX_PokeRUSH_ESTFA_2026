@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: leafage
   type: 4
   attackType: 0
+  descripcion: Ataca al oponente lanzando hojas.
   power: 40
   accuracy: 100
   maxPP: 40
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

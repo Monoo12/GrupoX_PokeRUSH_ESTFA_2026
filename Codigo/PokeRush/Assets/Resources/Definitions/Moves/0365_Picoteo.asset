@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: pluck
   type: 10
   attackType: 0
+  descripcion: "Picotea al objetivo. Si este sostiene una baya, la picotea tambi\xE9n
+    y obtiene sus efectos."
   power: 60
   accuracy: 100
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: gyro-ball
   type: 17
   attackType: 0
+  descripcion: "Embiste al objetivo con un potente ataque giratorio.  Cuanto m\xE1s
+    lento es el usuario, m\xE1s da\xF1o causa. "
   power: 0
   accuracy: 100
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 01b079fe7dc6e5042ae59e2c61ff488a, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: metal-burst
   type: 17
   attackType: 0
+  descripcion: "Devuelve al rival el \xFAltimo ataque recibido, pero con  mucha m\xE1s
+    fuerza."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

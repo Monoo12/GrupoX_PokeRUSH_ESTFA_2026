@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: breaking-swipe
   type: 15
   attackType: 0
+  descripcion: El usuario sacude violentamente su enorme cola para golpear a todos
+    los rivales y reducir su Ataque a la par.
   power: 60
   accuracy: 100
   maxPP: 15
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

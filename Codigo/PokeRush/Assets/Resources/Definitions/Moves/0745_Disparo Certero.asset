@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: snipe-shot
   type: 3
   attackType: 1
+  descripcion: "Permite atacar al objetivo seleccionado ignorando las habilidades
+    o movimientos que permiten a un rival centrar la atenci\xF3n sobre s\xED."
   power: 80
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

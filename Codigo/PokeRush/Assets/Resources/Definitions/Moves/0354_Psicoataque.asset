@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: psycho-boost
   type: 11
   attackType: 1
+  descripcion: "Este movimiento no se puede usar, por lo que ser\xEDa mejor olvidarlo,
+    aunque eso implique que no se pueda recordar posteriormente."
   power: 140
   accuracy: 90
   maxPP: 5
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: b5b2696f8cd3e454e81abd16db5d5c30, type: 2}

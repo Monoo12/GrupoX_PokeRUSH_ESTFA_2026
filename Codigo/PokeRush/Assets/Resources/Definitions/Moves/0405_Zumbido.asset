@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: bug-buzz
   type: 12
   attackType: 1
+  descripcion: "El usuario crea una onda s\xF3nica da\xF1ina moviendo su cuerpo que
+    tambi\xE9n puede disminuir la Defensa Especial del objetivo."
   power: 90
   accuracy: 100
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e675b67973714074b8bc02117c3d0945, type: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: mud-shot
   type: 9
   attackType: 1
+  descripcion: El usuario lanza lodo al objetivo y reduce su Velocidad.
   power: 55
   accuracy: 95
   maxPP: 15
@@ -42,4 +43,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 527fa3b5945d560419e65ce5998e4845, type: 2}

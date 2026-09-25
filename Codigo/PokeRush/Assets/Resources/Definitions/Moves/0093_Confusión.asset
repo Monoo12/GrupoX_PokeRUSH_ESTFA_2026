@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: confusion
   type: 11
   attackType: 1
+  descripcion: "D\xE9bil ataque telequin\xE9tico que puede causar confusi\xF3n."
   power: 50
   accuracy: 100
   maxPP: 25
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

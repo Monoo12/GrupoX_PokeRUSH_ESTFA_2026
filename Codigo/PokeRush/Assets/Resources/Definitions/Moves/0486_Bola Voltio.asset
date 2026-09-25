@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: electro-ball
   type: 5
   attackType: 1
+  descripcion: "Lanza una bola el\xE9ctrica. Cuanto mayor sea la Velocidad del usuario
+    en comparaci\xF3n con la del  objetivo, mayor ser\xE1 el da\xF1o causado."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

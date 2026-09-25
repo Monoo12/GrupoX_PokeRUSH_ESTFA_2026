@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: wave-crash
   type: 3
   attackType: 0
+  descripcion: The user shrouds itself in water and slams into the target with its
+    whole body to inflict damage. This also damages the user quite a lot.
   power: 120
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

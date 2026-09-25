@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: hone-claws
   type: 16
   attackType: 2
+  descripcion: "El usuario se afila las garras para aumentar su Ataque y Precisi\xF3n."
   power: 0
   accuracy: 0
   maxPP: 15
@@ -44,4 +45,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 63a43bef50ff5f9478b596870e559e75, type: 2}

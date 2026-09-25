@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: amnesia
   type: 11
   attackType: 2
+  descripcion: El usuario olvida sus preocupaciones y aumenta mucho la Defensa Especial.
   power: 0
   accuracy: 0
   maxPP: 20
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8ad0a759f2bbea448b363825473dd31c, type: 2}

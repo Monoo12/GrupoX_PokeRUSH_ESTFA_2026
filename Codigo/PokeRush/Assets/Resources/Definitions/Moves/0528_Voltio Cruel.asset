@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: wild-charge
   type: 5
   attackType: 0
+  descripcion: "Carga el\xE9ctrica muy potente que tambi\xE9n hiere  ligeramente
+    a quien la usa."
   power: 90
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

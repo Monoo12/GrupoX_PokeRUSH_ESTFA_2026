@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: order-up
   type: 15
   attackType: 0
+  descripcion: The user attacks with elegant poise. If the user has a Tatsugiri in
+    its mouth, this move boosts one of the user's stats based on the Tatsugiri's
+    form.
   power: 80
   accuracy: 100
   maxPP: 10
@@ -38,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ee893e073b0d35f4283e048b9da0c35c, type: 2}

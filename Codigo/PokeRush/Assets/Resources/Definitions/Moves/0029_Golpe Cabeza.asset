@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: headbutt
   type: 1
   attackType: 0
+  descripcion: Potente cabezazo que puede amedrentar al objetivo.
   power: 70
   accuracy: 100
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

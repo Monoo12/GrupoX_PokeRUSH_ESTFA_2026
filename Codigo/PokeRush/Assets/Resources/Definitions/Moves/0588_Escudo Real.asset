@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: kings-shield
   type: 17
   attackType: 2
+  descripcion: "El usuario adopta una postura defensiva y se protege de cualquier
+    da\xF1o. Reduce el Ataque de cualquier Pok\xE9mon con el que entre en contacto."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -40,4 +42,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

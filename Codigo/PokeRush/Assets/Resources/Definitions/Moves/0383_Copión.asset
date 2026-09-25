@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: copycat
   type: 1
   attackType: 2
+  descripcion: "Imita el movimiento usado justo antes. El movimiento falla si no
+    se ha usado a\xFAn ninguno."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

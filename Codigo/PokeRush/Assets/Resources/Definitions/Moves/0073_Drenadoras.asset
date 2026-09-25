@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: leech-seed
   type: 4
   attackType: 2
+  descripcion: Planta semillas que absorben PS del objetivo en cada turno y que le
+    sirven para recuperarse.
   power: 0
   accuracy: 90
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 321caad0077e27f4f9ae44ae7eae76de, type: 2}

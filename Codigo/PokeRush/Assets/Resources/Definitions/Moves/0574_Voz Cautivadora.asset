@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: disarming-voice
   type: 18
   attackType: 1
+  descripcion: "Obnubila a los oponentes con su fascinante voz y les provoca da\xF1os
+    emocionales. Siempre acierta al objetivo."
   power: 40
   accuracy: 0
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

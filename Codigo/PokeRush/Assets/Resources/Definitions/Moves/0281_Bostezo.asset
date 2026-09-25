@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: yawn
   type: 1
   attackType: 2
+  descripcion: "Gran bostezo que induce al sue\xF1o al objetivo en el siguiente turno."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 84b452de91ebaa943837823f8fbf009a, type: 2}

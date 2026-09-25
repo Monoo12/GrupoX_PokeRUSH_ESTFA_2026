@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: thunder-wave
   type: 5
   attackType: 2
+  descripcion: Una ligera descarga que paraliza al objetivo si lo  alcanza.
   power: 0
   accuracy: 90
   maxPP: 20
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

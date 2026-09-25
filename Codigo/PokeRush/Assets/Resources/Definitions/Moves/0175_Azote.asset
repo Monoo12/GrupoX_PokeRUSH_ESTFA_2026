@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: flail
   type: 1
   attackType: 0
+  descripcion: "Ataque fren\xE9tico. Cuantos menos PS tenga el usuario, m\xE1s da\xF1o
+    producir\xE1."
   power: 0
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

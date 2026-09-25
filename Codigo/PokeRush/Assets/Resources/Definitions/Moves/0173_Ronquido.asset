@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: snore
   type: 1
   attackType: 1
+  descripcion: Fuerte ronquido que solo puede usarse dormido. Puede amedrentar al
+    objetivo.
   power: 50
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: giga-drain
   type: 4
   attackType: 1
+  descripcion: "Un ataque que absorbe nutrientes. Quien lo usa  recupera la mitad
+    de los PS del da\xF1o que produce. "
   power: 75
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 4b6f637c1202429448a60565c2c60fc7, type: 2}

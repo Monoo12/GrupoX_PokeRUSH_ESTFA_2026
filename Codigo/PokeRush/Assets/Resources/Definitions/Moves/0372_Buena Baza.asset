@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: assurance
   type: 16
   attackType: 0
+  descripcion: "Si el objetivo ya ha sufrido da\xF1o en ese turno, la fuerza del
+    ataque se duplica."
   power: 60
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

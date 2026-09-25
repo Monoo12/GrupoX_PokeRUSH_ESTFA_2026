@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: switcheroo
   type: 16
   attackType: 2
+  descripcion: "Intercambia con el objetivo los objetos que llevan tan r\xE1pido
+    que es imposible verlo a simple vista."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

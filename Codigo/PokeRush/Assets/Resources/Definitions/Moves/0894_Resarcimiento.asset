@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: comeuppance
   type: 16
   attackType: 0
+  descripcion: The user retaliates with much greater force against the opponent that
+    last inflicted damage on it.
   power: 1
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

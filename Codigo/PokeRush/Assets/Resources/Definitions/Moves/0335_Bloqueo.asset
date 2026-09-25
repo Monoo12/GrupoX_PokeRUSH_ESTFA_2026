@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: block
   type: 1
   attackType: 2
+  descripcion: Le corta el paso al objetivo para que no pueda escapar.
   power: 0
   accuracy: 0
   maxPP: 5
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 6a482386a2580114ab219c4d55a1febb, type: 2}

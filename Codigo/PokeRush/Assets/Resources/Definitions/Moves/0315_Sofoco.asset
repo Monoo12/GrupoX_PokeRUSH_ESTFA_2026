@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: overheat
   type: 2
   attackType: 1
+  descripcion: Ataque en toda regla que baja mucho el Ataque  Especial de quien lo
+    usa.
   power: 130
   accuracy: 90
   maxPP: 5
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

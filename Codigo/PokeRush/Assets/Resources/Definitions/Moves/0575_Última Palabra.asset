@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: parting-shot
   type: 16
   attackType: 2
+  descripcion: "El usuario se cambia por otro Pok\xE9mon de su equipo, pero antes
+    amedrenta a su oponente y hace que disminuyan su Ataque y Ataque Especial."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -45,4 +47,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

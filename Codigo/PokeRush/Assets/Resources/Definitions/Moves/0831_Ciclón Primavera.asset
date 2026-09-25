@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: springtide-storm
   type: 18
   attackType: 1
+  descripcion: "The user attacks by wrapping opposing Pok\xE9mon in fierce winds
+    brimming with love and hate. This may also lower their Attack stats."
   power: 100
   accuracy: 80
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8eff1622d0965644c8a55daacb00c8e9, type: 2}

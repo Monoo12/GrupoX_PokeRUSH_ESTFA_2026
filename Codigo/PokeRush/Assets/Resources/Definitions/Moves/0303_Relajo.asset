@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: slack-off
   type: 1
   attackType: 2
+  descripcion: "El usuario se relaja y restaura la mitad de sus PS  m\xE1ximos."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7b5a4bed9e5142141b5ee0385130e123, type: 2}

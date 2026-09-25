@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: oblivion-wing
   type: 10
   attackType: 1
+  descripcion: "El usuario absorbe energ\xEDa del objetivo y aumenta sus PS en una
+    cantidad igual o superior a la mitad del da\xF1o infligido."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

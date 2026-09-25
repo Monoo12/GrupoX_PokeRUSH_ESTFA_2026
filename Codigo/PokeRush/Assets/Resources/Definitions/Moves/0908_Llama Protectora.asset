@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: burning-bulwark
   type: 2
   attackType: 2
+  descripcion: The user's intensely hot fur protects it from attacks and also burns
+    any attacker that makes direct contact with it.
   power: 0
   accuracy: 0
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

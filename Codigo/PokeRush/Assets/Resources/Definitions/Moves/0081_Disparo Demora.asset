@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: string-shot
   type: 12
   attackType: 2
+  descripcion: Lanza seda a los rivales y reduce mucho su Velocidad.
   power: 0
   accuracy: 95
   maxPP: 40
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8cba8404d558a2a40893bbef486d81f2, type: 2}

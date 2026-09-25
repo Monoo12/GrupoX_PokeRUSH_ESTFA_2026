@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: thunderbolt
   type: 5
   attackType: 1
+  descripcion: "Potente ataque el\xE9ctrico que puede paralizar al  objetivo."
   power: 90
   accuracy: 100
   maxPP: 15
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: spiky-shield
   type: 4
   attackType: 2
+  descripcion: "Protege al usuario de ataques, e inflige da\xF1o a quien se los lance
+    si entra en contacto con \xE9l. "
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

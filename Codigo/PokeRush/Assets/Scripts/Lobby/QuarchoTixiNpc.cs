@@ -1,0 +1,202 @@
+using UnityEngine;
+
+// Tixi, quien te recibe en la Quarcho Cueva.
+//
+// La PRIMERA vez que llegas habla solo, sin que te acerques: cuenta su parte
+// del lore (el asset 'lore', que escribe el equipo), te da una ayuda para
+// arrancar y te ofrece la tienda antes de mandarte al primer nivel. Recien
+// ahi se activa Lobby_TixiPresentado, que es lo que abre la salida de la cueva.
+//
+// Despues es un menu: comprar, viajar al siguiente nivel, charlar o nada. El
+// siguiente nivel lo decide RecorridoDeLaHistoria segun los flags, asi que Tixi
+// no sabe de escenas.
+//
+// TODO (equipo): el sprite y el retrato de Tixi son PROVISORIOS (salen del pack
+// de Essentials). Cuando esten los definitivos se cambian desde el Inspector.
+[RequireComponent(typeof(Collider2D))]
+public class QuarchoTixiNpc : MonoBehaviour, IInteractable
+{
+    [Header("Referencias (opcional: se busca sola)")]
+    [SerializeField] private DialogueController dialogueController;
+
+    [Header("Tixi")]
+    [SerializeField] private string nombre = "TIXI";
+    [Tooltip("Retrato de la caja de dialogo. Provisorio.")]
+    [SerializeField] private Sprite retrato;
+
+    [Header("La primera vez")]
+    [Tooltip("El lore que cuenta al conocerte. El texto lo escribe el equipo en el asset.")]
+    [SerializeField] private DialogueDefinition lore;
+    [Tooltip("Habla solo apenas llegas a la cueva por primera vez.")]
+    [SerializeField] private bool hablaAlLlegar = true;
+    [Tooltip("Segundos de espera antes de hablar solo, para que se vea la cueva.")]
+    [Min(0f)] [SerializeField] private float esperaAlLlegar = 0.6f;
+    [Tooltip("Plata que te da al presentarse, una sola vez. Con los 100 de arranque " +
+             "no alcanza ni para una Pocion. 0 = no da nada.")]
+    [Min(0)] [SerializeField] private int regaloDeBienvenida = 1000;
+    [Tooltip("{0} = la plata.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeRegalo =
+        "Tomá estas {0} monedas para arrancar. Con eso te alcanza para algo de mi tienda.";
+    [SerializeField, TextArea(2, 4)] private string preguntaTienda = "Antes de salir, ¿querés ver lo que tengo?";
+    [SerializeField] private string opcionVer = "Ver";
+    [SerializeField] private string opcionDespues = "Después";
+
+    [Header("La tienda")]
+    [Tooltip("Lo que vende. Usa 'healItemsForSale'; el precio es el buyPrice de cada objeto.")]
+    [SerializeField] private VendorDefinition tienda;
+
+    [Header("El menu")]
+    [SerializeField, TextArea(2, 4)] private string saludo = "¿Qué necesitás?";
+    [SerializeField] private string opcionComprar = "Comprar";
+    [SerializeField] private string opcionViajar = "Viajar";
+    [SerializeField] private string opcionCharlar = "Charlar";
+    [SerializeField] private string opcionNada = "Nada";
+    [Tooltip("Lo que dice al elegir Charlar. Vacio = el consejo de a donde ir.")]
+    [SerializeField] private DialogueDefinition charla;
+    [Tooltip("{0} = el siguiente nivel.")]
+    [SerializeField, TextArea(2, 4)] private string consejo =
+        "Lo que sigue es {0}. Cuando estés listo, salí por la puerta del este o pedime que te lleve.";
+    [SerializeField, TextArea(2, 4)] private string consejoFinal = "Ya no queda nada por delante. Descansá.";
+    [Tooltip("{0} = el nivel.")]
+    [SerializeField, TextArea(2, 4)] private string preguntaViaje = "¿Te llevo hacia {0}?";
+    [SerializeField] private string opcionIr = "Vamos";
+    [SerializeField] private string opcionNoIr = "Todavía no";
+    [SerializeField, TextArea(2, 4)] private string mensajeSinTienda = "Hoy no tengo nada para vender.";
+
+    public VendorDefinition Tienda => tienda;
+    public int RegaloDeBienvenida => regaloDeBienvenida;
+
+    private bool _presentandose;
+    private float _llegada = -1f;
+
+    private void Awake()
+    {
+        if (dialogueController == null)
+            dialogueController = FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
+    }
+
+    // ---------- la primera vez ----------
+
+    private void Update()
+    {
+        if (!hablaAlLlegar || _presentandose) return;
+
+        GameManager gm = GameManager.Instance;
+        if (gm == null || gm.Story == null || gm.CurrentPlayer == null) return;
+        if (gm.Story.HasFlag(StoryFlag.Lobby_TixiPresentado)) { hablaAlLlegar = false; return; }
+        if (MenuManager.AnyOpen || (dialogueController != null && dialogueController.IsOpen)) return;
+
+        if (_llegada < 0f) _llegada = Time.time;
+        if (Time.time - _llegada < esperaAlLlegar) return;
+
+        Presentarse(gm.CurrentPlayer, gm.Story);
+    }
+
+    private void Presentarse(PlayerModel player, StoryModel story)
+    {
+        _presentandose = true;
+
+        System.Action despues = () =>
+        {
+            TerminarPresentacion(player, story);
+            _presentandose = false;
+            hablaAlLlegar = false;
+        };
+
+        if (lore != null && dialogueController != null) dialogueController.StartDialogue(lore, story, despues);
+        else Decir(lore != null ? lore.lines : new[] { "¡Llegaste! Te estaba esperando." }, despues);
+    }
+
+    // Lo que pasa al cerrar el lore. Publico para los tests: flag, regalo y
+    // guardado, sin cajas.
+    public void TerminarPresentacion(PlayerModel player, StoryModel story)
+    {
+        if (story == null || story.HasFlag(StoryFlag.Lobby_TixiPresentado)) return;
+
+        story.ActivateFlag(StoryFlag.Lobby_TixiPresentado);
+        if (player != null && regaloDeBienvenida > 0) player.AddMoney(regaloDeBienvenida);
+        CasinoDialogo.Guardar();
+
+        if (dialogueController == null) return;
+
+        if (regaloDeBienvenida > 0)
+            Decir(new[] { string.Format(mensajeRegalo, regaloDeBienvenida) }, () => OfrecerTienda(story));
+        else
+            OfrecerTienda(story);
+    }
+
+    private void OfrecerTienda(StoryModel story)
+    {
+        Preguntar(preguntaTienda, opcionVer, opcionDespues, ver =>
+        {
+            if (ver) AbrirTienda(() => Aconsejar(story));
+            else Aconsejar(story);
+        });
+    }
+
+    // ---------- despues ----------
+
+    public bool Interact(PlayerModel player, StoryModel story)
+    {
+        if (player == null || story == null || _presentandose) return false;
+
+        if (!story.HasFlag(StoryFlag.Lobby_TixiPresentado))
+        {
+            Presentarse(player, story);
+            return true;
+        }
+
+        CasinoDialogo.Elegir(dialogueController, nombre, retrato, saludo,
+            new[] { opcionComprar, opcionViajar, opcionCharlar, opcionNada },
+            eleccion =>
+            {
+                switch (eleccion)
+                {
+                    case 0: AbrirTienda(null); break;
+                    case 1:
+                        ViajeEntreNiveles.Preguntar(dialogueController, nombre, retrato, story,
+                            preguntaViaje, opcionIr, opcionNoIr);
+                        break;
+                    case 2: Charlar(story); break;
+                }
+            });
+        return true;
+    }
+
+    private void Charlar(StoryModel story)
+    {
+        if (charla != null && dialogueController != null) dialogueController.StartDialogue(charla, story);
+        else Aconsejar(story);
+    }
+
+    private void Aconsejar(StoryModel story)
+    {
+        RecorridoDeLaHistoria.Nivel siguiente = RecorridoDeLaHistoria.SiguienteNivel(story);
+        Decir(new[] { siguiente != null ? string.Format(consejo, siguiente.Nombre) : consejoFinal });
+    }
+
+    private void AbrirTienda(System.Action alCerrar)
+    {
+        MenuManager menus = MenuManager.Instance;
+        if (menus == null || tienda == null || tienda.healItemsForSale == null || tienda.healItemsForSale.Length == 0)
+        {
+            Decir(new[] { mensajeSinTienda }, alCerrar);
+            return;
+        }
+
+        menus.SetContext(MenuContextKind.Overworld);
+        menus.Open(MenuScreenId.Shop,
+            new ShopScreenRequest { Vendedor = nombre, Objetos = tienda.healItemsForSale },
+            resultado =>
+            {
+                if (resultado is ShopScreenResult r && r.Compras > 0) CasinoDialogo.Guardar();
+                alCerrar?.Invoke();
+            });
+    }
+
+    private void Decir(string[] lineas, System.Action alCerrar = null)
+        => CasinoDialogo.Decir(dialogueController, nombre, retrato, lineas, alCerrar);
+
+    private void Preguntar(string texto, string si, string no, System.Action<bool> respuesta)
+        => CasinoDialogo.Preguntar(dialogueController, nombre, retrato, texto, si, no, respuesta);
+}

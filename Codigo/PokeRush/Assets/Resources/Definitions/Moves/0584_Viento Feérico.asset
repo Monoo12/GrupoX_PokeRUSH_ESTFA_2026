@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fairy-wind
   type: 18
   attackType: 1
+  descripcion: "El Pok\xE9mon que lo usa desata un vendaval fe\xE9rico que arremete
+    contra el objetivo."
   power: 40
   accuracy: 100
   maxPP: 30
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1a0d96c700ac3fb4281b4a48cdd1f383, type: 2}

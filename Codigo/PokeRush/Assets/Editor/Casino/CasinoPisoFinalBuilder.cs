@@ -20,27 +20,27 @@ using UnityEngine.SceneManagement;
 //     tiene enfermeria: sin esto, perder contra el jefe deja al jugador
 //     encerrado con el equipo debilitado.
 //   - Seis guardias iguales, tres por lado, mirando a la alfombra.
-//   - El jefe, parado atras de la mesa. Se le habla desde el frente de la mesa.
+//   - Martin Reymar, un busto sentado atras de la mesa, y la ZONA que hay
+//     delante de la mesa: pisarla arranca la pelea. Al jefe no se le habla.
 //
-// TODO (equipo):
-//   1. Los textos de los seis guardias son DE RELLENO. Los assets estan en
-//      Assets/Resources/Definitions/Casino/Dialogos/Historia_PisoFinal_Guardia*.asset
-//      y este builder NO los pisa si ya existen: se reescriben desde el
-//      Inspector cuando esten los dialogos de historia.
-//   2. La skin y el retrato del jefe son PROVISORIOS (Giovanni del pack de
-//      Essentials). El personaje es Martin Reymar: cuando esten sus sprites se
-//      cambian aca (HojaDelJefe / RetratoDelJefe) y se vuelve a correr.
+// TODO (equipo): los textos de los seis guardias son DE RELLENO. Los assets
+// estan en Assets/Resources/Definitions/Casino/Dialogos/Historia_PisoFinal_Guardia*.asset
+// y este builder NO los pisa si ya existen: se reescriben desde el Inspector
+// cuando esten los dialogos de historia.
 public static class CasinoPisoFinalBuilder
 {
     private const string Escena = "Assets/Scenes/Casino piso FINAL.unity";
     private const string Contenedor = "InteraccionesCasino";
     private const string Items = "Assets/Graphics/Items/";
     private const int CapaObstacles = 3;
+    private const int CapaDefault = 0;
 
-    // Provisorios: ver el TODO de arriba.
-    private const string HojaDelJefe = "giovanni";
-    private const string RetratoDelJefe = "GIOVANNI1";
     private const string HojaDeLosGuardias = "rocketElite";
+
+    // Martin Reymar. Es un BUSTO: se lo ve de la cintura para arriba, sentado
+    // atras de la mesa. Lo prepara scripts/preparar_sprites_casino.py.
+    private const string SpriteDeMartin = "Assets/Sprites/Casino/martin_sentado.png";
+    private const string RetratoDelJefe = "MARTIN";
 
     private const string NombreDelJefe = "REYMAR";
 
@@ -66,12 +66,24 @@ public static class CasinoPisoFinalBuilder
         "Yo de vos me daba vuelta. Pero nadie me escucha."
     };
 
-    // Donde va el jefe y donde se le habla. La mesa de cartas ocupa las celdas
-    // (-1..1, 29..30) y el jefe queda parado atras, en (0, 31). Como la mesa
-    // tapa, el collider con el que se lo agarra es un hijo apoyado sobre ella:
-    // el jugador se para en (0, 28), mira arriba y habla por encima de la mesa.
-    private static readonly Vector2 CeldaDelJefe = new Vector2(0.5f, 31.5f);
-    private static readonly Vector2 CeldaDeLaMesa = new Vector2(0.5f, 29.5f);
+    // Al jefe NO se le habla: la pelea la dispara una ZONA delante de la mesa.
+    // Por eso el objeto vive donde esta la hitbox y el dibujo va como hijo,
+    // corrido hasta la mesa.
+    //
+    // La mesa de cartas ocupa las celdas (-1..1, 29..30). La zona cubre el
+    // frente de la mesa, que es por donde se llega caminando por la alfombra.
+    private static readonly Vector2 CentroDeLaZona = new Vector2(0.5f, 27.5f);
+    private static readonly Vector2 TamanoDeLaZona = new Vector2(5f, 3f);
+
+    // Donde apoya el busto de Martin. Va 0,4 celdas METIDO en la mesa para que
+    // esta le tape la base y se lea como sentado; el borde de arriba de la mesa
+    // esta en y = 31.
+    private static readonly Vector2 ApoyoDeMartin = new Vector2(0.5f, 30.6f);
+
+    // Orden de dibujo del busto. Los NPCs van en 15 y la mesa vive en el tilemap
+    // 'Colisiones', que dibuja en 10: con 5 Martin queda DETRAS de la mesa y
+    // delante del piso, que es lo que hace el efecto de estar sentado.
+    private const int OrdenDetrasDeLaMesa = 5;
 
     // El ascensor: sobre la pared del fondo del pasillo, debajo de la alfombra.
     private static readonly Vector2 CeldaDelAscensor = new Vector2(0.5f, 3.5f);
@@ -118,33 +130,58 @@ public static class CasinoPisoFinalBuilder
 
         Debug.Log($"[PisoFinal] Listo: {Guardias.Length} guardias, el jefe y el ascensor de bajada.");
         Debug.LogWarning("[PisoFinal] TODO equipo: los textos de los guardias son de relleno " +
-                         $"({CasinoNpcBuilder.DialogosFolder}/Historia_PisoFinal_Guardia*.asset), y la " +
-                         $"skin del jefe es provisoria ('{HojaDelJefe}'): va la de Martin Reymar.");
+                         $"({CasinoNpcBuilder.DialogosFolder}/Historia_PisoFinal_Guardia*.asset).");
     }
 
     // ---------- el jefe en la escena ----------
 
     private static void PonerAlJefe(GameObject raiz, EnemyDefinition jefe, CasinoPrizeTable ruleta)
     {
-        GameObject go = CasinoNpcBuilder.Personaje(raiz, "JefeFinal", CeldaDelJefe, HojaDelJefe, CasinoNpcBuilder.Abajo);
+        // El objeto ES la zona: su Collider2D en 'Is Trigger' es la hitbox que
+        // dispara la pelea al pisarla. No se usa Personaje() porque ese arma un
+        // NPC con el que se habla, y a Martin no se le habla.
+        var go = new GameObject("JefeFinal");
+        go.transform.SetParent(raiz.transform, false);
+        go.transform.position = new Vector3(CentroDeLaZona.x, CentroDeLaZona.y, 0f);
 
-        // El collider de la mesa. Va como hijo porque PlayerController resuelve
-        // con GetComponentInParent: el jugador toca la mesa y contesta el jefe.
-        var mesa = new GameObject("MesaDePoker");
-        mesa.transform.SetParent(go.transform, false);
-        mesa.transform.localPosition = new Vector3(CeldaDeLaMesa.x - CeldaDelJefe.x,
-                                                   CeldaDeLaMesa.y - CeldaDelJefe.y, 0f);
-        mesa.layer = CapaObstacles;
-        var colMesa = mesa.AddComponent<BoxCollider2D>();
-        // Los tres anchos de la mesa. Trigger: las celdas de la mesa ya las
-        // bloquea el tilemap de Colisiones, esto es solo para poder hablarle.
-        colMesa.size = new Vector2(2.9f, 0.9f);
-        colMesa.isTrigger = true;
+        // OJO: la zona va en Default, NO en Obstacles como el resto de las
+        // interacciones del casino, y eso NO es un descuido.
+        //
+        // El proyecto tiene 'Queries Hit Triggers' prendido, y el jugador
+        // decide si puede pisar una celda con
+        // Physics2D.OverlapCircle(destino, radio, obstacleMask), donde
+        // obstacleMask es justamente Obstacles. O sea que un trigger puesto en
+        // Obstacles FRENA al jugador igual que una pared: se quedaria parado en
+        // el borde de la zona y la pelea no arrancaria nunca.
+        //
+        // En Default no lo frena, y el trigger igual le llega: el jugador esta
+        // en Default, tiene Rigidbody2D cinematico y Default choca con Default.
+        go.layer = CapaDefault;
+
+        var zona = go.AddComponent<BoxCollider2D>();
+        zona.size = TamanoDeLaZona;
+        zona.isTrigger = true;
+
+        // Martin sentado atras de la mesa. Va como HIJO y con su posicion puesta
+        // en mundo (no relativa): la zona y el dibujo estan en lugares
+        // distintos a proposito.
+        var visual = new GameObject("Visual");
+        visual.transform.SetParent(go.transform, false);
+        visual.transform.position = new Vector3(ApoyoDeMartin.x, ApoyoDeMartin.y, 0f);
+        visual.transform.localScale = Vector3.one * CasinoNpcBuilder.EscalaDelVisual;
+
+        var sr = visual.AddComponent<SpriteRenderer>();
+        sr.sprite = CasinoNpcBuilder.SpriteDePersonaje(SpriteDeMartin);
+        sr.sortingOrder = OrdenDetrasDeLaMesa;
+        if (sr.sprite == null)
+            Debug.LogError($"[PisoFinal] No se pudo cargar {SpriteDeMartin}. " +
+                           "Corre scripts/preparar_sprites_casino.py.");
 
         var npc = go.AddComponent<CasinoJefeFinalNpc>();
         var so = new SerializedObject(npc);
         so.FindProperty("nombre").stringValue = NombreDelJefe;
-        so.FindProperty("retrato").objectReferenceValue = jefe != null ? jefe.battleFrontSprite : null;
+        so.FindProperty("retrato").objectReferenceValue =
+            CasinoNpcBuilder.SpriteRetrato($"Assets/Graphics/Trainers/{RetratoDelJefe}.png");
         so.FindProperty("rival").objectReferenceValue = jefe;
         so.FindProperty("flagVencido").enumValueIndex = (int)StoryFlag.Casino_JefeFinalVencido;
         so.FindProperty("flagCasinoCompletado").enumValueIndex = (int)StoryFlag.Casino_Completado;

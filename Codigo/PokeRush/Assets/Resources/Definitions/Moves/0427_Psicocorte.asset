@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: psycho-cut
   type: 11
   attackType: 0
+  descripcion: "Ataca al objetivo con cuchillas formadas por energ\xEDa ps\xEDquica.
+    Suele ser cr\xEDtico."
   power: 70
   accuracy: 100
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1bb1b2fae68e274478c444a6577fff9c, type: 2}

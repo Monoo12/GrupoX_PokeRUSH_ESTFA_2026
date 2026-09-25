@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: no-retreat
   type: 7
   attackType: 2
+  descripcion: "El usuario aumenta todas sus caracter\xEDsticas, pero ya no puede
+    huir ni ser cambiado por otro."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -53,4 +55,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1aadc61de6e938e4e8319af83954446a, type: 2}

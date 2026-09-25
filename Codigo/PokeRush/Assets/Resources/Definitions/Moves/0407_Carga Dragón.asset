@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: dragon-rush
   type: 15
   attackType: 0
+  descripcion: "Ataca de forma brutal mientras intimida al objetivo. Tambi\xE9n puede
+    amedrentarlo."
   power: 100
   accuracy: 75
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

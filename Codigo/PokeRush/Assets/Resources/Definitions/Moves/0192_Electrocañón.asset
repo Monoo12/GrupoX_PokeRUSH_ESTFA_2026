@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: zap-cannon
   type: 5
   attackType: 1
+  descripcion: "Dispara una descarga el\xE9ctrica que causa da\xF1o y  par\xE1lisis."
   power: 120
   accuracy: 50
   maxPP: 5
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

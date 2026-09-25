@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: court-change
   type: 1
   attackType: 2
+  descripcion: "Extra\xF1o poder que intercambia los efectos en el terreno de combate
+    de ambos bandos."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

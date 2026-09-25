@@ -44,6 +44,13 @@ public class Prize
     [Tooltip("Plata que se da en su lugar si el jugador ya lo tenia.")]
     [Min(0)] public int moneyIfOwned = 300;
 
+    [Header("Mejora para la proxima batalla (opcional)")]
+    [Tooltip("La ruleta de mejoras de Martin: el equipo arranca la PROXIMA " +
+             "batalla con este stat subido. Ninguna = no da mejora.")]
+    public MejoraDeBatalla mejora = MejoraDeBatalla.Ninguna;
+    [Tooltip("Cuantos stages sube (1 = 'subio', 2 = 'subio mucho').")]
+    [Range(1, 6)] public int etapasDeMejora = 1;
+
     [Header("Combate (solo en la pelea del jefe)")]
     [Tooltip("Que le hace este gajo al Poken que el jugador tiene en el campo " +
              "cuando la ruleta se gira DENTRO de un combate. Ninguno = premio " +

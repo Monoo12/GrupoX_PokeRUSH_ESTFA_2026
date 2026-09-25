@@ -229,6 +229,17 @@ public class PokenModel
         return true;
     }
 
+    // Olvida el movimiento de ese lugar y aprende otro en su lugar, con los PP
+    // llenos. Mantiene la posicion: el orden es el del combate y el guardado.
+    // Lo usa el tutor de MTs de Nestor.
+    public bool ReplaceMove(int index, MoveDefinition move)
+    {
+        if (move == null || KnowsMove(move)) return false;
+        if (index < 0 || index >= Moves.Count) return false;
+        Moves[index] = new MoveModel(move);
+        return true;
+    }
+
     // Debe llamarse antes de usar AddXP (o dejar que use DefaultXpTable)
     public void SetExperienceTable(ExperienceTableDefinition table)
     {

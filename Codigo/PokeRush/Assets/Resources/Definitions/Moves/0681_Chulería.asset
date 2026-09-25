@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: power-trip
   type: 16
   attackType: 0
+  descripcion: "Ataca al oponente presumiendo de su fuerza. Cuanto m\xE1s hayan subido
+    las caracter\xEDsticas del usuario, mayor ser\xE1 el da\xF1o."
   power: 20
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

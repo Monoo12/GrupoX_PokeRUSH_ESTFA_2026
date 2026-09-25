@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: charge-beam
   type: 5
   attackType: 1
+  descripcion: "Lanza un rayo el\xE9ctrico contra el objetivo. Puede subir el Ataque
+    Especial de quien lo usa."
   power: 50
   accuracy: 90
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8e62b6f17edf0184aa147a87b33e04b8, type: 2}

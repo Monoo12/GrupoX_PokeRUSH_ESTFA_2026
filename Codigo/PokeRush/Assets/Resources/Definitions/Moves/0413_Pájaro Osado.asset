@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: brave-bird
   type: 10
   attackType: 0
+  descripcion: "Pliega sus alas y ataca con un vuelo rasante. El  Pok\xE9mon que
+    lo usa tambi\xE9n resulta seriamente  da\xF1ado."
   power: 120
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 4733fc31a3cb4a848ae445e2a52fc108, type: 2}

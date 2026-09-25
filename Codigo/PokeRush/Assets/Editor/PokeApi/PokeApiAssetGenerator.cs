@@ -143,6 +143,7 @@ namespace PokeRush.EditorTools.PokeApi
             asset.moveName = PokeApiMapper.SpanishName(dto.Names, dto.Name);
             asset.pokeApiId = dto.Id;
             asset.englishName = dto.Name;
+            asset.descripcion = MtYDescripciones.Descripcion(dto);
             asset.type = PokeApiMapper.MapType(dto.Type?.Name);
             asset.attackType = PokeApiMapper.MapDamageClass(dto.DamageClass?.Name);
             asset.power = dto.Power ?? 0;
@@ -391,6 +392,10 @@ namespace PokeRush.EditorTools.PokeApi
             }
             learnset.Sort((a, b) => a.level.CompareTo(b.level));
             asset.learnset = learnset.ToArray();
+
+            // Lo que le puede enseñar Nestor en la Quarcho Cueva (MT y tutor).
+            asset.mtMoves = MtYDescripciones.MovimientosDeMt(pokemon,
+                id => movesByApiId.TryGetValue(id, out MoveDefinition m) ? m : null);
 
             // Todo Pokemon tiene que poder pegar: si por nivel no aprende ningun
             // ataque, se le suman de MT/tutor/huevo (o uno basico de su tipo).

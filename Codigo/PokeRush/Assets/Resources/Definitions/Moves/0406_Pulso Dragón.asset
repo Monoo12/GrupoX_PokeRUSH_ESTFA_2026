@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dragon-pulse
   type: 15
   attackType: 1
+  descripcion: Abre mucho la boca y libera una onda de choque que ataca al objetivo.
   power: 85
   accuracy: 100
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ef935aeb775ee4d4094453e5c1560c4b, type: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: false-swipe
   type: 1
   attackType: 0
+  descripcion: Ataque moderado que no debilita al objetivo y le deja al menos 1 PS.
   power: 40
   accuracy: 100
   maxPP: 40
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 210c102486fa1e7449e6fa395cb4b818, type: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: smog
   type: 8
   attackType: 1
+  descripcion: "Lanza un ataque con gases t\xF3xicos que pueden llegar a envenenar."
   power: 30
   accuracy: 70
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7918dbd834fb5fa469e6ff3a9857918b, type: 2}

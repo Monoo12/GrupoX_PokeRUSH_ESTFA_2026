@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: ember
   type: 2
   attackType: 1
+  descripcion: "Ataca con llamas peque\xF1as que pueden causar  quemaduras."
   power: 40
   accuracy: 100
   maxPP: 25
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

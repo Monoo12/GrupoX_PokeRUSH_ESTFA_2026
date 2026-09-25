@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: toxic-spikes
   type: 8
   attackType: 2
+  descripcion: "Lanza una trampa de p\xFAas t\xF3xicas a los pies del objetivo. El
+    veneno afecta a los Pok\xE9mon oponentes que entran en combate."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 6
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

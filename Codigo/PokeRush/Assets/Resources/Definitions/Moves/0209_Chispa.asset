@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: spark
   type: 5
   attackType: 0
+  descripcion: "Ataque el\xE9ctrico que puede llegar a paralizar."
   power: 65
   accuracy: 100
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

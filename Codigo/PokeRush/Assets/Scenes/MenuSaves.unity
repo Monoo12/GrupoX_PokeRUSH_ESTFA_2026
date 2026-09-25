@@ -306,7 +306,7 @@ MonoBehaviour:
   deleteButton: {fileID: 910002004}
   backButton: {fileID: 910002204}
   optionsPanel: {fileID: 0}
-  sceneJuego: NestorGOD2
+  sceneJuego: Quarcho-Cueva
   sceneVolver: Menu Principal
 --- !u!1 &910000200
 GameObject:
@@ -2225,6 +2225,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   nivelesIniciales: 0f0000000f00000010000000
+  dineroInicial: 100
 --- !u!82 &910002403
 AudioSource:
   m_ObjectHideFlags: 0

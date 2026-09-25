@@ -133,6 +133,8 @@ namespace PokeRush.EditorTools.PokeApi
         [JsonProperty("meta")] public MoveMetaDto Meta;
         [JsonProperty("stat_changes")] public List<MoveStatChange> StatChanges;
         [JsonProperty("effect_entries")] public List<MoveEffectEntry> EffectEntries;
+        // Mismo formato que el de las habilidades (texto, idioma, version).
+        [JsonProperty("flavor_text_entries")] public List<AbilityFlavorText> FlavorTextEntries;
     }
 
     public class MoveMetaDto

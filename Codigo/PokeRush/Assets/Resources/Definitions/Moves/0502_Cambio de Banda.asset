@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: ally-switch
   type: 11
   attackType: 2
+  descripcion: "Extra\xF1o poder que intercambia la posici\xF3n del usuario con la
+    de un aliado sobre el terreno de combate."
   power: 0
   accuracy: 0
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

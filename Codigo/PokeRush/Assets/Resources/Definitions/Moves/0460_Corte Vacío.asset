@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: spacial-rend
   type: 15
   attackType: 1
+  descripcion: "Desgarra al objetivo y el espacio a su alrededor.  Suele ser cr\xEDtico."
   power: 100
   accuracy: 95
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

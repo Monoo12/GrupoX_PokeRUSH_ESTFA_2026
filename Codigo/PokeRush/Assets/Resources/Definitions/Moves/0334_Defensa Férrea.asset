@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: iron-defense
   type: 17
   attackType: 2
+  descripcion: Fortalece el cuerpo como si fuera de hierro y sube  mucho la Defensa.
   power: 0
   accuracy: 0
   maxPP: 15
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: stealth-rock
   type: 13
   attackType: 2
+  descripcion: "Una trampa de rocas que flota en el aire y da\xF1a a los objetivos
+    que entran en combate."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 4
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d7dab10e68f4fe0478df81b806b541d9, type: 2}

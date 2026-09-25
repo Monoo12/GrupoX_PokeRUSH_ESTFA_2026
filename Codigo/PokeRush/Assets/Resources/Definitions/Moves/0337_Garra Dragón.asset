@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dragon-claw
   type: 15
   attackType: 0
+  descripcion: "Ara\xF1a al objetivo con garras afiladas."
   power: 80
   accuracy: 100
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: a04e543962775b44d914c6c89d191523, type: 2}

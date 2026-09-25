@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: jungle-healing
   type: 4
   attackType: 2
+  descripcion: "Al entrar en plena armon\xEDa con la selva, el usuario cura problemas
+    de estado y restaura PS no solo de s\xED mismo, sino tambi\xE9n de los aliados
+    presentes en el terreno."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +42,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

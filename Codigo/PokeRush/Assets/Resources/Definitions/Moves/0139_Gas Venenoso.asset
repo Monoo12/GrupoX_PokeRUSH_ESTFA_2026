@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: poison-gas
   type: 8
   attackType: 2
+  descripcion: "Lanza una nube de gas t\xF3xico al objetivo. Produce envenenamiento."
   power: 0
   accuracy: 90
   maxPP: 40
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

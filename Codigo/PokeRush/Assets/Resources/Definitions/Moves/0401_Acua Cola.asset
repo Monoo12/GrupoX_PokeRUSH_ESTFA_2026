@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: aqua-tail
   type: 3
   attackType: 0
+  descripcion: Ataca agitando la cola como si fuera una ola rabiosa en una tormenta
+    devastadora.
   power: 90
   accuracy: 90
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

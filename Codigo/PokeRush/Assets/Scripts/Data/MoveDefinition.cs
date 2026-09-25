@@ -12,6 +12,10 @@ public class MoveDefinition : ScriptableObject
     public PokenType type;
     public AttackType attackType;
 
+    [Tooltip("Que hace, en español y para el jugador (flavor text de PokeAPI). Lo muestra el " +
+             "tutor de movimientos. Lo llena 'PokeRush > Datos > Completar MTs y descripciones'.")]
+    [TextArea(2, 4)] public string descripcion;
+
     [Header("Stats")]
     public int power;
     public int accuracy;

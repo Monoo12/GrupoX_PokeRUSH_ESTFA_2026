@@ -28,7 +28,7 @@ using UnityEngine;
 // PsAlRevivir, ElegirParaRevivir): asi las reglas de la mano se prueban enteras
 // desde CasinoSmokeTests sin abrir un combate ni repartir una carta.
 [RequireComponent(typeof(Collider2D))]
-public class CasinoJefeFinalNpc : CasinoNpcConCombate, IInteractable
+public class CasinoJefeFinalNpc : CasinoNpcConCombate
 {
     [Header("El jefe")]
     [SerializeField] private EnemyDefinition rival;
@@ -49,13 +49,11 @@ public class CasinoJefeFinalNpc : CasinoNpcConCombate, IInteractable
              "Sin tope, dos jugadores parejos se quedan jugando para siempre.")]
     [SerializeField, Min(0)] private int maximoDeRevanchas = 1;
 
-    [Header("Textos: antes de pelear")]
-    [SerializeField, TextArea(2, 4)] private string pregunta =
-        "Así que llegaste hasta acá. Sentate. Acá arriba las peleas las reparte la casa: cada dos turnos, la ruleta decide por vos. ¿Jugamos?";
-    [SerializeField] private string opcionSi = "Jugar";
-    [SerializeField] private string opcionNo = "Todavía no";
-    [SerializeField, TextArea(2, 4)] private string mensajeSiRechaza =
-        "La mesa no se va a ningún lado. Yo tampoco.";
+    [Header("Textos: al entrar a la zona")]
+    [Tooltip("Lo que dice al acercarte a la mesa. Apenas se cierra la caja " +
+             "arranca la pelea: entrar a la zona ES aceptar.")]
+    [SerializeField, TextArea(2, 4)] private string mensajeDeEncuentro =
+        "Sentate. Acá arriba las peleas las reparte la casa: cada dos turnos, la ruleta decide por vos.";
     [SerializeField, TextArea(2, 4)] private string mensajeYaVencido =
         "Te llevaste el casino entero. Andá antes de que cambie de idea.";
 
@@ -92,32 +90,61 @@ public class CasinoJefeFinalNpc : CasinoNpcConCombate, IInteractable
     public EnemyDefinition Rival => rival;
     public StoryFlag FlagVencido => flagVencido;
 
-    // ---------- interaccion ----------
+    // ---------- la zona que dispara la pelea ----------
 
-    public bool Interact(PlayerModel player, StoryModel story)
+    // A diferencia del resto de los NPCs del casino, al jefe no se le habla: la
+    // pelea arranca al PISAR la zona que hay delante de la mesa (el Collider2D
+    // de este objeto, en 'Is Trigger'). Martin es un busto sentado atras de la
+    // mesa y es un hijo de este objeto, no el objeto en si.
+    //
+    // El desarme es lo mismo que hace BattleZoneTrigger y no es un detalle:
+    // MapBattleBridge apaga el mapa entero durante la pelea, asi que al volver
+    // Unity vuelve a mandar el OnTriggerEnter2D con el jugador todavia parado
+    // adentro. Sin esto, la pelea se relanzaria en bucle.
+    private bool _armado = true;
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (player == null || EsperandoCombate || _enLaMano) return false;
+        if (!_armado || EsperandoCombate || _enLaMano) return;
+        if (other.GetComponentInParent<PlayerController>() == null) return;
+
+        _armado = false;
+        Encarar();
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.GetComponentInParent<PlayerController>() == null) return;
+        _armado = true;
+    }
+
+    private void Encarar()
+    {
+        GameManager gm = GameManager.Instance;
+        PlayerModel player = gm != null ? gm.CurrentPlayer : null;
+        StoryModel story = gm != null ? gm.Story : null;
+
+        if (player == null)
+        {
+            Debug.LogWarning($"[JefeFinal] '{name}': no hay partida cargada.");
+            return;
+        }
 
         if (flagVencido != StoryFlag.None && story != null && story.HasFlag(flagVencido))
         {
             Decir(mensajeYaVencido);
-            return true;
+            return;
         }
 
         if (rival == null)
         {
             Debug.LogError($"[JefeFinal] '{name}' no tiene rival asignado.");
-            return false;
+            return;
         }
 
-        Preguntar(pregunta, opcionSi, opcionNo, acepto =>
-        {
-            if (!acepto) { Decir(mensajeSiRechaza); return; }
-
-            _revanchasJugadas = 0;
-            LanzarCombate(player, rival, outcome => AlTerminar(player, story, outcome), ArmarRuleta());
-        });
-        return true;
+        _revanchasJugadas = 0;
+        Decir(mensajeDeEncuentro,
+            () => LanzarCombate(player, rival, outcome => AlTerminar(player, story, outcome), ArmarRuleta()));
     }
 
     private CasinoRuletaDeCombate ArmarRuleta()
@@ -252,6 +279,10 @@ public class CasinoJefeFinalNpc : CasinoNpcConCombate, IInteractable
     // Cierra el encuentro con el resultado que quedo.
     private void Cerrar(StoryModel story, BattleOutcome outcome)
     {
+        // La zona queda desarmada hasta que el jugador salga y vuelva a entrar:
+        // al volver del combate sigue parado adentro.
+        _armado = false;
+
         if (outcome == null || !outcome.PlayerVictory)
         {
             Decir(mensajeDerrota);

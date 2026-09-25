@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: plasma-fists
   type: 5
   attackType: 0
+  descripcion: "El usuario ataca con pu\xF1os cargados de electricidad. Convierte
+    los movimientos de tipo Normal en movimientos de tipo El\xE9ctrico."
   power: 100
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

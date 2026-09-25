@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: crush-grip
   type: 1
   attackType: 0
+  descripcion: "Estruja al objetivo con gran fuerza. Cuantos m\xE1s PS le queden
+    al objetivo, m\xE1s fuerte ser\xE1 el ataque."
   power: 0
   accuracy: 100
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 6a663fb437dc1f24786c56e662a7dbd8, type: 2}

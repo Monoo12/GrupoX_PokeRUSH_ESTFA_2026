@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: iron-head
   type: 17
   attackType: 0
+  descripcion: Ataca con su dura cabeza de hierro. Puede hacer que el objetivo se
+    amedrente.
   power: 80
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: c814bf042ede6ed46bb28e52b29a8ec0, type: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: blaze-kick
   type: 2
   attackType: 0
+  descripcion: "Patada que suele ser un golpe cr\xEDtico y puede causar quemaduras."
   power: 85
   accuracy: 90
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 95ae0f89d03e6244b972206568f8d84e, type: 2}

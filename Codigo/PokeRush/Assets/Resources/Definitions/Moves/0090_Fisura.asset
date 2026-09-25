@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fissure
   type: 9
   attackType: 0
+  descripcion: Abre una grieta en el suelo y mete al objetivo en ella.  Fulmina en
+    un golpe.
   power: 0
   accuracy: 30
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

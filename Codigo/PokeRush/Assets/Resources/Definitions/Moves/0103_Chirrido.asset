@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: screech
   type: 1
   attackType: 2
+  descripcion: Alarido agudo que reduce mucho la Defensa del  objetivo.
   power: 0
   accuracy: 85
   maxPP: 40
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 961426ae426dd9f4bba900d8abd404cf, type: 2}

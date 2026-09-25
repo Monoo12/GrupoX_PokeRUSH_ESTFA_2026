@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: wood-hammer
   type: 4
   attackType: 0
+  descripcion: "Arremete contra el objetivo con su robusto cuerpo.  El agresor tambi\xE9n
+    sufre bastante da\xF1o."
   power: 120
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 721b9350a4a00e24ea7439dc24b5e26c, type: 2}

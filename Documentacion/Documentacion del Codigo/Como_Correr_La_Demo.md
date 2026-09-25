@@ -1,8 +1,8 @@
 # Cómo correr la demo
 
-Recorrido completo: **Menú principal → Creación de personaje → Torre (NestorGOD2)**.
+Recorrido completo: **Menú principal → Creación de personaje → Quarcho Cueva (el lobby) → Torre (NestorGOD2) → Quarcho Cueva → Casino → Quarcho Cueva**.
 
-Para probarla, abrir **`Assets/Scenes/Menu Principal.unity`** y darle Play. Las cuatro escenas ya están en Build Settings, con el menú en el índice 0.
+Para probarla, abrir **`Assets/Scenes/Menu Principal.unity`** y darle Play. Las escenas ya están en Build Settings, con el menú en el índice 0.
 
 ---
 
@@ -10,15 +10,19 @@ Para probarla, abrir **`Assets/Scenes/Menu Principal.unity`** y darle Play. Las 
 
 ```
 Menu Principal
-   │  no hay partida guardada ──> CreacionPersonaje ──> NestorGOD2
-   │  hay partida guardada ─────> MenuSaves ──────────> NestorGOD2
+   │  no hay partida guardada ──> CreacionPersonaje ──> Quarcho-Cueva
+   │  hay partida guardada ─────> MenuSaves ──────────> Quarcho-Cueva
+
+Quarcho-Cueva ──(la puerta del este o Tixi)──> el siguiente nivel
+el nivel terminado ──(VueltaAlLobby, solo)──> Quarcho-Cueva
 ```
 
 Quién decide qué:
 
 - **`StartScreenView`** (en `Menu Principal`): `sceneNewGame = "CreacionPersonaje"`, `sceneWithSave = "MenuSaves"`. Mira si existe un guardado y manda a una u otra.
-- **`SaveSlotMenuView`** (en `MenuSaves`): `sceneJuego = "NestorGOD2"`.
-- **`CreacionPersonajeView`**: `escenaDestino = "NestorGOD2"`.
+- **`SaveSlotMenuView`** (en `MenuSaves`): `sceneJuego = "Quarcho-Cueva"`. Como el guardado no guarda la escena, "Continuar" siempre arranca en la cueva.
+- **`CreacionPersonajeView`**: `escenaDestino = "Quarcho-Cueva"` (cuando exista la habitación tutorial, va ahí).
+- **A qué nivel se sale de la cueva** lo decide `RecorridoDeLaHistoria` según los flags de la partida, y **la vuelta** a la cueva al terminar un nivel la hace `VueltaAlLobby`. Todo eso está en **`Quarcho_Cueva_Lobby.md`**.
 
 > Si agregás una escena nueva al recorrido, **acordate de sumarla a Build Settings**. `SceneManager.LoadScene` por nombre falla si la escena no está en la lista, y el error se ve recién en runtime.
 
@@ -38,7 +42,7 @@ Al apretar "Empezar":
 ```
 GameManager.NewGame(nombre, genero, inicial, nivel)   // crea la partida
 GameManager.SaveGame()                                 // la guarda YA
-SceneManager.LoadScene("NestorGOD2")
+SceneManager.LoadScene("Quarcho-Cueva")
 ```
 
 Se guarda en el acto a propósito: si el jugador cierra el juego sin llegar a apretar F2, igual queda una partida para continuar desde el menú.
@@ -112,4 +116,4 @@ Las cuatro pistas están importadas como **Streaming** con **Preload Audio Data*
 | No se escucha la música | el `GameManager` de esa escena no tiene asignadas sus dos `AudioSource`. Ojo que el que manda es el de la **primera** escena, porque es `DontDestroyOnLoad` |
 | La música se corta al rato, probando en el editor | no es un bug: **Run In Background** está apagado, así que Unity pausa el juego entero (audio incluido) cuando el Editor pierde el foco |
 
-Detalle de cada sistema en `Como_Armar_Un_Mapa_Nuevo.md` y `Como_Hacer_Dialogos_Y_Decisiones.md`.
+Detalle de cada sistema en `Como_Armar_Un_Mapa_Nuevo.md`, `Como_Hacer_Dialogos_Y_Decisiones.md` y `Quarcho_Cueva_Lobby.md` (el lobby).

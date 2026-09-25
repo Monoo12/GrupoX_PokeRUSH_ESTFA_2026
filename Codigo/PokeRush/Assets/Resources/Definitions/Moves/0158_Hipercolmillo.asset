@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: hyper-fang
   type: 1
   attackType: 0
+  descripcion: Ataca con agudos colmillos. Puede amedrentar al objetivo.
   power: 80
   accuracy: 90
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

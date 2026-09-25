@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: psychic-terrain
   type: 11
   attackType: 2
+  descripcion: "Durante cinco turnos, se potencian los movimientos de tipo Ps\xEDquico
+    y los Pok\xE9mon que est\xE1n en el suelo quedan protegidos contra movimientos
+    con prioridad."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 9
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

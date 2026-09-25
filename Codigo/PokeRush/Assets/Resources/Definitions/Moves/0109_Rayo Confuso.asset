@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: confuse-ray
   type: 14
   attackType: 2
+  descripcion: Rayo siniestro que confunde al objetivo.
   power: 0
   accuracy: 100
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: b6bd9117a7df37b45b3b39c3cbcee065, type: 2}

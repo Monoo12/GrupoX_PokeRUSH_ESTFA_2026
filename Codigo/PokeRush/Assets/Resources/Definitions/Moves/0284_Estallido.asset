@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: eruption
   type: 2
   attackType: 1
+  descripcion: "Furia explosiva. Cuanto menor sea el n\xFAmero de PS del usuario,
+    menos da\xF1o har\xE1 el ataque. "
   power: 150
   accuracy: 100
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1675aa43d06fe1f43a13dfe5afc30967, type: 2}

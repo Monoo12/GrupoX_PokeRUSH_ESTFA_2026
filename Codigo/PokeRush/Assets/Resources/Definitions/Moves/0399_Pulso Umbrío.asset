@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: dark-pulse
   type: 16
   attackType: 1
+  descripcion: Libera una horrible aura llena de malos pensamientos que puede amedrentar
+    al objetivo.
   power: 80
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d14ace43da5dd5441b57d0d6d8eaef1a, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: dynamic-punch
   type: 7
   attackType: 0
+  descripcion: "Pu\xF1etazo con toda la fuerza concentrada. Causa  confusi\xF3n si
+    atina."
   power: 100
   accuracy: 50
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

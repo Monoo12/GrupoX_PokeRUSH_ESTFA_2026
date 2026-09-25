@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: petal-dance
   type: 4
   attackType: 1
+  descripcion: "Lanza p\xE9talos de dos a tres turnos y acaba  confundiendo al atacante."
   power: 120
   accuracy: 100
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ab2ba730e5d528a4b866e4cfedb6010f, type: 2}

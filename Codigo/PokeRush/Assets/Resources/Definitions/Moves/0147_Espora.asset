@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: spore
   type: 4
   attackType: 2
+  descripcion: "Esparce esporas que inducen al sue\xF1o."
   power: 0
   accuracy: 100
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 82e9e6b077aa8064b94451f6e7b45250, type: 2}

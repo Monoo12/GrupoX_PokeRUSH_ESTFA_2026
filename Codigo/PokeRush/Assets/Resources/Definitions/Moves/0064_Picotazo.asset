@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: peck
   type: 10
   attackType: 0
+  descripcion: 'Ensarta al objetivo con un cuerno o pico punzante. '
   power: 35
   accuracy: 100
   maxPP: 35
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

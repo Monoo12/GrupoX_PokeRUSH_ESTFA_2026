@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: electroweb
   type: 5
   attackType: 1
+  descripcion: "Atrapa y ataca a los objetivos con una telara\xF1a  el\xE9ctrica.
+    Tambi\xE9n reduce su Velocidad."
   power: 55
   accuracy: 95
   maxPP: 15
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: b17d4822191eb054abfef46b0d5e9f53, type: 2}

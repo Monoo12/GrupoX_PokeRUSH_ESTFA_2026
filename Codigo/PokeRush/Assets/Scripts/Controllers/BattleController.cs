@@ -236,6 +236,16 @@ public class BattleController : MonoBehaviour
             _battleModel = null;
             return;
         }
+
+        // Las mejoras de la ruleta de Martin valen para UNA batalla: esta. Se
+        // toman (y se gastan) recien aca, pasado el chequeo de arriba, para que
+        // una pelea que no llega a arrancar no se las coma. Van antes del
+        // primer SwitchPlayerPoken porque se aplican al entrar al campo.
+        _battleModel.MejorasDelJugador.AddRange(_playerModel.TomarMejoras());
+        if (_battleModel.MejorasDelJugador.Count > 0)
+            Debug.Log($"[Combate] Mejoras de la ruleta para esta batalla: " +
+                      MejorasDeBatalla.Describir(_battleModel.MejorasDelJugador));
+
         _battleModel.SwitchPlayerPoken(playerLead);
         _battleModel.SwitchEnemyPoken(enemyLead);
 
@@ -400,6 +410,16 @@ public class BattleController : MonoBehaviour
             Announce(enemy.IsWild
                 ? $"¡Un {enemyName} salvaje apareció!"
                 : $"Un {enemyName} rival apareció!");
+            yield return new WaitForSeconds(messageDelay);
+        }
+
+        // Se avisa una sola vez: despues se aplican calladas a cada Poken que
+        // entre (ver BattleModel.SwitchPlayerPoken).
+        if (_battleModel.MejorasDelJugador.Count > 0)
+        {
+            Announce($"¡La ruleta de Martin! Tu equipo pelea esta batalla con " +
+                     $"{MejorasDeBatalla.Describir(_battleModel.MejorasDelJugador)}.");
+            battleHudView?.UpdateHud(_battleModel);
             yield return new WaitForSeconds(messageDelay);
         }
 

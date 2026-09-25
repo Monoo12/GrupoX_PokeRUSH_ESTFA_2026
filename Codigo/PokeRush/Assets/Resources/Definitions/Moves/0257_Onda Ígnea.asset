@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: heat-wave
   type: 2
   attackType: 1
+  descripcion: Provoca un viento abrasador que puede quemar al  objetivo.
   power: 95
   accuracy: 90
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

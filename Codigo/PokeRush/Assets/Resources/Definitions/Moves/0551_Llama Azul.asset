@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: blue-flare
   type: 2
   attackType: 1
+  descripcion: Ataca con una bella pero potente llama azul que rodea al objetivo.
+    Puede quemarlo.
   power: 130
   accuracy: 85
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

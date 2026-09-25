@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: leech-life
   type: 12
   attackType: 0
+  descripcion: "Restaura al usuario la mitad del da\xF1o causado al  objetivo."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 4af20f3933883814b85bd71c48baebe0, type: 2}

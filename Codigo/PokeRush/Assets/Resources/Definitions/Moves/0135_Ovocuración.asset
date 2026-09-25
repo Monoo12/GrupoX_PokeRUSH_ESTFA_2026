@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: soft-boiled
   type: 1
   attackType: 2
+  descripcion: "Restaura la mitad de los PS m\xE1ximos del usuario."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

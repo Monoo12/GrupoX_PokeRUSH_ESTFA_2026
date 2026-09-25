@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: withdraw
   type: 3
   attackType: 2
+  descripcion: El usuario se resguarda en su coraza, por lo que le sube la Defensa.
   power: 0
   accuracy: 0
   maxPP: 40
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: a29e6f043b98c4a4e8d68d543b2e2d03, type: 2}

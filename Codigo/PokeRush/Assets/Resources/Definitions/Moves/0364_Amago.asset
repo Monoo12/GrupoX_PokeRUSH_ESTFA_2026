@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: feint
   type: 1
   attackType: 0
+  descripcion: "Permite golpear a objetivos que han utilizado movimientos como Protecci\xF3n
+    o Detecci\xF3n y anula sus efectos."
   power: 30
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

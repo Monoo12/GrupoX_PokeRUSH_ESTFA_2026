@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: bitter-blade
   type: 2
   attackType: 0
+  descripcion: The user focuses its bitter feelings toward the world of the living
+    into a slashing attack. The user's HP is restored by up to half the damage taken
+    by the target.
   power: 90
   accuracy: 100
   maxPP: 10
@@ -38,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 77313694b5c25294bb97ab3fb8c909e6, type: 2}

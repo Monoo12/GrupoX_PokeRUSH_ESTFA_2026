@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: frost-breath
   type: 6
   attackType: 1
+  descripcion: "Quien lo usa ataca lanzando un aliento g\xE9lido. Siempre asesta
+    un golpe cr\xEDtico."
   power: 60
   accuracy: 90
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8c89ab26ddd3cf14f8f7c242d2089598, type: 2}

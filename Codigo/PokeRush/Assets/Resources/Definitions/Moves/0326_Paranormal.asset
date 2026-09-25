@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: extrasensory
   type: 11
   attackType: 1
+  descripcion: "Emite una energ\xEDa muy extra\xF1a que puede amedrentar al objetivo."
   power: 80
   accuracy: 100
   maxPP: 20
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

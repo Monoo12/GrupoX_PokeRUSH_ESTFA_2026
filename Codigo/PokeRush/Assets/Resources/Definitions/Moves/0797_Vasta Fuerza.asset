@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: expanding-force
   type: 11
   attackType: 1
+  descripcion: "El usuario ataca al objetivo con sus poderes ps\xEDquicos. Cuando
+    se usa en conjunci\xF3n con un campo ps\xEDquico, aumenta su potencia e inflige
+    da\xF1o a todos los rivales."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -38,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

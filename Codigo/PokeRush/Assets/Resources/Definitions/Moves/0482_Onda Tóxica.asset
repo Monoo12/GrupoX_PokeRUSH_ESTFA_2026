@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: sludge-wave
   type: 8
   attackType: 1
+  descripcion: "Una onda t\xF3xica que da\xF1a a los Pok\xE9mon de alrededor. Puede
+    envenenar."
   power: 95
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

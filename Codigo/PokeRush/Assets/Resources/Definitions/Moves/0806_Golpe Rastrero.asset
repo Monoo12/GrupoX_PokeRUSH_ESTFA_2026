@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: skitter-smack
   type: 12
   attackType: 0
+  descripcion: "Ataca al objetivo por la espalda de forma subrepticia y adem\xE1s
+    reduce su Ataque Especial."
   power: 70
   accuracy: 90
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

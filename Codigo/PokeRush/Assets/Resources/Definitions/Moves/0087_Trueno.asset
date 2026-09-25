@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: thunder
   type: 5
   attackType: 1
+  descripcion: "Un poderoso rayo que da\xF1a al objetivo y puede  paralizarlo."
   power: 110
   accuracy: 70
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

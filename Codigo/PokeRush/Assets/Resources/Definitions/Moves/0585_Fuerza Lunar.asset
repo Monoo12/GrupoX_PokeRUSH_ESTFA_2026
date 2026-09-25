@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: moonblast
   type: 18
   attackType: 1
+  descripcion: Invoca el poder de la luna para atacar al objetivo.  Puede disminuir
+    el Ataque Especial del objetivo.
   power: 95
   accuracy: 100
   maxPP: 15
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d755486ced62cfa48b879df238703089, type: 2}

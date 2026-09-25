@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: magma-storm
   type: 2
   attackType: 1
+  descripcion: El objetivo queda atrapado en una tormenta de fuego que dura de cuatro
+    a cinco turnos.
   power: 100
   accuracy: 75
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 139b141dc99b07d47a14577a6079f463, type: 2}

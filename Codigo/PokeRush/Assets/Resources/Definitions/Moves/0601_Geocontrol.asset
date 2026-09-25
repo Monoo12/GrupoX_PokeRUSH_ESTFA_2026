@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: geomancy
   type: 18
   attackType: 2
+  descripcion: "Concentra energ\xEDa durante el primer turno, de forma que su Velocidad,
+    Ataque Especial y Defensa Especial aumenten mucho en el segundo."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -49,4 +51,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 5db098f285c12b0428a57b36945f8a53, type: 2}

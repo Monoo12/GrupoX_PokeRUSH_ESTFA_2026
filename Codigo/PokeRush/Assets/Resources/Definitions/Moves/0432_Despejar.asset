@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: defog
   type: 10
   attackType: 2
+  descripcion: "Potente viento que barre el reflejo o la pantalla de luz creada por
+    el objetivo. Tambi\xE9n puede reducir su Evasi\xF3n."
   power: 0
   accuracy: 0
   maxPP: 15
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 6aef8eaca754ca44bbd922dac44f04ca, type: 2}

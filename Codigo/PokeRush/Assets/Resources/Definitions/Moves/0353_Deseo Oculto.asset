@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: doom-desire
   type: 17
   attackType: 1
+  descripcion: "Concentra un haz de luz y ataca dos turnos despu\xE9s."
   power: 140
   accuracy: 100
   maxPP: 5
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: c2f8ebf7f56fdf046b30fed4a64bca29, type: 2}

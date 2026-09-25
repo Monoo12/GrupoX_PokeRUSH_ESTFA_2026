@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: supersonic
   type: 1
   attackType: 2
+  descripcion: "Raras ondas s\xF3nicas que confunden al objetivo. "
   power: 0
   accuracy: 55
   maxPP: 20
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 530c5ac835f7b594da536b52208d2463, type: 2}

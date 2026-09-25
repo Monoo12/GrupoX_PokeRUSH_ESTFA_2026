@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: absorb
   type: 4
   attackType: 1
+  descripcion: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad
+    de los PS del da\xF1o que produce."
   power: 20
   accuracy: 100
   maxPP: 25
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

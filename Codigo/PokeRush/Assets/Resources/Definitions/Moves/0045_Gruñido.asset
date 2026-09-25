@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: growl
   type: 1
   attackType: 2
+  descripcion: "Dulce gru\xF1ido que reduce el Ataque del equipo rival."
   power: 0
   accuracy: 100
   maxPP: 40
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 566ad58c33f12d547b7400f245c2abfc, type: 2}

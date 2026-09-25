@@ -52,6 +52,7 @@ namespace PokeRush.EditorTools
             TestAscensorPideElShiny();
             TestApuestaDeTacconi();
             TestRevendedorDeLaTarjeta();
+            TestRuletaDelEmpresario();
 
             TestRuletaDeCombateCadencia();
             TestRuletaDeCombateSubeYBaja();
@@ -1143,6 +1144,45 @@ namespace PokeRush.EditorTools
             {
                 Object.DestroyImmediate(go);
                 Object.DestroyImmediate(tarjeta);
+            }
+        }
+
+        // El empresario del piso 3 cobra cada tiro de su ruleta, todas las veces
+        // que alcance la plata, y su ruleta da siempre un Pokemon.
+        private static void TestRuletaDelEmpresario()
+        {
+            var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>("Assets/Resources/Definitions/Casino/RuletaDelEmpresario.asset");
+            Check(tabla != null, "existe la ruleta del empresario");
+            if (tabla == null) return;
+
+            bool todosPokemon = tabla.premios.Length > 0;
+            foreach (Prize p in tabla.premios)
+                if (p == null || p.poken == null || p.probability <= 0f) todosPokemon = false;
+            Check(todosPokemon, "la ruleta del empresario da un Pokemon si o si");
+            Check(tabla.premios.Length <= 8, "la ruleta del empresario entra en los 8 gajos");
+
+            var go = new GameObject("EmpresarioDePrueba");
+            go.AddComponent<BoxCollider2D>();
+            try
+            {
+                var npc = go.AddComponent<CasinoRuletaPagaNpc>();
+                var so = new SerializedObject(npc);
+                so.FindProperty("ruleta").objectReferenceValue = tabla;
+                so.FindProperty("precio").intValue = 200;
+                so.ApplyModifiedPropertiesWithoutUndo();
+
+                var jugador = new PlayerModel("Test");
+                jugador.AddMoney(150);
+                Check(!npc.Cobrar(jugador) && jugador.Money == 150, "Empresario: sin 200 no deja tirar");
+
+                jugador.AddMoney(250);
+                Check(npc.Cobrar(jugador) && jugador.Money == 200, "Empresario: con 200 cobra el tiro");
+                Check(npc.Cobrar(jugador) && jugador.Money == 0, "Empresario: se puede volver a tirar");
+                Check(!npc.Cobrar(jugador) && jugador.Money == 0, "Empresario: nunca deja al jugador en negativo");
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
             }
         }
     }

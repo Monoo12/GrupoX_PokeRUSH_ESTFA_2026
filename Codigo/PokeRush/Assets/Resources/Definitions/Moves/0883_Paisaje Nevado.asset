@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: snowscape
   type: 6
   attackType: 2
+  descripcion: The user summons a snowstorm lasting five turns. This boosts the Defense
+    stats of Ice types.
   power: 0
   accuracy: 0
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 4
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

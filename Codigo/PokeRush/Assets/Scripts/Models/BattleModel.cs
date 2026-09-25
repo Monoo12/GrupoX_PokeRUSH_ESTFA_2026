@@ -36,6 +36,11 @@ public class BattleModel
 
     public SideState SideOf(bool isPlayer) => isPlayer ? PlayerSide : EnemySide;
 
+    // Las mejoras de la ruleta de Martin que valen para ESTA batalla. Se
+    // aplican a cada Poken del jugador que entra al campo: los stages viven en
+    // BattlePokenState y se pierden al cambiar (ver MejorasDeBatalla).
+    public List<MejoraPendiente> MejorasDelJugador { get; } = new List<MejoraPendiente>();
+
     public void SetWeather(WeatherKind weather, int turns)
     {
         CurrentWeather = weather;
@@ -80,6 +85,7 @@ public class BattleModel
 
         ActivePlayerIndex = index;
         PlayerState = new BattlePokenState(ActivePlayerPoken, isPlayerSide: true);
+        MejorasDeBatalla.Aplicar(PlayerState, MejorasDelJugador);
         PlayerParticipants.Add(ActivePlayerPoken);
         return true;
     }

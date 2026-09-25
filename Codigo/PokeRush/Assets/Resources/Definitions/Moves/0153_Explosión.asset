@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: explosion
   type: 1
   attackType: 0
+  descripcion: "El atacante causa una grand\xEDsima explosi\xF3n y hiere  a todos
+    a su alrededor. El usuario se debilita de  inmediato."
   power: 250
   accuracy: 100
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

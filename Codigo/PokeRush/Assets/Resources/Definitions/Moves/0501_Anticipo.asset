@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: quick-guard
   type: 7
   attackType: 2
+  descripcion: "Se protege a s\xED mismo y a sus aliados de movimientos con prioridad."
   power: 0
   accuracy: 0
   maxPP: 15
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

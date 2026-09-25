@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: brick-break
   type: 7
   attackType: 0
+  descripcion: "Potente ataque que tambi\xE9n es capaz de destruir  barreras como
+    Pantalla de Luz y Reflejo."
   power: 75
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

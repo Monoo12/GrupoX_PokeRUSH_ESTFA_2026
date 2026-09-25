@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: sparkling-aria
   type: 3
   attackType: 1
+  descripcion: "Libera burbujas al cantar. Este movimiento cura las quemaduras de
+    los Pok\xE9mon que reciban da\xF1o."
   power: 90
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

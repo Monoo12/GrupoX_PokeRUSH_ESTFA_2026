@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: smack-down
   type: 13
   attackType: 0
+  descripcion: "Ataca lanzando una piedra o un proyectil. Si el objetivo est\xE1
+    en el aire, lo estrella contra el suelo."
   power: 50
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

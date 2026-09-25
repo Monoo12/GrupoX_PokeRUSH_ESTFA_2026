@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: rock-blast
   type: 13
   attackType: 0
+  descripcion: Lanza pedruscos al objetivo de dos a cinco veces  consecutivas.
   power: 25
   accuracy: 90
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

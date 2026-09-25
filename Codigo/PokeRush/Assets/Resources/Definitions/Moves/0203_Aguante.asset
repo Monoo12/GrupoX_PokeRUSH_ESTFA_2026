@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: endure
   type: 1
   attackType: 2
+  descripcion: Resiste cualquier ataque y deja al menos 1 PS.  Puede fallar si se
+    usa repetidamente.
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

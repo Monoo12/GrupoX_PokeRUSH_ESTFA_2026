@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: horn-leech
   type: 4
   attackType: 0
+  descripcion: "Un golpe que drena energ\xEDa. El Pok\xE9mon recupera la mitad de
+    los PS arrebatados al objetivo."
   power: 75
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 6b5f151e60f87e249812d00ec6af7ae8, type: 2}

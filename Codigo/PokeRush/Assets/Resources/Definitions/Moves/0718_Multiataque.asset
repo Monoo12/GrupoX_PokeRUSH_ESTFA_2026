@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: multi-attack
   type: 1
   attackType: 0
+  descripcion: "El Pok\xE9mon se rodea de una potente energ\xEDa con la que golpea
+    al rival. El tipo del movimiento depende del disco que lleva el usuario."
   power: 120
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ae195b810d9508e4ab5f805da6d31607, type: 2}

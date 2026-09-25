@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: vice-grip
   type: 1
   attackType: 0
+  descripcion: Atrapa y atenaza al objetivo.
   power: 55
   accuracy: 100
   maxPP: 30
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: a2bf082f2239b5e409047ad25c628cfa, type: 2}

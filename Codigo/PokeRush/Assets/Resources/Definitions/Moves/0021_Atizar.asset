@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: slam
   type: 1
   attackType: 0
+  descripcion: "Golpea con la cola o con lianas, por ejemplo, para causar da\xF1o
+    al objetivo."
   power: 80
   accuracy: 75
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

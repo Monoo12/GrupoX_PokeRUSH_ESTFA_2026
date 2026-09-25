@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: nasty-plot
   type: 16
   attackType: 2
+  descripcion: Estimula su cerebro pensando en cosas malas. Aumenta mucho el Ataque
+    Especial.
   power: 0
   accuracy: 0
   maxPP: 20
@@ -41,4 +43,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 2a9a6b3d78ad6fa4fb2914b74be0fe83, type: 2}

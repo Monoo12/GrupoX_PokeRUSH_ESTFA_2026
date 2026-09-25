@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: psyblade
   type: 11
   attackType: 0
+  descripcion: The user rends the target with an ethereal blade. This move's power
+    is boosted by 50 percent if the user is on Electric Terrain.
   power: 80
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ee5db501ec5209c46838acfa583c070e, type: 2}

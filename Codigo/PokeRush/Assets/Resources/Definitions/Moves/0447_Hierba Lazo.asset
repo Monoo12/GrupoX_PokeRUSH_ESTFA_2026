@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: grass-knot
   type: 4
   attackType: 1
+  descripcion: "Enreda al objetivo con hierba y lo derriba. Cuanto m\xE1s pesado
+    es el objetivo, m\xE1s da\xF1o inflige. "
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 5de9f8221dda6684fb23192bd2ec43bd, type: 2}

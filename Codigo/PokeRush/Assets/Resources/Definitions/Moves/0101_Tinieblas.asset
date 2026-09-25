@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: night-shade
   type: 14
   attackType: 1
+  descripcion: Produce un espejismo ante el objetivo, que pierde tantos PS como nivel
+    tenga el usuario.
   power: 0
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

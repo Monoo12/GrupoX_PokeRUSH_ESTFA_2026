@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: tailwind
   type: 10
   attackType: 2
+  descripcion: "Crea un fuerte remolino que aumenta la Velocidad de los Pok\xE9mon
+    de tu equipo durante cuatro turnos."
   power: 0
   accuracy: 0
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e2e1bd090a7c00947971e63ea6072545, type: 2}

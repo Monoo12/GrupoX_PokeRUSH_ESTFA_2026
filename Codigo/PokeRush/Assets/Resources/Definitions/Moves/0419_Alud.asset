@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: avalanche
   type: 6
   attackType: 0
+  descripcion: "Este ataque inflige el doble de da\xF1o a un objetivo que haya golpeado
+    al usuario en ese mismo turno."
   power: 60
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

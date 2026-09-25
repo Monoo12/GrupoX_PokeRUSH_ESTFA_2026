@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: moongeist-beam
   type: 14
   attackType: 1
+  descripcion: Ataca con un rayo misterioso que ignora la habilidad del objetivo.
   power: 100
   accuracy: 100
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: f9779f71fe2e2ec4cadc66c613012e9e, type: 2}

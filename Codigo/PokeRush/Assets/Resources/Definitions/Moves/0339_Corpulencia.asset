@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: bulk-up
   type: 7
   attackType: 2
+  descripcion: Robustece el cuerpo para subir el Ataque y la Defensa.
   power: 0
   accuracy: 0
   maxPP: 20
@@ -44,4 +45,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ab92056829b1bfb47a504fe56feb92b4, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: gastro-acid
   type: 8
   attackType: 2
+  descripcion: El usuario arroja sus jugos biliares al objetivo, lo que anula el
+    efecto de la habilidad en uso.
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 9e01c55aba74a624e8b015ce58355da3, type: 2}

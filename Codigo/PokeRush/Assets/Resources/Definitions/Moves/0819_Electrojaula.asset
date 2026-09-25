@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: thunder-cage
   type: 5
   attackType: 1
+  descripcion: El objetivo queda atrapado en una jaula electrificada que permanece
+    en el terreno de cuatro a cinco turnos.
   power: 80
   accuracy: 90
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

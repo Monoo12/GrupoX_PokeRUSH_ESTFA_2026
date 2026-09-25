@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: vacuum-wave
   type: 7
   attackType: 1
+  descripcion: "Gira los pu\xF1os y libera una onda de vac\xEDo contra el objetivo.
+    Este movimiento tiene prioridad alta."
   power: 40
   accuracy: 100
   maxPP: 30
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

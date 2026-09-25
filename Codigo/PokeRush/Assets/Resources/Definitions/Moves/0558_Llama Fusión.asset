@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fusion-flare
   type: 2
   attackType: 1
+  descripcion: "Ataca con una llamarada gigantesca. Aumenta su  potencia si es influenciada
+    por una gran energ\xEDa el\xE9ctrica."
   power: 100
   accuracy: 100
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: kowtow-cleave
   type: 16
   attackType: 0
+  descripcion: The user slashes at the target after kowtowing to make the target
+    let down its guard. This attack never misses.
   power: 85
   accuracy: 0
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

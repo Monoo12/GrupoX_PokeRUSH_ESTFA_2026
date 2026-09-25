@@ -101,5 +101,17 @@ public enum StoryFlag
     // flag como numero, asi que meter uno en el medio le cambia el valor a
     // todos los de abajo.
     Casino_JefeFinalVencido,
-    Casino_Completado
+    Casino_Completado,
+
+    // Quarcho Cueva, el lobby entre niveles. Al final por lo mismo que las
+    // tandas de arriba: las escenas guardan el flag como numero.
+    //
+    // Tixi ya conto su parte del lore: desde ahi la salida de la cueva abre.
+    Lobby_TixiPresentado,
+    // Tacconi en la cueva: tres chances para ganarle el Mew, una por mano
+    // perdida (el empate no gasta), y el Mew ya ganado.
+    Lobby_TacconiChance1,
+    Lobby_TacconiChance2,
+    Lobby_TacconiChance3,
+    Lobby_TacconiMewGanado
 }

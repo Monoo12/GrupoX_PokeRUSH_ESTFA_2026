@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: howl
   type: 1
   attackType: 2
+  descripcion: "Aullido que sube el \xE1nimo y aumenta el Ataque del equipo. "
   power: 0
   accuracy: 0
   maxPP: 40
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d64517782d0f8dd4f923012f04197d99, type: 2}

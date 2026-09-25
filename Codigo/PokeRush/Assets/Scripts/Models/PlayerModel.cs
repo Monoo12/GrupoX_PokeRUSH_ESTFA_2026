@@ -108,4 +108,33 @@ public class PlayerModel
     {
         Money -= amount;
     }
+
+    // ---------- mejoras para la proxima batalla ----------
+    //
+    // Las da la ruleta de mejoras de Martin en la Quarcho Cueva. Esperan aca
+    // hasta la PROXIMA batalla, que las toma todas y las gasta (ver
+    // BattleController.BeginBattle). Se guardan con la partida: ganar una
+    // mejora, guardar y salir no la pierde.
+    public List<MejoraPendiente> MejorasPendientes { get; } = new List<MejoraPendiente>();
+
+    public bool TieneMejoras => MejorasPendientes.Count > 0;
+
+    public void AgregarMejora(MejoraDeBatalla mejora, int etapas)
+        => MejorasDeBatalla.Sumar(MejorasPendientes, mejora, etapas);
+
+    // Devuelve las mejoras y las saca: valen para UNA batalla.
+    public List<MejoraPendiente> TomarMejoras()
+    {
+        var tomadas = new List<MejoraPendiente>(MejorasPendientes);
+        MejorasPendientes.Clear();
+        return tomadas;
+    }
+
+    // Solo para la carga del guardado.
+    public void RestaurarMejoras(IEnumerable<MejoraPendiente> mejoras)
+    {
+        MejorasPendientes.Clear();
+        if (mejoras == null) return;
+        foreach (MejoraPendiente m in mejoras) AgregarMejora(m.Mejora, m.Etapas);
+    }
 }

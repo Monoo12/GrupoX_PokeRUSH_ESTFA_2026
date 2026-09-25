@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: aeroblast
   type: 10
   attackType: 1
+  descripcion: "Lanza un chorro de aire que suele asestar un golpe cr\xEDtico."
   power: 100
   accuracy: 95
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: c1e7b6c9ec5e7414683850401f014892, type: 2}

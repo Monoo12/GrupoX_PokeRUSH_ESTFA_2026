@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: grudge
   type: 14
   attackType: 2
+  descripcion: "Si el usuario se debilita al recibir un ataque, todos los PP de este
+    \xFAltimo ataque ser\xE1n eliminados."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: b2c475147b51f564896e9b57a8840a22, type: 2}

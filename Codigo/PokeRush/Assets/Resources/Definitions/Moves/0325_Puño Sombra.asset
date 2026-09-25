@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: shadow-punch
   type: 14
   attackType: 0
+  descripcion: "Pu\xF1etazo ineludible procedente de las sombras. "
   power: 60
   accuracy: 0
   maxPP: 20
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 3280d9f50faac9042a846e0592dac55e, type: 2}

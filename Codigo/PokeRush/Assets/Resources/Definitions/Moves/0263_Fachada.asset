@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: facade
   type: 1
   attackType: 0
+  descripcion: "Si el usuario est\xE1 quemado, paralizado o envenenado, ataca con
+    el doble de potencia."
   power: 70
   accuracy: 100
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

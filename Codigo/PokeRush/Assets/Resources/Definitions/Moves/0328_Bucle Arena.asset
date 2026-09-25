@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: sand-tomb
   type: 9
   attackType: 0
+  descripcion: Enreda al objetivo en un remolino de arena de cuatro a cinco turnos.
   power: 35
   accuracy: 85
   maxPP: 15
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7bf0d0eaa80fc254eb042d6eeaf315da, type: 2}

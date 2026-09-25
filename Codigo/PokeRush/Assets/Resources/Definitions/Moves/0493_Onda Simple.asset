@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: simple-beam
   type: 1
   attackType: 2
+  descripcion: "Lanza una onda ps\xEDquica que hace que la habilidad del objetivo
+    pase a ser Simple."
   power: 0
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: smokescreen
   type: 1
   attackType: 2
+  descripcion: "Baja la Precisi\xF3n del objetivo con una nube de humo  o tinta."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 78affd771ba7bd8478c4ae0c27c1de85, type: 2}

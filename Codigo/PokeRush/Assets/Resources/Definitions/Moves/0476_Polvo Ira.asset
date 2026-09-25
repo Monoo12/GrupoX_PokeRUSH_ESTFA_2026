@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: rage-powder
   type: 12
   attackType: 2
+  descripcion: "Usa un polvo que irrita y centra en el usuario la  atenci\xF3n y
+    los ataques de los rivales."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 969dc89b1bc88d3428275403b2c4417f, type: 2}

@@ -114,6 +114,9 @@ public static class CasinoNpcBuilder
     // Ganar MAS que esto al color (rojo o negro) en un giro abre la ruleta de premios.
     private const int UmbralRuletaPorColor = 200;
 
+    // Lo que cobra el empresario del piso 3 por cada tiro de su ruleta.
+    private const int PrecioRuletaDelEmpresario = 200;
+
     // El Pokemon de Tacconi, que pide el ascensor del piso 3.
     private const string EspecieDeTacconi = "0789_Cosmog";
 
@@ -273,6 +276,7 @@ public static class CasinoNpcBuilder
         CasinoPrizeTable ruletaGuardia = TablaDelGuardia();
         CasinoPrizeTable ruletaGuardiaVip = TablaDelGuardiaVip();
         CasinoPrizeTable ruletaMesa = TablaDeLaMesa();
+        CasinoPrizeTable ruletaEmpresario = TablaDelEmpresario();
 
         DialogueDefinition anciano = Dialogo("Historia_Piso1_Anciano", "ANCIANO",
             "Llevo cuarenta años viniendo a este casino.",
@@ -483,8 +487,10 @@ public static class CasinoNpcBuilder
                 Personaje(raiz, "EnfermeraCasino", new Vector2(-13.5f, 19.5f), "enfermera", Abajo)
                     .AddComponent<CasinoNurseInteractable>();
 
-                ConfigurarQueHabla(Personaje(raiz, "EmpresarioHistoria", new Vector2(11.5f, 14.5f), "empresario", Abajo)
-                    .AddComponent<NpcQueHabla>(), empresario);
+                // El empresario vende tiros de su ruleta (siempre Pokemon); si le
+                // dicen que no, cuenta lo suyo de historia.
+                ConfigurarRuletaPaga(Personaje(raiz, "EmpresarioHistoria", new Vector2(11.5f, 14.5f), "empresario", Abajo)
+                    .AddComponent<CasinoRuletaPagaNpc>(), ruletaEmpresario, PrecioRuletaDelEmpresario, empresario);
 
                 // ---- Tacconi y su Cosmog shiny ----
                 // Ya tiene sus sprites propios (los paso el equipo el 18-sep).
@@ -970,6 +976,17 @@ public static class CasinoNpcBuilder
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 
+    // Ojo: volver a armar el piso vuelve el precio a PrecioRuletaDelEmpresario.
+    private static void ConfigurarRuletaPaga(CasinoRuletaPagaNpc npc, CasinoPrizeTable ruleta, int precio,
+                                             DialogueDefinition charla)
+    {
+        var so = new SerializedObject(npc);
+        so.FindProperty("ruleta").objectReferenceValue = ruleta;
+        so.FindProperty("precio").intValue = precio;
+        so.FindProperty("charla").objectReferenceValue = charla;
+        so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
     public static void ConfigurarQueHabla(NpcQueHabla npc, DialogueDefinition dialogo)
     {
         var so = new SerializedObject(npc);
@@ -1163,6 +1180,34 @@ public static class CasinoNpcBuilder
             PremioPokemon("0443_Gible", 22, 12, "icon_greatball", 800),
             PremioPokemon("0231_Phanpy", 21, 15, "icon_pokeball", 800),
             PremioPokemon("0371_Bagon", 23, 4, "icon_masterball", 800)
+        };
+        AssetDatabase.CreateAsset(tabla, path);
+        return tabla;
+    }
+
+    // La ruleta que vende el empresario del piso 3 (PrecioRuletaDelEmpresario
+    // el tiro): siempre un Pokemon, un escalon arriba de la del guardia VIP.
+    //   Poke Ball  (comun):    4 x 15% = 60%
+    //   Great Ball (bueno):    2 x 12% = 24%
+    //   Ultra Ball (raro):     1 x 12% = 12%
+    //   Master Ball (muy raro): 1 x 4% =  4%
+    private static CasinoPrizeTable TablaDelEmpresario()
+    {
+        string path = $"{DefinitionFolder}/RuletaDelEmpresario.asset";
+        var tabla = AssetDatabase.LoadAssetAtPath<CasinoPrizeTable>(path);
+        if (tabla != null) return tabla;
+
+        tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
+        tabla.premios = new[]
+        {
+            PremioPokemon("0092_Gastly", 24, 15, "icon_pokeball", 200),
+            PremioPokemon("0280_Ralts", 25, 12, "icon_greatball", 200),
+            PremioPokemon("0304_Aron", 24, 15, "icon_pokeball", 200),
+            PremioPokemon("0215_Sneasel", 25, 12, "icon_ultraball", 200),
+            PremioPokemon("0302_Sableye", 24, 15, "icon_pokeball", 200),
+            PremioPokemon("0374_Beldum", 25, 12, "icon_greatball", 200),
+            PremioPokemon("0543_Venipede", 24, 15, "icon_pokeball", 200),
+            PremioPokemon("0633_Deino", 26, 4, "icon_masterball", 200)
         };
         AssetDatabase.CreateAsset(tabla, path);
         return tabla;

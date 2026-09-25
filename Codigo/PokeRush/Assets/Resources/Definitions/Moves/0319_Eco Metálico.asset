@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: metal-sound
   type: 17
   attackType: 2
+  descripcion: "Horrible chirrido met\xE1lico que baja mucho la Defensa Especial
+    del objetivo."
   power: 0
   accuracy: 85
   maxPP: 40
@@ -41,4 +43,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7bcb5a680b7cd994fbacd4956be19aa4, type: 2}

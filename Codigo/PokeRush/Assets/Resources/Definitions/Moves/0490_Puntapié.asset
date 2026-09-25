@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: low-sweep
   type: 7
   attackType: 0
+  descripcion: "Ataque r\xE1pido dirigido a los pies del objetivo que le hace perder
+    Velocidad."
   power: 65
   accuracy: 100
   maxPP: 20
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

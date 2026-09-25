@@ -139,7 +139,7 @@ lo saltea nada.
 | 3 | Gángster | Pelea una vez (Houndour Nv18, Skorupi Nv19) | (-3.5, 16.5), al costado de la mesa de Tacconi, mirando a la alfombra |
 | 3 | Crupiera | Pelea una vez (Porygon Nv18, Lampent Nv19) | (5.5, 16.5), en su descanso, apoyada en la barra |
 | 3 | Enfermera | Cura | (-13.5, 19.5), arriba a la izquierda, con el PC al lado |
-| 3 | Empresario | Historia | (11.5, 14.5), sentado en el restaurante |
+| 3 | **Empresario** | Vende tiros de su ruleta de premios (200 c/u); si le decís que no, cuenta su historia | (11.5, 14.5), sentado en el restaurante |
 | 3 | Jubilado | Historia | (5.5, 9.5), sentado en el restaurante |
 | 3 | 4 jugadores (`JugadorBlackjack1..4`) | Juegan al blackjack: parados debajo de los banquitos (el lado curvo de la mesa), mirando a la mesa. Del lado recto va el croupier. Uno juega en la mesa de Tacconi | ver abajo |
 
@@ -341,6 +341,28 @@ tres formas:
 
 ---
 
+## Piso 3: la ruleta del empresario
+
+El empresario (`CasinoRuletaPagaNpc`) cobra **200 monedas por tiro** y gira una vez la
+ruleta de premios. Se puede tirar todas las veces que alcance la plata. Si le decís que no,
+dice su diálogo de historia (`charla` = `Historia_Piso3_Empresario`), así que ese texto se
+sigue reescribiendo en el asset como el de los demás NPCs.
+
+- **Precio:** `precio` del componente en la escena (o `PrecioRuletaDelEmpresario` en el
+  builder; ojo, volver a armar los pisos 2 y 3 lo vuelve a ese valor).
+- **Cobro:** `CasinoRuletaPagaNpc.Cobrar`, probado en `TestRuletaDelEmpresario`.
+
+### Premios (`RuletaDelEmpresario.asset`): siempre un Pokémon
+
+| Rareza | Ícono | Pokémon | Peso |
+|---|---|---|---|
+| Común | Poké Ball | Gastly, Aron, Sableye, Venipede (Nv24) | 15 c/u (60%) |
+| Bueno | Great Ball | Ralts, Beldum (Nv25) | 12 c/u (24%) |
+| Raro | Ultra Ball | Sneasel (Nv25) | 12% |
+| Muy raro | Master Ball | Deino (Nv26) | 4% |
+
+---
+
 ## Piso 2: la ruleta de premios por ganarle al color
 
 En **las seis mesas** de ruleta, si en un giro le ganás **más de 200 en limpio** apostando a rojo
@@ -416,6 +438,7 @@ liberados de la torre y para el de Tacconi.
 - **Umbral de la ruleta por color:** `umbralRuletaPorColor` en cada mesa de ruleta del piso 2
   (o `UmbralRuletaPorColor` en el builder, que lo pone en las seis).
 - **Precio de la Tarjeta VIP:** `precio` del revendedor (o `PrecioTarjeta` en el builder).
+- **Precio del tiro del empresario:** `precio` de su `CasinoRuletaPagaNpc` (arranca en 200).
 - **Textos de historia:** `Resources/Definitions/Casino/Dialogos/Historia_*.asset`. Son
   **provisorios**: se reescriben en el asset sin abrir la escena. `NpcQueHabla` también
   acepta un `dialogoRepetido` para las veces siguientes.

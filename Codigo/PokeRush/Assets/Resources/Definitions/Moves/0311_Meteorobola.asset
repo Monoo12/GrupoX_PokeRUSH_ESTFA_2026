@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: weather-ball
   type: 1
   attackType: 1
+  descripcion: "El tipo y fuerza del ataque var\xEDan seg\xFAn el tiempo que haga."
   power: 50
   accuracy: 100
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

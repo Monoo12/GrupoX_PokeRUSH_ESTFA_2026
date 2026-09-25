@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: photon-geyser
   type: 11
   attackType: 1
+  descripcion: "El usuario ataca con una gran columna de luz. Compara sus valores
+    de Ataque y Ataque Especial para infligir da\xF1o con el m\xE1s alto de los dos."
   power: 100
   accuracy: 100
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: beat-up
   type: 16
   attackType: 0
+  descripcion: "Ataque de todo el equipo Pok\xE9mon. Cuantos m\xE1s haya, m\xE1s
+    veces se atacar\xE1."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

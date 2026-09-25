@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: seed-bomb
   type: 4
   attackType: 0
+  descripcion: Lanza al objetivo una descarga de semillas explosivas desde arriba.
   power: 80
   accuracy: 100
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: bc152d5bb35b889419517b264a7d6d9c, type: 2}

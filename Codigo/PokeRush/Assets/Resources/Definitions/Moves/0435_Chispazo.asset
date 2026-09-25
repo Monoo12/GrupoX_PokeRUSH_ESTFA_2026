@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: discharge
   type: 5
   attackType: 1
+  descripcion: "Una deslumbradora onda el\xE9ctrica afecta a los Pok\xE9mon que hay
+    combatiendo alrededor. Puede paralizar."
   power: 80
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e4a5f3070adc19a4c83517959016d9cd, type: 2}

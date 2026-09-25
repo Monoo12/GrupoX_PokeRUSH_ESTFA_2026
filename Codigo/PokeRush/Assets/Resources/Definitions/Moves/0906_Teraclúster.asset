@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: tera-starstorm
   type: 1
   attackType: 1
+  descripcion: "With the power of its crystals, the user bombards and eliminates
+    the target. When used by Terapagos in its Stellar Form, this move damages all
+    opposing Pok\xE9mon."
   power: 120
   accuracy: 100
   maxPP: 5
@@ -38,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7354ba5356349eb449a3ed66466bc920, type: 2}

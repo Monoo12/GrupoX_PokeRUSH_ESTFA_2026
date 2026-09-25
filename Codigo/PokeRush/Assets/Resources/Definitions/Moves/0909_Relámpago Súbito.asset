@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: thunderclap
   type: 5
   attackType: 1
+  descripcion: This move enables the user to attack first with a jolt of electricity.
+    This move fails if the target is not readying an attack.
   power: 70
   accuracy: 100
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

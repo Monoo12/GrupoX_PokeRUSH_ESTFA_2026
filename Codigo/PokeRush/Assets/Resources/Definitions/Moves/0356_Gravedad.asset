@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: gravity
   type: 11
   attackType: 2
+  descripcion: "Durante cinco turnos, se anulan los movimientos que alzan el vuelo
+    y los Pok\xE9mon de tipo Volador o que levitan son vulnerables a movimientos
+    de tipo Tierra."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -39,4 +42,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

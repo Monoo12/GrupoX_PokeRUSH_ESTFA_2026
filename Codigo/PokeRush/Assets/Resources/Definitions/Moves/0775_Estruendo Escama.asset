@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: clangorous-soul
   type: 15
   attackType: 2
+  descripcion: "Utiliza parte de los PS propios para subir sus caracter\xEDsticas."
   power: 0
   accuracy: 100
   maxPP: 5
@@ -53,4 +54,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

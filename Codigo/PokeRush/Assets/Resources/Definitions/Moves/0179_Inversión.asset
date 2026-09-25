@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: reversal
   type: 7
   attackType: 0
+  descripcion: "Ataque desesperado que causa m\xE1s da\xF1o cuantos menos PS tenga
+    el usuario."
   power: 0
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

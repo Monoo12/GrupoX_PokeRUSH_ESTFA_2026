@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: leer
   type: 1
   attackType: 2
+  descripcion: Intimida a los rivales para bajar su Defensa.
   power: 0
   accuracy: 100
   maxPP: 30
@@ -41,4 +42,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 318e507825d7a06489df8b1cb5049d3f, type: 2}

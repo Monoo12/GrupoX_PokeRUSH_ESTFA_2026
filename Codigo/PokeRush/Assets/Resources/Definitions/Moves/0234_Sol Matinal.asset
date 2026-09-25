@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: morning-sun
   type: 1
   attackType: 2
+  descripcion: "Restaura PS del usuario. La cantidad var\xEDa seg\xFAn  el tiempo
+    que haga."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

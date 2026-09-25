@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: rising-voltage
   type: 5
   attackType: 1
+  descripcion: "Ataca con una descarga el\xE9ctrica que surge del terreno de combate.
+    La potencia del movimiento se duplica si el rival se ve afectado por un campo
+    el\xE9ctrico."
   power: 70
   accuracy: 100
   maxPP: 20
@@ -38,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: icicle-crash
   type: 6
   attackType: 0
+  descripcion: "Lanza grandes car\xE1mbanos. Puede amedrentar al objetivo."
   power: 85
   accuracy: 90
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

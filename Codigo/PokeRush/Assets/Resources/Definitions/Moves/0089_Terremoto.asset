@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: earthquake
   type: 9
   attackType: 0
+  descripcion: "Un terremoto que afecta a todos los Pok\xE9mon que est\xE9n a su
+    alrededor."
   power: 100
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

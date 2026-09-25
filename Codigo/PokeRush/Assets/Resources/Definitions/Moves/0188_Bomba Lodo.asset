@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: sludge-bomb
   type: 8
   attackType: 1
+  descripcion: Arroja residuos al objetivo. Puede llegar a envenenar.
   power: 90
   accuracy: 100
   maxPP: 10
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: e876e712e0184464c8e0f6b9d9849c9b, type: 2}

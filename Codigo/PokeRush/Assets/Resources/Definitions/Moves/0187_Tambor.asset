@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: belly-drum
   type: 1
   attackType: 2
+  descripcion: "Reduce la mitad de los PS m\xE1ximos para mejorar al m\xE1ximo el
+    Ataque."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

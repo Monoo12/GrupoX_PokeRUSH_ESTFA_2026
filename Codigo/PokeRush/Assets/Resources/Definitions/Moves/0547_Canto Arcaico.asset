@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: relic-song
   type: 1
   attackType: 1
+  descripcion: Ataca conmoviendo a los rivales de alrededor con un antiguo canto.
+    Puede dormirlos.
   power: 75
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: crush-claw
   type: 1
   attackType: 0
+  descripcion: Hace trizas al objetivo con garras afiladas y puede bajar su Defensa.
   power: 75
   accuracy: 95
   maxPP: 10
@@ -42,4 +43,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

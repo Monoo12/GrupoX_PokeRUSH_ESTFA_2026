@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: venoshock
   type: 8
   attackType: 1
+  descripcion: "Cubre al objetivo con un l\xEDquido venenoso. El da\xF1o ser\xE1
+    doble si este ya est\xE1 envenenado."
   power: 65
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: a6bb6dac925401c4a8f1fb2848a3e727, type: 2}

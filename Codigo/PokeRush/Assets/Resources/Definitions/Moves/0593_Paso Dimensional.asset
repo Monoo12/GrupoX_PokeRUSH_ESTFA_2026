@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: hyperspace-hole
   type: 11
   attackType: 1
+  descripcion: "El usuario aparece junto al rival usando un agujero dimensional y
+    le asesta un golpe que movimientos como Protecci\xF3n o Detecci\xF3n no pueden
+    evitar."
   power: 80
   accuracy: 0
   maxPP: 5
@@ -38,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 3685ecb738f12d743b7df4f79847caca, type: 2}

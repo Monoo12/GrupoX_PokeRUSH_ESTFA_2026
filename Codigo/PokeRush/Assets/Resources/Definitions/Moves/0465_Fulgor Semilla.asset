@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: seed-flare
   type: 4
   attackType: 1
+  descripcion: Una onda de choque se libera del cuerpo. Puede bajar mucho la Defensa
+    Especial del objetivo.
   power: 120
   accuracy: 85
   maxPP: 5
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: air-slash
   type: 10
   attackType: 1
+  descripcion: "Ataca con un viento afilado que incluso corta el aire. Tambi\xE9n
+    puede amedrentar al objetivo."
   power: 75
   accuracy: 95
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1cb8e5087398bb146ac7ffbf9394cc73, type: 2}

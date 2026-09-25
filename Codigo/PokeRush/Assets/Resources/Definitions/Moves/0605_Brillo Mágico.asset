@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dazzling-gleam
   type: 18
   attackType: 1
+  descripcion: "Inflige da\xF1o a los oponentes con una potente luz."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

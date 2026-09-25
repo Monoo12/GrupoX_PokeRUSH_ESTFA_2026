@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: spirit-break
   type: 18
   attackType: 0
+  descripcion: "El usuario ataca al objetivo con tal \xEDmpetu que acaba minando
+    su moral y, en consecuencia, reduce su Ataque Especial."
   power: 75
   accuracy: 100
   maxPP: 15
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

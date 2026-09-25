@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: follow-me
   type: 1
   attackType: 2
+  descripcion: "Llama la atenci\xF3n para concentrar todos los ataques de todos los
+    del equipo rival hacia s\xED mismo."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 44e82884c6bbea2429d92bbf84cc27c6, type: 2}

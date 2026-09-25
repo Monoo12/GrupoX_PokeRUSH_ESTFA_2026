@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: bolt-strike
   type: 5
   attackType: 0
+  descripcion: "Ataca envolvi\xE9ndose de una gran carga el\xE9ctrica y  embistiendo
+    al objetivo con ella. Puede paralizar."
   power: 130
   accuracy: 85
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

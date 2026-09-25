@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fake-out
   type: 1
   attackType: 0
+  descripcion: Amedrenta al objetivo con este movimiento de prioridad alta. Solo
+    sirve en el primer turno.
   power: 40
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

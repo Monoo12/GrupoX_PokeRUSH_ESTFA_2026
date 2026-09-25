@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: hyper-voice
   type: 1
   attackType: 1
+  descripcion: "Grito desgarrador que inflige da\xF1o al objetivo. "
   power: 90
   accuracy: 100
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

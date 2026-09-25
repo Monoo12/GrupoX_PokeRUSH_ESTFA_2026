@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fiery-dance
   type: 2
   attackType: 1
+  descripcion: "Envuelve en llamas y da\xF1a al objetivo. Puede aumentar el Ataque
+    Especial de quien lo usa."
   power: 80
   accuracy: 100
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

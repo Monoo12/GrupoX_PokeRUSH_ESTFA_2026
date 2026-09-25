@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: glare
   type: 1
   attackType: 2
+  descripcion: Intimida y asusta al objetivo con la mirada para dejarlo paralizado.
   power: 0
   accuracy: 100
   maxPP: 30
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7ebb4c143d16faf4a92a51acd317b90f, type: 2}

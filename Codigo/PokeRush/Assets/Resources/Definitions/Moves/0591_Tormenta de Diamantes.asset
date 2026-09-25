@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: diamond-storm
   type: 13
   attackType: 0
+  descripcion: "Desata un devastador vendaval de diamantes para  da\xF1ar a los oponentes.
+    Puede aumentar mucho la Defensa del usuario."
   power: 100
   accuracy: 95
   maxPP: 5
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

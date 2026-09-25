@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: focus-energy
   type: 1
   attackType: 2
+  descripcion: "Concentra energ\xEDa para aumentar las posibilidades de asestar un
+    golpe cr\xEDtico."
   power: 0
   accuracy: 0
   maxPP: 30
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 1fa7658fdc4b03b48b7c331149a073a3, type: 2}

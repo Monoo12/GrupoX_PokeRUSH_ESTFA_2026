@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: misty-terrain
   type: 18
   attackType: 2
+  descripcion: "Durante cinco turnos, los Pok\xE9mon que est\xE1n en el suelo no
+    sufren problemas de estado y se reduce a la mitad el da\xF1o de los movimientos
+    de tipo Drag\xF3n."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -40,4 +43,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 11
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

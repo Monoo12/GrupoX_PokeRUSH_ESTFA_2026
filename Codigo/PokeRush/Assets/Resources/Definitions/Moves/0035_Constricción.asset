@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: wrap
   type: 1
   attackType: 0
+  descripcion: Oprime al objetivo de cuatro a cinco turnos con ramas o con su cuerpo.
   power: 15
   accuracy: 90
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

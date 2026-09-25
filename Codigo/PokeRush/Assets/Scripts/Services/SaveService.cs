@@ -27,7 +27,8 @@ public class SaveService
             // No existe: crear fila nueva
             playerRow = new PlayerRow { Id = playerId, Name = player.PlayerName,
                                        Gender = player.Genero.ToString(), Money = player.Money,
-                                       Debt = player.Debt };
+                                       Debt = player.Debt,
+                                       PendingBuffs = MejorasDeBatalla.Serializar(player.MejorasPendientes) };
             _db.Insert(playerRow);
         }
         else
@@ -37,6 +38,7 @@ public class SaveService
             playerRow.Gender = player.Genero.ToString();
             playerRow.Money = player.Money;
             playerRow.Debt = player.Debt;
+            playerRow.PendingBuffs = MejorasDeBatalla.Serializar(player.MejorasPendientes);
             _db.Update(playerRow);
         }
 
@@ -180,6 +182,7 @@ public class SaveService
         var player = new PlayerModel(playerRow.Name, genero);
         player.AddMoney(playerRow.Money);
         player.RestoreDebt(playerRow.Debt);
+        player.RestaurarMejoras(MejorasDeBatalla.Deserializar(playerRow.PendingBuffs));
 
         // --- Cargar equipo de Pokens ---
         // OrderBy(SlotIndex) asegura que el equipo se reconstruya en el mismo orden en que se guardo

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: rock-throw
   type: 13
   attackType: 0
+  descripcion: "Tira una peque\xF1a roca al objetivo."
   power: 50
   accuracy: 90
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

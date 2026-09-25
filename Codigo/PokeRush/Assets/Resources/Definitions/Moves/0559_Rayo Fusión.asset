@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fusion-bolt
   type: 5
   attackType: 0
+  descripcion: "Ataca con una enorme descarga el\xE9ctrica. Aumenta  su potencia
+    si es influenciada por una gigantesca  llamarada."
   power: 100
   accuracy: 100
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: b3590017fd750984790884f22b4263af, type: 2}

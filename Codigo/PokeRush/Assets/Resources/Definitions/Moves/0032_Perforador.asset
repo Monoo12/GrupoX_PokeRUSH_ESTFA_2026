@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: horn-drill
   type: 1
   attackType: 0
+  descripcion: Ataque con un cuerno giratorio que fulmina de un solo golpe al objetivo
+    si lo alcanza.
   power: 0
   accuracy: 30
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

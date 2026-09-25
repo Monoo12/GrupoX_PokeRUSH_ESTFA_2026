@@ -62,6 +62,28 @@ public static class CasinoDialogo
             resultado => respuesta?.Invoke(resultado is MessageBoxResult r && r.Confirmed));
     }
 
+    // Menu de varias opciones (los NPCs de la Quarcho Cueva). El callback
+    // recibe el indice elegido; Escape elige la ULTIMA, que por convencion es
+    // la de "nada".
+    //
+    // Sin DialogueController en la escena no hay forma de mostrar una lista (el
+    // MessageBox del sistema de menus es de dos opciones): se avisa y se
+    // resuelve como si hubiera elegido la ultima, asi nadie queda colgado.
+    public static void Elegir(DialogueController dialogo, string nombre, Sprite retrato,
+                              string pregunta, string[] opciones, System.Action<int> alElegir)
+    {
+        if (opciones == null || opciones.Length == 0) { alElegir?.Invoke(-1); return; }
+
+        if (dialogo != null)
+        {
+            dialogo.StartChoice(nombre, retrato, pregunta, opciones, alElegir);
+            return;
+        }
+
+        Debug.LogWarning($"[{nombre}] No hay DialogueController en la escena: no se puede mostrar el menu.");
+        alElegir?.Invoke(opciones.Length - 1);
+    }
+
     // La ruleta como premio de un combate: un solo giro y sin poder salir antes.
     // Al cerrarse guarda la partida, porque el premio ya se entrego.
     public static void AbrirRuletaDePremio(CasinoPrizeTable tabla, System.Action alCerrar = null)

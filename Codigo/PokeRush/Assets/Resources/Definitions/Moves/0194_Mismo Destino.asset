@@ -17,6 +17,9 @@ MonoBehaviour:
   englishName: destiny-bond
   type: 14
   attackType: 2
+  descripcion: "Si el usuario se debilita por un ataque rival antes de usar otro
+    movimiento, el Pok\xE9mon rival se debilitar\xE1 tambi\xE9n. Puede fallar si
+    se usa repetidamente."
   power: 0
   accuracy: 0
   maxPP: 5
@@ -39,4 +42,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

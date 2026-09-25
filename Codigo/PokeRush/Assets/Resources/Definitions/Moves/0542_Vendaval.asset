@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: hurricane
   type: 10
   attackType: 1
+  descripcion: Golpea al objetivo con un fuerte torbellino que envuelve al rival
+    y puede confundirlo.
   power: 110
   accuracy: 70
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

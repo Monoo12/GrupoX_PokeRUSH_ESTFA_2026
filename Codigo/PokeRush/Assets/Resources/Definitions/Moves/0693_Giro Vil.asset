@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: brutal-swing
   type: 16
   attackType: 0
+  descripcion: "Hace pivotar su cuerpo para causar da\xF1o a su alrededor."
   power: 60
   accuracy: 100
   maxPP: 20
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

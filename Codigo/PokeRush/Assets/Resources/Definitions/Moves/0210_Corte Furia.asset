@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fury-cutter
   type: 12
   attackType: 0
+  descripcion: "Ataque con garras o guada\xF1a que crece en intensidad si se usa
+    repetidas veces."
   power: 40
   accuracy: 95
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

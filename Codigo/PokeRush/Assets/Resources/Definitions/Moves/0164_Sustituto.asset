@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: substitute
   type: 1
   attackType: 2
+  descripcion: "Utiliza parte de los PS propios para crear un sustituto que act\xFAa
+    como se\xF1uelo."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -40,4 +42,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 80447146b92d51e4ea0fa18e24038c60, type: 2}

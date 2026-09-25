@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: air-cutter
   type: 10
   attackType: 1
+  descripcion: "Viento cortante que azota. Suele ser un golpe  cr\xEDtico."
   power: 60
   accuracy: 95
   maxPP: 25
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 0a7f756ba81956141b4754ed25464a61, type: 2}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: sunsteel-strike
   type: 17
   attackType: 0
+  descripcion: Ataca al objetivo con la potencia de un meteoro, ignorando su habilidad.
   power: 100
   accuracy: 100
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

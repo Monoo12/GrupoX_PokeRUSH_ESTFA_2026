@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: flatter
   type: 16
   attackType: 2
+  descripcion: "Halaga al objetivo y lo confunde, pero tambi\xE9n sube su Ataque
+    Especial."
   power: 0
   accuracy: 100
   maxPP: 15
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 80632b1c2bce9764a841929949f91839, type: 2}

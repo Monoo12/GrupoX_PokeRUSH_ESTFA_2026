@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: high-horsepower
   type: 9
   attackType: 0
+  descripcion: Asesta un golpe devastador usando todo su cuerpo.
   power: 95
   accuracy: 95
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

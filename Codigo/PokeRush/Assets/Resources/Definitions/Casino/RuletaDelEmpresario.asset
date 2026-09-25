@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6be7c5f4f0d4364dafe1703178aac54, type: 3}
+  m_Name: RuletaDelEmpresario
+  m_EditorClassIdentifier: Assembly-CSharp::CasinoPrizeTable
+  premios:
+  - prizeName: Gastly
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
+    amount: 1
+    probability: 15
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 8d957a971298af649af76aa768dd2958, type: 2}
+    pokenLevel: 24
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: Ralts
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 220baf3919fd9b848b1574420ae682a8, type: 3}
+    amount: 1
+    probability: 12
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: e04b4b94f27812f4bb979f191223d20e, type: 2}
+    pokenLevel: 25
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: Aron
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
+    amount: 1
+    probability: 15
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 6f9e93549f679a54a9f1da4fcac470a3, type: 2}
+    pokenLevel: 24
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: Sneasel
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: dad707ecaa2dd924995a8d4323c3d3d0, type: 3}
+    amount: 1
+    probability: 12
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: c14771cba571264409e12420a170e213, type: 2}
+    pokenLevel: 25
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: Sableye
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
+    amount: 1
+    probability: 15
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 4f8279fe7243a2f4a8f41ab02698e674, type: 2}
+    pokenLevel: 24
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: Beldum
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 220baf3919fd9b848b1574420ae682a8, type: 3}
+    amount: 1
+    probability: 12
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 23e2ea3357285db428e4c11eb9f86e50, type: 2}
+    pokenLevel: 25
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: Venipede
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: bc7a750fb3feafd4d91ec7a95e8ec50b, type: 3}
+    amount: 1
+    probability: 15
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: dfb26d618d386e5418d005c4769cce74, type: 2}
+    pokenLevel: 24
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  - prizeName: Deino
+    prizePlural: 
+    article: 
+    icon: {fileID: 21300000, guid: 84765820278006c428c3ffc54d91150c, type: 3}
+    amount: 1
+    probability: 4
+    item: {fileID: 0}
+    money: 0
+    poken: {fileID: 11400000, guid: 88d89b66b23182141a4ff20a27dcdfab, type: 2}
+    pokenLevel: 26
+    shiny: 0
+    moneyIfTeamFull: 200
+    specialItem: {fileID: 0}
+    moneyIfOwned: 300
+    efectoDeCombate: 0
+    customMessage: 
+  npcsQueLaPuedenDar: 

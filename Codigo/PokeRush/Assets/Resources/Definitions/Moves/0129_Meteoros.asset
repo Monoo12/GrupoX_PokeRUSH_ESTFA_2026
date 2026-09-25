@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: swift
   type: 1
   attackType: 1
+  descripcion: Lanza rayos en forma de estrella que no fallan nunca.
   power: 60
   accuracy: 0
   maxPP: 20
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 7cb0b3005be278049b4825004d21f2b2, type: 2}

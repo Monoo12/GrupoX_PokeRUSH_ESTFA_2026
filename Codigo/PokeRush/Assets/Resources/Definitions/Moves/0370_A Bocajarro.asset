@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: close-combat
   type: 7
   attackType: 0
+  descripcion: "Lucha abiertamente contra el objetivo sin protegerse. Tambi\xE9n
+    reduce la Defensa y la Defensa Especial del usuario."
   power: 120
   accuracy: 100
   maxPP: 5
@@ -45,4 +47,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Lobby_Tixi_Lore
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: TIXI
+  speakerPortrait: {fileID: 21300000, guid: 2b17330598b96a5459868a2f61a48db0, type: 3}
+  lines:
+  - "\xA1Por fin llegaste! Soy Tixi. Bienvenido a la Quarcho Cueva."
+  - "Desde ac\xE1 vamos a salir a cada misi\xF3n, y ac\xE1 vas a volver cada vez
+    que termines una."
+  - "Tu primera parada es el Data Center: N\xE9stor est\xE1 ah\xED adentro y hay
+    que salvarlo."
+  requiredFlag: 0
+  grantsFlag: 0

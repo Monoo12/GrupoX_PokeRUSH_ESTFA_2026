@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: tearful-look
   type: 1
   attackType: 2
+  descripcion: "Mira al objetivo con ojos llorosos para hacerle perder su esp\xEDritu
+    combativo y reduce su Ataque y Ataque Especial."
   power: 0
   accuracy: 0
   maxPP: 20
@@ -44,4 +46,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

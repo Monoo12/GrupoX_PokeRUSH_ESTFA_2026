@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: wonder-room
   type: 11
   attackType: 2
+  descripcion: "Crea una zona misteriosa donde se intercambian la Defensa y la Defensa
+    Especial de todos los Pok\xE9mon durante cinco turnos."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: core-enforcer
   type: 15
   attackType: 1
+  descripcion: "Inflige da\xF1o al rival, y si este ya ha hecho uso de alg\xFAn movimiento,
+    pierde su habilidad."
   power: 100
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 2f9b4387f2cb1ef49bb2689cfb3a03d4, type: 2}

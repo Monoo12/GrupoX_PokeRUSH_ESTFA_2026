@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dual-wingbeat
   type: 10
   attackType: 0
+  descripcion: "Ataca al adversario golpe\xE1ndolo dos veces con las alas."
   power: 40
   accuracy: 90
   maxPP: 10
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

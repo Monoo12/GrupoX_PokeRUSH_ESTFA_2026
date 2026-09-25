@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: torment
   type: 16
   attackType: 2
+  descripcion: 'Atormenta y enfurece al objetivo, que no puede usar dos veces seguidas
+    el mismo movimiento. '
   power: 0
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

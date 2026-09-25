@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: sticky-web
   type: 12
   attackType: 2
+  descripcion: Coloca una red pegajosa alrededor del equipo rival que baja la Velocidad
+    de cualquier adversario que entre a combatir.
   power: 0
   accuracy: 0
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 7
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 48410bbf2699fa048a5fcb41962bf5d5, type: 2}

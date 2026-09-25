@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: hydro-pump
   type: 3
   attackType: 1
+  descripcion: "Lanza una gran masa de agua a presi\xF3n para atacar. "
   power: 110
   accuracy: 80
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: b90bcd352eb918e459298483071acd87, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: conversion-2
   type: 1
   attackType: 2
+  descripcion: "El usuario cambia de tipo para hacerse resistente al \xFAltimo tipo
+    de movimiento usado por el objetivo. "
   power: 0
   accuracy: 0
   maxPP: 30
@@ -40,4 +42,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

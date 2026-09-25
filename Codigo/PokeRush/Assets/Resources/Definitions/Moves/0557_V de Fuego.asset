@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: v-create
   type: 2
   attackType: 0
+  descripcion: Golpea con una V de llamas al objetivo. Baja la  Defensa, la Defensa
+    Especial y la Velocidad de  quien lo usa.
   power: 180
   accuracy: 95
   maxPP: 5
@@ -48,4 +50,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

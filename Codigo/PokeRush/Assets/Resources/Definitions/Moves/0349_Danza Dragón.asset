@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: dragon-dance
   type: 15
   attackType: 2
+  descripcion: "Danza m\xEDstica que sube el Ataque y la Velocidad. "
   power: 0
   accuracy: 0
   maxPP: 20
@@ -44,4 +45,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 5f46db08626a24048907b34a28b3b1cd, type: 2}

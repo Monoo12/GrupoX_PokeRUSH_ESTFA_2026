@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: heavy-slam
   type: 17
   attackType: 0
+  descripcion: "El usuario golpea con todo su cuerpo. Cuanto mayor sea su peso comparado
+    con el del objetivo, m\xE1s da\xF1o causar\xE1."
   power: 0
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

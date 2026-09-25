@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: mean-look
   type: 1
   attackType: 2
+  descripcion: Mal de ojo que impide al objetivo huir del combate.
   power: 0
   accuracy: 0
   maxPP: 5
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: bdad8a036733f19449d5a5990e1f9f85, type: 2}

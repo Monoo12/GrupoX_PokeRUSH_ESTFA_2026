@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: magic-powder
   type: 11
   attackType: 2
+  descripcion: "Cubre al objetivo con unos polvos m\xE1gicos que le hacen adquirir
+    el tipo Ps\xEDquico."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

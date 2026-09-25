@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: psychic
   type: 11
   attackType: 1
+  descripcion: "Fuerte ataque telequin\xE9tico que puede bajar la Defensa Especial
+    del objetivo."
   power: 90
   accuracy: 100
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

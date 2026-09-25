@@ -16,6 +16,10 @@ public class PlayerRow
     // Lo que el jugador le debe a la enfermeria del casino. sqlite-net agrega la
     // columna sola en los guardados viejos, que quedan en 0.
     public int Debt { get; set; }
+    // Las mejoras de la ruleta de Martin que esperan la proxima batalla, como
+    // texto ("Ataque:1;Velocidad:2", ver MejorasDeBatalla). Los guardados
+    // viejos quedan en null y se leen como ninguna.
+    public string PendingBuffs { get; set; }
 }
 
 [Table("player_poken")]

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: meteor-mash
   type: 17
   attackType: 0
+  descripcion: "Pu\xF1etazo que impacta como un meteorito y puede subir el Ataque
+    del agresor."
   power: 90
   accuracy: 90
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 96214ec88330dd148a9fc6d404d27d8d, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: throat-chop
   type: 16
   attackType: 0
+  descripcion: Inflige al rival un dolor tan abrumador que le impide utilizar durante
+    dos turnos ataques que se sirven del sonido.
   power: 80
   accuracy: 100
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

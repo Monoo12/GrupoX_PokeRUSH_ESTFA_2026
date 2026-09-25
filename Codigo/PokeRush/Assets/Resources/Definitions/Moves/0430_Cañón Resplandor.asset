@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: flash-cannon
   type: 17
   attackType: 1
+  descripcion: El usuario concentra toda la luz del cuerpo y la libera. Puede bajar
+    la Defensa Especial del objetivo.
   power: 80
   accuracy: 100
   maxPP: 10
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 165a4652a762ccf499a94aa4702a5236, type: 2}

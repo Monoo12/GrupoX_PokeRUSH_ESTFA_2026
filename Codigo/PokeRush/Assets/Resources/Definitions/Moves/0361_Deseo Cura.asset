@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: healing-wish
   type: 11
   attackType: 2
+  descripcion: "El Pok\xE9mon cae debilitado, pero su sustituto recupera su estado
+    y los PS."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

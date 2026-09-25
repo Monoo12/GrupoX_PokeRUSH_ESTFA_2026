@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: final-gambit
   type: 7
   attackType: 1
+  descripcion: "El usuario se sacrifica caus\xE1ndole un da\xF1o al objetivo equivalente
+    a sus propios PS perdidos."
   power: 0
   accuracy: 100
   maxPP: 5
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

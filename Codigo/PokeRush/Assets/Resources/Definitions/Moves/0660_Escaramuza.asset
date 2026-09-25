@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: first-impression
   type: 12
   attackType: 0
+  descripcion: Movimiento de gran potencia que solo puede usarse en el turno en que
+    el usuario sale al combate.
   power: 90
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d1b4d3b9a819dc7419d8ad835283b29d, type: 2}

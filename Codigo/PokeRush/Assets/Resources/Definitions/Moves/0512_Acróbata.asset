@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: acrobatics
   type: 10
   attackType: 0
+  descripcion: "Golpea \xE1gilmente. Si el usuario no porta ning\xFAn objeto, el
+    objetivo resulta seriamente da\xF1ado."
   power: 55
   accuracy: 100
   maxPP: 15
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

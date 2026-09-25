@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: shift-gear
   type: 17
   attackType: 2
+  descripcion: Al hacer girar los engranajes, el usuario mejora su Ataque y aumenta
+    mucho su Velocidad.
   power: 0
   accuracy: 0
   maxPP: 10
@@ -45,4 +47,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

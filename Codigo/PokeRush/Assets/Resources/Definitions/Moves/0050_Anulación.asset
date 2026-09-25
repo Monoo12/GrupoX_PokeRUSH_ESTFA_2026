@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: disable
   type: 1
   attackType: 2
+  descripcion: "Desactiva el \xFAltimo movimiento del objetivo durante  cuatro turnos."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 15791cd5145848a4b949908278850109, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: rollout
   type: 13
   attackType: 0
+  descripcion: El atacante rueda contra el objetivo durante cinco  turnos, cada vez
+    con mayor fuerza.
   power: 30
   accuracy: 90
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: d0907c4818fe42344afdd79eb741b09a, type: 2}

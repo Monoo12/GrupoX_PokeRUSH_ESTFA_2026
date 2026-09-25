@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: double-edge
   type: 1
   attackType: 0
+  descripcion: "Ataque arriesgado que tambi\xE9n hiere al agresor."
   power: 120
   accuracy: 100
   maxPP: 15
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

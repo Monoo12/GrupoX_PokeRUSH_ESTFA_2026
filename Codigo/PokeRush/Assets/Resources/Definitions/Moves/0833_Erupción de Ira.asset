@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: raging-fury
   type: 2
   attackType: 0
+  descripcion: The user rampages around spewing flames for two to three turns. The
+    user then becomes confused.
   power: 120
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

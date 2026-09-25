@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: acid
   type: 8
   attackType: 1
+  descripcion: "Roc\xEDa a los enemigos con un \xE1cido corrosivo.  Puede bajar la
+    Defensa Especial."
   power: 40
   accuracy: 100
   maxPP: 30
@@ -42,4 +44,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

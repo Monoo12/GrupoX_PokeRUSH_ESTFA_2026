@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: fire-blast
   type: 2
   attackType: 1
+  descripcion: Llama intensa que chamusca y puede causar  quemaduras.
   power: 110
   accuracy: 85
   maxPP: 5
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: dbde784a51a58d04891b5f10bbb93ce3, type: 2}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: draining-kiss
   type: 18
   attackType: 1
+  descripcion: "El usuario absorbe PS del objetivo con un beso y restaura su propia
+    energ\xEDa en una cantidad igual o superior a la mitad del da\xF1o infligido."
   power: 50
   accuracy: 100
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 72c73a6438e459b41ab17de135a5f157, type: 2}

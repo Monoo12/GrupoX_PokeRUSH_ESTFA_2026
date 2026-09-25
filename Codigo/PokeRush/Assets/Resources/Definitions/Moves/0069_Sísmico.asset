@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: seismic-toss
   type: 7
   attackType: 0
+  descripcion: Aprovecha la gravedad para derribar al objetivo. Le resta tantos PS
+    como nivel tenga el usuario.
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 25a554e14412fa943a189ec346373de4, type: 2}

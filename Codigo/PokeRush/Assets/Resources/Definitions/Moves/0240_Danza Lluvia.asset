@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: rain-dance
   type: 3
   attackType: 2
+  descripcion: Genera una fuerte lluvia que refuerza los movimientos de tipo Agua
+    durante cinco turnos y debilita los de tipo Fuego.
   power: 0
   accuracy: 0
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 1
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

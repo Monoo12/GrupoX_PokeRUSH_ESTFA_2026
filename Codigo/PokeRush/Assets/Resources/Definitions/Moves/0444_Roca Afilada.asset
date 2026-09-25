@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: stone-edge
   type: 13
   attackType: 0
+  descripcion: "Clava piedras muy afiladas al objetivo. Suele ser cr\xEDtico."
   power: 100
   accuracy: 80
   maxPP: 5
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

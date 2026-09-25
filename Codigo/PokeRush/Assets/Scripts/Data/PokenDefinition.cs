@@ -53,6 +53,10 @@ public class PokenDefinition : ScriptableObject
     public LearnsetEntry[] learnset;
     [Tooltip("LEGADO: lista plana de movimientos. Solo se usa si 'learnset' esta vacio (Pokens de prueba).")]
     public MoveDefinition[] moves;
+    [Tooltip("Lo que la especie aprende por MT o tutor en los juegos originales (PokeAPI), " +
+             "filtrado a los movimientos del proyecto. Lo enseña Nestor en la Quarcho Cueva. " +
+             "Lo llena 'PokeRush > Datos > Completar MTs y descripciones de movimientos'.")]
+    public MoveDefinition[] mtMoves;
 
     [Header("Experiencia")]
     [Tooltip("XP base que otorga al ser derrotado (base_experience de PokeAPI).")]

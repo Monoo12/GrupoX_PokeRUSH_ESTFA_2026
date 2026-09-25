@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: light-screen
   type: 11
   attackType: 2
+  descripcion: "Pared de luz que reduce durante cinco turnos el da\xF1o producido
+    por los ataques especiales."
   power: 0
   accuracy: 0
   maxPP: 30
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 2
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 4a9e2d54163b60f40948b88d42d7a286, type: 2}

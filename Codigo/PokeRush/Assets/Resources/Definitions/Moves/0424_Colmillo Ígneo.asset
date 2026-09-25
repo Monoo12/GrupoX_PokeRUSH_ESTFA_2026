@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fire-fang
   type: 2
   attackType: 0
+  descripcion: El usuario muerde al objetivo con colmillos en llamas y puede hacer
+    que se amedrente o sufra quemaduras.
   power: 65
   accuracy: 95
   maxPP: 15
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

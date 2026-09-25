@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: sheer-cold
   type: 6
   attackType: 1
+  descripcion: "Debilita al objetivo de un solo golpe. Si lo usa un Pok\xE9mon que
+    no sea de tipo Hielo, es dif\xEDcil que acierte."
   power: 0
   accuracy: 30
   maxPP: 5
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: ac23a2cac3d31af43bbc0d001995bff9, type: 2}

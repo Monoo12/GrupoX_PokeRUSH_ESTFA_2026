@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: cross-poison
   type: 8
   attackType: 0
+  descripcion: "Tajo que puede envenenar al objetivo. Suele ser cr\xEDtico."
   power: 70
   accuracy: 100
   maxPP: 20
@@ -39,4 +40,8 @@ MonoBehaviour:
   implementation: 1
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: b6003bbe4c64b9042a6b563249e969da, type: 2}

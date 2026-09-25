@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: shell-smash
   type: 1
   attackType: 2
+  descripcion: El usuario rompe su coraza y baja su Defensa y Defensa Especial, pero
+    aumenta mucho su Ataque,  Ataque Especial y Velocidad.
   power: 0
   accuracy: 0
   maxPP: 15
@@ -55,4 +57,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

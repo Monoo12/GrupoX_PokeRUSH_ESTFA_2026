@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: power-gem
   type: 13
   attackType: 1
+  descripcion: Ataca con un rayo de luz que centellea como si lo  formaran miles
+    de joyas.
   power: 80
   accuracy: 100
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,7 @@ MonoBehaviour:
   englishName: splash
   type: 1
   attackType: 2
+  descripcion: "No tiene ning\xFAn efecto. Solo salpica."
   power: 0
   accuracy: 0
   maxPP: 40
@@ -38,4 +39,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

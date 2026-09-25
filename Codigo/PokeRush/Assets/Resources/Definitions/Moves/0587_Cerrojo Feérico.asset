@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: fairy-lock
   type: 18
   attackType: 2
+  descripcion: "Consigue que ning\xFAn Pok\xE9mon pueda huir en el  siguiente turno
+    echando un cerrojo."
   power: 0
   accuracy: 0
   maxPP: 10
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: c915ce6ce62bbed4fa3747f0767f231c, type: 2}

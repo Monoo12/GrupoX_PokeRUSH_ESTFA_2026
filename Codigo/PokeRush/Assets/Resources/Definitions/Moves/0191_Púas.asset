@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: spikes
   type: 9
   attackType: 2
+  descripcion: "Esparce p\xFAas alrededor del equipo rival que hieren  a los Pok\xE9mon
+    rivales que entran en combate. "
   power: 0
   accuracy: 0
   maxPP: 20
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 5
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 11400000, guid: 8c7566e1d723017419f87afe42b95fd8, type: 2}

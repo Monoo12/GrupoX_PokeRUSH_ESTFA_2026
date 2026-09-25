@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: spectral-thief
   type: 14
   attackType: 0
+  descripcion: "El usuario se esconde en la sombra del objetivo y lo ataca tras robarle
+    las mejoras en sus caracter\xEDsticas."
   power: 90
   accuracy: 100
   maxPP: 10
@@ -38,4 +40,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: noble-roar
   type: 1
   attackType: 2
+  descripcion: Intimida a su oponente con un rugido de guerra, lo que hace que disminuyan
+    tanto su Ataque como su Ataque Especial.
   power: 0
   accuracy: 100
   maxPP: 30
@@ -44,4 +46,8 @@ MonoBehaviour:
   implementation: 0
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}

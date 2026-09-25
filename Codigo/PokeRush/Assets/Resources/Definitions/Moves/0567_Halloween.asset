@@ -17,6 +17,8 @@ MonoBehaviour:
   englishName: trick-or-treat
   type: 14
   attackType: 2
+  descripcion: "Invita al objetivo a celebrar Halloween, lo que a\xF1ade  el tipo
+    Fantasma a los tipos de este."
   power: 0
   accuracy: 100
   maxPP: 20
@@ -39,4 +41,8 @@ MonoBehaviour:
   implementation: 2
   weatherEffect: 0
   fieldEffect: 0
+  turnRule: 0
+  chargeMessage: 
+  chargeStatChanges: []
+  skipChargeInWeather: 0
   animationOverride: {fileID: 0}
