@@ -601,8 +601,9 @@ namespace PokeRush.EditorTools
         {
             string creacion = System.IO.File.ReadAllText("Assets/Scenes/CreacionPersonaje.unity");
             string saves = System.IO.File.ReadAllText("Assets/Scenes/MenuSaves.unity");
-            Check(creacion.Contains($"escenaDestino: {RecorridoDeLaHistoria.EscenaDelLobby}"),
-                  "Recorrido: la creacion de personaje lleva a la cueva");
+            // A la cueva, o a la habitacion tutorial una vez que esta en Build Settings.
+            Check(creacion.Contains($"escenaDestino: {RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje}"),
+                  $"Recorrido: la creacion de personaje lleva a {RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje}");
             Check(saves.Contains($"sceneJuego: {RecorridoDeLaHistoria.EscenaDelLobby}"),
                   "Recorrido: 'Continuar' lleva a la cueva");
         }

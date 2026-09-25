@@ -113,5 +113,21 @@ public enum StoryFlag
     Lobby_TacconiChance1,
     Lobby_TacconiChance2,
     Lobby_TacconiChance3,
-    Lobby_TacconiMewGanado
+    Lobby_TacconiMewGanado,
+
+    // Habitacion tutorial, donde despierta el personaje. Al final por lo mismo
+    // que las tandas de arriba: las escenas guardan el flag como numero.
+    //
+    // Ya se conto lo basico al despertar (moverse, interactuar, el menu).
+    Tutorial_Despertar,
+    // Una por parte: al activarse se apaga su brillo y cuenta para la puerta.
+    Tutorial_Mochila,
+    Tutorial_Equipo,
+    Tutorial_Pc,
+    Tutorial_Guardar,
+    Tutorial_Opciones,
+    Tutorial_Pelea,
+    // Hizo todas las partes obligatorias, o eligio omitirlo en la puerta.
+    Tutorial_Completado,
+    Tutorial_Omitido
 }

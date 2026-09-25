@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Tutorial_Cierre
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: 
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "\xA1Listo! Ya sab\xE9s lo b\xE1sico."
+  - "Afuera te espera la Quarcho Cueva: desde ah\xED sal\xEDs a cada nivel y volv\xE9s
+    al terminarlo."
+  - "La puerta ya abre. \xA1Suerte!"
+  requiredFlag: 0
+  grantsFlag: 0

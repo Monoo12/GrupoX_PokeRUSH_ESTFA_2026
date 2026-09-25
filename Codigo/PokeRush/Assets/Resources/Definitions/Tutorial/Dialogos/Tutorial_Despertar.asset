@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Tutorial_Despertar
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: 
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "Te despert\xE1s en tu habitaci\xF3n. Hoy empieza todo."
+  - "Movete con las flechas o con WASD. Manten\xE9 Shift para correr."
+  - "Parate al lado de algo y apret\xE1 X para usarlo. Con Z abr\xEDs el men\xFA."
+  - "Lo que brilla te ense\xF1a lo b\xE1sico. Cuando termines con todo, la puerta
+    se abre."
+  requiredFlag: 0
+  grantsFlag: 0

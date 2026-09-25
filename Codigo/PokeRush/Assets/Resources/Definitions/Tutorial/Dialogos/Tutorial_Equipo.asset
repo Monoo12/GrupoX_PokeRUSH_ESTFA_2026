@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Tutorial_Equipo
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: 
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "Tu equipo: hasta seis Pok\xE9mon. El primero de la lista es el que sale a pelear."
+  - "Eleg\xED un Pok\xE9mon y entr\xE1 a DATOS para ver sus stats, su tipo y sus
+    movimientos."
+  - "Desde DATOS tambi\xE9n pod\xE9s reordenar sus movimientos."
+  - "En el men\xFA (Z) el equipo est\xE1 como Pokemon."
+  requiredFlag: 0
+  grantsFlag: 0

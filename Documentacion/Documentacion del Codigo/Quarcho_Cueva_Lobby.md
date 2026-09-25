@@ -7,7 +7,7 @@ Menu Principal -> Creacion de personaje -> (habitacion tutorial) -> Quarcho Cuev
   -> Data Center de Nestor -> Quarcho Cueva -> Casino -> Quarcho Cueva -> Jefe final
 ```
 
-> La **habitación tutorial** todavía no existe: mientras tanto la creación de personaje manda directo a la cueva (`RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje`). El **jefe final** tampoco: la salida lo dice en vez de romper (ver más abajo).
+> De la **habitación tutorial** está el esqueleto (ver `Tutorial_Habitacion.md`). Mientras la habitación decorada no esté en Build Settings, la creación de personaje manda directo a la cueva (`RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje`). El **jefe final** todavía no existe: la salida lo dice en vez de romper (ver más abajo).
 
 ---
 
@@ -21,7 +21,7 @@ El **mapa lo hizo el equipo y no se toca**. Todo lo demás lo pone un builder, i
 | `PokeRush > Datos > Completar MTs y descripciones de movimientos` | Llena `PokenDefinition.mtMoves` y `MoveDefinition.descripcion` desde el cache de PokeAPI. |
 | `PokeRush > UI > Construir las pantallas de la Quarcho Cueva` | La tienda y el tutor, registrados en el `MenuSystem` (no toca las otras pantallas). |
 | `PokeRush > Quarcho Cueva > Armar el lobby` | Jugador, cámara, `GameManager`, bootstrap, diálogo y el contenedor `Lobby` con los personajes. |
-| `PokeRush > Quarcho Cueva > Conectar el recorrido` | La creación de personaje y el "Continuar" de la pantalla de guardados van a la cueva. |
+| `PokeRush > Quarcho Cueva > Conectar el recorrido` | El "Continuar" de la pantalla de guardados va a la cueva. La creación de personaje va a la habitación tutorial si está en Build Settings y, si no, también a la cueva. |
 | `PokeRush > Quarcho Cueva > Correr smoke tests del lobby` | 126 checks de reglas, datos y escena (`[SmokeLobby]` en el Editor.log). |
 | `PokeRush > Quarcho Cueva > Probar la cueva en Play` | Recorre la cueva como un jugador y deja capturas en `Capturas/Lobby/` (`[PlayLobby]`). Juega con una partida DEMO y **no guarda**. |
 
@@ -176,7 +176,7 @@ git add -f "Codigo/PokeRush/Assets/Graphics/Characters/cientifico.png"* \
 
 - El **lore** de Tixi y las charlas de Néstor y Martín (`Resources/Definitions/Lobby/Dialogos`): hoy es texto de relleno.
 - El **sprite de Tixi**.
-- La **habitación tutorial** (hoy la creación de personaje salta directo a la cueva).
+- La **habitación tutorial** decorada: el esqueleto ya está y se pega en ella (`Tutorial_Habitacion.md`). Hasta entonces la creación de personaje salta directo a la cueva.
 - La escena del **jefe final** (`BossFinal`).
 - La **música** de la cueva: no hay pista propia, sigue sonando la de la escena anterior.
 - Las pantallas de la tienda y del tutor son **de prueba** con el arte del pack: las finales las diseña el equipo.

@@ -12,9 +12,10 @@ using UnityEngine;
 // checklist visual de lo que falta.
 //
 // USO
-//   1. Poner el componente en el mismo objeto que el InteractableTrigger.
-//   2. Nada mas: el flag lo toma del trigger y los sprites tienen valores por
-//      defecto. 'tamanioHalo' y 'tamanioEstrella' regulan que tan grande es.
+//   1. Poner el componente en el mismo objeto que el InteractableTrigger (o que
+//      la TutorialParte, en la habitacion tutorial).
+//   2. Nada mas: el flag lo toma de ese componente y los sprites tienen valores
+//      por defecto. 'tamanioHalo' y 'tamanioEstrella' regulan que tan grande es.
 //
 // SE VE MIENTRAS LO EDITAS
 // [ExecuteAlways] hace que el brillo se arme tambien fuera de Play, y los
@@ -28,7 +29,7 @@ using UnityEngine;
 public class BrilloInteractuable : MonoBehaviour
 {
     [Header("Cuando deja de brillar")]
-    [Tooltip("None = lo toma del InteractableTrigger que este en este objeto.")]
+    [Tooltip("None = lo toma del InteractableTrigger o de la TutorialParte que este en este objeto.")]
     [SerializeField] private StoryFlag flagQueLoApaga = StoryFlag.None;
 
     [Header("Tamanio (en tiles)")]
@@ -68,6 +69,12 @@ public class BrilloInteractuable : MonoBehaviour
     private float _fase;      // desfase por objeto, para que no laten al unisono
     private bool _apagado;
 
+    // El flag que se consulta de verdad: el del Inspector o, si esta en None, el
+    // del componente de al lado. Se resuelve aca y NO se escribe en el campo:
+    // escribiendolo quedaba fijo al guardar la escena, y cambiar despues el flag
+    // del trigger ya no le llegaba al brillo.
+    private StoryFlag _flag;
+
     private void OnEnable()
     {
         // Desfase estable por objeto (no aleatorio): se ve organico pero es
@@ -75,13 +82,9 @@ public class BrilloInteractuable : MonoBehaviour
         _fase = Mathf.Abs(name.GetHashCode() % 100) / 100f * Mathf.PI * 2f;
         _apagado = false;
 
-        if (flagQueLoApaga == StoryFlag.None)
-        {
-            var trigger = GetComponent<InteractableTrigger>();
-            if (trigger != null) flagQueLoApaga = trigger.OtorgaFlag;
-        }
+        _flag = flagQueLoApaga != StoryFlag.None ? flagQueLoApaga : FlagDelComponenteDeAlLado();
 
-        if (Application.isPlaying && flagQueLoApaga == StoryFlag.None)
+        if (Application.isPlaying && _flag == StoryFlag.None)
             Debug.LogWarning($"[Brillo] '{name}' no tiene flag: va a brillar para siempre.");
 
         // Arrancar siempre de cero. Los hijos llevan HideFlags.DontSave, y esos
@@ -112,7 +115,7 @@ public class BrilloInteractuable : MonoBehaviour
             // nunca mas. Asi tambien cubre el caso de cargar una partida que ya
             // tenia el subsistema cortado.
             var gm = GameManager.Instance;
-            if (gm != null && gm.Story != null && gm.Story.HasFlag(flagQueLoApaga))
+            if (gm != null && gm.Story != null && gm.Story.HasFlag(_flag))
             {
                 Apagar();
                 return;
@@ -121,6 +124,17 @@ public class BrilloInteractuable : MonoBehaviour
 
         Armar();
         Latir();
+    }
+
+    private StoryFlag FlagDelComponenteDeAlLado()
+    {
+        var trigger = GetComponent<InteractableTrigger>();
+        if (trigger != null) return trigger.OtorgaFlag;
+
+        var parte = GetComponent<TutorialParte>();
+        if (parte != null) return parte.Flag;
+
+        return StoryFlag.None;
     }
 
     // ---- armado ----

@@ -152,21 +152,24 @@ public static class QuarchoCuevaBuilder
         Debug.Log("[Lobby] TERMINADO. La Quarcho Cueva quedo armada y en Build Settings.");
     }
 
-    // La creacion de personaje y el "Continuar" de la pantalla de guardados
-    // llevan a la cueva: es el lobby, y SaveService no guarda la escena.
+    // El "Continuar" de la pantalla de guardados lleva a la cueva: es el lobby,
+    // y SaveService no guarda la escena. La creacion de personaje, a la
+    // habitacion tutorial si ya esta en Build Settings; si no, tambien a la cueva.
     [MenuItem("PokeRush/Quarcho Cueva/Conectar el recorrido")]
     public static void ConectarRecorrido()
     {
         if (EditorApplication.isPlaying) return;
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
-        CambiarDestino<CreacionPersonajeView>(EscenaCreacion, "escenaDestino");
-        CambiarDestino<SaveSlotMenuView>(EscenaSaves, "sceneJuego");
+        string trasCrear = RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje;
+        CambiarDestino<CreacionPersonajeView>(EscenaCreacion, "escenaDestino", trasCrear);
+        CambiarDestino<SaveSlotMenuView>(EscenaSaves, "sceneJuego", RecorridoDeLaHistoria.EscenaDelLobby);
         AgregarABuildSettings();
-        Debug.Log($"[Lobby] Recorrido conectado: creacion de personaje y 'Continuar' van a {RecorridoDeLaHistoria.EscenaDelLobby}.");
+        Debug.Log($"[Lobby] Recorrido conectado: la creacion de personaje va a {trasCrear} y " +
+                  $"'Continuar' a {RecorridoDeLaHistoria.EscenaDelLobby}.");
     }
 
-    private static void CambiarDestino<T>(string path, string campo) where T : Component
+    private static void CambiarDestino<T>(string path, string campo, string destino) where T : Component
     {
         Scene scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         T vista = scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<T>(true)).FirstOrDefault();
@@ -174,10 +177,10 @@ public static class QuarchoCuevaBuilder
 
         var so = new SerializedObject(vista);
         SerializedProperty prop = so.FindProperty(campo);
-        if (prop.stringValue == RecorridoDeLaHistoria.EscenaDelLobby) return;
+        if (prop.stringValue == destino) return;
 
-        Debug.Log($"[Lobby] {scene.name}: {campo} '{prop.stringValue}' -> '{RecorridoDeLaHistoria.EscenaDelLobby}'.");
-        prop.stringValue = RecorridoDeLaHistoria.EscenaDelLobby;
+        Debug.Log($"[Lobby] {scene.name}: {campo} '{prop.stringValue}' -> '{destino}'.");
+        prop.stringValue = destino;
         so.ApplyModifiedPropertiesWithoutUndo();
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);

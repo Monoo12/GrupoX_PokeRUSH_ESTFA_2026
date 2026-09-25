@@ -21,7 +21,7 @@ Quién decide qué:
 
 - **`StartScreenView`** (en `Menu Principal`): `sceneNewGame = "CreacionPersonaje"`, `sceneWithSave = "MenuSaves"`. Mira si existe un guardado y manda a una u otra.
 - **`SaveSlotMenuView`** (en `MenuSaves`): `sceneJuego = "Quarcho-Cueva"`. Como el guardado no guarda la escena, "Continuar" siempre arranca en la cueva.
-- **`CreacionPersonajeView`**: `escenaDestino = "Quarcho-Cueva"` (cuando exista la habitación tutorial, va ahí).
+- **`CreacionPersonajeView`**: `escenaDestino = "Quarcho-Cueva"`. Cuando la habitación tutorial decorada esté lista, `PokeRush > Tutorial > Conectar la escena abierta al recorrido` lo cambia a `HabitacionTutorial` (ver `Tutorial_Habitacion.md`).
 - **A qué nivel se sale de la cueva** lo decide `RecorridoDeLaHistoria` según los flags de la partida, y **la vuelta** a la cueva al terminar un nivel la hace `VueltaAlLobby`. Todo eso está en **`Quarcho_Cueva_Lobby.md`**.
 
 > Si agregás una escena nueva al recorrido, **acordate de sumarla a Build Settings**. `SceneManager.LoadScene` por nombre falla si la escena no está en la lista, y el error se ve recién en runtime.

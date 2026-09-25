@@ -8,6 +8,7 @@
 // sale al siguiente. QUE nivel toca lo deciden los flags de la partida y no la
 // escena de donde se viene: SaveService no guarda la escena, asi que al
 // "Continuar" el jugador aparece en la cueva y la salida igual sabe adonde va.
+// La habitacion tutorial no es un nivel: se pasa una sola vez, al empezar.
 //
 // Clase pura: la usan la salida de la cueva, Tixi, la vuelta automatica al
 // lobby y los smoke tests, y ninguno tiene que saber nombres de escenas.
@@ -15,9 +16,35 @@ public static class RecorridoDeLaHistoria
 {
     public const string EscenaDelLobby = "Quarcho-Cueva";
 
-    // La habitacion tutorial todavia no existe: mientras tanto la creacion de
-    // personaje manda directo a la cueva.
-    public const string EscenaDespuesDeCrearPersonaje = EscenaDelLobby;
+    // La habitacion tutorial, donde despierta el personaje. Su puerta lleva a la
+    // cueva. La arma el equipo pegando el esqueleto (HabitacionTutorial_Esqueleto)
+    // en la habitacion decorada, que se tiene que llamar asi (o cambiar este
+    // nombre). Ver Tutorial_Habitacion.md.
+    public const string EscenaDelTutorial = "HabitacionTutorial";
+
+    // Adonde manda la creacion de personaje: a la habitacion tutorial si ya esta
+    // en Build Settings y, mientras no exista, directo a la cueva. Es lo que
+    // escriben los menus 'Conectar el recorrido' (el de la cueva y el del
+    // tutorial) en la escena de creacion de personaje.
+    public static string EscenaDespuesDeCrearPersonaje =>
+        EstaEnBuildSettings(EscenaDelTutorial) ? EscenaDelTutorial : EscenaDelLobby;
+
+    // Application.CanStreamedLevelBeLoaded contesta bien solo en Play: en el
+    // editor, fuera de Play, da false para TODAS las escenas (hasta para la
+    // cueva). Los menus del editor preguntan esto, asi que ahi se mira la lista
+    // de Build Settings directamente.
+    public static bool EstaEnBuildSettings(string escena)
+    {
+#if UNITY_EDITOR
+        if (!UnityEngine.Application.isPlaying)
+        {
+            foreach (UnityEditor.EditorBuildSettingsScene s in UnityEditor.EditorBuildSettings.scenes)
+                if (s.enabled && System.IO.Path.GetFileNameWithoutExtension(s.path) == escena) return true;
+            return false;
+        }
+#endif
+        return UnityEngine.Application.CanStreamedLevelBeLoaded(escena);
+    }
 
     public class Nivel
     {

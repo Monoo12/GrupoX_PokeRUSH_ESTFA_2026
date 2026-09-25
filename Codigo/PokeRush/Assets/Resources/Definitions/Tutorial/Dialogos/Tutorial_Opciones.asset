@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Tutorial_Opciones
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: 
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "La tele. En Opciones cambi\xE1s el volumen de la m\xFAsica y de los efectos."
+  - "Tambi\xE9n pod\xE9s cambiar la tecla de cada acci\xF3n, si las de siempre no
+    te sirven."
+  - "En el men\xFA (Z) est\xE1n como Opciones."
+  requiredFlag: 0
+  grantsFlag: 0

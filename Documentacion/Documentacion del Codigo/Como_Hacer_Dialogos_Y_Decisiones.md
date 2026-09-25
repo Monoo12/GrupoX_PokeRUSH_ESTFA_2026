@@ -129,11 +129,11 @@ Ejemplo armado en `NestorGOD2`: `BotonRayos` en el rack de la sala de servidores
 
 Los paneles de subsistema **no tienen sprite propio**: son colliders invisibles puestos encima de los tiles del mapa. Sin una marca no hay forma de saber que ahí se puede apretar X.
 
-**`BrilloInteractuable`**, en el mismo objeto que el `InteractableTrigger`. No hay nada que configurar: **toma el flag del propio trigger**, así que no se puede desincronizar. Se apaga solo al cortar ese subsistema, con lo cual el brillo funciona además como checklist de lo que falta.
+**`BrilloInteractuable`**, en el mismo objeto que el `InteractableTrigger` (o que la `TutorialParte`, en la habitación tutorial). No hay nada que configurar: **toma el flag del componente de al lado**, así que no se puede desincronizar. Se apaga solo al cortar ese subsistema, con lo cual el brillo funciona además como checklist de lo que falta.
 
 | Campo | Para qué |
 |---|---|
-| `flagQueLoApaga` | `None` = lo lee del `InteractableTrigger` del objeto |
+| `flagQueLoApaga` | `None` = lo lee del `InteractableTrigger` o de la `TutorialParte` del objeto. Se resuelve en runtime y no se escribe en el campo, así que cambiar después el flag del trigger le llega al brillo |
 | `tamanioHalo` / `tamanioEstrella` | **alto en tiles** (1.15 y 0.4). `tamanioEstrella` en 0 = sin estrella |
 | `escalaGeneral` | multiplica a los dos, para agrandar todo sin tocarlos por separado |
 | `spriteHalo` / `spriteEstrella` | `ballBurst_particle` y `ballBurst_star` de `Sprites/UI/Battle` |

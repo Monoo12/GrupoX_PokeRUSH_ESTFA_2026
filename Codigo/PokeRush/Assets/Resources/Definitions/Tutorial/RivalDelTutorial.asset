@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
+  m_Name: RivalDelTutorial
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  characterName: "COMPA\xD1ERA"
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  pokenTeam:
+  - species: {fileID: 11400000, guid: 633e41c5f5326594e9ef2dbb95d7aa34, type: 2}
+    level: 10
+  battleFrontSprite: {fileID: 21300000, guid: 1575ff0858080f14b8a6a30f2f005ff0, type: 3}
+  battleBackSprite: {fileID: 0}
+  battleMusic: {fileID: 0}
+  battleIntroDialogue: {fileID: 0}
+  moneyReward: 100
+  itemRewards: []
+  defeatGrantsFlag: 0
+  fleeIfWeak: 0
+  aiProfile: {fileID: 11400000, guid: 1b6fdae9a791b3e4d893a1534d6d2962, type: 2}
+  battleBackground: {fileID: 21300000, guid: bc089637f1ef0554f87f6fa884f66053, type: 3}
