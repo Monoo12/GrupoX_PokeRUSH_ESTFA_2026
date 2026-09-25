@@ -64,7 +64,7 @@ public static class MoveScorer
         if (expected.Damage >= ctx.Foe.Poken.CurrentHP)
             score += profile.koWeight * hitProb;
 
-        if (DamageCalculator.HasStab(ctx.Self.Poken.Definition, move.type))
+        if (DamageCalculator.HasStab(ctx.Self, move.type))
             score += StabBonus;
 
         return score;
@@ -80,8 +80,8 @@ public static class MoveScorer
             bool useless =
                 (move.effect == StatusEffect.Confused && ctx.Foe.IsConfused) ||
                 (move.effect != StatusEffect.Confused && ctx.Foe.Poken.CurrentStatus != StatusEffect.None) ||
-                (move.effect != StatusEffect.Confused && StatusEffects.IsImmuneByType(move.effect, ctx.Foe.Poken.Definition)) ||
-                DamageCalculator.DualEffectiveness(move.type, ctx.Foe.Poken.Definition) <= 0f;
+                (move.effect != StatusEffect.Confused && StatusEffects.IsImmuneByType(move.effect, ctx.Foe)) ||
+                DamageCalculator.DualEffectiveness(move.type, ctx.Foe) <= 0f;
 
             if (useless) return 0f;
             // Un estado vale mas cuanto mas HP le queda al rival (temprano en la pelea)

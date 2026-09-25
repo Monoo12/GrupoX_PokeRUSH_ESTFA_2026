@@ -809,12 +809,16 @@ public class BlackjackScreen : MenuScreen
         switch (resultado)
         {
             case BlackjackOutcome.Blackjack:
+                if (!string.IsNullOrEmpty(_pedido.TextoGana)) return "¡Blackjack! " + _pedido.TextoGana;
                 return $"¡Blackjack! {rival} te tiene que dar {premio}.";
             case BlackjackOutcome.Gana:
+                if (!string.IsNullOrEmpty(_pedido.TextoGana)) return "¡Ganaste! " + _pedido.TextoGana;
                 return $"¡Ganaste! {rival} te tiene que dar {premio}.";
             case BlackjackOutcome.Empata:
+                if (!string.IsNullOrEmpty(_pedido.TextoEmpata)) return "Empate. " + _pedido.TextoEmpata;
                 return "Empate: nadie pierde nada.";
             default:
+                if (!string.IsNullOrEmpty(_pedido.TextoPierde)) return "Perdiste. " + _pedido.TextoPierde;
                 return $"Perdiste: {rival} se queda con tu {_pedido.ApuestaPokemon}.";
         }
     }

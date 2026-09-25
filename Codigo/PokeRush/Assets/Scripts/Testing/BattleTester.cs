@@ -44,6 +44,14 @@ public class BattleTester : MonoBehaviour
     [Tooltip("Un EnemyDefinition o BossDefinition con su pokenTeam cargado.")]
     [SerializeField] private NPCDefinition enemyDefinition;
 
+    [Header("Ruleta del jefe del casino (tecla B)")]
+    [Tooltip("Con una tabla puesta, la pelea de la tecla B abre la ruleta cada " +
+             "'turnos entre giros' y aplica el efecto de cada gajo sobre tu " +
+             "Poken. Vacio = pelea normal, sin ruleta. Es para probar el " +
+             "balance del ultimo piso sin caminar el casino entero.")]
+    [SerializeField] private CasinoPrizeTable ruletaDeCombate;
+    [SerializeField, Min(1)] private int turnosEntreGiros = 2;
+
     [Header("Encuentro salvaje (prueba)")]
     [Tooltip("Opcional: un WildEncounterDefinition para probar combates salvajes con la tecla W.")]
     [SerializeField] private WildEncounterDefinition wildEncounter;
@@ -166,7 +174,12 @@ public class BattleTester : MonoBehaviour
             return;
         }
 
-        battleController.StartBattle(player, enemyDefinition);
+        CasinoRuletaDeCombate ruleta =
+            ruletaDeCombate != null && ruletaDeCombate.premios != null && ruletaDeCombate.premios.Length > 0
+                ? new CasinoRuletaDeCombate(ruletaDeCombate.premios, turnosEntreGiros)
+                : null;
+
+        battleController.StartBattle(player, enemyDefinition, ruletaDeCombate: ruleta);
     }
 
     // Pisa el set automatico por el elegido en el Inspector, si hay uno.

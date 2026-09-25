@@ -35,6 +35,10 @@ public class CasinoProgressModel
     // Acceso al boss del ultimo piso.
     public bool BossDesbloqueado => Piso3Superado;
 
+    // Ultimo piso: el jefe del casino, al final del pasillo de guardias.
+    public bool JefeFinalVencido => Tiene(StoryFlag.Casino_JefeFinalVencido);
+    public bool CasinoCompletado => Tiene(StoryFlag.Casino_Completado);
+
     // Cuantos pisos quedaron atras, para carteles y para el resumen.
     public int PisosSuperados =>
         (Piso1Superado ? 1 : 0) + (Piso2Superado ? 1 : 0) + (Piso3Superado ? 1 : 0);

@@ -57,7 +57,7 @@ public static class StatusEffects
             return false;
         }
 
-        if (IsImmuneByType(status, target.Poken.Definition))
+        if (IsImmuneByType(status, target))
         {
             if (showFailMessage) BattleEvent.Add(events, $"No afecta a {name}...");
             return false;
@@ -71,10 +71,18 @@ public static class StatusEffects
         return true;
     }
 
-    // Inmunidades por tipo de la saga
+    // Inmunidades por tipo de la saga, contra los tipos ACTUALES del que esta
+    // en el campo: con el tipo cambiado por la ruleta del jefe del casino, un
+    // Poken que paso a ser de Fuego no se puede quemar.
+    public static bool IsImmuneByType(StatusEffect status, BattlePokenState target)
+        => target != null && IsImmuneByType(status, target.Tipo1, target.Tipo2);
+
     public static bool IsImmuneByType(StatusEffect status, PokenDefinition def)
+        => IsImmuneByType(status, def.type, def.type2);
+
+    private static bool IsImmuneByType(StatusEffect status, PokenType tipo1, PokenType tipo2)
     {
-        bool HasType(PokenType t) => def.type == t || def.type2 == t;
+        bool HasType(PokenType t) => tipo1 == t || tipo2 == t;
         switch (status)
         {
             case StatusEffect.Burned: return HasType(PokenType.Fire);

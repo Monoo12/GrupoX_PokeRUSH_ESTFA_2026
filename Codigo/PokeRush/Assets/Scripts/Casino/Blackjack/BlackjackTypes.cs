@@ -126,6 +126,16 @@ public class BlackjackScreenRequest
     public string PremioPokemon;
     // Contra quien se juega, para los carteles. Ej: "Tacconi".
     public string Rival;
+
+    // Pisan el cartel del final de la mano apostada. Vacios = los de siempre
+    // ("te tiene que dar X" / "se queda con tu X"), que son los de Tacconi.
+    //
+    // Existen porque la mano del jefe del ultimo piso no se juega por un
+    // Pokemon del otro: se juega por revivir uno propio, y ahi el empate no es
+    // "nadie pierde nada" sino media barra de PS.
+    public string TextoGana;
+    public string TextoEmpata;
+    public string TextoPierde;
 }
 
 // Lo que devuelve al cerrarse, para que la mesa del mundo pueda reaccionar sin

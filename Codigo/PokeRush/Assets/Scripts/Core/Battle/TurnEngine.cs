@@ -494,7 +494,7 @@ public class TurnEngine
         {
             // Inmunidad por tipo para estados con tipo (ej: Onda Trueno vs Ground)
             if (move.effect != StatusEffect.None
-                && DamageCalculator.DualEffectiveness(move.type, defender.Poken.Definition) <= 0f)
+                && DamageCalculator.DualEffectiveness(move.type, defender) <= 0f)
             {
                 BattleEvent.Add(events, $"No afecta a {defenderName}...");
                 return;
@@ -512,7 +512,7 @@ public class TurnEngine
         // Habilidades que anulan/absorben (Levitación, Absorber Electricidad...)
         if (AbilityEffects.CheckAbsorbOrImmunity(defender, move.type, events)) return;
 
-        float effectiveness = DamageCalculator.DualEffectiveness(move.type, defender.Poken.Definition);
+        float effectiveness = DamageCalculator.DualEffectiveness(move.type, defender);
         if (effectiveness <= 0f)
         {
             BattleEvent.Add(events, $"No afecta a {defenderName}...");

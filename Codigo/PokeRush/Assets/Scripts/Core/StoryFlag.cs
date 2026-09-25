@@ -94,5 +94,12 @@ public enum StoryFlag
     // dos que pelean una vez que se sumaron.
     Casino_TacconiVencido,
     Casino_GangsterVencido,
-    Casino_CrupieraVencida
+    Casino_CrupieraVencida,
+
+    // Casino, ultimo piso: el pasillo de guardias y el jefe (Martin Reymar).
+    // Al final por lo mismo que las tandas de arriba: las escenas guardan el
+    // flag como numero, asi que meter uno en el medio le cambia el valor a
+    // todos los de abajo.
+    Casino_JefeFinalVencido,
+    Casino_Completado
 }

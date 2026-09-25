@@ -53,8 +53,8 @@ public static class CasinoNpcBuilder
     private static readonly string[] Escenas = { Piso1, Piso2, Piso3 };
 
     private const string Contenedor = "PersonajesCasino";
-    private const string DefinitionFolder = "Assets/Resources/Definitions/Casino";
-    private const string DialogosFolder = DefinitionFolder + "/Dialogos";
+    public const string DefinitionFolder = "Assets/Resources/Definitions/Casino";
+    public const string DialogosFolder = DefinitionFolder + "/Dialogos";
     private const string Pokens = "Assets/Resources/Definitions/Pokens/";
     private const string Items = "Assets/Resources/Definitions/Items/";
     private const string Iconos = "Assets/Graphics/Ruleta/";
@@ -64,10 +64,25 @@ public static class CasinoNpcBuilder
 
     private const int CapaObstacles = 3;
 
+    // Cuanto hay que agrandar el sprite de un NPC para que su pixel de arte
+    // mida lo MISMO que el del jugador.
+    //
+    // El jugador dibuja con PPU 100 y escala 4 (0,04 unidades por pixel); las
+    // hojas de personaje se cortan a PPU 32 (0,03125). Sin corregirlo, un NPC
+    // parado al lado del jugador se ve un 28% mas chico, que es exactamente lo
+    // que se notaba en el pasillo del piso final.
+    //
+    // Es el cociente y no un numero a ojo: si alguien cambia el PPU del corte o
+    // la escala del jugador, esto sigue estando bien.
+    public const float PpuDeLasHojas = 32f;
+    private const float PpuDelJugador = 100f;
+    private const float EscalaDelJugador = 4f;
+    public const float EscalaDelVisual = PpuDeLasHojas * EscalaDelJugador / PpuDelJugador;
+
     // Las hojas de personaje del pack son 4x4: cuatro poses por direccion, en
     // el orden abajo / izquierda / derecha / arriba.
     private static readonly string[] Direcciones = { "abajo", "izq", "der", "arriba" };
-    private const int Abajo = 0, Izquierda = 1, Derecha = 2, Arriba = 3;
+    public const int Abajo = 0, Izquierda = 1, Derecha = 2, Arriba = 3;
 
     // Los NPCs que pueden dar la ruleta de premios al ganarles.
     private static readonly StoryFlag[] DanRuleta =
@@ -101,6 +116,16 @@ public static class CasinoNpcBuilder
 
     // El Pokemon de Tacconi, que pide el ascensor del piso 3.
     private const string EspecieDeTacconi = "0789_Cosmog";
+
+    // El sprite de Tacconi: la pose de frente de la hoja que paso el equipo
+    // (Assets/Tacconi/), recortada y con el fondo sacado. El retrato de la caja
+    // de dialogo es el busto de esa misma pose, en Graphics/Trainers/TACCONI.png.
+    //
+    // Va mas alto que los demas (76 px de arte contra 58): su dibujo tiene
+    // proporciones de unas 3 cabezas y los del pack son de 2,2, asi que igualar
+    // por ALTURA lo deja como un palito con la cara hecha una mancha. Se iguala
+    // por CABEZA, que es lo que se mira primero en un sprite chibi.
+    private const string SpriteDeTacconi = "Assets/Sprites/Casino/tacconi_frente.png";
 
     // Gente jugando a la ruleta del piso 2: una persona en el FRENTE de cada mesa
     // (abajo, donde se ve el borde de la mesa y se apuesta), mirandola. Cada mesa
@@ -462,13 +487,17 @@ public static class CasinoNpcBuilder
                     .AddComponent<NpcQueHabla>(), empresario);
 
                 // ---- Tacconi y su Cosmog shiny ----
-                // Sprites provisorios (Giovanni): el equipo va a pasar los de Tacconi.
+                // Ya tiene sus sprites propios (los paso el equipo el 18-sep).
+                // Va parado de frente y no se mueve, asi que es UN sprite suelto
+                // y no una hoja de 4x4: ver PersonajeSuelto y SpriteDeTacconi.
+                // Si el equipo pasa el resto de las direcciones, pasa a Personaje.
+                //
                 // Tiene SU mesa: la de arriba a la derecha (la mas cerca de la
                 // alfombra). Esta del lado del croupier, porque es el que reparte;
                 // su guardaespaldas se para al costado de la mesa mirando a la
                 // alfombra y el veterano la mira desde el pasillo entre mesas.
-                var tc = Personaje(raiz, "Tacconi", new Vector2(-6.5f, 18.5f), "giovanni", Abajo);
-                ConfigurarTacconi(tc.AddComponent<CasinoTacconiNpc>(), "GIOVANNI1");
+                var tc = PersonajeSuelto(raiz, "Tacconi", new Vector2(-6.5f, 18.5f), SpriteDeTacconi);
+                ConfigurarTacconi(tc.AddComponent<CasinoTacconiNpc>(), "TACCONI");
 
                 // ---- mas gente que pelea una vez ----
                 var gg = Personaje(raiz, "GangsterCasino", new Vector2(-3.5f, 16.5f), "rocketo", Derecha);
@@ -577,7 +606,7 @@ public static class CasinoNpcBuilder
 
     // ---------- escenas ----------
 
-    private static bool ArmarPiso(string path, System.Action<GameObject> poner, System.Action<Scene> extra = null)
+    public static bool ArmarPiso(string path, System.Action<GameObject> poner, System.Action<Scene> extra = null)
     {
         Scene scene = SceneManager.GetSceneByPath(path);
         bool yaAbierta = scene.IsValid() && scene.isLoaded;
@@ -773,7 +802,7 @@ public static class CasinoNpcBuilder
 
     // ---------- personajes ----------
 
-    private static GameObject Personaje(GameObject raiz, string nombre, Vector2 celda, string hoja, int mira)
+    public static GameObject Personaje(GameObject raiz, string nombre, Vector2 celda, string hoja, int mira)
     {
         var go = new GameObject(nombre);
         go.transform.SetParent(raiz.transform, false);
@@ -790,6 +819,10 @@ public static class CasinoNpcBuilder
         // El sprite tiene el pivote abajo: se lo baja media celda para que los
         // pies queden apoyados en el piso.
         visual.transform.localPosition = new Vector3(0f, -0.5f, 0f);
+        // Y se agranda para dibujar con el MISMO pixel que el jugador (ver
+        // EscalaDelVisual). Escala desde el pivote, que son los pies, asi que
+        // no hay que reacomodar nada.
+        visual.transform.localScale = Vector3.one * EscalaDelVisual;
 
         var sr = visual.AddComponent<SpriteRenderer>();
         sr.sprite = Frame(Hoja(hoja), mira);
@@ -799,6 +832,77 @@ public static class CasinoNpcBuilder
 
         if (sr.sprite == null) Debug.LogWarning($"[CasinoNPC] '{nombre}' quedo sin sprite ({hoja}).");
         return go;
+    }
+
+    // Igual que Personaje, pero con UN sprite suelto en vez de una hoja de 4x4.
+    //
+    // Para los personajes que el equipo entrega dibujados a mano y que no se
+    // mueven: no tienen las cuatro direcciones, asi que no hay hoja que cortar.
+    // El primero fue Tacconi.
+    public static GameObject PersonajeSuelto(GameObject raiz, string nombre, Vector2 celda, string pathDelSprite)
+    {
+        var go = new GameObject(nombre);
+        go.transform.SetParent(raiz.transform, false);
+        go.transform.position = new Vector3(celda.x, celda.y, 0f);
+
+        go.layer = CapaObstacles;
+        var col = go.AddComponent<BoxCollider2D>();
+        col.size = new Vector2(0.9f, 0.9f);
+
+        var visual = new GameObject("Visual");
+        visual.transform.SetParent(go.transform, false);
+        visual.transform.localPosition = new Vector3(0f, -0.5f, 0f);
+        visual.transform.localScale = Vector3.one * EscalaDelVisual;
+
+        var sr = visual.AddComponent<SpriteRenderer>();
+        sr.sprite = SpriteDePersonaje(pathDelSprite);
+        sr.sortingOrder = 15;
+
+        if (sr.sprite == null) Debug.LogWarning($"[CasinoNPC] '{nombre}' quedo sin sprite ({pathDelSprite}).");
+        return go;
+    }
+
+    // Importa un sprite suelto con las mismas medidas que las hojas cortadas:
+    // 32 pixeles por unidad y pivote abajo al medio, que es lo que hace que los
+    // pies queden apoyados en la celda y que mida lo mismo que el resto.
+    public static Sprite SpriteDePersonaje(string path)
+    {
+        var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+        if (importer == null)
+        {
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+            importer = AssetImporter.GetAtPath(path) as TextureImporter;
+        }
+        if (importer == null) { Debug.LogError($"[CasinoNPC] No existe {path}."); return null; }
+
+        var settings = new TextureImporterSettings();
+        importer.ReadTextureSettings(settings);
+
+        bool bien = importer.textureType == TextureImporterType.Sprite &&
+                    importer.spriteImportMode == SpriteImportMode.Single &&
+                    importer.filterMode == FilterMode.Point &&
+                    importer.textureCompression == TextureImporterCompression.Uncompressed &&
+                    !importer.mipmapEnabled &&
+                    Mathf.Approximately(importer.spritePixelsPerUnit, PpuDeLasHojas) &&
+                    settings.spriteAlignment == (int)SpriteAlignment.BottomCenter;
+        if (bien) return AssetDatabase.LoadAssetAtPath<Sprite>(path);
+
+        importer.textureType = TextureImporterType.Sprite;
+        importer.spriteImportMode = SpriteImportMode.Single;
+        importer.filterMode = FilterMode.Point;
+        importer.textureCompression = TextureImporterCompression.Uncompressed;
+        importer.mipmapEnabled = false;
+        importer.alphaIsTransparency = true;
+        importer.spritePixelsPerUnit = PpuDeLasHojas;
+
+        importer.ReadTextureSettings(settings);
+        settings.spriteAlignment = (int)SpriteAlignment.BottomCenter;
+        settings.spritePivot = new Vector2(0.5f, 0f);
+        importer.SetTextureSettings(settings);
+        importer.SaveAndReimport();
+
+        Debug.Log($"[CasinoNPC] Sprite de personaje reimportado (PPU {PpuDeLasHojas}, pivote abajo): {path}");
+        return AssetDatabase.LoadAssetAtPath<Sprite>(path);
     }
 
     private static void ConfigurarEntrenador(CasinoTrainerNpc npc, string nombre, EnemyDefinition rival,
@@ -866,7 +970,7 @@ public static class CasinoNpcBuilder
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 
-    private static void ConfigurarQueHabla(NpcQueHabla npc, DialogueDefinition dialogo)
+    public static void ConfigurarQueHabla(NpcQueHabla npc, DialogueDefinition dialogo)
     {
         var so = new SerializedObject(npc);
         so.FindProperty("dialogo").objectReferenceValue = dialogo;
@@ -877,7 +981,7 @@ public static class CasinoNpcBuilder
 
     // Los rivales se actualizan siempre (equipo, plata, flag): son balance del
     // builder, no texto del equipo.
-    private static EnemyDefinition Enemigo(string archivo, string nombre, int plata, StoryFlag flag,
+    public static EnemyDefinition Enemigo(string archivo, string nombre, int plata, StoryFlag flag,
         string retrato, string perfil, params (string especie, int nivel)[] equipo)
     {
         string path = $"{DefinitionFolder}/{archivo}.asset";
@@ -903,7 +1007,7 @@ public static class CasinoNpcBuilder
         return def;
     }
 
-    private static DialogueDefinition Dialogo(string archivo, string hablante, params string[] lineas)
+    public static DialogueDefinition Dialogo(string archivo, string hablante, params string[] lineas)
     {
         string path = $"{DialogosFolder}/{archivo}.asset";
         var def = AssetDatabase.LoadAssetAtPath<DialogueDefinition>(path);
@@ -1158,7 +1262,7 @@ public static class CasinoNpcBuilder
     // retrato mostraba un pedazo agrandado) y todos con filtro bilinear y
     // compresion, que los deja borrosos. Se fuerza imagen entera, Point y sin
     // compresion; solo se reimporta si algo no coincide.
-    private static Sprite SpriteRetrato(string path)
+    public static Sprite SpriteRetrato(string path)
     {
         var importer = AssetImporter.GetAtPath(path) as TextureImporter;
         if (importer == null) { Debug.LogError($"[CasinoNPC] No existe {path}."); return null; }
@@ -1182,7 +1286,7 @@ public static class CasinoNpcBuilder
         return AssetDatabase.LoadAssetAtPath<Sprite>(path);
     }
 
-    private static Sprite SpriteSimple(string path)
+    public static Sprite SpriteSimple(string path)
     {
         var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
         if (sprite != null) return sprite;
@@ -1257,9 +1361,9 @@ public static class CasinoNpcBuilder
         importer.textureCompression = TextureImporterCompression.Uncompressed;
         importer.mipmapEnabled = false;
         importer.alphaIsTransparency = true;
-        // 32 pixeles por unidad, como los tiles: un personaje de 64px mide dos
-        // celdas de alto, que es lo que miden los del resto del juego.
-        importer.spritePixelsPerUnit = 32;
+        // 32 pixeles por unidad, como los tiles. El personaje termina de medir lo
+        // que tiene que medir con EscalaDelVisual, que lo empareja con el jugador.
+        importer.spritePixelsPerUnit = PpuDeLasHojas;
         importer.SaveAndReimport();
 
         var factories = new SpriteDataProviderFactories();

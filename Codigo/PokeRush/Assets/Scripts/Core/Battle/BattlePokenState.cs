@@ -33,6 +33,23 @@ public class BattlePokenState
     // Flag de Flash Fire: se activo la inmunidad y potencia sus movimientos Fire
     public bool FlashFireBoosted;
 
+    // ---- tipo cambiado (lo hace la ruleta del jefe del casino) ----
+    // El Poken pasa a ser de UN solo tipo, como Hidropulsion en la saga. None =
+    // conserva los suyos. Como todo lo de esta clase se pierde al cambiar de
+    // Poken, que es la semantica correcta: el tipo nuevo es del que esta en el
+    // campo, no de la especie.
+    //
+    // Lo leen Tipo1/Tipo2 y NADIE mas: el resto del combate pregunta por estas
+    // dos, no por Poken.Definition.type, asi el cambio vale para efectividad,
+    // STAB e inmunidades de estado sin tener que acordarse en cada lugar.
+    public PokenType TipoCambiado = PokenType.None;
+
+    public PokenType Tipo1 => TipoCambiado != PokenType.None ? TipoCambiado : Poken.Definition.type;
+    public PokenType Tipo2 => TipoCambiado != PokenType.None ? PokenType.None : Poken.Definition.type2;
+
+    public bool EsDeTipo(PokenType tipo)
+        => tipo != PokenType.None && (Tipo1 == tipo || Tipo2 == tipo);
+
     // Ya se emitio el evento "se debilitó" (evita anunciarlo dos veces)
     public bool FaintAnnounced;
 

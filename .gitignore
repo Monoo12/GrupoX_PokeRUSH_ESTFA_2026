@@ -33,3 +33,13 @@ Codigo/PokeRush/Capturas/
 # === Python: cache de los scripts de scripts/ ===
 __pycache__/
 *.pyc
+
+# === Pack de graficos de Essentials ===
+# Vive solo en local: de ahi se saca lo que el juego usa. Lo que ya esta
+# versionado sigue versionado; algo nuevo que se use se agrega con git add -f.
+Codigo/PokeRush/Assets/Graphics/*
+!Codigo/PokeRush/Assets/Graphics.meta
+
+# === Escenas de recuperacion que deja Unity al cerrarse mal ===
+Codigo/PokeRush/Assets/_Recovery/
+Codigo/PokeRush/Assets/_Recovery.meta

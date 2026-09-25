@@ -29,12 +29,65 @@ un piso no toque el otro:
 > Las frases de los jugadores (tragaperras, ruleta y blackjack: `Jugador*.asset`) también son
 > provisorias, pero no son de historia.
 
-> ## ⚠️ Pendiente: los sprites de Tacconi
->
-> Tacconi usa sprites **provisorios**: la hoja `Graphics/Characters/giovanni.png` y el retrato
-> `Graphics/Trainers/GIOVANNI1.png`. Cuando lleguen los suyos, cambiar `"giovanni"` y
-> `"GIOVANNI1"` en el bloque del piso 3 de `CasinoNpcBuilder` y volver a correr
-> `Poner los personajes de los pisos 2 y 3`.
+## Los sprites de Tacconi (ya son los suyos)
+
+Desde el 18-sep Tacconi usa **su propio arte**, no el provisorio de Giovanni:
+
+| Archivo | Qué es |
+|---|---|
+| `Sprites/Casino/tacconi_frente.png` | El del mapa: 30x76, parado de frente. |
+| `Graphics/Trainers/TACCONI.png` | El retrato de la caja de diálogo, 160x160. |
+| `Assets/Tacconi/Gemini_Generated_Image_v0fpte...jpg` | El dibujo que pasó el equipo. |
+
+**Está parado y no se mueve**, así que es **un sprite suelto** y no una hoja de 4x4. Lo
+cuelga `CasinoNpcBuilder.PersonajeSuelto`, que es el mismo `Personaje` de siempre pero con un
+único sprite. `SpriteDePersonaje` lo importa a 32 píxeles por unidad y con el pivote abajo al
+medio, que es lo que hace que los pies queden apoyados en la celda.
+
+### Lo que hay que hacerle al dibujo antes de meterlo
+
+No es un recorte directo, y saltearse estos dos pasos fue lo que hizo que quedara mal dos
+veces seguidas:
+
+- **Sacarle el damero.** El archivo es un **JPG**, así que el damero de transparencia quedó
+  pegado como cuadrados blancos y grises. Se saca marcando como fondo lo neutro y claro y
+  rellenando **desde el borde**, no por color: el blanco del cuello del polo está encerrado
+  por el contorno negro, así que el relleno no lo alcanza y se salva.
+- **Volverlo pixel art.** El JPEG le mete ruido: la figura sale con ~18.000 colores. Un
+  personaje del pack usa **~20** y lleva **contorno negro de 1 píxel**. Después de achicar
+  hay que **reducir la paleta sin difuminado** (a este tamaño el dither es suciedad, no
+  sombreado) y **repintar el contorno por dentro de la silueta**, para no agrandar el sprite.
+  Sin eso, en el mapa se ve como una mancha al lado de los demás por más que la escala y el
+  pivote estén bien.
+
+### Por qué mide 76 y no 58
+
+Su dibujo tiene proporciones de unas **3 cabezas** y los del pack son de **2,2**. Igualando
+por **altura** queda un palito de 23 px de ancho contra los 36 del guardia, y la cara se
+vuelve una mancha. Se iguala por **cabeza**, que es lo que se mira primero en un sprite
+chibi: ahí dan 76 y se le leen los anteojos y la remera. Queda 3,04 unidades de alto contra
+2,32 del resto.
+
+Es una constante del script de exportación. Si se lo quiere más bajo, a 68 todavía se lee;
+a 58 no.
+
+### Si se vuelve a generar el dibujo
+
+Lo que sigue sin cumplirse y haría que entrara en 58 sin perder nada:
+
+- **40 x 60 píxeles reales**, no una imagen grande "estilo pixel art". Las tres que se
+  probaron vinieron entre 300 y 1140 px de alto, y ahí el detalle se pierde al achicar sí o sí.
+- **PNG con fondo transparente de verdad**, nunca JPEG: el JPG rompe la paleta plana y pega
+  el damero.
+- Proporción **chibi de 2 a 2,5 cabezas**, como los personajes de Essentials del proyecto.
+
+Lo que sí vino bien en la última: figura única, de frente, parada, completa con pies,
+contorno negro y paleta razonablemente plana.
+
+> Se probaron tres. La primera tenía las poses de frente cortadas a la altura de la rodilla y
+> proporciones realistas (hubo que injertarle piernas: quedó mal). La segunda era una hoja de
+> 20 poses, mejor pero todavía con el detalle perdido al achicar. La que vale es la tercera
+> (`Gemini_Generated_Image_v0fpte...`), una sola figura ya dibujada de frente.
 
 ## Néstor de ayudante en todos los combates
 

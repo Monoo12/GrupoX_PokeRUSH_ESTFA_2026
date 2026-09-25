@@ -62,8 +62,11 @@ public abstract class CasinoNpcConCombate : MonoBehaviour
 
     // ---------- combate ----------
 
+    // 'ruleta' es la ruleta que aparece cada dos turnos durante la pelea. Solo
+    // la usa el jefe del ultimo piso; los demas NPCs pelean sin ninguna.
     protected bool LanzarCombate(PlayerModel jugador, EnemyDefinition rival,
-                                 System.Action<BattleOutcome> alTerminar)
+                                 System.Action<BattleOutcome> alTerminar,
+                                 CasinoRuletaDeCombate ruleta = null)
     {
         if (rival == null)
         {
@@ -88,8 +91,30 @@ public abstract class CasinoNpcConCombate : MonoBehaviour
         EsperandoCombate = true;
         _alTerminar = alTerminar;
         battleController.BattleEnded += OnBattleEnded;
-        battleController.StartBattle(jugador, rival, conNestorAliado: true);
+        battleController.StartBattle(jugador, rival, conNestorAliado: true,
+                                    ruletaDeCombate: ruleta);
         return true;
+    }
+
+    // Revancha: sigue la MISMA pelea con los equipos como quedaron. Se vuelve a
+    // escuchar el final, igual que en LanzarCombate, porque la suscripcion se
+    // corta en cuanto termina cada pelea.
+    protected bool LanzarRevancha(PlayerModel jugador, System.Action<BattleOutcome> alTerminar)
+    {
+        if (battleController == null || jugador == null) return false;
+
+        EsperandoCombate = true;
+        _alTerminar = alTerminar;
+        battleController.BattleEnded += OnBattleEnded;
+
+        if (battleController.Revancha(jugador)) return true;
+
+        // No arranco: hay que soltar la suscripcion o el NPC queda esperando un
+        // BattleEnded que no va a llegar nunca.
+        battleController.BattleEnded -= OnBattleEnded;
+        EsperandoCombate = false;
+        _alTerminar = null;
+        return false;
     }
 
     private void OnBattleEnded(BattleOutcome outcome)
