@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Historia_PisoFinal_GuardiaPasillo4
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: GUARDIA
+  speakerName: "GUARDIA"
   speakerPortrait: {fileID: 0}
   lines:
-  - "Arriba no se sube. Adentro no se entra. Vos ya est\xE1s adentro, as\xED que
-    segu\xED."
-  - "El jefe te est\xE1 esperando. No te hagas el vivo."
-  - Yo de vos me daba vuelta. Pero nadie me escucha.
+  - "[GUARDIA] Dicen que la Directora mira este piso en persona. No por las c\xE1maras."
+  - "[GUARDIA] Por nosotros. Por nuestros ojos."
+  - "[] El guardia parpadea dos veces, muy despacio."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

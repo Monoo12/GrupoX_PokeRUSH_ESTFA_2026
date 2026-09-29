@@ -16,6 +16,11 @@ using UnityEngine;
 // Nunca deja al jugador sin equipo: no acepta la apuesta si, perdiendola, el
 // equipo se queda sin nadie que pueda pelear.
 //
+// La historia (opcional, en assets): 'presentacion' es lo que cuenta la
+// primera vez, antes de ofrecer la mano (se marca con su grantsFlag y no se
+// repite); 'despuesDeGanar' suena al perder el premio (la tarjeta y lo que sabe
+// del registro de 2026); 'charlaYaGanado' reemplaza al cartel de ya ganado.
+//
 // En la Quarcho Cueva es el MISMO componente con otro premio (un Mew) y con
 // tope de chances: cada mano perdida gasta un flag de 'chances' y, gastados
 // todos, no juega mas. En el casino 'chances' queda vacio y se puede jugar
@@ -64,6 +69,14 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
     [SerializeField, TextArea(2, 4)] private string mensajeSeFue = "¿Te arrepentiste? Mejor para vos.";
     [SerializeField, TextArea(2, 4)] private string mensajeYaGanado =
         "Ya te llevaste mi {0}. No me hagas acordar.";
+
+    [Header("Historia (opcional)")]
+    [Tooltip("La primera vez, antes de ofrecer la mano. Su grantsFlag marca que ya se conto.")]
+    [SerializeField] private DialogueDefinition presentacion;
+    [Tooltip("Despues del cartel de la mano ganada.")]
+    [SerializeField] private DialogueDefinition despuesDeGanar;
+    [Tooltip("En vez de 'mensajeYaGanado'.")]
+    [SerializeField] private DialogueDefinition charlaYaGanado;
 
     [Header("Chances (vacio = sin tope, como en el casino)")]
     [Tooltip("Un flag por mano PERDIDA, en orden. Gastados todos, Tacconi no " +
@@ -137,7 +150,10 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
 
         if (flagGanado != StoryFlag.None && story.HasFlag(flagGanado))
         {
-            Decir(string.Format(mensajeYaGanado, NombrePremio));
+            if (charlaYaGanado != null && dialogueController != null)
+                dialogueController.StartDialogue(charlaYaGanado, story);
+            else
+                Decir(string.Format(mensajeYaGanado, NombrePremio));
             return true;
         }
 
@@ -153,12 +169,30 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
             return false;
         }
 
+        if (TocaPresentarse(story))
+        {
+            dialogueController.StartDialogue(presentacion, story, () => OfrecerMano(player, story));
+            return true;
+        }
+
+        OfrecerMano(player, story);
+        return true;
+    }
+
+    // Publico para los tests.
+    public bool TocaPresentarse(StoryModel story)
+    {
+        if (presentacion == null || dialogueController == null) return false;
+        return presentacion.grantsFlag == StoryFlag.None || story == null || !story.HasFlag(presentacion.grantsFlag);
+    }
+
+    private void OfrecerMano(PlayerModel player, StoryModel story)
+    {
         Preguntar(string.Format(pregunta, NombrePremio), opcionJugar, opcionNo, jugar =>
         {
             if (!jugar) { Decir(mensajeRechazo); return; }
             ElegirApuesta(player, story);
         });
-        return true;
     }
 
     private void ElegirApuesta(PlayerModel player, StoryModel story)
@@ -234,10 +268,18 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
                     ? r.ResultadoApuestaPokemon
                     : BlackjackOutcome.Pendiente;
 
+                bool yaLoTenia = flagGanado != StoryFlag.None && story != null && story.HasFlag(flagGanado);
                 string cartel = AplicarResultado(player, story, apuesta, final);
                 if (final != BlackjackOutcome.Pendiente && final != BlackjackOutcome.Empata)
                     CasinoDialogo.Guardar();
-                Decir(cartel);
+
+                // Recien ganado (no "gano pero no tenia lugar"): lo que cuenta despues.
+                bool recienGanado = !yaLoTenia && flagGanado != StoryFlag.None && story != null && story.HasFlag(flagGanado);
+                if (recienGanado && despuesDeGanar != null && dialogueController != null)
+                    CasinoDialogo.Decir(dialogueController, nombre, retrato, new[] { cartel },
+                        () => dialogueController.StartDialogue(despuesDeGanar, story, CasinoDialogo.Guardar));
+                else
+                    Decir(cartel);
             });
     }
 

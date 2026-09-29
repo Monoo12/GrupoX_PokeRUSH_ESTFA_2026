@@ -12,14 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Tutorial_Mochila
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: 
+  speakerName: ""
   speakerPortrait: {fileID: 0}
   lines:
-  - "Tu mochila. Ac\xE1 va todo lo que juntes: medicinas, objetos de combate y objetos
-    clave."
-  - "Una Poci\xF3n le devuelve PS a un Pok\xE9mon: la eleg\xEDs y despu\xE9s a qui\xE9n
-    d\xE1rsela."
-  - "En combate tambi\xE9n sirve, pero usarla te gasta el turno."
-  - "En el men\xFA (Z) la vas a encontrar como Bolsa."
+  - "[] Tu mochila. Adentro siguen los apuntes de Redes. El parcial era \"la semana que viene\". Tienen dos dedos de polvo."
+  - "[] Ac\xE1 va todo lo que juntes: medicinas, objetos de combate y objetos clave, como la carta."
+  - "[] Una Poci\xF3n le devuelve PS a un Pok\xE9mon: la eleg\xEDs y despu\xE9s a qui\xE9n d\xE1rsela."
+  - "[] En combate tambi\xE9n sirve, pero te gasta el turno."
+  - "[] En el men\xFA (Z) la vas a encontrar como Bolsa."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

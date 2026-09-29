@@ -15,8 +15,25 @@ MonoBehaviour:
   speakerName: "N\xC9STOR"
   speakerPortrait: {fileID: 21300000, guid: 853498d5f00c6fa45a5a2b62a53fa1c5, type: 3}
   lines:
-  - "Gracias por sacarme de ese chip. Todav\xEDa me zumban los o\xEDdos."
-  - "Mientras tanto, arm\xE9 ac\xE1 mi puesto de MT. Si quer\xE9s que alguno de tus
-    Pok\xE9mon aprenda algo nuevo, avisame."
+  - "[N\xC9STOR] Ante todo, buenos d\xEDas."
+  - "[N\xC9STOR] Te dije que cuando me acordara de todo te iba a buscar. De todo todo, no. Pero de bastante."
+  - "[N\xC9STOR] Me acuerdo del aula. De la sala de la directora. De la luz. Y de vos, atr\xE1s de un escritorio, con cara de culpa."
+  - "[N\xC9STOR] El chip me dej\xF3 algo bueno, al menos: s\xE9 c\xF3mo se ense\xF1a cada t\xE9cnica. Las MT tambi\xE9n son datos."
+  - "[N\xC9STOR] \xBFTe sirvi\xF3 el Protocolo? Yo todav\xEDa lo siento, a veces. Como un eco."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Despues de Julieta"
+    requiere: 65
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[N\xC9STOR] Ante todo, buenos d\xEDas. Hoy s\xED, de verdad."
+    - "[N\xC9STOR] Me acuerdo de todo. Hasta de cosas que preferir\xEDa no acordarme. As\xED es la memoria cuando es tuya."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

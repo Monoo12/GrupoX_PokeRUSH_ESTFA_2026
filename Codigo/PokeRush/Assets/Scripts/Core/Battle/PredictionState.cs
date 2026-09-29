@@ -100,6 +100,11 @@ public class PredictionState
     public System.Func<bool> TieneMovimientoDeEstado;
     public System.Func<bool> TieneMovimientoDeDano;
 
+    // Quien lee, para los textos. En la torre 1 es Nestor; en la pelea final
+    // Julieta le roba el protocolo a Nestor y lo usa contra el jugador con las
+    // mismas reglas, asi que lo unico que cambia es el nombre en pantalla.
+    public string Lector = "Nestor";
+
     public PredictionState(bool conAviso, int turnosEntrePredicciones)
     {
         _conAviso = conAviso;
@@ -128,7 +133,7 @@ public class PredictionState
             // en vez de cantar un bloqueo que despues no bloquea nada (antes
             // salia "no podes actuar" y el jugador podia hacer de todo).
             if (Categoria == PredictedCategory.None)
-                return "Nestor no te encontró la vuelta: este turno es libre.";
+                return $"{Lector} no te encontró la vuelta: este turno es libre.";
 
             _ultima = Categoria;
             return MensajeBloqueo(Categoria);
@@ -143,7 +148,7 @@ public class PredictionState
             _pendiente = Elegir(model, rng);
             Anticipada = _pendiente;
             if (Anticipada != PredictedCategory.None)
-                return $"Nestor esta calculando: el proximo turno te va a leer {Texto(Anticipada)}.";
+                return $"{Lector} esta calculando: el proximo turno te va a leer {Texto(Anticipada)}.";
             return null;
         }
 
@@ -188,11 +193,11 @@ public class PredictionState
     {
         switch (Categoria)
         {
-            case PredictedCategory.Ataque: return "Nestor anticipo tu ataque. Probá otra cosa.";
-            case PredictedCategory.Estado: return "Nestor te leyó el movimiento de estado. Probá otra cosa.";
-            case PredictedCategory.Cambio: return "Nestor bloqueo el cambio.";
-            case PredictedCategory.Objeto: return "Nestor te vio buscar en la mochila.";
-            default: return "Nestor anticipo tu accion.";
+            case PredictedCategory.Ataque: return $"{Lector} anticipo tu ataque. Probá otra cosa.";
+            case PredictedCategory.Estado: return $"{Lector} te leyó el movimiento de estado. Probá otra cosa.";
+            case PredictedCategory.Cambio: return $"{Lector} bloqueo el cambio.";
+            case PredictedCategory.Objeto: return $"{Lector} te vio buscar en la mochila.";
+            default: return $"{Lector} anticipo tu accion.";
         }
     }
 
@@ -211,16 +216,16 @@ public class PredictionState
         if (Categoria != PredictedCategory.None)
         {
             snap.Titulo = "ANULADO: " + TituloDe(Categoria);
-            snap.Detalle = "Nestor te leyó la jugada.";
+            snap.Detalle = $"{Lector} te leyó la jugada.";
         }
         else if (Anticipada != PredictedCategory.None)
         {
-            snap.Titulo = "LECTURA DE NESTOR";
+            snap.Titulo = "LECTURA DE " + Lector.ToUpperInvariant();
             snap.Detalle = $"El próximo turno te lee {Texto(Anticipada)}.";
         }
         else
         {
-            snap.Titulo = "LECTURA DE NESTOR";
+            snap.Titulo = "LECTURA DE " + Lector.ToUpperInvariant();
             snap.Detalle = TurnosParaProxima == 1
                 ? "Próxima lectura: el turno que viene."
                 : $"Próxima lectura en {TurnosParaProxima} turnos.";
@@ -229,8 +234,8 @@ public class PredictionState
         return snap;
     }
 
-    private static string MensajeBloqueo(PredictedCategory c) =>
-        $"Nestor te leyo: este turno no podes {Texto(c)}.";
+    private string MensajeBloqueo(PredictedCategory c) =>
+        $"{Lector} te leyo: este turno no podes {Texto(c)}.";
 
     // Nombre de la categoria en español. Publico porque la vista lo necesita
     // para rotular iconos sin volver a escribir la tabla.

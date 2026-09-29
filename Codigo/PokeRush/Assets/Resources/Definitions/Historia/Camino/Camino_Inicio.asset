@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Camino_Inicio
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: ""
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[] Afuera, la ciudad est\xE1 en silencio. Demasiado silencio para ser de d\xEDa."
+  - "[] En cada ventana brilla una c\xE1psula. Adentro, gente durmiendo con los ojos abiertos."
+  - "[] Un Lillipup con un chip en la nuca camina en l\xEDnea recta hasta chocar con un poste. Gira noventa grados y sigue."
+  - "[] Un Pidgey mira un cartel de la Liga sin pesta\xF1ear: \"DORM\xCD TRANQUILO. NOSOTROS PENSAMOS POR VOS.\""
+  - "[] En la esquina hay alguien con casco del Gobierno Mundial. Al lado, un robotito que no para de hablar."
+  - "[] Esa cara te suena."
+  - "[PJ] \xBF...CRUZ?"
+  - "[CRUZ] \xBFQu\xE9 hac\xE9s fuera de tu c\xE1psula? \xA1Present\xE1 respetos al Gobierno Mundial!"
+  - "[ARTURITO] Bip. Ciudadano fuera de horario. Bip. Qu\xE9 verg\xFCenza. Bip."
+  requiredFlag: 0
+  grantsFlag: 66
+  otrosHablantes:
+  - nombre: "CRUZ"
+    retrato: {fileID: 21300000, guid: bb83d80bef73aff4eafbf0dd6154a5a9, type: 3}
+  - nombre: "ARTURITO"
+    retrato: {fileID: 0}
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: "\xBFQu\xE9 hac\xE9s?"
+  respuestas:
+  - opcion: "Dialogar"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: 65f76d9e6b56956b239ac7face0722f6, type: 2}
+  - opcion: "Huir"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 68
+    siguiente: {fileID: 11400000, guid: ed55554eda3008697a13d8db3b389f4f, type: 2}
+  - opcion: "Atacar"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 69
+    siguiente: {fileID: 11400000, guid: 4ad1d7c926383e744f8f597eca290d97, type: 2}
+  cancelarElige: 1
+  siguiente: {fileID: 0}

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add55da467d09504c924f5aa415c5bf4, type: 3}
+  m_Name: TarjetaPiso4
+  m_EditorClassIdentifier: Assembly-CSharp::SpecialItemDefinition
+  itemName: "Tarjeta de acceso P4"
+  description: "Tarjeta magn\xE9tica de Tacconi. Abre el ascensor al piso 4 del casino: el que no existe."
+  icon: {fileID: 2090832415092106812, guid: 0e01a57f34198614ca689686349e9b06, type: 3}
+  buyPrice: 0
+  effectDescription: "Habilita el ascensor al \xFAltimo piso del casino."
+  triggersFlag: 0

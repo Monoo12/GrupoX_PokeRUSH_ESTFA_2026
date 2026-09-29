@@ -610,8 +610,7 @@ MonoBehaviour:
   mensajeBajando: El ascensor baja.
   mensajeFaltaDinero: Necesitas conseguir mas dinero. Te faltan {0}.
   mensajeFaltaObjetivo: El ascensor no se abre todavia. Te falta algo en este piso.
-  mensajeFaltaPokemon: 'El de seguridad no te deja subir: arriba solo entran los
-    que tienen un {0} shiny. Dicen que Tacconi tiene uno.'
+  mensajeFaltaPokemon: "Un lector de tarjetas parpadea en rojo: PISO 4, ACCESO RESTRINGIDO. La tarjeta la tiene Tacconi, y la apuesta junto con su {0} shiny."
   preguntarAntesDeSubir: 1
 --- !u!61 &77964466
 BoxCollider2D:
@@ -12917,8 +12916,7 @@ MonoBehaviour:
   especiePremio: {fileID: 11400000, guid: 6829c0eace00f1b4692bfe150db8a819, type: 2}
   nivelPremio: 15
   premioShiny: 1
-  pregunta: "Soy Tacconi. \xBFVes este {0}? \xDAnico en todo el casino. Te lo juego
-    a una mano de blackjack contra uno de tus Pok\xE9mon. \xBFJugamos?"
+  pregunta: "Una mano de blackjack: uno de tus Pok\xE9mon contra mi {0}. Si gan\xE1s, te llev\xE1s los dos: el shiny y la tarjeta. \xBFJugamos?"
   opcionJugar: Jugar
   opcionNo: Paso
   mensajeRechazo: "Cuando te animes, ac\xE1 estoy. De esta mesa no me muevo."
@@ -12936,6 +12934,9 @@ MonoBehaviour:
   mensajeEmpate: "Empate. Nadie pierde nada. \xBFOtra?"
   mensajeSeFue: "\xBFTe arrepentiste? Mejor para vos."
   mensajeYaGanado: Ya te llevaste mi {0}. No me hagas acordar.
+  presentacion: {fileID: 11400000, guid: fca524f5d9741278827d9bb6439cd949, type: 2}
+  despuesDeGanar: {fileID: 11400000, guid: 77fdb09dd17556d665024cf03df31e92, type: 2}
+  charlaYaGanado: {fileID: 11400000, guid: 224cfd352c6c89c9a26076cce7830873, type: 2}
 --- !u!61 &499746558
 BoxCollider2D:
   m_ObjectHideFlags: 0

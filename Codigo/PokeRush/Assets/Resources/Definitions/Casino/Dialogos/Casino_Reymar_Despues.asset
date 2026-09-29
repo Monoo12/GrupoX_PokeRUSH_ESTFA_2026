@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Casino_Reymar_Despues
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "MART\xCDN"
+  speakerPortrait: {fileID: 21300000, guid: 97358298e5121c8408cf32d53e1270c9, type: 3}
+  lines:
+  - "[] Reymar suelta las cartas. El chip de su nuca chisporrotea."
+  - "[SISTEMA] CONEXI\xD3N PERDIDA. ERROR CR\xCDTICO. DESCONEXI\xD3N DEL USUARIO."
+  - "[MART\xCDN] ..."
+  - "[MART\xCDN] \xBFCu\xE1ntas manos jugu\xE9? ...No, no me contestes. Cinco a\xF1os. Perd\xED cinco a\xF1os sentado ac\xE1."
+  - "[MART\xCDN] Me acuerdo del d\xEDa de la onda. Estaba en la calle y vi un aro dorado, enorme, abierto arriba del Ameghino. Despu\xE9s, nada."
+  - "[MART\xCDN] La ruleta... llev\xE1tela. Si alguna vez fue m\xEDa, ahora es tuya."
+  - "[MART\xCDN] Cuando se me pase el mareo, voy a ir a buscar a ese tal Tixi. Dicen que ah\xED se juega limpio."
+  - "[] Detr\xE1s de la mesa, la pared se abre. Hay un rack solo, enorme, lleno de luces. El servidor."
+  - "[] Antes de que se apague, hac\xE9s lo que dijo Tacconi: busc\xE1s tu nombre."
+  - "[SISTEMA] BUSCANDO: {PJ}... 1 RESULTADO."
+  - "[SISTEMA] REGISTRO 2026. PRIMER EXPERIMENTO NEURARUSH-LINK. RESPONSABLE: J."
+  - "[SISTEMA] EQUIPO DE DESARROLLO: {PJ} (NO VOLUNTARIO). APORTE: M\xD3DULO DE PROPAGACI\xD3N."
+  - "[SISTEMA] ESTADO DEL SUJETO: [DATO ELIMINADO POR LA ADMINISTRADORA]."
+  - "[PJ] \xBF\"M\xF3dulo de propagaci\xF3n\"? \xBF\"No voluntario\"?"
+  - "[SISTEMA] SERVIDOR 02: DESCONEXI\xD3N INICIADA."
+  - "[] Las luces del rack se apagan de a una. Lo \xFAltimo que queda en la pantalla es una letra: J."
+  requiredFlag: 0
+  grantsFlag: 86
+  otrosHablantes:
+  - nombre: "REYMAR"
+    retrato: {fileID: 21300000, guid: 97358298e5121c8408cf32d53e1270c9, type: 3}
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

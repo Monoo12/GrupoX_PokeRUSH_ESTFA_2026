@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Lobby_Tacconi_Presentacion
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "TACCONI"
+  speakerPortrait: {fileID: 21300000, guid: 630ce5488625ef8419eb65dcd7bdcd1d, type: 3}
+  lines:
+  - "[TACCONI] Llegaste tarde. Otra vez."
+  - "[PJ] \xBFTarde para qu\xE9?"
+  - "[TACCONI] Para ganar. \xBFBuscaste tu nombre all\xE1 arriba?"
+  - "[PJ] Lo encontr\xE9. \"No voluntario\". \"M\xF3dulo de propagaci\xF3n\". No entend\xED nada."
+  - "[TACCONI] Somos dos. Yo tampoco entiendo por qu\xE9 sigo apostando."
+  - "[] Tacconi te muestra una Pok\xE9bola vieja, rayada. Adentro, algo rosado se mueve como si te reconociera."
+  - "[TACCONI] Apareci\xF3 el mismo d\xEDa que el portal, en 2026, flotando arriba del Ameghino. Nadie lo reclam\xF3."
+  - "[TACCONI] Te lo juego. Tres chances. Ni una m\xE1s."
+  requiredFlag: 0
+  grantsFlag: 87
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

@@ -12,9 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: JugadorTragaperras2
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: JUGADORA
+  speakerName: "MUJER"
   speakerPortrait: {fileID: 0}
   lines:
-  - "Llevo tres d\xEDas en esta silla. Ya casi sale."
+  - "[] Una mujer mira las m\xE1quinas sin jugar."
+  - "[PJ] \xBFHace cu\xE1nto que est\xE1s ac\xE1?"
+  - "[MUJER] No s\xE9."
+  - "[PJ] \xBFC\xF3mo que no sab\xE9s?"
+  - "[MUJER] Entr\xE9 a jugar una partida."
+  - "[PJ] \xBFY?"
+  - "[MUJER] Perd\xED."
+  - "[PJ] \xBFCu\xE1nto?"
+  - "[MUJER] Cinco a\xF1os."
+  - "[PJ] ..."
+  - "[MUJER] Al principio pens\xE9 que era una exageraci\xF3n."
+  - "[PJ] \xBFY ahora?"
+  - "[MUJER] Ahora no me acuerdo de c\xF3mo era mi casa."
+  - "[PJ] \xBFTen\xE9s un chip?"
+  - "[MUJER] Todos ac\xE1 tenemos uno."
+  - "[PJ] Yo no."
+  - "[] La mujer te mira fijo."
+  - "[MUJER] Entonces sos quien est\xE1 causando problemas..."
+  - "[] Vuelve a mirar la m\xE1quina, sin jugar."
   requiredFlag: 0
-  grantsFlag: 0
+  grantsFlag: 80
+  otrosHablantes: []
+  variantes:
+  - nota: "Ya hablaron"
+    requiere: 80
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[MUJER] No me mires as\xED. Estoy esperando que la m\xE1quina me devuelva los cinco a\xF1os."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Nestor_Despues
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "N\xC9STOR"
+  speakerPortrait: {fileID: 21300000, guid: a4969c809e8096346880bff78dd80c5e, type: 3}
+  lines:
+  - "[] N\xE9stor cae de rodillas."
+  - "[N\xC9STOR] No... puede ser..."
+  - "[] El NeuraRush-LINK de su nuca empieza a fallar."
+  - "[SISTEMA] CONEXI\xD3N PERDIDA. ERROR CR\xCDTICO. DESCONEXI\xD3N DEL USUARIO."
+  - "[] El chip se apaga."
+  - "[N\xC9STOR] ..."
+  - "[PJ] \xBFEst\xE1s bien?"
+  - "[N\xC9STOR] {PJ}..."
+  - "[PJ] \xBFQu\xE9 pasa?"
+  - "[N\xC9STOR] Ante todo... buenos d\xEDas."
+  - "[PJ] N\xE9stor... \xBFqu\xE9 te pas\xF3?"
+  - "[N\xC9STOR] Yo estaba en el Ameghino. Era 2026... Julieta..."
+  - "[PJ] \xBFJulieta?"
+  - "[N\xC9STOR] Ella... ella estaba haciendo algo. El NeuraRush-LINK."
+  - "[] N\xE9stor te mira."
+  - "[N\xC9STOR] Vos tambi\xE9n estabas ah\xED."
+  - "[PJ] S\xED."
+  - "[N\xC9STOR] Entonces sobreviviste."
+  - "[PJ] No s\xE9 c\xF3mo."
+  - "[N\xC9STOR] Yo tampoco..."
+  - "[] Silencio."
+  - "[N\xC9STOR] Nos hicieron olvidar."
+  - "[PJ] \xBFQui\xE9nes?"
+  - "[N\xC9STOR] La Liga. NeuraRush. Julieta... Todav\xEDa no me acuerdo de todo."
+  - "[PJ] \xBFEntonces por qu\xE9 proteg\xEDas este lugar?"
+  - "[N\xC9STOR] Porque estaba conectado al sistema. El chip no solo controlaba lo que hac\xEDa."
+  - "[N\xC9STOR] Tambi\xE9n controlaba lo que recordaba."
+  - "[PJ] Entonces... \xBFtodos los que tienen un chip est\xE1n igual?"
+  - "[N\xC9STOR] No lo s\xE9."
+  - "[] N\xE9stor mira los servidores."
+  - "[N\xC9STOR] Pero ahora me acuerdo de algo. Este servidor no es el principal."
+  - "[PJ] \xBFC\xF3mo que no?"
+  - "[N\xC9STOR] Es uno de varios."
+  - "[PJ] Eso ya lo sab\xEDa."
+  - "[N\xC9STOR] Entonces tambi\xE9n ten\xE9s que saber que no est\xE1n separados. Est\xE1n conectados."
+  requiredFlag: 0
+  grantsFlag: 78
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 11400000, guid: 34130bdfd3b99ade5e3d84447d91f184, type: 2}

@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Nestor_Despues_Protocolo
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "N\xC9STOR"
+  speakerPortrait: {fileID: 21300000, guid: 0f1798d60322fc14596167ce820d37b1, type: 3}
+  lines:
+  - "[] La pantalla central del data center se enciende."
+  - "[SISTEMA] SERVIDOR 01: DESCONEXI\xD3N INICIADA."
+  - "[] Las luces del data center empiezan a apagarse, una por una."
+  - "[SISTEMA] OBJETIVO COMPLETADO: N\xC9STOR DERROTADO."
+  - "[] De repente, tu dispositivo empieza a brillar."
+  - "[SISTEMA] NIVEL 10 ALCANZADO."
+  - "[PJ] \xBFEh?"
+  - "[N\xC9STOR] Parece que pelear conmigo te hizo subir de nivel."
+  - "[PJ] Justo ahora llego al nivel 10..."
+  - "[N\xC9STOR] \xBFTixi te dijo que volvieras cuando llegaras a ese nivel?"
+  - "[PJ] S\xED."
+  - "[N\xC9STOR] Entonces deber\xEDas volver con Tixi."
+  - "[PJ] \xBFY vos?"
+  - "[N\xC9STOR] Necesito recuperar mis recuerdos."
+  - "[PJ] \xBFVas a venir conmigo?"
+  - "[N\xC9STOR] Todav\xEDa no. Pero si de verdad vas a enfrentarte a Julieta..."
+  - "[] N\xE9stor te mira."
+  - "[N\xC9STOR] ...vas a necesitar ayuda."
+  - "[PJ] \xBFVos pod\xE9s ayudarme?"
+  - "[N\xC9STOR] Tom\xE1."
+  - "[SISTEMA] NUEVA HABILIDAD DESBLOQUEADA: PROTOCOLO N\xC9STOR."
+  - "[PJ] \xBFQu\xE9 es esto?"
+  - "[N\xC9STOR] Una de las funciones que ten\xEDa mi NeuraRush-LINK."
+  - "[PJ] \xBFY ahora la puedo usar yo?"
+  - "[N\xC9STOR] Parece que s\xED."
+  - "[PJ] \xBFY qu\xE9 hace?"
+  - "[N\xC9STOR] Probablemente sea mejor descubrirlo en combate."
+  - "[PJ] Bueno... gracias, supongo."
+  - "[N\xC9STOR] De nada."
+  - "[] Te das vuelta para irte."
+  - "[N\xC9STOR] \xA1{PJ}!"
+  - "[N\xC9STOR] Ten\xE9 cuidado."
+  - "[PJ] \xBFPor qu\xE9?"
+  - "[N\xC9STOR] Porque si este servidor estaba conectado con los dem\xE1s... ahora saben que estamos interfiriendo."
+  - "[PJ] Genial."
+  - "[N\xC9STOR] Y otra cosa: no conf\xEDes en nadie que tenga un chip."
+  - "[PJ] \xBFNi en vos?"
+  - "[N\xC9STOR] Especialmente en m\xED."
+  - "[PJ] ..."
+  - "[N\xC9STOR] Era una broma."
+  - "[PJ] No fue gracioso."
+  - "[] N\xE9stor vuelve a sentarse."
+  - "[N\xC9STOR] Cuando me acuerde de todo, te voy a buscar."
+  - "[PJ] Espero que s\xED."
+  - "[] La salida est\xE1 en la recepci\xF3n, por donde entraste."
+  requiredFlag: 0
+  grantsFlag: 79
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 11400000, guid: 9465f2983fd5363ca244e0da2e94a423, type: 2}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

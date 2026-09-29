@@ -1,6 +1,6 @@
 # Cómo correr la demo
 
-Recorrido completo: **Menú principal → Creación de personaje → Quarcho Cueva (el lobby) → Torre (NestorGOD2) → Quarcho Cueva → Casino → Quarcho Cueva**.
+Recorrido completo: **Menú principal → Creación de personaje → Habitación (el tutorial) → Quarcho Cueva (el lobby) → Torre (NestorGOD2) → Quarcho Cueva → Casino → Quarcho Cueva**.
 
 Para probarla, abrir **`Assets/Scenes/Menu Principal.unity`** y darle Play. Las escenas ya están en Build Settings, con el menú en el índice 0.
 
@@ -10,7 +10,7 @@ Para probarla, abrir **`Assets/Scenes/Menu Principal.unity`** y darle Play. Las 
 
 ```
 Menu Principal
-   │  no hay partida guardada ──> CreacionPersonaje ──> Quarcho-Cueva
+   │  no hay partida guardada ──> CreacionPersonaje ──> habitacion ──> Quarcho-Cueva
    │  hay partida guardada ─────> MenuSaves ──────────> Quarcho-Cueva
 
 Quarcho-Cueva ──(la puerta del este o Tixi)──> el siguiente nivel
@@ -21,7 +21,7 @@ Quién decide qué:
 
 - **`StartScreenView`** (en `Menu Principal`): `sceneNewGame = "CreacionPersonaje"`, `sceneWithSave = "MenuSaves"`. Mira si existe un guardado y manda a una u otra.
 - **`SaveSlotMenuView`** (en `MenuSaves`): `sceneJuego = "Quarcho-Cueva"`. Como el guardado no guarda la escena, "Continuar" siempre arranca en la cueva.
-- **`CreacionPersonajeView`**: `escenaDestino = "Quarcho-Cueva"`. Cuando la habitación tutorial decorada esté lista, `PokeRush > Tutorial > Conectar la escena abierta al recorrido` lo cambia a `HabitacionTutorial` (ver `Tutorial_Habitacion.md`).
+- **`CreacionPersonajeView`**: `escenaDestino = "habitacion"`, la habitación tutorial. Su puerta lleva a la cueva (ver `Tutorial_Habitacion.md`).
 - **A qué nivel se sale de la cueva** lo decide `RecorridoDeLaHistoria` según los flags de la partida, y **la vuelta** a la cueva al terminar un nivel la hace `VueltaAlLobby`. Todo eso está en **`Quarcho_Cueva_Lobby.md`**.
 
 > Si agregás una escena nueva al recorrido, **acordate de sumarla a Build Settings**. `SceneManager.LoadScene` por nombre falla si la escena no está en la lista, y el error se ve recién en runtime.

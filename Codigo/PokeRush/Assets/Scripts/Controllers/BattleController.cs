@@ -80,6 +80,11 @@ public class BattleController : MonoBehaviour
     private List<BattleEvent> _eventosDeLaRuleta;
     private bool _laRuletaDebeOtroGiro;
 
+    // El que le pone guion a esta pelea (la de Julieta). Null en todas las
+    // demas: ningun gancho corre y el combate es el de siempre. Ver
+    // IDirectorDeCombate y la seccion "mandos para un director" de abajo.
+    private IDirectorDeCombate _director;
+
     // Fase de liberacion: se dispara cuando el ULTIMO Poken del boss llega a PS
     // criticos. Null mientras no este activa.
     private LiberationEngine _liberation;
@@ -151,10 +156,12 @@ public class BattleController : MonoBehaviour
     // falte el flag. La usan los NPCs del casino (ver HayLecturaAliada).
     // 'ruletaDeCombate' es la ruleta que aparece cada dos turnos en la pelea
     // del jefe del casino. Null (lo normal) = no aparece ninguna.
+    // 'director' le pone guion a la pelea (la de Julieta). Null = ninguno.
     public void StartBattle(PlayerModel player, NPCDefinition enemyDefinition,
         BossBattleConfig config = null, bool conNestorAliado = false,
-        CasinoRuletaDeCombate ruletaDeCombate = null)
+        CasinoRuletaDeCombate ruletaDeCombate = null, IDirectorDeCombate director = null)
     {
+        _director = director;
         _nestorPedidoPorLaPelea = conNestorAliado;
         _ruletaDeCombate = ruletaDeCombate != null && ruletaDeCombate.Configurada
             ? ruletaDeCombate
@@ -216,6 +223,7 @@ public class BattleController : MonoBehaviour
         _bossConfig = null;
         _nestorPedidoPorLaPelea = false;
         _ruletaDeCombate = null;
+        _director = null;
         BeginBattle(player, enemy, encounter.battleBackground);
     }
 
@@ -260,22 +268,7 @@ public class BattleController : MonoBehaviour
                                   _bossConfig.TurnosEntrePredicciones)
             : null;
 
-        // La Prediccion necesita saber que salidas le quedan al jugador para no
-        // anularle la ultima. El rastreo activo ya le cierra el cambio.
-        if (_prediction != null)
-        {
-            _prediction.PuedeCambiar = () =>
-                _bossConfig.PermiteCambio && HayBancoDisponible();
-            _prediction.TieneObjetos = () =>
-                _playerModel.Inventory.HealItems.Exists(s => s.Quantity > 0);
-            // Los movimientos CON PP son dos salidas distintas, no una: la
-            // lectura de Ataque anula solo los de dano y la de Estado solo los
-            // de estado, asi que siempre le queda la otra mitad del menu. Sin
-            // separarlas, el que llega con un solo Poken y la mochila vacia
-            // tenia una unica categoria anulable y Nestor leia siempre igual.
-            _prediction.TieneMovimientoDeEstado = () => TieneMovimientoConPP(false);
-            _prediction.TieneMovimientoDeDano = () => TieneMovimientoConPP(true);
-        }
+        CablearSalidasDeLaPrediccion();
         if (_bossConfig != null)
             Debug.Log($"[Combate] Config del boss: {_bossConfig.Resumen()}");
 
@@ -329,6 +322,13 @@ public class BattleController : MonoBehaviour
             // quedaron activos.
             _battleModel.EnemySide.ShieldHp = _bossConfig.EscudoInicial;
             _battleModel.EnemySide.ShieldMaxHp = _bossConfig.EscudoInicial;
+        }
+        else if (_director != null)
+        {
+            // Una pelea con guion puede necesitar que el rival no caiga antes
+            // de cierto momento (Julieta no pierde hasta que se rompe su
+            // control). Lo decide el director; sin el, el delegado queda null.
+            _engine.EnemyCannotFaint = m => _director.ImpedirQueCaiga(m);
         }
 
         if (playerInputController != null)
@@ -426,9 +426,37 @@ public class BattleController : MonoBehaviour
         // Habilidades de entrada (Intimidación, etc.)
         yield return PlayEvents(_engine.BeginBattle());
 
+        // La pelea con guion arranca aca: los dos Pokemon ya estan en el campo.
+        if (_director != null)
+        {
+            _battleModel.SetPhase(BattlePhase.CalculatingResult);
+            yield return _director.AlEmpezar(this);
+            if (_battleModel == null) yield break;
+        }
+
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
         yield return AvanzarPrediccion();
         battleHudView?.ShowCommandMenu(_battleModel);
+    }
+
+    // La Prediccion necesita saber que salidas le quedan al jugador para no
+    // anularle la ultima. El rastreo activo ya le cierra el cambio. Se cablea al
+    // armar la pelea y cada vez que un director enciende una a mitad de camino.
+    private void CablearSalidasDeLaPrediccion()
+    {
+        if (_prediction == null) return;
+
+        _prediction.PuedeCambiar = () =>
+            (_bossConfig == null || _bossConfig.PermiteCambio) && HayBancoDisponible();
+        _prediction.TieneObjetos = () =>
+            _playerModel.Inventory.HealItems.Exists(s => s.Quantity > 0);
+        // Los movimientos CON PP son dos salidas distintas, no una: la
+        // lectura de Ataque anula solo los de dano y la de Estado solo los
+        // de estado, asi que siempre le queda la otra mitad del menu. Sin
+        // separarlas, el que llega con un solo Poken y la mochila vacia
+        // tenia una unica categoria anulable y Nestor leia siempre igual.
+        _prediction.TieneMovimientoDeEstado = () => TieneMovimientoConPP(false);
+        _prediction.TieneMovimientoDeDano = () => TieneMovimientoConPP(true);
     }
 
     // Adelanta el contador de la Prediccion y avisa por pantalla si corresponde.
@@ -776,6 +804,21 @@ public class BattleController : MonoBehaviour
         _battleModel.SetPhase(BattlePhase.CalculatingResult);
         battleHudView?.HideMenus();
 
+        // La pelea con guion puede cambiar lo que hace el jugador (un Pokemon
+        // que ya no le obedece) y hasta terminarla ahi mismo.
+        if (_director != null)
+        {
+            BattleAction ajustada = null;
+            yield return _director.AntesDeResolver(this, playerAction, a => ajustada = a);
+            if (_battleModel == null) yield break;
+            if (_battleModel.IsBattleOver)
+            {
+                yield return EndBattleRoutine();
+                yield break;
+            }
+            if (ajustada != null) playerAction = ajustada;
+        }
+
         // El contexto se arma UNA vez y lo comparten la IA y Nestor: si cada
         // uno armara el suyo, Nestor podria estar leyendo una foto distinta de
         // la que uso la IA para decidir.
@@ -795,6 +838,7 @@ public class BattleController : MonoBehaviour
             {
                 yield return LecturaDeNestorRoutine(lectura);
                 enemyAction = lectura.AccionFinal;
+                _director?.NestorIntervino();
             }
             else
             {
@@ -805,6 +849,12 @@ public class BattleController : MonoBehaviour
 
         List<BattleEvent> events = _engine.ResolveTurn(playerAction, enemyAction);
         yield return PlayEvents(events);
+
+        if (_director != null)
+        {
+            yield return _director.DespuesDelTurno(this, events);
+            if (_battleModel == null) yield break;
+        }
 
         yield return ContinuarDespuesDelTurno();
     }
@@ -837,6 +887,20 @@ public class BattleController : MonoBehaviour
         {
             yield return LiberationRoutine();
             yield break;
+        }
+
+        // La pelea con guion habla y cambia reglas ACA: antes de la Prediccion,
+        // de la ruleta y del menu, para que lo que active ya se vea este turno.
+        if (_director != null)
+        {
+            _battleModel.SetPhase(BattlePhase.CalculatingResult);
+            yield return _director.AntesDeElegir(this);
+            if (_battleModel == null) yield break;
+            if (_battleModel.IsBattleOver)
+            {
+                yield return EndBattleRoutine();
+                yield break;
+            }
         }
 
         _battleModel.SetPhase(BattlePhase.PlayerTurn);
@@ -947,9 +1011,13 @@ public class BattleController : MonoBehaviour
     {
         if (premio == null) return "La ruleta se detiene en un gajo vacio.";
 
-        _eventosDeLaRuleta = CasinoRuletaDeCombate.Aplicar(premio.efectoDeCombate, _battleModel, _rng);
+        // A quien le cae lo decide la ruleta (QuienCobra): en el casino,
+        // siempre al jugador; en la pelea de Julieta, segun quien la controle.
+        _eventosDeLaRuleta = _ruletaDeCombate.Cobrar(premio, _battleModel, _rng,
+                                                      out bool alJugador, out string cartel);
         _laRuletaDebeOtroGiro = premio.efectoDeCombate == EfectoDeRuleta.TirarDeNuevo;
-        return premio.BuildMessage();
+        _director?.RuletaCobro(premio.efectoDeCombate, alJugador);
+        return cartel;
     }
 
     // ---------- revancha (jefe del casino) ----------
@@ -1478,9 +1546,14 @@ public class BattleController : MonoBehaviour
         bool victory = _battleModel.IsPlayerVictory;
         bool escaped = _battleModel.PlayerEscaped;
 
+        // La pelea con guion apaga lo suyo (vistas y efectos temporales) antes
+        // del cartel de resultado.
+        _director?.AlTerminar(victory);
+
         // El retrato se apaga con el combate. Si queda prendido, el Canvas se
         // esconde con Nestor dibujado y reaparece asi en la pelea siguiente.
         battleHudView?.SetNestorPortrait(default);
+        battleHudView?.SetPrediction(default);
 
         // Si escapo, el mensaje "¡Escapaste sin problemas!" ya salio como evento
         if (!escaped)
@@ -1522,6 +1595,85 @@ public class BattleController : MonoBehaviour
         // Flags, items, dialogo de derrota del boss y guardado: los aplican
         // los suscriptores (EventController / GameManager)
         BattleEnded?.Invoke(outcome);
+    }
+
+    // ---------- mandos para un director de pelea ----------
+    //
+    // Lo que un IDirectorDeCombate puede tocar con la pelea en curso. Son los
+    // MISMOS sistemas que ya usan el casino y la torre (la ruleta, la lectura
+    // aliada de Nestor, la Prediccion, la IA), solo que encendibles y
+    // apagables a mitad de camino en vez de decididos una vez al arrancar.
+
+    public BattleModel Modelo => _battleModel;
+    public bool EnCurso => _battleModel != null;
+    public float PausaDeMensaje => messageDelay;
+
+    public void Anunciar(string mensaje) => Announce(mensaje);
+
+    public void RefrescarHud()
+    {
+        if (_battleModel != null) battleHudView?.UpdateHud(_battleModel);
+    }
+
+    // Reproduce eventos con el ritmo de siempre (barras de PS, mensajes, FX).
+    public IEnumerator Reproducir(List<BattleEvent> eventos)
+    {
+        if (_battleModel == null || eventos == null) yield break;
+        yield return PlayEvents(eventos);
+    }
+
+    // Parpadeo de color sobre el Poken de un lado (el FX que ya existe).
+    public IEnumerator Destello(bool ladoDelJugador, Color color, int pulsos = 2)
+    {
+        PokenView vista = ladoDelJugador ? playerPokenView : enemyPokenView;
+        if (battleFxView != null && vista != null && vista.gameObject.activeSelf)
+            yield return battleFxView.PulseTint(vista, color, pulsos);
+    }
+
+    // La ruleta del jefe del casino. Null la saca.
+    public CasinoRuletaDeCombate Ruleta => _ruletaDeCombate;
+    public void PonerRuleta(CasinoRuletaDeCombate ruleta)
+        => _ruletaDeCombate = ruleta != null && ruleta.Configurada ? ruleta : null;
+
+    // La lectura aliada de Nestor, con sus propios numeros. Null la apaga (y
+    // el retrato se esconde).
+    public bool LecturaAliadaActiva => _nestorAlly != null;
+    public void PonerLecturaAliada(NestorPredictionSystem lectura)
+    {
+        _nestorAlly = lectura;
+        if (_battleModel != null) RefrescarRetratoDeNestor();
+        else if (lectura == null) battleHudView?.SetNestorPortrait(default);
+    }
+
+    // La Prediccion contra el jugador (la de la torre 1). Null la apaga.
+    public PredictionState Prediccion => _prediction;
+    public void PonerPrediccion(PredictionState prediccion)
+    {
+        _prediction = prediccion;
+        CablearSalidasDeLaPrediccion();
+        if (prediccion == null) battleHudView?.SetPrediction(default);
+    }
+
+    // Cambia como juega el rival. La seleccion de reemplazos lee los campos al
+    // momento, asi que tambien pasa a usar el perfil nuevo.
+    public void CambiarPerfilDeIA(AIProfileDefinition perfil)
+    {
+        if (perfil == null || _battleModel == null) return;
+        _aiProfile = perfil;
+        _enemyAI = BattleAIFactory.Create(perfil);
+    }
+
+    // Corta la pelea en curso como derrota sin esperar el turno: para reiniciar
+    // una pelea de prueba desde cero. Pasa por el cierre normal (EndBattleRoutine
+    // + BattleEnded), asi el mapa vuelve y quien escuchaba se entera.
+    public void Abandonar()
+    {
+        if (_battleModel == null) return;
+
+        StopAllCoroutines();
+        if (MenuManager.HasInstance) MenuManager.Instance.CloseAll();
+        _battleModel.Finish(playerVictory: false);
+        StartCoroutine(EndBattleRoutine());
     }
 
     // ---------- utilidades ----------

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Nestor_Antes
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "N\xC9STOR"
+  speakerPortrait: {fileID: 21300000, guid: 43e896cfa02520c4394f17ea3d8a7679, type: 3}
+  lines:
+  - "[] En el centro de la sala, conectado al sistema por un NeuraRush-LINK, hay alguien que conoc\xE9s."
+  - "[N\xC9STOR] Alto."
+  - "[PJ] \xBFN\xE9stor?"
+  - "[N\xC9STOR] Identificaci\xF3n confirmada. Alumno... Usuario. Usuario no registrado."
+  - "[PJ] Vengo a destruir este servidor."
+  - "[N\xC9STOR] Entonces sos un enemigo de la Liga."
+  - "[PJ] T\xE9cnicamente, s\xED."
+  - "[N\xC9STOR] No voy a permitir que interfieras con el sistema."
+  - "[PJ] \xBFY si te digo que esto est\xE1 controlando a todo el mundo?"
+  - "[N\xC9STOR] ..."
+  - "[] N\xE9stor se queda callado unos segundos. Por un momento parece que va a decir otra cosa."
+  - "[N\xC9STOR] El sistema protege a la humanidad."
+  - "[PJ] \xBFVos de verdad cre\xE9s eso?"
+  - "[N\xC9STOR] ..."
+  - "[] El NeuraRush-LINK de su nuca empieza a emitir pulsos."
+  - "[N\xC9STOR] Iniciando protocolo de defensa."
+  - "[PJ] Bueno... no quer\xEDa hacerlo de esta manera."
+  requiredFlag: 0
+  grantsFlag: 77
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

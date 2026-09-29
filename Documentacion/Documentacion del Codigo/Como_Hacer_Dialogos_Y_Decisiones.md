@@ -67,6 +67,16 @@ Para textos largos o de guión conviene un `DialogueDefinition` (menú `Create >
 dialogueController.StartDialogue(miDialogo, story, alTerminar);
 ```
 
+Desde el 28-sep-2026 el asset sabe bastante más, todo opcional y sin código:
+
+- **Varios hablantes en una charla**: una línea que empieza con `[TIXI]` la dice Tixi; `[PJ]` el jugador (su nombre, sin retrato); `[]` un narrador sin nombre. Los retratos de los demás van en `otrosHablantes`.
+- **Marcas**: `{PJ}` (nombre del jugador) y `{INICIAL}` (el primer Pokémon del equipo), también en preguntas y opciones.
+- **Variantes**: otras líneas según los flags de la partida (hasta dos que pide y uno que excluye). Gana la primera que se cumple. Así un NPC cambia lo que dice después de un evento.
+- **Objeto clave** al terminar (`otorgaObjeto`).
+- **Pregunta con respuestas** (cada una puede pedir un flag o un objeto, encender un flag y seguir con otro diálogo), o un `siguiente` directo. `cancelarElige` dice qué respuesta elige Escape.
+
+Un asset sin nada para decir en esa partida no abre la caja y pasa a lo que sigue; `alTerminar` se llama al final de toda la cadena. Todo esto está explicado con ejemplos en `Historia_En_Los_Niveles.md`.
+
 ---
 
 ## Recetas

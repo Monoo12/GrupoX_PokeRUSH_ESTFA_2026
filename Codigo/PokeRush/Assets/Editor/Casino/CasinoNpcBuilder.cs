@@ -577,7 +577,7 @@ public static class CasinoNpcBuilder
         if (cosmog == null) Debug.LogError($"[CasinoNPC] No existe la especie {EspecieDeTacconi}.");
 
         ConfigurarAscensor(scene, CasinoRequisitoTipo.TenerPokemon, StoryFlag.None, cosmog,
-            "El de seguridad no te deja subir: arriba solo entran los que tienen un {0} shiny. Dicen que Tacconi tiene uno.",
+            "Un lector de tarjetas parpadea en rojo: PISO 4, ACCESO RESTRINGIDO. La tarjeta la tiene Tacconi, y la apuesta junto con su {0} shiny.",
             ("Casino Nivel 2", "PISO 2"), ("Casino Nivel 1", "PISO 1"));
     }
 
@@ -973,6 +973,12 @@ public static class CasinoNpcBuilder
         so.FindProperty("nivelPremio").intValue = 15;
         so.FindProperty("premioShiny").boolValue = true;
         so.FindProperty("flagGanado").enumValueIndex = (int)StoryFlag.Casino_TacconiVencido;
+        // La historia (historia.pdf): lo que sabe del registro de 2026 y la tarjeta del piso 4.
+        so.FindProperty("pregunta").stringValue =
+            "Una mano de blackjack: uno de tus Pokémon contra mi {0}. Si ganás, te llevás los dos: el shiny y la tarjeta. ¿Jugamos?";
+        so.FindProperty("presentacion").objectReferenceValue = HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Tacconi_Presentacion");
+        so.FindProperty("despuesDeGanar").objectReferenceValue = HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Tacconi_DespuesDeGanar");
+        so.FindProperty("charlaYaGanado").objectReferenceValue = HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Tacconi_YaGanado");
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 

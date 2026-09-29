@@ -49,6 +49,13 @@ public class CasinoJefeFinalNpc : CasinoNpcConCombate
              "Sin tope, dos jugadores parejos se quedan jugando para siempre.")]
     [SerializeField, Min(0)] private int maximoDeRevanchas = 1;
 
+    [Header("Historia (opcional)")]
+    [Tooltip("La primera vez que se entra a la zona, antes del cartel de encuentro. " +
+             "Su grantsFlag marca que ya se conto: al volver a encararlo va directo.")]
+    [SerializeField] private DialogueDefinition dialogoAntes;
+    [Tooltip("Al ganarle, antes del cartel de victoria: el chip que se apaga y lo que cuenta despues.")]
+    [SerializeField] private DialogueDefinition dialogoDespues;
+
     [Header("Textos: al entrar a la zona")]
     [Tooltip("Lo que dice al acercarte a la mesa. Apenas se cierra la caja " +
              "arranca la pelea: entrar a la zona ES aceptar.")]
@@ -143,8 +150,18 @@ public class CasinoJefeFinalNpc : CasinoNpcConCombate
         }
 
         _revanchasJugadas = 0;
-        Decir(mensajeDeEncuentro,
+        System.Action pelear = () => Decir(mensajeDeEncuentro,
             () => LanzarCombate(player, rival, outcome => AlTerminar(player, story, outcome), ArmarRuleta()));
+
+        if (TocaPresentarse(story)) dialogueController.StartDialogue(dialogoAntes, story, pelear);
+        else pelear();
+    }
+
+    // Publico para los tests.
+    public bool TocaPresentarse(StoryModel story)
+    {
+        if (dialogoAntes == null || dialogueController == null) return false;
+        return dialogoAntes.grantsFlag == StoryFlag.None || story == null || !story.HasFlag(dialogoAntes.grantsFlag);
     }
 
     private CasinoRuletaDeCombate ArmarRuleta()
@@ -295,7 +312,14 @@ public class CasinoJefeFinalNpc : CasinoNpcConCombate
         CasinoDialogo.Guardar();
 
         Debug.Log($"[JefeFinal] '{name}' vencido: casino completado.");
-        Decir(mensajeVictoria);
+        if (dialogoDespues != null && dialogueController != null)
+            dialogueController.StartDialogue(dialogoDespues, story, () =>
+            {
+                CasinoDialogo.Guardar();
+                Decir(mensajeVictoria);
+            });
+        else
+            Decir(mensajeVictoria);
     }
 
     // ---------- reglas de la mano (puras, para los tests) ----------

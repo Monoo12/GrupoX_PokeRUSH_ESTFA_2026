@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Lobby_Tixi_Sobreviviste
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "TIXI"
+  speakerPortrait: {fileID: 21300000, guid: 2b17330598b96a5459868a2f61a48db0, type: 3}
+  lines:
+  - "[PJ] \xBFY vos? \xBFC\xF3mo sobreviviste?"
+  - "[TIXI] No sobreviv\xED: me desmay\xE9 como todos. Pero conmigo no se abri\xF3 ning\xFAn portal. No tengo chip."
+  - "[TIXI] Quiz\xE1s Julieta me guarda algo de cari\xF1o. O se olvid\xF3 de m\xED. No s\xE9 qu\xE9 es peor."
+  - "[TIXI] Lo raro es c\xF3mo es que VOS te despertaste. \xBFTodav\xEDa ten\xE9s tu chip?"
+  - "[PJ] Solo me despert\xE9. Jurar\xEDa que escuch\xE9 unas voces pidiendo ayuda."
+  - "[] Le mostr\xE1s la nuca. Tixi se acerca con una linterna."
+  - "[TIXI] Incre\xEDble... El chip est\xE1 ah\xED, prendido, y no te hace nada."
+  - "[TIXI] Quiz\xE1s... \xA1podr\xEDas ser inmune!"
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 11400000, guid: cce5ae335f9e770658d658929045391c, type: 2}

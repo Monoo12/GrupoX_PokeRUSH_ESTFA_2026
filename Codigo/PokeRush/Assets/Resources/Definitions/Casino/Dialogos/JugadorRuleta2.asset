@@ -12,10 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: JugadorRuleta2
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: JUGADOR
+  speakerName: "JUGADOR"
   speakerPortrait: {fileID: 0}
   lines:
-  - "Dicen que si le gan\xE1s m\xE1s de 200 al color, la casa te hace girar la ruleta
-    de premios."
+  - "[JUGADOR] Shh. Estoy contando. Ac\xE1 nadie gana, pero yo cuento igual."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Ya hablaron"
+    requiere: 82
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[JUGADOR] Ya te dije lo que s\xE9. No me hagas mirar para atr\xE1s, que me pierdo la bola."
+    otorgaFlag: 0
+  - nota: "Despues de hablar con el croupier"
+    requiere: 81
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[] Un jugador mira la ruleta fijo, sin apostar."
+    - "[PJ] \xBFTacconi trabaja para la Liga?"
+    - "[JUGADOR] Todos trabajan para alguien."
+    - "[PJ] Eso no responde mi pregunta."
+    - "[JUGADOR] Tacconi estaba en el Ameghino."
+    - "[PJ] \xBFEn 2026?"
+    - "[JUGADOR] S\xED."
+    - "[PJ] \xBFQu\xE9 hac\xEDa?"
+    - "[JUGADOR] Nadie sabe bien. Dicen que hac\xEDa planos, y que lo que ganaba lo gastaba en casinos online."
+    - "[PJ] \xBFEra parte del proyecto?"
+    - "[JUGADOR] Seg\xFAn dicen, s\xED."
+    - "[] El jugador se levanta de golpe, mira para los dos lados... y se vuelve a sentar. No tiene ad\xF3nde ir."
+    - "[PJ] Cada vez entiendo menos."
+    otorgaFlag: 82
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

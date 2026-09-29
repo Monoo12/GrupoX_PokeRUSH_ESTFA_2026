@@ -129,5 +129,57 @@ public enum StoryFlag
     Tutorial_Pelea,
     // Hizo todas las partes obligatorias, o eligio omitirlo en la puerta.
     Tutorial_Completado,
-    Tutorial_Omitido
+    Tutorial_Omitido,
+
+    // El jefe final. Al final por lo mismo que las tandas de arriba: las
+    // escenas guardan el flag como numero.
+    //
+    // Se enciende al ganarle la pelea a Julieta, antes del epilogo y los
+    // creditos. Ver PeleaJulieta.
+    Julieta_Vencida,
+
+    // La historia repartida por los niveles (ver Historia_En_Los_Niveles.md).
+    // Al final por lo mismo que las tandas de arriba: las escenas guardan el
+    // flag como numero. Casi todos los enciende un DialogueDefinition al
+    // terminar (su grantsFlag o el de una variante o respuesta), y los leen
+    // las variantes de otros dialogos: asi un NPC se acuerda de lo que paso
+    // antes, en este nivel o en otro.
+    //
+    // El camino de la habitacion a la Quarcho Cueva, y lo que se hizo con Cruz.
+    Historia_CaminoContado,
+    Historia_CruzEnganiado,
+    Historia_CruzHuida,
+    Historia_CruzPateado,
+
+    // Tixi: lo que cuenta al volver de cada nivel (una sola vez).
+    Historia_TixiVueltaDelDataCenter,
+    Historia_TixiVueltaDelCasino,
+
+    // Data Center de Nestor.
+    Historia_DC_PantallasParpadearon,
+    Historia_DC_GuardianEnEspera,
+    Historia_DC_TecnicoHablo,
+    Historia_DC_GuardiaRecibioOrden,
+    Historia_DC_MemoLeido,
+    Historia_NestorPresentado,
+    // Mitad de la charla de despues de la pelea: aca se apagan las luces.
+    Historia_Servidor01Desconectado,
+    Historia_NestorDesperto,
+
+    // Casino.
+    Historia_Casino_MujerHablo,
+    Historia_Casino_CroupierHablo,
+    Historia_Casino_JugadorHablo,
+    Historia_TacconiPresentado,
+    Historia_TacconiRevelo,
+    Historia_ReymarPresentado,
+    Historia_Servidor02Desconectado,
+
+    // Quarcho Cueva: Tacconi ya conto lo suyo antes de ofrecer el Mew.
+    Historia_TacconiEnLaCueva,
+
+    // Data Center: la terminal del salon y la foto de la mesa de Nestor ya se
+    // vieron (apagan su brillo).
+    Historia_DC_TerminalLeida,
+    Historia_DC_FotoVista
 }

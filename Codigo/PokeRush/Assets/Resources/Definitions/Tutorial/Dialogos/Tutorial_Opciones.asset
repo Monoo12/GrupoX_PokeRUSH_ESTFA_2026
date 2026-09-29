@@ -12,12 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Tutorial_Opciones
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: 
+  speakerName: ""
   speakerPortrait: {fileID: 0}
   lines:
-  - "La tele. En Opciones cambi\xE1s el volumen de la m\xFAsica y de los efectos."
-  - "Tambi\xE9n pod\xE9s cambiar la tecla de cada acci\xF3n, si las de siempre no
-    te sirven."
-  - "En el men\xFA (Z) est\xE1n como Opciones."
+  - "[] La tele se prende sola. Un noticiero con m\xFAsica de himno."
+  - "[NOTICIERO] Informe especial: cinco a\xF1os de convivencia entre personas y Pok\xE9mon. Cinco a\xF1os de paz."
+  - "[NOTICIERO] Hoy el 98,7% de la poblaci\xF3n durmi\xF3 en su c\xE1psula. \xA1R\xE9cord hist\xF3rico!"
+  - "[NOTICIERO] Desde la sede corporativa de NeuraRush-LINK, en el Ameghino de Berazachussetts, el Gobierno Mundial y la Liga nos cuidan."
+  - "[NOTICIERO] \xBFQu\xE9 pas\xF3 en 2026? Nadie lo sabe. Y la Liga recomienda no preguntarlo."
+  - "[NOTICIERO] Y ahora, unas palabras de la Directora de la Liga..."
+  - "[] La imagen se congela en una sonrisa que conoc\xE9s demasiado bien. Julieta."
+  - "[PJ] ...No. No puede ser."
+  - "[] La tele se apaga sola. En Opciones cambi\xE1s el volumen de la m\xFAsica y de los efectos, y la tecla de cada acci\xF3n."
+  - "[] En el men\xFA (Z) est\xE1n como Opciones."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

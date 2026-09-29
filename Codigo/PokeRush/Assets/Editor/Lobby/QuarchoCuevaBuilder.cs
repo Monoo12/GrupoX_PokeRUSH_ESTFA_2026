@@ -19,7 +19,8 @@ using UnityEngine.Tilemaps;
 // con los personajes:
 //
 //   Tixi      recibe al jugador, cuenta el lore, vende y lo manda a cada nivel.
-//   Nestor    aparece con Torre1_NestorLiberado: tutor de MTs.
+//   Nestor    aparece con Casino_Completado (en el guion se queda en su Data
+//             Center hasta recordar): tutor de MTs.
 //   Martin    aparece con Casino_Completado: sus tres ruletas y los juegos del
 //             casino, sentado atras de SU mesa (la del ultimo piso).
 //   Tacconi   aparece con Casino_Completado: tres chances de ganarle un Mew.
@@ -471,7 +472,10 @@ public static class QuarchoCuevaBuilder
         // al reves desde un objeto que siempre esta activo.
         var apariciones = new GameObject("Apariciones");
         apariciones.transform.SetParent(lobby.transform, false);
-        Aparicion(apariciones, StoryFlag.Torre1_NestorLiberado, nestor);
+        // Nestor llega recien despues del casino: en el guion se queda en su
+        // Data Center recuperando la memoria ("Todavía no... Cuando recuerde
+        // todo, te voy a buscar"). Ver Historia_En_Los_Niveles.md.
+        Aparicion(apariciones, StoryFlag.Casino_Completado, nestor);
         Aparicion(apariciones, StoryFlag.Casino_Completado, martin, mesaGo, tacconi);
 
         return lobby;
@@ -500,6 +504,13 @@ public static class QuarchoCuevaBuilder
         so.FindProperty("retrato").objectReferenceValue = retrato;
         so.FindProperty("lore").objectReferenceValue = QuarchoCuevaAssets.LoreDeTixi(retrato);
         so.FindProperty("tienda").objectReferenceValue = QuarchoCuevaAssets.TiendaDeTixi(retrato);
+        // La historia: lo que charla y lo que cuenta sola al volver de cada nivel.
+        so.FindProperty("charla").objectReferenceValue = HistoriaAssets.Dialogo("Lobby/Dialogos/Lobby_Tixi_Charla");
+        so.FindProperty("consejo").stringValue =
+            "Lo que sigue es {0}. Cuando quieras, salí por la puerta del este o pedime que te lleve.";
+        HistoriaAssets.PonerLista(so.FindProperty("alVolver"),
+            "Lobby/Dialogos/Lobby_Tixi_VueltaDelDataCenter",
+            "Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino");
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 
@@ -705,6 +716,7 @@ public static class QuarchoCuevaBuilder
         so.FindProperty("mensajePerdiste").stringValue = "Tacconi siempre gana. Tu {0} se queda conmigo.";
         so.FindProperty("mensajeEmpate").stringValue = "Empate. Esa no cuenta: la chance sigue en pie. ¿Otra?";
         so.FindProperty("mensajeYaGanado").stringValue = "Ya te llevaste mi {0}. Un trato es un trato.";
+        so.FindProperty("presentacion").objectReferenceValue = HistoriaAssets.Dialogo("Lobby/Dialogos/Lobby_Tacconi_Presentacion");
 
         SerializedProperty chances = so.FindProperty("chances");
         StoryFlag[] flags = { StoryFlag.Lobby_TacconiChance1, StoryFlag.Lobby_TacconiChance2, StoryFlag.Lobby_TacconiChance3 };

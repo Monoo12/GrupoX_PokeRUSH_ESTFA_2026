@@ -12,12 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Historia_PisoFinal_GuardiaPasillo2
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: GUARDIA
+  speakerName: "GUARDIA"
   speakerPortrait: {fileID: 0}
   lines:
-  - "Arriba no se sube. Adentro no se entra. Vos ya est\xE1s adentro, as\xED que
-    segu\xED."
-  - "El jefe te est\xE1 esperando. No te hagas el vivo."
-  - Yo de vos me daba vuelta. Pero nadie me escucha.
+  - "[GUARDIA] Este piso no figura en los planos. Tampoco en el ascensor. Y sin embargo, ac\xE1 estamos."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Despues de ganarle a Tacconi"
+    requiere: 84
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[GUARDIA] Tacconi te dio su tarjeta, \xBFno? Tacconi nunca pierde."
+    - "[GUARDIA] Si perdi\xF3 con vos... fue porque quiso."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

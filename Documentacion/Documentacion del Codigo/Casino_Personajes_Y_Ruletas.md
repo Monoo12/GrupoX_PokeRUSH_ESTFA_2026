@@ -418,6 +418,14 @@ no quedaría nadie que pueda pelear.
 
 Se cambia en `CasinoTacconiNpc.especiePremio` y en `EspecieDeTacconi` del builder.
 
+**La historia (28-sep-2026).** Antes de ofrecer la mano, Tacconi cuenta lo del guion
+(`Casino_Tacconi_Presentacion`: "¿Te acordás de 2026?", los tres grupos, "vos no aparecés
+en ninguno"); al perderla entrega también la **Tarjeta de acceso P4** y dice que el PJ "era
+parte del desarrollo" (`Casino_Tacconi_DespuesDeGanar`). El ascensor sigue pidiendo el shiny:
+lo que cambió son los textos (el lector de tarjetas del piso 4). Los NPCs de historia de los
+tres pisos, el croupier de la primera mesa del piso 2 y los jugadores tienen sus textos de
+historia. Ver `Historia_En_Los_Niveles.md`.
+
 ---
 
 ## Premios con el equipo lleno

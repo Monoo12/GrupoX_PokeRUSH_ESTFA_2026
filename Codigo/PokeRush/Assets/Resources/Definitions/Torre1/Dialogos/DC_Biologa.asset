@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Biologa
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "BI\xD3LOGA"
+  speakerPortrait: {fileID: 21300000, guid: 22d8f055d00cd634198beecdcbe1c195, type: 3}
+  lines:
+  - "[BI\xD3LOGA] No golpees el vidrio. Est\xE1n en observaci\xF3n."
+  - "[BI\xD3LOGA] A este Basculin le pusieron un chip de prueba. Dej\xF3 de nadar en c\xEDrculos. Ahora nada en cuadrados. Perfectos."
+  - "[BI\xD3LOGA] Los Pok\xE9mon con chip no pelean por instinto: pelean por protocolo. Son f\xE1ciles de predecir y dif\xEDciles de mirar."
+  - "[BI\xD3LOGA] Si alguien lo sacara del tanque, las c\xE1maras lo ver\xEDan. El panel de las c\xE1maras est\xE1 ah\xED nom\xE1s. No te estoy diciendo nada."
+  - "[BI\xD3LOGA] ...Anoche so\xF1\xE9 con un aula. Un pizarr\xF3n que dec\xEDa \"TCP/IP\". No s\xE9 de d\xF3nde saqu\xE9 eso."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Con el servidor caido"
+    requiere: 78
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[BI\xD3LOGA] Los Pok\xE9mon del tanque se durmieron. Todos juntos, como si alguien hubiera apagado una canci\xF3n."
+    - "[BI\xD3LOGA] Hac\xEDa cinco a\xF1os que no dorm\xEDan."
+    - "[BI\xD3LOGA] Yo tampoco. Creo que me voy a sentar un rato."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

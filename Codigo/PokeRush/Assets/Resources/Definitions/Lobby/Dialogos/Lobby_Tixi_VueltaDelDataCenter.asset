@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Lobby_Tixi_VueltaDelDataCenter
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "TIXI"
+  speakerPortrait: {fileID: 21300000, guid: 2b17330598b96a5459868a2f61a48db0, type: 3}
+  lines: []
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Primera vuelta despues de Nestor"
+    requiere: 15
+    requiereTambien: 0
+    excluye: 70
+    lineas:
+    - "[] Tixi est\xE1 trabajando frente a varias computadoras a la vez."
+    - "[TIXI] \xBFY?"
+    - "[PJ] Derrot\xE9 a N\xE9stor."
+    - "[TIXI] \xBFA N\xE9stor?"
+    - "[PJ] S\xED."
+    - "[TIXI] \xBFY volviste en una pieza?"
+    - "[PJ] Por ahora."
+    - "[TIXI] Bueno... eso es un comienzo."
+    - "[PJ] Adem\xE1s recuper\xF3 sus recuerdos. Cuando derrot\xE9 su NeuraRush-LINK, empez\xF3 a acordarse de lo que pas\xF3 en 2026."
+    - "[TIXI] Entonces funcion\xF3..."
+    - "[PJ] \xBFQu\xE9 cosa?"
+    - "[TIXI] Lo que sospechaba: que al destruir los servidores y desconectar los chips, las personas podr\xEDan recuperar sus recuerdos."
+    - "[PJ] \xBFEntonces podemos salvarlos?"
+    - "[TIXI] Tal vez."
+    - "[PJ] \xBFY N\xE9stor?"
+    - "[TIXI] Si de verdad empez\xF3 a recordar, puede que vuelva a ser \xE9l mismo."
+    - "[PJ] Tambi\xE9n me dio esto."
+    - "[] Le mostr\xE1s el Protocolo N\xE9stor."
+    - "[TIXI] \xBFC\xF3mo conseguiste eso?"
+    - "[PJ] Me lo dio N\xE9stor."
+    - "[TIXI] Interesante..."
+    - "[] Tixi lo enchufa, teclea r\xE1pido y se queda mirando la pantalla."
+    - "[TIXI] Es una funci\xF3n del NeuraRush-LINK adaptada para vos."
+    - "[PJ] \xBFEso es bueno?"
+    - "[TIXI] No tengo idea."
+    - "[PJ] Ah."
+    - "[TIXI] Pero seguro que es \xFAtil."
+    otorgaFlag: 70
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 11400000, guid: 4f4a134b7ba3ff922a5b5bd8111de3a8, type: 2}

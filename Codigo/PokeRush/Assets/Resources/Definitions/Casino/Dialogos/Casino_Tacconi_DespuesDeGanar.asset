@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Casino_Tacconi_DespuesDeGanar
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "TACCONI"
+  speakerPortrait: {fileID: 21300000, guid: 630ce5488625ef8419eb65dcd7bdcd1d, type: 3}
+  lines:
+  - "[] Tacconi se desploma sobre la mesa."
+  - "[PJ] \xBFPerdiste?"
+  - "[TACCONI] Parece que s\xED."
+  - "[PJ] Entonces dame la tarjeta."
+  - "[] Tacconi saca una tarjeta magn\xE9tica del bolsillo y te la da."
+  - "[SISTEMA] OBJETO CLAVE OBTENIDO: TARJETA DE ACCESO P4."
+  - "[PJ] Gracias. Antes dijiste que sab\xEDas algo sobre m\xED."
+  - "[TACCONI] S\xED."
+  - "[PJ] \xBFQu\xE9 soy?"
+  - "[TACCONI] No lo s\xE9."
+  - "[PJ] \xBFEntonces por qu\xE9 dijiste eso?"
+  - "[TACCONI] Porque encontr\xE9 tu nombre en un registro de 2026. El del primer experimento del NeuraRush-LINK."
+  - "[PJ] \xBFY qu\xE9 dec\xEDa?"
+  - "[TACCONI] Que vos no eras uno de los sujetos."
+  - "[PJ] \xBFEntonces?"
+  - "[TACCONI] Eras parte del desarrollo."
+  - "[PJ] \xBFQu\xE9?"
+  - "[] Tacconi vuelve a sentarse y a barajar."
+  - "[TACCONI] Cuando llegues al \xFAltimo piso, busc\xE1 tu propio nombre. Quiz\xE1s ah\xED encuentres la respuesta."
+  - "[] Mir\xE1s la tarjeta. Al fondo del sal\xF3n, el lector del ascensor se prende en verde."
+  - "[SISTEMA] TARJETA RECONOCIDA. ACCESO AL \xDALTIMO PISO HABILITADO."
+  - "[PJ] Bueno... Hora de conocer al verdadero due\xF1o de este casino."
+  - "[SISTEMA] NUEVO OBJETIVO: LLEGAR AL \xDALTIMO PISO. ENCONTRAR EL SERVIDOR DE NEURARUSH-LINK."
+  requiredFlag: 0
+  grantsFlag: 84
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 11400000, guid: 75f9c9539b43bf80381e5f52f5c5f1c3, type: 2}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

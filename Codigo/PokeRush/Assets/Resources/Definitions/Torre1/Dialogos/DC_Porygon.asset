@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Porygon
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "PORYGON"
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[] Un Porygon flota frente a los generadores. Tiene un chip pegado en la nuca."
+  - "[PORYGON] SERVIDOR 01... ESTABLE. ESTABLE. ESTABLE."
+  - "[] No te mira. No mira nada."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Con el servidor caido"
+    requiere: 78
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[PORYGON] ...\xBFbip?"
+    - "[] Porygon mira alrededor como si viera el cuarto por primera vez. Se acerca y te empuja la mano con la cabeza."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

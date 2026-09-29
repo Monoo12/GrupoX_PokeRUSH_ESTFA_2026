@@ -7,7 +7,7 @@ Menu Principal -> Creacion de personaje -> (habitacion tutorial) -> Quarcho Cuev
   -> Data Center de Nestor -> Quarcho Cueva -> Casino -> Quarcho Cueva -> Jefe final
 ```
 
-> De la **habitación tutorial** está el esqueleto (ver `Tutorial_Habitacion.md`). Mientras la habitación decorada no esté en Build Settings, la creación de personaje manda directo a la cueva (`RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje`). El **jefe final** todavía no existe: la salida lo dice en vez de romper (ver más abajo).
+> La **habitación tutorial** es `habitacion.unity` (ver `Tutorial_Habitacion.md`): la creación de personaje lleva ahí y su puerta, a la cueva (`RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje`). El **jefe final** todavía no existe: la salida lo dice en vez de romper (ver más abajo).
 
 ---
 
@@ -37,7 +37,7 @@ Los **textos** (diálogos) y el **balance** (precios, premios) se crean una vez 
 |---|---|---|---|
 | **Tixi** | (1, 2), en el hueco entre el escritorio y la biblioteca | Siempre | Lore, tienda, te manda al siguiente nivel |
 | **PC** | el escritorio de la computadora (x −3..−1, fila 2) | Siempre | El PC de siempre |
-| **Néstor** | (−12, 2), entre los racks de servidores | `Torre1_NestorLiberado` | Tutor de MTs |
+| **Néstor** | (−12, 2), entre los racks de servidores | `Casino_Completado` (en el guion se queda en su Data Center hasta recordar; antes era `Torre1_NestorLiberado`) | Tutor de MTs |
 | **Martín** | sentado atrás de su mesa, celdas (−4..−2, −2..−1) | `Casino_Completado` | Tres ruletas y los juegos del casino |
 | **Tacconi** | (−5, −1), al costado de la mesa de Martín | `Casino_Completado` | Tres chances de ganarle un Mew |
 | **Salida** | (6, 0), la puerta del este | Siempre (abre después de Tixi) | Al siguiente nivel |
@@ -132,6 +132,8 @@ En el casino `chances` queda vacío y se juega sin tope, como siempre.
 
 **La vuelta a la cueva** la hace `VueltaAlLobby`, que se crea solo al arrancar el juego y vive entre escenas: si en una escena de un nivel se enciende el flag de "completado" de ese nivel (`Torre1_NestorLiberado`, `Casino_Completado`), espera a que no haya combate, cartel ni menú abiertos, dice "¡Nivel superado!" y carga la cueva. **No hace falta tocar NestorGOD2 ni los pisos del casino.** Volver a entrar a un nivel ya completo no expulsa a nadie.
 
+**Excepción (28-sep-2026):** si la escena tiene una `SalidaDelNivel` (el Data Center de Néstor), `VueltaAlLobby` no hace nada y el jugador vuelve caminando por la salida, que se prende recién con el nivel terminado. Tixi además cuenta sola la vuelta de cada nivel (campo `alVolver`) y tiene su charla (`Lobby_Tixi_Charla`). Ver `Historia_En_Los_Niveles.md`.
+
 > Como `SaveService` no guarda la escena, **"Continuar" siempre arranca en la cueva**, y la salida igual sabe adónde ir.
 
 Agregar un nivel es sumar una entrada a `RecorridoDeLaHistoria.Niveles` (nombre, escena de entrada, escenas del nivel y flag de completado). Cuando exista el jefe final, alcanza con que su escena se llame `BossFinal` (o cambiar ese nombre ahí) y esté en Build Settings.
@@ -176,7 +178,6 @@ git add -f "Codigo/PokeRush/Assets/Graphics/Characters/cientifico.png"* \
 
 - El **lore** de Tixi y las charlas de Néstor y Martín (`Resources/Definitions/Lobby/Dialogos`): hoy es texto de relleno.
 - El **sprite de Tixi**.
-- La **habitación tutorial** decorada: el esqueleto ya está y se pega en ella (`Tutorial_Habitacion.md`). Hasta entonces la creación de personaje salta directo a la cueva.
 - La escena del **jefe final** (`BossFinal`).
 - La **música** de la cueva: no hay pista propia, sigue sonando la de la escena anterior.
 - Las pantallas de la tienda y del tutor son **de prueba** con el arte del pack: las finales las diseña el equipo.

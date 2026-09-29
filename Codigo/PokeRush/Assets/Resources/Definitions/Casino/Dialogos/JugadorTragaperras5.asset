@@ -12,9 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: JugadorTragaperras5
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: JUGADOR
+  speakerName: "JUGADOR"
   speakerPortrait: {fileID: 0}
   lines:
-  - "No me mires, que me cort\xE1s la racha."
+  - "[JUGADOR] No me mires, que me cort\xE1s la racha."
+  - "[JUGADOR] ...Che. \xBFTu chip hace ruidito cuando perd\xE9s? El m\xEDo hace \"clin\". Como una moneda."
+  - "[PJ] El m\xEDo no hace nada."
+  - "[JUGADOR] Uh. Eso no lo digas muy fuerte ac\xE1 adentro."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

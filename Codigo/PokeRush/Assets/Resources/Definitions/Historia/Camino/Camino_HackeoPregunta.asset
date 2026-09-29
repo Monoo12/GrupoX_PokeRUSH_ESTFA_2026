@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Camino_HackeoPregunta
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "SISTEMA"
+  speakerPortrait: {fileID: 0}
+  lines: []
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: "AUTENTICACI\xD3N: \xBFEn qu\xE9 capa del modelo OSI trabaja un router?"
+  respuestas:
+  - opcion: "Capa 2"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: fa461271abeb7b53aeee5012c41cdf3c, type: 2}
+  - opcion: "Capa 3"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: ef1d284df15777c724b58b0d6201f764, type: 2}
+  - opcion: "Capa 7"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: fa461271abeb7b53aeee5012c41cdf3c, type: 2}
+  cancelarElige: -1
+  siguiente: {fileID: 0}

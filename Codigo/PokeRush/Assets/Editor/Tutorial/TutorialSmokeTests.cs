@@ -41,6 +41,7 @@ namespace PokeRush.EditorTools
             TestAssets();
             TestRecorrido();
             TestEsqueleto();
+            TestHabitacion();
 
             if (_failed == 0) Debug.Log($"[SmokeTutorial] TERMINADO. OK={_passed} FALLOS=0");
             else Debug.LogError($"[SmokeTutorial] TERMINADO. OK={_passed} FALLOS={_failed}");
@@ -351,33 +352,33 @@ namespace PokeRush.EditorTools
             }
         }
 
-        private static void RevisarRig(Scene scene)
+        private static void RevisarRig(Scene scene, string prefijo = "")
         {
             GameObject mapaRaiz = scene.GetRootGameObjects().FirstOrDefault(r => r.name == "MapaRaiz");
             var tutorial = TutorialBuilder.Buscar<TutorialDeLaHabitacion>(scene);
             var player = TutorialBuilder.Buscar<PlayerController>(scene);
             Check(player != null && mapaRaiz != null && player.transform.IsChildOf(mapaRaiz.transform),
-                  "Rig: el jugador vive adentro de MapaRaiz");
+                  $"{prefijo}Rig: el jugador vive adentro de MapaRaiz");
             if (player != null)
             {
                 int mascara = new SerializedObject(player).FindProperty("interactableMask").intValue;
-                Check((mascara & (1 << 3)) != 0, "Rig: el jugador interactua con Obstacles");
+                Check((mascara & (1 << 3)) != 0, $"{prefijo}Rig: el jugador interactua con Obstacles");
                 if (tutorial != null && tutorial.PuntoDeDespertar != null)
                     Check(Vector2.Distance(player.transform.position,
                               TutorialDeLaHabitacionCentro(tutorial.PuntoDeDespertar.position)) < 0.01f,
-                          "Rig: el jugador arranca en el centro de la celda de 'Despertar'");
+                          $"{prefijo}Rig: el jugador arranca en el centro de la celda de 'Despertar'");
             }
 
             Camera cam = mapaRaiz != null ? mapaRaiz.GetComponentInChildren<Camera>(true) : null;
             var follow = cam != null ? cam.GetComponent<CameraFollow>() : null;
             Check(follow != null && player != null &&
                   new SerializedObject(follow).FindProperty("target").objectReferenceValue == player.transform,
-                  "Rig: la camara del mapa sigue al jugador");
+                  $"{prefijo}Rig: la camara del mapa sigue al jugador");
 
             GameObject sistema = scene.GetRootGameObjects().FirstOrDefault(r => r.name == "Sistema");
             var bridge = sistema != null ? sistema.GetComponent<MapBattleBridge>() : null;
             var combate = TutorialBuilder.Buscar<BattleController>(scene);
-            Check(combate != null && !combate.gameObject.activeSelf, "Rig: el combate esta y arranca apagado");
+            Check(combate != null && !combate.gameObject.activeSelf, $"{prefijo}Rig: el combate esta y arranca apagado");
             if (bridge != null)
             {
                 var so = new SerializedObject(bridge);
@@ -385,33 +386,74 @@ namespace PokeRush.EditorTools
                       combate != null && so.FindProperty("combateRaiz").objectReferenceValue == combate.gameObject &&
                       so.FindProperty("battleController").objectReferenceValue == combate &&
                       so.FindProperty("playerController").objectReferenceValue == player,
-                      "Rig: MapBattleBridge conectado al mapa, al combate y al jugador");
+                      $"{prefijo}Rig: MapBattleBridge conectado al mapa, al combate y al jugador");
             }
-            else Check(false, "Rig: hay MapBattleBridge en 'Sistema'");
+            else Check(false, $"{prefijo}Rig: hay MapBattleBridge en 'Sistema'");
 
             var boot = sistema != null ? sistema.GetComponent<SceneBootstrapper>() : null;
             Check(boot != null && new SerializedObject(boot).FindProperty("playerController").objectReferenceValue == player,
-                  "Rig: SceneBootstrapper conectado al jugador");
-            Check(sistema != null && sistema.GetComponent<GuardadoRapido>() != null, "Rig: F2 guarda (GuardadoRapido)");
-            Check(TutorialBuilder.Buscar<DialogueController>(scene) != null, "Rig: hay caja de dialogo");
-            Check(TutorialBuilder.Buscar<EventSystem>(scene) != null, "Rig: hay EventSystem");
+                  $"{prefijo}Rig: SceneBootstrapper conectado al jugador");
+            Check(sistema != null && sistema.GetComponent<GuardadoRapido>() != null, $"{prefijo}Rig: F2 guarda (GuardadoRapido)");
+            Check(TutorialBuilder.Buscar<DialogueController>(scene) != null, $"{prefijo}Rig: hay caja de dialogo");
+            Check(TutorialBuilder.Buscar<EventSystem>(scene) != null, $"{prefijo}Rig: hay EventSystem");
 
             var gm = TutorialBuilder.Buscar<GameManager>(scene);
             SerializedProperty equipo = gm != null ? new SerializedObject(gm).FindProperty("equipoInicial") : null;
             Check(equipo != null && equipo.arraySize >= 1 && equipo.GetArrayElementAtIndex(0).objectReferenceValue != null,
-                  "Rig: la partida DEMO arranca con un Pokemon");
+                  $"{prefijo}Rig: la partida DEMO arranca con un Pokemon");
 
             Tilemap colisiones = scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Tilemap>(true))
                 .FirstOrDefault(t => t.name == "Colisiones");
             Check(colisiones != null && colisiones.gameObject.layer == 3 &&
                   colisiones.GetComponent<ColisionesTilemapRuntimeFix>() != null &&
                   colisiones.GetComponent<CompositeCollider2D>() != null,
-                  "Rig: Colisiones en Obstacles con su collider y el arreglo de runtime");
+                  $"{prefijo}Rig: Colisiones en Obstacles con su collider y el arreglo de runtime");
 
             Physics2D.SyncTransforms();
             List<string> problemas = TutorialBuilder.Verificar(scene, out int alcanzables);
             foreach (string p in problemas) Debug.LogError($"[SmokeTutorial] {p}");
-            Check(problemas.Count == 0, $"Rig: se llega caminando a todas las partes y a la puerta ({alcanzables} celdas)");
+            Check(problemas.Count == 0, $"{prefijo}Rig: se llega caminando a todas las partes y a la puerta ({alcanzables} celdas)");
+        }
+
+        // La habitacion de verdad (la del recorrido), si ya existe: que tenga el
+        // tutorial pegado entero, el rig y que se llegue a todo sin huecos. Las
+        // posiciones son del equipo: aca no se controla donde esta cada cosa.
+        private static void TestHabitacion()
+        {
+            string path = $"Assets/Scenes/{RecorridoDeLaHistoria.EscenaDelTutorial}.unity";
+            if (!System.IO.File.Exists(path)) return;
+
+            Scene previa = SceneManager.GetSceneByPath(path);
+            bool yaAbierta = previa.IsValid() && previa.isLoaded;
+            Scene scene = yaAbierta ? previa : EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);
+
+            try
+            {
+                var tutorial = TutorialBuilder.Buscar<TutorialDeLaHabitacion>(scene);
+                Check(tutorial != null, $"Habitacion: '{scene.name}' tiene el tutorial pegado");
+                if (tutorial == null) return;
+
+                List<string> afuera = ReferenciasAfuera(tutorial.transform);
+                foreach (string r in afuera) Debug.LogError($"[SmokeTutorial] Habitacion, referencia que se pierde: {r}");
+                Check(afuera.Count == 0, "Habitacion: nada adentro del Tutorial apunta a un objeto de afuera");
+
+                TutorialParte[] partes = tutorial.GetComponentsInChildren<TutorialParte>(true);
+                Check(partes.Length > 0 && partes.All(p => p.Flag != StoryFlag.None) &&
+                      partes.Select(p => p.Flag).Distinct().Count() == partes.Length,
+                      "Habitacion: cada parte tiene su propio flag");
+                Check(partes.Count(p => p.QueHace == TutorialParte.Tipo.Pelea && p.Rival != null) == 1,
+                      "Habitacion: hay una pelea con rival");
+
+                var puerta = tutorial.GetComponentInChildren<PuertaDelTutorial>(true);
+                Check(puerta != null && puerta.EscenaSiguiente == RecorridoDeLaHistoria.EscenaDelLobby,
+                      "Habitacion: la puerta lleva a la cueva");
+
+                RevisarRig(scene, "Habitacion ");
+            }
+            finally
+            {
+                if (!yaAbierta) EditorSceneManager.CloseScene(scene, true);
+            }
         }
 
         private static Vector2 TutorialDeLaHabitacionCentro(Vector3 p)

@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Lobby_Tixi_VueltaDelDataCenter_Casino
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "TIXI"
+  speakerPortrait: {fileID: 21300000, guid: 2b17330598b96a5459868a2f61a48db0, type: 3}
+  lines:
+  - "[PJ] \xBFY ahora qu\xE9?"
+  - "[] Tixi vuelve al mapa. El primer punto est\xE1 apagado."
+  - "[SISTEMA] SERVIDOR 01: OFFLINE."
+  - "[] Los otros tres siguen encendidos."
+  - "[TIXI] Ahora vamos por el segundo servidor. Est\xE1 en un lugar... bastante particular."
+  - "[PJ] \xBFD\xF3nde?"
+  - "[] Tixi hace zoom en el mapa."
+  - "[PJ] ..."
+  - "[TIXI] ..."
+  - "[PJ] \xBFEso es un casino?"
+  - "[TIXI] Exactamente."
+  - "[PJ] \xBFUn casino?"
+  - "[TIXI] Un casino."
+  - "[PJ] \xBFY qu\xE9 hace un servidor de NeuraRush-LINK en un casino?"
+  - "[TIXI] Buena pregunta."
+  - "[PJ] \xBFY qui\xE9n lo protege?"
+  - "[] Tixi revisa unos archivos."
+  - "[TIXI] Todav\xEDa no lo s\xE9. La informaci\xF3n est\xE1 bloqueada."
+  - "[PJ] \xBFEntonces c\xF3mo sabemos que est\xE1 ah\xED?"
+  - "[TIXI] Porque alguien intent\xF3 borrar los registros del lugar."
+  - "[PJ] \xBFY eso no es sospechoso?"
+  - "[TIXI] Bastante."
+  - "[PJ] \xBFQu\xE9 tengo que hacer?"
+  - "[TIXI] Entrar al casino. Encontrar el servidor."
+  - "[PJ] \xBFY destruirlo?"
+  - "[TIXI] Si pod\xE9s."
+  - "[PJ] \xBFY si no puedo?"
+  - "[TIXI] Entonces improvis\xE1."
+  - "[PJ] Excelente plan."
+  - "[TIXI] Una \xFAltima cosa: el casino no es como el data center. El servidor est\xE1 escondido. Vas a tener que recorrer todo el lugar."
+  - "[PJ] \xBFY hay Pok\xE9mon?"
+  - "[TIXI] Seguramente."
+  - "[PJ] \xBFCon chips?"
+  - "[TIXI] Seguramente."
+  - "[PJ] \xBFY un jefe?"
+  - "[] Tixi mira la pantalla."
+  - "[TIXI] Eso todav\xEDa no lo sabemos."
+  - "[PJ] Bueno... \xBFcu\xE1ndo salgo?"
+  - "[TIXI] Cuando quieras. La puerta del este te lleva. Suerte, {PJ}."
+  - "[PJ] Gracias."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

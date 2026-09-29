@@ -42,7 +42,12 @@ public class NpcQueHabla : MonoBehaviour, IInteractable
             return true;
         }
 
-        CasinoDialogo.Decir(null, cual.speakerName, cual.speakerPortrait, cual.lines);
+        // Sin caja de dialogo en la escena: el cartel del menu, con las lineas
+        // que tocan en esta partida y el que habla escrito adelante.
+        string[] lineas = cual.LineasPara(story) ?? new string[0];
+        var planas = new string[lineas.Length];
+        for (int i = 0; i < lineas.Length; i++) planas[i] = DialogueController.ComoTextoPlano(lineas[i]);
+        CasinoDialogo.Decir(null, cual.speakerName, cual.speakerPortrait, planas);
         return true;
     }
 }

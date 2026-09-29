@@ -126,6 +126,11 @@ public class NestorPortraitView : MonoBehaviour
         _pulsing = false;
         _escalaObjetivo = 1f;
         if (pulseGroup != null) pulseGroup.alpha = 1f;
+        // El globo no es hijo de 'root' en el prefab: sin esto, apagar a Nestor
+        // con la pelea en curso (la de Julieta lo desconecta) dejaba su ultima
+        // frase flotando en pantalla sin el retrato.
+        if (globo != null) globo.SetActive(false);
+        else if (dialogoText != null) dialogoText.gameObject.SetActive(false);
         if (root != null)
         {
             root.transform.localScale = _escalaBase;

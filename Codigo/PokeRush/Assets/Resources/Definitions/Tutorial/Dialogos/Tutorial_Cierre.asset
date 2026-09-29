@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Tutorial_Cierre
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: 
+  speakerName: ""
   speakerPortrait: {fileID: 0}
   lines:
-  - "\xA1Listo! Ya sab\xE9s lo b\xE1sico."
-  - "Afuera te espera la Quarcho Cueva: desde ah\xED sal\xEDs a cada nivel y volv\xE9s
-    al terminarlo."
-  - "La puerta ya abre. \xA1Suerte!"
+  - "[] Ya viste lo b\xE1sico. Y lo suficiente para saber que algo anda muy mal."
+  - "[PJ] \"Ven\xED a la QuarchoCueva\"... Si alguien sabe qu\xE9 pas\xF3, est\xE1 ah\xED."
+  - "[] La puerta ya abre."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

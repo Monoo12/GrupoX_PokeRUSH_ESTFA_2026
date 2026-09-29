@@ -20,7 +20,8 @@ using UnityEngine.Tilemaps;
 //       repara las colisiones y verifica que se llegue caminando a todo.
 //   PokeRush > Tutorial > Conectar la escena abierta al recorrido
 //       La habitacion decorada va a Build Settings y la creacion de personaje
-//       pasa a llevar ahi. Se tiene que llamar HabitacionTutorial.
+//       pasa a llevar ahi. Se tiene que llamar como dice
+//       RecorridoDeLaHistoria.EscenaDelTutorial ('habitacion').
 //
 // Lo que se copia es UN objeto: 'Tutorial'. Adentro estan 'Despertar' (donde
 // aparece el jugador), 'Partes' (lo que brilla) y 'Puerta'. Todo se busca solo
@@ -205,7 +206,10 @@ public static class TutorialBuilder
         }
 
         if (scene.isDirty) EditorSceneManager.SaveScene(scene);
+        // Nombre y ruta antes de seguir: ConectarRecorrido abre otras escenas y
+        // el struct 'scene' queda apuntando a una escena cerrada.
         string path = scene.path;
+        string nombre = scene.name;
 
         var lista = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
         EditorBuildSettingsScene existente = lista.FirstOrDefault(s => s.path == path);
@@ -217,7 +221,7 @@ public static class TutorialBuilder
         // personaje pasa a ser ella (RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje).
         QuarchoCuevaBuilder.ConectarRecorrido();
         EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
-        Debug.Log($"[Tutorial] Recorrido: creación de personaje -> {scene.name} -> {RecorridoDeLaHistoria.EscenaDelLobby}.");
+        Debug.Log($"[Tutorial] Recorrido: creación de personaje -> {nombre} -> {RecorridoDeLaHistoria.EscenaDelLobby}.");
     }
 
     // ------------------------------------------------------------- el cuarto de prueba
@@ -445,7 +449,13 @@ public static class TutorialBuilder
         var zona = puerta.AddComponent<BoxCollider2D>();
         zona.size = new Vector2(0.8f, 0.8f);
         zona.isTrigger = true;
-        puerta.AddComponent<PuertaDelTutorial>();
+        var componente = puerta.AddComponent<PuertaDelTutorial>();
+
+        // El camino a la Quarcho Cueva (Cruz, el viejo Ameghino, la cerradura
+        // NFC): lo cuenta la puerta sobre negro antes de cargar la cueva.
+        var so = new SerializedObject(componente);
+        so.FindProperty("camino").objectReferenceValue = HistoriaAssets.Dialogo("Historia/Camino/Camino_Inicio");
+        so.ApplyModifiedPropertiesWithoutUndo();
 
         // Del otro lado no hay mapa: un tope para no salir caminando al vacio
         // despues de decir "todavia no". Si la puerta queda en otra pared, se
@@ -743,8 +753,12 @@ public static class TutorialBuilder
         if (!suelo.HasTile(spawn) || Bloqueada(spawn)) problemas.Add($"donde despierta ({spawn}) no es piso libre.");
 
         // Flood fill desde donde despierta, acotado: las escenas hechas desde el
-        // template traen un bloque fantasma de tiles muy lejos.
+        // template traen un bloque fantasma de tiles muy lejos. De paso junta
+        // los HUECOS: celdas sin piso ni pared pegadas a una que se pisa. El
+        // jugador no mira si hay piso, solo si hay pared, asi que por un hueco
+        // sale caminando al vacio.
         var alcanzadas = new HashSet<Vector3Int> { spawn };
+        var huecos = new SortedSet<string>();
         var cola = new Queue<Vector3Int>();
         cola.Enqueue(spawn);
         var dirs = new[] { Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
@@ -755,12 +769,17 @@ public static class TutorialBuilder
             {
                 Vector3Int n = c + d;
                 if (alcanzadas.Contains(n) || Mathf.Abs(n.x - spawn.x) > 40 || Mathf.Abs(n.y - spawn.y) > 40) continue;
-                if (!suelo.HasTile(n) || Bloqueada(n)) continue;
+                if (Bloqueada(n)) continue;
+                if (!suelo.HasTile(n)) { huecos.Add($"({n.x}, {n.y})"); continue; }
                 alcanzadas.Add(n);
                 cola.Enqueue(n);
             }
         }
         alcanzables = alcanzadas.Count;
+
+        if (huecos.Count > 0)
+            problemas.Add($"se puede salir caminando del mapa por {string.Join(" ", huecos)}: ahi no hay piso " +
+                          "ni pared. Taparlas en 'Colisiones' con la pared invisible (ANDRUSIANI/Tiles/ParedInvisible).");
 
         foreach (TutorialParte parte in partes)
             if (!AlcanzableAlLado(parte.GetComponent<Collider2D>(), suelo, alcanzadas))
@@ -768,6 +787,19 @@ public static class TutorialBuilder
 
         foreach (PuertaDelTutorial puerta in puertas)
         {
+            Collider2D zona = puerta.GetComponent<Collider2D>();
+            if (zona != null && !zona.isTrigger)
+            {
+                // Dibujada como pared: se usa con X desde al lado.
+                if (puerta.gameObject.layer != CapaObstacles)
+                    problemas.Add("la puerta es solida (se usa con X) y tiene que estar en la capa Obstacles.");
+                if (!AlcanzableAlLado(zona, suelo, alcanzadas))
+                    problemas.Add("no se llega a pararse al lado de la puerta.");
+                continue;
+            }
+
+            if (puerta.gameObject.layer == CapaObstacles)
+                problemas.Add("la puerta es una zona para pisar y esta en Obstacles: frena al jugador. Va en Default.");
             Vector3Int celda = suelo.WorldToCell(puerta.transform.position);
             if (!alcanzadas.Contains(celda)) problemas.Add($"no se llega caminando a la puerta ({celda}).");
         }

@@ -15,11 +15,19 @@ MonoBehaviour:
   speakerName: "COMPA\xD1ERA"
   speakerPortrait: {fileID: 21300000, guid: 1575ff0858080f14b8a6a30f2f005ff0, type: 3}
   lines:
-  - "\xA1Por fin te despertaste! Antes de salir, una de pr\xE1ctica."
-  - "LUCHAR: eleg\xEDs un movimiento. Fijate el tipo: hay ataques que pegan el doble
-    y otros que no le hacen nada."
-  - "MOCHILA: us\xE1s un objeto, pero se te va el turno. POK\xC9MON: cambi\xE1s al
-    que pelea. HUIR: solo contra salvajes."
-  - "Si perd\xE9s no pasa nada: te curo y probamos de nuevo. \xA1Vamos!"
+  - "[COMPA\xD1ERA] \xA1Por fin! Mi chip me avis\xF3 que hab\xEDa movimiento en tu c\xE1psula."
+  - "[PJ] \xBFMi qu\xE9? ...Par\xE1. \xBFVos no ibas al Ameghino conmigo?"
+  - "[COMPA\xD1ERA] \xBFAl qu\xE9? El chip no tiene nada con ese nombre. As\xED que no."
+  - "[COMPA\xD1ERA] Rutina de la Liga: todo ciudadano despierto hace una pelea de pr\xE1ctica. Yo solo repito lo que dice el chip."
+  - "[COMPA\xD1ERA] LUCHAR: eleg\xEDs un movimiento. Fijate el tipo: hay ataques que pegan el doble y otros que no le hacen nada."
+  - "[COMPA\xD1ERA] MOCHILA: us\xE1s un objeto, pero se te va el turno. POK\xC9MON: cambi\xE1s al que pelea. HUIR: solo contra salvajes."
+  - "[COMPA\xD1ERA] Si perd\xE9s no pasa nada: te curo y probamos de nuevo. \xA1Vamos!"
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

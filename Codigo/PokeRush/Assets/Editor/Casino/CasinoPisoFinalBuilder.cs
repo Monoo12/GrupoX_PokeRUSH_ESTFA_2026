@@ -188,6 +188,9 @@ public static class CasinoPisoFinalBuilder
         so.FindProperty("ruletaDeCombate").objectReferenceValue = ruleta;
         so.FindProperty("turnosEntreGiros").intValue = 2;
         so.FindProperty("maximoDeRevanchas").intValue = 1;
+        // La historia: lo que dice la primera vez y cuando se le apaga el chip.
+        so.FindProperty("dialogoAntes").objectReferenceValue = HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Reymar_Antes");
+        so.FindProperty("dialogoDespues").objectReferenceValue = HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Reymar_Despues");
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Recepcionista
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "RECEPCIONISTA"
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[RECEPCIONISTA] \xA1Bienvenidos a NeuraRush-LINK, Servidor 01! \xBFTiene turno?"
+  - "[RECEPCIONISTA] Por favor, acerque la nuca al lector para validar su chip."
+  - "[] Te acerc\xE1s. El lector hace un pitido largo y triste."
+  - "[RECEPCIONISTA] Chip... no responde. El sistema de visitas est\xE1 en mantenimiento desde 2027. Puede pasar igual."
+  - "[RECEPCIONISTA] El Guardi\xE1n de turno es [DATO RESTRINGIDO]. \xA1Que tenga un excelente d\xEDa productivo!"
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Con el servidor caido"
+    requiere: 78
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[RECEPCIONISTA] ...\xBFQu\xE9 hago yo atr\xE1s de un mostrador?"
+    - "[RECEPCIONISTA] Yo ten\xEDa una florer\xEDa. Me acuerdo del olor. \xBFCu\xE1nto hace que no huelo nada?"
+    - "[RECEPCIONISTA] Si ves a alguien de la Liga, no le digas que me acord\xE9. Por las dudas."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

@@ -12,9 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: JugadorBlackjack1
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: JUGADOR
+  speakerName: "JUGADOR"
   speakerPortrait: {fileID: 0}
   lines:
-  - Diecinueve... me planto. No, pido. No, me planto.
+  - "[JUGADOR] Diecinueve... me planto. No, pido. No, me planto."
+  - "[JUGADOR] En este piso hay menos gente y m\xE1s guardias. Si te preguntan, cont\xE1s fichas. No cartas."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

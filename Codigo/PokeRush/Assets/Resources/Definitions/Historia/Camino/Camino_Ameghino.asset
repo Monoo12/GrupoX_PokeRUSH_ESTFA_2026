@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Camino_Ameghino
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: ""
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[] Al final de la avenida hay un edificio que conoc\xE9s de memoria. O que conociste."
+  - "[] Es el viejo Ameghino. Sin carteles, sin alumnos, con las ventanas tapadas. La Liga se llev\xF3 el nombre y dej\xF3 el esqueleto."
+  - "[] Adentro, pupitres cubiertos de polvo. En un pizarr\xF3n todav\xEDa se lee: \"TCP/IP: para el martes\"."
+  - "[] Sub\xEDs las escaleras. La vieja Quarcho Cueva sigue ah\xED, con una cerradura NFC nueva que no combina con nada."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 11400000, guid: b712cabd203a0c2b824223f751f503ac, type: 2}

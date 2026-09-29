@@ -12,13 +12,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Lobby_Tixi_Lore
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: TIXI
+  speakerName: "TIXI"
   speakerPortrait: {fileID: 21300000, guid: 2b17330598b96a5459868a2f61a48db0, type: 3}
   lines:
-  - "\xA1Por fin llegaste! Soy Tixi. Bienvenido a la Quarcho Cueva."
-  - "Desde ac\xE1 vamos a salir a cada misi\xF3n, y ac\xE1 vas a volver cada vez
-    que termines una."
-  - "Tu primera parada es el Data Center: N\xE9stor est\xE1 ah\xED adentro y hay
-    que salvarlo."
+  - "[???] Aaah... conque recibiste mi carta."
+  - "[???] Nos volvemos a encontrar."
+  - "[PJ] \xBFQui\xE9n anda ah\xED?"
+  - "[] De entre las sombras y los cables sale una figura conocida."
+  - "[PJ] \xA1Tixi! \xA1Cu\xE1nto tiempo!"
+  - "[TIXI] \xA1Hola, {PJ}!"
+  - "[PJ] \xBFQu\xE9 es todo esto? \xBFQu\xE9 le pas\xF3 al mundo? \xBFSos del Gobierno Mundial?"
+  - "[TIXI] Calma, calma. Te lo explico todo."
+  - "[TIXI] Hace cinco a\xF1os, una onda misteriosa dej\xF3 inconsciente a todo el planeta."
+  - "[TIXI] Se abrieron portales de una tecnolog\xEDa desconocida. De ah\xED sal\xEDan chips que iban directo a la nuca de la gente."
+  - "[PJ] \xA1NeuraRush-LINK!"
+  - "[TIXI] ...\xBFC\xF3mo sab\xE9s ese nombre?"
+  - "[PJ] Estuve ah\xED cuando empez\xF3 todo. Fue Julieta. Unas criaturas que parec\xEDan Pok\xE9mon la quer\xEDan detener..."
+  - "[PJ] ...y ella les tir\xF3 un chip y las domin\xF3."
+  - "[TIXI] Lo s\xE9. Son su mano derecha."
+  - "[TIXI] Pero lo importante es que desde ese momento nuestros universos se fusionaron."
+  - "[TIXI] Pok\xE9mon y \"humanos\"... si todav\xEDa se nos puede llamar as\xED... ahora convivimos."
+  - "[PJ] Parece un sue\xF1o."
+  - "[TIXI] M\xE1s bien una pesadilla."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes:
+  - nombre: "???"
+    retrato: {fileID: 0}
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: "\xBFPreguntas?"
+  respuestas:
+  - opcion: "\xBFY vos?"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: eaedd8efba96f892adb0f17690d67cab, type: 2}
+  - opcion: "\xBFY ahora?"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: cce5ae335f9e770658d658929045391c, type: 2}
+  cancelarElige: -1
+  siguiente: {fileID: 0}

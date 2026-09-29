@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Tecnico
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "T\xC9CNICO"
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[T\xC9CNICO] No toques los racks. Muerden. Bueno, no muerden, pero dan una patada que te acomoda los dientes."
+  - "[T\xC9CNICO] Mi hermana trabaja en la administraci\xF3n de un casino. Dice que el ascensor tiene un bot\xF3n de piso 4."
+  - "[T\xC9CNICO] Nadie lo apret\xF3 nunca. Dicen que el piso 4 no existe. Pero el bot\xF3n est\xE1."
+  - "[T\xC9CNICO] Ac\xE1 pasa lo mismo: hay un rack que no figura en ning\xFAn plano y siempre est\xE1 caliente. Cosas de la Liga."
+  requiredFlag: 0
+  grantsFlag: 74
+  otrosHablantes: []
+  variantes:
+  - nota: "Con el servidor caido"
+    requiere: 78
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[T\xC9CNICO] Los racks se apagaron uno por uno. Nunca los hab\xEDa escuchado callados."
+    - "[T\xC9CNICO] Me acord\xE9 de mi hermana. Trabaja en la administraci\xF3n de un casino. Hace cinco a\xF1os que no la llamo."
+    - "[T\xC9CNICO] Si pas\xE1s por ah\xED, decile que su hermano est\xE1 bien. Creo."
+    otorgaFlag: 74
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

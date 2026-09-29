@@ -12,9 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: JugadorRuleta1
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: JUGADORA
+  speakerName: "JUGADORA"
   speakerPortrait: {fileID: 0}
   lines:
-  - "Rojo, rojo, rojo... \xA1negro! Siempre sale negro cuando le voy al rojo."
+  - "[JUGADORA] Rojo, rojo, rojo... \xA1negro! Siempre sale negro cuando le voy al rojo."
+  - "[JUGADORA] Dicen que si le gan\xE1s m\xE1s de 200 al color, la casa te hace girar la ruleta de premios."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

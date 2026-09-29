@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Casino_Croupier
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "CROUPIER"
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[CROUPIER] \xBFN\xFAmero?"
+  - "[PJ] \xBFQu\xE9?"
+  - "[CROUPIER] Eleg\xED un n\xFAmero."
+  - "[PJ] No vine a jugar."
+  - "[CROUPIER] Todos dicen eso antes de perder."
+  - "[PJ] Estoy buscando c\xF3mo llegar al \xFAltimo piso."
+  - "[] El croupier deja de mover la ruleta."
+  - "[CROUPIER] No existe."
+  - "[PJ] Abajo me dijeron lo mismo."
+  - "[CROUPIER] Si quer\xE9s llegar arriba, necesit\xE1s una tarjeta."
+  - "[PJ] \xBFD\xF3nde la consigo?"
+  - "[CROUPIER] No la consegu\xEDs. Te la tiene que dar alguien."
+  - "[PJ] \xBFQui\xE9n?"
+  - "[CROUPIER] Tacconi. Un lud\xF3pata que nunca pierde. Juega en el piso de arriba."
+  - "[CROUPIER] Y para llegar a Tacconi te va a hacer falta la VIP. Esa s\xED se consigue. De mil maneras. Ninguna barata."
+  - "[CROUPIER] Ahora, si me disculp\xE1s... \xBFn\xFAmero?"
+  requiredFlag: 0
+  grantsFlag: 81
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

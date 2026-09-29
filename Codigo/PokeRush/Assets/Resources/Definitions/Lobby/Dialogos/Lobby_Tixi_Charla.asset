@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Lobby_Tixi_Charla
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "TIXI"
+  speakerPortrait: {fileID: 21300000, guid: 2b17330598b96a5459868a2f61a48db0, type: 3}
+  lines:
+  - "[TIXI] Un consejo de data center: todo lo que tenga un panel se puede apagar. C\xE1maras, rastreo, firewall, energ\xEDa."
+  - "[TIXI] Cada sistema que apagues es uno menos que el Guardi\xE1n puede usar en tu contra."
+  - "[TIXI] Y si ves criaturas encerradas, liberalas. Mis QuerryBolas hacen el resto."
+  - "[TIXI] Cuando quieras, sal\xED por la puerta del este o pedime que te lleve."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Despues del casino"
+    requiere: 50
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[TIXI] Dos servidores menos. Los otros dos siguen prendidos, pero todo su tr\xE1fico va a parar al mismo lugar."
+    - "[TIXI] El servidor central. Ah\xED va a estar ella."
+    - "[TIXI] Cuando consiga abrir un camino hasta ah\xED, te aviso. Mientras tanto, descans\xE1. Te lo ganaste."
+    otorgaFlag: 0
+  - nota: "Despues de Nestor"
+    requiere: 15
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[TIXI] Un servidor de NeuraRush-LINK entre tragamonedas. Revis\xE9 tres veces."
+    - "[TIXI] Si todo ah\xED est\xE1 conectado, cada ruleta y cada mano de cartas pasa por ese servidor. La casa no juega: calcula."
+    - "[TIXI] Ten\xE9 a mano el Protocolo N\xE9stor. No s\xE9 bien qu\xE9 hace, pero un casino es un buen lugar para leer jugadas."
+    - "[TIXI] Cuando quieras, sal\xED por la puerta del este o pedime que te lleve."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

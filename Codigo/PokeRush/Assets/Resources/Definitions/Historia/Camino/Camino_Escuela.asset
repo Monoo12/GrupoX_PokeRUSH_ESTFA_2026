@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Camino_Escuela
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: ""
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[] Recorr\xE9s los pasillos. En preceptor\xEDa, entre planillas de 2026, hay una tarjeta de acceso vieja con la foto de Pato."
+  - "[] La apoy\xE1s en el lector sin mucha fe."
+  - "[SISTEMA] ACCESO CONCEDIDO. BIENVENIDA, EX DIRECTORA."
+  - "[PJ] Sab\xEDa que Pato ten\xEDa acceso a todo."
+  - "[] CLACK."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 11400000, guid: 948703f56f1ef4f7b06926dddc762f7e, type: 2}

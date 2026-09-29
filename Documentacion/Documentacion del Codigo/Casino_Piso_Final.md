@@ -87,6 +87,11 @@ el Pokémon que está peleando.
 Cada `Prize` tiene ahora un `efectoDeCombate`. En los premios de mapa es
 `Ninguno` y no pasa nada, así que las ruletas de los otros pisos siguen igual.
 
+**A quién le cae cada gajo** lo decide `CasinoRuletaDeCombate.QuienCobra`. Acá es
+`SiempreElJugador` (el valor por defecto): todo le pega al Pokémon del jugador. La
+pelea contra Julieta reusa **esta misma ruleta** con los otros dos modos
+(`AFavorDelJugador` y `AFavorDelRival`), ver `Jefe_Final_Julieta.md`.
+
 ### Los ocho gajos
 
 | Gajo | Qué hace | Peso |
@@ -222,10 +227,11 @@ fuera del editor parece congelado. Se destraba poniendo
 
 ## Lo que falta (equipo)
 
-1. **Los textos de los seis guardias son de relleno.** Están en
-   `Resources/Definitions/Casino/Dialogos/Historia_PisoFinal_GuardiaPasillo*.asset`
-   y el builder **no los pisa** si ya existen: se reescriben desde el Inspector
-   cuando lleguen los diálogos de historia.
+1. ~~Los textos de los seis guardias son de relleno.~~ Desde el 28-sep-2026 cada
+   guardia dice algo distinto de la historia, y el jefe tiene `dialogoAntes`
+   (`Casino_Reymar_Antes`, la primera vez) y `dialogoDespues` (`Casino_Reymar_Despues`:
+   se le apaga el chip, deja la ruleta y el jugador busca su nombre en el servidor).
+   Ver `Historia_En_Los_Niveles.md`.
 2. **Los iconos de la ruleta son items del pack** (Ataque X, orbe tóxico, cola
    lenta, placa en blanco, monedero). Se leen, pero no son arte propio.
 3. **El ascensor no tiene puertas dibujadas.**

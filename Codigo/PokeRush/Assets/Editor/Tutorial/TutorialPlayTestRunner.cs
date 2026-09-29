@@ -3,13 +3,14 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Lanza el banco de pruebas del tutorial (TutorialPlayTest): abre el esqueleto
-// y entra en Play. El banco se crea solo al arrancar el Play, no se agrega a la
+// Lanza el banco de pruebas del tutorial (TutorialPlayTest) y entra en Play:
+// sobre la escena abierta si tiene tutorial (la habitacion), y si no sobre el
+// esqueleto. El banco se crea solo al arrancar el Play, no se agrega a la
 // escena. Resultados en el Editor.log con la etiqueta [PlayTutorial] y capturas
 // en Capturas/Tutorial/.
 public static class TutorialPlayTestRunner
 {
-    [MenuItem("PokeRush/Tutorial/Probar el esqueleto en Play")]
+    [MenuItem("PokeRush/Tutorial/Probar el tutorial en Play")]
     public static void Probar()
     {
         if (EditorApplication.isPlaying)
@@ -18,7 +19,7 @@ public static class TutorialPlayTestRunner
             return;
         }
 
-        if (SceneManager.GetActiveScene().path != TutorialBuilder.EscenaEsqueleto)
+        if (TutorialBuilder.Buscar<TutorialDeLaHabitacion>(SceneManager.GetActiveScene()) == null)
         {
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
             EditorSceneManager.OpenScene(TutorialBuilder.EscenaEsqueleto, OpenSceneMode.Single);

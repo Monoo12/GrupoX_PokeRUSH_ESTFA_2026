@@ -28,14 +28,16 @@ public static class QuarchoCuevaAssets
 
     // El lore de Tixi. Son lineas de RELLENO: el lore lo escribe el equipo en
     // este asset (Resources/Definitions/Lobby/Dialogos/Lobby_Tixi_Lore).
+    // Si el asset ya existe no se toca: la historia de verdad (historia.pdf)
+    // esta escrita ahi, con varios que hablan, preguntas y lo que sigue.
     public static DialogueDefinition LoreDeTixi(Sprite retrato) => Dialogo("Lobby_Tixi_Lore", "TIXI", retrato,
-        "¡Por fin llegaste! Soy Tixi. Bienvenido a la Quarcho Cueva.",
-        "Desde acá vamos a salir a cada misión, y acá vas a volver cada vez que termines una.",
-        "Tu primera parada es el Data Center: Néstor está ahí adentro y hay que salvarlo.");
+        "[TIXI] ¡Por fin llegaste! Te estaba esperando.",
+        "[TIXI] Desde acá vamos a salir a cada misión, y acá vas a volver cada vez que termines una.",
+        "[TIXI] El primer servidor queda cerca. Quién lo cuida, no lo sé: eso lo vas a descubrir vos.");
 
     public static DialogueDefinition CharlaDeNestor(Sprite retrato) => Dialogo("Lobby_Nestor_Charla", "NÉSTOR", retrato,
-        "Gracias por sacarme de ese chip. Todavía me zumban los oídos.",
-        "Mientras tanto, armé acá mi puesto de MT. Si querés que alguno de tus Pokémon aprenda algo nuevo, avisame.");
+        "[NÉSTOR] Ante todo, buenos días. Te dije que cuando me acordara de todo te iba a buscar.",
+        "[NÉSTOR] Mientras tanto, armé acá mi puesto de MT. Si querés que alguno de tus Pokémon aprenda algo nuevo, avisame.");
 
     public static DialogueDefinition CharlaDeMartin(Sprite retrato) => Dialogo("Lobby_Martin_Charla", "MARTÍN", retrato,
         "Nunca nadie me había ganado en mi propia mesa.",

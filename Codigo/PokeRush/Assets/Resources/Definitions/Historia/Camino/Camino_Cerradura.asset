@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Camino_Cerradura
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: ""
+  speakerPortrait: {fileID: 0}
+  lines: []
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: "La cerradura NFC parpadea en rojo."
+  respuestas:
+  - opcion: "Usar la RaspBerry"
+    requiere: 0
+    requiereObjeto: {fileID: 11400000, guid: 5b3ab56f91b5b9ee02fd0f9968bd58ae, type: 2}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: 6d844a212ae793a385dc8c957d2f744b, type: 2}
+  - opcion: "Hackear"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: 47b4501a42da1bdf3abb12bb39814f40, type: 2}
+  - opcion: "Explorar"
+    requiere: 0
+    requiereObjeto: {fileID: 0}
+    otorgaFlag: 0
+    siguiente: {fileID: 11400000, guid: 8becdfbf79581e199a6655503923e88b, type: 2}
+  cancelarElige: -1
+  siguiente: {fileID: 0}

@@ -107,7 +107,7 @@ public static class CasinoInteractionBuilder
             // Hay que tener el Cosmog shiny, que solo se le gana a Tacconi.
             Requisito = CasinoRequisitoTipo.TenerPokemon,
             EspecieRequerida = "Assets/Resources/Definitions/Pokens/0789_Cosmog.asset",
-            MensajeFaltaPokemon = "El de seguridad no te deja subir: arriba solo entran los que tienen un {0} shiny. Dicen que Tacconi tiene uno.",
+            MensajeFaltaPokemon = "Un lector de tarjetas parpadea en rojo: PISO 4, ACCESO RESTRINGIDO. La tarjeta la tiene Tacconi, y la apuesta junto con su {0} shiny.",
             OtorgaFlag = StoryFlag.Casino_Piso3_Superado,
             PisosDeAbajo = new[] { ("Casino Nivel 2", "PISO 2"), ("Casino Nivel 1", "PISO 1") }
         }
@@ -235,6 +235,16 @@ public static class CasinoInteractionBuilder
             {
                 var mesa = go.AddComponent<RouletteTableInteractable>();
                 OtorgarSoloElPrimero(mesa, puestos, StoryFlag.Casino_Ruleta_ObjetivoCumplido);
+
+                // El croupier de la historia (el que manda a buscar a Tacconi)
+                // atiende la primera mesa: una sola charla, la primera vez.
+                if (puestos == 1)
+                {
+                    var soCroupier = new SerializedObject(mesa);
+                    soCroupier.FindProperty("charlaDelCroupier").objectReferenceValue =
+                        HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Croupier");
+                    soCroupier.ApplyModifiedPropertiesWithoutUndo();
+                }
 
                 // Todas las mesas abren la ruleta de premios al ganar al color.
                 if (!string.IsNullOrEmpty(piso.RuletaPorColor))

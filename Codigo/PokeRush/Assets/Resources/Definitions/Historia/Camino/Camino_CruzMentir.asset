@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Camino_CruzMentir
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: ""
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[PJ] Estoy yendo a mi estaci\xF3n de trabajo."
+  - "[CRUZ] Ah. Bueno. Buen d\xEDa, ciudadano."
+  - "[ARTURITO] Bip. Mentira. Bip."
+  - "[CRUZ] Callate, Arturito. Nadie te pregunt\xF3."
+  - "[] Cruz te deja pasar sin mirarte dos veces."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes:
+  - nombre: "CRUZ"
+    retrato: {fileID: 21300000, guid: bb83d80bef73aff4eafbf0dd6154a5a9, type: 3}
+  - nombre: "ARTURITO"
+    retrato: {fileID: 0}
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 11400000, guid: 19fbc89c3f0baebeeb418522c559b640, type: 2}

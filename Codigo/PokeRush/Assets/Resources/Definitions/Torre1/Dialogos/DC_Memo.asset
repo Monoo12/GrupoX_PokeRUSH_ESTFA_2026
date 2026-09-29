@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Memo
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: ""
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[] En la mesa de control qued\xF3 una pantalla prendida. Un mensaje interno, marcado URGENTE."
+  - "[SISTEMA] DE: ADMINISTRACI\xD3N CENTRAL. PARA: TODOS LOS GUARDIANES."
+  - "[SISTEMA] \"El sujeto que no figura en ning\xFAn registro se despert\xF3. No lo busquen. Va a venir por su cuenta. -J.\""
+  - "[PJ] ...\"El sujeto que no figura en ning\xFAn registro\"."
+  requiredFlag: 0
+  grantsFlag: 76
+  otrosHablantes: []
+  variantes:
+  - nota: "Con el servidor caido"
+    requiere: 78
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[] La pantalla de la mesa de control est\xE1 apagada. En el vidrio negro solo se ve tu reflejo."
+    otorgaFlag: 0
+  - nota: "Ya lo leyo"
+    requiere: 76
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[SISTEMA] \"El sujeto que no figura en ning\xFAn registro se despert\xF3. No lo busquen. Va a venir por su cuenta. -J.\""
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

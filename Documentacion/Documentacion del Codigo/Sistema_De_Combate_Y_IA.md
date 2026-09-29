@@ -417,6 +417,23 @@ así que no pisa el HUD que diseñe el equipo. Queda **arriba a la derecha**, qu
 libre de este HUD (arriba a la izquierda ya están el databox del rival y la barra del
 escudo).
 
+## 🎬 Peleas con guion (`IDirectorDeCombate`)
+
+Una pelea puede traer un **director** (`StartBattle(..., director: ...)`): alguien
+que habla en el medio del combate y cambia reglas a mitad de camino. Lo usa la
+pelea contra Julieta (ver `Jefe_Final_Julieta.md`). Sin director —todas las demás
+peleas— no corre nada nuevo.
+
+`BattleController` llama al director en momentos fijos: `AlEmpezar` (después de
+la intro), `AntesDeElegir` (antes de la Predicción, la ruleta y el menú),
+`AntesDeResolver` (puede cambiar la acción del jugador), `DespuesDelTurno`,
+`ImpedirQueCaiga` (el `EnemyCannotFaint` del motor) y `AlTerminar`. Y le expone
+"mandos" para prender y apagar a mitad de pelea los sistemas que ya existían:
+`PonerRuleta`, `PonerLecturaAliada`, `PonerPrediccion`, `CambiarPerfilDeIA`.
+
+La Predicción ahora tiene `Lector` (quién firma los textos; por defecto "Nestor")
+y la ruleta `QuienCobra` (por defecto todo al jugador, como en el casino).
+
 ## 🧬 Mecánicas de combate implementadas
 
 Todas siguen las reglas de la saga principal.

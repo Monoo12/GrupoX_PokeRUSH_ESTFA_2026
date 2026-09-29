@@ -88,12 +88,13 @@ public class LobbyPlayTest : MonoBehaviour
         yield return Foto("01-tixi-lore");
         int plataAntes = player.Money;
 
-        // Avanzar el lore y el regalo hasta la pregunta de la tienda.
+        // Avanzar el lore (con su pregunta: va la primera opcion) y el regalo
+        // hasta la pregunta de la tienda. El lore es el del guion: es largo.
         bool fotoPregunta = false;
-        float limite = Time.realtimeSinceStartup + 20f;
+        float limite = Time.realtimeSinceStartup + 60f;
         while (!(menus.Top is ShopScreen) && Time.realtimeSinceStartup < limite)
         {
-            if (_dialogo.IsOpen && HayOpciones() && !fotoPregunta)
+            if (_dialogo.IsOpen && HayOpciones() && !fotoPregunta && TextoDeLaCaja().Contains("ver lo que tengo"))
             {
                 yield return Foto("02-tixi-pregunta-tienda");
                 fotoPregunta = true;
@@ -152,10 +153,30 @@ public class LobbyPlayTest : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.2f);
         Check("Escape elige 'Nada' y cierra", !_dialogo.IsOpen);
 
-        // ---- 4. Nestor, el tutor ----
+        // ---- 4. La vuelta del Data Center ----
+        // En el guion Nestor se queda en su Data Center recuperando la memoria:
+        // a la cueva llega recien despues del casino.
         story.ActivateFlag(StoryFlag.Torre1_NestorLiberado);
         yield return null;
-        Check("Con Nestor rescatado, Nestor aparece en la cueva", nestor.gameObject.activeInHierarchy);
+        Check("Con Nestor rescatado, Nestor todavia no esta en la cueva", !nestor.gameObject.activeInHierarchy);
+        yield return EsperarHasta(() => _dialogo.IsOpen, 5f);
+        Check("Al volver del Data Center, Tixi cuenta la vuelta sola", _dialogo.IsOpen);
+        yield return Foto("09a-tixi-vuelta-data-center");
+        yield return CerrarDialogos(45f);
+        Check("La vuelta del Data Center queda contada", story.HasFlag(StoryFlag.Historia_TixiVueltaDelDataCenter));
+
+        // ---- 5. La vuelta del casino: llegan Nestor, Martin y Tacconi ----
+        story.ActivateFlag(StoryFlag.Casino_Completado);
+        yield return null;
+        Check("Con el casino completo aparecen Nestor, Martin y Tacconi",
+              nestor.gameObject.activeInHierarchy && martin.gameObject.activeInHierarchy && tacconi.gameObject.activeInHierarchy);
+        yield return EsperarHasta(() => _dialogo.IsOpen, 5f);
+        Check("Al volver del casino, Tixi cuenta la vuelta sola", _dialogo.IsOpen);
+        yield return Foto("09b-tixi-vuelta-casino");
+        yield return CerrarDialogos(30f);
+        Check("La vuelta del casino queda contada", story.HasFlag(StoryFlag.Historia_TixiVueltaDelCasino));
+
+        // ---- 6. Nestor, el tutor ----
         player.AddMoney(5000);
 
         PokenModel alumno = player.Team[0];
@@ -199,11 +220,7 @@ public class LobbyPlayTest : MonoBehaviour
         }
         yield return CerrarDialogos();
 
-        // ---- 5. Martin y Tacconi ----
-        story.ActivateFlag(StoryFlag.Casino_Completado);
-        yield return null;
-        Check("Con el casino completo aparecen Martin y Tacconi",
-              martin.gameObject.activeInHierarchy && tacconi.gameObject.activeInHierarchy);
+        // ---- 7. Martin y Tacconi ----
         yield return new WaitForSecondsRealtime(0.3f);
         yield return Foto("15-cueva-completa");
 
@@ -245,7 +262,7 @@ public class LobbyPlayTest : MonoBehaviour
         _dialogo.OnCancel();
         yield return CerrarDialogos();
 
-        // ---- 6. La salida ----
+        // ---- 8. La salida ----
         RecorridoDeLaHistoria.Nivel siguiente = RecorridoDeLaHistoria.SiguienteNivel(story);
         Check("Despues del casino la salida apunta al jefe final", siguiente?.EscenaDeEntrada == "BossFinal");
         Check("Como la escena del jefe todavia no existe, la salida no la carga", !ViajeEntreNiveles.SePuedeCargar(siguiente));
@@ -286,9 +303,9 @@ public class LobbyPlayTest : MonoBehaviour
         while (!condicion() && Time.realtimeSinceStartup < limite) yield return null;
     }
 
-    private IEnumerator CerrarDialogos()
+    private IEnumerator CerrarDialogos(float segundos = 8f)
     {
-        float limite = Time.realtimeSinceStartup + 8f;
+        float limite = Time.realtimeSinceStartup + segundos;
         while ((_dialogo.IsOpen || MenuManager.AnyOpen) && Time.realtimeSinceStartup < limite)
         {
             if (MenuManager.AnyOpen) MenuManager.Instance.Top?.HandleAction(GameAction.Confirm);
@@ -302,6 +319,12 @@ public class LobbyPlayTest : MonoBehaviour
     {
         var panel = Campo<GameObject>(_vista, "choicePanel");
         return panel != null && panel.activeInHierarchy;
+    }
+
+    private string TextoDeLaCaja()
+    {
+        var texto = Campo<Text>(_vista, "dialogueLineText");
+        return texto != null ? texto.text : "";
     }
 
     private int OpcionesVisibles()

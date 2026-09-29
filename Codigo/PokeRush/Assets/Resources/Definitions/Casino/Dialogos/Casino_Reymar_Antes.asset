@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Casino_Reymar_Antes
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "REYMAR"
+  speakerPortrait: {fileID: 21300000, guid: 97358298e5121c8408cf32d53e1270c9, type: 3}
+  lines:
+  - "[] Detr\xE1s de la mesa, sentado como si fuera parte del mueble, hay un hombre repartiendo cartas para nadie."
+  - "[REYMAR] Pas\xE1. Este es el piso 4. El que no existe."
+  - "[REYMAR] Soy Mart\xEDn Reymar, el due\xF1o de este casino. O eso dice el cartel de la puerta."
+  - "[PJ] Vengo por el servidor."
+  - "[REYMAR] Todos vienen por algo. La mayor\xEDa, por plata. Vos ven\xEDs por lo \xFAnico que no est\xE1 en juego."
+  - "[REYMAR] \xBFSab\xE9s por qu\xE9 la casa siempre gana? Porque la casa no juega. La casa calcula."
+  - "[REYMAR] Yo solo giro la rueda. Los n\xFAmeros los pone alguien m\xE1s arriba. Mucho m\xE1s arriba."
+  requiredFlag: 0
+  grantsFlag: 85
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 11400000, guid: bd77546ed3cea1137b9c247e1208c2f5, type: 2}

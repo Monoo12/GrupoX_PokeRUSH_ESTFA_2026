@@ -7,6 +7,11 @@ using UnityEngine;
 // arrancar y te ofrece la tienda antes de mandarte al primer nivel. Recien
 // ahi se activa Lobby_TixiPresentado, que es lo que abre la salida de la cueva.
 //
+// Al volver de cada nivel tambien habla sola, una vez: lo que cuenta sale de
+// 'alVolver' (la primera charla que tenga algo para decir en esta partida; cada
+// una se marca con su flag y no se repite). Asi el regreso del Data Center y el
+// del casino se escriben en los assets.
+//
 // Despues es un menu: comprar, viajar al siguiente nivel, charlar o nada. El
 // siguiente nivel lo decide RecorridoDeLaHistoria segun los flags, asi que Tixi
 // no sabe de escenas.
@@ -41,6 +46,12 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
     [SerializeField] private string opcionVer = "Ver";
     [SerializeField] private string opcionDespues = "Después";
 
+    [Header("Al volver de un nivel")]
+    [Tooltip("Charlas que Tixi dice sola al llegar a la cueva. Suena la primera que " +
+             "tenga algo para decir en esta partida (sus variantes deciden cuando) y " +
+             "cada una se marca con su flag para no repetirse.")]
+    [SerializeField] private DialogueDefinition[] alVolver = new DialogueDefinition[0];
+
     [Header("La tienda")]
     [Tooltip("Lo que vende. Usa 'healItemsForSale'; el precio es el buyPrice de cada objeto.")]
     [SerializeField] private VendorDefinition tienda;
@@ -68,6 +79,7 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
 
     private bool _presentandose;
     private float _llegada = -1f;
+    private bool _contandoVuelta;
 
     private void Awake()
     {
@@ -79,17 +91,42 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (!hablaAlLlegar || _presentandose) return;
+        if (_presentandose || _contandoVuelta) return;
 
         GameManager gm = GameManager.Instance;
         if (gm == null || gm.Story == null || gm.CurrentPlayer == null) return;
-        if (gm.Story.HasFlag(StoryFlag.Lobby_TixiPresentado)) { hablaAlLlegar = false; return; }
         if (MenuManager.AnyOpen || (dialogueController != null && dialogueController.IsOpen)) return;
 
         if (_llegada < 0f) _llegada = Time.time;
         if (Time.time - _llegada < esperaAlLlegar) return;
 
-        Presentarse(gm.CurrentPlayer, gm.Story);
+        if (hablaAlLlegar)
+        {
+            if (!gm.Story.HasFlag(StoryFlag.Lobby_TixiPresentado)) { Presentarse(gm.CurrentPlayer, gm.Story); return; }
+            hablaAlLlegar = false;
+        }
+
+        // Ya presentada: lo que haya para contar de la vuelta de un nivel.
+        DialogueDefinition vuelta = VueltaQueToca(gm.Story);
+        if (vuelta == null || dialogueController == null) return;
+
+        _contandoVuelta = true;
+        Debug.Log($"[Tixi] Cuenta la vuelta: {vuelta.name}.");
+        dialogueController.StartDialogue(vuelta, gm.Story, () =>
+        {
+            _contandoVuelta = false;
+            CasinoDialogo.Guardar();
+        });
+    }
+
+    // La primera charla de 'alVolver' que tiene algo para decir. Null = nada.
+    // Publico para los tests.
+    public DialogueDefinition VueltaQueToca(StoryModel story)
+    {
+        if (alVolver == null || story == null || !story.HasFlag(StoryFlag.Lobby_TixiPresentado)) return null;
+        foreach (DialogueDefinition d in alVolver)
+            if (d != null && d.TieneQueDecir(story)) return d;
+        return null;
     }
 
     private void Presentarse(PlayerModel player, StoryModel story)
@@ -138,7 +175,7 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
 
     public bool Interact(PlayerModel player, StoryModel story)
     {
-        if (player == null || story == null || _presentandose) return false;
+        if (player == null || story == null || _presentandose || _contandoVuelta) return false;
 
         if (!story.HasFlag(StoryFlag.Lobby_TixiPresentado))
         {

@@ -79,12 +79,31 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
     [Tooltip("Apagar el objeto una vez usado. Util para puertas o paneles de un solo uso.")]
     [SerializeField] private bool desactivarAlUsar = false;
 
+    [Header("Historia (opcional)")]
+    [Tooltip("Se dice antes de la pregunta previa (o antes de ejecutar, si no hay pregunta). " +
+             "Si otorga un flag y hay 'dialogoAntesRepetido', las veces siguientes dice ese.")]
+    [SerializeField] private DialogueDefinition dialogoAntes;
+    [SerializeField] private DialogueDefinition dialogoAntesRepetido;
+    [Tooltip("Al ganar el combate, cuando vuelve el mapa. Va en vez de 'mensajeExito'.")]
+    [SerializeField] private DialogueDefinition dialogoAlGanar;
+    [Tooltip("Cuando ya esta hecho. Va en vez de 'mensajeYaHecho'.")]
+    [SerializeField] private DialogueDefinition dialogoYaHecho;
+    [Tooltip("Flag que tambien lo da por hecho aunque lo encienda otro: el combate " +
+             "(defeatGrantsFlag del enemigo) o la liberacion de Nestor. Sin esto, " +
+             "despues de ganar volveria a ofrecer la pelea. None = solo 'otorgaFlag'.")]
+    [SerializeField] private StoryFlag hechoConFlag = StoryFlag.None;
+
     // Que flag activa este interactuable. Publico para que otros componentes
     // (el brillo que marca los subsistemas sin cortar) sepan cuando dejar de
     // mostrarse, sin tener que repetir el flag en el Inspector.
     public StoryFlag OtorgaFlag => otorgaFlag;
 
     private bool _esperandoCombate;
+
+    // Lo que hay que decir cuando vuelva el mapa. El combate apaga MapaRaiz, y
+    // un objeto apagado no corre corrutinas ni conviene abrir una caja que el
+    // combate tapa: queda pendiente hasta el OnEnable.
+    private System.Action _pendiente;
 
     private void Awake()
     {
@@ -107,9 +126,12 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
         if (_esperandoCombate) return false;
 
         // 1) ya estaba hecho
-        if (otorgaFlag != StoryFlag.None && story.HasFlag(otorgaFlag))
+        if (YaHecho(story))
         {
-            Avisar(mensajeYaHecho);
+            if (dialogoYaHecho != null && dialogueController != null)
+                dialogueController.StartDialogue(dialogoYaHecho, story);
+            else
+                Avisar(mensajeYaHecho);
             return true;
         }
 
@@ -120,7 +142,39 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
             return true;
         }
 
-        // 3) pregunta previa: si el diseniador puso una, no se hace nada
+        // 3) lo que se cuenta antes (un jefe que habla antes de pelear). La
+        //    pregunta y la ejecucion siguen al cerrarse la caja.
+        DialogueDefinition antes = DialogoAntesQueToca(story);
+        if (antes != null && dialogueController != null)
+        {
+            dialogueController.StartDialogue(antes, story, () => PreguntarOEjecutar(player, story));
+            return true;
+        }
+
+        return PreguntarOEjecutar(player, story);
+    }
+
+    public bool YaHecho(StoryModel story)
+    {
+        if (story == null) return false;
+        if (otorgaFlag != StoryFlag.None && story.HasFlag(otorgaFlag)) return true;
+        return hechoConFlag != StoryFlag.None && story.HasFlag(hechoConFlag);
+    }
+
+    // 'dialogoAntes' la primera vez; si ya encendio su flag y hay repetido, el
+    // repetido. Publico para los tests.
+    public DialogueDefinition DialogoAntesQueToca(StoryModel story)
+    {
+        if (dialogoAntes == null) return null;
+        if (dialogoAntesRepetido != null && dialogoAntes.grantsFlag != StoryFlag.None &&
+            story != null && story.HasFlag(dialogoAntes.grantsFlag))
+            return dialogoAntesRepetido;
+        return dialogoAntes;
+    }
+
+    private bool PreguntarOEjecutar(PlayerModel player, StoryModel story)
+    {
+        // 4) pregunta previa: si el diseniador puso una, no se hace nada
         //    hasta que el jugador acepte. La respuesta llega por callback, asi
         //    que aca se corta y se sigue adentro de Ejecutar().
         if (!string.IsNullOrEmpty(preguntaAntes) && dialogueController != null)
@@ -151,7 +205,7 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
             return true;
         }
 
-        // 4) combate: el flag lo otorga EventController al ganar, leyendo el
+        // 5) combate: el flag lo otorga EventController al ganar, leyendo el
         //    defeatGrantsFlag del enemigo. Aca solo lanzamos la pelea.
         if (combate != null)
         {
@@ -168,7 +222,7 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
             return true;
         }
 
-        // 5) sin combate: se resuelve en el momento
+        // 6) sin combate: se resuelve en el momento
         Lograr(player, story);
         return true;
     }
@@ -182,8 +236,41 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
 
         // El flag ya lo activo EventController con el defeatGrantsFlag del
         // enemigo; aca solo mostramos el cartel y apagamos el objeto si toca.
+        if (dialogoAlGanar != null && dialogueController != null)
+        {
+            // La charla de despues espera al mapa. Recien ahi se apaga el
+            // objeto, si toca: apagarlo antes se comeria la charla.
+            StoryModel story = GameManager.Instance != null ? GameManager.Instance.Story : null;
+            AlVolverAlMapa(() => dialogueController.StartDialogue(dialogoAlGanar, story, () =>
+            {
+                if (desactivarAlUsar) gameObject.SetActive(false);
+            }));
+            return;
+        }
+
         Avisar(mensajeExito);
         if (desactivarAlUsar) gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        if (_pendiente != null) StartCoroutine(CorrerPendiente());
+    }
+
+    private void AlVolverAlMapa(System.Action accion)
+    {
+        _pendiente = accion;
+        if (isActiveAndEnabled) StartCoroutine(CorrerPendiente());
+    }
+
+    private System.Collections.IEnumerator CorrerPendiente()
+    {
+        // Un frame: que el mapa termine de prenderse antes de abrir la caja.
+        yield return null;
+
+        var accion = _pendiente;
+        _pendiente = null;
+        accion?.Invoke();
     }
 
     private void Lograr(PlayerModel player, StoryModel story)

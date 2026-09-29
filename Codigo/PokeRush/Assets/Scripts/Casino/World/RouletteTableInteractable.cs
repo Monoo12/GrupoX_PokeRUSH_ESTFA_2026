@@ -55,7 +55,19 @@ public class RouletteTableInteractable : MonoBehaviour, IInteractable
     [SerializeField, TextArea(2, 3)] private string mensajeObjetivo =
         "El de seguridad te mira distinto. El ascensor ya te deja subir.";
 
+    [Header("Historia (opcional)")]
+    [Tooltip("Lo que dice el croupier la primera vez que te acercas a ESTA mesa. Esa vez " +
+             "no se abre la mesa: es una charla. Su grantsFlag marca que ya se conto.")]
+    [SerializeField] private DialogueDefinition charlaDelCroupier;
+    [SerializeField] private DialogueController dialogueController;
+
     private StoryModel _story;
+
+    private void Awake()
+    {
+        if (dialogueController == null)
+            dialogueController = FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
+    }
 
     public bool Interact(PlayerModel player, StoryModel story)
     {
@@ -64,6 +76,13 @@ public class RouletteTableInteractable : MonoBehaviour, IInteractable
         // Se guarda para poder otorgar el flag al cerrar la mesa: para ese
         // entonces ya no hay nadie llamando a Interact.
         _story = story;
+
+        if (charlaDelCroupier != null && dialogueController != null &&
+            (charlaDelCroupier.grantsFlag == StoryFlag.None || story == null || !story.HasFlag(charlaDelCroupier.grantsFlag)))
+        {
+            dialogueController.StartDialogue(charlaDelCroupier, story);
+            return true;
+        }
 
         if (requiereFlag != StoryFlag.None && (story == null || !story.HasFlag(requiereFlag)))
         {

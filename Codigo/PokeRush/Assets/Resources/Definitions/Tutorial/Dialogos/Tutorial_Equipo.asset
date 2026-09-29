@@ -12,13 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Tutorial_Equipo
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: 
+  speakerName: ""
   speakerPortrait: {fileID: 0}
   lines:
-  - "Tu equipo: hasta seis Pok\xE9mon. El primero de la lista es el que sale a pelear."
-  - "Eleg\xED un Pok\xE9mon y entr\xE1 a DATOS para ver sus stats, su tipo y sus
-    movimientos."
-  - "Desde DATOS tambi\xE9n pod\xE9s reordenar sus movimientos."
-  - "En el men\xFA (Z) el equipo est\xE1 como Pokemon."
+  - "[] {INICIAL} te sigue a todos lados. Quien sea que te lo mand\xF3, eligi\xF3 bien."
+  - "[] Tu equipo: hasta seis Pok\xE9mon. El primero de la lista es el que sale a pelear."
+  - "[] Eleg\xED un Pok\xE9mon y entr\xE1 a DATOS para ver sus stats, su tipo y sus movimientos. Desde ah\xED tambi\xE9n los reorden\xE1s."
+  - "[] En el men\xFA (Z) el equipo est\xE1 como Pokemon."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

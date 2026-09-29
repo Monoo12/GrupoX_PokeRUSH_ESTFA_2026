@@ -12,13 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Tutorial_Despertar
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: 
+  speakerName: ""
   speakerPortrait: {fileID: 0}
   lines:
-  - "Te despert\xE1s en tu habitaci\xF3n. Hoy empieza todo."
-  - "Movete con las flechas o con WASD. Manten\xE9 Shift para correr."
-  - "Parate al lado de algo y apret\xE1 X para usarlo. Con Z abr\xEDs el men\xFA."
-  - "Lo que brilla te ense\xF1a lo b\xE1sico. Cuando termines con todo, la puerta
-    se abre."
+  - "[] ...Un aula. Un pizarr\xF3n con \"TCP/IP\" escrito a las apuradas. Alguien dice \"NeuraRush-LINK\"..."
+  - "[] ...el techo se abre como una herida. Dos siluetas. Una luz blanca que lo tapa todo."
+  - "[] Te despert\xE1s de golpe. Est\xE1s en tu habitaci\xF3n."
+  - "[] Toc, toc. Un Fletchling picotea la ventana. Deja caer una carta y se va volando."
+  - "[] Algo te chispea en la nuca. Te toc\xE1s: hay algo duro ah\xED atr\xE1s, pegado a la piel."
+  - "[PJ] \xBFQu\xE9...? Wtf."
+  - "[] La carta no tiene firma. Son cuatro l\xEDneas, escritas como si fueran c\xF3digo:"
+  - "[] print(\"No conf\xEDes en la Liga\")   print(\"No conf\xEDes en Julieta\")"
+  - "[] print(\"Si todav\xEDa record\xE1s el 2026\")   print(\"Ven\xED a la QuarchoCueva\")"
+  - "[PJ] \xBFQu\xE9 est\xE1 pasando? \xBFQu\xE9 es esto? \xBFC\xF3mo llegu\xE9 ac\xE1?"
+  - "[] Junto a la carta hay una esfera rara, mitad Pok\xE9bola, mitad pendrive. Adentro, {INICIAL} te mira como diciendo \"por fin\"."
+  - "[SISTEMA] OBJETO CLAVE OBTENIDO: CARTA AN\xD3NIMA."
+  - "[] Movete con las flechas o con WASD. Manten\xE9 Shift para correr."
+  - "[] Parate al lado de algo y apret\xE1 X para usarlo. Con Z abr\xEDs el men\xFA."
+  - "[] Lo que brilla tiene algo para mostrarte. Pod\xE9s investigar el cuarto o ir directo a la puerta."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 11400000, guid: 09edf98ca1e476042637d0e8435c46db, type: 2}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

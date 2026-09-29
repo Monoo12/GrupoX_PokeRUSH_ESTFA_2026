@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Casino_Tacconi_Presentacion
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "TACCONI"
+  speakerPortrait: {fileID: 21300000, guid: 630ce5488625ef8419eb65dcd7bdcd1d, type: 3}
+  lines:
+  - "[] Tacconi est\xE1 solo en su mesa, memorizando cartas en silencio. Gan\xF3 y perdi\xF3 fortunas, y todav\xEDa no puede parar."
+  - "[PJ] \xBFTacconi?"
+  - "[TACCONI] Llegaste tarde."
+  - "[PJ] \xBFTarde para qu\xE9?"
+  - "[TACCONI] Para ganar."
+  - "[PJ] No vine a jugar. Vine por una tarjeta."
+  - "[] Tacconi mira las cartas."
+  - "[TACCONI] Ah."
+  - "[PJ] Necesito llegar al \xFAltimo piso."
+  - "[TACCONI] Antes de jugar, quiero preguntarte algo. \xBFTe acord\xE1s de 2026?"
+  - "[PJ] Algunas cosas."
+  - "[TACCONI] \xBFLa sala de la directora?"
+  - "[PJ] S\xED."
+  - "[TACCONI] \xBFJulieta?"
+  - "[PJ] S\xED."
+  - "[TACCONI] \xBFLas criaturas?"
+  - "[PJ] Mewtwo y Hoopa."
+  - "[] Tacconi deja las cartas sobre la mesa."
+  - "[TACCONI] Entonces de verdad sos vos."
+  - "[PJ] \xBFMe conoc\xE9s?"
+  - "[TACCONI] No personalmente. Conozco los registros. Los que quedaron despu\xE9s del accidente."
+  - "[PJ] \xBFQu\xE9 dicen?"
+  - "[TACCONI] Que hubo tres grupos afectados. Los que quedaron conectados al sistema."
+  - "[TACCONI] Los que quedaron atrapados entre los dos mundos. Y los que simplemente desaparecieron."
+  - "[PJ] \xBFY yo?"
+  - "[TACCONI] Vos no aparec\xE9s en ninguno."
+  - "[PJ] \xBFEso es bueno?"
+  - "[TACCONI] No... No lo s\xE9."
+  - "[PJ] Tixi dice que soy inmune."
+  - "[TACCONI] Tixi sabe muchas cosas."
+  - "[PJ] Entonces dame la tarjeta."
+  - "[TACCONI] No."
+  - "[PJ] \xA1S\xCD!"
+  - "[TACCONI] Si quer\xE9s llegar al \xFAltimo piso, me la vas a tener que ganar. La tarjeta y mi shiny van juntos."
+  requiredFlag: 0
+  grantsFlag: 83
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

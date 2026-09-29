@@ -16,11 +16,10 @@ public static class RecorridoDeLaHistoria
 {
     public const string EscenaDelLobby = "Quarcho-Cueva";
 
-    // La habitacion tutorial, donde despierta el personaje. Su puerta lleva a la
-    // cueva. La arma el equipo pegando el esqueleto (HabitacionTutorial_Esqueleto)
-    // en la habitacion decorada, que se tiene que llamar asi (o cambiar este
-    // nombre). Ver Tutorial_Habitacion.md.
-    public const string EscenaDelTutorial = "HabitacionTutorial";
+    // La habitacion tutorial, donde despierta el personaje: la que dibujo
+    // Santiago, con el esqueleto (HabitacionTutorial_Esqueleto) pegado adentro.
+    // Su puerta lleva a la cueva. Ver Tutorial_Habitacion.md.
+    public const string EscenaDelTutorial = "habitacion";
 
     // Adonde manda la creacion de personaje: a la habitacion tutorial si ya esta
     // en Build Settings y, mientras no exista, directo a la cueva. Es lo que
@@ -48,7 +47,9 @@ public static class RecorridoDeLaHistoria
 
     public class Nivel
     {
-        // Como lo nombran los carteles: "¿Salís hacia el Data Center de Néstor?"
+        // Como lo nombran los carteles: "¿Salís hacia el primer Data Center?".
+        // Ojo con lo que se adelanta: el jugador no sabe quien cuida cada
+        // servidor hasta llegar (el guion: "¿Néstor?").
         public string Nombre;
         // La que se carga al salir de la cueva.
         public string EscenaDeEntrada;
@@ -64,7 +65,7 @@ public static class RecorridoDeLaHistoria
     {
         new Nivel
         {
-            Nombre = "el Data Center de Néstor",
+            Nombre = "el primer Data Center",
             EscenaDeEntrada = "NestorGOD2",
             Escenas = new[] { "NestorGOD2" },
             FlagCompletado = StoryFlag.Torre1_NestorLiberado
@@ -79,7 +80,7 @@ public static class RecorridoDeLaHistoria
         new Nivel
         {
             // La escena todavia no existe: la salida lo avisa en vez de romper.
-            Nombre = "el jefe final",
+            Nombre = "el servidor central",
             EscenaDeEntrada = "BossFinal",
             Escenas = new[] { "BossFinal" },
             FlagCompletado = StoryFlag.None

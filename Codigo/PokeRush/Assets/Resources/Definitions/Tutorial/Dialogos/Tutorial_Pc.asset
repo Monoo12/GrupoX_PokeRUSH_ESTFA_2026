@@ -12,11 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Tutorial_Pc
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: 
+  speakerName: ""
   speakerPortrait: {fileID: 0}
   lines:
-  - "Tu PC. Guarda los Pok\xE9mon que no entran en el equipo: ocho cajas de treinta."
-  - "Si gan\xE1s un Pok\xE9mon con el equipo lleno, viene directo ac\xE1."
-  - "Hay un PC en cada nivel, as\xED que pod\xE9s rearmar el equipo cuando quieras."
+  - "[] Tu PC. Tarda en prender, como si hubiera estado apagado mucho tiempo."
+  - "[SISTEMA] FECHA DEL SISTEMA: 2031. TEN\xC9S 1.826 CORREOS SIN LEER."
+  - "[PJ] \xBF\xA12031!? \xBFCinco a\xF1os?"
+  - "[] En el escritorio hay una carpeta que te suena: \"virus_ameghino\". Adentro, un solo archivo."
+  - "[] Tama\xF1o: 0 bytes. \xDAltimo acceso: diciembre de 2026. Alguien lo abri\xF3 despu\xE9s que vos. Y lo vaci\xF3."
+  - "[] El PC tambi\xE9n guarda los Pok\xE9mon que no entran en el equipo: ocho cajas de treinta."
+  - "[] Si consegu\xEDs un Pok\xE9mon con el equipo lleno, viene directo ac\xE1. Hay un PC en cada nivel."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

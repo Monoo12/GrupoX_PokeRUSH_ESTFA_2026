@@ -22,6 +22,22 @@ public enum EfectoDeRuleta
     TirarDeNuevo
 }
 
+// A quien le cae cada gajo cuando la ruleta se gira dentro de un combate.
+//
+// La del jefe del casino es SiempreElJugador: todo le pega al Poken del jugador,
+// lo bueno y lo malo, y el azar decide. Las otras dos existen para la pelea de
+// Julieta, donde la MISMA ruleta primero juega para el jugador y despues ella
+// la da vuelta: lo que era a favor pasa a ser en contra.
+public enum QuienCobraLaRuleta
+{
+    SiempreElJugador,
+    // Lo bueno (ataque, pocion) al jugador; lo malo (bajas, mordisco, turno
+    // perdido, cambio de tipo) al rival. Ningun gajo le juega en contra.
+    AFavorDelJugador,
+    // El espejo: lo bueno al rival, lo malo al jugador.
+    AFavorDelRival
+}
+
 // La ruleta que aparece cada dos turnos en la pelea contra el jefe del casino.
 //
 // Es la MISMA ruleta de premios de los pisos de abajo: mismo prefab, misma
@@ -63,6 +79,14 @@ public class CasinoRuletaDeCombate
     // limpio) y no cambia al cargar la partida.
     public int CadaCuantosTurnos = 2;
 
+    // A quien le cae cada gajo. Por defecto, como en el casino: todo al jugador.
+    // Se puede cambiar con la pelea en curso (Julieta la da vuelta a mitad).
+    public QuienCobraLaRuleta QuienCobra = QuienCobraLaRuleta.SiempreElJugador;
+
+    // Texto del cartel: recibe el premio y si le toco al jugador. Null = el del
+    // premio (customMessage o "¡Has obtenido...!"), que es lo que usa el casino.
+    public System.Func<Prize, bool, string> Cartel;
+
     public CasinoRuletaDeCombate(Prize[] premios, int cadaCuantosTurnos = 2)
     {
         Premios = premios;
@@ -70,6 +94,41 @@ public class CasinoRuletaDeCombate
     }
 
     public bool Configurada => Premios != null && Premios.Length > 0;
+
+    // ---------- a quien le toca ----------
+
+    // Lo que le conviene recibir a quien lo recibe. El resto (las bajas, el
+    // mordisco, el turno perdido y el cambio de tipo, que casi siempre le saca
+    // el STAB) es malo para el que lo recibe. TirarDeNuevo no le cae a nadie.
+    public static bool EsFavorable(EfectoDeRuleta efecto)
+        => efecto == EfectoDeRuleta.SubirAtaque || efecto == EfectoDeRuleta.DarPocion;
+
+    public static bool LeTocaAlJugador(EfectoDeRuleta efecto, QuienCobraLaRuleta quien)
+    {
+        switch (quien)
+        {
+            case QuienCobraLaRuleta.AFavorDelJugador: return EsFavorable(efecto);
+            case QuienCobraLaRuleta.AFavorDelRival: return !EsFavorable(efecto);
+            default: return true;
+        }
+    }
+
+    // Cobra el gajo que salio segun QuienCobra: elige el lado, aplica el efecto
+    // y arma el texto del cartel. Es lo que llama el combate al frenar la rueda.
+    public List<BattleEvent> Cobrar(Prize premio, BattleModel modelo, IBattleRng rng,
+                                    out bool alJugador, out string cartel)
+    {
+        alJugador = true;
+        if (premio == null)
+        {
+            cartel = "La ruleta se detiene en un gajo vacio.";
+            return new List<BattleEvent>();
+        }
+
+        alJugador = LeTocaAlJugador(premio.efectoDeCombate, QuienCobra);
+        cartel = Cartel != null ? Cartel(premio, alJugador) : premio.BuildMessage();
+        return Aplicar(premio.efectoDeCombate, modelo, rng, alJugador);
+    }
 
     // Se llama al EMPEZAR cada turno del jugador, con el numero del turno que
     // esta por jugarse.
@@ -88,11 +147,18 @@ public class CasinoRuletaDeCombate
     // Devuelve lista vacia si no hay nada que hacer: el gajo era un premio de
     // mapa, o la pelea ya termino.
     public static List<BattleEvent> Aplicar(EfectoDeRuleta efecto, BattleModel modelo, IBattleRng rng)
+        => Aplicar(efecto, modelo, rng, alJugador: true);
+
+    // Igual, pero eligiendo el lado: 'alJugador' false aplica el gajo sobre el
+    // Poken que el RIVAL tiene en el campo. Los efectos son los mismos de los
+    // dos lados (el mordisco tampoco debilita al rival).
+    public static List<BattleEvent> Aplicar(EfectoDeRuleta efecto, BattleModel modelo, IBattleRng rng,
+                                            bool alJugador)
     {
         var eventos = new List<BattleEvent>();
         if (modelo == null || modelo.IsBattleOver) return eventos;
 
-        BattlePokenState objetivo = modelo.PlayerState;
+        BattlePokenState objetivo = alJugador ? modelo.PlayerState : modelo.EnemyState;
         if (objetivo == null || objetivo.Poken == null || objetivo.Poken.IsFainted) return eventos;
 
         string nombre = objetivo.Poken.Definition.pokenName;

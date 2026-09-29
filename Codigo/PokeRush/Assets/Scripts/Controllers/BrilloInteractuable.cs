@@ -32,6 +32,12 @@ public class BrilloInteractuable : MonoBehaviour
     [Tooltip("None = lo toma del InteractableTrigger o de la TutorialParte que este en este objeto.")]
     [SerializeField] private StoryFlag flagQueLoApaga = StoryFlag.None;
 
+    [Header("Cuando empieza a brillar (opcional)")]
+    [Tooltip("Al reves: no brilla hasta que se activa este flag. Es la salida de un " +
+             "nivel terminado. None = lo toma de la SalidaDelNivel de al lado, y si no " +
+             "hay, brilla desde el principio.")]
+    [SerializeField] private StoryFlag flagQueLoPrende = StoryFlag.None;
+
     [Header("Tamanio (en tiles)")]
     [Tooltip("Alto del halo. 1 = un tile.")]
     [Range(0.1f, 4f)]
@@ -74,6 +80,9 @@ public class BrilloInteractuable : MonoBehaviour
     // escribiendolo quedaba fijo al guardar la escena, y cambiar despues el flag
     // del trigger ya no le llegaba al brillo.
     private StoryFlag _flag;
+    private StoryFlag _prende;
+    // Esperando el flag que lo prende: no se dibuja nada todavia.
+    private bool _esperando;
 
     private void OnEnable()
     {
@@ -83,8 +92,11 @@ public class BrilloInteractuable : MonoBehaviour
         _apagado = false;
 
         _flag = flagQueLoApaga != StoryFlag.None ? flagQueLoApaga : FlagDelComponenteDeAlLado();
+        _prende = flagQueLoPrende != StoryFlag.None ? flagQueLoPrende : FlagQueLoPrendeDeAlLado();
+        _esperando = false;
 
-        if (Application.isPlaying && _flag == StoryFlag.None)
+        // Uno que se prende con un flag y no se apaga nunca es lo esperado.
+        if (Application.isPlaying && _flag == StoryFlag.None && _prende == StoryFlag.None)
             Debug.LogWarning($"[Brillo] '{name}' no tiene flag: va a brillar para siempre.");
 
         // Arrancar siempre de cero. Los hijos llevan HideFlags.DontSave, y esos
@@ -120,10 +132,26 @@ public class BrilloInteractuable : MonoBehaviour
                 Apagar();
                 return;
             }
+
+            // Todavia no le toca: nada en pantalla. Se limpia una sola vez, al
+            // pasar a esperar, y no en cada frame.
+            bool falta = _prende != StoryFlag.None && (gm == null || gm.Story == null || !gm.Story.HasFlag(_prende));
+            if (falta)
+            {
+                if (!_esperando) { LimpiarHijos(); _esperando = true; }
+                return;
+            }
+            _esperando = false;
         }
 
         Armar();
         Latir();
+    }
+
+    private StoryFlag FlagQueLoPrendeDeAlLado()
+    {
+        var salida = GetComponentInParent<SalidaDelNivel>();
+        return salida != null ? salida.FlagQueAbre : StoryFlag.None;
     }
 
     private StoryFlag FlagDelComponenteDeAlLado()

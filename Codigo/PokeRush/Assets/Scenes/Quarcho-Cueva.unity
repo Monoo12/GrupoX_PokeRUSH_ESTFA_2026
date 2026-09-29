@@ -7261,14 +7261,16 @@ MonoBehaviour:
   opcionViajar: Viajar
   opcionCharlar: Charlar
   opcionNada: Nada
-  charla: {fileID: 0}
-  consejo: "Lo que sigue es {0}. Cuando est\xE9s listo, sal\xED por la puerta del
-    este o pedime que te lleve."
+  charla: {fileID: 11400000, guid: 8ac4c027b444760c51dd8c037f56980c, type: 2}
+  consejo: "Lo que sigue es {0}. Cuando quieras, sal\xED por la puerta del este o pedime que te lleve."
   consejoFinal: "Ya no queda nada por delante. Descans\xE1."
   preguntaViaje: "\xBFTe llevo hacia {0}?"
   opcionIr: Vamos
   opcionNoIr: "Todav\xEDa no"
   mensajeSinTienda: Hoy no tengo nada para vender.
+  alVolver:
+  - {fileID: 11400000, guid: a3ff89b115de8020f47ef601af0c9514, type: 2}
+  - {fileID: 11400000, guid: d4c560f3cf7a1d0d5d290c384aac5802, type: 2}
 --- !u!61 &442310815
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9316,6 +9318,9 @@ MonoBehaviour:
   mensajeSinChances: Ya tuviste tus {0} chances. Tacconi no vuelve a jugar con vos.
   mensajeChancesQueQuedan: Te quedan {0} chances.
   mensajeUltimaChance: "Era tu \xFAltima chance."
+  presentacion: {fileID: 11400000, guid: f7d83c0b91ef54577d8d663060b12afe, type: 2}
+  despuesDeGanar: {fileID: 0}
+  charlaYaGanado: {fileID: 0}
 --- !u!61 &736607559
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14834,7 +14839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e296a2150b2044d82b1047e2b059f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BarreraPorFlag
-  flagQueLaApaga: 15
+  flagQueLaApaga: 50
   alReves: 1
   objetos:
   - {fileID: 1803914595}

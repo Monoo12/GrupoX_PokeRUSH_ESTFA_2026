@@ -12,11 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Historia_Piso2_Damisela
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: DAMISELA
+  speakerName: "DAMISELA"
   speakerPortrait: {fileID: 0}
   lines:
-  - La ruleta de este piso no es lo que parece.
-  - "Vi gente entrar con todo su equipo y salir sin un solo Pok\xE9mon."
-  - "Ten\xE9 cuidado con lo que apost\xE1s."
+  - "[DAMISELA] La ruleta de este piso no es lo que parece. La bola cae donde el servidor quiere."
+  - "[DAMISELA] Vi gente entrar con todo su equipo y salir sin un solo Pok\xE9mon. Y lo peor: contentos."
+  - "[DAMISELA] Ten\xE9 cuidado con lo que apost\xE1s. Ac\xE1 lo que se pierde no vuelve. Ni siquiera como recuerdo."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

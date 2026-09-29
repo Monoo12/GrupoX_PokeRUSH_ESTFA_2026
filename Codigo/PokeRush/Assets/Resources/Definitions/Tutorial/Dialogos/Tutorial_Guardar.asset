@@ -12,12 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Tutorial_Guardar
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: 
+  speakerName: ""
   speakerPortrait: {fileID: 0}
   lines:
-  - "Tu diario. Guardar la partida es anotar hasta d\xF3nde llegaste."
-  - "Para guardar, abr\xED el men\xFA con Z y eleg\xED Guardar. Con F2 guard\xE1s
-    en cualquier momento."
-  - Al volver a jugar, Continuar te deja en la Quarcho Cueva con todo lo guardado.
+  - "[] Tu diario. La \xFAltima p\xE1gina es de 2026, con tu letra:"
+  - "[] \"Ma\xF1ana es la graduaci\xF3n. Me escondo en la oficina de la directora y espero a que se caiga la red.\""
+  - "[] \"Cuando pase, el virus hace el resto. Que se acuerden de m\xED.\""
+  - "[PJ] ...Me acuerdo de haber escrito eso. Y me acuerdo de lo que pas\xF3 despu\xE9s. Ojal\xE1 no."
+  - "[] Guardar la partida es anotar hasta d\xF3nde llegaste. Abr\xED el men\xFA con Z y eleg\xED Guardar, o apret\xE1 F2 cuando quieras."
+  - "[] Al volver a jugar, Continuar te deja en la Quarcho Cueva con todo lo guardado."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

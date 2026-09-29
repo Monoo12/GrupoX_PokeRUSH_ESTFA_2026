@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 // Al terminar un nivel de la historia, lleva al jugador de vuelta a la Quarcho
 // Cueva.
 //
+// Si la escena tiene una SalidaDelNivel no hace nada: ese nivel se deja
+// caminando (el Data Center de Nestor, que sigue despues de la pelea).
+//
 // Se crea solo al arrancar el juego y vive entre escenas, asi ni NestorGOD2 ni
 // los pisos del casino necesitan un componente nuevo: mira el flag de
 // "completado" del nivel en el que esta el jugador (RecorridoDeLaHistoria) y,
@@ -97,6 +100,16 @@ public class VueltaAlLobby : MonoBehaviour
         _combate = null;
 
         if (_nivel == null) return;
+
+        // El nivel tiene su propia salida: el jugador se va caminando cuando
+        // quiere (y mientras tanto ve el nivel terminado). Ver SalidaDelNivel.
+        if (SalidaDelNivel.HayEnLaEscena())
+        {
+            Debug.Log($"[Recorrido] {escena} tiene SalidaDelNivel: al terminarlo no se vuelve solo a la cueva.");
+            _nivel = null;
+            return;
+        }
+
         _dialogo = FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
         _combate = FindAnyObjectByType<BattleController>(FindObjectsInactive.Include);
     }

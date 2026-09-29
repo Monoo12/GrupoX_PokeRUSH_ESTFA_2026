@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: DC_Operaria
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: "OPERARIA"
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[OPERARIA] \xBFSos del turno nuevo? Lleg\xE1s tarde. Todos llegan tarde: el sistema los perdona."
+  - "[OPERARIA] Te explico r\xE1pido. Al n\xFAcleo lo cuida un firewall de tres nodos. Cada nodo es una de estas terminales."
+  - "[OPERARIA] Adem\xE1s est\xE1n las c\xE1maras, el rastreo y la energ\xEDa auxiliar. Cada cosa, con su panel."
+  - "[OPERARIA] Cada sistema que se cae es uno menos que el Guardi\xE1n puede usar. Por eso ac\xE1 nadie toca nada. Nunca."
+  - "[OPERARIA] ...\xBFPor qu\xE9 te lo cuento? No s\xE9. Me sali\xF3. Hac\xE9 de cuenta que no dije nada."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Con el servidor caido"
+    requiere: 78
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[OPERARIA] Se cay\xF3 todo. Todas las pantallas en negro, y yo ac\xE1, sin saber qu\xE9 hacer con las manos."
+    - "[OPERARIA] Y tengo hambre. Hace cinco a\xF1os que no tengo hambre. \xBFEso es normal?"
+    - "[OPERARIA] And\xE1, en serio. Si vuelve la luz, no quiero que el sistema te vea."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

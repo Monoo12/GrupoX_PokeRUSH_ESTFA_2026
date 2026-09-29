@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 // BANCO DE PRUEBAS. No es parte del juego.
 //
-// Recorre el esqueleto del tutorial como un jugador: el despertar, la puerta
+// Recorre el tutorial (el esqueleto o la habitacion) como un jugador: el despertar, la puerta
 // cerrada, la pelea antes de tiempo, las cinco partes de menu, la pelea, la
 // puerta abierta y, al final, omitir el tutorial y salir a la cueva. Deja
 // capturas en Capturas/Tutorial/ y los resultados en el Editor.log con la
@@ -94,16 +94,19 @@ public class TutorialPlayTest : MonoBehaviour
         yield return Foto("01-despertar");
         yield return CerrarDialogos();
         Check("Queda Tutorial_Despertar", story.HasFlag(StoryFlag.Tutorial_Despertar));
+        // El guion: el Fletchling trae la carta. Queda como objeto clave.
+        Check("Al despertar llega la carta anonima (objeto clave)",
+              player.Inventory.SpecialItems.Any(i => i.Definition != null && i.Definition.itemName == "Carta anónima"));
         yield return new WaitForSecondsRealtime(0.3f);
         Check("Todas las partes brillan al principio", partes.All(Brilla));
         yield return Foto("02-habitacion");
 
         // ---- 2. La puerta sin terminar ----
-        yield return Pisar(jugador, puerta.transform.position);
+        yield return UsarLaPuerta(jugador, puerta);
         yield return EsperarHasta(() => _dialogo.IsOpen, 3f);
         Check("La puerta no deja salir: pregunta si seguir u omitir", _dialogo.IsOpen && HayOpciones());
         Check("La puerta dice lo que falta", TextoDeLaCaja().Contains("falta"));
-        Check("La opcion marcada es seguir", TextoElegido().Contains("Seguir"));
+        Check("La opcion marcada es seguir investigando", TextoElegido().Contains("Investigar"));
         yield return Foto("03-puerta-sin-terminar");
         _dialogo.OnCancel();                                     // Escape
         yield return new WaitForSecondsRealtime(0.2f);
@@ -206,7 +209,7 @@ public class TutorialPlayTest : MonoBehaviour
         Check("La compañera deja de brillar", !Brilla(pelea));
 
         // ---- 6. La puerta terminada ----
-        yield return Pisar(jugador, puerta.transform.position);
+        yield return UsarLaPuerta(jugador, puerta);
         yield return EsperarHasta(() => _dialogo.IsOpen, 3f);
         Check("Terminado, la puerta ofrece salir a la cueva", _dialogo.IsOpen && TextoDeLaCaja().Contains("Quarcho"));
         yield return Foto("10-puerta-terminado");
@@ -218,10 +221,10 @@ public class TutorialPlayTest : MonoBehaviour
         // ---- 7. Omitir (partida como recien empezada) y salir a la cueva ----
         story.ActiveFlags.RemoveWhere(f => f.ToString().StartsWith("Tutorial_"));
         int antesDeOmitir = pocion != null ? player.Inventory.CountHealItem(pocion) : 0;
-        yield return Pisar(jugador, puerta.transform.position);
+        yield return UsarLaPuerta(jugador, puerta);
         yield return EsperarHasta(() => _dialogo.IsOpen && HayOpciones(), 3f);
         _dialogo.OnNavigate(1);
-        Check("La segunda opcion es omitir", TextoElegido().Contains("Omitir"));
+        Check("La segunda opcion es salir ya (omitir)", TextoElegido().Contains("Salir ya"));
         yield return Foto("11-omitir");
         _dialogo.OnConfirm();
         yield return EsperarHasta(() => _dialogo.IsOpen, 2f);
@@ -229,12 +232,46 @@ public class TutorialPlayTest : MonoBehaviour
         if (pocion != null)
             Check("Omitir da las Pociones de la mochila igual", player.Inventory.CountHealItem(pocion) == antesDeOmitir + 2);
         yield return Foto("12-omitido");
-        if (_dialogo.IsOpen) _dialogo.OnConfirm();               // "Te llevas..." -> sale
+        if (_dialogo.IsOpen) _dialogo.OnConfirm();               // "Agarrás lo que tenés..." -> sale
+
+        // ---- 8. El camino a la Quarcho Cueva (sobre negro) ----
+        // A Cruz se lo ataca (la tercera opcion) para probar la RaspBerry PY, y
+        // en la cerradura se usa la RaspBerry (la primera, que aparece por tenerla).
+        yield return EsperarHasta(() => _dialogo.IsOpen, 5f);
+        Check("Al salir se cuenta el camino", _dialogo.IsOpen && GameObject.Find("[FundidoDelCamino]") != null);
+        yield return Foto("13-camino");
+        bool fotoCruz = false, fotoCerradura = false;
+        float limiteCamino = Time.realtimeSinceStartup + 40f;
+        while (SceneManager.GetActiveScene().name == escena && Time.realtimeSinceStartup < limiteCamino)
+        {
+            if (_dialogo.IsOpen && HayOpciones())
+            {
+                if (TextoDeLaCaja().Contains("¿Qué hacés?"))
+                {
+                    if (!fotoCruz) { yield return Foto("14-camino-cruz"); fotoCruz = true; }
+                    _dialogo.OnNavigate(1);
+                    _dialogo.OnNavigate(1);                          // Atacar
+                }
+                else if (TextoDeLaCaja().Contains("cerradura") && !fotoCerradura)
+                {
+                    yield return Foto("15-camino-cerradura");
+                    fotoCerradura = true;
+                    Check("Con la RaspBerry, la cerradura ofrece usarla", TextoElegido().Contains("RaspBerry"));
+                }
+                _dialogo.OnConfirm();
+            }
+            else if (_dialogo.IsOpen) _dialogo.OnConfirm();
+            yield return new WaitForSecondsRealtime(0.2f);
+        }
+        Check("Patear al Arturito da la RaspBerry PY",
+              player.Inventory.SpecialItems.Any(i => i.Definition != null && i.Definition.itemName == "RaspBerry PY"));
+        Check("Queda Historia_CruzPateado", story.HasFlag(StoryFlag.Historia_CruzPateado));
+        Check("Queda Historia_CaminoContado", story.HasFlag(StoryFlag.Historia_CaminoContado));
         yield return EsperarHasta(() => SceneManager.GetActiveScene().name != escena, 10f);
         Check($"La puerta lleva a {RecorridoDeLaHistoria.EscenaDelLobby}",
               SceneManager.GetActiveScene().name == RecorridoDeLaHistoria.EscenaDelLobby);
         yield return new WaitForSecondsRealtime(1f);
-        yield return Foto("13-cueva");
+        yield return Foto("16-cueva");
 
         Terminar();
     }
@@ -268,6 +305,36 @@ public class TutorialPlayTest : MonoBehaviour
     // este hecha, y los borra al apagarse.
     private static bool Brilla(TutorialParte parte)
         => parte != null && parte.transform.Find("BrilloHalo") != null;
+
+    // Usar la puerta como lo haria el jugador: si es un hueco, pisarla; si esta
+    // dibujada como pared, pararse al lado y apretar X (PlayerController.Interact,
+    // asi se prueba tambien la capa y el interactableMask).
+    private IEnumerator UsarLaPuerta(PlayerController jugador, PuertaDelTutorial puerta)
+    {
+        Collider2D zona = puerta.GetComponent<Collider2D>();
+        if (zona == null || zona.isTrigger)
+        {
+            yield return Pisar(jugador, puerta.transform.position);
+            yield break;
+        }
+
+        Bounds b = zona.bounds;
+        Vector2[] alLado =
+        {
+            new Vector2(b.min.x - 0.5f, b.center.y), new Vector2(b.max.x + 0.5f, b.center.y),
+            new Vector2(b.center.x, b.min.y - 0.5f), new Vector2(b.center.x, b.max.y + 0.5f)
+        };
+        int obstaculos = LayerMask.GetMask("Obstacles");
+        foreach (Vector2 celda in alLado)
+        {
+            if (Physics2D.OverlapCircle(celda, 0.3f, obstaculos) != null) continue;
+            yield return Pisar(jugador, celda);
+            jugador.Interact();
+            yield return null;
+            yield break;
+        }
+        Check("Hay una celda libre al lado de la puerta", false);
+    }
 
     // Poner al jugador en una celda y dejar correr la fisica: asi se disparan
     // los OnTrigger de la puerta como al caminar.

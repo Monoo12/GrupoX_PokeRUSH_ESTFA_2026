@@ -12,12 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Historia_PisoFinal_GuardiaPasillo1
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: GUARDIA
+  speakerName: "GUARDIA"
   speakerPortrait: {fileID: 0}
   lines:
-  - "Arriba no se sube. Adentro no se entra. Vos ya est\xE1s adentro, as\xED que
-    segu\xED."
-  - "El jefe te est\xE1 esperando. No te hagas el vivo."
-  - Yo de vos me daba vuelta. Pero nadie me escucha.
+  - "[GUARDIA] Arriba no se sube. Adentro no se entra. Vos ya est\xE1s adentro, as\xED que segu\xED."
+  - "[GUARDIA] El jefe te est\xE1 esperando. No hagas nada raro."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes:
+  - nota: "Si hablo con la mujer de las tragamonedas"
+    requiere: 80
+    requiereTambien: 0
+    excluye: 0
+    lineas:
+    - "[GUARDIA] Una se\xF1ora de las tragamonedas avis\xF3 que andaba alguien sin chip."
+    - "[GUARDIA] Baj\xF3 la orden de dejarte subir. Rara orden. Pero ac\xE1 las \xF3rdenes no se discuten."
+    otorgaFlag: 0
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

@@ -12,11 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Historia_Piso3_Empresario
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: EMPRESARIO
+  speakerName: "EMPRESARIO"
   speakerPortrait: {fileID: 0}
   lines:
-  - "El blackjack es el \xFAnico juego donde la casa no siempre gana."
-  - Por eso los de arriba vigilan cada mesa.
-  - "Si gan\xE1s, hacelo sin llamar la atenci\xF3n."
+  - "[EMPRESARIO] El blackjack es el \xFAnico juego donde la casa no siempre gana. Por eso la casa lo odia."
+  - "[EMPRESARIO] Arriba vigilan cada mesa. Cada carta que sale pasa por un servidor antes de llegar a tu mano."
+  - "[EMPRESARIO] Si gan\xE1s, hacelo sin llamar la atenci\xF3n."
   requiredFlag: 0
   grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: ""
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

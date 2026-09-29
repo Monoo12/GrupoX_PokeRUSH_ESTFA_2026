@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add55da467d09504c924f5aa415c5bf4, type: 3}
+  m_Name: ProtocoloNestor
+  m_EditorClassIdentifier: Assembly-CSharp::SpecialItemDefinition
+  itemName: "Protocolo N\xE9stor"
+  description: "Una de las funciones del NeuraRush-LINK de N\xE9stor, adaptada para vos. Qu\xE9 hace, se descubre en combate."
+  icon: {fileID: 2641661277105070055, guid: 250e1b464f4da60448f65467c22d67bc, type: 3}
+  buyPrice: 0
+  effectDescription: "En combate, a veces lee la jugada del rival antes de que la haga."
+  triggersFlag: 0
