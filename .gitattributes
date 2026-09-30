@@ -1,2 +1,16 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Escenas de Unity: git NO las fusiona como texto.
+#
+# El YAML de una escena fusionado linea por linea queda inservible. El
+# 25-sep-2026 un merge dejo marcadores de conflicto (<<<<<<< HEAD) adentro de
+# "Casino Nivel 1" y Unity la abria vacia, como si alguien la hubiera borrado.
+#
+# Con merge=binary, si las dos ramas tocaron la misma escena, git deja la
+# version propia intacta y marca el conflicto. Hay que ELEGIR una:
+#   git checkout --ours   -- "ruta/escena.unity"   (la mia)
+#   git checkout --theirs -- "ruta/escena.unity"   (la que llega)
+# y rehacer en Unity lo que se pierda de la otra. Nunca resolverlo editando
+# la escena como texto.
+*.unity merge=binary
