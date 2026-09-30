@@ -89,16 +89,23 @@ Lo arma **`PokeRush > Historia > Poblar el Data Center de Nestor`**
 (`Editor/Historia/HistoriaDataCenterBuilder.cs`), dentro de
 `MapaRaiz/HistoriaDataCenter`. Borra y rehace **solo ese contenedor** (y los campos
 de historia de Néstor, como override de la escena); verifica que cada uno esté
-sobre piso libre y se llegue caminando, y repone los Grid de Colisiones antes de
-guardar.
+sobre piso libre, que nadie esté parado **arriba de un mueble** y que se llegue
+caminando, y repone los Grid de Colisiones antes de guardar.
+
+> **Nadie va parado sobre un mueble.** Las sillas (`Decorado`) y el sillón
+> (`Techos`) no frenan, así que para la verificación vieja eran "piso libre", pero
+> `Decorado` se dibuja debajo de los personajes: la recepcionista y la operaria
+> quedaban subidas a su silla (arreglado el 29-sep). Ahora `Verificar` lo rechaza,
+> salvo un NPC marcado `Acostado`. Tampoco conviene un mueble justo al **sur** del
+> NPC: le queda bajo los pies (eso no lo verifica: mirarlo en una captura).
 
 | Quién / qué | Dónde | Antes de la caída | Después | Para qué está |
 |---|---|---|---|---|
-| Recepcionista | atrás del mostrador (se le habla desde el mostrador) | Guion de bienvenida robótico; el lector no reconoce tu chip; "Guardián de turno: [DATO RESTRINGIDO]" | Se acuerda de su florería | Presenta el lugar sin nombrar a Néstor; efecto del chip |
-| Operaria | escritorio del salón | Te toma por el turno nuevo y explica firewall, cámaras, rastreo y energía | Tiene hambre por primera vez en cinco años | Explica la mecánica de los subsistemas de forma diegética |
+| Recepcionista | atrás de su silla y del mostrador (se le habla desde el mostrador) | Guion de bienvenida robótico; el lector no reconoce tu chip; "Guardián de turno: [DATO RESTRINGIDO]" | Se acuerda de su florería | Presenta el lugar sin nombrar a Néstor; efecto del chip |
+| Operaria | parada junto a su escritorio del salón | Te toma por el turno nuevo y explica firewall, cámaras, rastreo y energía | Tiene hambre por primera vez en cinco años | Explica la mecánica de los subsistemas de forma diegética |
 | Técnico | sala de racks | El rack caliente que no figura en planos; **su hermana trabaja en un casino** y habla del piso 4 | Se acuerda de su hermana | Pista del piso 4; continuidad con la secretaria del casino |
-| Entusiasta | sala de descanso | Aprendió redes en una siesta; "la Directora nunca se equivoca" | Se le borró todo lo aprendido: "¿solo nos lo prestaba?" | La mirada a favor del LINK; siembra "el LINK no enseña" |
-| Empleado dormido | el sillón | "Estoy descargando Excel avanzado..." | "¿Qué AÑO es?" | Humor |
+| Entusiasta | sala de descanso, delante de las mesas | Aprendió redes en una siesta; "la Directora nunca se equivoca" | Se le borró todo lo aprendido: "¿solo nos lo prestaba?" | La mirada a favor del LINK; siembra "el LINK no enseña" |
+| Empleado dormido | acostado en el sillón (`Acostado`: el sprite de frente girado 90°, dibujado sobre el sillón) | "Estoy descargando Excel avanzado..." | "¿Qué AÑO es?" | Humor |
 | Guardia de la Liga | sala de control | **Evento**: el sistema le ordena buscar a alguien sin chip... y te pregunta a vos. Sabe lo que hiciste con Cruz | Recibió la última orden y no sabe qué hacer un martes | Tensión, humor, continuidad |
 | Bióloga | junto al tanque de Basculin | Pokémon que pelean "por protocolo"; señala el panel de las cámaras; sueña con un aula | Los Pokémon del tanque se durmieron | Pokémon afectados; pista para liberar a Basculin |
 | Porygon con chip | sala de generadores (detrás de los rayos) | "SERVIDOR 01... ESTABLE" | Te empuja la mano, curioso | Un Pokémon controlado y liberado |

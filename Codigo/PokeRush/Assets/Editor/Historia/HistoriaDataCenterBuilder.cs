@@ -37,6 +37,10 @@ public static class HistoriaDataCenterBuilder
     private const int CapaDefault = 0;
     private const int CapaObstacles = 3;
 
+    // Techos dibuja en 20 (el sillon de la sala de descanso esta ahi) y los
+    // personajes en 15. El que esta acostado va ARRIBA del mueble.
+    private const int OrdenAcostado = 21;
+
     private static readonly Color Celeste = new Color(0.45f, 0.9f, 1f, 0.5f);
     private static readonly Color Verde = new Color(0.45f, 1f, 0.55f, 0.55f);
 
@@ -47,6 +51,9 @@ public static class HistoriaDataCenterBuilder
         public int Mira;
         // Celda de mueble desde la que tambien se le habla (el mostrador).
         public Vector2Int? Atencion;
+        // Acostado sobre el mueble de su celda (el que duerme en el sillon). Es
+        // el unico que puede estar arriba de un mueble: ver Verificar.
+        public bool Acostado;
     }
 
     private struct Cosa
@@ -62,21 +69,32 @@ public static class HistoriaDataCenterBuilder
         public Vector2Int Desde, Tamanio;
     }
 
+    // Nadie va parado ARRIBA de un mueble. Las sillas y el sillon no frenan (no
+    // estan en Colisiones), asi que para Verificar eran "piso libre", pero se
+    // dibujan debajo de los personajes: la recepcionista y la operaria quedaban
+    // subidas a su silla. Tampoco conviene un mueble justo al SUR: le queda
+    // debajo de los pies (le paso al entusiasta con el respaldo de una silla).
     private static readonly Npc[] Npcs =
     {
-        new Npc { Nombre = "Recepcionista", Hoja = "asistenta", Celda = new Vector2Int(-4, 0),
+        // Atras de su silla, entre el mostrador y la pared.
+        new Npc { Nombre = "Recepcionista", Hoja = "asistenta", Celda = new Vector2Int(-4, 1),
                   Mira = CasinoNpcBuilder.Derecha, Dialogo = "DC_Recepcionista", Atencion = new Vector2Int(-3, 0) },
-        new Npc { Nombre = "Operaria", Hoja = "operaria", Celda = new Vector2Int(-3, 15),
+        // Parada al lado de su silla, mirando la terminal.
+        new Npc { Nombre = "Operaria", Hoja = "operaria", Celda = new Vector2Int(-2, 15),
                   Mira = CasinoNpcBuilder.Izquierda, Dialogo = "DC_Operaria" },
         // Ojo con las hojas: Personaje() las corta con nombres propios y cambia
         // los IDs de los sprites. Una hoja que otra escena ya usa cortada de otra
         // forma (la de 'tecnico', en EdificioNucleo) quedaria rota alla.
         new Npc { Nombre = "Tecnico", Hoja = "operario", Celda = new Vector2Int(31, 16),
                   Mira = CasinoNpcBuilder.Arriba, Dialogo = "DC_Tecnico" },
-        new Npc { Nombre = "Entusiasta", Hoja = "cerebrito", Celda = new Vector2Int(-35, 15),
-                  Mira = CasinoNpcBuilder.Izquierda, Dialogo = "DC_Entusiasta" },
+        // Delante de las mesas de la sala de descanso: tapa la silla de atras,
+        // que es lo que corresponde en la vista 3/4.
+        new Npc { Nombre = "Entusiasta", Hoja = "cerebrito", Celda = new Vector2Int(-35, 13),
+                  Mira = CasinoNpcBuilder.Abajo, Dialogo = "DC_Entusiasta" },
+        // Durmiendo en el sillon. Parado ahi lo tapaba el sillon (esta en
+        // Techos, por encima de los personajes) y solo asomaba la coronilla.
         new Npc { Nombre = "EmpleadoDormido", Hoja = "chaval1", Celda = new Vector2Int(-45, 18),
-                  Mira = CasinoNpcBuilder.Abajo, Dialogo = "DC_Dormido" },
+                  Mira = CasinoNpcBuilder.Abajo, Dialogo = "DC_Dormido", Acostado = true },
         new Npc { Nombre = "GuardiaDeLaLiga", Hoja = "maton", Celda = new Vector2Int(-40, 22),
                   Mira = CasinoNpcBuilder.Izquierda, Dialogo = "DC_Guardia" },
         new Npc { Nombre = "Biologa", Hoja = "cientifica", Celda = new Vector2Int(-42, -4),
@@ -168,6 +186,7 @@ public static class HistoriaDataCenterBuilder
     private static void PonerNpc(GameObject raiz, Npc n)
     {
         GameObject go = CasinoNpcBuilder.Personaje(raiz, n.Nombre, Centro(n.Celda), n.Hoja, n.Mira);
+        if (n.Acostado) Acostar(go);
         var habla = go.AddComponent<NpcQueHabla>();
         var so = new SerializedObject(habla);
         so.FindProperty("dialogo").objectReferenceValue = HistoriaAssets.Dialogo(T + n.Dialogo);
@@ -182,6 +201,24 @@ public static class HistoriaDataCenterBuilder
             atencion.layer = CapaObstacles;
             atencion.AddComponent<BoxCollider2D>().size = new Vector2(0.9f, 0.9f);
         }
+    }
+
+    // Acuesta al personaje sobre el mueble de su celda. No hay hojas de gente
+    // acostada en el pack: es el mismo sprite de frente girado 90 grados (la
+    // cabeza a la izquierda), que en pixel art gira sin deformarse. El
+    // collider no se mueve: se le habla desde la celda de abajo, como antes.
+    private static void Acostar(GameObject npc)
+    {
+        Transform visual = npc.transform.Find("Visual");
+        var sr = visual.GetComponent<SpriteRenderer>();
+        if (sr.sprite == null) return;
+
+        // El pivote son los pies: se corre medio cuerpo a la derecha para que
+        // el cuerpo quede centrado en la celda y no sobre el apoyabrazos.
+        float largo = sr.sprite.rect.height / sr.sprite.pixelsPerUnit * visual.localScale.y;
+        visual.localRotation = Quaternion.Euler(0f, 0f, 90f);
+        visual.localPosition = new Vector3(largo * 0.5f, 0f, 0f);
+        sr.sortingOrder = OrdenAcostado;
     }
 
     private static void PonerCosa(GameObject raiz, Cosa c)
@@ -320,10 +357,19 @@ public static class HistoriaDataCenterBuilder
             return solidos.Any(b => b.Contains(new Vector3(centro.x, centro.y, b.center.z)));
         }
 
+        // Los muebles que no frenan: sillas y mesas de Decorado, el sillon de
+        // Techos. Todo tilemap que no sea el piso ni las colisiones.
+        List<Tilemap> muebles = roots.SelectMany(r => r.GetComponentsInChildren<Tilemap>(true))
+            .Where(t => t != suelo && t != colisiones).ToList();
+
         foreach (Npc n in Npcs)
         {
             var c = new Vector3Int(n.Celda.x, n.Celda.y, 0);
             if (!suelo.HasTile(c) || colisiones.HasTile(c)) problemas.Add($"'{n.Nombre}' no esta sobre piso libre ({c.x},{c.y}).");
+
+            Tilemap mueble = muebles.FirstOrDefault(t => t.HasTile(c));
+            if (mueble != null && !n.Acostado)
+                problemas.Add($"'{n.Nombre}' esta parado arriba de un mueble de {mueble.name} ({c.x},{c.y}): se lo ve subido a una silla.");
         }
         foreach (Cosa k in Cosas)
         {
