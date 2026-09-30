@@ -1,16 +1,18 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-# Escenas de Unity: git NO las fusiona como texto.
+# Escenas y prefabs de Unity: git NO los fusiona como texto.
 #
 # El YAML de una escena fusionado linea por linea queda inservible. El
 # 25-sep-2026 un merge dejo marcadores de conflicto (<<<<<<< HEAD) adentro de
 # "Casino Nivel 1" y Unity la abria vacia, como si alguien la hubiera borrado.
+# Un prefab tiene el mismo formato, y roto rompe todas las escenas que lo usan.
 #
-# Con merge=binary, si las dos ramas tocaron la misma escena, git deja la
+# Con merge=binary, si las dos ramas tocaron el mismo archivo, git deja la
 # version propia intacta y marca el conflicto. Hay que ELEGIR una:
-#   git checkout --ours   -- "ruta/escena.unity"   (la mia)
-#   git checkout --theirs -- "ruta/escena.unity"   (la que llega)
+#   git checkout --ours   -- "ruta/archivo"   (la mia)
+#   git checkout --theirs -- "ruta/archivo"   (la que llega)
 # y rehacer en Unity lo que se pierda de la otra. Nunca resolverlo editando
-# la escena como texto.
+# el archivo como texto.
 *.unity merge=binary
+*.prefab merge=binary
