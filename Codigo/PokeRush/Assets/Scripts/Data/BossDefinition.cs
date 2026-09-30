@@ -39,7 +39,9 @@ public class BossDefinition : NPCDefinition
              "(en la torre 1: Nestor sin Melmetal). Vacio = siempre pelea con " +
              "este equipo, sin importar los subsistemas.\n\n" +
              "Es una BossDefinition entera y no solo un equipo porque la " +
-             "variante puede cambiar tambien sprites, dialogo y recompensas.")]
+             "variante puede cambiar tambien sprites, dialogo y recompensas.\n\n" +
+             "Lo que la variante deja vacio (a quien se libera, el fondo, el " +
+             "sprite de entrenador) lo toma de este boss.")]
     public BossDefinition varianteTodoCortado;
 
     [Tooltip("Quien aparece en la FASE DE LIBERACION. En la torre 1 es Nestor: " +

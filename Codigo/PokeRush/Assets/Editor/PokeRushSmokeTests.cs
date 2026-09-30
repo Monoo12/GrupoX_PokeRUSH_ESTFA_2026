@@ -58,6 +58,10 @@ namespace PokeRush.EditorTools
             TestCadaSubsistemaAflojaLoSuyo();
             TestFirewallEsParcialPeroMelmetalEsTodoONada();
 
+            // La fase de liberacion: a quien se libera y como se lo ve
+            TestLaVarianteLiberaANestor();
+            TestNestorSeQuedaQuietoEnCombate();
+
             // La lectura de Nestor: que varie y que el aviso no mienta
             TestLecturaVariaConElEquipoDelPrimerNivel();
             TestLecturaNoAnulaLaUnicaSalida();
@@ -970,6 +974,39 @@ namespace PokeRush.EditorTools
                             StoryFlag.Torre1_RastreoCortado,
                             StoryFlag.Torre1_EnergiaAuxiliarCortada).SinMelmetal,
                 "Melmetal: con los CUATRO subsistemas cortados, Nestor pelea sin el");
+        }
+
+        // ---------- la fase de liberacion ----------
+
+        // Con los cuatro subsistemas cortados pelea la variante (sin Melmetal),
+        // que no define a quien se libera. El bug: la fase seguia con Porygon-Z
+        // y Nestor no aparecia nunca. Tiene que heredarlo del boss original.
+        private static void TestLaVarianteLiberaANestor()
+        {
+            var nestor = AssetDatabase.LoadAssetAtPath<BossDefinition>("Assets/Resources/Definitions/Torre1/Nestor.asset");
+            if (nestor == null || nestor.varianteTodoCortado == null)
+            {
+                Check(false, "Liberacion: faltan Nestor.asset o su variante de todo cortado");
+                return;
+            }
+
+            PokenDefinition normal = BattleController.DefinicionDeLiberacion(nestor, nestor)?.pokenDeLiberacion;
+            PokenDefinition cortado = BattleController.DefinicionDeLiberacion(nestor.varianteTodoCortado, nestor)?.pokenDeLiberacion;
+
+            Check(normal != null && normal.pokenName == "Nestor", "Liberacion: contra Nestor se libera a Nestor");
+            Check(cortado == normal, "Liberacion: con los cuatro subsistemas cortados tambien se libera a Nestor");
+            Check(BattleController.DefinicionDeLiberacion(null, null) == null, "Liberacion: sin boss no se libera a nadie");
+        }
+
+        // PokenView toma battleFrontFrames como la tira animada de un Pokemon y
+        // la cicla a 30 cuadros por segundo. Nestor tiene POSES sueltas, no una
+        // tira: con mas de un frame parpadeaba entre poses durante la fase.
+        private static void TestNestorSeQuedaQuietoEnCombate()
+        {
+            var def = AssetDatabase.LoadAssetAtPath<PokenDefinition>("Assets/Resources/Definitions/Pokens/NESTOR.asset");
+            Check(def != null && def.battleFrontSprite != null, "Liberacion: Nestor tiene sprite de frente");
+            Check(def != null && (def.battleFrontFrames == null || def.battleFrontFrames.Length <= 1),
+                "Liberacion: Nestor va con una sola pose (sin frames que parpadeen)");
         }
 
         // ---------- la lectura de Nestor ----------

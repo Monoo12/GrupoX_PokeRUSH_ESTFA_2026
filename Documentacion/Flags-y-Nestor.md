@@ -112,6 +112,13 @@ Es una definición completa y no solo un equipo porque la variante puede cambiar
 también sprites, diálogo y recompensas. Si queda vacío, el boss pelea siempre
 con el mismo equipo sin importar los subsistemas.
 
+Lo que la variante deja **vacío** lo toma del boss original: a quién se libera
+(`pokenDeLiberacion` y su nivel), el fondo y el sprite de entrenador
+(`BattleController.DefinicionDeLiberacion`). Por eso `Nestor_SinMelmetal` no
+repite a Néstor. Hasta el 29-sep no heredaba nada: con los cuatro subsistemas
+cortados, la fase de liberación seguía con Porygon-Z, Néstor no aparecía nunca y
+se peleaba en el fondo de pasto por defecto.
+
 ## Agregar un subsistema nuevo
 
 1. Agregar el `StoryFlag`.

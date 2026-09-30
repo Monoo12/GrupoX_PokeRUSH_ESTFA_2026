@@ -288,6 +288,10 @@ frames cuadrados en fila, donde **el lado del frame = el alto del PNG**
   (+ shiny) con todos los frames; los campos single quedan con el frame 0.
 - `PokenView` cicla los frames en loop (`frameRate` serializado, default 30 fps),
   con fallback al sprite estático si una especie no tiene tira.
+- Los frames son para **tiras de animación**, no para poses sueltas. `NESTOR`
+  tenía tres poses distintas (frente, manos en la cadera, brazos cruzados) y
+  parpadeaba entre ellas a 30 fps durante la fase de liberación: ahora va sin
+  frames, solo con `battleFrontSprite`.
 
 ⚠️ La primera ejecución re-importa ~2500 tiras sin comprimir: tarda varios
 minutos y agranda la carpeta Library (solo local, no va al repo).

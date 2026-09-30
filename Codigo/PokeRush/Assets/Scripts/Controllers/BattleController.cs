@@ -61,8 +61,12 @@ public class BattleController : MonoBehaviour
     // Null en los combates normales (no todos los enemigos son el boss).
     private BossBattleConfig _bossConfig;
     private PredictionState _prediction;
-    // Definicion del boss en curso: de aca sale a QUIEN se libera
+    // Definicion del boss en curso (su variante, si se cortaron los cuatro
+    // subsistemas). A QUIEN se libera sale de DefinicionDeLiberacion.
     private BossDefinition _bossDefinition;
+    // El boss tal como lo pidio la pelea, antes de cambiarlo por su variante de
+    // "todo cortado". Lo que la variante deja vacio se toma de aca.
+    private BossDefinition _bossOriginal;
 
     // La LECTURA ALIADA de Nestor. Solo existe en el nivel 2 (el casino), donde
     // Nestor ya esta de nuestro lado. Null en todo el resto, incluido el primer
@@ -176,9 +180,9 @@ public class BattleController : MonoBehaviour
         //
         // Todo o nada: dos de tres nodos achican el escudo pero no alcanzan
         // para esto, que es lo que obliga a terminar lo que se empieza.
+        BossDefinition original = enemyDefinition as BossDefinition;
         if (_bossConfig != null && _bossConfig.SinMelmetal
-            && enemyDefinition is BossDefinition original
-            && original.varianteTodoCortado != null)
+            && original != null && original.varianteTodoCortado != null)
         {
             enemyDefinition = original.varianteTodoCortado;
             Debug.Log($"[Combate] Subsistemas todos cortados: pelea la variante " +
@@ -187,6 +191,7 @@ public class BattleController : MonoBehaviour
 
         var enemy = new EnemyModel(enemyDefinition);
         _bossDefinition = enemyDefinition as BossDefinition;
+        _bossOriginal = original;
 
         Sprite background = null;
         _trainerIntroSprite = null;
@@ -197,8 +202,10 @@ public class BattleController : MonoBehaviour
         }
         else if (enemyDefinition is BossDefinition b)
         {
-            background = b.battleBackground;
-            _trainerIntroSprite = b.battleFrontSprite;
+            // La variante cambia el equipo, no el lugar: sin fondo propio se
+            // pelea en el del original (antes caia al pasto por defecto).
+            background = b.battleBackground != null ? b.battleBackground : original?.battleBackground;
+            _trainerIntroSprite = b.battleFrontSprite != null ? b.battleFrontSprite : original?.battleFrontSprite;
         }
 
         BeginBattle(player, enemy, background);
@@ -216,6 +223,7 @@ public class BattleController : MonoBehaviour
         var enemy = new EnemyModel(encounter.species, level, encounter.aiProfile);
         _trainerIntroSprite = null;
         _bossDefinition = null;
+        _bossOriginal = null;
 
         // Un salvaje no es un boss. Sin esto se arrastraba la config del
         // combate ANTERIOR y el salvaje heredaba EnemyCannotFaint: no podia
@@ -1226,10 +1234,11 @@ public class BattleController : MonoBehaviour
     // Entra con PS al minimo: viene de la pelea, no es un rival nuevo.
     private IEnumerator EntraElQueSeLibera()
     {
-        PokenDefinition quien = _bossDefinition != null ? _bossDefinition.pokenDeLiberacion : null;
+        BossDefinition def = DefinicionDeLiberacion(_bossDefinition, _bossOriginal);
+        PokenDefinition quien = def != null ? def.pokenDeLiberacion : null;
         if (quien == null) yield break;   // sin asignar: se libera al que este
 
-        int nivel = _bossDefinition.nivelDeLiberacion > 0 ? _bossDefinition.nivelDeLiberacion : 50;
+        int nivel = def.nivelDeLiberacion > 0 ? def.nivelDeLiberacion : 50;
         var liberado = new PokenModel(quien, nivel);
         liberado.SetCurrentHP(Mathf.Max(1, Mathf.RoundToInt(liberado.MaxHP * liberationHpThreshold)));
 
@@ -1251,6 +1260,14 @@ public class BattleController : MonoBehaviour
         if (battleFxView != null && enemyPokenView != null)
             yield return battleFxView.PulseTint(enemyPokenView, BattleFxView.PulseStatUp);
     }
+
+    // De que definicion sale QUIEN se libera (y con que nivel). La variante de
+    // "todo cortado" cambia el equipo, no al que tiene el chip: si no lo
+    // define, es el del boss original. Sin esto, cortando los cuatro
+    // subsistemas la fase seguia con Porygon-Z en el campo y Nestor no
+    // aparecia nunca.
+    public static BossDefinition DefinicionDeLiberacion(BossDefinition peleando, BossDefinition original)
+        => peleando != null && peleando.pokenDeLiberacion != null ? peleando : original;
 
     private void AbrirMenuLiberacion()
     {

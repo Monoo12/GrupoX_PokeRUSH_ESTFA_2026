@@ -141,13 +141,12 @@ namespace PokeRush.EditorTools
             def.worldSideSprite = Cargar("NESTOR_lado");
             def.inventorySprite = Cargar("NESTOR_retrato_feliz");
 
-            // Poses extra como frames de batalla: BattleFxView las usa si estan
-            def.battleFrontFrames = new[]
-            {
-                Cargar("NESTOR_frente"),
-                Cargar("NESTOR_manos_cadera"),
-                Cargar("NESTOR_brazos_cruzados")
-            };
+            // SIN frames de batalla: PokenView toma battleFrontFrames como la
+            // tira animada de un Pokemon y la cicla a 30 cuadros por segundo.
+            // Con tres POSES distintas (frente, manos en la cadera, brazos
+            // cruzados) Nestor parpadeaba entre las tres durante toda la fase de
+            // liberacion. Se queda quieto en battleFrontSprite, como un entrenador.
+            def.battleFrontFrames = new Sprite[0];
 
             EditorUtility.SetDirty(def);
             AssetDatabase.SaveAssets();
