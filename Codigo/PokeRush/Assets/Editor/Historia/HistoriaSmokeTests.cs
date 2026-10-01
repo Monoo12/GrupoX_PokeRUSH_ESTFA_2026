@@ -371,6 +371,14 @@ namespace PokeRush.EditorTools
             string nestor = File.ReadAllText("Assets/Scenes/NestorGOD2.unity");
             Check(nestor.Contains(AssetDatabase.AssetPathToGUID("Assets/Scripts/Lobby/SalidaDelNivel.cs")), "Escena: el Data Center tiene salida");
             Check(nestor.Contains(AssetDatabase.AssetPathToGUID("Assets/Scripts/Controllers/ApagonDelNivel.cs")), "Escena: el Data Center tiene el apagon");
+            Check(EscenaUsa("NestorGOD2", "Torre1/Dialogos/DC_Enfermera") &&
+                  EscenaUsa("NestorGOD2", "Torre1/Dialogos/DC_Enfermera_Curado") &&
+                  nestor.Contains(AssetDatabase.AssetPathToGUID("Assets/Scripts/Controllers/NpcQueCura.cs")),
+                  "Escena: el Data Center tiene la enfermera que cura");
+            Check(nestor.Contains(AssetDatabase.AssetPathToGUID("Assets/Scripts/Controllers/NpcQueTeDetecta.cs")),
+                  "Escena: el guardia de la sala de control te ve entrar");
+            Check(nestor.Contains(AssetDatabase.AssetPathToGUID("Assets/Palettes/ColisionInvisible.asset")),
+                  "Escena: los muebles del Data Center frenan (tile de colision invisible)");
 
             Check(EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Tixi_VueltaDelDataCenter") &&
                   EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino"), "Escena: Tixi cuenta las vueltas");

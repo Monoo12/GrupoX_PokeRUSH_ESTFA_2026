@@ -1372,6 +1372,16 @@ public static class CasinoNpcBuilder
         return i >= 0 && i < hoja.Length ? hoja[i] : null;
     }
 
+    // Las cuatro poses quietas de una hoja, en el orden Abajo / Izquierda /
+    // Derecha / Arriba. Para los NPCs que se dan vuelta solos en el juego (el
+    // guardia del Data Center que te ve entrar). Corta la hoja igual que
+    // Personaje, asi que no cambia nada para las escenas que ya la usan.
+    public static Sprite[] Poses(string hoja)
+    {
+        Sprite[] cortada = Hoja(hoja);
+        return new[] { Frame(cortada, Abajo), Frame(cortada, Izquierda), Frame(cortada, Derecha), Frame(cortada, Arriba) };
+    }
+
     // Corta una hoja de personaje en su grilla y devuelve los sprites en orden
     // de lectura (fila 0 = mirando abajo).
     //

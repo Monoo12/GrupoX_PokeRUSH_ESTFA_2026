@@ -86,18 +86,8 @@ public static class ReglasDelTutorial
         return Enumerar(nombres);
     }
 
-    // Deja al equipo como nuevo, igual que la enfermera del casino: PS al
-    // maximo, sin estados y con los PP llenos. La pelea de practica cura antes
-    // (para que arranque siempre) y despues (para que nadie salga del cuarto
-    // golpeado).
-    public static void CurarEquipo(PlayerModel player)
-    {
-        if (player == null) return;
-        foreach (PokenModel poken in player.Team)
-        {
-            poken.SetCurrentHP(poken.MaxHP);
-            poken.CureStatus();
-            foreach (MoveModel move in poken.Moves) move.SetCurrentPP(move.Definition.maxPP);
-        }
-    }
+    // Deja al equipo como nuevo, igual que las enfermeras (PlayerModel.CurarEquipo).
+    // La pelea de practica cura antes (para que arranque siempre) y despues
+    // (para que nadie salga del cuarto golpeado).
+    public static void CurarEquipo(PlayerModel player) => player?.CurarEquipo();
 }

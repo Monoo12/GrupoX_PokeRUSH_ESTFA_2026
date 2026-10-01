@@ -45,7 +45,7 @@ public class CasinoNurseInteractable : MonoBehaviour, IInteractable
         // volver a fiar. Si no, se podria acumular deuda infinita gratis.
         if (player.HasDebt) { OfrecerPagar(player); return true; }
 
-        if (!NecesitaCuracion(player)) { Decir(mensajeSano); return true; }
+        if (!player.EquipoNecesitaCuracion) { Decir(mensajeSano); return true; }
 
         bool puedePagar = player.Money >= costo;
         string pregunta = string.Format(puedePagar ? preguntaCobrando : preguntaFiando, costo);
@@ -54,7 +54,7 @@ public class CasinoNurseInteractable : MonoBehaviour, IInteractable
         {
             if (!acepto) return;
 
-            Curar(player);
+            player.CurarEquipo();
 
             if (puedePagar)
             {
@@ -90,29 +90,6 @@ public class CasinoNurseInteractable : MonoBehaviour, IInteractable
                 ? string.Format(mensajeDeudaParcial, pagado, player.Debt)
                 : mensajeDeudaSaldada);
         });
-    }
-
-    // Cura como una posta: PS al maximo, estados limpios y PP restaurados.
-    private static void Curar(PlayerModel player)
-    {
-        foreach (PokenModel poken in player.Team)
-        {
-            poken.SetCurrentHP(poken.MaxHP);
-            poken.CureStatus();
-            foreach (MoveModel move in poken.Moves) move.SetCurrentPP(move.Definition.maxPP);
-        }
-    }
-
-    private static bool NecesitaCuracion(PlayerModel player)
-    {
-        foreach (PokenModel poken in player.Team)
-        {
-            if (poken.CurrentHP < poken.MaxHP) return true;
-            if (poken.CurrentStatus != StatusEffect.None) return true;
-            foreach (MoveModel move in poken.Moves)
-                if (move.CurrentPP < move.Definition.maxPP) return true;
-        }
-        return false;
     }
 
     // ---------- carteles ----------

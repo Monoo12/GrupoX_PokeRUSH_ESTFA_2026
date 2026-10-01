@@ -72,6 +72,14 @@ Verificado: el arreglo sobrevive al guardado y al domain reload de entrar en Pla
 
 > Solo `Colisiones` lleva `TilemapCollider2D`. Si `Suelo`, `Decorado` o `Techos` tienen uno, sacalo: bloquean el mapa entero.
 
+**Un mueble que se dibuja en `Decorado` o `Techos` y tiene que frenar** (sillas,
+sillones, banquetas): pintá en `Colisiones` el tile **`Palettes/ColisionInvisible.asset`**
+en esa celda. Es un tile sin sprite con collider `Grid`: frena y no dibuja nada, así
+que no cambia cómo se ve ni el orden de dibujo. Mover el mueble a `Colisiones` lo
+haría dibujarse en otro orden (encima de los escritorios, o tapado por la pared
+de arriba si el sprite asoma a la fila de atrás). Lo usa el Data Center de Néstor
+(`HistoriaDataCenterBuilder.MueblesQueFrenan`).
+
 ---
 
 ## 3. El jugador

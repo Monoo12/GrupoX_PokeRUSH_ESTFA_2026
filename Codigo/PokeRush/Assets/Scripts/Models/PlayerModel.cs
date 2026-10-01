@@ -64,6 +64,38 @@ public class PlayerModel
         return true;
     }
 
+    // ---------- curacion ----------
+    //
+    // Deja al equipo como nuevo, como una posta: PS al maximo, sin estados y con
+    // los PP llenos. Es UNA sola curacion para todo el juego: la enfermera del
+    // Data Center, la del casino y la pelea de practica del tutorial. Antes cada
+    // una tenia su copia y era cuestion de tiempo que alguna se olvidara los PP.
+    public void CurarEquipo()
+    {
+        foreach (PokenModel poken in Team)
+        {
+            poken.SetCurrentHP(poken.MaxHP);
+            poken.CureStatus();
+            foreach (MoveModel move in poken.Moves) move.SetCurrentPP(move.Definition.maxPP);
+        }
+    }
+
+    // Hay algo que curar? Sirve para no ofrecer una curacion que no cambia nada.
+    public bool EquipoNecesitaCuracion
+    {
+        get
+        {
+            foreach (PokenModel poken in Team)
+            {
+                if (poken.CurrentHP < poken.MaxHP) return true;
+                if (poken.CurrentStatus != StatusEffect.None) return true;
+                foreach (MoveModel move in poken.Moves)
+                    if (move.CurrentPP < move.Definition.maxPP) return true;
+            }
+            return false;
+        }
+    }
+
     public void AddMoney(int amount)
     {
         Money += amount;

@@ -102,11 +102,12 @@ caminando, y repone los Grid de Colisiones antes de guardar.
 | Quién / qué | Dónde | Antes de la caída | Después | Para qué está |
 |---|---|---|---|---|
 | Recepcionista | atrás de su silla y del mostrador (se le habla desde el mostrador) | Guion de bienvenida robótico; el lector no reconoce tu chip; "Guardián de turno: [DATO RESTRINGIDO]" | Se acuerda de su florería | Presenta el lugar sin nombrar a Néstor; efecto del chip |
-| Operaria | parada junto a su escritorio del salón | Te toma por el turno nuevo y explica firewall, cámaras, rastreo y energía | Tiene hambre por primera vez en cinco años | Explica la mecánica de los subsistemas de forma diegética |
-| Técnico | sala de racks | El rack caliente que no figura en planos; **su hermana trabaja en un casino** y habla del piso 4 | Se acuerda de su hermana | Pista del piso 4; continuidad con la secretaria del casino |
+| **Enfermera** | recepción, al lado del PC (4,1), mirando al que entra | "Enfermería de guardia... una herida es una herida." **Cura al equipo gratis** (PS, estados y PP) con un destello de posta | Se acordó del juramento de cuando se recibió: "hoy curo porque quiero" | La curación del primer nivel (`NpcQueCura`, misma curación que la enfermera del casino) |
+| Operaria | junto a la silla de la primera terminal del salón (-6,15), mirándola | Te toma por el turno nuevo y explica firewall, cámaras, rastreo y energía | Tiene hambre por primera vez en cinco años | Explica la mecánica de los subsistemas de forma diegética |
+| Técnico | al fondo del pasillo entre racks (36,16), revisando el último | El rack caliente que no figura en planos; **su hermana trabaja en un casino** y habla del piso 4 | Se acuerda de su hermana | Pista del piso 4; continuidad con la secretaria del casino |
 | Entusiasta | sala de descanso, delante de las mesas | Aprendió redes en una siesta; "la Directora nunca se equivoca" | Se le borró todo lo aprendido: "¿solo nos lo prestaba?" | La mirada a favor del LINK; siembra "el LINK no enseña" |
 | Empleado dormido | acostado en el sillón (`Acostado`: el sprite de frente girado 90°, dibujado sobre el sillón) | "Estoy descargando Excel avanzado..." | "¿Qué AÑO es?" | Humor |
-| Guardia de la Liga | sala de control | **Evento**: el sistema le ordena buscar a alguien sin chip... y te pregunta a vos. Sabe lo que hiciste con Cruz | Recibió la última orden y no sabe qué hacer un martes | Tensión, humor, continuidad |
+| Guardia de la Liga (el pelado) | sala de control, la del panel de la energía auxiliar, al lado de la puerta | **Evento**: **te ve apenas pisás la sala** (le sale el "!", se da vuelta y habla solo, una sola vez). El sistema le ordena buscar a alguien sin chip... y te pregunta a vos. Sabe lo que hiciste con Cruz | Recibió la última orden y no sabe qué hacer un martes (ya no vigila: se le habla con X) | Tensión, humor, continuidad |
 | Bióloga | junto al tanque de Basculin | Pokémon que pelean "por protocolo"; señala el panel de las cámaras; sueña con un aula | Los Pokémon del tanque se durmieron | Pokémon afectados; pista para liberar a Basculin |
 | Porygon con chip | sala de generadores (detrás de los rayos) | "SERVIDOR 01... ESTABLE" | Te empuja la mano, curioso | Un Pokémon controlado y liberado |
 | Terminal del salón | escritorio | El registro del Guardián: "RECUERDOS: SINCRONIZADOS. ÚLTIMA EDICIÓN: HACE 4 MINUTOS" | "RECUERDOS: SIN SINCRONIZAR" | Adelanta que el chip edita recuerdos |
@@ -116,6 +117,33 @@ caminando, y repone los Grid de Colisiones antes de guardar.
 | Zona "pantallas" | entrada al salón | USUARIO NO ENCONTRADO EN NINGÚN REGISTRO | — | Evento; pista de "no aparecés en ninguno" |
 | Zona "guardián" | pasillo a Néstor | GUARDIÁN EN LÍNEA. PROTOCOLO DE DEFENSA: EN ESPERA | — | Tensión antes del jefe |
 | Salida | recepción, donde aparecés | cerrada (no hace nada) | brilla verde y pregunta "¿Volvés a la Quarcho Cueva?" | Volver caminando, como en el guion |
+
+**El guardia que te ve** (`NpcQueTeDetecta`, desde el 1-oct-2026). La sala que
+vigila es un rectángulo (x -46..-37, y 22..26) y no un collider: un trigger en
+Obstacles frenaría al jugador en la puerta y el combate re-dispara los triggers al
+volver el mapa. Al pisarla: el "!" del pack (`Graphics/Animations/Overworld
+exclaim.png`, el primer globo) le sale arriba de la cabeza, se da vuelta hacia vos,
+vos te das vuelta hacia él y arranca `DC_Guardia` solo. Suena **una vez**: lo marca
+`Historia_DC_GuardiaRecibioOrden`, que enciende `DC_Guardia_Cruz` al final de la
+cadena (es un flag de la partida, tampoco se repite al cargar). Si al entrar había
+un cartel abierto, espera a que se cierre. Con el servidor caído ya no vigila.
+
+**La enfermera** (`NpcQueCura`). Saludo → si el equipo está entero, `DC_Enfermera_Sano`;
+si no, pregunta (Sí / No) → cura con `PlayerModel.CurarEquipo` (PS, estados y PP),
+la pantalla destella tres veces por debajo de la caja y dice `DC_Enfermera_Curado`;
+si decís que no, `DC_Enfermera_NoGracias`. No cobra (la del casino sí).
+
+**Muebles que frenan** (desde el 1-oct-2026). Las sillas del salón y de la sala de
+descanso, las banquetas y la silla de la recepción y los extremos del sillón se
+dibujaban pero no frenaban: el jugador caminaba por encima. Ahora cada celda lleva
+`Palettes/ColisionInvisible.asset` en Colisiones (un tile sin sprite con collider
+Grid): frenan sin cambiar nada de lo que se ve ni el orden de dibujo. Lo mismo para
+cuatro celdas de la pared del fondo de la sala de generadores que estaban pintadas
+en `Suelo`. La lista está en `HistoriaDataCenterBuilder.MueblesQueFrenan` y
+`Verificar` comprueba que **todo lo que se toca con X en la escena** (no solo lo de
+la historia) siga alcanzable. Queda un hueco de dos celdas entre las sillas de las
+mesas de la sala de descanso al que no se llega: es a propósito (es el espacio
+entre dos sillas).
 
 La pelea con Néstor no cambió: antes de la pregunta ("PROTOCOLO DE DEFENSA:
 LISTO." Pelear / Todavía no) va la charla del PDF; la segunda vez, una corta. Al
@@ -214,7 +242,7 @@ escenas guardan los flags como número). Los de la historia empiezan en
 |---|---|
 | `PokeRush > Historia > Poblar el Data Center de Nestor` | Arma lo de arriba en `NestorGOD2`. |
 | `PokeRush > Historia > Poner iconos a los objetos de la historia` | Pone los iconos del pack a los cuatro objetos clave. |
-| `PokeRush > Historia > Correr smoke tests de la historia` | 112 checks, `[SmokeHistoria]`: el sistema de diálogos nuevo, que los assets estén sanos (largo de líneas, cadenas, respuestas), la continuidad y que las escenas tengan enganchado lo suyo (leyendo el `.unity`, sin abrirlo). |
+| `PokeRush > Historia > Correr smoke tests de la historia` | 115 checks (al 1-oct-2026), `[SmokeHistoria]`: el sistema de diálogos nuevo, que los assets estén sanos (largo de líneas, cadenas, respuestas), la continuidad y que las escenas tengan enganchado lo suyo (leyendo el `.unity`, sin abrirlo). |
 | `PokeRush > Historia > Probar el Data Center en Play` | 41 checks, `[PlayHistoria]`: habla con todos, pisa las zonas, Néstor antes y después, el apagón, el Protocolo, todos cambian, la salida y la vuelta de Tixi. Capturas en `Capturas/Historia/`. No guarda. |
 
 `Probar la cueva en Play` (33) y `Probar el tutorial en Play` (61) también recorren

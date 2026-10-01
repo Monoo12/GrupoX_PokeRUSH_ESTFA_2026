@@ -15,6 +15,10 @@ using UnityEngine.Tilemaps;
 //   NPCs        Personas del Data Center, cada una con su DialogueDefinition
 //               (Torre1/Dialogos/DC_*). Cambian lo que dicen cuando cae el
 //               servidor (variantes con Historia_Servidor01Desconectado).
+//               La enfermera de la recepcion cura al equipo (NpcQueCura) y el
+//               guardia de la sala de control te ve entrar (NpcQueTeDetecta).
+//   Muebles     Sillas, banquetas y el sillon frenan: un tile invisible en
+//               Colisiones en cada celda (no cambia nada de lo que se ve).
 //   Cosas       Terminales, el memo de J., la foto de la mesa de Nestor y la
 //               maquina expendedora: colliders sobre muebles que ya estan
 //               dibujados, con un brillo celeste hasta que se leen.
@@ -54,6 +58,13 @@ public static class HistoriaDataCenterBuilder
         // Acostado sobre el mueble de su celda (el que duerme en el sillon). Es
         // el unico que puede estar arriba de un mueble: ver Verificar.
         public bool Acostado;
+        // Cura al equipo (NpcQueCura) en vez de solo hablar. Sus textos son
+        // Dialogo + _Curado / _Sano / _NoGracias.
+        public bool Cura;
+        // La sala (en celdas) donde te ve entrar y arranca a hablar solo
+        // (NpcQueTeDetecta). Suena una vez: la marca YaPasoCon.
+        public RectInt? Vigila;
+        public StoryFlag YaPasoCon, NoVigilaCon;
     }
 
     private struct Cosa
@@ -79,13 +90,22 @@ public static class HistoriaDataCenterBuilder
         // Atras de su silla, entre el mostrador y la pared.
         new Npc { Nombre = "Recepcionista", Hoja = "asistenta", Celda = new Vector2Int(-4, 1),
                   Mira = CasinoNpcBuilder.Derecha, Dialogo = "DC_Recepcionista", Atencion = new Vector2Int(-3, 0) },
-        // Parada al lado de su silla, mirando la terminal.
-        new Npc { Nombre = "Operaria", Hoja = "operaria", Celda = new Vector2Int(-2, 15),
+        // La enfermeria: en la recepcion, al lado del PC (enfermera y PC juntos,
+        // como en el casino), mirando al que entra. Se le habla desde (4,0). Es
+        // lo primero que se ve al llegar y queda de paso al volver del salon.
+        new Npc { Nombre = "Enfermera", Hoja = "enfermera", Celda = new Vector2Int(4, 1),
+                  Mira = CasinoNpcBuilder.Abajo, Dialogo = "DC_Enfermera", Cura = true },
+        // Al lado de la silla de la primera terminal del salon, mirandola. En
+        // (-2,15) estaba en el pasillo del medio, justo debajo del que sube a
+        // Nestor: angostaba el camino principal del nivel.
+        new Npc { Nombre = "Operaria", Hoja = "operaria", Celda = new Vector2Int(-6, 15),
                   Mira = CasinoNpcBuilder.Izquierda, Dialogo = "DC_Operaria" },
         // Ojo con las hojas: Personaje() las corta con nombres propios y cambia
         // los IDs de los sprites. Una hoja que otra escena ya usa cortada de otra
         // forma (la de 'tecnico', en EdificioNucleo) quedaria rota alla.
-        new Npc { Nombre = "Tecnico", Hoja = "operario", Celda = new Vector2Int(31, 16),
+        // Al fondo del pasillo entre racks, revisando el ultimo. En (31,16)
+        // cortaba ese pasillo (una sola celda de alto) por la mitad.
+        new Npc { Nombre = "Tecnico", Hoja = "operario", Celda = new Vector2Int(36, 16),
                   Mira = CasinoNpcBuilder.Arriba, Dialogo = "DC_Tecnico" },
         // Delante de las mesas de la sala de descanso: tapa la silla de atras,
         // que es lo que corresponde en la vista 3/4.
@@ -95,8 +115,16 @@ public static class HistoriaDataCenterBuilder
         // Techos, por encima de los personajes) y solo asomaba la coronilla.
         new Npc { Nombre = "EmpleadoDormido", Hoja = "chaval1", Celda = new Vector2Int(-45, 18),
                   Mira = CasinoNpcBuilder.Abajo, Dialogo = "DC_Dormido", Acostado = true },
+        // De guardia al lado de la puerta de la sala de control (la del panel
+        // de la energia auxiliar), mirando hacia ella. Te ve apenas pisas la
+        // sala (x -46..-37, y 22..26): "!", se da vuelta y te habla solo. Una
+        // vez: DC_Guardia_Cruz enciende GuardiaRecibioOrden al final. Con el
+        // servidor caido ya no vigila (le hablas con X).
         new Npc { Nombre = "GuardiaDeLaLiga", Hoja = "maton", Celda = new Vector2Int(-40, 22),
-                  Mira = CasinoNpcBuilder.Izquierda, Dialogo = "DC_Guardia" },
+                  Mira = CasinoNpcBuilder.Izquierda, Dialogo = "DC_Guardia",
+                  Vigila = new RectInt(-46, 22, 10, 5),
+                  YaPasoCon = StoryFlag.Historia_DC_GuardiaRecibioOrden,
+                  NoVigilaCon = StoryFlag.Historia_Servidor01Desconectado },
         new Npc { Nombre = "Biologa", Hoja = "cientifica", Celda = new Vector2Int(-42, -4),
                   Mira = CasinoNpcBuilder.Izquierda, Dialogo = "DC_Biologa" },
         new Npc { Nombre = "PorygonConChip", Hoja = "Followers/PORYGON", Celda = new Vector2Int(25, 34),
@@ -121,6 +149,52 @@ public static class HistoriaDataCenterBuilder
 
     // La recepcion, donde aparece el jugador: "por donde entraste".
     private static readonly Vector2Int Salida = new Vector2Int(-1, -1);
+
+    // Muebles que se dibujaban pero no frenaban: el jugador caminaba por
+    // encima de las sillas y se metia adentro del sillon. Cada celda lleva un
+    // tile INVISIBLE en Colisiones (ColisionInvisible): frena sin cambiar nada
+    // de lo que se ve ni el orden de dibujo (mover la silla a Colisiones la
+    // dibujaba encima de los escritorios y el sillon quedaba tapado por la
+    // pared). Verificar comprueba que todo lo que se toca siga alcanzable.
+    private static readonly (string que, Vector2Int[] celdas)[] MueblesQueFrenan =
+    {
+        ("las sillas de las ocho terminales del salon (dos celdas cada una)", new[]
+        {
+            new Vector2Int(-7, 11), new Vector2Int(-7, 12), new Vector2Int(-3, 11), new Vector2Int(-3, 12),
+            new Vector2Int(1, 11), new Vector2Int(1, 12), new Vector2Int(5, 11), new Vector2Int(5, 12),
+            new Vector2Int(-7, 14), new Vector2Int(-7, 15), new Vector2Int(-3, 14), new Vector2Int(-3, 15),
+            new Vector2Int(1, 14), new Vector2Int(1, 15), new Vector2Int(5, 14), new Vector2Int(5, 15),
+        }),
+        ("las sillas de las mesas de la sala de descanso", new[]
+        {
+            new Vector2Int(-39, 14), new Vector2Int(-39, 16), new Vector2Int(-35, 14), new Vector2Int(-35, 16),
+            new Vector2Int(-34, 14), new Vector2Int(-34, 16), new Vector2Int(-30, 14), new Vector2Int(-30, 16),
+        }),
+        ("las banquetas de la recepcion y la silla de la recepcionista", new[]
+        {
+            new Vector2Int(3, -4), new Vector2Int(4, -4), new Vector2Int(5, -2), new Vector2Int(5, -3),
+            new Vector2Int(-4, 0),
+        }),
+        // El del medio no: lo ocupa el que duerme, que ya frena.
+        ("los extremos del sillon de la sala de descanso", new[]
+        {
+            new Vector2Int(-46, 18), new Vector2Int(-44, 18),
+        }),
+        // Pintada en Suelo en vez de Colisiones (las de al lado estan bien).
+        // Hoy no se llega porque el panel de rastreo tapa el paso, pero achicar
+        // ese collider la volveria atravesable.
+        ("la pared del fondo de la sala de generadores", new[]
+        {
+            new Vector2Int(27, 42), new Vector2Int(28, 42), new Vector2Int(27, 43), new Vector2Int(28, 43),
+        }),
+    };
+
+    // Un Tile sin sprite y con collider Grid: frena y no dibuja nada.
+    private const string TileInvisiblePath = "Assets/Palettes/ColisionInvisible.asset";
+
+    // El "!" del guardia: el globo del pack de Essentials (ya cortado).
+    private const string HojaDeExclamacion = "Assets/Graphics/Animations/Overworld exclaim.png";
+    private const string SpriteDeExclamacion = "Overworld exclaim_0";
 
     [MenuItem("PokeRush/Historia/Poblar el Data Center de Nestor")]
     public static void Poblar()
@@ -161,6 +235,7 @@ public static class HistoriaDataCenterBuilder
 
         PonerSalida(raiz);
         bool nestorOk = ConfigurarNestor(scene);
+        int frenan = PonerMueblesQueFrenan(scene);
 
         List<string> problemas = Verificar(scene, raiz);
         if (!nestorOk) problemas.Add("no se encontro el InteractableTrigger de Nestor.");
@@ -175,7 +250,8 @@ public static class HistoriaDataCenterBuilder
         ReponerColisiones(scene);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
-        Debug.Log($"[HistoriaDC] Listo: {Npcs.Length} personas, {Cosas.Length} cosas, {Zonas.Length} zonas, " +
+        Debug.Log($"[HistoriaDC] Listo: {Npcs.Length} personas (enfermera y guardia que vigila incluidos), " +
+                  $"{Cosas.Length} cosas, {Zonas.Length} zonas, {frenan} celdas de muebles que ahora frenan, " +
                   "salida en la recepcion, apagon y Nestor con su historia. Todo alcanzable. Guardada.");
     }
 
@@ -187,10 +263,20 @@ public static class HistoriaDataCenterBuilder
     {
         GameObject go = CasinoNpcBuilder.Personaje(raiz, n.Nombre, Centro(n.Celda), n.Hoja, n.Mira);
         if (n.Acostado) Acostar(go);
-        var habla = go.AddComponent<NpcQueHabla>();
-        var so = new SerializedObject(habla);
-        so.FindProperty("dialogo").objectReferenceValue = HistoriaAssets.Dialogo(T + n.Dialogo);
-        so.ApplyModifiedPropertiesWithoutUndo();
+
+        if (n.Cura)
+        {
+            PonerEnfermera(go, n);
+        }
+        else
+        {
+            var habla = go.AddComponent<NpcQueHabla>();
+            var so = new SerializedObject(habla);
+            so.FindProperty("dialogo").objectReferenceValue = HistoriaAssets.Dialogo(T + n.Dialogo);
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        if (n.Vigila.HasValue) PonerVigia(go, n);
 
         if (n.Atencion.HasValue)
         {
@@ -201,6 +287,98 @@ public static class HistoriaDataCenterBuilder
             atencion.layer = CapaObstacles;
             atencion.AddComponent<BoxCollider2D>().size = new Vector2(0.9f, 0.9f);
         }
+    }
+
+    // La enfermera: cura con PlayerModel.CurarEquipo (la misma curacion del
+    // casino) y habla con sus cuatro dialogos.
+    private static void PonerEnfermera(GameObject go, Npc n)
+    {
+        var cura = go.AddComponent<NpcQueCura>();
+        var so = new SerializedObject(cura);
+        so.FindProperty("saludo").objectReferenceValue = HistoriaAssets.Dialogo(T + n.Dialogo);
+        so.FindProperty("alCurar").objectReferenceValue = HistoriaAssets.Dialogo(T + n.Dialogo + "_Curado");
+        so.FindProperty("yaEstaSano").objectReferenceValue = HistoriaAssets.Dialogo(T + n.Dialogo + "_Sano");
+        so.FindProperty("alRechazar").objectReferenceValue = HistoriaAssets.Dialogo(T + n.Dialogo + "_NoGracias");
+        so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
+    // El que te ve entrar a su sala: la sala en el mundo, los flags, el "!" y
+    // las cuatro poses de su hoja para darse vuelta hacia vos.
+    private static void PonerVigia(GameObject go, Npc n)
+    {
+        RectInt sala = n.Vigila.Value;
+        var vigia = go.AddComponent<NpcQueTeDetecta>();
+        var so = new SerializedObject(vigia);
+        so.FindProperty("centroDeLaSala").vector2Value = sala.center;
+        so.FindProperty("tamanioDeLaSala").vector2Value = new Vector2(sala.width, sala.height);
+        so.FindProperty("yaPasoConFlag").enumValueIndex = (int)n.YaPasoCon;
+        so.FindProperty("excluye").enumValueIndex = (int)n.NoVigilaCon;
+        so.FindProperty("signo").objectReferenceValue = SignoDeExclamacion();
+        so.FindProperty("visual").objectReferenceValue = go.transform.Find("Visual").GetComponent<SpriteRenderer>();
+
+        Sprite[] poses = CasinoNpcBuilder.Poses(n.Hoja);
+        SerializedProperty miradas = so.FindProperty("miradas");
+        miradas.arraySize = poses.Length;
+        for (int i = 0; i < poses.Length; i++) miradas.GetArrayElementAtIndex(i).objectReferenceValue = poses[i];
+        so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
+    // El globo del pack viene filtrado (Bilinear) y comprimido: en pixel art
+    // se veia borroso al lado de los personajes. Se deja nitido y sin perder
+    // el corte que ya tiene (6 globos).
+    private static Sprite SignoDeExclamacion()
+    {
+        var importer = AssetImporter.GetAtPath(HojaDeExclamacion) as TextureImporter;
+        if (importer != null && (importer.filterMode != FilterMode.Point ||
+                                 importer.textureCompression != TextureImporterCompression.Uncompressed))
+        {
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.SaveAndReimport();
+        }
+
+        Sprite signo = AssetDatabase.LoadAllAssetsAtPath(HojaDeExclamacion).OfType<Sprite>()
+            .FirstOrDefault(s => s.name == SpriteDeExclamacion);
+        if (signo == null) Debug.LogWarning($"[HistoriaDC] No encontre '{SpriteDeExclamacion}' en {HojaDeExclamacion}: el guardia te ve sin el '!'.");
+        return signo;
+    }
+
+    // Pone el tile invisible en cada celda de MueblesQueFrenan que todavia no
+    // frene. Devuelve cuantas puso. ReponerColisiones les da el Grid despues.
+    private static int PonerMueblesQueFrenan(Scene scene)
+    {
+        Tilemap colisiones = scene.GetRootGameObjects()
+            .SelectMany(r => r.GetComponentsInChildren<Tilemap>(true))
+            .FirstOrDefault(t => t.name == "Colisiones");
+        if (colisiones == null) return 0;
+
+        Tile invisible = TileInvisible();
+        int puestas = 0;
+        foreach (var (que, celdas) in MueblesQueFrenan)
+            foreach (Vector2Int c in celdas)
+            {
+                var p = new Vector3Int(c.x, c.y, 0);
+                if (colisiones.HasTile(p)) continue;
+                colisiones.SetTile(p, invisible);
+                colisiones.SetColliderType(p, Tile.ColliderType.Grid);
+                puestas++;
+            }
+        return puestas;
+    }
+
+    private static Tile TileInvisible()
+    {
+        var tile = AssetDatabase.LoadAssetAtPath<Tile>(TileInvisiblePath);
+        if (tile != null) return tile;
+
+        tile = ScriptableObject.CreateInstance<Tile>();
+        tile.sprite = null;
+        tile.color = Color.white;
+        tile.colliderType = Tile.ColliderType.Grid;
+        AssetDatabase.CreateAsset(tile, TileInvisiblePath);
+        AssetDatabase.SaveAssets();
+        Debug.Log($"[HistoriaDC] Creado {TileInvisiblePath}: tile sin sprite que solo frena.");
+        return tile;
     }
 
     // Acuesta al personaje sobre el mueble de su celda. No hay hojas de gente
@@ -395,14 +573,46 @@ public static class HistoriaDataCenterBuilder
             }
         }
 
-        foreach (NpcQueHabla h in raiz.GetComponentsInChildren<NpcQueHabla>(true))
+        // TODO lo que se toca con X en la escena (no solo lo de la historia):
+        // los muebles que ahora frenan no pueden dejar afuera un panel, una
+        // jaula o el PC. Se mira cada celda que cubre su collider.
+        foreach (MonoBehaviour m in roots.SelectMany(r => r.GetComponentsInChildren<MonoBehaviour>(true)))
         {
-            var celdas = h.GetComponentsInChildren<Collider2D>(true)
-                .Select(c => colisiones.WorldToCell(c.bounds.center)).ToList();
+            if (!(m is IInteractable)) continue;
+            var celdas = new List<Vector3Int>();
+            foreach (Collider2D c in m.GetComponentsInChildren<Collider2D>(true))
+            {
+                Bounds b = c.bounds;
+                for (int x = Mathf.FloorToInt(b.min.x + 0.05f); x <= Mathf.FloorToInt(b.max.x - 0.05f); x++)
+                    for (int y = Mathf.FloorToInt(b.min.y + 0.05f); y <= Mathf.FloorToInt(b.max.y - 0.05f); y++)
+                        celdas.Add(new Vector3Int(x, y, 0));
+            }
             bool llega = celdas.Any(celda => dirs.Any(d => alcanzables.Contains(celda + d)));
-            if (!llega) problemas.Add($"a '{h.name}' no se llega caminando.");
-            if (h.Dialogo == null) problemas.Add($"'{h.name}' no tiene dialogo.");
+            if (!llega) problemas.Add($"a '{m.name}' ({m.GetType().Name}) no se llega caminando.");
         }
+        foreach (NpcQueHabla h in raiz.GetComponentsInChildren<NpcQueHabla>(true))
+            if (h.Dialogo == null) problemas.Add($"'{h.name}' no tiene dialogo.");
+        foreach (NpcQueCura e in raiz.GetComponentsInChildren<NpcQueCura>(true))
+            if (e.Saludo == null) problemas.Add($"'{e.name}' cura pero no tiene saludo.");
+
+        // El que vigila: parado adentro de su sala, y la sala se pisa.
+        foreach (NpcQueTeDetecta v in raiz.GetComponentsInChildren<NpcQueTeDetecta>(true))
+        {
+            Rect sala = v.Sala;
+            if (!sala.Contains((Vector2)v.transform.position)) problemas.Add($"'{v.name}' no esta adentro de la sala que vigila.");
+            bool sePisa = alcanzables.Any(c => sala.Contains(new Vector2(c.x + 0.5f, c.y + 0.5f)));
+            if (!sePisa) problemas.Add($"la sala que vigila '{v.name}' no se pisa.");
+            if (v.YaPasoConFlag == StoryFlag.None) problemas.Add($"'{v.name}' vigila sin flag: se repetiria en cada partida cargada.");
+        }
+
+        // Un mueble que frena no puede caer donde hay alguien parado ni en el spawn.
+        foreach (var (que, celdasDelMueble) in MueblesQueFrenan)
+            foreach (Vector2Int c in celdasDelMueble)
+            {
+                var p = new Vector3Int(c.x, c.y, 0);
+                if (p == spawn) problemas.Add($"un mueble que frena ({que}) cae en el spawn {p}.");
+                if (Npcs.Any(n => n.Celda == c)) problemas.Add($"un mueble que frena ({que}) cae donde hay un NPC {p}.");
+            }
         foreach (ZonaDeHistoria z in raiz.GetComponentsInChildren<ZonaDeHistoria>(true))
         {
             if (!alcanzables.Contains(colisiones.WorldToCell(z.transform.position))) problemas.Add($"la zona '{z.name}' no se pisa.");
