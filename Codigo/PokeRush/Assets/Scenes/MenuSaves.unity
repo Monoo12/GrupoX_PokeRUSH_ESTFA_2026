@@ -119,6 +119,115 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &435077025
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 435077026}
+  - component: {fileID: 435077030}
+  - component: {fileID: 435077029}
+  - component: {fileID: 435077028}
+  - component: {fileID: 435077027}
+  m_Layer: 0
+  m_Name: Continuar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &435077026
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435077025}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 910000301}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -40, y: 26}
+  m_SizeDelta: {x: 380, y: 46}
+  m_Pivot: {x: 1, y: 0}
+--- !u!114 &435077027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435077025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cbc415bc25743447a49671560cf8409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PulsoSuave
+  periodo: 1.6
+  escalaMinima: 1
+  escalaMaxima: 1.05
+  alfaMinimo: 0.55
+--- !u!225 &435077028
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435077025}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &435077029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435077025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.35, g: 0.72, b: 0.95, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 8
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: "CONTINUAR  \u203A"
+--- !u!222 &435077030
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435077025}
+  m_CullTransparentMesh: 1
 --- !u!1 &587141521
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8a21c7b94d4e0a8c5d17f2a6b90e41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveSlotMenuView
+  fundido: 0.45
   saveCardButton: {fileID: 910000304}
   playerSprite: {fileID: 910000403}
   nameText: {fileID: 910000503}
@@ -302,6 +412,8 @@ MonoBehaviour:
   - {fileID: 910001503}
   - {fileID: 910001603}
   - {fileID: 910001703}
+  spriteVaron: {fileID: 1014919073136080582, guid: 4c3196c8494bc1d4aaeb9c26ee12338c, type: 3}
+  spriteMujer: {fileID: -4443158098807034339, guid: fa6e5bacec26b604d9da2ca6629130e4, type: 3}
   optionsButton: {fileID: 910001804}
   deleteButton: {fileID: 910002004}
   backButton: {fileID: 910002204}
@@ -395,6 +507,7 @@ GameObject:
   - component: {fileID: 910000302}
   - component: {fileID: 910000303}
   - component: {fileID: 910000304}
+  - component: {fileID: 910000305}
   m_Layer: 5
   m_Name: SaveCard
   m_TagString: Untagged
@@ -421,6 +534,7 @@ RectTransform:
   - {fileID: 910000801}
   - {fileID: 910000901}
   - {fileID: 910001101}
+  - {fileID: 435077026}
   m_Father: {fileID: 910000101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -510,6 +624,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &910000305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910000300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee69367ef78b87e47af01f2e0402f222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotonAnimado
+  escalaEncima: 1.015
+  escalaApretado: 0.99
+  velocidad: 16
+  resaltado: {fileID: 0}
+  marcaDeElegido: {fileID: 0}
+  alfaDeshabilitado: 0.4
 --- !u!1 &910000400
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,9 +1178,9 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
+    m_BestFit: 1
+    m_MinSize: 18
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1584,6 +1716,7 @@ GameObject:
   - component: {fileID: 910001802}
   - component: {fileID: 910001803}
   - component: {fileID: 910001804}
+  - component: {fileID: 910001805}
   m_Layer: 5
   m_Name: Boton_Opciones
   m_TagString: Untagged
@@ -1693,6 +1826,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &910001805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910001800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee69367ef78b87e47af01f2e0402f222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotonAnimado
+  escalaEncima: 1.03
+  escalaApretado: 0.97
+  velocidad: 16
+  resaltado: {fileID: 0}
+  marcaDeElegido: {fileID: 0}
+  alfaDeshabilitado: 0.4
 --- !u!1 &910001900
 GameObject:
   m_ObjectHideFlags: 0
@@ -1784,6 +1935,7 @@ GameObject:
   - component: {fileID: 910002002}
   - component: {fileID: 910002003}
   - component: {fileID: 910002004}
+  - component: {fileID: 910002005}
   m_Layer: 5
   m_Name: Boton_Borrar
   m_TagString: Untagged
@@ -1893,6 +2045,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &910002005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910002000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee69367ef78b87e47af01f2e0402f222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotonAnimado
+  escalaEncima: 1.03
+  escalaApretado: 0.97
+  velocidad: 16
+  resaltado: {fileID: 0}
+  marcaDeElegido: {fileID: 0}
+  alfaDeshabilitado: 0.4
 --- !u!1 &910002100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1984,6 +2154,7 @@ GameObject:
   - component: {fileID: 910002202}
   - component: {fileID: 910002203}
   - component: {fileID: 910002204}
+  - component: {fileID: 910002205}
   m_Layer: 5
   m_Name: Boton_Volver
   m_TagString: Untagged
@@ -2093,6 +2264,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &910002205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910002200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee69367ef78b87e47af01f2e0402f222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BotonAnimado
+  escalaEncima: 1.03
+  escalaApretado: 0.97
+  velocidad: 16
+  resaltado: {fileID: 0}
+  marcaDeElegido: {fileID: 0}
+  alfaDeshabilitado: 0.4
 --- !u!1 &910002300
 GameObject:
   m_ObjectHideFlags: 0

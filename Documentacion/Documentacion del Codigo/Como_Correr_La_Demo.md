@@ -32,18 +32,22 @@ Quién decide qué:
 
 Tres pasos y una confirmación, todo en una escena (`CreacionPersonajeView` prende y apaga un panel por paso, así se puede volver atrás sin recargar):
 
-1. **Género** — Varón o Mujer, con los sprites `POKEMONTRAINER_RojoNeutro` y `POKEMONTRAINER_HojaNeutra`. El click elige y avanza. **El género cambia la skin en el mapa**: `PlayerView` tiene un segundo juego de animaciones (`walkMujer` / `runMujer`) y las usa si la partida es de una jugadora. Las hojas están en `Sprites/Player/POKEMONTRAINER_HojaNeutra_walk_2.png` y `_run.png`, sliceadas 4x4 igual que las del varón.
-2. **Nombre** — máximo 10 caracteres. No deja seguir vacío.
-3. **Inicial** — Lucario, Gengar o Greninja, con su descripción. Entra al equipo en **Nv20**, igual que los que se liberan en el mapa.
-4. **Confirmación** — resumen y el aviso de que **se guarda con F2**.
+1. **Género** — Varón o Mujer, con los sprites `POKEMONTRAINER_RojoNeutro` y `POKEMONTRAINER_HojaNeutra`. **El género cambia la skin en el mapa**: `PlayerView` tiene un segundo juego de animaciones (`walkMujer` / `runMujer`) y las usa si la partida es de una jugadora. Las hojas están en `Sprites/Player/POKEMONTRAINER_HojaNeutra_walk_2.png` y `_run.png`, sliceadas 4x4 igual que las del varón.
+2. **Nombre** — máximo 10 caracteres, con contador. "Continuar" queda deshabilitado mientras esté vacío; Enter en el campo sigue.
+3. **Inicial** — Lucario, Gengar o Greninja. Pasar por una ficha muestra su descripción; el elegido se anima con su tira de combate. Entra al equipo en **Nv20**, igual que los que se liberan en el mapa.
+4. **Confirmación** — los dos retratos, el resumen y el aviso de que **se guarda con F2**.
 
-Al apretar "Empezar":
+Elegir es en dos tiempos (desde el 1-oct-2026): tocar una ficha la **marca** y habilita "Continuar"; tocarla de nuevo, o "Continuar", sigue. Cada paso tiene "Volver" (el primero vuelve al menú principal) y arriba se ve en qué paso estás. Los paneles entran animados y mientras cambian no se acepta nada, así un doble clic no saltea pasos. Se maneja con mouse, flechas + X/Enter y Z/Esc, o joystick. Ver `Pantallas_De_Inicio.md`.
+
+Al apretar "¡Empezar aventura!":
 
 ```
 GameManager.NewGame(nombre, genero, inicial, nivel)   // crea la partida
 GameManager.SaveGame()                                 // la guarda YA
-SceneManager.LoadScene("Quarcho-Cueva")
+FundidoAEscena.Ir(escenaDestino, 0.45f)                // funde a negro y carga
 ```
+
+`escenaDestino` es la habitación tutorial (la escribe `QuarchoCuevaBuilder`, ver `RecorridoDeLaHistoria`).
 
 Se guarda en el acto a propósito: si el jugador cierra el juego sin llegar a apretar F2, igual queda una partida para continuar desde el menú.
 

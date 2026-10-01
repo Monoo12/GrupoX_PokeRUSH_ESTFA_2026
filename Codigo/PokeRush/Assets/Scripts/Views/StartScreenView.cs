@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -5,8 +6,23 @@ using UnityEngine.UI;
 // Pantalla de inicio ("Press Start"). Espera que el jugador toque el boton
 // (o cualquier tecla/click) y decide a que escena ir segun exista o no una
 // partida guardada.
+//
+// La pantalla entra con un fundido desde negro, el PRESS START "respira"
+// (PulsoSuave sobre una copia exacta de ese pedazo del arte) y al aceptar
+// destella y funde a negro hacia la escena siguiente (FundidoAEscena), en vez
+// de cortar de golpe.
 public class StartScreenView : MonoBehaviour
 {
+    [Header("Presentacion (opcionales)")]
+    [Tooltip("Grupo de toda la pantalla: entra desde transparente.")]
+    [SerializeField] private CanvasGroup pantalla;
+    [SerializeField, Min(0f)] private float fundidoDeEntrada = 0.7f;
+    [Tooltip("El PRESS START que respira y destella al aceptar.")]
+    [SerializeField] private PulsoSuave pressStart;
+    [Tooltip("Cuanto destella antes de fundir a negro.")]
+    [SerializeField, Min(0f)] private float destello = 0.45f;
+    [SerializeField, Min(0.05f)] private float fundidoDeSalida = 0.45f;
+
     [Header("Boton")]
     // Boton "Press Start". Se puede dejar null si solo se usa "cualquier tecla".
     [SerializeField] private Button startButton;
@@ -38,9 +54,29 @@ public class StartScreenView : MonoBehaviour
         if (startButton != null) startButton.onClick.RemoveListener(OnStartPressed);
     }
 
+    private void Start()
+    {
+        if (pantalla != null) StartCoroutine(Aparecer());
+    }
+
+    private IEnumerator Aparecer()
+    {
+        pantalla.alpha = 0f;
+        for (float t = 0f; t < fundidoDeEntrada; t += Time.unscaledDeltaTime)
+        {
+            pantalla.alpha = t / fundidoDeEntrada;
+            yield return null;
+        }
+        pantalla.alpha = 1f;
+    }
+
+    // Los primeros instantes no se acepta nada: el clic con el que se llego
+    // (o un toque apurado) no tiene que saltear la pantalla de titulo.
+    private bool Lista => Time.timeSinceLevelLoad > Mathf.Min(0.35f, fundidoDeEntrada);
+
     private void Update()
     {
-        if (!anyKeyToStart || _started) return;
+        if (!anyKeyToStart || _started || !Lista) return;
 
         // "Press Start" clasico: cualquier tecla, click o toque tambien arranca.
         // El proyecto usa el Input System nuevo (activeInputHandler = 1), por eso
@@ -63,7 +99,7 @@ public class StartScreenView : MonoBehaviour
     // Handler unico: decide el destino y carga la escena.
     private void OnStartPressed()
     {
-        if (_started) return; // ya estamos cargando, ignorar toques extra
+        if (_started || !Lista) return; // ya estamos cargando, ignorar toques extra
 
         // HasSaveData necesita la conexion SQLite abierta. GameManager la abre en
         // su Awake (DatabaseService.Instance). Si esta pantalla es la primera del
@@ -83,6 +119,18 @@ public class StartScreenView : MonoBehaviour
         }
 
         _started = true;
-        SceneLoaderService.Instance.LoadScene(destino);
+        StartCoroutine(Salir(destino));
+    }
+
+    // El "aceptado" clasico: el PRESS START destella y recien ahi funde a negro.
+    private IEnumerator Salir(string destino)
+    {
+        if (startButton != null) startButton.interactable = false;
+        if (pressStart != null)
+        {
+            pressStart.Destellar(destello);
+            for (float t = 0f; t < destello; t += Time.unscaledDeltaTime) yield return null;
+        }
+        FundidoAEscena.Ir(destino, fundidoDeSalida);
     }
 }
