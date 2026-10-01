@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -490,9 +491,8 @@ public static class MenuPrefabBuilder
 
         var cancelar = (GameObject)PrefabUtility.InstantiatePrefab(optionPrefab, marco);
         cancelar.name = "Cancelar";
-        MenuUiKit.Box(cancelar, new Vector2(1f, 0f), new Vector2(1f, 0f),
-            new Vector2(-10f, 8f), new Vector2(110f, 26f));
         MenuOptionWidget cancelarWidget = ConfigurarOpcion(cancelar, "cancel", "SALIR", null);
+        ConfigurarBotonSalir(cancelar);
 
         // Submenu del Poken
         GameObject submenu = MenuUiKit.Node("Submenu", marco);
@@ -937,6 +937,102 @@ public static class MenuPrefabBuilder
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(widget);
         return widget;
+    }
+
+    // ---------------------------------------------------------------- SALIR del equipo
+
+    private const string PartyScreenPath = PrefabFolder + "/PartyScreen.prefab";
+    private const string SalirNormal = "Assets/Graphics/UI/Party/icon_cancel_narrow.png";
+    private const string SalirElegido = "Assets/Graphics/UI/Party/icon_cancel_narrow_sel.png";
+
+    // Arregla SOLO el boton SALIR del prefab de la pantalla de equipo, sin
+    // rehacer el resto de los menus (que el equipo puede haber retocado).
+    [MenuItem("PokeRush/UI/Boton SALIR de la pantalla de equipo")]
+    public static void ArreglarSalirDelEquipo()
+    {
+        GameObject raiz = PrefabUtility.LoadPrefabContents(PartyScreenPath);
+        try
+        {
+            Transform cancelar = raiz.GetComponentsInChildren<Transform>(true)
+                .FirstOrDefault(t => t.name == "Cancelar");
+            if (cancelar == null)
+            {
+                Debug.LogError($"[Menus] {PartyScreenPath} no tiene el boton 'Cancelar'.");
+                return;
+            }
+            ConfigurarBotonSalir(cancelar.gameObject);
+            PrefabUtility.SaveAsPrefabAsset(raiz, PartyScreenPath);
+            Debug.Log("[Menus] Boton SALIR de la pantalla de equipo listo: arte del pack, " +
+                      "estados normal/elegido/apretado y clic con el mouse. Los PNG " +
+                      "(icon_cancel_narrow*.png) estan en Assets/Graphics: subirlos con git add -f.");
+        }
+        finally
+        {
+            PrefabUtility.UnloadPrefabContents(raiz);
+        }
+    }
+
+    // El SALIR de la pantalla de equipo como un boton de verdad: el boton
+    // CANCEL del pack (azul; con borde rojo cuando el cursor esta encima, igual
+    // que los paneles de esa misma pantalla), abajo a la derecha, con el texto
+    // centrado y un MenuPuntero para el mouse. Antes era una etiqueta gris que
+    // ni el cursor ni el mouse podian alcanzar: solo se salia con Z.
+    private static void ConfigurarBotonSalir(GameObject cancelar)
+    {
+        Sprite normal = MenuUiKit.Sprite(SalirNormal);
+        Sprite elegido = MenuUiKit.Sprite(SalirElegido);
+
+        // 112x36 a la resolucion de referencia (512x384): el tamanio nativo del
+        // arte, asi no se escala ni se ve borroso. Entra en el margen de 46 px
+        // que dejan los paneles abajo.
+        MenuUiKit.Box(cancelar, new Vector2(1f, 0f), new Vector2(1f, 0f),
+            new Vector2(-8f, 5f), new Vector2(112f, 36f));
+
+        var widget = cancelar.GetComponent<MenuOptionWidget>();
+        Transform fondoTr = cancelar.transform.Find("Fondo");
+        Transform textoTr = cancelar.transform.Find("Texto");
+        Transform resaltadoTr = cancelar.transform.Find("Resaltado");
+
+        if (fondoTr != null)
+        {
+            Image fondo = fondoTr.GetComponent<Image>();
+            MenuUiKit.SetField(fondo, "m_Sprite", normal);
+            MenuUiKit.SetField(fondo, "m_Color", Color.white);
+            // Sin esto el clic no llega: el fondo es lo unico que lo recibe.
+            MenuUiKit.SetField(fondo, "m_RaycastTarget", true);
+        }
+
+        if (textoTr != null)
+        {
+            var rt = (RectTransform)textoTr;
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.offsetMin = new Vector2(0f, 2f);
+            rt.offsetMax = Vector2.zero;
+            Text texto = textoTr.GetComponent<Text>();
+            MenuUiKit.SetField(texto, "m_FontData.m_Alignment", (int)TextAnchor.MiddleCenter);
+            MenuUiKit.SetField(texto, "m_FontData.m_FontSize", 14);
+        }
+
+        // El resaltado naranja de las opciones comunes taparia el arte: aca lo
+        // que cambia es el sprite (y el color del texto, que sobre el celeste
+        // claro del elegido tiene que ser oscuro para leerse).
+        if (resaltadoTr != null) resaltadoTr.gameObject.SetActive(false);
+        if (widget != null)
+        {
+            MenuUiKit.SetField(widget, "normalSprite", normal);
+            MenuUiKit.SetField(widget, "selectedSprite", elegido);
+            MenuUiKit.SetArrayField(widget, "selectedObjects", new Object[0]);
+            MenuUiKit.SetField(widget, "normalColor", MenuUiKit.Ink);
+            MenuUiKit.SetField(widget, "selectedColor", MenuUiKit.InkDark);
+        }
+
+        if (cancelar.GetComponent<MenuPuntero>() == null) cancelar.AddComponent<MenuPuntero>();
+
+        if (PrefabUtility.IsPartOfPrefabInstance(cancelar))
+            foreach (Component c in cancelar.GetComponentsInChildren<Component>(true))
+                if (c != null) PrefabUtility.RecordPrefabInstancePropertyModifications(c);
     }
 
     private static GameObject Pagina(string name, Transform parent)

@@ -187,6 +187,29 @@ En `SelectTarget`, los Pokémon sobre los que el objeto no haría nada se pintan
 apagados (`ItemUsageService.Evaluate`) y elegirlos muestra el motivo sin gastar
 el objeto.
 
+**El botón SALIR** (desde el 1-oct-2026). Antes era una etiqueta gris a la que ni
+el cursor ni el mouse llegaban: solo se salía con Z, y en la fase de liberación de
+Néstor (que se juega con el mouse) no había forma visible de volver. Ahora:
+
+- Es el botón CANCEL del pack (`Graphics/UI/Party/icon_cancel_narrow*.png`): azul,
+  y con el borde rojo cuando el cursor está encima, igual que los paneles.
+- Es **un lugar más del cursor**, después del último panel: pasarse por abajo (o
+  por la derecha) cae en SALIR y desde ahí se vuelve al primero o al último. Con
+  el cursor encima, el cartel dice "Volver sin cambiar de Pokémon.".
+- Se puede **tocar con el mouse** (`MenuPuntero`: pasar por encima mueve el
+  cursor, el clic acepta, se achica mientras está apretado). Si hay un cartel
+  abierto encima, el clic no le corresponde y no hace nada.
+- Aceptar en SALIR hace lo mismo que Z: devuelve `Cancelled` sin tocar el equipo.
+  Quien abrió la pantalla vuelve a lo suyo (en combate, el menú de comandos; en la
+  liberación, el panel de la liberación).
+- Si no hay a quién elegir (en la liberación con un solo Pokémon, el único es el
+  que pelea), el cursor arranca en SALIR.
+- En el reemplazo obligado (`CanCancel = false`) sigue sin dibujarse.
+
+Para poner el botón en un prefab ya armado sin rehacer los demás menús:
+`PokeRush > UI > Boton SALIR de la pantalla de equipo`. Los dos PNG están en
+`Assets/Graphics` (ignorado): se suben con `git add -f` junto con su `.meta`.
+
 ### Resumen — `SummaryScreen`
 
 Cuatro páginas: Información, Notas Entrenador, Estadísticas, Movimientos.
@@ -459,6 +482,17 @@ Lo que verifica (59 chequeos, todos en verde al 21-ago-2026 sobre `NestorGOD2`):
 
 **Qué NO cubre:** que las teclas físicas lleguen (el test llama a `HandleAction`
 directo, no aprieta teclas). Eso hay que probarlo jugando.
+
+> **Al 1-oct-2026 fallan 9 chequeos que no son de los menús**: los de "usar un
+> objeto" en el mundo y en combate. El banco usa el **primer** objeto del bolsillo
+> de medicinas y hoy ese es *Cura Total*, que no cura PS, así que ningún Pokémon es
+> elegible y nada se cura. Fallan igual con la `PartyScreen` anterior (se comprobó
+> volviendo a la versión de `HEAD`). Arreglo pendiente: que el banco elija un
+> objeto que cure PS en vez del primero.
+>
+> El banco **guarda la partida** (`GameManager.SaveGame`): respaldar
+> `%USERPROFILE%/AppData/LocalLow/DefaultCompany/PokeRush/pokerush.db` antes de
+> correrlo si hay una partida que importe.
 
 Para revisar la UI sin jugar hasta cada pantalla:
 `PokeRush > UI > Sacar capturas de los menus` abre las seis pantallas, saca una

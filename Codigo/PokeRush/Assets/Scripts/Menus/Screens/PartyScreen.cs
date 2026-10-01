@@ -23,6 +23,9 @@ public class PartyScreen : MenuScreen
 
     [Header("Textos")]
     [SerializeField] private Text promptText;
+    [Tooltip("El boton SALIR. Es un lugar mas del cursor (despues del ultimo " +
+             "panel) y se puede tocar con el mouse. Solo se ve si la pantalla " +
+             "se puede cancelar: en el reemplazo obligado no hay a donde volver.")]
     [SerializeField] private MenuOptionWidget cancelOption;
 
     [Header("Submenu del Poken")]
@@ -57,9 +60,22 @@ public class PartyScreen : MenuScreen
 
     private List<PokenModel> Team => Player != null ? Player.Team : null;
 
+    private int Cuantos => Team != null ? Team.Count : 0;
+
+    // El SALIR cuenta como un lugar mas del cursor, despues del ultimo panel,
+    // solo cuando la pantalla se puede cancelar. Asi se llega con las flechas
+    // (o el joystick) y no hace falta saber que Z/Escape tambien sale.
+    private bool SalirDisponible => cancelOption != null && _request != null && _request.CanCancel;
+    private int IndiceSalir => Cuantos;
+    private bool CursorEnSalir => SalirDisponible && _cursor == IndiceSalir;
+
     // Sobre que slot esta el cursor. Lectura publica para tests y herramientas;
-    // la pantalla sigue mandando sobre el valor.
+    // la pantalla sigue mandando sobre el valor. Con el cursor en SALIR vale
+    // la cantidad de Pokemon del equipo (ver CursorEnSalirPublico).
     public int CursorIndex => _cursor;
+    public bool CursorEnSalirPublico => CursorEnSalir;
+
+    private void Awake() => ConectarSalir();
 
     protected override void OnOpen(object payload)
     {
@@ -71,6 +87,7 @@ public class PartyScreen : MenuScreen
         Result = _result;
 
         EnsurePools();
+        ConectarSalir();
         _inActionMenu = false;
         _swapFrom = -1;
         _cursor = 0;
@@ -78,12 +95,45 @@ public class PartyScreen : MenuScreen
 
         // Arrancar sobre alguien que SI se pueda elegir. En el reemplazo
         // obligado el slot 0 suele ser justo el que acaba de caer.
-        int cuantos = Team != null ? Team.Count : 0;
+        int cuantos = Cuantos;
         for (int i = 0; i < cuantos && !EsSeleccionable(_cursor); i++)
             _cursor = (_cursor + 1) % cuantos;
 
+        // Si no hay a quien elegir (en la liberacion con un solo Pokemon: el
+        // unico es el que esta peleando) lo unico que se puede hacer es salir.
+        if (SalirDisponible && (cuantos == 0 || !EsSeleccionable(_cursor)))
+            _cursor = IndiceSalir;
+
         Refresh();
     }
+
+    // El SALIR responde al mouse. Se engancha una sola vez; si el prefab no
+    // trae el MenuPuntero (uno armado antes de este cambio) se le agrega.
+    private bool _salirConectado;
+
+    private void ConectarSalir()
+    {
+        if (_salirConectado || cancelOption == null) return;
+        _salirConectado = true;
+
+        MenuPuntero puntero = cancelOption.GetComponent<MenuPuntero>();
+        if (puntero == null) puntero = cancelOption.gameObject.AddComponent<MenuPuntero>();
+
+        puntero.Entro += () =>
+        {
+            if (!EsLaDeArriba() || !SalirDisponible || _inActionMenu) return;
+            _cursor = IndiceSalir;
+            Refresh();
+        };
+        puntero.Clic += () =>
+        {
+            if (EsLaDeArriba()) Salir();
+        };
+    }
+
+    // El mouse no pasa por el MenuManager: si hay un cartel abierto encima
+    // ("ese Pokemon no puede pelear"), el clic no le corresponde a esta.
+    private bool EsLaDeArriba() => IsOpen && (Manager == null || Manager.Top == this);
 
     public override void OnFocusGained()
     {
@@ -130,12 +180,17 @@ public class PartyScreen : MenuScreen
             // Sin salida posible, el boton de salir no se muestra: prometeria
             // algo que la pantalla no va a hacer.
             cancelOption.gameObject.SetActive(_request.CanCancel);
-            cancelOption.SetSelected(false);
+            cancelOption.SetSelected(!_inActionMenu && CursorEnSalir);
         }
     }
 
     private string PromptForMode()
     {
+        // Con el cursor en SALIR el cartel dice que pasa si se acepta ahi.
+        if (CursorEnSalir && !_inActionMenu)
+            return _request.Mode == PartyScreenMode.SelectSwitch
+                ? "Volver sin cambiar de Pokémon."
+                : "Volver.";
         if (!string.IsNullOrEmpty(_request.Prompt)) return _request.Prompt;
         if (_swapFrom >= 0) return "¿Con cuál lo cambio?";
 
@@ -181,7 +236,7 @@ public class PartyScreen : MenuScreen
         int cuantos = Team != null ? Team.Count : 0;
         if (cuantos == 0)
         {
-            if (action == GameAction.Cancel) CloseSelf();
+            if (action == GameAction.Cancel || (action == GameAction.Confirm && CursorEnSalir)) CloseSelf();
             return;
         }
 
@@ -200,7 +255,8 @@ public class PartyScreen : MenuScreen
                 MoveCursor(1);
                 break;
             case GameAction.Confirm:
-                Confirm();
+                if (CursorEnSalir) Salir();
+                else Confirm();
                 break;
             case GameAction.Cancel:
                 Cancel();
@@ -211,10 +267,45 @@ public class PartyScreen : MenuScreen
     private void MoveCursor(int delta)
     {
         int cuantos = Team.Count;
-        // Se recorre como una lista aunque se dibuje en dos columnas: con 5 o 6
-        // paneles el salto de columna nunca deja un hueco al que no se llegue.
-        _cursor = (_cursor + delta % cuantos + cuantos) % cuantos;
+
+        if (!SalirDisponible)
+        {
+            // Se recorre como una lista aunque se dibuje en dos columnas: con 5
+            // o 6 paneles el salto de columna nunca deja un hueco al que no se
+            // llegue.
+            _cursor = (_cursor + delta % cuantos + cuantos) % cuantos;
+            Refresh();
+            return;
+        }
+
+        // Con SALIR, el boton es la parada entre el ultimo panel y el primero:
+        // pasarse por abajo (o por la derecha) cae en SALIR, y desde SALIR se
+        // vuelve al primero bajando o al ultimo subiendo.
+        if (CursorEnSalir)
+            _cursor = delta > 0 ? 0 : cuantos - 1;
+        else
+        {
+            int destino = _cursor + delta;
+            _cursor = destino >= 0 && destino < cuantos ? destino : IndiceSalir;
+        }
         Refresh();
+    }
+
+    // SALIR (con Aceptar encima o con un clic). Sale del nivel de arriba sin
+    // elegir a nadie: si habia algo a medio hacer (el submenu abierto, un
+    // Pokemon agarrado para intercambiar) se suelta primero. Quien abrio la
+    // pantalla recibe Cancelled y vuelve a lo que estaba: en combate, el menu
+    // de comandos; en la liberacion de Nestor, el panel de la liberacion.
+    private void Salir()
+    {
+        if (!SalirDisponible) return;
+
+        if (_inActionMenu) CloseActionMenu();
+        _swapFrom = -1;
+
+        _result.Cancelled = true;
+        _result.SelectedIndex = -1;
+        CloseSelf();
     }
 
     private void Cancel()
