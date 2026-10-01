@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -60,6 +61,7 @@ namespace PokeRush.EditorTools
 
             // La fase de liberacion: a quien se libera y como se lo ve
             TestLaVarianteLiberaANestor();
+            TestNestorSinMelmetalTraeUnSoloUnown();
             TestNestorSeQuedaQuietoEnCombate();
 
             // La lectura de Nestor: que varie y que el aviso no mienta
@@ -996,6 +998,39 @@ namespace PokeRush.EditorTools
             Check(normal != null && normal.pokenName == "Nestor", "Liberacion: contra Nestor se libera a Nestor");
             Check(cortado == normal, "Liberacion: con los cuatro subsistemas cortados tambien se libera a Nestor");
             Check(BattleController.DefinicionDeLiberacion(null, null) == null, "Liberacion: sin boss no se libera a nadie");
+        }
+
+        // Reporte del 1-oct-2026: "en la pelea de Nestor aparecen dos Unown". No
+        // se pudo reproducir (datos, IA, liberacion y sprites dan uno solo): esto
+        // deja asentado lo que tiene que valer para que, si vuelve, salte aca.
+        //   - la variante cambia SOLO a Melmetal por UN Unown, el original no tiene;
+        //   - el equipo armado son cuatro Pokemon distintos (ninguno repetido);
+        //   - la tira de cuadros del Unown es de un Unown por cuadro.
+        private static void TestNestorSinMelmetalTraeUnSoloUnown()
+        {
+            var nestor = AssetDatabase.LoadAssetAtPath<BossDefinition>("Assets/Resources/Definitions/Torre1/Nestor.asset");
+            BossDefinition variante = nestor != null ? nestor.varianteTodoCortado : null;
+            if (variante == null) { Check(false, "Unown: faltan Nestor.asset o su variante"); return; }
+
+            int UnownsEn(BossDefinition b) => b.pokenTeam.Count(e => e != null && e.species != null && e.species.dexNumber == 201);
+            Check(UnownsEn(nestor) == 0, "Unown: el Nestor de siempre no trae Unown");
+            Check(UnownsEn(variante) == 1, $"Unown: la variante sin Melmetal trae exactamente uno ({UnownsEn(variante)})");
+            Check(variante.pokenTeam.Length == nestor.pokenTeam.Length, "Unown: la variante tiene el mismo tamanio de equipo");
+
+            int distintos = 0;
+            for (int i = 0; i < Mathf.Min(nestor.pokenTeam.Length, variante.pokenTeam.Length); i++)
+                if (nestor.pokenTeam[i].species != variante.pokenTeam[i].species) distintos++;
+            Check(distintos == 1, $"Unown: la variante cambia un solo lugar del equipo ({distintos})");
+
+            var rival = new EnemyModel(variante);
+            Check(rival.Team.Count == variante.pokenTeam.Length && rival.Team.Distinct().Count() == rival.Team.Count,
+                "Unown: el equipo armado son Pokemon distintos, ninguno repetido");
+
+            PokenDefinition unown = variante.pokenTeam.First(e => e.species.dexNumber == 201).species;
+            Sprite cuadro = unown.battleFrontSprite;
+            Check(cuadro != null && Mathf.Approximately(cuadro.texture.width % cuadro.rect.width, 0f) &&
+                  unown.battleFrontFrames.Length == Mathf.RoundToInt(cuadro.texture.width / cuadro.rect.width),
+                "Unown: la tira de frente se corta en cuadros de un Unown");
         }
 
         // PokenView toma battleFrontFrames como la tira animada de un Pokemon y

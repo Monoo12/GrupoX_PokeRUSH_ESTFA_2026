@@ -136,6 +136,28 @@ El punto 6 no es ceremonia. `SinMelmetal` se calculaba bien durante semanas y
 y Nestor seguía apareciendo con Melmetal. No fallaba nada, no había error en
 consola, simplemente el trabajo no tenía efecto.
 
+## "Aparecen dos Unown" (1-oct-2026)
+
+Se reportó que en la pelea de Néstor aparecían dos Unown. **No se pudo
+reproducir** y no hay ningún camino que lo genere:
+
+- `Nestor_SinMelmetal` tiene **un** Unown (Nv14) en el lugar de Melmetal, y así
+  estuvo en toda su historia en git; `Nestor` no tiene ninguno.
+- `EnemyModel` arma el equipo una vez por pelea (cuatro Pokémon distintos) y la
+  variante se elige una sola vez en `StartBattle`.
+- 160 peleas simuladas con la IA real (`GymLeader`, que sí cambia de Pokémon) y el
+  motor real: el Unown entra a lo sumo una vez.
+- En Play, por el trigger real de Néstor con los cuatro subsistemas cortados: un
+  solo Unown en pantalla en todo momento; en la liberación lo reemplaza Néstor.
+- Las tiras de sprites del Unown (normal y shiny, frente y espalda) tienen un
+  Unown por cuadro.
+
+Quedó un chequeo en `PokeRush > Correr smoke tests`
+(`TestNestorSinMelmetalTraeUnSoloUnown`) que salta si la variante deja de traer
+exactamente un Unown, si el equipo armado repite un Pokémon o si la tira de
+cuadros se corta mal. Si vuelve a pasar, anotar **en qué momento** se ven los dos
+(al empezar, al caer cuál, en qué menú) y con qué subsistemas cortados.
+
 ## Probarlo sin caminar la torre
 
 - **`BattleTester`** (escena `CombatePrueba`, tecla **N**): marcás los
