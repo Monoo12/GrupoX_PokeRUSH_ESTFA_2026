@@ -76,26 +76,31 @@ public static class QuarchoCuevaBuilder
     public static readonly Vector2 Nestor = new Vector2(-11.5f, 2.5f);
 
     // La mesa de Martin: la de cartas del ultimo piso del casino (3x2), en las
-    // celdas (-4..-2, -2..-1). Martin sentado atras, del lado recto (el del
-    // croupier); se juega desde abajo, del lado curvo. Deja libres la fila de
-    // arriba (y 1, el paso a la sala de servidores y al PC) y la columna -5.
-    private static readonly Vector3Int MesaEnLaCueva = new Vector3Int(-4, -2, 0);
+    // celdas (-4..-2, -4..-3): el rincon de juegos, contra la pared de abajo y
+    // pegada a la maquina arcade y su silla (x -6 y -5). Antes estaba en el
+    // medio del cuarto, sin nada alrededor (2-oct-2026, lo pidio Augusto).
+    // Martin sentado atras, del lado recto (el del croupier); se le habla desde
+    // arriba o desde el costado derecho.
+    private static readonly Vector3Int MesaEnLaCueva = new Vector3Int(-4, -4, 0);
     private static readonly Vector3Int MesaEnElCasino = new Vector3Int(-1, 29, 0);
     private static readonly Vector2Int TamanioDeLaMesa = new Vector2Int(3, 2);
     // El busto va 0,4 celdas METIDO en la mesa, como en el piso final.
-    private static readonly Vector2 ApoyoDeMartin = new Vector2(-2.5f, -0.4f);
-    // Martin ocupa la fila de atras de la mesa (y 0).
-    private static readonly Vector2 SillaDeMartin = new Vector2(-2.5f, 0.5f);
-    // Tacconi parado al costado de la mesa de Martin: juega sus apuestas ahi.
-    public static readonly Vector2 Tacconi = new Vector2(-4.5f, -0.5f);
+    private static readonly Vector2 ApoyoDeMartin = new Vector2(-2.5f, -2.4f);
+    // Martin ocupa la fila de atras de la mesa (y -2).
+    private static readonly Vector2 SillaDeMartin = new Vector2(-2.5f, -1.5f);
+    // Tacconi parado al costado derecho de la mesa de Martin: juega sus apuestas ahi.
+    public static readonly Vector2 Tacconi = new Vector2(-0.5f, -3.5f);
 
     // Mew: el premio de Tacconi en la cueva. Nv 30, un escalon arriba de los
     // Pokemon de las ruletas de Martin.
     private const string EspecieMew = "0151_Mew";
     private const int NivelMew = 30;
 
-    private const string HojaDeTixi = "cientifico";
-    private const string RetratoDeTixi = "CIENTIFICO";
+    // El arte que paso el equipo (Graphics/Tixi), pasado a pixel art: hoja 4x4
+    // de 64x82 y retrato de 160x160. Mide 76 px de alto y no 58: se igualo por
+    // cabeza, como Tacconi (ver Casino_Personajes_Y_Ruletas.md).
+    private const string HojaDeTixi = "tixi";
+    private const string RetratoDeTixi = "TIXI";
     private const string SpriteDeNestor = "Assets/Sprites/Nestor/NESTOR_frente.png";
     private const string RetratoDeNestor = "Assets/Sprites/Nestor/NESTOR_retrato_feliz.png";
     private const float AltoDeNestor = 2.6f;
@@ -498,6 +503,18 @@ public static class QuarchoCuevaBuilder
     private static void PonerTixi(GameObject lobby, Sprite retrato)
     {
         GameObject tixi = CasinoNpcBuilder.Personaje(lobby, "Tixi", Tixi, HojaDeTixi, CasinoNpcBuilder.Abajo);
+
+        // Camina hasta el jugador cuando habla sola y vuelve a su lugar.
+        var camina = tixi.AddComponent<NpcQueCamina>();
+        var soCamina = new SerializedObject(camina);
+        Sprite[] cuadros = CasinoNpcBuilder.Cuadros(HojaDeTixi);
+        SerializedProperty lista = soCamina.FindProperty("cuadros");
+        lista.arraySize = cuadros.Length;
+        for (int i = 0; i < cuadros.Length; i++) lista.GetArrayElementAtIndex(i).objectReferenceValue = cuadros[i];
+        soCamina.FindProperty("visual").objectReferenceValue = tixi.transform.Find("Visual").GetComponent<SpriteRenderer>();
+        soCamina.FindProperty("obstaculos").intValue = 1 << CapaObstacles;
+        soCamina.ApplyModifiedPropertiesWithoutUndo();
+
         var npc = tixi.AddComponent<QuarchoTixiNpc>();
 
         var so = new SerializedObject(npc);

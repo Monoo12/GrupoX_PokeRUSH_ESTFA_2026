@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 // Tixi, quien te recibe en la Quarcho Cueva.
@@ -16,8 +17,13 @@ using UnityEngine;
 // siguiente nivel lo decide RecorridoDeLaHistoria segun los flags, asi que Tixi
 // no sabe de escenas.
 //
-// TODO (equipo): el sprite y el retrato de Tixi son PROVISORIOS (salen del pack
-// de Essentials). Cuando esten los definitivos se cambian desde el Inspector.
+// Cuando habla sola camina hasta el jugador (NpcQueCamina) y, cuando ya no
+// queda ninguna caja ni menu abiertos, vuelve a su lugar. Mientras tanto el
+// jugador queda frenado (PlayerInputController.Frenar). Si le hablas vos ya
+// estas al lado: solo se da vuelta para mirarte.
+//
+// El sprite (Graphics/Characters/tixi) y el retrato (Graphics/Trainers/TIXI)
+// salen del arte que paso el equipo (Graphics/Tixi).
 [RequireComponent(typeof(Collider2D))]
 public class QuarchoTixiNpc : MonoBehaviour, IInteractable
 {
@@ -74,24 +80,46 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
     [SerializeField] private string opcionNoIr = "Todavía no";
     [SerializeField, TextArea(2, 4)] private string mensajeSinTienda = "Hoy no tengo nada para vender.";
 
+    [Header("Caminar hasta vos")]
+    [Tooltip("Al hablar sola se acerca al jugador y despues vuelve a su lugar. " +
+             "Sin NpcQueCamina habla desde donde esta.")]
+    [SerializeField] private bool caminaHastaVos = true;
+    [Tooltip("Opcional: se busca en el mismo objeto.")]
+    [SerializeField] private NpcQueCamina caminante;
+    [Tooltip("Segundos sin cajas ni menus abiertos para dar la charla por terminada. " +
+             "Entre una caja y la siguiente de la misma charla hay frames vacios.")]
+    [Min(0.1f)] [SerializeField] private float pausaDeFin = 0.4f;
+
     public VendorDefinition Tienda => tienda;
     public int RegaloDeBienvenida => regaloDeBienvenida;
+    // Ni hablando ni caminando: se le puede hablar. Publico para los tests.
+    public bool Libre => !_presentandose && !_contandoVuelta && !_enEscena;
 
     private bool _presentandose;
     private float _llegada = -1f;
     private bool _contandoVuelta;
+    // Desde que frena al jugador hasta que vuelve a su lugar.
+    private bool _enEscena;
 
     private void Awake()
     {
         if (dialogueController == null)
             dialogueController = FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
+        if (caminante == null) caminante = GetComponent<NpcQueCamina>();
+    }
+
+    // Si la escena se apaga a mitad de la charla, el jugador no puede quedar frenado.
+    private void OnDisable()
+    {
+        PlayerInputController.Soltar(this);
+        _enEscena = false;
     }
 
     // ---------- la primera vez ----------
 
     private void Update()
     {
-        if (_presentandose || _contandoVuelta) return;
+        if (_presentandose || _contandoVuelta || _enEscena) return;
 
         GameManager gm = GameManager.Instance;
         if (gm == null || gm.Story == null || gm.CurrentPlayer == null) return;
@@ -112,11 +140,12 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
 
         _contandoVuelta = true;
         Debug.Log($"[Tixi] Cuenta la vuelta: {vuelta.name}.");
-        dialogueController.StartDialogue(vuelta, gm.Story, () =>
+        StoryModel story = gm.Story;
+        Conversar(() => dialogueController.StartDialogue(vuelta, story, () =>
         {
             _contandoVuelta = false;
             CasinoDialogo.Guardar();
-        });
+        }), acercarse: true);
     }
 
     // La primera charla de 'alVolver' que tiene algo para decir. Null = nada.
@@ -140,8 +169,11 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
             hablaAlLlegar = false;
         };
 
-        if (lore != null && dialogueController != null) dialogueController.StartDialogue(lore, story, despues);
-        else Decir(lore != null ? lore.lines : new[] { "¡Llegaste! Te estaba esperando." }, despues);
+        Conversar(() =>
+        {
+            if (lore != null && dialogueController != null) dialogueController.StartDialogue(lore, story, despues);
+            else Decir(lore != null ? lore.lines : new[] { "¡Llegaste! Te estaba esperando." }, despues);
+        }, acercarse: true);
     }
 
     // Lo que pasa al cerrar el lore. Publico para los tests: flag, regalo y
@@ -175,7 +207,7 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
 
     public bool Interact(PlayerModel player, StoryModel story)
     {
-        if (player == null || story == null || _presentandose || _contandoVuelta) return false;
+        if (player == null || story == null || !Libre) return false;
 
         if (!story.HasFlag(StoryFlag.Lobby_TixiPresentado))
         {
@@ -183,7 +215,8 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
             return true;
         }
 
-        CasinoDialogo.Elegir(dialogueController, nombre, retrato, saludo,
+        // Ya estas al lado: no camina, solo te mira mientras charlan.
+        Conversar(() => CasinoDialogo.Elegir(dialogueController, nombre, retrato, saludo,
             new[] { opcionComprar, opcionViajar, opcionCharlar, opcionNada },
             eleccion =>
             {
@@ -196,8 +229,69 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
                         break;
                     case 2: Charlar(story); break;
                 }
-            });
+            }), acercarse: false);
         return true;
+    }
+
+    // ---------- caminar hasta vos y volver ----------
+
+    // Frena al jugador, se acerca (o solo lo mira), corre 'hablar' (que abre la
+    // primera caja) y espera a que no quede nada abierto: la charla puede ser
+    // una cadena (lore, regalo, pregunta, tienda, consejo) y no hay un unico
+    // callback al final. Recien ahi vuelve a su lugar y suelta al jugador.
+    //
+    // No depender de callbacks tambien cubre DialogueController.Cancelar, que
+    // cierra la caja sin avisar.
+    private void Conversar(System.Action hablar, bool acercarse)
+    {
+        if (!isActiveAndEnabled) { hablar(); return; }
+        StartCoroutine(ConversarRutina(hablar, acercarse));
+    }
+
+    private IEnumerator ConversarRutina(System.Action hablar, bool acercarse)
+    {
+        _enEscena = true;
+        PlayerInputController.Frenar(this);
+        PlayerController jugador = FindAnyObjectByType<PlayerController>();
+
+        if (jugador != null)
+        {
+            // Que termine el paso que venia dando: cortarlo a mitad se ve como un salto.
+            float limite = Time.unscaledTime + 1f;
+            while (jugador.IsMoving && Time.unscaledTime < limite) yield return null;
+
+            if (caminante != null)
+            {
+                if (acercarse && caminaHastaVos) yield return caminante.AcercarseA(jugador.transform);
+                else caminante.Mirar(jugador.transform.position - transform.position);
+            }
+
+            // Y el jugador lo mira a el.
+            if (!jugador.IsMoving)
+                jugador.TeleportTo(jugador.transform.position, Cardinal(transform.position - jugador.transform.position));
+        }
+
+        hablar();
+
+        float quieto = 0f;
+        while (quieto < pausaDeFin)
+        {
+            yield return null;
+            bool abierto = MenuManager.AnyOpen || (dialogueController != null && dialogueController.IsOpen);
+            quieto = abierto ? 0f : quieto + Time.unscaledDeltaTime;
+        }
+
+        if (caminante != null)
+            yield return caminante.VolverASuLugar(jugador != null ? jugador.transform : null);
+
+        PlayerInputController.Soltar(this);
+        _enEscena = false;
+    }
+
+    private static Vector2 Cardinal(Vector2 v)
+    {
+        if (Mathf.Abs(v.x) >= Mathf.Abs(v.y)) return v.x >= 0f ? Vector2.right : Vector2.left;
+        return v.y >= 0f ? Vector2.up : Vector2.down;
     }
 
     private void Charlar(StoryModel story)

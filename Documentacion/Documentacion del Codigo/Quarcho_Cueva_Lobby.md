@@ -38,8 +38,8 @@ Los **textos** (diálogos) y el **balance** (precios, premios) se crean una vez 
 | **Tixi** | (1, 2), en el hueco entre el escritorio y la biblioteca | Siempre | Lore, tienda, te manda al siguiente nivel |
 | **PC** | el escritorio de la computadora (x −3..−1, fila 2) | Siempre | El PC de siempre |
 | **Néstor** | (−12, 2), entre los racks de servidores | `Casino_Completado` (en el guion se queda en su Data Center hasta recordar; antes era `Torre1_NestorLiberado`) | Tutor de MTs |
-| **Martín** | sentado atrás de su mesa, celdas (−4..−2, −2..−1) | `Casino_Completado` | Tres ruletas y los juegos del casino |
-| **Tacconi** | (−5, −1), al costado de la mesa de Martín | `Casino_Completado` | Tres chances de ganarle un Mew |
+| **Martín** | sentado atrás de su mesa en el rincón de juegos, celdas (−4..−2, −4..−3), contra la pared de abajo y al lado de la máquina arcade | `Casino_Completado` | Tres ruletas y los juegos del casino |
+| **Tacconi** | (−1, −4), al costado derecho de la mesa de Martín | `Casino_Completado` | Tres chances de ganarle un Mew |
 | **Salida** | (6, 0), la puerta del este | Siempre (abre después de Tixi) | Al siguiente nivel |
 
 Los que se suman con la historia se guardan **apagados** y los prende un `BarreraPorFlag` al revés que vive en `Lobby/Apariciones` (así no se ven un frame antes de que llegue el flag). La mesa de Martín es la **misma mesa de cartas del último piso del casino**: el builder copia sus seis tiles a un `Tilemap` propio (`Grid/MesaDeMartin`) en modo *Individual*, para que se ordene por altura con los personajes (Martín queda detrás de la mesa y el que juega, delante).
@@ -56,7 +56,9 @@ Los que se suman con la historia se guardan **apagados** y los prende un `Barrer
 
 > ⚠️ **El lore es texto de relleno.** Lo escribe el equipo en `Lobby_Tixi_Lore`. El builder no pisa el asset.
 >
-> ⚠️ **El sprite de Tixi es provisorio** (`Graphics/Characters/cientifico` y el retrato `CIENTIFICO`). Se cambia en `QuarchoCuevaBuilder` (`HojaDeTixi`, `RetratoDeTixi`).
+> **Sprite de Tixi** (2-oct-2026): `Graphics/Characters/tixi` (hoja 4x4 de 64x82) y el retrato `Graphics/Trainers/TIXI` (160x160), sacados del arte que pasó el equipo en `Graphics/Tixi` (Gemini). Se pasaron a pixel art igual que Tacconi: achicar promediando solo la figura, paleta de ~30 colores sin difuminado (con cuatro grises fijos para las zapatillas y la cadena) y contorno negro pintado por dentro. Mide **76 px** de alto contra los ~58 del pack: el dibujo tiene unas 3 cabezas y se igualó por cabeza. La hoja de Gemini traía dos errores que se corrigieron al armarla: las filas 2 y 3 miraban las dos a la derecha (la izquierda es el espejo) y su columna 3 era una pose de frente (va la pose quieta).
+>
+> **Camina hasta vos.** Cuando habla sola (la presentación y cada vuelta de un nivel) se acerca caminando a una celda pegada al jugador, lo mira, habla, y cuando ya no queda **ninguna caja ni menú abiertos** vuelve a su lugar. Mientras tanto el jugador queda frenado (`PlayerInputController.Frenar`). Si le hablás vos ya estás al lado: solo se da vuelta y al terminar vuelve a mirar abajo. El caminar es `NpcQueCamina` (BFS sobre la capa Obstacles, 4 cuadros por dirección, 3,5 u/s): sirve para cualquier NPC con hoja 4x4.
 >
 > **Regalo de bienvenida: 1000.** Con los 100 de arranque no alcanza ni para una Poción, y el pedido es que antes del primer nivel se pueda comprar. Es el campo `regaloDeBienvenida` de Tixi; en 0 no da nada.
 
@@ -163,8 +165,8 @@ Los menús de los NPCs usan `DialogueController.StartChoice(hablante, retrato, p
 `Assets/Graphics` está en el `.gitignore` (el pack vive en local). Estos PNG los usa la cueva o sus pantallas y hay que subirlos **con su `.meta`** (y el `.meta` de la carpeta si falta), o en GitHub las referencias quedan rotas:
 
 ```
-git add -f "Codigo/PokeRush/Assets/Graphics/Characters/cientifico.png"* \
-  "Codigo/PokeRush/Assets/Graphics/Trainers/CIENTIFICO.png"* "Codigo/PokeRush/Assets/Graphics/Trainers/MARTIN.png"* \
+git add -f "Codigo/PokeRush/Assets/Graphics/Characters/tixi.png"* \
+  "Codigo/PokeRush/Assets/Graphics/Trainers/TIXI.png"* "Codigo/PokeRush/Assets/Graphics/Trainers/MARTIN.png"* \
   "Codigo/PokeRush/Assets/Graphics/Items/"{FULLHEAL,REVIVE,XACCURACY,XATTACK2,XDEFENSE,XSPATK,XSPDEF,XSPEED}.png* \
   "Codigo/PokeRush/Assets/Graphics/UI/Mart"* "Codigo/PokeRush/Assets/Graphics/UI/Move Reminder"* \
   "Codigo/PokeRush/Assets/Graphics/UI/category.png"* "Codigo/PokeRush/Assets/Graphics/Windowskins/choice 1.png"*
@@ -177,7 +179,6 @@ git add -f "Codigo/PokeRush/Assets/Graphics/Characters/cientifico.png"* \
 ## Pendiente (del equipo)
 
 - El **lore** de Tixi y las charlas de Néstor y Martín (`Resources/Definitions/Lobby/Dialogos`): hoy es texto de relleno.
-- El **sprite de Tixi**.
 - La escena del **jefe final** (`BossFinal`).
 - La **música** de la cueva: no hay pista propia, sigue sonando la de la escena anterior.
 - Las pantallas de la tienda y del tutor son **de prueba** con el arte del pack: las finales las diseña el equipo.

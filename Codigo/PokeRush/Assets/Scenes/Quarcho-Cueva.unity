@@ -753,7 +753,7 @@ Tilemap:
   m_GameObject: {fileID: 94465103}
   m_Enabled: 1
   m_Tiles:
-  - first: {x: -4, y: -2, z: 0}
+  - first: {x: -4, y: -4, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 0
@@ -763,7 +763,7 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -3, y: -2, z: 0}
+  - first: {x: -3, y: -4, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 1
@@ -773,7 +773,7 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -2, y: -2, z: 0}
+  - first: {x: -2, y: -4, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 2
@@ -783,7 +783,7 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -4, y: -1, z: 0}
+  - first: {x: -4, y: -3, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 3
@@ -793,7 +793,7 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -3, y: -1, z: 0}
+  - first: {x: -3, y: -3, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 4
@@ -803,7 +803,7 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -2, y: -1, z: 0}
+  - first: {x: -2, y: -3, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 5
@@ -879,7 +879,7 @@ Tilemap:
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -4, y: -2, z: 0}
+  m_Origin: {x: -4, y: -4, z: 0}
   m_Size: {x: 4, y: 2, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
@@ -7207,6 +7207,7 @@ GameObject:
   m_Component:
   - component: {fileID: 442310813}
   - component: {fileID: 442310815}
+  - component: {fileID: 442310816}
   - component: {fileID: 442310814}
   m_Layer: 3
   m_Name: Tixi
@@ -7245,7 +7246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuarchoTixiNpc
   dialogueController: {fileID: 0}
   nombre: TIXI
-  retrato: {fileID: 21300000, guid: 2b17330598b96a5459868a2f61a48db0, type: 3}
+  retrato: {fileID: 21300000, guid: 29f022df382dcbf47a02f8d6628d92f5, type: 3}
   lore: {fileID: 11400000, guid: ddc6c8efff07f2349bb3740548ddd543, type: 2}
   hablaAlLlegar: 1
   esperaAlLlegar: 0.6
@@ -7271,6 +7272,44 @@ MonoBehaviour:
   alVolver:
   - {fileID: 11400000, guid: a3ff89b115de8020f47ef601af0c9514, type: 2}
   - {fileID: 11400000, guid: d4c560f3cf7a1d0d5d290c384aac5802, type: 2}
+--- !u!114 &442310816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442310812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57589705d6562f4f86766985fc8ee7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NpcQueCamina
+  cuadros:
+  - {fileID: 1903744221, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: -252908012, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 1190932859, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: -1978695179, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 2141318461, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 1774301823, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: -1247992599, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 1925123571, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: -278669202, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 1839580485, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 734864250, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 1335679717, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 136727179, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 236396997, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 576975884, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  - {fileID: 1264506449, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
+  visual: {fileID: 475540123}
+  velocidad: 3.5
+  cuadrosPorSegundo: 6
+  miraEnSuLugar: {x: 0, y: -1}
+  obstaculos:
+    serializedVersion: 2
+    m_Bits: 8
+  radioDeChoque: 0.3
+  alcance: 14
 --- !u!61 &442310815
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7432,7 +7471,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 15
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 246417500, guid: 1b0beb9e83d38fd499a7a1a1d22dc289, type: 3}
+  m_Sprite: {fileID: 1903744221, guid: 6a6fc948c9bb8164a91d432f1cad6364, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -9376,7 +9415,7 @@ Transform:
   m_GameObject: {fileID: 736607557}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: -0.5, z: 0}
+  m_LocalPosition: {x: -0.5, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12772,7 +12811,7 @@ Transform:
   m_GameObject: {fileID: 940037849}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: -1, z: 0}
+  m_LocalPosition: {x: -2.5, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

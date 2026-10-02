@@ -24,6 +24,24 @@ public class PlayerInputController : MonoBehaviour
 
     private static GameInputService Input => GameInputService.Instance;
 
+    // Escenitas en las que el mundo se mueve solo (Tixi caminando hacia vos):
+    // mientras alguien lo tenga pedido, el jugador no camina, no interactua y
+    // no abre el menu. Es un conjunto y no un bool para que dos pedidos no se
+    // pisen, y los objetos destruidos (cambio de escena) se sueltan solos.
+    private static readonly System.Collections.Generic.HashSet<Object> _frenos =
+        new System.Collections.Generic.HashSet<Object>();
+
+    public static void Frenar(Object quien) { if (quien != null) _frenos.Add(quien); }
+    public static void Soltar(Object quien) { _frenos.Remove(quien); }
+    public static bool Frenado
+    {
+        get
+        {
+            _frenos.RemoveWhere(o => o == null);
+            return _frenos.Count > 0;
+        }
+    }
+
     private void Awake()
     {
         if (dialogueController == null)
@@ -52,6 +70,8 @@ public class PlayerInputController : MonoBehaviour
         }
 
         _navPrevio = 0;
+
+        if (Frenado) return;
 
         if (_inBattle)
             HandleBattleInput();

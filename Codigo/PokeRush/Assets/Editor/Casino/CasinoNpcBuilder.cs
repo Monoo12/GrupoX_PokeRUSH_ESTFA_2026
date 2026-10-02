@@ -1382,6 +1382,14 @@ public static class CasinoNpcBuilder
         return new[] { Frame(cortada, Abajo), Frame(cortada, Izquierda), Frame(cortada, Derecha), Frame(cortada, Arriba) };
     }
 
+    // Los 16 cuadros de una hoja (cuatro por direccion, mismo orden). Para los
+    // NPCs que caminan (NpcQueCamina, el primero es Tixi).
+    public static Sprite[] Cuadros(string hoja)
+    {
+        Sprite[] cortada = Hoja(hoja);
+        return cortada != null ? (Sprite[])cortada.Clone() : new Sprite[0];
+    }
+
     // Corta una hoja de personaje en su grilla y devuelve los sprites en orden
     // de lectura (fila 0 = mirando abajo).
     //

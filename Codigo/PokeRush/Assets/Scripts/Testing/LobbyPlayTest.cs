@@ -85,6 +85,11 @@ public class LobbyPlayTest : MonoBehaviour
         // ---- 1. Tixi habla sola ----
         yield return EsperarHasta(() => _dialogo.IsOpen, 5f);
         Check("Tixi habla sola al llegar", _dialogo.IsOpen);
+        var camina = tixi.GetComponent<NpcQueCamina>();
+        var jugador = FindAnyObjectByType<PlayerController>();
+        Check("Tixi camina hasta el jugador antes de hablar",
+              camina != null && jugador != null && !camina.EnSuLugar &&
+              Vector2.Distance(tixi.transform.position, jugador.transform.position) < 1.1f);
         yield return Foto("01-tixi-lore");
         int plataAntes = player.Money;
 
@@ -139,6 +144,12 @@ public class LobbyPlayTest : MonoBehaviour
         yield return EsperarHasta(() => _dialogo.IsOpen, 3f);
         yield return Foto("07-tixi-consejo");
         yield return CerrarDialogos();
+
+        // Cerrada la charla, vuelve caminando a su lugar y recien ahi suelta al jugador.
+        Check("Mientras vuelve, el jugador queda frenado", !tixi.Libre && PlayerInputController.Frenado);
+        yield return EsperarHasta(() => tixi.Libre, 8f);
+        Check("Despues de la charla Tixi vuelve a su lugar", camina != null && camina.EnSuLugar);
+        Check("Y el jugador se puede mover de nuevo", !PlayerInputController.Frenado);
 
         // ---- 3. El menu de Tixi (lista de cuatro opciones) ----
         tixi.Interact(player, story);
