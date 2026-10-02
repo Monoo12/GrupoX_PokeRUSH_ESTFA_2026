@@ -43,6 +43,8 @@ public class SlotsScreen : MenuScreen
     private Fase _fase;
     private int _apuesta;
     private SlotSpinResult _tirada;
+    // El sonido de los rodillos girando: se corta cuando frena el ultimo.
+    private SfxEnCurso _sonidoDelGiro;
     private float _tiempo;
     private float _proximoRefresco;
     private int _rodillosParados;
@@ -94,6 +96,7 @@ public class SlotsScreen : MenuScreen
 
     protected override void OnClose()
     {
+        CortarGiro();
         _tirada = null;
         _motor = null;
     }
@@ -143,6 +146,7 @@ public class SlotsScreen : MenuScreen
         {
             PintarRodilloReal(_rodillosParados);
             _rodillosParados++;
+            Sonidos.SlotsFrena();
         }
 
         if (_rodillosParados >= _maquina.rodillos)
@@ -188,7 +192,7 @@ public class SlotsScreen : MenuScreen
         // a mitad de la animacion regalaria tiradas gratis.
         if (jugador.Money < _apuesta)
         {
-            Sonar(sonidoSinDinero);
+            Sonar(sonidoSinDinero, Sonidos.Error);
             Mensaje("No te alcanza para esa apuesta.");
             return;
         }
@@ -203,7 +207,9 @@ public class SlotsScreen : MenuScreen
         _rodillosParados = 0;
 
         ApagarResaltados();
-        Sonar(sonidoGiro);
+        Sonidos.SlotsMoneda();
+        if (sonidoGiro != null) Sonar(sonidoGiro, null);
+        else _sonidoDelGiro = Sonidos.SlotsGiro();
         Mensaje("Girando...");
         RefrescarTextos();
     }
@@ -211,6 +217,7 @@ public class SlotsScreen : MenuScreen
     private void Resolver()
     {
         _fase = Fase.Apostando;
+        CortarGiro();
 
         PlayerModel jugador = Player;
         if (jugador != null && _tirada.Pago > 0) jugador.AddMoney(_tirada.Pago);
@@ -223,7 +230,9 @@ public class SlotsScreen : MenuScreen
         if (_tirada.Gano)
         {
             ResaltarLineasGanadoras();
-            Sonar(sonidoPremio);
+            // Un premio de diez veces la apuesta o mas se festeja en grande.
+            bool grande = _tirada.Pago >= _apuesta * 10;
+            Sonar(sonidoPremio, grande ? (System.Action)Sonidos.PremioGrande : Sonidos.PremioChico);
 
             SlotLineHit mejor = _tirada.Lineas[0];
             foreach (SlotLineHit hit in _tirada.Lineas)
@@ -292,9 +301,17 @@ public class SlotsScreen : MenuScreen
         if (mensajeText != null) mensajeText.text = texto;
     }
 
-    private void Sonar(AudioClip clip)
+    // El clip asignado en el prefab manda; sin clip, el del catalogo de audio.
+    private static void Sonar(AudioClip clip, System.Action delCatalogo)
     {
-        if (clip != null && AudioService.Instance != null) AudioService.Instance.PlaySFX(clip);
+        if (clip != null) AudioService.Instance.PlaySFX(clip);
+        else delCatalogo?.Invoke();
+    }
+
+    private void CortarGiro()
+    {
+        _sonidoDelGiro?.Parar(0.2f);
+        _sonidoDelGiro = null;
     }
 
     private void MostrarEn(int rodillo, int fila, SlotSymbol simbolo)

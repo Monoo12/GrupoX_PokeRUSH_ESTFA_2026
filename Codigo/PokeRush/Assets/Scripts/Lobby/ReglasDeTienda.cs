@@ -37,6 +37,7 @@ public static class ReglasDeTienda
 
         jugador.SpendMoney(total);
         jugador.Inventory.AddHealItem(objeto, cantidad);
+        Sonidos.Comprar();
         return true;
     }
 }

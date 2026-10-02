@@ -195,6 +195,8 @@ public class NpcQueCamina : MonoBehaviour
         {
             _reloj -= dura;
             _cuadro = (_cuadro + 1) % 4;
+            // Cuadros 1 y 3 = el pie apoya (como el jugador, ver Pasos).
+            if (_cuadro == 1 || _cuadro == 3) Pasos.DeNpc(transform.position);
         }
         MostrarCuadro();
     }

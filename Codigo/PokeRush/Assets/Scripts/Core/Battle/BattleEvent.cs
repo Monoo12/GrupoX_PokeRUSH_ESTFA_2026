@@ -17,9 +17,23 @@ public enum BattleEventKind
     BattleEnded       // fin del combate
 }
 
+// Que sonido le corresponde a un evento. Lo marca el TurnEngine, que es el que
+// sabe si un golpe fue super eficaz; lo hace sonar el BattleController.
+public enum SonidoDelEvento
+{
+    Ninguno,
+    Golpe,
+    GolpeSuperEficaz,
+    GolpePocoEficaz,
+    Curacion,
+    SubirNivel
+}
+
 public class BattleEvent
 {
     public BattleEventKind Kind;
+    // Solo presentacion: que sonido acompaña al evento (ver SonidoDelEvento).
+    public SonidoDelEvento Sonido;
     // Texto en español ya formateado (puede ser null en eventos puramente visuales)
     public string Message;
     // Que lado afecta el evento (para saber que barra/sprite refrescar)

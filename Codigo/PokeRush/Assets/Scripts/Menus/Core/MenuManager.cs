@@ -268,7 +268,7 @@ public class MenuManager : MonoBehaviour
         {
             if (!input.WasPressedOrRepeated(nav)) continue;
             input.Consume(nav);
-            PlayClip(navigateClip);
+            PlayClip(navigateClip, Sonidos.Cursor);
             top.HandleAction(nav);
             if (_stack.Count == 0 || _stack[_stack.Count - 1].Screen != top) return;
         }
@@ -279,7 +279,7 @@ public class MenuManager : MonoBehaviour
         if (input.WasPressed(GameAction.Confirm))
         {
             input.Consume(GameAction.Confirm);
-            PlayClip(confirmClip);
+            PlayClip(confirmClip, Sonidos.Confirmar);
             top.HandleAction(GameAction.Confirm);
             if (Changed(top)) return;
         }
@@ -291,7 +291,7 @@ public class MenuManager : MonoBehaviour
         if (input.WasPressed(GameAction.Cancel) || input.WasPressed(GameAction.Menu))
         {
             input.Consume(GameAction.Cancel, GameAction.Menu);
-            PlayClip(cancelClip);
+            PlayClip(cancelClip, Sonidos.Cancelar);
             top.HandleAction(GameAction.Cancel);
         }
     }
@@ -299,8 +299,11 @@ public class MenuManager : MonoBehaviour
     private bool Changed(MenuScreen top)
         => _stack.Count == 0 || _stack[_stack.Count - 1].Screen != top;
 
-    private void PlayClip(AudioClip clip)
+    // El clip asignado en el prefab manda; sin clip suena el del catalogo de
+    // audio (lo normal: el prefab lo regenera un builder y no los trae).
+    private static void PlayClip(AudioClip clip, Action delCatalogo)
     {
         if (clip != null) AudioService.Instance.PlaySFX(clip);
+        else delCatalogo?.Invoke();
     }
 }

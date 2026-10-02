@@ -121,14 +121,20 @@ public class DialogueController : MonoBehaviour
     {
         if (_modo != Modo.Pregunta || delta == 0) return;
 
+        int antes = _seleccion;
         _seleccion = Mathf.Clamp(_seleccion + delta, 0, _opciones.Length - 1);
+        if (_seleccion != antes) Sonidos.Cursor();
         dialogueView.ShowChoices(_opciones, _seleccion);
     }
 
     public void OnConfirm()
     {
         if (_modo == Modo.Lineas) AvanzarLinea();
-        else if (_modo == Modo.Pregunta) ResolverPregunta();
+        else if (_modo == Modo.Pregunta)
+        {
+            Sonidos.Confirmar();
+            ResolverPregunta();
+        }
     }
 
     // Cancelar equivale a elegir la segunda opcion (el "No"), o la que haya
@@ -136,6 +142,7 @@ public class DialogueController : MonoBehaviour
     public void OnCancel()
     {
         if (_modo != Modo.Pregunta) return;
+        Sonidos.Cancelar();
         _seleccion = _opcionAlCancelar;
         ResolverPregunta();
     }
@@ -181,6 +188,7 @@ public class DialogueController : MonoBehaviour
         if (def.otorgaObjeto != null && player != null && !player.Inventory.HasSpecialItem(def.otorgaObjeto))
         {
             player.Inventory.AddSpecialItem(def.otorgaObjeto, 1);
+            Sonidos.ObjetoRecibido();
             Debug.Log($"[Dialogo] '{def.name}' entrego {def.otorgaObjeto.itemName}.");
         }
     }

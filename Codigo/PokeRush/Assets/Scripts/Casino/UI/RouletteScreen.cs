@@ -205,8 +205,13 @@ public class RouletteScreen : MenuScreen
         MostrarResultado(-1);
     }
 
+    // La grabacion de la rueda girando, mientras gira.
+    private SfxEnCurso _sonidoDelGiro;
+
     protected override void OnClose()
     {
+        _sonidoDelGiro?.Parar(0.2f);
+        _sonidoDelGiro = null;
         ApagarEfectos();
     }
 
@@ -408,6 +413,7 @@ public class RouletteScreen : MenuScreen
 
         _apuestas[donde] = puesto + ficha;
         if (chipClip != null) AudioService.Instance.PlaySFX(chipClip);
+        else Sonidos.Fichas();
         Refrescar();
     }
 
@@ -416,6 +422,7 @@ public class RouletteScreen : MenuScreen
         if (_apuestas.Count == 0) return;
         _apuestas.Clear();
         if (chipClip != null) AudioService.Instance.PlaySFX(chipClip);
+        else Sonidos.Fichas();
         Refrescar();
     }
 
@@ -468,6 +475,13 @@ public class RouletteScreen : MenuScreen
         _t = 0f;
         _ticks = 0;
         _fase = Fase.Girando;
+        // Sin tic por casillero asignado, suena la grabacion de la rueda
+        // girando, y se apaga cuando la bola cae.
+        if (tickClip == null)
+        {
+            _sonidoDelGiro?.Parar(0f);
+            _sonidoDelGiro = Sonidos.RuletaGiro();
+        }
         _result.Giros++;
 
         Refrescar();
@@ -545,6 +559,8 @@ public class RouletteScreen : MenuScreen
     private void Cobrar()
     {
         _fase = Fase.Celebrando;
+        _sonidoDelGiro?.Parar(0.5f);
+        _sonidoDelGiro = null;
         _celebracion = 0f;
 
         _pagado = 0;
@@ -579,6 +595,11 @@ public class RouletteScreen : MenuScreen
 
         AudioClip clip = _pagado > 0 ? winClip : loseClip;
         if (clip != null) AudioService.Instance.PlaySFX(clip);
+        else if (_pagado > 0)
+        {
+            Sonidos.Fichas();
+            Sonidos.PremioChico();
+        }
     }
 
     private void PrenderEfectos()

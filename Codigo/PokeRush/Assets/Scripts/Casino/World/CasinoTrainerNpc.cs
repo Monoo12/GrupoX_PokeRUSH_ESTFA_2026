@@ -83,7 +83,11 @@ public class CasinoTrainerNpc : CasinoNpcConCombate, IInteractable
         // la firma la usa por reflexion el banco de pruebas).
         PlayerModel jugador = GameManager.Instance != null ? GameManager.Instance.CurrentPlayer : null;
         bool daObjeto = objetoAlGanar != null && jugador != null && !jugador.Inventory.HasSpecialItem(objetoAlGanar);
-        if (daObjeto) jugador.Inventory.AddSpecialItem(objetoAlGanar);
+        if (daObjeto)
+        {
+            jugador.Inventory.AddSpecialItem(objetoAlGanar);
+            Sonidos.ObjetoRecibido();
+        }
 
         Activar(story, flagVencido);
         if (rival != null) Activar(story, rival.defeatGrantsFlag);

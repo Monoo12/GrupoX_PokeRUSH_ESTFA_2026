@@ -1,0 +1,3081 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7242bf903674124b909522d12bf0608, type: 3}
+  m_Name: CatalogoDeAudio
+  m_EditorClassIdentifier: Assembly-CSharp::CatalogoDeAudio
+  escenas:
+  - escena: Menu Principal
+    musica:
+      clip: {fileID: 8300000, guid: caf89ff9777362a45a8f2aa975b9d55b, type: 3}
+      volumen: 1
+      ganancia: 0.622
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: 
+  - escena: MenuSaves
+    musica:
+      clip: {fileID: 8300000, guid: caf89ff9777362a45a8f2aa975b9d55b, type: 3}
+      volumen: 1
+      ganancia: 0.622
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: 
+  - escena: CreacionPersonaje
+    musica:
+      clip: {fileID: 8300000, guid: e8eb74fb584b19a44b4e4a398492b63b, type: 3}
+      volumen: 1
+      ganancia: 0.825
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: 
+  - escena: habitacion
+    musica:
+      clip: {fileID: 8300000, guid: e8eb74fb584b19a44b4e4a398492b63b, type: 3}
+      volumen: 1
+      ganancia: 0.825
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: laminado
+  - escena: HabitacionTutorial_Esqueleto
+    musica:
+      clip: {fileID: 8300000, guid: e8eb74fb584b19a44b4e4a398492b63b, type: 3}
+      volumen: 1
+      ganancia: 0.825
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: laminado
+  - escena: Quarcho-Cueva
+    musica:
+      clip: {fileID: 8300000, guid: b7ae461ca40fa0144a6f8c4c5d40398a, type: 3}
+      volumen: 1
+      ganancia: 0.766
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: laminado
+  - escena: NestorGOD2
+    musica:
+      clip: {fileID: 8300000, guid: 9e5fb10d1e9e1944d9a06b1a0e3dc851, type: 3}
+      volumen: 1
+      ganancia: 1.528
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: metal
+  - escena: Casino Nivel 1
+    musica:
+      clip: {fileID: 8300000, guid: 35745dc0b16c8e0438093f2b615dee43, type: 3}
+      volumen: 1
+      ganancia: 0.704
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: alfombra
+  - escena: Casino Nivel 2
+    musica:
+      clip: {fileID: 8300000, guid: 16d77363ef855c34f9886d83814cf14c, type: 3}
+      volumen: 1
+      ganancia: 0.607
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: alfombra
+  - escena: Casino nivel 3
+    musica:
+      clip: {fileID: 8300000, guid: f0718a28e4f788b4f92e03278e59afa0, type: 3}
+      volumen: 1
+      ganancia: 1.31
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: alfombra
+  - escena: Casino piso FINAL
+    musica:
+      clip: {fileID: 8300000, guid: 54aef12d5f65a68409b0cfa94aac6046, type: 3}
+      volumen: 1
+      ganancia: 1.233
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: alfombra
+  - escena: BossFinal
+    musica:
+      clip: {fileID: 8300000, guid: 511c6062f853f454b8ce04ab68d2b7cf, type: 3}
+      volumen: 1
+      ganancia: 1.246
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: metal
+  - escena: ArenaJuli_Vacia
+    musica:
+      clip: {fileID: 8300000, guid: 511c6062f853f454b8ce04ab68d2b7cf, type: 3}
+      volumen: 1
+      ganancia: 1.246
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: metal
+  - escena: BossJulieta_Prueba
+    musica:
+      clip: {fileID: 8300000, guid: 511c6062f853f454b8ce04ab68d2b7cf, type: 3}
+      volumen: 1
+      ganancia: 1.246
+    combate:
+      clip: {fileID: 0}
+      volumen: 1
+      ganancia: 1
+    superficie: metal
+  volumenBaseDeMusica: 0.5
+  fundidoEntreCanciones: 0.8
+  rivales:
+  - rival: Nestor
+    musica:
+      clip: {fileID: 8300000, guid: 68e815539ce83944e87130ba6bfc6f16, type: 3}
+      volumen: 1
+      ganancia: 0.826
+  - rival: JefeFinalCasino
+    musica:
+      clip: {fileID: 8300000, guid: a3aad8131de2f1443bac45aa1531bb8e, type: 3}
+      volumen: 1
+      ganancia: 0.731
+  peleasComunes:
+  - clip: {fileID: 8300000, guid: d8502f7a6f7d47441a2fff251f49de72, type: 3}
+    volumen: 1
+    ganancia: 0.985
+  - clip: {fileID: 8300000, guid: 9deb5e60ff635614e874e3e6db22290a, type: 3}
+    volumen: 1
+    ganancia: 0.997
+  - clip: {fileID: 8300000, guid: 5ef944b3c8131de4486c4b710b5cfb6c, type: 3}
+    volumen: 1
+    ganancia: 1.066
+  - clip: {fileID: 8300000, guid: 8f9fd25c2d71d244aa151a59d3443d50, type: 3}
+    volumen: 1
+    ganancia: 1
+  - clip: {fileID: 8300000, guid: 7bdd93c3d33244b4081b25b8349e60cf, type: 3}
+    volumen: 1
+    ganancia: 1.132
+  victoriaComun:
+    clip: {fileID: 8300000, guid: ea59f24ced190db429f847b91440cc84, type: 3}
+    volumen: 1
+    ganancia: 1.9
+  victoriaImportante:
+    clip: {fileID: 8300000, guid: eab7be02d793f2744a1d017fa4e923ad, type: 3}
+    volumen: 1
+    ganancia: 1.9
+  julietaFase1:
+    clip: {fileID: 8300000, guid: 84d4c8e2e4c32e342bde586afd59f149, type: 3}
+    volumen: 1
+    ganancia: 1.283
+  julietaFase2:
+    clip: {fileID: 8300000, guid: 438ad15c93d1b924980d4165c2c643e8, type: 3}
+    volumen: 1
+    ganancia: 1.422
+  julietaFinal:
+    clip: {fileID: 8300000, guid: 60442428d48748948b942f8e79b91d49, type: 3}
+    volumen: 1
+    ganancia: 1.565
+  julietaDespues:
+    clip: {fileID: 8300000, guid: 122ea2fcea232f94fbd051e890037351, type: 3}
+    volumen: 1
+    ganancia: 0.978
+  creditos:
+    clip: {fileID: 8300000, guid: bf08e110f3c5ed949be82841bdbed1ab, type: 3}
+    volumen: 1
+    ganancia: 1.9
+  cursor:
+    clip: {fileID: 8300000, guid: 448f099d7f681f84b8ec7a76d0bcbf8d, type: 3}
+    volumen: 1
+    ganancia: 1.606
+  confirmar:
+    clip: {fileID: 8300000, guid: caddcbd49fc0d104c9997cc38fed497d, type: 3}
+    volumen: 1
+    ganancia: 3
+  cancelar:
+    clip: {fileID: 8300000, guid: 6382c358ef9099c43a1c16070f3b484e, type: 3}
+    volumen: 1
+    ganancia: 0.869
+  abrirMenu:
+    clip: {fileID: 8300000, guid: 9c489fb8beb8cd940896ad721f286a1b, type: 3}
+    volumen: 1
+    ganancia: 1.178
+  cerrarMenu:
+    clip: {fileID: 8300000, guid: 55d86256db779484ab6461043d2eb589, type: 3}
+    volumen: 1
+    ganancia: 1.087
+  error:
+    clip: {fileID: 8300000, guid: c29c4f1b92cda924dac8cb44b177be06, type: 3}
+    volumen: 1
+    ganancia: 0.445
+  guardar:
+    clip: {fileID: 8300000, guid: 03b7e05f48720ae4c93cb867fbf7311e, type: 3}
+    volumen: 1
+    ganancia: 0.664
+  comprar:
+    clip: {fileID: 8300000, guid: 97038ef53ebe87247a0d202098da127f, type: 3}
+    volumen: 1
+    ganancia: 1.516
+  pcPrender:
+    clip: {fileID: 8300000, guid: 1ad606c89006f674890a3af253b82891, type: 3}
+    volumen: 1
+    ganancia: 1.388
+  pcApagar:
+    clip: {fileID: 8300000, guid: 8a832162ae622aa4789f4a2eee0cdb13, type: 3}
+    volumen: 1
+    ganancia: 0.994
+  pcAgarrar:
+    clip: {fileID: 8300000, guid: cfceaaf6c2f9c8e43a7d458707ea1916, type: 3}
+    volumen: 1
+    ganancia: 0.955
+  pcSoltar:
+    clip: {fileID: 8300000, guid: 2aae1a18c23b4354bb1fd2f3d1b86c97, type: 3}
+    volumen: 1
+    ganancia: 1
+  curar:
+    clip: {fileID: 8300000, guid: a7d01480cf42b25468b2f8453b04886b, type: 3}
+    volumen: 1
+    ganancia: 0.832
+  objetoEncontrado:
+    clip: {fileID: 8300000, guid: acc96bbbc2b606b479c86d89cd7234ed, type: 3}
+    volumen: 1
+    ganancia: 0.664
+  objetoRecibido:
+    clip: {fileID: 8300000, guid: 67c6d960327f60c4aa1cdbc05f448bb4, type: 3}
+    volumen: 1
+    ganancia: 0.452
+  pokemonRecibido:
+    clip: {fileID: 8300000, guid: 4a6f22fcf8363de4cae0d88fada854da, type: 3}
+    volumen: 1
+    ganancia: 0.959
+  teletransporte:
+    clip: {fileID: 8300000, guid: 01185ddb9cec2064fb87aa09630e1c96, type: 3}
+    volumen: 1
+    ganancia: 1.115
+  puertaEntrar:
+    clip: {fileID: 8300000, guid: 5cdf529b265ca254aa0a4985aabcb72a, type: 3}
+    volumen: 1
+    ganancia: 1.728
+  puertaSalir:
+    clip: {fileID: 8300000, guid: f4a0095cc566f7248bbdac61cb94d0b7, type: 3}
+    volumen: 1
+    ganancia: 1.573
+  ascensorViaja:
+    clip: {fileID: 8300000, guid: 69655a8a656daba45a63b646604033e1, type: 3}
+    volumen: 1
+    ganancia: 2.412
+  ascensorLlega:
+    clip: {fileID: 8300000, guid: 85db388fca6d72d4080f9aed2981d89b, type: 3}
+    volumen: 1
+    ganancia: 1.481
+  exclamacion:
+    clip: {fileID: 8300000, guid: 5787403d685fcc54aaa3c6af870f35dc, type: 3}
+    volumen: 1
+    ganancia: 1.209
+  choque:
+    clip: {fileID: 8300000, guid: c0d6f6b38f3d7b04ca1f41f12d1da765, type: 3}
+    volumen: 1
+    ganancia: 0.745
+  lanzarBall:
+    clip: {fileID: 8300000, guid: 73af29be60dad434b9f44f3d6f8cedf1, type: 3}
+    volumen: 1
+    ganancia: 1.323
+  pokeballSale:
+    clip: {fileID: 8300000, guid: 60ead427c3924214bb3e0b770d3d4cdd, type: 3}
+    volumen: 1
+    ganancia: 0.515
+  retirar:
+    clip: {fileID: 8300000, guid: 3d27f331c0010224e8f58e6012aecbf5, type: 3}
+    volumen: 1
+    ganancia: 0.66
+  debilitado:
+    clip: {fileID: 8300000, guid: 5a2e7a1a532bfdf46bde530ab6343cce, type: 3}
+    volumen: 1
+    ganancia: 0.898
+  golpeNormal:
+    clip: {fileID: 8300000, guid: 6678471837399fc46a3b9807589e24b0, type: 3}
+    volumen: 1
+    ganancia: 0.679
+  golpeSuperEficaz:
+    clip: {fileID: 8300000, guid: 3abcbe19b2c9f184cb17f7e68be51cc9, type: 3}
+    volumen: 1
+    ganancia: 0.728
+  golpePocoEficaz:
+    clip: {fileID: 8300000, guid: 0b69032ca4489104aad1d1f69eee5c99, type: 3}
+    volumen: 1
+    ganancia: 0.824
+  subirNivel:
+    clip: {fileID: 8300000, guid: 783ba26e0273a004f8eeb5a657c19891, type: 3}
+    volumen: 1
+    ganancia: 1.137
+  huir:
+    clip: {fileID: 8300000, guid: a62f4cc2a460462458b8899f7a2d202a, type: 3}
+    volumen: 1
+    ganancia: 3
+  usarObjeto:
+    clip: {fileID: 8300000, guid: 0583464e2325ecd479fb4c0e8e68df60, type: 3}
+    volumen: 1
+    ganancia: 1.468
+  statSube:
+    clip: {fileID: 8300000, guid: fb8a65061404b2d4b9e802e0075939ad, type: 3}
+    volumen: 1
+    ganancia: 1.926
+  statBaja:
+    clip: {fileID: 8300000, guid: 9c6cb16195855da4cbae488dcf7da5a7, type: 3}
+    volumen: 1
+    ganancia: 1.173
+  quemado:
+    clip: {fileID: 8300000, guid: c71af370f7406e64e8f0994f81222893, type: 3}
+    volumen: 1
+    ganancia: 0.695
+  envenenado:
+    clip: {fileID: 8300000, guid: f97b978ed36725a4ca13a7c418d3f0bc, type: 3}
+    volumen: 1
+    ganancia: 0.431
+  paralizado:
+    clip: {fileID: 8300000, guid: 0b683e91fcd3bd346b846cb242cdcd40, type: 3}
+    volumen: 1
+    ganancia: 1.915
+  dormido:
+    clip: {fileID: 8300000, guid: 3e77c954cd38a794b9edff0ffe815249, type: 3}
+    volumen: 1
+    ganancia: 0.869
+  congelado:
+    clip: {fileID: 8300000, guid: faac0cda19b4b9d47987d869a1816129, type: 3}
+    volumen: 1
+    ganancia: 1.605
+  confundido:
+    clip: {fileID: 8300000, guid: 1373e979f877d8f45a1aed92af130e6f, type: 3}
+    volumen: 1
+    ganancia: 0.726
+  volumenDeGritos: 0.8
+  volumenDeAtaques: 0.75
+  gritos:
+  - especie: 0001_Bulbasaur
+    grito: {fileID: 8300000, guid: f6a03704060d5e74da684988c9e37287, type: 3}
+  - especie: 0002_Ivysaur
+    grito: {fileID: 8300000, guid: 5cb616683bcb3844c9026610785ca643, type: 3}
+  - especie: 0003_Venusaur
+    grito: {fileID: 8300000, guid: 48aae37fc8f30154291e1ed54065f46f, type: 3}
+  - especie: 0004_Charmander
+    grito: {fileID: 8300000, guid: 44533634c3b7f7a458a546c4b4c8eba7, type: 3}
+  - especie: 0005_Charmeleon
+    grito: {fileID: 8300000, guid: 89226507b5b65bc4eaaeec06034fb3f3, type: 3}
+  - especie: 0006_Charizard
+    grito: {fileID: 8300000, guid: e11c9dd723aa8c54a9405765595475da, type: 3}
+  - especie: 0007_Squirtle
+    grito: {fileID: 8300000, guid: 1de8ba4b7f21d4f4080266469026927d, type: 3}
+  - especie: 0008_Wartortle
+    grito: {fileID: 8300000, guid: d3250fefed9c9a54383f2c92cd344213, type: 3}
+  - especie: 0009_Blastoise
+    grito: {fileID: 8300000, guid: e1713e3a1526ee9488b499ac35956ae1, type: 3}
+  - especie: 0019_Rattata
+    grito: {fileID: 8300000, guid: 9576905ef748d6a4eb10184400b84ba1, type: 3}
+  - especie: 0020_Raticate
+    grito: {fileID: 8300000, guid: 8dcd55f3a4224ba4aba7d0e83516ee64, type: 3}
+  - especie: 0025_Pikachu
+    grito: {fileID: 8300000, guid: 35bdc141c378e8947a856643d8ba2fbe, type: 3}
+  - especie: 0026_Raichu
+    grito: {fileID: 8300000, guid: 258b121a4e523b748adde21d482efc9d, type: 3}
+  - especie: 0056_Mankey
+    grito: {fileID: 8300000, guid: 920cee6584a87f24e9bbcb9d9c8d5d97, type: 3}
+  - especie: 0057_Primeape
+    grito: {fileID: 8300000, guid: 924e3b832d7a0a8488805db0ecc4cfac, type: 3}
+  - especie: 0063_Abra
+    grito: {fileID: 8300000, guid: 25cc235650506414eb42c4832660a14d, type: 3}
+  - especie: 0064_Kadabra
+    grito: {fileID: 8300000, guid: 70ae5f78c43098f439a1cb3ce862f92d, type: 3}
+  - especie: 0065_Alakazam
+    grito: {fileID: 8300000, guid: 26395c826501ebe4d8b8663504a8d1ff, type: 3}
+  - especie: 0066_Machop
+    grito: {fileID: 8300000, guid: 5fb5d493b0be84f418f77df2e1631a42, type: 3}
+  - especie: 0067_Machoke
+    grito: {fileID: 8300000, guid: 7a58de2415166f7439c29b1e9d029f78, type: 3}
+  - especie: 0068_Machamp
+    grito: {fileID: 8300000, guid: bad93ecbc5a8e8f4a8891cd71c8d3ddc, type: 3}
+  - especie: 0081_Magnemite
+    grito: {fileID: 8300000, guid: dbfbea66bcf7ffc4892313caf99d8e28, type: 3}
+  - especie: 0082_Magneton
+    grito: {fileID: 8300000, guid: b5fb944c24d43c649b14df34ec5976cf, type: 3}
+  - especie: 0092_Gastly
+    grito: {fileID: 8300000, guid: 635f94b980b155646a1ecd9c1e737c61, type: 3}
+  - especie: 0093_Haunter
+    grito: {fileID: 8300000, guid: 4574885ef6a51ad459db4d1f26d23b73, type: 3}
+  - especie: 0094_Gengar
+    grito: {fileID: 8300000, guid: fd8337f37ef70a1439bb94425e9f1184, type: 3}
+  - especie: 0095_Onix
+    grito: {fileID: 8300000, guid: b9de3e0fe0e565047973477463645641, type: 3}
+  - especie: 0111_Rhyhorn
+    grito: {fileID: 8300000, guid: 7b51aaccd9a4d814d8d688ce26022fb1, type: 3}
+  - especie: 0112_Rhydon
+    grito: {fileID: 8300000, guid: e052e6a84a88e2a4cbaba4274f8f8cbc, type: 3}
+  - especie: 0113_Chansey
+    grito: {fileID: 8300000, guid: 604afabcfae243b4a9e8cf9c55f1d62e, type: 3}
+  - especie: 0123_Scyther
+    grito: {fileID: 8300000, guid: 8bd08966c9ad4d64b912936bdf8c38bb, type: 3}
+  - especie: 0125_Electabuzz
+    grito: {fileID: 8300000, guid: 9619e37a9a64d954c8d8e8b7e11ad8cd, type: 3}
+  - especie: 0126_Magmar
+    grito: {fileID: 8300000, guid: 4cbc6be26998b59408e708876dbff886, type: 3}
+  - especie: 0127_Pinsir
+    grito: {fileID: 8300000, guid: bf2b93b908455c7448918015fe78cc7f, type: 3}
+  - especie: 0131_Lapras
+    grito: {fileID: 8300000, guid: 4dc0d29b04823f94da3e569d636417c4, type: 3}
+  - especie: 0133_Eevee
+    grito: {fileID: 8300000, guid: e15060e6750d7194da9572e1e2b0187b, type: 3}
+  - especie: 0134_Vaporeon
+    grito: {fileID: 8300000, guid: 50b353b3b5af3a148ac91b4cb3453f55, type: 3}
+  - especie: 0135_Jolteon
+    grito: {fileID: 8300000, guid: 9a68a1f7c80737642bd58919d7a24f29, type: 3}
+  - especie: 0136_Flareon
+    grito: {fileID: 8300000, guid: 81521f5d13b8d724885af73b02b87331, type: 3}
+  - especie: 0137_Porygon
+    grito: {fileID: 8300000, guid: a2ff5b4ec89031643b78ab03a3eb5ed8, type: 3}
+  - especie: 0142_Aerodactyl
+    grito: {fileID: 8300000, guid: 942a96956bbf11f4ebad569e727ed309, type: 3}
+  - especie: 0143_Snorlax
+    grito: {fileID: 8300000, guid: bc69bf17c3114e741a9694924dce74f6, type: 3}
+  - especie: 0144_Articuno
+    grito: {fileID: 8300000, guid: 9bb454e8c10aba44480176314817059e, type: 3}
+  - especie: 0145_Zapdos
+    grito: {fileID: 8300000, guid: ee659b01579346e4593a7780ea401e55, type: 3}
+  - especie: 0146_Moltres
+    grito: {fileID: 8300000, guid: 4a7b5c12d140b5b448d920ce894bcab4, type: 3}
+  - especie: 0147_Dratini
+    grito: {fileID: 8300000, guid: c9be722278f13eb4ead7d404763446b3, type: 3}
+  - especie: 0148_Dragonair
+    grito: {fileID: 8300000, guid: 4600ccb01dfb16e46be847ce0d3a44e6, type: 3}
+  - especie: 0149_Dragonite
+    grito: {fileID: 8300000, guid: c29312c462916074592ffa18efbfd6eb, type: 3}
+  - especie: 0150_Mewtwo
+    grito: {fileID: 8300000, guid: 2f10b06a39b1624489955f4febbcf811, type: 3}
+  - especie: 0151_Mew
+    grito: {fileID: 8300000, guid: dceabf96b5306184ba0e4662d29450a9, type: 3}
+  - especie: 0152_Chikorita
+    grito: {fileID: 8300000, guid: dfddd189c68c98b409ec270f8855b7b7, type: 3}
+  - especie: 0153_Bayleef
+    grito: {fileID: 8300000, guid: 4f270f4532c6398408f581d44b507412, type: 3}
+  - especie: 0154_Meganium
+    grito: {fileID: 8300000, guid: 60b576911e93a8c4190f81c34e9383e5, type: 3}
+  - especie: 0155_Cyndaquil
+    grito: {fileID: 8300000, guid: 54bc941769308dc4da0bab833e1bc7d3, type: 3}
+  - especie: 0156_Quilava
+    grito: {fileID: 8300000, guid: 3579329e85bbbfd4384c39d5fa8533f8, type: 3}
+  - especie: 0157_Typhlosion
+    grito: {fileID: 8300000, guid: 583621abfd09311479599bff2a963667, type: 3}
+  - especie: 0158_Totodile
+    grito: {fileID: 8300000, guid: 8b832ea29aa6462429f93f379e31beea, type: 3}
+  - especie: 0159_Croconaw
+    grito: {fileID: 8300000, guid: fbd32f7fb40e54e449a534c6a3ccdf72, type: 3}
+  - especie: 0160_Feraligatr
+    grito: {fileID: 8300000, guid: 6d4951d9d5ce0f0489a43aa6df104dd0, type: 3}
+  - especie: 0172_Pichu
+    grito: {fileID: 8300000, guid: 2b40fde1f7f61d343ba3952c56413cb5, type: 3}
+  - especie: 0175_Togepi
+    grito: {fileID: 8300000, guid: 5223d4d1f12441445827dd4b56d08dec, type: 3}
+  - especie: 0176_Togetic
+    grito: {fileID: 8300000, guid: f358ddce0a035374f88c8cb02b063cb2, type: 3}
+  - especie: 0193_Yanma
+    grito: {fileID: 8300000, guid: 386c25565f219884882fce5fb3f0f907, type: 3}
+  - especie: 0196_Espeon
+    grito: {fileID: 8300000, guid: 50666be3611ea9849961ff91c8b1ee41, type: 3}
+  - especie: 0197_Umbreon
+    grito: {fileID: 8300000, guid: 49af79098a1337f4e962ca3bf3fbc023, type: 3}
+  - especie: 0201_Unown
+    grito: {fileID: 8300000, guid: a5a1e6471db831346acb62282dfbe31c, type: 3}
+  - especie: 0207_Gligar
+    grito: {fileID: 8300000, guid: c7a0f11dddab4754790c20d8f8aae442, type: 3}
+  - especie: 0208_Steelix
+    grito: {fileID: 8300000, guid: 9324c75bf751f124f819cba7d3963290, type: 3}
+  - especie: 0212_Scizor
+    grito: {fileID: 8300000, guid: 85b7b179883b83e4a870d8ca7e55e4db, type: 3}
+  - especie: 0214_Heracross
+    grito: {fileID: 8300000, guid: 35ff31acadbd3fb46a6a43948dc79ee9, type: 3}
+  - especie: 0215_Sneasel
+    grito: {fileID: 8300000, guid: 965714d38c428514c94f9b958366f1bf, type: 3}
+  - especie: 0220_Swinub
+    grito: {fileID: 8300000, guid: 74f48d18d57ed034796a16501af07bd5, type: 3}
+  - especie: 0221_Piloswine
+    grito: {fileID: 8300000, guid: 5f00575ed769bc745b6b1664e89150f5, type: 3}
+  - especie: 0227_Skarmory
+    grito: {fileID: 8300000, guid: af36b534670703f4d8056672fb440091, type: 3}
+  - especie: 0228_Houndour
+    grito: {fileID: 8300000, guid: 1951408fa4e210c478de3edaa5b89d19, type: 3}
+  - especie: 0229_Houndoom
+    grito: {fileID: 8300000, guid: 4338e1877a98f904cbdadef019bd2469, type: 3}
+  - especie: 0231_Phanpy
+    grito: {fileID: 8300000, guid: 8eafe7ba638b9454798457bfff45b9c1, type: 3}
+  - especie: 0232_Donphan
+    grito: {fileID: 8300000, guid: 4fac3578baa7ac342a665aa5ab41c2d5, type: 3}
+  - especie: 0233_Porygon2
+    grito: {fileID: 8300000, guid: 5f78286ebc982204babffd8583a4cffa, type: 3}
+  - especie: 0239_Elekid
+    grito: {fileID: 8300000, guid: b08b7953250f0b44681347187f75c1ae, type: 3}
+  - especie: 0240_Magby
+    grito: {fileID: 8300000, guid: 298ca346db5af4f4a8c58d4c682d2c7c, type: 3}
+  - especie: 0242_Blissey
+    grito: {fileID: 8300000, guid: 7f1e478e750dc8c4f885db93f7cd5dc7, type: 3}
+  - especie: 0243_Raikou
+    grito: {fileID: 8300000, guid: 84d296b60ca658d4fb58538447f22ea6, type: 3}
+  - especie: 0244_Entei
+    grito: {fileID: 8300000, guid: 4fe52d6fc22c9cf4abf3524978d61c6d, type: 3}
+  - especie: 0245_Suicune
+    grito: {fileID: 8300000, guid: eaaa9a3b99969ed41a250351184d7ee8, type: 3}
+  - especie: 0246_Larvitar
+    grito: {fileID: 8300000, guid: d2d5c7f2da8800245a8e86991a01fea3, type: 3}
+  - especie: 0247_Pupitar
+    grito: {fileID: 8300000, guid: 653c45e31bf08d443bace73f33ed7903, type: 3}
+  - especie: 0248_Tyranitar
+    grito: {fileID: 8300000, guid: 042f929667e23f5498ef57ac8a7de81c, type: 3}
+  - especie: 0249_Lugia
+    grito: {fileID: 8300000, guid: f2ac1b00f0fc08142ae398ab17cd02bf, type: 3}
+  - especie: 0250_Ho-Oh
+    grito: {fileID: 8300000, guid: 4b628ce1d31be5c46ab4a44ddf9ddbbf, type: 3}
+  - especie: 0251_Celebi
+    grito: {fileID: 8300000, guid: 824356fb63aa8754a885cb98fa752c67, type: 3}
+  - especie: 0252_Treecko
+    grito: {fileID: 8300000, guid: 1cf983b369e076b47a05b0237dff95c6, type: 3}
+  - especie: 0253_Grovyle
+    grito: {fileID: 8300000, guid: e8d8714badd11d44db0c40d8747be342, type: 3}
+  - especie: 0254_Sceptile
+    grito: {fileID: 8300000, guid: 130fdc86032af9240a5445463e162b11, type: 3}
+  - especie: 0255_Torchic
+    grito: {fileID: 8300000, guid: 3093488fe85eb424b9f9df73d095c967, type: 3}
+  - especie: 0256_Combusken
+    grito: {fileID: 8300000, guid: 91dc2de5a62a1434b8bb103f0afef499, type: 3}
+  - especie: 0257_Blaziken
+    grito: {fileID: 8300000, guid: 2da939a60cfac7444b6341ae39b23db2, type: 3}
+  - especie: 0258_Mudkip
+    grito: {fileID: 8300000, guid: 5d6a696038401b34bb5b0fcdcad79ceb, type: 3}
+  - especie: 0259_Marshtomp
+    grito: {fileID: 8300000, guid: 9c688fedc3b95014c8ecf77e761528c0, type: 3}
+  - especie: 0260_Swampert
+    grito: {fileID: 8300000, guid: bb222a3ab2806ad4caa9e03914b79c68, type: 3}
+  - especie: 0280_Ralts
+    grito: {fileID: 8300000, guid: 9e43498a782b7a447aa89d10bb489ff8, type: 3}
+  - especie: 0281_Kirlia
+    grito: {fileID: 8300000, guid: 6f4c5a53bcd427c4aa6cd29bbd7e4c03, type: 3}
+  - especie: 0282_Gardevoir
+    grito: {fileID: 8300000, guid: c880036f47464924291d8ad9cbeb58bf, type: 3}
+  - especie: 0285_Shroomish
+    grito: {fileID: 8300000, guid: b1d8f034432e1544f83222bddc6cb1ff, type: 3}
+  - especie: 0286_Breloom
+    grito: {fileID: 8300000, guid: 71a22ba4c93060a46807a7a03a33b09e, type: 3}
+  - especie: 0302_Sableye
+    grito: {fileID: 8300000, guid: cb7d74dc177b6204cae2f543ebd3a979, type: 3}
+  - especie: 0303_Mawile
+    grito: {fileID: 8300000, guid: d704898bb2946da46bf08c495de7d63a, type: 3}
+  - especie: 0304_Aron
+    grito: {fileID: 8300000, guid: 451320a74debf764795c63f94459e4ec, type: 3}
+  - especie: 0305_Lairon
+    grito: {fileID: 8300000, guid: a471f68e8b322c94aaa2429a1c63c2be, type: 3}
+  - especie: 0306_Aggron
+    grito: {fileID: 8300000, guid: a761f7c4d58cc914dbcca031879358c0, type: 3}
+  - especie: 0315_Roselia
+    grito: {fileID: 8300000, guid: e8c17834e79504540a438b845fd2f983, type: 3}
+  - especie: 0328_Trapinch
+    grito: {fileID: 8300000, guid: bada3764ed85cb340ba15dc7687c1f2c, type: 3}
+  - especie: 0329_Vibrava
+    grito: {fileID: 8300000, guid: 64670e4307c6b4a4aabb8c92c87ac905, type: 3}
+  - especie: 0330_Flygon
+    grito: {fileID: 8300000, guid: 300feaad4d2d0c34082299fe5b25a8b7, type: 3}
+  - especie: 0333_Swablu
+    grito: {fileID: 8300000, guid: 255fe088b064d064b80b2aa1b75835f2, type: 3}
+  - especie: 0334_Altaria
+    grito: {fileID: 8300000, guid: b35b516c0d78950419e09decb5f5dd9e, type: 3}
+  - especie: 0349_Feebas
+    grito: {fileID: 8300000, guid: d3ba808fb01424142bce19dc109ba3ea, type: 3}
+  - especie: 0350_Milotic
+    grito: {fileID: 8300000, guid: 9862b3ff08b1e1a4f89586fb67fcbf01, type: 3}
+  - especie: 0353_Shuppet
+    grito: {fileID: 8300000, guid: 6562d44fa593a6d4d9101832fcac2d4d, type: 3}
+  - especie: 0354_Banette
+    grito: {fileID: 8300000, guid: 30af621b6687c984492f9f1a64fefa96, type: 3}
+  - especie: 0355_Duskull
+    grito: {fileID: 8300000, guid: 257b032a26be10b4a9beafa0c21124d0, type: 3}
+  - especie: 0356_Dusclops
+    grito: {fileID: 8300000, guid: fdda441e733a536478fa2ff93ee616e3, type: 3}
+  - especie: 0359_Absol
+    grito: {fileID: 8300000, guid: 52d62ae1435c3854d92538a6b52051e3, type: 3}
+  - especie: 0361_Snorunt
+    grito: {fileID: 8300000, guid: 59afce730ce08a3478afa2a1953b0927, type: 3}
+  - especie: 0362_Glalie
+    grito: {fileID: 8300000, guid: a87cc9398e86e344b98d8d7e3df45e4b, type: 3}
+  - especie: 0371_Bagon
+    grito: {fileID: 8300000, guid: 7ea5912162f648f4f8803040c7b9e901, type: 3}
+  - especie: 0372_Shelgon
+    grito: {fileID: 8300000, guid: 57d86341d2559a247b1aa63ed5c65b2f, type: 3}
+  - especie: 0373_Salamence
+    grito: {fileID: 8300000, guid: e1e6429a7a698cd41b6b0f78d0e45b0e, type: 3}
+  - especie: 0374_Beldum
+    grito: {fileID: 8300000, guid: dac991b5fbac5bd4c98538e260099875, type: 3}
+  - especie: 0375_Metang
+    grito: {fileID: 8300000, guid: 755bc9337274fd24083b170eebf6f72e, type: 3}
+  - especie: 0376_Metagross
+    grito: {fileID: 8300000, guid: 75ac4d5d97409a24283ee228f531ee59, type: 3}
+  - especie: 0377_Regirock
+    grito: {fileID: 8300000, guid: 9e5b2e561d12e9e41be1d26fd174d8c4, type: 3}
+  - especie: 0378_Regice
+    grito: {fileID: 8300000, guid: d7b6b4a107612214cb64da7cffa26316, type: 3}
+  - especie: 0379_Registeel
+    grito: {fileID: 8300000, guid: 1689ac30107286241a02174ddc731834, type: 3}
+  - especie: 0380_Latias
+    grito: {fileID: 8300000, guid: e34ebe97562fb3948930a85a61ad90fa, type: 3}
+  - especie: 0381_Latios
+    grito: {fileID: 8300000, guid: 9e670902792bf1d44a52a757967d9c2f, type: 3}
+  - especie: 0382_Kyogre
+    grito: {fileID: 8300000, guid: 8746a2657fcd1dd43a3f8f1383d58204, type: 3}
+  - especie: 0383_Groudon
+    grito: {fileID: 8300000, guid: 2361e5a8329f63641bca6aeab63fd9c1, type: 3}
+  - especie: 0384_Rayquaza
+    grito: {fileID: 8300000, guid: a76b07e8f67f81a46a47377941c0ea22, type: 3}
+  - especie: 0385_Jirachi
+    grito: {fileID: 8300000, guid: d128e1a1d1be0424593981914339cc0b, type: 3}
+  - especie: 0386_Deoxys
+    grito: {fileID: 8300000, guid: 0484dabce6f02e14aba59d4ee2b60469, type: 3}
+  - especie: 0387_Turtwig
+    grito: {fileID: 8300000, guid: 5a0074d4ca1021c4f9e227de87628fc2, type: 3}
+  - especie: 0388_Grotle
+    grito: {fileID: 8300000, guid: 046786beccacaa04c979552dd9d4dc70, type: 3}
+  - especie: 0389_Torterra
+    grito: {fileID: 8300000, guid: 04e9feb785f6f4445ab5bc79aca02977, type: 3}
+  - especie: 0390_Chimchar
+    grito: {fileID: 8300000, guid: 92352586136d88f45a5103e3f87048ed, type: 3}
+  - especie: 0391_Monferno
+    grito: {fileID: 8300000, guid: 4ec62823d621d3f4d9769d655014aee6, type: 3}
+  - especie: 0392_Infernape
+    grito: {fileID: 8300000, guid: c13368af6e58b22438e4b38ac2752dd7, type: 3}
+  - especie: 0393_Piplup
+    grito: {fileID: 8300000, guid: ef7849dd40e5b2c46946429eb9f1feeb, type: 3}
+  - especie: 0394_Prinplup
+    grito: {fileID: 8300000, guid: 6659846a7e9ec7e448f133bee600fcbc, type: 3}
+  - especie: 0395_Empoleon
+    grito: {fileID: 8300000, guid: 3642472e30c82db4fb7b3103863ee6bb, type: 3}
+  - especie: 0403_Shinx
+    grito: {fileID: 8300000, guid: e86edaa416f1ed84f94f1b9a6fec76c1, type: 3}
+  - especie: 0404_Luxio
+    grito: {fileID: 8300000, guid: 33a41f2482867c24885172d026c79147, type: 3}
+  - especie: 0405_Luxray
+    grito: {fileID: 8300000, guid: 426212709958450428a841f140991a48, type: 3}
+  - especie: 0406_Budew
+    grito: {fileID: 8300000, guid: 761c5dda0473d6a46ad3bad7d3f722fc, type: 3}
+  - especie: 0407_Roserade
+    grito: {fileID: 8300000, guid: d479e5c4d51d73c49b5fa2906b9f17dc, type: 3}
+  - especie: 0425_Drifloon
+    grito: {fileID: 8300000, guid: f0dcb98312a35824ab101fd6f3d32598, type: 3}
+  - especie: 0426_Drifblim
+    grito: {fileID: 8300000, guid: 9804935e23d627e479e3a145b01f0160, type: 3}
+  - especie: 0440_Happiny
+    grito: {fileID: 8300000, guid: 4c35a4181e13d6c4dab1eb910e410dd3, type: 3}
+  - especie: 0442_Spiritomb
+    grito: {fileID: 8300000, guid: 90877dcb2be235a4ea53e9e95f28fb59, type: 3}
+  - especie: 0443_Gible
+    grito: {fileID: 8300000, guid: 388c6808db686394baeff6294813e93a, type: 3}
+  - especie: 0444_Gabite
+    grito: {fileID: 8300000, guid: 1766f39103e5cdf4082787e6453a1f4a, type: 3}
+  - especie: 0445_Garchomp
+    grito: {fileID: 8300000, guid: 9afb7932674af9c47a47244b9e2334d5, type: 3}
+  - especie: 0446_Munchlax
+    grito: {fileID: 8300000, guid: 1458eb902d516b7479a2daf1fe885ace, type: 3}
+  - especie: 0447_Riolu
+    grito: {fileID: 8300000, guid: 35eb7a2486149f14bad16d9260f963ca, type: 3}
+  - especie: 0448_Lucario
+    grito: {fileID: 8300000, guid: 1875ae71cb5a3964eb976767288d6082, type: 3}
+  - especie: 0449_Hippopotas
+    grito: {fileID: 8300000, guid: 76ef63625e10d534e8f4ba84d7aa3bec, type: 3}
+  - especie: 0450_Hippowdon
+    grito: {fileID: 8300000, guid: 08810facf27056b43baa58cb541d3216, type: 3}
+  - especie: 0451_Skorupi
+    grito: {fileID: 8300000, guid: 2ea6f42f4e6b7b74598f1cbfa23ecc49, type: 3}
+  - especie: 0452_Drapion
+    grito: {fileID: 8300000, guid: b75733ad74365ca40ba8da435d0e7e67, type: 3}
+  - especie: 0461_Weavile
+    grito: {fileID: 8300000, guid: f90be49b8c11bf04496d5458fd80e828, type: 3}
+  - especie: 0462_Magnezone
+    grito: {fileID: 8300000, guid: 914e3fb5f9c84bb4692d1dd8c85da7a6, type: 3}
+  - especie: 0464_Rhyperior
+    grito: {fileID: 8300000, guid: f429552d0c2e4e349ac8db0fdcc32ed1, type: 3}
+  - especie: 0466_Electivire
+    grito: {fileID: 8300000, guid: 737bd00f4988bf94fa8ad53dd54975d4, type: 3}
+  - especie: 0467_Magmortar
+    grito: {fileID: 8300000, guid: 0d474f185bcb653449f5044b0390db93, type: 3}
+  - especie: 0468_Togekiss
+    grito: {fileID: 8300000, guid: 969dbf0a720fd7b4c8ac34a8adf3f503, type: 3}
+  - especie: 0469_Yanmega
+    grito: {fileID: 8300000, guid: eaa47009f9eb3d446802d63ac23d071c, type: 3}
+  - especie: 0470_Leafeon
+    grito: {fileID: 8300000, guid: 620da6b24d94354469a0fd8f39a6edd5, type: 3}
+  - especie: 0471_Glaceon
+    grito: {fileID: 8300000, guid: 7c2f3c4ec6ce66d4a9df894b95842870, type: 3}
+  - especie: 0472_Gliscor
+    grito: {fileID: 8300000, guid: e36f45d2241a2e543851e28a0ddb7c71, type: 3}
+  - especie: 0473_Mamoswine
+    grito: {fileID: 8300000, guid: b7d90654631a74d45a17f3d626d79f87, type: 3}
+  - especie: 0474_Porygon-Z
+    grito: {fileID: 8300000, guid: 963152ee1b79b824daddf6813ec0360f, type: 3}
+  - especie: 0475_Gallade
+    grito: {fileID: 8300000, guid: 5141747a9bc4dd041903c28d3acc898b, type: 3}
+  - especie: 0477_Dusknoir
+    grito: {fileID: 8300000, guid: afb2f51304aaccc4bbe8cbb04b51360c, type: 3}
+  - especie: 0478_Froslass
+    grito: {fileID: 8300000, guid: 800af0f74cc2176458986cee8567d981, type: 3}
+  - especie: 0480_Uxie
+    grito: {fileID: 8300000, guid: 893ff3012d2a3fe4dba98ad4bb7b5071, type: 3}
+  - especie: 0481_Mesprit
+    grito: {fileID: 8300000, guid: 493a0f44a6133e44abb4846651a18cd8, type: 3}
+  - especie: 0482_Azelf
+    grito: {fileID: 8300000, guid: 62d0f0f449639b740932ab9ef3331ddb, type: 3}
+  - especie: 0483_Dialga
+    grito: {fileID: 8300000, guid: d1703da191dc34f40a0fd0879bc36e10, type: 3}
+  - especie: 0484_Palkia
+    grito: {fileID: 8300000, guid: 70afd96ce1a0bea44b66ff84558d1c64, type: 3}
+  - especie: 0485_Heatran
+    grito: {fileID: 8300000, guid: 30cbc948489ec9f40a4b9c0e40efb389, type: 3}
+  - especie: 0486_Regigigas
+    grito: {fileID: 8300000, guid: aa0154f7d083ab34bac12c9b1bac9715, type: 3}
+  - especie: 0487_Giratina
+    grito: {fileID: 8300000, guid: 7c4196351eb20b74cad7b10cbf057155, type: 3}
+  - especie: 0488_Cresselia
+    grito: {fileID: 8300000, guid: 7f57de40b6f312b408459a895ef00df7, type: 3}
+  - especie: 0489_Phione
+    grito: {fileID: 8300000, guid: 081368443e9434a49b976f9051a62386, type: 3}
+  - especie: 0490_Manaphy
+    grito: {fileID: 8300000, guid: fdf11302dffdf6f4290e356133448b81, type: 3}
+  - especie: 0491_Darkrai
+    grito: {fileID: 8300000, guid: ff28083b75b040d4fbe794fece7c24e9, type: 3}
+  - especie: 0492_Shaymin
+    grito: {fileID: 8300000, guid: f36716ecab5394041b9a049a35eac8ef, type: 3}
+  - especie: 0493_Arceus
+    grito: {fileID: 8300000, guid: d14062401aaa9ae43b16c887574a19e1, type: 3}
+  - especie: 0494_Victini
+    grito: {fileID: 8300000, guid: fed7f89d6777e2248b826180bb1664dd, type: 3}
+  - especie: 0495_Snivy
+    grito: {fileID: 8300000, guid: d68b3229cac5c434797853c5d647cd02, type: 3}
+  - especie: 0496_Servine
+    grito: {fileID: 8300000, guid: 28f250f9da50b1d4c9a4a985a09788a7, type: 3}
+  - especie: 0497_Serperior
+    grito: {fileID: 8300000, guid: 1093611b3f74c6741915e83d47abed72, type: 3}
+  - especie: 0498_Tepig
+    grito: {fileID: 8300000, guid: 692a2f91faa49b04c89c0d7887e83667, type: 3}
+  - especie: 0499_Pignite
+    grito: {fileID: 8300000, guid: ede5efe0ab4c09d43b8dadc609758445, type: 3}
+  - especie: 0500_Emboar
+    grito: {fileID: 8300000, guid: 16d93d8080ad03b4babc515a1f1ef778, type: 3}
+  - especie: 0501_Oshawott
+    grito: {fileID: 8300000, guid: 1a6ac580527b5ae4cb3da777fd11b637, type: 3}
+  - especie: 0502_Dewott
+    grito: {fileID: 8300000, guid: 92321c7a9d10a194a8a975d68ff5affc, type: 3}
+  - especie: 0503_Samurott
+    grito: {fileID: 8300000, guid: 5ade2bd41e8a0dc4688283ff5cfdbe94, type: 3}
+  - especie: 0529_Drilbur
+    grito: {fileID: 8300000, guid: 42aebd6ffc0c39847973e4266a447b73, type: 3}
+  - especie: 0530_Excadrill
+    grito: {fileID: 8300000, guid: fc88f6b1e1f8c5747a088dfacebcf9e5, type: 3}
+  - especie: 0532_Timburr
+    grito: {fileID: 8300000, guid: b3a0721ac0cbca7459df54fd94520eeb, type: 3}
+  - especie: 0533_Gurdurr
+    grito: {fileID: 8300000, guid: d84c3ad23b15bb1438fa7c712a476b64, type: 3}
+  - especie: 0534_Conkeldurr
+    grito: {fileID: 8300000, guid: 71965002b8b9a58458ed8f59c03f5cb6, type: 3}
+  - especie: 0543_Venipede
+    grito: {fileID: 8300000, guid: 125d6aab181c75c44bb73569d1cb6fb5, type: 3}
+  - especie: 0544_Whirlipede
+    grito: {fileID: 8300000, guid: fe0c0cb9c5689a14180ff5c16ceffba0, type: 3}
+  - especie: 0545_Scolipede
+    grito: {fileID: 8300000, guid: ace8d2fca36446b4f95b681e872558e1, type: 3}
+  - especie: 0550_Basculin
+    grito: {fileID: 8300000, guid: 9a38a244902289a47b4dd01b6e857e5e, type: 3}
+  - especie: 0551_Sandile
+    grito: {fileID: 8300000, guid: baa8f5bf6387e7c48a3744f56b076c15, type: 3}
+  - especie: 0552_Krokorok
+    grito: {fileID: 8300000, guid: 778ed25c5d6c9c14ba0e4f526ce53ada, type: 3}
+  - especie: 0553_Krookodile
+    grito: {fileID: 8300000, guid: c15f361e497d0e543a0fdfc7ae700849, type: 3}
+  - especie: 0554_Darumaka
+    grito: {fileID: 8300000, guid: 1010b40ba01975e42822c1793c946596, type: 3}
+  - especie: 0555_Darmanitan
+    grito: {fileID: 8300000, guid: 732c62bafb5994042840556e78aa5a78, type: 3}
+  - especie: 0562_Yamask
+    grito: {fileID: 8300000, guid: 138ed832182fae744a93e4dc26347554, type: 3}
+  - especie: 0563_Cofagrigus
+    grito: {fileID: 8300000, guid: 28e3a9e26a28d0f41a41f9a0d5b15eb5, type: 3}
+  - especie: 0577_Solosis
+    grito: {fileID: 8300000, guid: 91c970b183d5e6b4a94a62c0ac961e76, type: 3}
+  - especie: 0578_Duosion
+    grito: {fileID: 8300000, guid: 2715ade0ab8d56643b7be67785073e10, type: 3}
+  - especie: 0579_Reuniclus
+    grito: {fileID: 8300000, guid: d7940dfb25a860e4f8438d918ed71fc2, type: 3}
+  - especie: 0588_Karrablast
+    grito: {fileID: 8300000, guid: 4206d32e9abe5ba4790c88aee05d767f, type: 3}
+  - especie: 0589_Escavalier
+    grito: {fileID: 8300000, guid: 328e38e5874b2bf439ea87ff59de216a, type: 3}
+  - especie: 0590_Foongus
+    grito: {fileID: 8300000, guid: cdc41fb2694fcb14fa9ac5f30cf15ff6, type: 3}
+  - especie: 0591_Amoonguss
+    grito: {fileID: 8300000, guid: b71e6e7557d6edb43a6a7e2c8adaced7, type: 3}
+  - especie: 0597_Ferroseed
+    grito: {fileID: 8300000, guid: 761f9dc2e6b766e479afca5dc5cafc3c, type: 3}
+  - especie: 0598_Ferrothorn
+    grito: {fileID: 8300000, guid: 3235cc546431f294d9b26ec1c109b693, type: 3}
+  - especie: 0607_Litwick
+    grito: {fileID: 8300000, guid: 38c4cae797395ad4d90f3d4a9defe056, type: 3}
+  - especie: 0608_Lampent
+    grito: {fileID: 8300000, guid: eb49b4b0c4f3db04b9fee75b3f93546f, type: 3}
+  - especie: 0609_Chandelure
+    grito: {fileID: 8300000, guid: 5136f7bfd88249b4e8ba5b283995a69f, type: 3}
+  - especie: 0610_Axew
+    grito: {fileID: 8300000, guid: 9a831d9c233ea4449acf217af7ba4125, type: 3}
+  - especie: 0611_Fraxure
+    grito: {fileID: 8300000, guid: 3bfcce3c7dcd8bb4b90ee92794cc3f7c, type: 3}
+  - especie: 0612_Haxorus
+    grito: {fileID: 8300000, guid: b01c9f34c054aa34587bc11cb24d968e, type: 3}
+  - especie: 0624_Pawniard
+    grito: {fileID: 8300000, guid: 8ea18d17ac9098a40b6b03d34abf1da4, type: 3}
+  - especie: 0625_Bisharp
+    grito: {fileID: 8300000, guid: 068d2cf14ca92de46857f324f8cd583c, type: 3}
+  - especie: 0633_Deino
+    grito: {fileID: 8300000, guid: 687cf7a46b0edd0408f106bd5b641293, type: 3}
+  - especie: 0634_Zweilous
+    grito: {fileID: 8300000, guid: c62ba7dcb488b704c92535ce58966bcb, type: 3}
+  - especie: 0635_Hydreigon
+    grito: {fileID: 8300000, guid: fcb48bbed33bbd443a72aa0c952ff8ae, type: 3}
+  - especie: 0636_Larvesta
+    grito: {fileID: 8300000, guid: 95cb6632c2ce4ac498ef780d95bf6f25, type: 3}
+  - especie: 0637_Volcarona
+    grito: {fileID: 8300000, guid: a4aed378032d3534d9c0e61bb2a046da, type: 3}
+  - especie: 0638_Cobalion
+    grito: {fileID: 8300000, guid: 6877fd7a974e233469eed6e6c9962bad, type: 3}
+  - especie: 0639_Terrakion
+    grito: {fileID: 8300000, guid: 69fa6a691e03ce2498f68287573ceeae, type: 3}
+  - especie: 0640_Virizion
+    grito: {fileID: 8300000, guid: c425a595870c4b942af67d02380ef5ef, type: 3}
+  - especie: 0641_Tornadus
+    grito: {fileID: 8300000, guid: a9ca44bdb57cea8479126f138cd5c194, type: 3}
+  - especie: 0642_Thundurus
+    grito: {fileID: 8300000, guid: 4863d9750a0cb844caba0a15e482e88b, type: 3}
+  - especie: 0643_Reshiram
+    grito: {fileID: 8300000, guid: 3cd6842f10808c94ea7eb109d9cfe73e, type: 3}
+  - especie: 0644_Zekrom
+    grito: {fileID: 8300000, guid: c797064de6a0f4d4a8cdf2798483ece6, type: 3}
+  - especie: 0645_Landorus
+    grito: {fileID: 8300000, guid: d22d19ae55ac60a4ebeca19fcd59e21a, type: 3}
+  - especie: 0646_Kyurem
+    grito: {fileID: 8300000, guid: 4a343c1729f197e44868e4bfbddb7421, type: 3}
+  - especie: 0647_Keldeo
+    grito: {fileID: 8300000, guid: 56910bbedb45b5f4d8c46bc013769d6e, type: 3}
+  - especie: 0648_Meloetta
+    grito: {fileID: 8300000, guid: 53c7c73d8cf9f8847819550d91cb6281, type: 3}
+  - especie: 0649_Genesect
+    grito: {fileID: 8300000, guid: 0cbd69ca01ee4484387014d9e26de36b, type: 3}
+  - especie: 0650_Chespin
+    grito: {fileID: 8300000, guid: 83426e76d25560d44a540cbe97f3dcdd, type: 3}
+  - especie: 0651_Quilladin
+    grito: {fileID: 8300000, guid: 408329634ee3c7f459658dc2524ef0e6, type: 3}
+  - especie: 0652_Chesnaught
+    grito: {fileID: 8300000, guid: 593c0903cf2b75242be4104de34aae98, type: 3}
+  - especie: 0653_Fennekin
+    grito: {fileID: 8300000, guid: 9af7d51c26b280b4cbaf52c277a7b099, type: 3}
+  - especie: 0654_Braixen
+    grito: {fileID: 8300000, guid: 129bd8f8535f01848a249578f1e13ab7, type: 3}
+  - especie: 0655_Delphox
+    grito: {fileID: 8300000, guid: a9ef55219424a6147bbb0cf6b47b0d26, type: 3}
+  - especie: 0656_Froakie
+    grito: {fileID: 8300000, guid: c11e36da44112b54ba891d87d7aa5e6d, type: 3}
+  - especie: 0657_Frogadier
+    grito: {fileID: 8300000, guid: 4f09dcc41d54e4741927152ce70f6d65, type: 3}
+  - especie: 0658_Greninja
+    grito: {fileID: 8300000, guid: 4246e6a3d28bcb54c99526a850755890, type: 3}
+  - especie: 0661_Fletchling
+    grito: {fileID: 8300000, guid: 44f6d53d0c7ad574eb2af91a97e6423f, type: 3}
+  - especie: 0662_Fletchinder
+    grito: {fileID: 8300000, guid: 84c6a792ce6a2524483df133602fb16b, type: 3}
+  - especie: 0663_Talonflame
+    grito: {fileID: 8300000, guid: 79c04427f29acb74f937314c28fd46f8, type: 3}
+  - especie: 0679_Honedge
+    grito: {fileID: 8300000, guid: 8e80c0f713893ca45bd9962bedaf03c1, type: 3}
+  - especie: 0680_Doublade
+    grito: {fileID: 8300000, guid: 464e986261569164686cfa750a907258, type: 3}
+  - especie: 0681_Aegislash
+    grito: {fileID: 8300000, guid: b4a34440a2126e44580f3ac2e5a6dbad, type: 3}
+  - especie: 0690_Skrelp
+    grito: {fileID: 8300000, guid: e17eda883d0a1da47ba283aa0a451824, type: 3}
+  - especie: 0691_Dragalge
+    grito: {fileID: 8300000, guid: 425fff01889fb9444b16327f3035a7dd, type: 3}
+  - especie: 0700_Sylveon
+    grito: {fileID: 8300000, guid: e53ca4a1c8f080c4e9884be1dd73457d, type: 3}
+  - especie: 0701_Hawlucha
+    grito: {fileID: 8300000, guid: ac31e998ff224f74a877e095ac079d69, type: 3}
+  - especie: 0704_Goomy
+    grito: {fileID: 8300000, guid: e0cd5648843e07d4cb4d5990b62c14d8, type: 3}
+  - especie: 0705_Sliggoo
+    grito: {fileID: 8300000, guid: 2decb8354a3258e40b66815e2a14a355, type: 3}
+  - especie: 0706_Goodra
+    grito: {fileID: 8300000, guid: 1a4b71323c2703849afaa6766610827a, type: 3}
+  - especie: 0707_Klefki
+    grito: {fileID: 8300000, guid: 758b3d3dff19dec4499dd112cce4d9df, type: 3}
+  - especie: 0708_Phantump
+    grito: {fileID: 8300000, guid: c1af76afe4c5102448721af465c93e80, type: 3}
+  - especie: 0709_Trevenant
+    grito: {fileID: 8300000, guid: 93a6e88063041964ea642fef4e764c32, type: 3}
+  - especie: 0710_Pumpkaboo
+    grito: {fileID: 8300000, guid: a5dc75c3d65e4664d9abbf8ebbb94c67, type: 3}
+  - especie: 0711_Gourgeist
+    grito: {fileID: 8300000, guid: a1dc19f9ee6f93d40a234de61c752eae, type: 3}
+  - especie: 0714_Noibat
+    grito: {fileID: 8300000, guid: a3cecbd7d3421fe4080882022d5e10ef, type: 3}
+  - especie: 0715_Noivern
+    grito: {fileID: 8300000, guid: f0968a772c5c3d44fbc4e64f25375653, type: 3}
+  - especie: 0716_Xerneas
+    grito: {fileID: 8300000, guid: f19e70131beb3304d9073530d56c4371, type: 3}
+  - especie: 0717_Yveltal
+    grito: {fileID: 8300000, guid: a43c057d9519a714e894eec8b144748e, type: 3}
+  - especie: 0718_Zygarde
+    grito: {fileID: 8300000, guid: 8491799ab0fcd984cb5eff267e3e46dc, type: 3}
+  - especie: 0719_Diancie
+    grito: {fileID: 8300000, guid: 31fd01c21861e43488c7c03bfa0d8e97, type: 3}
+  - especie: 0720_Hoopa
+    grito: {fileID: 8300000, guid: f946712e3ae632849b21359d6c64b5fe, type: 3}
+  - especie: 0721_Volcanion
+    grito: {fileID: 8300000, guid: b57ff6e97065ee14398efb53d0a3d480, type: 3}
+  - especie: 0722_Rowlet
+    grito: {fileID: 8300000, guid: 93632d3d749127549b145ee6202c3e0d, type: 3}
+  - especie: 0723_Dartrix
+    grito: {fileID: 8300000, guid: 4f00c3cfa85809e4fbb4f0e5a1931041, type: 3}
+  - especie: 0724_Decidueye
+    grito: {fileID: 8300000, guid: e5109b33b30a89a42ae7434bdd6f33c7, type: 3}
+  - especie: 0725_Litten
+    grito: {fileID: 8300000, guid: 643192f1dbcdde5448a84ec9676fc42e, type: 3}
+  - especie: 0726_Torracat
+    grito: {fileID: 8300000, guid: ac3b2127316a4c8418d85b7f59d192e5, type: 3}
+  - especie: 0727_Incineroar
+    grito: {fileID: 8300000, guid: 5012943cc7afc154aa8e5e9f85befdfc, type: 3}
+  - especie: 0728_Popplio
+    grito: {fileID: 8300000, guid: 52b65874ac0202c4db418e62eadc2540, type: 3}
+  - especie: 0729_Brionne
+    grito: {fileID: 8300000, guid: 4ea8a59c8ccb0cf49bfaf5f3f305d84c, type: 3}
+  - especie: 0730_Primarina
+    grito: {fileID: 8300000, guid: 3fc2885a8e89f7e4baa8ea2ed0373202, type: 3}
+  - especie: 0736_Grubbin
+    grito: {fileID: 8300000, guid: cb92cc1daa24e184089471626d5a3d35, type: 3}
+  - especie: 0737_Charjabug
+    grito: {fileID: 8300000, guid: 07ebb4f4c6ff27a41ab48c2da754debe, type: 3}
+  - especie: 0738_Vikavolt
+    grito: {fileID: 8300000, guid: 04dfc13fd5bb4494887d5c5773ad4f04, type: 3}
+  - especie: 0744_Rockruff
+    grito: {fileID: 8300000, guid: 00a78f0d317cbe34cb9bbfce0f2bf4f6, type: 3}
+  - especie: 0745_Lycanroc
+    grito: {fileID: 8300000, guid: dabe91eb6e085cd4abb0436eeee65809, type: 3}
+  - especie: 0747_Mareanie
+    grito: {fileID: 8300000, guid: c6dccc098c88dfe49bfddb66c4b1b7fc, type: 3}
+  - especie: 0748_Toxapex
+    grito: {fileID: 8300000, guid: 8acea7fb860fcf84f86e30524683b3f2, type: 3}
+  - especie: 0749_Mudbray
+    grito: {fileID: 8300000, guid: 651ffb5111cf2ce47b446b9e14cd7efb, type: 3}
+  - especie: 0750_Mudsdale
+    grito: {fileID: 8300000, guid: e0e98883c55a4b64d8fd3b6cbc1ad1a9, type: 3}
+  - especie: 0761_Bounsweet
+    grito: {fileID: 8300000, guid: 6c1fbbbbfaf887d4ea7f75de9a8e42ac, type: 3}
+  - especie: 0762_Steenee
+    grito: {fileID: 8300000, guid: 2d1e8856f00c8734ba7e2c7a94dbc946, type: 3}
+  - especie: 0763_Tsareena
+    grito: {fileID: 8300000, guid: 845a4b8a1b323534289e1e97ff72d04b, type: 3}
+  - especie: 0767_Wimpod
+    grito: {fileID: 8300000, guid: 02b9aad7d37957d4481af76fc2ad4347, type: 3}
+  - especie: 0768_Golisopod
+    grito: {fileID: 8300000, guid: a3f5320c89d439845a8c0289c81cb9af, type: 3}
+  - especie: "0772_C\xF3digo Cero"
+    grito: {fileID: 8300000, guid: 68acd3ccbbcbd1e4e973546e1568e211, type: 3}
+  - especie: 0773_Silvally
+    grito: {fileID: 8300000, guid: 51e420dfabd47b94f855023a031fb1e1, type: 3}
+  - especie: 0778_Mimikyu
+    grito: {fileID: 8300000, guid: 2c2b6e89a5b03ff4a9ac06111767a703, type: 3}
+  - especie: 0782_Jangmo-o
+    grito: {fileID: 8300000, guid: 759239a3a767bfa4a98a9beb4147e9e7, type: 3}
+  - especie: 0783_Hakamo-o
+    grito: {fileID: 8300000, guid: 33b0287cb88f90b4e9cfa6753ccdf5dc, type: 3}
+  - especie: 0784_Kommo-o
+    grito: {fileID: 8300000, guid: 6b9dc1858cc324b4c90dc74392b13df8, type: 3}
+  - especie: 0785_Tapu Koko
+    grito: {fileID: 8300000, guid: 84030a0360bc25f4bb5e071e1f29f8c4, type: 3}
+  - especie: 0786_Tapu Lele
+    grito: {fileID: 8300000, guid: 41d9c10e24869114aac64715fddc4812, type: 3}
+  - especie: 0787_Tapu Bulu
+    grito: {fileID: 8300000, guid: 894c260b4c318c84fb5285a9b1721130, type: 3}
+  - especie: 0788_Tapu Fini
+    grito: {fileID: 8300000, guid: 993beeee01869f748b9849b81aaa7a88, type: 3}
+  - especie: 0789_Cosmog
+    grito: {fileID: 8300000, guid: 6fcdf82667609274e801686a770fce20, type: 3}
+  - especie: 0790_Cosmoem
+    grito: {fileID: 8300000, guid: e974e2c0d0f68bf468835d92d1bfc0c6, type: 3}
+  - especie: 0791_Solgaleo
+    grito: {fileID: 8300000, guid: 5ab07e64ea9da9e40bc2a5d2e87a7c4c, type: 3}
+  - especie: 0792_Lunala
+    grito: {fileID: 8300000, guid: 1f846613fa81fd5458de2767d93fe3a1, type: 3}
+  - especie: 0800_Necrozma
+    grito: {fileID: 8300000, guid: 079157159e5dae24996eeee00fdcbd01, type: 3}
+  - especie: 0801_Magearna
+    grito: {fileID: 8300000, guid: 2f44706f6f156ff4e910edd0ef5698c3, type: 3}
+  - especie: 0802_Marshadow
+    grito: {fileID: 8300000, guid: f05c000f1d4102c43b47687e3d47e489, type: 3}
+  - especie: 0807_Zeraora
+    grito: {fileID: 8300000, guid: 8221275a26e14c4429d9b5d21ee4bffa, type: 3}
+  - especie: 0808_Meltan
+    grito: {fileID: 8300000, guid: ad9e127d5ee445f48a9877525142fd6a, type: 3}
+  - especie: 0809_Melmetal
+    grito: {fileID: 8300000, guid: 9e97e34fb25d5874196f321f496705d7, type: 3}
+  - especie: 0810_Grookey
+    grito: {fileID: 8300000, guid: 94c8a1ed1b006a947977273b2ca12c43, type: 3}
+  - especie: 0811_Thwackey
+    grito: {fileID: 8300000, guid: b50c8910ac803784388ebc052729c7d1, type: 3}
+  - especie: 0812_Rillaboom
+    grito: {fileID: 8300000, guid: 837ba01b8583ab041b7654d43cb89cca, type: 3}
+  - especie: 0813_Scorbunny
+    grito: {fileID: 8300000, guid: e3890ad7bc5ef4d428dd46f773dd31f7, type: 3}
+  - especie: 0814_Raboot
+    grito: {fileID: 8300000, guid: 1e666043747b33947af65ba5b6ce564a, type: 3}
+  - especie: 0815_Cinderace
+    grito: {fileID: 8300000, guid: f8509e9f8d484c249898a9376fdefdc4, type: 3}
+  - especie: 0816_Sobble
+    grito: {fileID: 8300000, guid: 90cf35677c63f0b4b959581c0745fe48, type: 3}
+  - especie: 0817_Drizzile
+    grito: {fileID: 8300000, guid: f16361d55468d1a459d92d646c8af020, type: 3}
+  - especie: 0818_Inteleon
+    grito: {fileID: 8300000, guid: 39ac543b405f8434080d27288802cec2, type: 3}
+  - especie: 0821_Rookidee
+    grito: {fileID: 8300000, guid: 160e88d8bacd6b545b55fd85818d4536, type: 3}
+  - especie: 0822_Corvisquire
+    grito: {fileID: 8300000, guid: a44a66b637542d2429bed0d90bd51329, type: 3}
+  - especie: 0823_Corviknight
+    grito: {fileID: 8300000, guid: f844f7484e655274ba1204aced59604b, type: 3}
+  - especie: 0833_Chewtle
+    grito: {fileID: 8300000, guid: 6d635bca330a6a049bf1428c57440210, type: 3}
+  - especie: 0834_Drednaw
+    grito: {fileID: 8300000, guid: 329376159bb8ee94f86ddc2f9eba79c2, type: 3}
+  - especie: 0848_Toxel
+    grito: {fileID: 8300000, guid: a1587ce2e25c42b49bb7ed961c4eeb9a, type: 3}
+  - especie: 0849_Toxtricity
+    grito: {fileID: 8300000, guid: 0a90b97608b681d4ca3d727cb513a105, type: 3}
+  - especie: 0856_Hatenna
+    grito: {fileID: 8300000, guid: fa9e57dc1acb287439b3e17229faa6a5, type: 3}
+  - especie: 0857_Hattrem
+    grito: {fileID: 8300000, guid: f0bacee2de42a1c42a431a89357764ee, type: 3}
+  - especie: 0858_Hatterene
+    grito: {fileID: 8300000, guid: a780e4b0b3fd4a346900b82555f79fa9, type: 3}
+  - especie: 0859_Impidimp
+    grito: {fileID: 8300000, guid: 9001b743bf9e9bf4d89dfa330bfa288a, type: 3}
+  - especie: 0860_Morgrem
+    grito: {fileID: 8300000, guid: eefbf6c9cec98da44ab165a6199653b5, type: 3}
+  - especie: 0861_Grimmsnarl
+    grito: {fileID: 8300000, guid: b77a2729e2b44bf408c98adb7634eb0a, type: 3}
+  - especie: 0867_Runerigus
+    grito: {fileID: 8300000, guid: 8e6a22033fdbb294dafa2c8fcbace57b, type: 3}
+  - especie: 0870_Falinks
+    grito: {fileID: 8300000, guid: 8c407aa2b5d898f46a5f62ec2eb05471, type: 3}
+  - especie: 0878_Cufant
+    grito: {fileID: 8300000, guid: 4775611458f6f4f4583e87431ad7b704, type: 3}
+  - especie: 0879_Copperajah
+    grito: {fileID: 8300000, guid: efcdf1cbcc62e084990225111ebfbad3, type: 3}
+  - especie: 0884_Duraludon
+    grito: {fileID: 8300000, guid: b9c53f1862cfa9b4791ef6cae41b2cf8, type: 3}
+  - especie: 0885_Dreepy
+    grito: {fileID: 8300000, guid: ddc60404bbbd11e4cb2b27eef2155632, type: 3}
+  - especie: 0886_Drakloak
+    grito: {fileID: 8300000, guid: 3924b3dc21b2eaf4eb6395dfe140444b, type: 3}
+  - especie: 0887_Dragapult
+    grito: {fileID: 8300000, guid: 2047430b5757bc9409ab63db43d47ee1, type: 3}
+  - especie: 0888_Zacian
+    grito: {fileID: 8300000, guid: 46969e1a4c8e283409de9f90d45f2f3d, type: 3}
+  - especie: 0889_Zamazenta
+    grito: {fileID: 8300000, guid: 40bfbb9a2025a1c43b966c5bd33932c4, type: 3}
+  - especie: 0890_Eternatus
+    grito: {fileID: 8300000, guid: 6d7a829d67fa25b4a8cbcee19809ab53, type: 3}
+  - especie: 0891_Kubfu
+    grito: {fileID: 8300000, guid: 89dc44dc9576f114eb9e503d4929bf22, type: 3}
+  - especie: 0892_Urshifu
+    grito: {fileID: 8300000, guid: af7c119b8b60d51419a54d2452954beb, type: 3}
+  - especie: 0893_Zarude
+    grito: {fileID: 8300000, guid: c913858cfd9f5924fba601817c96984e, type: 3}
+  - especie: 0894_Regieleki
+    grito: {fileID: 8300000, guid: 5ae41fa6f64c784429007b152654976a, type: 3}
+  - especie: 0895_Regidrago
+    grito: {fileID: 8300000, guid: eb8e9ac4f8dde4949a595e6dd84c1088, type: 3}
+  - especie: 0896_Glastrier
+    grito: {fileID: 8300000, guid: e47d1c7cc792bcc4bb224ea23d2e5fbe, type: 3}
+  - especie: 0897_Spectrier
+    grito: {fileID: 8300000, guid: c2cece3c7d7d3ce47b37dc64ec1e520f, type: 3}
+  - especie: 0898_Calyrex
+    grito: {fileID: 8300000, guid: 7da356bceabeabc4fb37992a8d3d8398, type: 3}
+  - especie: 0900_Kleavor
+    grito: {fileID: 8300000, guid: 1eeffbaddab32d743bdb460fcf15287d, type: 3}
+  - especie: 0902_Basculegion
+    grito: {fileID: 8300000, guid: 65a00bfd5eadc2c47ae9149105982958, type: 3}
+  - especie: 0903_Sneasler
+    grito: {fileID: 8300000, guid: a7fe8bab1170aa94c99f5a2490a77f6a, type: 3}
+  - especie: 0905_Enamorus
+    grito: {fileID: 8300000, guid: 3c6a88cc0e33aa647aa67912a4b3bd6c, type: 3}
+  - especie: 0906_Sprigatito
+    grito: {fileID: 8300000, guid: 47b5f612a8eafac4eb1dd4f418eb4692, type: 3}
+  - especie: 0907_Floragato
+    grito: {fileID: 8300000, guid: 0d443ef995f8538438e993ce7a236a75, type: 3}
+  - especie: 0908_Meowscarada
+    grito: {fileID: 8300000, guid: aea810e01a1205647b8e6400096ff4dd, type: 3}
+  - especie: 0909_Fuecoco
+    grito: {fileID: 8300000, guid: 5bef769be9f3a8248b64845d0d5a18a2, type: 3}
+  - especie: 0910_Crocalor
+    grito: {fileID: 8300000, guid: 5b4c802329331c94eab38fb3e7a17a08, type: 3}
+  - especie: 0911_Skeledirge
+    grito: {fileID: 8300000, guid: 73cd0f69999bb97408ba2e39687ae598, type: 3}
+  - especie: 0912_Quaxly
+    grito: {fileID: 8300000, guid: 3438b51efe18adb43b121e04743e7d62, type: 3}
+  - especie: 0913_Quaxwell
+    grito: {fileID: 8300000, guid: be44026f64f2b5e4f9b21ed2a1c40fda, type: 3}
+  - especie: 0914_Quaquaval
+    grito: {fileID: 8300000, guid: a48da1cc125ba5046acad2e5b890fbdb, type: 3}
+  - especie: 0932_Nacli
+    grito: {fileID: 8300000, guid: 8ef43adf9713eb640ae88d08f2bcd102, type: 3}
+  - especie: 0933_Naclstack
+    grito: {fileID: 8300000, guid: c0a12bab61077744497e693d5a8afdb3, type: 3}
+  - especie: 0934_Garganacl
+    grito: {fileID: 8300000, guid: a378fdb7cf2102f4aa44ec391eb3c6a6, type: 3}
+  - especie: 0935_Charcadet
+    grito: {fileID: 8300000, guid: 4d4d3fcd4af703945805a45d68bb9a56, type: 3}
+  - especie: 0936_Armarouge
+    grito: {fileID: 8300000, guid: ffce3a4d154e6264d93a1cd459d88ff1, type: 3}
+  - especie: 0937_Ceruledge
+    grito: {fileID: 8300000, guid: c7248604e2376bf428d470349c846820, type: 3}
+  - especie: 0957_Tinkatink
+    grito: {fileID: 8300000, guid: 33168a2c4c7d67241a17fde945c942cd, type: 3}
+  - especie: 0958_Tinkatuff
+    grito: {fileID: 8300000, guid: 0f3a26608c0a528499d2e9a44c8abd3c, type: 3}
+  - especie: 0959_Tinkaton
+    grito: {fileID: 8300000, guid: 828dbf871541c79498b857657306f267, type: 3}
+  - especie: 0967_Cyclizar
+    grito: {fileID: 8300000, guid: df1e0128880796549b376832195ff8d7, type: 3}
+  - especie: 0973_Flamigo
+    grito: {fileID: 8300000, guid: 6d407c064af077d47b5303b99dbeb733, type: 3}
+  - especie: 0977_Dondozo
+    grito: {fileID: 8300000, guid: f7ab45837b12f0c458d41e0552e88333, type: 3}
+  - especie: 0978_Tatsugiri
+    grito: {fileID: 8300000, guid: b7b034e8a77472d4cbee09959359f614, type: 3}
+  - especie: 0979_Annihilape
+    grito: {fileID: 8300000, guid: 20731f21618470745af33bca764d35d7, type: 3}
+  - especie: 0983_Kingambit
+    grito: {fileID: 8300000, guid: c8055589076a5a64faa9cf7767ac3947, type: 3}
+  - especie: 0984_Colmilargo
+    grito: {fileID: 8300000, guid: f29d61888f1c97649bf444a37e3e038d, type: 3}
+  - especie: 0985_Colagrito
+    grito: {fileID: 8300000, guid: 1e5ad2260d5f6b343bd3f3c8e69447ed, type: 3}
+  - especie: 0986_Furioseta
+    grito: {fileID: 8300000, guid: 8dd4d4e7b1ab20140aaa436fa7d9ccba, type: 3}
+  - especie: 0987_Melenaleteo
+    grito: {fileID: 8300000, guid: e8a3677d5a03fc547ad1e5e39a1d6767, type: 3}
+  - especie: 0988_Reptalada
+    grito: {fileID: 8300000, guid: d9be5592bce55e048aae63f754be5546, type: 3}
+  - especie: 0989_Pelarena
+    grito: {fileID: 8300000, guid: 416aad5a58f48094593f6371db94e347, type: 3}
+  - especie: 0990_Ferrodada
+    grito: {fileID: 8300000, guid: fd577e4f31c2eeb4ebb7d622f9562760, type: 3}
+  - especie: 0991_Ferrosaco
+    grito: {fileID: 8300000, guid: 0455ea2f4d19b8d489caa15a1e6a7d39, type: 3}
+  - especie: 0992_Ferropalmas
+    grito: {fileID: 8300000, guid: 1c2cbce3316589243aaff9ec964eb640, type: 3}
+  - especie: 0993_Ferrocuello
+    grito: {fileID: 8300000, guid: fd4c35d3ffa92294f828d29dadc4a5b8, type: 3}
+  - especie: 0994_Ferropolilla
+    grito: {fileID: 8300000, guid: f943a03efe736154a9d7fe7ee45343e8, type: 3}
+  - especie: "0995_Ferrop\xFAas"
+    grito: {fileID: 8300000, guid: 093127750a531f3449c762af406c5a9d, type: 3}
+  - especie: 0996_Frigibax
+    grito: {fileID: 8300000, guid: b1992787bd1126847a538c3fd0a1faec, type: 3}
+  - especie: 0997_Arctibax
+    grito: {fileID: 8300000, guid: 14f3b38e70a50924885f70ffb2c330f2, type: 3}
+  - especie: 0998_Baxcalibur
+    grito: {fileID: 8300000, guid: f11cd65ca8533ec46b4eb2d9e698b309, type: 3}
+  - especie: 1001_Wo-Chien
+    grito: {fileID: 8300000, guid: 42c5559ed72610b47913f35b67be8a1f, type: 3}
+  - especie: 1002_Chien-Pao
+    grito: {fileID: 8300000, guid: 7f385bc5161170c4bad9620b47861557, type: 3}
+  - especie: 1003_Ting-Lu
+    grito: {fileID: 8300000, guid: 0691403f17c78014c9fd8a538ffa5171, type: 3}
+  - especie: 1004_Chi-Yu
+    grito: {fileID: 8300000, guid: ccf8d3373f029a442af962f9e400b62d, type: 3}
+  - especie: 1005_Bramaluna
+    grito: {fileID: 8300000, guid: f394d2325777a614194de6786b921578, type: 3}
+  - especie: "1006_Ferropalad\xEDn"
+    grito: {fileID: 8300000, guid: 5edddc060a2ec2941bd819f7430fde74, type: 3}
+  - especie: 1007_Koraidon
+    grito: {fileID: 8300000, guid: 513ea2f5366b3d04ba89f08d905cc1a5, type: 3}
+  - especie: 1008_Miraidon
+    grito: {fileID: 8300000, guid: d908da2db6f7f47449ba5bef1858c993, type: 3}
+  - especie: 1009_Ondulagua
+    grito: {fileID: 8300000, guid: 24f9b56814ccc754e9115153b9dcb346, type: 3}
+  - especie: 1010_Ferroverdor
+    grito: {fileID: 8300000, guid: 60058abefacde54449830b5530b229fa, type: 3}
+  - especie: 1014_Okidogi
+    grito: {fileID: 8300000, guid: 56d5c8fb69847244ebd862f1f8da166d, type: 3}
+  - especie: 1015_Munkidori
+    grito: {fileID: 8300000, guid: 261c4b962c8ccbb43aee5d63384fef27, type: 3}
+  - especie: 1016_Fezandipiti
+    grito: {fileID: 8300000, guid: ee12c643cd95d784db2d95ccbaba4814, type: 3}
+  - especie: 1017_Ogerpon
+    grito: {fileID: 8300000, guid: 947aac18f151f644cae5792154195b57, type: 3}
+  - especie: 1018_Archaludon
+    grito: {fileID: 8300000, guid: 400b90ac7e8538142aaee573ea2d2f2f, type: 3}
+  - especie: 1020_Flamariete
+    grito: {fileID: 8300000, guid: 0c5fe00afb4a25a449312d73e4a1285b, type: 3}
+  - especie: 1021_Electrofuria
+    grito: {fileID: 8300000, guid: d0c9898e5ee157b40aa7c8eeb4f09ba4, type: 3}
+  - especie: 1022_Ferromole
+    grito: {fileID: 8300000, guid: 42b622767ee82da4da6495849d1f5249, type: 3}
+  - especie: 1023_Ferrotesta
+    grito: {fileID: 8300000, guid: c42bf02c016b2be428545f88ab3a66b5, type: 3}
+  - especie: 1024_Terapagos
+    grito: {fileID: 8300000, guid: d9bcf43faa25e63419321f2adde101b0, type: 3}
+  - especie: 1025_Pecharunt
+    grito: {fileID: 8300000, guid: 33e2b7edf90564a4cbec92f16723eacc, type: 3}
+  ataques:
+  - movimiento: pound
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 120ca8ebe201e7b469f3de35149539cb, type: 3}
+  - movimiento: mega-punch
+    carga: {fileID: 8300000, guid: 9141ae7700ac62840925a23a29e31590, type: 3}
+    impacto: {fileID: 8300000, guid: 996a0a958fba1da489adf6aa5d046cb9, type: 3}
+  - movimiento: fire-punch
+    carga: {fileID: 8300000, guid: cf04d895dc097c0428e4c588c9557431, type: 3}
+    impacto: {fileID: 8300000, guid: 94df56f071f4d1848906dad8977954d1, type: 3}
+  - movimiento: ice-punch
+    carga: {fileID: 8300000, guid: d4c43b9cb59bb124d82beed006230c34, type: 3}
+    impacto: {fileID: 8300000, guid: 63ba45301ba9d7343898ecf298ac153d, type: 3}
+  - movimiento: thunder-punch
+    carga: {fileID: 8300000, guid: 784b6e56f5a2f494290cdcb5912a38b8, type: 3}
+    impacto: {fileID: 8300000, guid: 644c1dac34330ad40a2a5d14545e5cf8, type: 3}
+  - movimiento: scratch
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2f705a417f9645d4dad775c992d6ed44, type: 3}
+  - movimiento: vice-grip
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2fdff716acb80a94daffb4b0ab76b766, type: 3}
+  - movimiento: guillotine
+    carga: {fileID: 8300000, guid: b85c8c9af02096644b1512f5b30b5d68, type: 3}
+    impacto: {fileID: 8300000, guid: 6382f837a31d7dd449d1e426b761d7c4, type: 3}
+  - movimiento: swords-dance
+    carga: {fileID: 8300000, guid: 06dd2eca1dc288a4a871b807f44f0d5a, type: 3}
+    impacto: {fileID: 8300000, guid: ccc5fde58979eb74fb47f5f6cbe27bec, type: 3}
+  - movimiento: gust
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 66b28f88b3faee248a1ad2cfacb328f8, type: 3}
+  - movimiento: wing-attack
+    carga: {fileID: 8300000, guid: b72682fa97ef51a488de31c2c5f60bf0, type: 3}
+    impacto: {fileID: 8300000, guid: 502febc601087094e9300de9beffc425, type: 3}
+  - movimiento: whirlwind
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 0dc766b5473cd8e499274f21116c5f57, type: 3}
+  - movimiento: fly
+    carga: {fileID: 8300000, guid: 4fa8e6630fadf284bb7dcbeba31a6c21, type: 3}
+    impacto: {fileID: 8300000, guid: 9e95e13b83a20e7409cfd3aaddc87d82, type: 3}
+  - movimiento: bind
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7cbd3d61412c6344b9bcdf6d0af14fa5, type: 3}
+  - movimiento: slam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: eca42b7d72bb74d4d9b6115932793193, type: 3}
+  - movimiento: vine-whip
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f13478c630daaaf4ba035c5750c4900b, type: 3}
+  - movimiento: stomp
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 6fbcae73acd992547beb5cf1746d719e, type: 3}
+  - movimiento: double-kick
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 5f088b42a4c44b643a8d5a5a62f3349b, type: 3}
+  - movimiento: mega-kick
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c159a3c867a352d4f83ac056f2c96028, type: 3}
+  - movimiento: sand-attack
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7cfb30395d7062148a997106e82c63a4, type: 3}
+  - movimiento: headbutt
+    carga: {fileID: 8300000, guid: 79b4f5ca3d807c7498448af0d1bc2bab, type: 3}
+    impacto: {fileID: 8300000, guid: ec1b5e60a35b9284aadc8c66b7526c25, type: 3}
+  - movimiento: horn-attack
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ec42f372fc57ba345ae6d639e478613b, type: 3}
+  - movimiento: fury-attack
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 365cb20bed69b4a468155a8ee862b031, type: 3}
+  - movimiento: horn-drill
+    carga: {fileID: 8300000, guid: 67f9fe0d068635d45b6631974a4ceee3, type: 3}
+    impacto: {fileID: 8300000, guid: 00384ff365705ba4daed721b4a0380f0, type: 3}
+  - movimiento: tackle
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ed331f3100afd714b8ba17ccff0b286a, type: 3}
+  - movimiento: body-slam
+    carga: {fileID: 8300000, guid: 7f64bd8c8ad06fc4ea4d98336321bbf5, type: 3}
+    impacto: {fileID: 8300000, guid: d7691d66fd32abd4d9ef19ef608f7ff0, type: 3}
+  - movimiento: wrap
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ee87e7b6ed7d9fc4986eb6608aee5ed9, type: 3}
+  - movimiento: take-down
+    carga: {fileID: 8300000, guid: d0faa9228d374f349bb200b95b6d7eb7, type: 3}
+    impacto: {fileID: 8300000, guid: 65287ba2e3d6d60479cc1288e1b8b8af, type: 3}
+  - movimiento: thrash
+    carga: {fileID: 8300000, guid: 1e280d748d8c86343852c593504d4892, type: 3}
+    impacto: {fileID: 8300000, guid: 867aa59a807ae354aa3d36af650f41a2, type: 3}
+  - movimiento: double-edge
+    carga: {fileID: 8300000, guid: 0ecb05a1a5ee6fc438d749e6984f3062, type: 3}
+    impacto: {fileID: 8300000, guid: 0551180fa71a1ad47b9d7a46ce50051b, type: 3}
+  - movimiento: tail-whip
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 01d70dfad1f14d348ab6430ea99f27da, type: 3}
+  - movimiento: poison-sting
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 4335eac99d1519343ab754ce73eb4c44, type: 3}
+  - movimiento: pin-missile
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 61855cee6f2efad4289794e3d6f6a0d3, type: 3}
+  - movimiento: leer
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1be9204e1dc79214fa0f8adf5a1218df, type: 3}
+  - movimiento: bite
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 44fe2ee52164ffe42a44f43691c5dca4, type: 3}
+  - movimiento: roar
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f17851afe400e364081036d177379bf9, type: 3}
+  - movimiento: sing
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ed1503079d3e8e14d88d781c93c27977, type: 3}
+  - movimiento: supersonic
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 6841363b8a8e1c84483067142aa62900, type: 3}
+  - movimiento: disable
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: dd17f153b07c197478e84ed7e4f200c2, type: 3}
+  - movimiento: acid
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: df83ce519708f0c44a32ff38c8c55d64, type: 3}
+  - movimiento: ember
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 03a4cf961b25a394b8305a770cb223cd, type: 3}
+  - movimiento: flamethrower
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 90128f7295bcb524abadcfeeac2a75eb, type: 3}
+  - movimiento: mist
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 5841e8adc4369dc4e8217527850b2c09, type: 3}
+  - movimiento: water-gun
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 217c0c9ebdd37044da15640dd6488768, type: 3}
+  - movimiento: hydro-pump
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c0c1b28f7afd2a04c824ac8a04e0252f, type: 3}
+  - movimiento: surf
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 78d79be34bda33c41acc3026c03cbd5a, type: 3}
+  - movimiento: ice-beam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c1411dfec8318564bb534f25b1a2d4cd, type: 3}
+  - movimiento: blizzard
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 45fe809c74dcc6141996e7c6ab5c6965, type: 3}
+  - movimiento: psybeam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 749f6b34ed90cda42bab3fa9f480122d, type: 3}
+  - movimiento: bubble-beam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ddb68423038030642a00cf7105b779fb, type: 3}
+  - movimiento: aurora-beam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d40d079a2b77af04fa7148996c80c0f0, type: 3}
+  - movimiento: hyper-beam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 170f6b45e6fb8dd48af8399d7ac4e39a, type: 3}
+  - movimiento: peck
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e23c0e07f2e6e674d823aa1f72e293a6, type: 3}
+  - movimiento: drill-peck
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: b971fbf218dde3c4baec0ffc0cbeb381, type: 3}
+  - movimiento: submission
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a487e00fe6bcf0e43b74901aefe45524, type: 3}
+  - movimiento: low-kick
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7a2938b3761a7774d92bb7c8b3561a07, type: 3}
+  - movimiento: counter
+    carga: {fileID: 8300000, guid: aa0b0832f2eb44742b9f42edcaacb776, type: 3}
+    impacto: {fileID: 8300000, guid: 80adfc02739b4914aa2e53818cc5d6e3, type: 3}
+  - movimiento: seismic-toss
+    carga: {fileID: 8300000, guid: ebfa4aebf28344d49812d987686ff71d, type: 3}
+    impacto: {fileID: 8300000, guid: 2f6461323e0570549af2725e3cbf2c85, type: 3}
+  - movimiento: strength
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d52fd3103a7226247968f20bc06b1313, type: 3}
+  - movimiento: absorb
+    carga: {fileID: 8300000, guid: 88a697d52f73c184cba642a571bed23b, type: 3}
+    impacto: {fileID: 8300000, guid: 3fdda301b23bbec42a8fcb6882f0978c, type: 3}
+  - movimiento: mega-drain
+    carga: {fileID: 8300000, guid: 0e7399f27ad14d24c95e8aa2616d601e, type: 3}
+    impacto: {fileID: 8300000, guid: a0f8a358100c01840863f57024818819, type: 3}
+  - movimiento: leech-seed
+    carga: {fileID: 8300000, guid: 759792797aa7f614cbde4cf0ca3e97b2, type: 3}
+    impacto: {fileID: 8300000, guid: ce4fa1af262ec1044b32ab25f1e7029d, type: 3}
+  - movimiento: growth
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: efd5d210bbc155648b00c3c775bfb216, type: 3}
+  - movimiento: razor-leaf
+    carga: {fileID: 8300000, guid: 96b962cd50c2be24a952790f916f8c64, type: 3}
+    impacto: {fileID: 8300000, guid: 0209e74b4411d1d4e98112a151ded468, type: 3}
+  - movimiento: solar-beam
+    carga: {fileID: 8300000, guid: f8b3d7c5b64ccf5499484e648f85281c, type: 3}
+    impacto: {fileID: 8300000, guid: 38d264d891ed4cd4f882f7047bf6ec21, type: 3}
+  - movimiento: poison-powder
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: dd51a1a2b867aed42b8e168a296001f2, type: 3}
+  - movimiento: stun-spore
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d942457e4e7b3f34fa015c1a104cc622, type: 3}
+  - movimiento: sleep-powder
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e1b6eb4067885724e98b56dd2a68bac8, type: 3}
+  - movimiento: petal-dance
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7986b62d212402a41bcf4b2e91a80817, type: 3}
+  - movimiento: string-shot
+    carga: {fileID: 8300000, guid: 6a8bf45b1d7e69d4db70f0c273a03607, type: 3}
+    impacto: {fileID: 8300000, guid: a132558b8bd67d54bb01d39f927cddbd, type: 3}
+  - movimiento: fire-spin
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 03e8be50b991cd34ab2d2f338f808b99, type: 3}
+  - movimiento: thunder-shock
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1ea384f6534eba4488f83a3f013873a7, type: 3}
+  - movimiento: thunderbolt
+    carga: {fileID: 8300000, guid: e813c1dc853d6834790eef7fb4e0a110, type: 3}
+    impacto: {fileID: 8300000, guid: 33ad22750e2fe864a91a44d4a2a66135, type: 3}
+  - movimiento: thunder-wave
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f06dfb51ba90b594787aebdb26fd4f22, type: 3}
+  - movimiento: thunder
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f1a2e8cd6f8ac3d4889b9d494be62b4b, type: 3}
+  - movimiento: rock-throw
+    carga: {fileID: 8300000, guid: 56902d80115c53648b1625334ad35c61, type: 3}
+    impacto: {fileID: 8300000, guid: de2f25033425d2743a2cce5775096d5a, type: 3}
+  - movimiento: earthquake
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 30850880e8ae42b4e8aba952e589845c, type: 3}
+  - movimiento: fissure
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f8602d262e635c0429fde295cb2c0423, type: 3}
+  - movimiento: dig
+    carga: {fileID: 8300000, guid: 338a2654895707b479fd728975ea8929, type: 3}
+    impacto: {fileID: 8300000, guid: e804fb5576331ea43abf4304c47b21d9, type: 3}
+  - movimiento: toxic
+    carga: {fileID: 8300000, guid: 4a7c5c592fff9c044a014ce8075bc6e3, type: 3}
+    impacto: {fileID: 8300000, guid: 90b937085fd652a4e9c56bf068349962, type: 3}
+  - movimiento: confusion
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e89de0068dcb2424b8357cab2d9cb0c6, type: 3}
+  - movimiento: psychic
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3192d53efe670da43b9839314ef5f03a, type: 3}
+  - movimiento: hypnosis
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d13e472de614b6b4a9b108993de3a2f8, type: 3}
+  - movimiento: agility
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: b89e87c6617747e4faa9ad5233d40c0e, type: 3}
+  - movimiento: quick-attack
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fdd03c0f544a82d41a3e0b1d28ff8482, type: 3}
+  - movimiento: teleport
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 9e4dd4bb4f4a19e4ab47528bbf0783dd, type: 3}
+  - movimiento: night-shade
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 08573ba8b2c85c040a1d1a779a09d530, type: 3}
+  - movimiento: mimic
+    carga: {fileID: 8300000, guid: a1ec79f178109134480a1338819d3e74, type: 3}
+    impacto: {fileID: 8300000, guid: 2703a88daa2acd647b58940c8ae1025a, type: 3}
+  - movimiento: screech
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 29bac607aef802d4d91927ce05c80d17, type: 3}
+  - movimiento: double-team
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: dc437024553992b489615723fb60243d, type: 3}
+  - movimiento: recover
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 69044a71f2904744cb4a2f5e2007cc9b, type: 3}
+  - movimiento: harden
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e5912d1d3b424c24cb83b9e5cb12ac45, type: 3}
+  - movimiento: minimize
+    carga: {fileID: 8300000, guid: eff7092f88e875b41bdcf0b1d6caca58, type: 3}
+    impacto: {fileID: 8300000, guid: a2fda58615b3f2146a1cd1f998783df0, type: 3}
+  - movimiento: smokescreen
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a398394491c2c22408bb287d623f7571, type: 3}
+  - movimiento: confuse-ray
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c4975b02d3046884c9d2709adb91acf8, type: 3}
+  - movimiento: withdraw
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3f3e4290324ad8541bda4274864910d8, type: 3}
+  - movimiento: defense-curl
+    carga: {fileID: 8300000, guid: 14121c5878cad3647a690869a25133ba, type: 3}
+    impacto: {fileID: 8300000, guid: ed1fa2df55c415c47b4e7fcf512b5e3a, type: 3}
+  - movimiento: light-screen
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ee698199418309b4783140883cc55332, type: 3}
+  - movimiento: haze
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f7b47c4e32343bc4793beb95f4716e23, type: 3}
+  - movimiento: reflect
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e2333cbab985eac48826ca94703ce6ab, type: 3}
+  - movimiento: focus-energy
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 774be4e2ad06c624ca539b035532699b, type: 3}
+  - movimiento: metronome
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7935c9d03746c8044b269895315d16ec, type: 3}
+  - movimiento: self-destruct
+    carga: {fileID: 8300000, guid: 7ff1b5e85502140438fefa3614114b8a, type: 3}
+    impacto: {fileID: 8300000, guid: 3c44143789267e34587d0783c0309196, type: 3}
+  - movimiento: lick
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 81a0768438d07824995c1731bf680901, type: 3}
+  - movimiento: smog
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 616eb722ee5898241875d9c571bc8ad8, type: 3}
+  - movimiento: fire-blast
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 04f8b16120de0834caae38cad25e38f8, type: 3}
+  - movimiento: swift
+    carga: {fileID: 8300000, guid: 10805a9eb54405940a9e6734270af66b, type: 3}
+    impacto: {fileID: 8300000, guid: d58434e690261e245a49a7f413e0e4dc, type: 3}
+  - movimiento: skull-bash
+    carga: {fileID: 8300000, guid: f90190f09a958de409d13edd8deaf094, type: 3}
+    impacto: {fileID: 8300000, guid: a7a0796e3182051419cfc06b7bc9bdb6, type: 3}
+  - movimiento: amnesia
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: bcbbd55a7532cc640ba121e781574106, type: 3}
+  - movimiento: kinesis
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2f35a38acf68da54fa779019bc6186a0, type: 3}
+  - movimiento: soft-boiled
+    carga: {fileID: 8300000, guid: fa2cc8da031c3844d9ac65ace9730c50, type: 3}
+    impacto: {fileID: 8300000, guid: fc45591e128585e4ba8a01a25499571a, type: 3}
+  - movimiento: high-jump-kick
+    carga: {fileID: 8300000, guid: 04ac4e543d7d6af4ca57181a91ec7ccf, type: 3}
+    impacto: {fileID: 8300000, guid: ff4643d4c7e6f694d82b2cfced8eecc6, type: 3}
+  - movimiento: glare
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 218e057dacae8444e92d5cb426c838ab, type: 3}
+  - movimiento: dream-eater
+    carga: {fileID: 8300000, guid: e2b9487263254fe4abfa666011049fe4, type: 3}
+    impacto: {fileID: 8300000, guid: d998fd89419c62c4e8bdffd699d0d737, type: 3}
+  - movimiento: poison-gas
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d86aa31e97ca8584894ec418ffe01793, type: 3}
+  - movimiento: leech-life
+    carga: {fileID: 8300000, guid: b4f6ef709db4fdc4699a382adcee83a9, type: 3}
+    impacto: {fileID: 8300000, guid: 1f981892be829434d82f88a41077f4f4, type: 3}
+  - movimiento: sky-attack
+    carga: {fileID: 8300000, guid: 5450cee5262e04742a839a6bb74e1cdd, type: 3}
+    impacto: {fileID: 8300000, guid: e7649d9da37a13d4eabb4fa2b0ac586e, type: 3}
+  - movimiento: transform
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: eeb40632455cd94418179a069c086ad7, type: 3}
+  - movimiento: spore
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c875ec352f597834a8982737f4f511c3, type: 3}
+  - movimiento: splash
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: cae00dc9cb4f02a40b2d92fb9baa8c2d, type: 3}
+  - movimiento: acid-armor
+    carga: {fileID: 8300000, guid: 8ca35de9008e3a34fabcd725cc1fe0f2, type: 3}
+    impacto: {fileID: 8300000, guid: 8cbe33d441e24a4439d05a8bdaec360e, type: 3}
+  - movimiento: crabhammer
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d239efa1ad99fdc42a21e83b2078d9a4, type: 3}
+  - movimiento: explosion
+    carga: {fileID: 8300000, guid: 76beb507f6b963e49ad26c1c7e12e922, type: 3}
+    impacto: {fileID: 8300000, guid: e5832c8904e81e647976373a8aa92d7b, type: 3}
+  - movimiento: fury-swipes
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 01d4046c257889e41a25b33fff47fd24, type: 3}
+  - movimiento: rock-slide
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 199f67fcf6f07c845b3da800d6de0a7c, type: 3}
+  - movimiento: hyper-fang
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fa04a30c90b626647bad1a77326f373f, type: 3}
+  - movimiento: conversion
+    carga: {fileID: 8300000, guid: a270df82539f1cb4c9ee3443aaa54a8e, type: 3}
+    impacto: {fileID: 8300000, guid: 8a97cfa0773fbd948afbaad8fc552e48, type: 3}
+  - movimiento: tri-attack
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1828497e88ae5d54aa2aea2a1db4766d, type: 3}
+  - movimiento: super-fang
+    carga: {fileID: 8300000, guid: cd1efe56b4f8e7349afac2fcbf8ead13, type: 3}
+    impacto: {fileID: 8300000, guid: 98e82a1de0756a249b84200452b98da1, type: 3}
+  - movimiento: slash
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ce65b8c3db4393c42bb179a3f710a359, type: 3}
+  - movimiento: substitute
+    carga: {fileID: 8300000, guid: 787e0d86be149284a8de647940b462a1, type: 3}
+    impacto: {fileID: 8300000, guid: 85d8e05dec120164b84bc5931b85e262, type: 3}
+  - movimiento: flame-wheel
+    carga: {fileID: 8300000, guid: efba655dc9a510d4c8f398777963547d, type: 3}
+    impacto: {fileID: 8300000, guid: 5dfef24edff844844994e51063a94bd0, type: 3}
+  - movimiento: snore
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8c249dacaaf18fb46a2ce853ff63915f, type: 3}
+  - movimiento: curse
+    carga: {fileID: 8300000, guid: 50fe7000ad9e96e43b5d602f79d486bb, type: 3}
+    impacto: {fileID: 8300000, guid: d1cb3de1a5d0c1544a307c4d111ced62, type: 3}
+  - movimiento: flail
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8dc76862b33f7e14c8de08f8e05aa92b, type: 3}
+  - movimiento: aeroblast
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 43cc24cfed3aa1148b1a1fdb7a8cf08a, type: 3}
+  - movimiento: reversal
+    carga: {fileID: 8300000, guid: 06d977dfc1d2d0f4eaefb86fecea576a, type: 3}
+    impacto: {fileID: 8300000, guid: b143fb6874e76d248b9349039795d55b, type: 3}
+  - movimiento: spite
+    carga: {fileID: 8300000, guid: a734d274d6a24654a8c3226517c5d26b, type: 3}
+    impacto: {fileID: 8300000, guid: 5d2df49e38823de418abf23f12872cde, type: 3}
+  - movimiento: powder-snow
+    carga: {fileID: 8300000, guid: 63f0d221e3bd5bb42b939d92771b56dc, type: 3}
+    impacto: {fileID: 8300000, guid: fab284c933ab5294ea46274a29ad0705, type: 3}
+  - movimiento: protect
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 462e32f48d2f1c843af0a1d883571792, type: 3}
+  - movimiento: mach-punch
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 881cc6e8eb5a2d1408b2f99e0f78ac94, type: 3}
+  - movimiento: scary-face
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c73c8279a26d7214084b8ff76623363b, type: 3}
+  - movimiento: sweet-kiss
+    carga: {fileID: 8300000, guid: 6f7a91d4fcd66c74991bbdc2b6abade3, type: 3}
+    impacto: {fileID: 8300000, guid: 7b27cf088104efe4b8de373212ed312e, type: 3}
+  - movimiento: belly-drum
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c6b1e28cdd58a844eae3ddda167224c0, type: 3}
+  - movimiento: sludge-bomb
+    carga: {fileID: 8300000, guid: 2efec861179d51f42baaa89f3b066080, type: 3}
+    impacto: {fileID: 8300000, guid: 18a21c4693f0bee4d8647f5db44cd653, type: 3}
+  - movimiento: mud-slap
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3c62d9f86e65b644f8aaf1cbeec1c183, type: 3}
+  - movimiento: spikes
+    carga: {fileID: 8300000, guid: 4303cd9bf7a5d274aa622f7be66cf7fe, type: 3}
+    impacto: {fileID: 8300000, guid: 4f14f61996e610e45954a27398661245, type: 3}
+  - movimiento: zap-cannon
+    carga: {fileID: 8300000, guid: 83e62c21f8573ee45a51ae43e8425970, type: 3}
+    impacto: {fileID: 8300000, guid: b1cfb977e14fac4468c8cbe685545526, type: 3}
+  - movimiento: destiny-bond
+    carga: {fileID: 8300000, guid: 597fc2e98109fea4f8baf2fb80b03a7d, type: 3}
+    impacto: {fileID: 8300000, guid: bdb36b45d3b3b9b4eb15eaf1797328ff, type: 3}
+  - movimiento: perish-song
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8b5c28f2db33c1e45be2dac8d46da997, type: 3}
+  - movimiento: icy-wind
+    carga: {fileID: 8300000, guid: fd2b7c16e3e467a43b8470c747d5555e, type: 3}
+    impacto: {fileID: 8300000, guid: dbbd0c1f17fd20941aaa4d5a750d3105, type: 3}
+  - movimiento: detect
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 6e94ef99a62b06e439e2f48c7b382769, type: 3}
+  - movimiento: bone-rush
+    carga: {fileID: 8300000, guid: 93224b6178616ea4ea15c0dfae026738, type: 3}
+    impacto: {fileID: 8300000, guid: 194f02a99c0382d42bff83a8a866c329, type: 3}
+  - movimiento: lock-on
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7c12cbf7cc2dd3a4c865c23e50cdf61d, type: 3}
+  - movimiento: outrage
+    carga: {fileID: 8300000, guid: d4c2c3c283acf524e8125b6b7459be49, type: 3}
+    impacto: {fileID: 8300000, guid: bd776f45775ccee45ad16605bfbc5647, type: 3}
+  - movimiento: sandstorm
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7326b885e8b7dda4ea4fa441a19edca4, type: 3}
+  - movimiento: giga-drain
+    carga: {fileID: 8300000, guid: e2387c25495af374d98946957b88043e, type: 3}
+    impacto: {fileID: 8300000, guid: b11ef461966642247b8646a2ab9f59a4, type: 3}
+  - movimiento: endure
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 16492f545b406e948b35436f9cafde83, type: 3}
+  - movimiento: charm
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 9ac09f2a581a48542955c8c25c8946ed, type: 3}
+  - movimiento: rollout
+    carga: {fileID: 8300000, guid: b4dd4a97f6a00af438426edb61048e01, type: 3}
+    impacto: {fileID: 8300000, guid: f24d4691d4fbf4e46b27daf4a38686f8, type: 3}
+  - movimiento: false-swipe
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 6ff073585f1d18c4aa0fde6563ddbb1b, type: 3}
+  - movimiento: swagger
+    carga: {fileID: 8300000, guid: 9c7d8fdcaa6bcad4e99d9a61ca3e91a5, type: 3}
+    impacto: {fileID: 8300000, guid: c484c538f9e3ee5489e1b135104f1eff, type: 3}
+  - movimiento: spark
+    carga: {fileID: 8300000, guid: 30b82ac95b257d64fa7994f919de45ac, type: 3}
+    impacto: {fileID: 8300000, guid: 3ef2e743027354447b50d36fba30c192, type: 3}
+  - movimiento: fury-cutter
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 441c7fb8613d3894eb45fdfd2a9b815f, type: 3}
+  - movimiento: steel-wing
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 9beb68e5fd8ac8942aeb82242cecac21, type: 3}
+  - movimiento: mean-look
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 43c686b8fad23c64da2c5dbcba3803e1, type: 3}
+  - movimiento: attract
+    carga: {fileID: 8300000, guid: 78b417c5cda3cd2478db921e536c4dec, type: 3}
+    impacto: {fileID: 8300000, guid: b669f369ba2bd1e408a035a5f3cf0cfa, type: 3}
+  - movimiento: sleep-talk
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a951f25d2c77b4b44b55fced8723eec8, type: 3}
+  - movimiento: heal-bell
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3e243f1b7ffca524eb37734addf5cddf, type: 3}
+  - movimiento: present
+    carga: {fileID: 8300000, guid: 57a6eeb92480f4f4d9279028d5af4c89, type: 3}
+    impacto: {fileID: 8300000, guid: 1b280dbabc0151a43a09c2fdaa2588dc, type: 3}
+  - movimiento: safeguard
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 04451e816ecda8742953ee50dca67f1b, type: 3}
+  - movimiento: pain-split
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3057c510818e25540b82574c570ef15c, type: 3}
+  - movimiento: sacred-fire
+    carga: {fileID: 8300000, guid: ae1db371c8da2274585aa25a033aadc6, type: 3}
+    impacto: {fileID: 8300000, guid: c6053b355beae374b881e1d6789deead, type: 3}
+  - movimiento: dynamic-punch
+    carga: {fileID: 8300000, guid: f7ae3334739674d48aafc15c39645ba1, type: 3}
+    impacto: {fileID: 8300000, guid: 0adbda725cb6dda4b8b539121b6db8a3, type: 3}
+  - movimiento: megahorn
+    carga: {fileID: 8300000, guid: 7f8a8e46f2822334e82b4e2dd1ca3f15, type: 3}
+    impacto: {fileID: 8300000, guid: 43f34117414635644a1644293a609cb2, type: 3}
+  - movimiento: dragon-breath
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 173536c0b70c9e748b8f377b349df3e3, type: 3}
+  - movimiento: baton-pass
+    carga: {fileID: 8300000, guid: d6dbc0c5a268f2e42950129f42821ebc, type: 3}
+    impacto: {fileID: 8300000, guid: 06badd92ecc761547bae95fcde8281be, type: 3}
+  - movimiento: encore
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8a2ce2aeddb896348b76b6b7d4a5c176, type: 3}
+  - movimiento: pursuit
+    carga: {fileID: 8300000, guid: bdbd0b1ad5db88e44b26e409f9cad894, type: 3}
+    impacto: {fileID: 8300000, guid: fcf8f871f13d07c49b35c4d4f8888400, type: 3}
+  - movimiento: rapid-spin
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3c3cccea44ca99a4f883b00c7ad14140, type: 3}
+  - movimiento: sweet-scent
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e02cc4228c368214ea62c3ec3f53f659, type: 3}
+  - movimiento: iron-tail
+    carga: {fileID: 8300000, guid: f7ff3e9a27976394b9e16cfd078bc39f, type: 3}
+    impacto: {fileID: 8300000, guid: b8b89397767cfe94bbfb3977530fe4c9, type: 3}
+  - movimiento: metal-claw
+    carga: {fileID: 8300000, guid: 4354ccf2012c7e34d979ec5aad60597c, type: 3}
+    impacto: {fileID: 8300000, guid: 2bf3aa1303dca6844b45d68d871c76fd, type: 3}
+  - movimiento: vital-throw
+    carga: {fileID: 8300000, guid: 3b062c6a4dd5bed42844d8d04ddc618f, type: 3}
+    impacto: {fileID: 8300000, guid: af33793ab52712e45bd6636111861f66, type: 3}
+  - movimiento: morning-sun
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7a5784a751917ba43ad2696cad0f8295, type: 3}
+  - movimiento: synthesis
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f4ba04dceb30fe44682b747b04868aad, type: 3}
+  - movimiento: moonlight
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2c1a04eb5ac0c0b40b2eff1f3e1a73c8, type: 3}
+  - movimiento: hidden-power
+    carga: {fileID: 8300000, guid: 6462d79efac756c4293448771f8faead, type: 3}
+    impacto: {fileID: 8300000, guid: 4fe8cedef9b33bc46b481a5927bd1a1c, type: 3}
+  - movimiento: cross-chop
+    carga: {fileID: 8300000, guid: 3de32ff69ea4e7443927e28f2b7c74f5, type: 3}
+    impacto: {fileID: 8300000, guid: 2455f41aee8aceb4ab2487f565805d88, type: 3}
+  - movimiento: twister
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 59a0f567f9c2dcd4aad63d16d966ef5d, type: 3}
+  - movimiento: rain-dance
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f55a47d937f23ff42a6016858fc732b4, type: 3}
+  - movimiento: sunny-day
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: eb976ff0a81e22849b974a63dc0e969a, type: 3}
+  - movimiento: crunch
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 0c926463b3b690143994d3f3983a60a3, type: 3}
+  - movimiento: mirror-coat
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2f5c12edddeb71b44a4ae7f50cff255f, type: 3}
+  - movimiento: psych-up
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 12b5117708e53734a9b17857bbb5cc3a, type: 3}
+  - movimiento: extreme-speed
+    carga: {fileID: 8300000, guid: 93f47cbc6881694428743dfbe83da348, type: 3}
+    impacto: {fileID: 8300000, guid: 98448a2552761fc4abeef58ff36ac7c9, type: 3}
+  - movimiento: ancient-power
+    carga: {fileID: 8300000, guid: b0c0166a36a873b4c92f5a997ba8fdb8, type: 3}
+    impacto: {fileID: 8300000, guid: 6ad5d4c0977d3e243826fa08fc309f2a, type: 3}
+  - movimiento: shadow-ball
+    carga: {fileID: 8300000, guid: 8f7521bb5bc57924a8849f2b0216ddad, type: 3}
+    impacto: {fileID: 8300000, guid: ca45dd1cf1b352f438f7547d21908c05, type: 3}
+  - movimiento: future-sight
+    carga: {fileID: 8300000, guid: de6df7ea09b398c4e8e93525ea8e57c9, type: 3}
+    impacto: {fileID: 8300000, guid: 62662b9911e3ab14388869c8646de3ef, type: 3}
+  - movimiento: rock-smash
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 17097330f26f397419b66526bbd4ba01, type: 3}
+  - movimiento: whirlpool
+    carga: {fileID: 8300000, guid: b0c04c995e126b749a18510cbb274ebd, type: 3}
+    impacto: {fileID: 8300000, guid: a0aee6fc46e1c204db6f28704b7bcd04, type: 3}
+  - movimiento: beat-up
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 302e884effb55a54f9b140ac31a8df86, type: 3}
+  - movimiento: fake-out
+    carga: {fileID: 8300000, guid: 02f97edd366ef394fae9348656d00d9b, type: 3}
+    impacto: {fileID: 8300000, guid: e94df46eaf2597843af97dcaa87c138f, type: 3}
+  - movimiento: uproar
+    carga: {fileID: 8300000, guid: 0fe9be37726ab1f4cb7a59db8e46c669, type: 3}
+    impacto: {fileID: 8300000, guid: aced632fb3f20c340b572c4aaa17a59f, type: 3}
+  - movimiento: stockpile
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 460da810ae3d6954e89922b0c25f1e95, type: 3}
+  - movimiento: spit-up
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 0529cb298e53106429e61e98b23b6114, type: 3}
+  - movimiento: swallow
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 4c6ffacf6ab9066438f410da447c0544, type: 3}
+  - movimiento: heat-wave
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 51065408085841a43a3d0ef373ed1cfa, type: 3}
+  - movimiento: torment
+    carga: {fileID: 8300000, guid: 4f30383af91983e41988ea97cbce7701, type: 3}
+    impacto: {fileID: 8300000, guid: 2f337e8d09d15e842bb281b3af024fb0, type: 3}
+  - movimiento: flatter
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 463fb6591f78d104abc3980e967fe509, type: 3}
+  - movimiento: will-o-wisp
+    carga: {fileID: 8300000, guid: 0a35a1b77c0017f4fac8821f937f8b60, type: 3}
+    impacto: {fileID: 8300000, guid: 8b019d319c38dee4b9cf826dbaf92b3a, type: 3}
+  - movimiento: memento
+    carga: {fileID: 8300000, guid: 6470448c2608a04428cfa70f94df64e4, type: 3}
+    impacto: {fileID: 8300000, guid: 37bcc40cd79cfe94cab8498a32d430a6, type: 3}
+  - movimiento: facade
+    carga: {fileID: 8300000, guid: 18102e878215b00499d74c4eecd8b9c4, type: 3}
+    impacto: {fileID: 8300000, guid: 7a2e19ae2e6e00d48a946cafd7460cbd, type: 3}
+  - movimiento: focus-punch
+    carga: {fileID: 8300000, guid: 9012498f958544b488f460d787710a10, type: 3}
+    impacto: {fileID: 8300000, guid: b5af23c5311259c4dbe503d5ce77f6cf, type: 3}
+  - movimiento: follow-me
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fb0f539ea37bf82498be23b76a74e84f, type: 3}
+  - movimiento: charge
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 29f9e65319599bc4cb2986e323cc4c96, type: 3}
+  - movimiento: taunt
+    carga: {fileID: 8300000, guid: 1ff37253c0ed33b44a36a8635133d8d8, type: 3}
+    impacto: {fileID: 8300000, guid: d9936d8e3b6047b49886ae8217bff773, type: 3}
+  - movimiento: helping-hand
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d8c531208a8cb24409a59bad9112ecb2, type: 3}
+  - movimiento: trick
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f57f074c919861f40a12b5fcd76f67a9, type: 3}
+  - movimiento: role-play
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a2594d60d65c8a44f844a4e3974232ea, type: 3}
+  - movimiento: wish
+    carga: {fileID: 8300000, guid: 7d2357c82e3f5af47a9e613ad327055d, type: 3}
+    impacto: {fileID: 8300000, guid: ecfb77035257a1842b2ab144db326751, type: 3}
+  - movimiento: ingrain
+    carga: {fileID: 8300000, guid: 52c249d2230aa8d4eaae49732c1b375c, type: 3}
+    impacto: {fileID: 8300000, guid: 921e725d6c5a2264e8a11014de14d70e, type: 3}
+  - movimiento: superpower
+    carga: {fileID: 8300000, guid: 9435f752b42e0574aae796994ee6fa7e, type: 3}
+    impacto: {fileID: 8300000, guid: b5536db4044a12c48bfd824b00cbd0c8, type: 3}
+  - movimiento: recycle
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f6a309d20905e6749bd91358b6afff38, type: 3}
+  - movimiento: revenge
+    carga: {fileID: 8300000, guid: d4611dc7546d80f439fcbf28de37944e, type: 3}
+    impacto: {fileID: 8300000, guid: 0310d30b5f3cf57499fc24e93f56366c, type: 3}
+  - movimiento: brick-break
+    carga: {fileID: 8300000, guid: e34632c10d2287c4ba5eb2f7ed0366d5, type: 3}
+    impacto: {fileID: 8300000, guid: afbc00cecf10adf48a37588a720e4bde, type: 3}
+  - movimiento: yawn
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3e5b14431b6256f4db858b1b2be3b6b3, type: 3}
+  - movimiento: knock-off
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 0732d92ecda32ab48ba85e7c6a26ff56, type: 3}
+  - movimiento: endeavor
+    carga: {fileID: 8300000, guid: 23a0276024015de448b768266ed1fd1c, type: 3}
+    impacto: {fileID: 8300000, guid: 7fa1decafd10c274091b8c55f4ab97f0, type: 3}
+  - movimiento: eruption
+    carga: {fileID: 8300000, guid: 0a6a2557b8101b84da8df0eebc8192be, type: 3}
+    impacto: {fileID: 8300000, guid: e8260553931580e478654e12b4e93003, type: 3}
+  - movimiento: skill-swap
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 82ffdb29f3a61bb4ab87585d5ec7e5f7, type: 3}
+  - movimiento: imprison
+    carga: {fileID: 8300000, guid: cd283b65635d38645b58ae49eab8fa58, type: 3}
+    impacto: {fileID: 8300000, guid: 3238e07c52aea3c4cba0476bfbfb0e1d, type: 3}
+  - movimiento: grudge
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 9359892b63e28ea40a9e1f853e2503d3, type: 3}
+  - movimiento: dive
+    carga: {fileID: 8300000, guid: b451d233bf746384dbc581ca011c272e, type: 3}
+    impacto: {fileID: 8300000, guid: b5e045088b9f7e34f8a4dbc2304f58aa, type: 3}
+  - movimiento: arm-thrust
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2572ec932ff909a4a948ac5599ff86a6, type: 3}
+  - movimiento: tail-glow
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 10cd0be3f0371f542b24ef861f2ef0da, type: 3}
+  - movimiento: luster-purge
+    carga: {fileID: 8300000, guid: 04e98ade7bc40cc4c85e7aad79e1e799, type: 3}
+    impacto: {fileID: 8300000, guid: 5d42349651d3a0c4190e192be3ca422b, type: 3}
+  - movimiento: mist-ball
+    carga: {fileID: 8300000, guid: 6dc622bc168b13a429683e1b8cdd52e6, type: 3}
+    impacto: {fileID: 8300000, guid: 23250e08d5413584c8ed7ba905861e68, type: 3}
+  - movimiento: feather-dance
+    carga: {fileID: 8300000, guid: 53f2a01f1130f704d8782b807c7a8a91, type: 3}
+    impacto: {fileID: 8300000, guid: 931966adb19851642830ccfbd916bf75, type: 3}
+  - movimiento: teeter-dance
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 416d74dc597f17c4e82c57d232948ab0, type: 3}
+  - movimiento: blaze-kick
+    carga: {fileID: 8300000, guid: debb3295ba516774b866fe1cf06d6b03, type: 3}
+    impacto: {fileID: 8300000, guid: a42a8f14b129cb94ea43a76abb1c8572, type: 3}
+  - movimiento: slack-off
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7e9b51f745c6eda44b25889b750b91b7, type: 3}
+  - movimiento: poison-fang
+    carga: {fileID: 8300000, guid: 67e5dbdfebf1dce439694e669a537fc4, type: 3}
+    impacto: {fileID: 8300000, guid: fd23a39deb897e048bb0efecafe617c7, type: 3}
+  - movimiento: crush-claw
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: bb79b04775ceb644ba09b069678df9e7, type: 3}
+  - movimiento: meteor-mash
+    carga: {fileID: 8300000, guid: e21badf5de4ab254ab4e8d30d9f37418, type: 3}
+    impacto: {fileID: 8300000, guid: a4f0c18196f41994aa7b614c030aa2ec, type: 3}
+  - movimiento: astonish
+    carga: {fileID: 8300000, guid: 7a28ad32a610cd948a22c3ba7c3587a5, type: 3}
+    impacto: {fileID: 8300000, guid: db4adc924c1cb464fbc4045343b0f358, type: 3}
+  - movimiento: weather-ball
+    carga: {fileID: 8300000, guid: 3dcac113900810b4e9ad249ea5aec73e, type: 3}
+    impacto: {fileID: 8300000, guid: 291292140074044469690893e42f7d74, type: 3}
+  - movimiento: aromatherapy
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 431f7a6ce913a0b458d2d2b6f0afdf84, type: 3}
+  - movimiento: fake-tears
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2fff10c4dec57da4799f8f9598292e86, type: 3}
+  - movimiento: air-cutter
+    carga: {fileID: 8300000, guid: 2617ce7a6a88e2441adf01b976431dbe, type: 3}
+    impacto: {fileID: 8300000, guid: 6c822bc222675df46958018214f71872, type: 3}
+  - movimiento: overheat
+    carga: {fileID: 8300000, guid: 516368f77a2ea71488cc5bf0f2a53d64, type: 3}
+    impacto: {fileID: 8300000, guid: b7a32467f05d1a543aad1f409c4bb821, type: 3}
+  - movimiento: rock-tomb
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: b52885783866e9f4d8e838c786542979, type: 3}
+  - movimiento: metal-sound
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a77c37a87b5afa344857c2de9086a86c, type: 3}
+  - movimiento: tickle
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ded0fddd63046fd43a621f8a7f40ec45, type: 3}
+  - movimiento: cosmic-power
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a9459b0da90f88c43b5a29e8f1add3da, type: 3}
+  - movimiento: water-spout
+    carga: {fileID: 8300000, guid: 3f64e76ebdbf3ff4190d638fa41109a0, type: 3}
+    impacto: {fileID: 8300000, guid: 47a449f802ac77d4a9f4cd977f496e87, type: 3}
+  - movimiento: shadow-punch
+    carga: {fileID: 8300000, guid: ffed31356a7b1a04a9d67a15b30526b9, type: 3}
+    impacto: {fileID: 8300000, guid: 3888a7d8c01cb1b4e89b5685d01c247b, type: 3}
+  - movimiento: extrasensory
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e5246bc837246df4ebdcffaa250b6b72, type: 3}
+  - movimiento: sand-tomb
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 861412d735467db4493dbe034177298b, type: 3}
+  - movimiento: sheer-cold
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 781553c5bbcda834e9cdb7ef2e9624c5, type: 3}
+  - movimiento: muddy-water
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 59724b5edaa4d9141b13c1e1857e51a5, type: 3}
+  - movimiento: bullet-seed
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1748e065d1c8cb14caaafe40cbb7134e, type: 3}
+  - movimiento: aerial-ace
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 68c9dc3c24d42124493de23e840abaa3, type: 3}
+  - movimiento: iron-defense
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2c7c783d61fb1cb4ca2d6ce5490760d4, type: 3}
+  - movimiento: block
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: b1c42ac92b5ed4247923ceba2f83afb1, type: 3}
+  - movimiento: dragon-claw
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: df48b2ad964e60147a8aedc87ce3ce6c, type: 3}
+  - movimiento: bulk-up
+    carga: {fileID: 8300000, guid: 68eed40373943f140bd965844463127b, type: 3}
+    impacto: {fileID: 8300000, guid: 68065e0fb4aeca3488d2c015f4c2d2f0, type: 3}
+  - movimiento: bounce
+    carga: {fileID: 8300000, guid: 60b827216d86ca9439b42fbe95b366d5, type: 3}
+    impacto: {fileID: 8300000, guid: 112b5a7dd52f16948b9a7a74e14a7ae7, type: 3}
+  - movimiento: mud-shot
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 4899d9db25d0aef489de1d4aa01bda71, type: 3}
+  - movimiento: poison-tail
+    carga: {fileID: 8300000, guid: 671e065071e97324b915f46634c1abb5, type: 3}
+    impacto: {fileID: 8300000, guid: 6a21f419a1d187d47859ffba056ea6b4, type: 3}
+  - movimiento: covet
+    carga: {fileID: 8300000, guid: 59ad0eb10df0df04c9dcd66325a4b5f2, type: 3}
+    impacto: {fileID: 8300000, guid: 6c219bda5c97d9142a17d7f5204063ab, type: 3}
+  - movimiento: magical-leaf
+    carga: {fileID: 8300000, guid: 55544f20cbed856419e12735505b1d8e, type: 3}
+    impacto: {fileID: 8300000, guid: b74b60b57f96233489e0eb6c275f8ae0, type: 3}
+  - movimiento: calm-mind
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7579bed8347bde24ab95e1dab502d279, type: 3}
+  - movimiento: leaf-blade
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 13956968a5cf1cb4cac907f9d7f896ef, type: 3}
+  - movimiento: dragon-dance
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c7009c20c50d3184a890a8bc6f6aa3fe, type: 3}
+  - movimiento: rock-blast
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fb3edc61cfb5435498c54f185249f421, type: 3}
+  - movimiento: shock-wave
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a7c077e77ae8d65438479694ed719f82, type: 3}
+  - movimiento: water-pulse
+    carga: {fileID: 8300000, guid: 118be2a30ee3db345b39c73d33c0acc4, type: 3}
+    impacto: {fileID: 8300000, guid: 76cf500e3a187ae4a8d157addd49fd88, type: 3}
+  - movimiento: doom-desire
+    carga: {fileID: 8300000, guid: 81d23357a35727743a38d3b702496e91, type: 3}
+    impacto: {fileID: 8300000, guid: 171b9a65280e94049a60ba7b7e282fce, type: 3}
+  - movimiento: psycho-boost
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f5929775c865ff14095d814dd552b56b, type: 3}
+  - movimiento: roost
+    carga: {fileID: 8300000, guid: b7ba3358b7940834cb2ab597a0f42ba9, type: 3}
+    impacto: {fileID: 8300000, guid: 7fbeeebde2f32fc4ea99ece2cbec98eb, type: 3}
+  - movimiento: gravity
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 94d43df0a16cdf34da0f452242906854, type: 3}
+  - movimiento: hammer-arm
+    carga: {fileID: 8300000, guid: 98cee80b5533ae842b02cb0848edbf83, type: 3}
+    impacto: {fileID: 8300000, guid: cbb5359de14594d4b8986634f6579208, type: 3}
+  - movimiento: gyro-ball
+    carga: {fileID: 8300000, guid: 4bcc2c1f5681e284a960fd2e49804d42, type: 3}
+    impacto: {fileID: 8300000, guid: c72aeb935a6cd3a4c80abf94308c782d, type: 3}
+  - movimiento: healing-wish
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d842d672b06c6404b89d48db59c8aef0, type: 3}
+  - movimiento: brine
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 9330efa95e6e99b489ebd585cf480ad0, type: 3}
+  - movimiento: feint
+    carga: {fileID: 8300000, guid: 6e78d8bfdd3b3774cb10e8d289eba362, type: 3}
+    impacto: {fileID: 8300000, guid: efac7be7d8fee4f44b91794b81a28090, type: 3}
+  - movimiento: pluck
+    carga: {fileID: 8300000, guid: c3ee40339c4757349a96b7b6f5b71727, type: 3}
+    impacto: {fileID: 8300000, guid: c42a4ad641a999741b1114e12f2730eb, type: 3}
+  - movimiento: tailwind
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 20138cc7b61632645aaad540158dc414, type: 3}
+  - movimiento: acupressure
+    carga: {fileID: 8300000, guid: 0831aa53455900247ad09d51fc9a7593, type: 3}
+    impacto: {fileID: 8300000, guid: 4fce6c0487aff4642a6a15210ab1c7c1, type: 3}
+  - movimiento: metal-burst
+    carga: {fileID: 8300000, guid: ef08d195cce665e4b9f5f478186e2e29, type: 3}
+    impacto: {fileID: 8300000, guid: ca019c1e5bf630d43a94a2378aa42c78, type: 3}
+  - movimiento: u-turn
+    carga: {fileID: 8300000, guid: 64fef0a57b69d5b4bad3a5750ed2faaf, type: 3}
+    impacto: {fileID: 8300000, guid: a24cdaa06e2d361478979e3c63ca0665, type: 3}
+  - movimiento: close-combat
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7e46651b9c56d3544959a623a3ab290c, type: 3}
+  - movimiento: payback
+    carga: {fileID: 8300000, guid: 1cb069953e9615e4293aa01830796eda, type: 3}
+    impacto: {fileID: 8300000, guid: ac2918e15c7f43e4c9cb0a9917febb52, type: 3}
+  - movimiento: assurance
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: bdc58e12c7ceeea4b83143350dadbcaf, type: 3}
+  - movimiento: fling
+    carga: {fileID: 8300000, guid: 833cc767f1f747e4d816bb793ed2ca31, type: 3}
+    impacto: {fileID: 8300000, guid: 1fe62805333a37d418b19dc9fd5e3a0e, type: 3}
+  - movimiento: power-trick
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8d93aa602cabb2d44938478d16ff7f5c, type: 3}
+  - movimiento: gastro-acid
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 14fa3f38b7ade844095af28fb90075c9, type: 3}
+  - movimiento: copycat
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1c91e9c59b2731943a3814af388d3f20, type: 3}
+  - movimiento: power-swap
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7152ceab34db5bb47905d06bb607712b, type: 3}
+  - movimiento: guard-swap
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ce11a9331b9823347b7e32e0242bae34, type: 3}
+  - movimiento: last-resort
+    carga: {fileID: 8300000, guid: b91a9144c1640704fab812c09976d898, type: 3}
+    impacto: {fileID: 8300000, guid: 7ccec0e3cf565524c89dcb0e2c692c64, type: 3}
+  - movimiento: worry-seed
+    carga: {fileID: 8300000, guid: 20fac2c3328eaef48ac094ad118b3884, type: 3}
+    impacto: {fileID: 8300000, guid: 0c2c2f4400a9d784bb8eb82f502d8614, type: 3}
+  - movimiento: sucker-punch
+    carga: {fileID: 8300000, guid: 8d4ed844f962c5345937425cef293a07, type: 3}
+    impacto: {fileID: 8300000, guid: 8d86b992cb1bf5c42a7aca6fad6685ee, type: 3}
+  - movimiento: toxic-spikes
+    carga: {fileID: 8300000, guid: 51eabb4abbb845f4ba4083f3ca06e7cf, type: 3}
+    impacto: {fileID: 8300000, guid: 548506baf85fc22469f412570fb155e7, type: 3}
+  - movimiento: heart-swap
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fd3942c190f66f24e8db78124c635f48, type: 3}
+  - movimiento: aqua-ring
+    carga: {fileID: 8300000, guid: e445ea4962d81254ea2d3b5731869015, type: 3}
+    impacto: {fileID: 8300000, guid: 1e720c3b9d6536341b935f826994c15b, type: 3}
+  - movimiento: magnet-rise
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 0a582c8cc36be4c428e44a4c46967bb8, type: 3}
+  - movimiento: flare-blitz
+    carga: {fileID: 8300000, guid: fae75b5d2c37fef43a8133fcd97e2a59, type: 3}
+    impacto: {fileID: 8300000, guid: 93d17f1c775650f4e87e78cd8bc16fbe, type: 3}
+  - movimiento: force-palm
+    carga: {fileID: 8300000, guid: e249be6f3cb7b5347bff4767f3bc28ee, type: 3}
+    impacto: {fileID: 8300000, guid: d9b41871deab0784ba72915b7da52d7a, type: 3}
+  - movimiento: aura-sphere
+    carga: {fileID: 8300000, guid: 9238d164c36c7b345aab0906c3b3522d, type: 3}
+    impacto: {fileID: 8300000, guid: 7cd06d6f9c70cd344af2b0a1ea68e9ad, type: 3}
+  - movimiento: rock-polish
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3b7cf1e259bcc1d43b5030b874f9705c, type: 3}
+  - movimiento: poison-jab
+    carga: {fileID: 8300000, guid: 2bdbd446895baa34fac8db32d5e0fe85, type: 3}
+    impacto: {fileID: 8300000, guid: 4e3c085c02308b0498d1d3d87c97067f, type: 3}
+  - movimiento: dark-pulse
+    carga: {fileID: 8300000, guid: f644c5d8a4f4391409529cfd8765149b, type: 3}
+    impacto: {fileID: 8300000, guid: c214053175c83704b950592fcc5ca012, type: 3}
+  - movimiento: night-slash
+    carga: {fileID: 8300000, guid: c0a8a1d67778afe47afb9aae07acc84a, type: 3}
+    impacto: {fileID: 8300000, guid: d60bb1e1e7f5c6d47b3fd38ea5a83f8d, type: 3}
+  - movimiento: aqua-tail
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 45579aa8b51fcf34283b92320712dc38, type: 3}
+  - movimiento: seed-bomb
+    carga: {fileID: 8300000, guid: 90c04fe1f9d83f64e95265d30bcef6ac, type: 3}
+    impacto: {fileID: 8300000, guid: 5cef3fec4bc8fd741a71d4d8c24b92d3, type: 3}
+  - movimiento: air-slash
+    carga: {fileID: 8300000, guid: e6e33189458b26b40a6b21bf5d2803c4, type: 3}
+    impacto: {fileID: 8300000, guid: 46947b29289e2934d9d175d34848f575, type: 3}
+  - movimiento: x-scissor
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 6be3d266caca1b74fb79728ab4369451, type: 3}
+  - movimiento: bug-buzz
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a708fe6524eebee4789f8f3b67b60f9d, type: 3}
+  - movimiento: dragon-pulse
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ce7a63c6f219655458489eb28bdb4636, type: 3}
+  - movimiento: dragon-rush
+    carga: {fileID: 8300000, guid: f7fb93a3d23496144a3611a28d561b80, type: 3}
+    impacto: {fileID: 8300000, guid: 7b2291c73516a15418b291c92ef702a7, type: 3}
+  - movimiento: power-gem
+    carga: {fileID: 8300000, guid: 64179369f21c2484ab51408e9c8b1317, type: 3}
+    impacto: {fileID: 8300000, guid: 4615e2ce04f8b1647a741e36a215e0cc, type: 3}
+  - movimiento: drain-punch
+    carga: {fileID: 8300000, guid: e40497b43d030e54cbdb220ddfd62f9d, type: 3}
+    impacto: {fileID: 8300000, guid: 13d45b3a2cfd48c40affc74c4b05febb, type: 3}
+  - movimiento: vacuum-wave
+    carga: {fileID: 8300000, guid: 1d48059b5e06b5f4ab168cd8265fc39f, type: 3}
+    impacto: {fileID: 8300000, guid: 28600a512428cd3488272fb1666357be, type: 3}
+  - movimiento: focus-blast
+    carga: {fileID: 8300000, guid: 1e7a11701917d5e4d8314f34510cde1c, type: 3}
+    impacto: {fileID: 8300000, guid: 7a0dc083e465f894e8b300eafae29eb6, type: 3}
+  - movimiento: energy-ball
+    carga: {fileID: 8300000, guid: 3c15c50774b8e384a977db3365f2c933, type: 3}
+    impacto: {fileID: 8300000, guid: d998ebfc66d70c34bbaa2b70298e3d3d, type: 3}
+  - movimiento: brave-bird
+    carga: {fileID: 8300000, guid: e68da1f688ad59d4ebd012ab9606cf83, type: 3}
+    impacto: {fileID: 8300000, guid: 89c6624b2757668489ff1bf7f4cddc80, type: 3}
+  - movimiento: earth-power
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8ae1e94a3cb7f0f41bf4fdee66cd922e, type: 3}
+  - movimiento: switcheroo
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 7e6bd485301981948a36d43505429a1e, type: 3}
+  - movimiento: giga-impact
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 37e473ffd09298a4dbefe4f14a6ff7bd, type: 3}
+  - movimiento: nasty-plot
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1440c2d07d55269479af82885d97c74e, type: 3}
+  - movimiento: bullet-punch
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: b2ea5ac836276ee44882d2e34f6658c2, type: 3}
+  - movimiento: avalanche
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 5e460b354a7d0c644a6c7726e8e5b90f, type: 3}
+  - movimiento: ice-shard
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f232095b3df9792438c943843ddec858, type: 3}
+  - movimiento: shadow-claw
+    carga: {fileID: 8300000, guid: 83d5fefe8ecae4b42815bb96d064fd35, type: 3}
+    impacto: {fileID: 8300000, guid: 0c4f49657b342e14790ea7837843d165, type: 3}
+  - movimiento: thunder-fang
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 86ca2f01005784843a6565d90067c8bf, type: 3}
+  - movimiento: ice-fang
+    carga: {fileID: 8300000, guid: c7b78ac823f879345b4a03218d993e25, type: 3}
+    impacto: {fileID: 8300000, guid: 9a390b64b0011724ab0c4bd4ffd7d38b, type: 3}
+  - movimiento: fire-fang
+    carga: {fileID: 8300000, guid: 6bf9e2001f918ed409ca48042157aa38, type: 3}
+    impacto: {fileID: 8300000, guid: 1f5c1e856c0f2eb4ba94c263bc421c4d, type: 3}
+  - movimiento: shadow-sneak
+    carga: {fileID: 8300000, guid: b32d54fc34939264a99469bd73ae3fa6, type: 3}
+    impacto: {fileID: 8300000, guid: 1f1280f1461342849b3f8126f6f010dc, type: 3}
+  - movimiento: psycho-cut
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ca708bd31347c0a48890f57461d2eccd, type: 3}
+  - movimiento: zen-headbutt
+    carga: {fileID: 8300000, guid: 1489d6c06f0d7fb49bbc603f07759c74, type: 3}
+    impacto: {fileID: 8300000, guid: 53864e0173fbb8f4aa99cd8cdca0c42b, type: 3}
+  - movimiento: flash-cannon
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8bf8adbe2415e2341b38ebcb7b4c0728, type: 3}
+  - movimiento: defog
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 65b9adc554446634781b0639e8cfd06b, type: 3}
+  - movimiento: trick-room
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a98ee80c3e6c53845be78f9b942e9e87, type: 3}
+  - movimiento: discharge
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c430743bf6f93c9428035c4180a9858b, type: 3}
+  - movimiento: lava-plume
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 75ed4a3d2c19ebc44a6396b93aefeae7, type: 3}
+  - movimiento: leaf-storm
+    carga: {fileID: 8300000, guid: 9d9af2d9fecccdd4b801add75365416a, type: 3}
+    impacto: {fileID: 8300000, guid: 7561221293baf904583f19525514a8d5, type: 3}
+  - movimiento: power-whip
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3b1a0f77f24c0364e8349efc6d794060, type: 3}
+  - movimiento: rock-wrecker
+    carga: {fileID: 8300000, guid: 89f1197659c582d41b88f2f93ab3ea41, type: 3}
+    impacto: {fileID: 8300000, guid: 9ba13db794c64584983fd9751b8c2dd6, type: 3}
+  - movimiento: cross-poison
+    carga: {fileID: 8300000, guid: fba15e649f7416646ba2a76e6198c5e0, type: 3}
+    impacto: {fileID: 8300000, guid: 626636dbee6213c4fb342a309dfc5f91, type: 3}
+  - movimiento: iron-head
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 315bb6029993f0f49813b3c2d38be233, type: 3}
+  - movimiento: stone-edge
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d7613122e748936478707d9dda20af96, type: 3}
+  - movimiento: stealth-rock
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 0d489996d86149a47a8b81bf2250183e, type: 3}
+  - movimiento: grass-knot
+    carga: {fileID: 8300000, guid: 2ced25c3ff7e5724880f0ddb74253273, type: 3}
+    impacto: {fileID: 8300000, guid: 8c31d2e2fe309e74cafcb687755fce46, type: 3}
+  - movimiento: judgment
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fad9682746aeedd4889059b9e4255e36, type: 3}
+  - movimiento: bug-bite
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fdd7bbe937fa6624bb3715da94f69f88, type: 3}
+  - movimiento: charge-beam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: aa98ca2e5efa5734f82d07847271c6db, type: 3}
+  - movimiento: wood-hammer
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 61f1e1a2e1686884caa291e07a612afb, type: 3}
+  - movimiento: aqua-jet
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3155fa3fc6084914686c6fcfae797c56, type: 3}
+  - movimiento: head-smash
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1359c997759494f4ba411c8d6b046649, type: 3}
+  - movimiento: double-hit
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8a114e8b02961f54fbd03fb0875894e7, type: 3}
+  - movimiento: roar-of-time
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: dd7b8a2acfc2d044ab1a603748850344, type: 3}
+  - movimiento: spacial-rend
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1666ac656fba8d642a0cec4b03875754, type: 3}
+  - movimiento: lunar-dance
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a19c38efc1d488d4eba70a940be41bc2, type: 3}
+  - movimiento: crush-grip
+    carga: {fileID: 8300000, guid: eb3e43449a63a19468cbcda45c4c88ca, type: 3}
+    impacto: {fileID: 8300000, guid: 710962ab9926f604593f5f237ccd2282, type: 3}
+  - movimiento: magma-storm
+    carga: {fileID: 8300000, guid: 4e9a1cefbfccee6488f144c2d976206e, type: 3}
+    impacto: {fileID: 8300000, guid: 35e97e3a99678434fbd62239bf7c6f53, type: 3}
+  - movimiento: dark-void
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 0f89edde9e65c7f44a4ec1445d4d0c66, type: 3}
+  - movimiento: seed-flare
+    carga: {fileID: 8300000, guid: cb63f9833ec5772429e716bdd1318a9d, type: 3}
+    impacto: {fileID: 8300000, guid: d1267c21846c3964ea694f641157be1c, type: 3}
+  - movimiento: shadow-force
+    carga: {fileID: 8300000, guid: bc23707e363e5c748927de2b988d032b, type: 3}
+    impacto: {fileID: 8300000, guid: 3d942b370bf2f6d4895b583f8f9e41d6, type: 3}
+  - movimiento: hone-claws
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: e522219d7ab4d104182ad97209aa9250, type: 3}
+  - movimiento: wide-guard
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f8539d4d967c7b1408ae8829ec61e27c, type: 3}
+  - movimiento: guard-split
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8d99a04578c595241b06b4d8e3e298d9, type: 3}
+  - movimiento: power-split
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 83566a7530c62f34da7f9c7b80ce9413, type: 3}
+  - movimiento: wonder-room
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 4893cc7e9c009a4458f2c02810ccbca0, type: 3}
+  - movimiento: psyshock
+    carga: {fileID: 8300000, guid: b940b34b87549044c8a76064f3dd9098, type: 3}
+    impacto: {fileID: 8300000, guid: 68b81081d68a9f247a2eb0acc7938822, type: 3}
+  - movimiento: venoshock
+    carga: {fileID: 8300000, guid: 5500c2a40d91c7940910c3d8328f2414, type: 3}
+    impacto: {fileID: 8300000, guid: b02045b6a43747040be1f745275470c4, type: 3}
+  - movimiento: autotomize
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c3f4e22a818b87b4f81e983817633b09, type: 3}
+  - movimiento: rage-powder
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 15d901cb4508160438e27a5e0c24cd99, type: 3}
+  - movimiento: magic-room
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8b5b5c36af349c544b25c38e24bee8f3, type: 3}
+  - movimiento: smack-down
+    carga: {fileID: 8300000, guid: 7a26cda4e4ce7b649bc134015d2e88fe, type: 3}
+    impacto: {fileID: 8300000, guid: 46b8704d7f5695644b4071bae2c7b8b4, type: 3}
+  - movimiento: storm-throw
+    carga: {fileID: 8300000, guid: ddc12f56bf428fc44b03d3c502cb271c, type: 3}
+    impacto: {fileID: 8300000, guid: cf4f14193c560de49b822b35b0b58732, type: 3}
+  - movimiento: sludge-wave
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: df27cae00d42f474f8cc7f931b7a9574, type: 3}
+  - movimiento: quiver-dance
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f6468353fcdc94a44889aca7634d868d, type: 3}
+  - movimiento: heavy-slam
+    carga: {fileID: 8300000, guid: c0cf8e944bace57418048e00b10322d0, type: 3}
+    impacto: {fileID: 8300000, guid: be9f032f4cf62f548a364cd0fb4497bf, type: 3}
+  - movimiento: electro-ball
+    carga: {fileID: 8300000, guid: cc48e81f3baed1b4791b1c9693b91133, type: 3}
+    impacto: {fileID: 8300000, guid: 7cdad16d044706146be9ffc8ce1c2977, type: 3}
+  - movimiento: soak
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 362317bee08eea240b6e594f0abfc246, type: 3}
+  - movimiento: flame-charge
+    carga: {fileID: 8300000, guid: 0db3696908bfa05489e240f5fa8655c1, type: 3}
+    impacto: {fileID: 8300000, guid: 9b72abc4ee496e144809d8f6e8b16c91, type: 3}
+  - movimiento: coil
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1380e43b2e72bec42aa01937a9ccf00a, type: 3}
+  - movimiento: low-sweep
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a52fa6c9baf57fb42b4e6d8a9b6639f8, type: 3}
+  - movimiento: acid-spray
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: fa6a1bc78c48d67449d88405368e7860, type: 3}
+  - movimiento: foul-play
+    carga: {fileID: 8300000, guid: b9c84d3bf55011f499c2b5b427c490e3, type: 3}
+    impacto: {fileID: 8300000, guid: 00fcfca7d360aa34fb0be874d3e8fa07, type: 3}
+  - movimiento: simple-beam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ea0534af39493f0489e46eda35dbcc49, type: 3}
+  - movimiento: after-you
+    carga: {fileID: 8300000, guid: 66bc20fc803455c4cbe4d8efa0841027, type: 3}
+    impacto: {fileID: 8300000, guid: 168e9d71f8bd28d439c6749a502f72ad, type: 3}
+  - movimiento: round
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: f4b8d830bb6fbf34191198f6b92414ae, type: 3}
+  - movimiento: echoed-voice
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 819e98800af5b7b4a97e1e50f280acf6, type: 3}
+  - movimiento: clear-smog
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 850b00f0db619fa4d9697e141c063909, type: 3}
+  - movimiento: stored-power
+    carga: {fileID: 8300000, guid: c37c5e1b31aa65742a744bb066a9d553, type: 3}
+    impacto: {fileID: 8300000, guid: a5040882cdd21024cb7c42f11ce66e50, type: 3}
+  - movimiento: quick-guard
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 4da99b8ca60e1654c8eef42166e8ab09, type: 3}
+  - movimiento: ally-switch
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 42652aac67505a14cbb0c9d2b5e3055c, type: 3}
+  - movimiento: scald
+    carga: {fileID: 8300000, guid: 6985353e9a9e2204fb032cc7b36623cf, type: 3}
+    impacto: {fileID: 8300000, guid: b9395e9c338db6d4d85ad178b8d9b64e, type: 3}
+  - movimiento: shell-smash
+    carga: {fileID: 8300000, guid: f41f692fdd6536645ba86b39b851f60f, type: 3}
+    impacto: {fileID: 8300000, guid: 36cf8531c3ed3b14ab1218b0c8e10c26, type: 3}
+  - movimiento: hex
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c03a60fea01f8dd4dbb9d47f848e0b1f, type: 3}
+  - movimiento: shift-gear
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ffe0547ae3675a143804171fdb7514f7, type: 3}
+  - movimiento: incinerate
+    carga: {fileID: 8300000, guid: 12aa42c5c0c9bda4bac9a6202eaa43e6, type: 3}
+    impacto: {fileID: 8300000, guid: eef87c21de0429e48beec8e4a35da63f, type: 3}
+  - movimiento: quash
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 41c6d75ddb5b67d4ca39f8a7bd9df1df, type: 3}
+  - movimiento: acrobatics
+    carga: {fileID: 8300000, guid: b471b725aad13604facf8c25c8f97731, type: 3}
+    impacto: {fileID: 8300000, guid: 5065dc7d7c34dbf4584613f67eb6c02e, type: 3}
+  - movimiento: reflect-type
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: bb6e8fe5bb8d3ea4eb33e3fc4fe8b170, type: 3}
+  - movimiento: retaliate
+    carga: {fileID: 8300000, guid: 2bb1a57940f85234cbf9166aa5dc6b94, type: 3}
+    impacto: {fileID: 8300000, guid: f0ced8646024cea468322e7b87fc0d7e, type: 3}
+  - movimiento: final-gambit
+    carga: {fileID: 8300000, guid: 21ad203f9bf06dd409b410e80a4c23d8, type: 3}
+    impacto: {fileID: 8300000, guid: f12a5fbf6a92da04bb4e7896ff5a53df, type: 3}
+  - movimiento: inferno
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c5187ac069c5efe46ac0c0118351c2de, type: 3}
+  - movimiento: volt-switch
+    carga: {fileID: 8300000, guid: 8699686851ba3444aa344dc1132482f9, type: 3}
+    impacto: {fileID: 8300000, guid: 2d894e8aa7f1ccd4cae525feaf62b12e, type: 3}
+  - movimiento: struggle-bug
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 177fbad6e8cae194fac75ccbb4c1af61, type: 3}
+  - movimiento: bulldoze
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 91f91f05f44acd946a89d47978e7e8ff, type: 3}
+  - movimiento: frost-breath
+    carga: {fileID: 8300000, guid: 39d136a547a11aa4496df2e0189f2c9d, type: 3}
+    impacto: {fileID: 8300000, guid: ae65add7455c71b4b847322891932bc2, type: 3}
+  - movimiento: dragon-tail
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d1856a413f8ecf9469d6501b11ac873c, type: 3}
+  - movimiento: work-up
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 3b540eee8f3a12241b86188e0940af85, type: 3}
+  - movimiento: electroweb
+    carga: {fileID: 8300000, guid: f04eb75658b9f9142a52e0e15342ec70, type: 3}
+    impacto: {fileID: 8300000, guid: 97c92fd50f569f34990db324f20cfee7, type: 3}
+  - movimiento: wild-charge
+    carga: {fileID: 8300000, guid: 1ba8366c4fa1f9544b39d95bc27ae54b, type: 3}
+    impacto: {fileID: 8300000, guid: 73f248118ae14d246a05075880c46452, type: 3}
+  - movimiento: drill-run
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 25590eea3516cc049b0938f1150ceee5, type: 3}
+  - movimiento: dual-chop
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8da586dacb7ec254883f1c6b27b9f3ee, type: 3}
+  - movimiento: horn-leech
+    carga: {fileID: 8300000, guid: 3e31e3f5ea013344cb10432a6f228a28, type: 3}
+    impacto: {fileID: 8300000, guid: 9136d32c52d99ae4d8d62fe208da0635, type: 3}
+  - movimiento: sacred-sword
+    carga: {fileID: 8300000, guid: c467b94aa47b815478ac4ff6997deeac, type: 3}
+    impacto: {fileID: 8300000, guid: 81c7729a2df84484db3864a43a47d16b, type: 3}
+  - movimiento: razor-shell
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: bdbc73644b7ad1d43b4a0bde1b7f48f8, type: 3}
+  - movimiento: heat-crash
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: bd98ff9faf57cd547966bdd545105a07, type: 3}
+  - movimiento: cotton-guard
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 2eb55c3b7984bb94bacb1f056c5b3ffa, type: 3}
+  - movimiento: night-daze
+    carga: {fileID: 8300000, guid: fa9bea7418c6a0340b30dd0fa11f785c, type: 3}
+    impacto: {fileID: 8300000, guid: 64b286347da610f46b296ca10884a985, type: 3}
+  - movimiento: psystrike
+    carga: {fileID: 8300000, guid: 19334b645b9cadd40b52540a5f9fe719, type: 3}
+    impacto: {fileID: 8300000, guid: 7516844df58cef644b7d3a13f2a3f920, type: 3}
+  - movimiento: tail-slap
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 05a4efce3b3fffb428fd5d8aba93a533, type: 3}
+  - movimiento: hurricane
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c343de224f31dfc47be300b54fb31773, type: 3}
+  - movimiento: searing-shot
+    carga: {fileID: 8300000, guid: 1ecf86c8993b84940bf634ddf0748f89, type: 3}
+    impacto: {fileID: 8300000, guid: dfeb4994adc0d1b44b2da156745635d0, type: 3}
+  - movimiento: techno-blast
+    carga: {fileID: 8300000, guid: 41f4df50c29ef7844a4010918166e2dd, type: 3}
+    impacto: {fileID: 8300000, guid: ff432285ab2578c4ab324ae668d35dff, type: 3}
+  - movimiento: relic-song
+    carga: {fileID: 8300000, guid: 833c1c25f8e25ad4590ce990a383c48d, type: 3}
+    impacto: {fileID: 8300000, guid: e8b33388ca77c264fa15aacbdeb1ab55, type: 3}
+  - movimiento: secret-sword
+    carga: {fileID: 8300000, guid: adabeb727768bab4192682dfc6b3d249, type: 3}
+    impacto: {fileID: 8300000, guid: 7254ef21c7394eb4dba4ed79fdabd2d1, type: 3}
+  - movimiento: glaciate
+    carga: {fileID: 8300000, guid: ec71597c336287246897db84378978cd, type: 3}
+    impacto: {fileID: 8300000, guid: 7533d4763ada9e64cacf920f4e35b4b9, type: 3}
+  - movimiento: bolt-strike
+    carga: {fileID: 8300000, guid: 5d5b14d84caa2d34ba7e8fa24968ad0f, type: 3}
+    impacto: {fileID: 8300000, guid: cf8a1b6a8a151de44b415484b13d3b39, type: 3}
+  - movimiento: blue-flare
+    carga: {fileID: 8300000, guid: 5a6dad88a645d3445ad32da05b5fc2c6, type: 3}
+    impacto: {fileID: 8300000, guid: c665b1c17d5698048abfa625aabf4555, type: 3}
+  - movimiento: fiery-dance
+    carga: {fileID: 8300000, guid: e058d4411cf399143bcc6aeabd137601, type: 3}
+    impacto: {fileID: 8300000, guid: 173328f2ecefa9c4b94b3f5c51232209, type: 3}
+  - movimiento: snarl
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1e549a02883bbd54992dbf9f8648461e, type: 3}
+  - movimiento: icicle-crash
+    carga: {fileID: 8300000, guid: 524e294922825974ab61476f626e5591, type: 3}
+    impacto: {fileID: 8300000, guid: a6ed5a560bc197548879c8417df8d159, type: 3}
+  - movimiento: v-create
+    carga: {fileID: 8300000, guid: 193d4f5805122434ba08dfd22eebd442, type: 3}
+    impacto: {fileID: 8300000, guid: dbe67cf0b6fc4e64eb4dbb5e239bfcfb, type: 3}
+  - movimiento: fusion-flare
+    carga: {fileID: 8300000, guid: d179e715b41e3d144b919398591a3150, type: 3}
+    impacto: {fileID: 8300000, guid: 3d1f9289a8aa3824dbe37ff42e4d02fb, type: 3}
+  - movimiento: fusion-bolt
+    carga: {fileID: 8300000, guid: b5fa01757c7bd03479011898869448d6, type: 3}
+    impacto: {fileID: 8300000, guid: f0b92fa4c8dfb5a4b8f1ce1376942513, type: 3}
+  - movimiento: flying-press
+    carga: {fileID: 8300000, guid: 8b2c9ff64a425b140a1197d5749eb764, type: 3}
+    impacto: {fileID: 8300000, guid: 01fa030d170874946b5968ee5c64a30c, type: 3}
+  - movimiento: belch
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ff9823f6c6975a246bdfb0c603cd9105, type: 3}
+  - movimiento: sticky-web
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d3b969c8f86662e489e65aec794d5f55, type: 3}
+  - movimiento: fell-stinger
+    carga: {fileID: 8300000, guid: 2abb212075ee802488eb7233f9ea7fcb, type: 3}
+    impacto: {fileID: 8300000, guid: 7b983e1d6faeeab47be1e9d7625cc581, type: 3}
+  - movimiento: phantom-force
+    carga: {fileID: 8300000, guid: 4bba125813a90344c9f66323b1cfb968, type: 3}
+    impacto: {fileID: 8300000, guid: c165cb2538698204f946f910da51a004, type: 3}
+  - movimiento: trick-or-treat
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: a3849b020a1b92348b1b3fea4aea1a72, type: 3}
+  - movimiento: noble-roar
+    carga: {fileID: 8300000, guid: 8c72be0ed704d344b892fb2c9e4611d2, type: 3}
+    impacto: {fileID: 8300000, guid: d55cfb09592969a4184f47768f380848, type: 3}
+  - movimiento: parabolic-charge
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c9e613079d7dfa34592bbf705da80379, type: 3}
+  - movimiento: forests-curse
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 9872d0904c3e75d4d942eebd8a446e29, type: 3}
+  - movimiento: petal-blizzard
+    carga: {fileID: 8300000, guid: eb70dc7c554c7084f8d7bf59310774ab, type: 3}
+    impacto: {fileID: 8300000, guid: c3a415fe8beeb0a46a5aee392283c09d, type: 3}
+  - movimiento: freeze-dry
+    carga: {fileID: 8300000, guid: 642c70df5f985dc4bb02b543e0ed212f, type: 3}
+    impacto: {fileID: 8300000, guid: 28974d06470147246b76915f1d4d65b9, type: 3}
+  - movimiento: parting-shot
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 6b5c4db3f50a49d4b89fed5a8312da08, type: 3}
+  - movimiento: draining-kiss
+    carga: {fileID: 8300000, guid: 4866440e9929eb845a2d2e3e3666a203, type: 3}
+    impacto: {fileID: 8300000, guid: 293c0ca764b56ef40826f73e1ef5d93a, type: 3}
+  - movimiento: crafty-shield
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c23b942f8bb2a334e978fc2aef465563, type: 3}
+  - movimiento: grassy-terrain
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: d6f14e228564b8b4bab8b022f1e70e3b, type: 3}
+  - movimiento: misty-terrain
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 695028a29a96a914f8d0319bb73ecb92, type: 3}
+  - movimiento: play-rough
+    carga: {fileID: 8300000, guid: c2b6c0affd62f7d4e9d966e582bea4ef, type: 3}
+    impacto: {fileID: 8300000, guid: 71cabc34d50afe443a0abd358514fbab, type: 3}
+  - movimiento: fairy-wind
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c9dac5f8498af56489eb75d208591842, type: 3}
+  - movimiento: moonblast
+    carga: {fileID: 8300000, guid: dfa059be655d0cf4b8149d0c9ac7ea4b, type: 3}
+    impacto: {fileID: 8300000, guid: 64c025ec16adc954ba146dc00c68bdf6, type: 3}
+  - movimiento: boomburst
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 1fa4d285dd010f84fa08c8cda23203b4, type: 3}
+  - movimiento: fairy-lock
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 482ad02066f2ad743b6116262dd9ac05, type: 3}
+  - movimiento: kings-shield
+    carga: {fileID: 8300000, guid: 59971bb1e512bb74f971849719af0137, type: 3}
+    impacto: {fileID: 8300000, guid: e1945fe00e327e24ca9273eb3918e0ee, type: 3}
+  - movimiento: play-nice
+    carga: {fileID: 8300000, guid: 7eedaaf944d1d3948a21a03dcf338e15, type: 3}
+    impacto: {fileID: 8300000, guid: b04915d66cb4ee741bee0e71074d2078, type: 3}
+  - movimiento: confide
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c536d7038c4fd2f49a9cd15d5bd07b13, type: 3}
+  - movimiento: diamond-storm
+    carga: {fileID: 8300000, guid: 9843625566b5b99469c2240069c67975, type: 3}
+    impacto: {fileID: 8300000, guid: 0825e89a2c915974d86d513996d24228, type: 3}
+  - movimiento: steam-eruption
+    carga: {fileID: 8300000, guid: 060098e412ee78644a9341f38ed60ed7, type: 3}
+    impacto: {fileID: 8300000, guid: df2b7e2eba9f8964c8a17df6f7c40dff, type: 3}
+  - movimiento: hyperspace-hole
+    carga: {fileID: 8300000, guid: 5c3e0ecc9a54e8f42852f6b487605bfe, type: 3}
+    impacto: {fileID: 8300000, guid: e1e2e754fdc0b554a8675a7d3ae935bf, type: 3}
+  - movimiento: water-shuriken
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: bcec377c0b95c0c408724ee20ce51b6f, type: 3}
+  - movimiento: mystical-fire
+    carga: {fileID: 8300000, guid: d66a7a2dfd9a6454d92ecc5ad42241e7, type: 3}
+    impacto: {fileID: 8300000, guid: e7e1879359a811c448d76948870de439, type: 3}
+  - movimiento: spiky-shield
+    carga: {fileID: 8300000, guid: a7bffa6f134f4494e8cac6e8ffb8431b, type: 3}
+    impacto: {fileID: 8300000, guid: 9d557b7e944bf13478b69867f830b21b, type: 3}
+  - movimiento: aromatic-mist
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ff565fae2ac2194448cfd93434cb00de, type: 3}
+  - movimiento: venom-drench
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: ece5c8d2f143ff14499aeb56d724782b, type: 3}
+  - movimiento: geomancy
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 20b1681134b68274997480459fe3a4bb, type: 3}
+  - movimiento: magnetic-flux
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: dc30608f80493ca43b0fe500dde37cef, type: 3}
+  - movimiento: electric-terrain
+    carga: {fileID: 8300000, guid: 46c103143bc95ad42bafd2beb21a9199, type: 3}
+    impacto: {fileID: 8300000, guid: 4b80c543e0392af498797680471e3c8e, type: 3}
+  - movimiento: dazzling-gleam
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8a0a79a29bb784145aa5d302fe09f99f, type: 3}
+  - movimiento: baby-doll-eyes
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 8cbe283b72ae0bc4da277d02eb966a4b, type: 3}
+  - movimiento: nuzzle
+    carga: {fileID: 8300000, guid: 371ecc93826819e4c90b26ff2f99eedc, type: 3}
+    impacto: {fileID: 8300000, guid: 09db2ac812e2d8747bcbcf2b4fd2e89a, type: 3}
+  - movimiento: infestation
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 075ec6c8db1191a4490b81454f5b0efa, type: 3}
+  - movimiento: power-up-punch
+    carga: {fileID: 8300000, guid: c385a7d5a537ca942949f6f91414be8e, type: 3}
+    impacto: {fileID: 8300000, guid: db4ab9f8f19e3d54fa30ab64ec85db8c, type: 3}
+  - movimiento: oblivion-wing
+    carga: {fileID: 8300000, guid: 9696e975e55f8224f90b29936fe8997d, type: 3}
+    impacto: {fileID: 8300000, guid: e007431726a968945a3dfee2c2ab05be, type: 3}
+  - movimiento: thousand-arrows
+    carga: {fileID: 8300000, guid: d66541a0a0918d142a010af91a5fd251, type: 3}
+    impacto: {fileID: 8300000, guid: 059e9e1d932d2b045a1df726fa3dbd9c, type: 3}
+  - movimiento: thousand-waves
+    carga: {fileID: 8300000, guid: 7199d56bc8ba8e8428fa99c6942ff1d1, type: 3}
+    impacto: {fileID: 8300000, guid: f800efb1164cb0f4096ad26818f678f6, type: 3}
+  - movimiento: lands-wrath
+    carga: {fileID: 8300000, guid: b29201d233b17fb40a7d16cf158b53d2, type: 3}
+    impacto: {fileID: 8300000, guid: 9b03071f8dd611c4eac6545e894326a5, type: 3}
+  - movimiento: origin-pulse
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 82e965e92cda6784aa75e75adac140aa, type: 3}
+  - movimiento: precipice-blades
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: c7f7ef7c686dbed4283d8b345c68a2f3, type: 3}
+  - movimiento: dragon-ascent
+    carga: {fileID: 8300000, guid: 290ef2f532c14e04bbe5a684b2b14a32, type: 3}
+    impacto: {fileID: 8300000, guid: dd79615e4654d7d4e9d9a3cc6e119c2e, type: 3}
+  - movimiento: psychic-terrain
+    carga: {fileID: 0}
+    impacto: {fileID: 8300000, guid: 5945825570de24f4bb25394b001ffa96, type: 3}
+  ataquePorTipo:
+  - {fileID: 0}
+  - {fileID: 8300000, guid: ed331f3100afd714b8ba17ccff0b286a, type: 3}
+  - {fileID: 8300000, guid: 03a4cf961b25a394b8305a770cb223cd, type: 3}
+  - {fileID: 8300000, guid: 217c0c9ebdd37044da15640dd6488768, type: 3}
+  - {fileID: 8300000, guid: f13478c630daaaf4ba035c5750c4900b, type: 3}
+  - {fileID: 8300000, guid: 1ea384f6534eba4488f83a3f013873a7, type: 3}
+  - {fileID: 8300000, guid: f232095b3df9792438c943843ddec858, type: 3}
+  - {fileID: 8300000, guid: afbc00cecf10adf48a37588a720e4bde, type: 3}
+  - {fileID: 8300000, guid: 4335eac99d1519343ab754ce73eb4c44, type: 3}
+  - {fileID: 8300000, guid: 3c62d9f86e65b644f8aaf1cbeec1c183, type: 3}
+  - {fileID: 8300000, guid: 66b28f88b3faee248a1ad2cfacb328f8, type: 3}
+  - {fileID: 8300000, guid: e89de0068dcb2424b8357cab2d9cb0c6, type: 3}
+  - {fileID: 8300000, guid: fdd7bbe937fa6624bb3715da94f69f88, type: 3}
+  - {fileID: 8300000, guid: de2f25033425d2743a2cce5775096d5a, type: 3}
+  - {fileID: 8300000, guid: 81a0768438d07824995c1731bf680901, type: 3}
+  - {fileID: 8300000, guid: 173536c0b70c9e748b8f377b349df3e3, type: 3}
+  - {fileID: 8300000, guid: 44fe2ee52164ffe42a44f43691c5dca4, type: 3}
+  - {fileID: 8300000, guid: 2bf3aa1303dca6844b45d68d871c76fd, type: 3}
+  - {fileID: 8300000, guid: c9dac5f8498af56489eb75d208591842, type: 3}
+  slotsGiro:
+    clip: {fileID: 8300000, guid: 098fc0696e65cc241b1c7ce4061fe293, type: 3}
+    volumen: 1
+    ganancia: 0.35
+  slotsFrena:
+    clip: {fileID: 8300000, guid: 66f36119604bfff4eabe511d4f431349, type: 3}
+    volumen: 1
+    ganancia: 0.935
+  slotsMoneda:
+    clip: {fileID: 8300000, guid: 15cef072f956e0448b541fae87e997c3, type: 3}
+    volumen: 1
+    ganancia: 1.324
+  premioChico:
+    clip: {fileID: 8300000, guid: 17622738668f2924d91cc7740299de06, type: 3}
+    volumen: 1
+    ganancia: 0.561
+  premioGrande:
+    clip: {fileID: 8300000, guid: 29373db6155dd894f89e5cd06af1c353, type: 3}
+    volumen: 1
+    ganancia: 0.486
+  ruletaGiro:
+    clip: {fileID: 8300000, guid: 3de64cd9bf85b4d43ae0a542691b58d3, type: 3}
+    volumen: 1
+    ganancia: 0.94
+  ruedaGiro:
+    clip: {fileID: 8300000, guid: a9af72bdd39039641b97ada243367c61, type: 3}
+    volumen: 1
+    ganancia: 1.192
+  fichas:
+    clip: {fileID: 8300000, guid: c69437abd883f85448ca7f19292a7a8a, type: 3}
+    volumen: 1
+    ganancia: 1
+  carta:
+    clip: {fileID: 8300000, guid: 27aa6db151c49ee49a6031ddba2a88d2, type: 3}
+    volumen: 1
+    ganancia: 3
+  mezclar:
+    clip: {fileID: 8300000, guid: 49b9b45316de67147b49c9a0fafa264d, type: 3}
+    volumen: 1
+    ganancia: 1
+  mediciones:
+  - clip: {fileID: 8300000, guid: caf89ff9777362a45a8f2aa975b9d55b, type: 3}
+    rmsDb: -9.075301
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: e8eb74fb584b19a44b4e4a398492b63b, type: 3}
+    rmsDb: -11.518708
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: b7ae461ca40fa0144a6f8c4c5d40398a, type: 3}
+    rmsDb: -10.8781395
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 9e5fb10d1e9e1944d9a06b1a0e3dc851, type: 3}
+    rmsDb: -16.877905
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 35745dc0b16c8e0438093f2b615dee43, type: 3}
+    rmsDb: -10.142579
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 16d77363ef855c34f9886d83814cf14c, type: 3}
+    rmsDb: -8.859476
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: f0718a28e4f788b4f92e03278e59afa0, type: 3}
+    rmsDb: -15.535429
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 54aef12d5f65a68409b0cfa94aac6046, type: 3}
+    rmsDb: -15.0111685
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 511c6062f853f454b8ce04ab68d2b7cf, type: 3}
+    rmsDb: -15.103653
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 68e815539ce83944e87130ba6bfc6f16, type: 3}
+    rmsDb: -11.52776
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: a3aad8131de2f1443bac45aa1531bb8e, type: 3}
+    rmsDb: -10.466565
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: d8502f7a6f7d47441a2fff251f49de72, type: 3}
+    rmsDb: -13.061267
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 9deb5e60ff635614e874e3e6db22290a, type: 3}
+    rmsDb: -13.166799
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 5ef944b3c8131de4486c4b710b5cfb6c, type: 3}
+    rmsDb: -13.752243
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 8f9fd25c2d71d244aa151a59d3443d50, type: 3}
+    rmsDb: -13.193303
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 7bdd93c3d33244b4081b25b8349e60cf, type: 3}
+    rmsDb: -14.269124
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: ea59f24ced190db429f847b91440cc84, type: 3}
+    rmsDb: -22.61441
+    pico: 0.31417847
+  - clip: {fileID: 8300000, guid: eab7be02d793f2744a1d017fa4e923ad, type: 3}
+    rmsDb: -22.687113
+    pico: 0.31051636
+  - clip: {fileID: 8300000, guid: 84d4c8e2e4c32e342bde586afd59f149, type: 3}
+    rmsDb: -15.355333
+    pico: 0.96240234
+  - clip: {fileID: 8300000, guid: 438ad15c93d1b924980d4165c2c643e8, type: 3}
+    rmsDb: -16.252136
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 60442428d48748948b942f8e79b91d49, type: 3}
+    rmsDb: -17.084393
+    pico: 0.8498535
+  - clip: {fileID: 8300000, guid: 122ea2fcea232f94fbd051e890037351, type: 3}
+    rmsDb: -12.997553
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: bf08e110f3c5ed949be82841bdbed1ab, type: 3}
+    rmsDb: -18.93869
+    pico: 0.967926
+  - clip: {fileID: 8300000, guid: 448f099d7f681f84b8ec7a76d0bcbf8d, type: 3}
+    rmsDb: -25.578407
+    pico: 0.12399292
+  - clip: {fileID: 8300000, guid: caddcbd49fc0d104c9997cc38fed497d, type: 3}
+    rmsDb: -32.021374
+    pico: 0.12823486
+  - clip: {fileID: 8300000, guid: 6382c358ef9099c43a1c16070f3b484e, type: 3}
+    rmsDb: -20.245647
+    pico: 0.505188
+  - clip: {fileID: 8300000, guid: 9c489fb8beb8cd940896ad721f286a1b, type: 3}
+    rmsDb: -22.885397
+    pico: 0.33703613
+  - clip: {fileID: 8300000, guid: 55d86256db779484ab6461043d2eb589, type: 3}
+    rmsDb: -22.192583
+    pico: 0.44436646
+  - clip: {fileID: 8300000, guid: c29c4f1b92cda924dac8cb44b177be06, type: 3}
+    rmsDb: -14.430657
+    pico: 0.35040283
+  - clip: {fileID: 8300000, guid: 03b7e05f48720ae4c93cb867fbf7311e, type: 3}
+    rmsDb: -17.908152
+    pico: 0.45217896
+  - clip: {fileID: 8300000, guid: 97038ef53ebe87247a0d202098da127f, type: 3}
+    rmsDb: -25.07877
+    pico: 0.25228882
+  - clip: {fileID: 8300000, guid: 1ad606c89006f674890a3af253b82891, type: 3}
+    rmsDb: -24.311188
+    pico: 0.18334961
+  - clip: {fileID: 8300000, guid: 8a832162ae622aa4789f4a2eee0cdb13, type: 3}
+    rmsDb: -21.417397
+    pico: 0.21066284
+  - clip: {fileID: 8300000, guid: cfceaaf6c2f9c8e43a7d458707ea1916, type: 3}
+    rmsDb: -21.066147
+    pico: 0.45578003
+  - clip: {fileID: 8300000, guid: 2aae1a18c23b4354bb1fd2f3d1b86c97, type: 3}
+    rmsDb: -21.465694
+    pico: 0.41360474
+  - clip: {fileID: 8300000, guid: a7d01480cf42b25468b2f8453b04886b, type: 3}
+    rmsDb: -19.863983
+    pico: 0.46951294
+  - clip: {fileID: 8300000, guid: acc96bbbc2b606b479c86d89cd7234ed, type: 3}
+    rmsDb: -17.908909
+    pico: 0.47790527
+  - clip: {fileID: 8300000, guid: 67c6d960327f60c4aa1cdbc05f448bb4, type: 3}
+    rmsDb: -14.572335
+    pico: 0.98703
+  - clip: {fileID: 8300000, guid: 4a6f22fcf8363de4cae0d88fada854da, type: 3}
+    rmsDb: -21.10533
+    pico: 0.5247803
+  - clip: {fileID: 8300000, guid: 01185ddb9cec2064fb87aa09630e1c96, type: 3}
+    rmsDb: -22.415064
+    pico: 0.27963257
+  - clip: {fileID: 8300000, guid: 5cdf529b265ca254aa0a4985aabcb72a, type: 3}
+    rmsDb: -26.217464
+    pico: 0.3592224
+  - clip: {fileID: 8300000, guid: f4a0095cc566f7248bbdac61cb94d0b7, type: 3}
+    rmsDb: -25.402431
+    pico: 0.15994263
+  - clip: {fileID: 8300000, guid: 69655a8a656daba45a63b646604033e1, type: 3}
+    rmsDb: -29.114134
+    pico: 0.19869995
+  - clip: {fileID: 8300000, guid: 85db388fca6d72d4080f9aed2981d89b, type: 3}
+    rmsDb: -24.877617
+    pico: 0.16381836
+  - clip: {fileID: 8300000, guid: 5787403d685fcc54aaa3c6af870f35dc, type: 3}
+    rmsDb: -23.113901
+    pico: 0.31445312
+  - clip: {fileID: 8300000, guid: c0d6f6b38f3d7b04ca1f41f12d1da765, type: 3}
+    rmsDb: -18.908388
+    pico: 0.19668579
+  - clip: {fileID: 8300000, guid: 73af29be60dad434b9f44f3d6f8cedf1, type: 3}
+    rmsDb: -23.894352
+    pico: 0.41809082
+  - clip: {fileID: 8300000, guid: 60ead427c3924214bb3e0b770d3d4cdd, type: 3}
+    rmsDb: -15.708643
+    pico: 0.9198303
+  - clip: {fileID: 8300000, guid: 3d27f331c0010224e8f58e6012aecbf5, type: 3}
+    rmsDb: -17.854881
+    pico: 0.48120117
+  - clip: {fileID: 8300000, guid: 5a2e7a1a532bfdf46bde530ab6343cce, type: 3}
+    rmsDb: -20.534536
+    pico: 0.37023926
+  - clip: {fileID: 8300000, guid: 6678471837399fc46a3b9807589e24b0, type: 3}
+    rmsDb: -18.10633
+    pico: 0.63690186
+  - clip: {fileID: 8300000, guid: 3abcbe19b2c9f184cb17f7e68be51cc9, type: 3}
+    rmsDb: -18.70403
+    pico: 0.7142029
+  - clip: {fileID: 8300000, guid: 0b69032ca4489104aad1d1f69eee5c99, type: 3}
+    rmsDb: -19.783367
+    pico: 0.49475098
+  - clip: {fileID: 8300000, guid: 783ba26e0273a004f8eeb5a657c19891, type: 3}
+    rmsDb: -22.583372
+    pico: 0.4604187
+  - clip: {fileID: 8300000, guid: a62f4cc2a460462458b8899f7a2d202a, type: 3}
+    rmsDb: -31.56771
+    pico: 0.19506836
+  - clip: {fileID: 8300000, guid: 0583464e2325ecd479fb4c0e8e68df60, type: 3}
+    rmsDb: -24.798439
+    pico: 0.15127563
+  - clip: {fileID: 8300000, guid: fb8a65061404b2d4b9e802e0075939ad, type: 3}
+    rmsDb: -27.160698
+    pico: 0.2512207
+  - clip: {fileID: 8300000, guid: 9c6cb16195855da4cbae488dcf7da5a7, type: 3}
+    rmsDb: -22.854883
+    pico: 0.33898926
+  - clip: {fileID: 8300000, guid: c71af370f7406e64e8f0994f81222893, type: 3}
+    rmsDb: -18.301271
+    pico: 0.8104248
+  - clip: {fileID: 8300000, guid: f97b978ed36725a4ca13a7c418d3f0bc, type: 3}
+    rmsDb: -14.163055
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 0b683e91fcd3bd346b846cb242cdcd40, type: 3}
+    rmsDb: -27.10911
+    pico: 0.33624268
+  - clip: {fileID: 8300000, guid: 3e77c954cd38a794b9edff0ffe815249, type: 3}
+    rmsDb: -20.247059
+    pico: 0.3979187
+  - clip: {fileID: 8300000, guid: faac0cda19b4b9d47987d869a1816129, type: 3}
+    rmsDb: -25.577772
+    pico: 0.3140869
+  - clip: {fileID: 8300000, guid: 1373e979f877d8f45a1aed92af130e6f, type: 3}
+    rmsDb: -18.686424
+    pico: 0.38760376
+  - clip: {fileID: 8300000, guid: 098fc0696e65cc241b1c7ce4061fe293, type: 3}
+    rmsDb: -8.572597
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 66f36119604bfff4eabe511d4f431349, type: 3}
+    rmsDb: -20.88409
+    pico: 0.6746521
+  - clip: {fileID: 8300000, guid: 15cef072f956e0448b541fae87e997c3, type: 3}
+    rmsDb: -23.901236
+    pico: 0.45941162
+  - clip: {fileID: 8300000, guid: 17622738668f2924d91cc7740299de06, type: 3}
+    rmsDb: -16.44488
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 29373db6155dd894f89e5cd06af1c353, type: 3}
+    rmsDb: -15.203434
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 3de64cd9bf85b4d43ae0a542691b58d3, type: 3}
+    rmsDb: -20.93246
+    pico: 0.9814453
+  - clip: {fileID: 8300000, guid: a9af72bdd39039641b97ada243367c61, type: 3}
+    rmsDb: -22.989407
+    pico: 0.5263977
+  - clip: {fileID: 8300000, guid: c69437abd883f85448ca7f19292a7a8a, type: 3}
+    rmsDb: -22.989233
+    pico: 0.9999695
+  - clip: {fileID: 8300000, guid: 27aa6db151c49ee49a6031ddba2a88d2, type: 3}
+    rmsDb: -33.287914
+    pico: 0.28085327
+  - clip: {fileID: 8300000, guid: 49b9b45316de67147b49c9a0fafa264d, type: 3}
+    rmsDb: -28.35848
+    pico: 0.9999695
+  superficies:
+  - nombre: alfombra
+    pasos:
+    - clip: {fileID: 8300000, guid: 2abc1eafaa9b93f43b446bfffa1c2ee2, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: bf4f4def164b8564b85022ca4d3a5b86, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 62c6f8a1529880047bf130530f88fbc2, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 1d564e1908d4bf043bb699631d7429c7, type: 3}
+      volumen: 1
+      ganancia: 1
+  - nombre: ejimas
+    pasos:
+    - clip: {fileID: 8300000, guid: 7a79f1ff6db585f46840bd05f8c5801e, type: 3}
+      volumen: 1
+      ganancia: 1
+  - nombre: laminado
+    pasos:
+    - clip: {fileID: 8300000, guid: 54aaab00fffe46844a50a17d6eb70627, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: c982cfee1028c1f4fb5acb9e32b93496, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: bbab31a217d3f4742beaa3885d9e53fb, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 8c17891d49fcb394287b98cb9a999188, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 7690248c7c032044880ca2737977fc17, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 6c2c5cfd4a0590b408f2c088e1ce302e, type: 3}
+      volumen: 1
+      ganancia: 1
+  - nombre: metal
+    pasos:
+    - clip: {fileID: 8300000, guid: 178a56f3a6385c2469f4351c5ab50227, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 9131cc7a688563c4bae75dc3866ae94b, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 4382b0e02c39593499c0a22d7efd1950, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 8ff8975b6f4773e4eac7c076b17fa24a, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 2d5fe7bbb6a5d5f45ab4132ee51c8663, type: 3}
+      volumen: 1
+      ganancia: 1
+    - clip: {fileID: 8300000, guid: 74e7b16b1d92bd54cb59d2debb4c26d4, type: 3}
+      volumen: 1
+      ganancia: 1
+  superficiePorDefecto: laminado
+  volumenDePasos: 0.55
+  volumenDePasosDeNpc: 0.5

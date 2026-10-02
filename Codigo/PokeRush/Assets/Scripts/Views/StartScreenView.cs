@@ -119,6 +119,7 @@ public class StartScreenView : MonoBehaviour
         }
 
         _started = true;
+        Sonidos.Confirmar();
         StartCoroutine(Salir(destino));
     }
 

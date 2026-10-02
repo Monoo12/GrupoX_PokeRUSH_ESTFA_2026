@@ -229,7 +229,11 @@ public class TurnEngine
         // del banquillo cambia el modelo pero no dispara HpChanged, o el HUD
         // animaria la barra equivocada.
         if (esElActivo && resultado.HealedHp > 0)
-            events.Add(BattleEvent.Of(BattleEventKind.HpChanged, true));
+        {
+            BattleEvent cura = BattleEvent.Of(BattleEventKind.HpChanged, true);
+            cura.Sonido = SonidoDelEvento.Curacion;
+            events.Add(cura);
+        }
 
         // Pausa extra: la curacion tiene que quedar a la vista ANTES de que el
         // rival pegue. Sin esto la barra subia y bajaba casi junta y la pocion
@@ -540,7 +544,11 @@ public class TurnEngine
             defender.Poken.TakeDamage(damage);
             totalDamage += damage;
             landedHits++;
-            events.Add(BattleEvent.Of(BattleEventKind.HpChanged, defender.IsPlayerSide));
+            BattleEvent golpe = BattleEvent.Of(BattleEventKind.HpChanged, defender.IsPlayerSide);
+            golpe.Sonido = effectiveness > 1f ? SonidoDelEvento.GolpeSuperEficaz
+                         : effectiveness < 1f ? SonidoDelEvento.GolpePocoEficaz
+                         : SonidoDelEvento.Golpe;
+            events.Add(golpe);
         }
 
         // Hiperrayo y compania: si pego, el turno que viene descansa (aunque el
@@ -609,7 +617,9 @@ public class TurnEngine
         int damage = AbilityEffects.ModifyIncomingDamage(defender, result.Damage, out bool endured);
         damage = AbsorberEscudo(defender, damage, events);
         defender.Poken.TakeDamage(damage);
-        events.Add(BattleEvent.Of(BattleEventKind.HpChanged, defender.IsPlayerSide));
+        BattleEvent golpe = BattleEvent.Of(BattleEventKind.HpChanged, defender.IsPlayerSide);
+        golpe.Sonido = SonidoDelEvento.Golpe;
+        events.Add(golpe);
 
         if (result.IsCritical) BattleEvent.Add(events, "¡Golpe crítico!");
         if (endured)
@@ -797,8 +807,10 @@ public class TurnEngine
 
             foreach (int level in levelsGained)
             {
-                events.Add(BattleEvent.Of(BattleEventKind.HpChanged,
-                    poken == _model.ActivePlayerPoken, $"¡{name} subió al nivel {level}!"));
+                BattleEvent nivel = BattleEvent.Of(BattleEventKind.HpChanged,
+                    poken == _model.ActivePlayerPoken, $"¡{name} subió al nivel {level}!");
+                nivel.Sonido = SonidoDelEvento.SubirNivel;
+                events.Add(nivel);
 
                 // Movimientos nuevos de este nivel
                 foreach (MoveDefinition move in poken.MovesLearnedAt(level))

@@ -241,8 +241,13 @@ public class PrizeWheelController : MenuScreen
         RefrescarBotones();
     }
 
+    // La grabacion de la rueda girando, mientras gira.
+    private SfxEnCurso _sonidoDelGiro;
+
     protected override void OnClose()
     {
+        _sonidoDelGiro?.Parar(0.2f);
+        _sonidoDelGiro = null;
         ApagarEfectos();
     }
 
@@ -383,6 +388,12 @@ public class PrizeWheelController : MenuScreen
         _ticksPasados = 0;
         _t = 0f;
         _fase = Fase.Girando;
+        // Sin tic por gajo asignado, suena la grabacion de la rueda girando.
+        if (tickClip == null)
+        {
+            _sonidoDelGiro?.Parar(0f);
+            _sonidoDelGiro = Sonidos.RuedaGiro();
+        }
         _result.Giros++;
 
         RefrescarBotones();
@@ -479,6 +490,8 @@ public class PrizeWheelController : MenuScreen
     {
         _fase = Fase.Celebrando;
         _celebracion = 0f;
+        _sonidoDelGiro?.Parar(0.4f);
+        _sonidoDelGiro = null;
 
         Prize premio = _enJuego[_indiceGanador];
         _result.UltimoPremio = premio;
@@ -493,7 +506,10 @@ public class PrizeWheelController : MenuScreen
             : PrizeGranter.Entregar(premio, Player);
 
         PrenderEfectos();
+        // PrizeGranter ya hace sonar el "recibiste" de lo que entrego; adentro de
+        // un combate (lo cobra quien abrio la ruleta) suena el premio del casino.
         if (winClip != null) AudioService.Instance.PlaySFX(winClip);
+        else if (_entregar != null) Sonidos.PremioChico();
     }
 
     private void PrenderEfectos()

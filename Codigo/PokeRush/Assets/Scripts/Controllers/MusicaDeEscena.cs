@@ -7,54 +7,39 @@ using UnityEngine;
 // los cambios de escena: por eso alcanza con decirle QUE sonar, y no hay que
 // arrastrar un AudioSource por escena.
 //
+// Es OPCIONAL: sin este componente la escena toma su cancion del
+// CatalogoDeAudio por el nombre (ver MusicaDelJuego). Si esta, manda este.
+//
 // Si dos escenas seguidas tienen el MISMO clip (el menu y la pantalla de
 // guardados, por ejemplo), la musica no se reinicia al pasar de una a otra:
 // AudioService.PlayMusic ignora el pedido si ya esta sonando ese clip.
 //
 // COMBATE
-// Si se asigna 'musicaDeCombate', el componente se engancha al BattleController
-// de la escena y cambia la musica al empezar la pelea, volviendo a la del mapa
-// al terminar. Sirve para el boss sin tocar el MapBattleBridge.
+// 'musicaDeCombate' NO es la de cada pelea: es para una escena donde TODAS las
+// peleas tienen que sonar igual. Lo normal es dejarlo vacio y que MusicaDelJuego
+// elija (la del rival si tiene, o una de las peleas comunes).
 public class MusicaDeEscena : MonoBehaviour
 {
     [Header("Musica")]
     [Tooltip("La que suena mientras estas en esta escena.")]
     [SerializeField] private AudioClip musica;
-    [Tooltip("Opcional: la que suena durante el combate. Vacio = no cambia.")]
+    [Tooltip("Opcional: la de TODAS las peleas de esta escena. Vacio = la elige MusicaDelJuego.")]
     [SerializeField] private AudioClip musicaDeCombate;
     [SerializeField] private bool loop = true;
     [Range(0f, 1f)]
     [SerializeField] private float volumen = 0.5f;
 
-    [Header("Referencias (opcional: se busca sola)")]
-    [SerializeField] private BattleController battleController;
+    public static MusicaDeEscena Actual { get; private set; }
 
-    private bool _enganchado;
+    public AudioClip Musica => musica;
+    public AudioClip MusicaDeCombate => musicaDeCombate;
+    public float Volumen => volumen;
 
-    private void Awake()
-    {
-        if (battleController == null)
-        {
-            // Include: el prefab de combate vive DESACTIVADO hasta que arranca
-            // la pelea, y las busquedas por defecto ignoran lo inactivo.
-            battleController = FindAnyObjectByType<BattleController>(FindObjectsInactive.Include);
-        }
-    }
-
-    private void OnEnable()
-    {
-        if (battleController == null || musicaDeCombate == null) return;
-        battleController.BattleStarted += SonarCombate;
-        battleController.BattleEnded += VolverAlMapa;
-        _enganchado = true;
-    }
+    private void OnEnable() => Actual = this;
 
     private void OnDisable()
     {
-        if (!_enganchado || battleController == null) return;
-        battleController.BattleStarted -= SonarCombate;
-        battleController.BattleEnded -= VolverAlMapa;
-        _enganchado = false;
+        if (Actual == this) Actual = null;
     }
 
     // En Start y no en Awake: AudioService lo inicializa GameManager en SU
@@ -70,19 +55,7 @@ public class MusicaDeEscena : MonoBehaviour
             return;
         }
 
-        AudioService.Instance.SetMusicVolume(volumen);
-        Sonar(musica);
-    }
-
-    private void SonarCombate() => Sonar(musicaDeCombate);
-
-    private void VolverAlMapa(BattleOutcome outcome) => Sonar(musica);
-
-    private void Sonar(AudioClip clip)
-    {
-        if (clip == null) return;
-        StopAllCoroutines();
-        StartCoroutine(SonarSeguro(clip));
+        if (musica != null) StartCoroutine(SonarSeguro(musica));
     }
 
     // Pide reproducir y COMPRUEBA que haya arrancado, reintentando un par de
@@ -97,7 +70,7 @@ public class MusicaDeEscena : MonoBehaviour
     {
         for (int intento = 1; intento <= 5; intento++)
         {
-            AudioService.Instance.PlayMusic(clip, loop);
+            MusicaDelJuego.SonarEnLaEscena(clip, volumen, loop);
             yield return null;
 
             if (AudioService.Instance.IsMusicPlaying) yield break;

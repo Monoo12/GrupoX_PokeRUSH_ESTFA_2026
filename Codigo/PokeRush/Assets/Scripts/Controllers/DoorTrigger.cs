@@ -45,6 +45,7 @@ public class DoorTrigger : MonoBehaviour
             return;
         }
 
+        Sonidos.PuertaEntrar();
         player.TeleportTo(destino.position, miraHacia);
     }
 }

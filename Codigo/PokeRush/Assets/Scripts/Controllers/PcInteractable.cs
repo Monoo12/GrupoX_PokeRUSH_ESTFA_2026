@@ -27,6 +27,7 @@ public class PcInteractable : MonoBehaviour, IInteractable
         }
 
         menus.SetContext(MenuContextKind.Overworld);
+        Sonidos.PcPrender();
         if (string.IsNullOrEmpty(mensajeAlEncender)) Abrir(menus);
         else menus.Open(MenuScreenId.MessageBox, new MessageBoxRequest { Message = mensajeAlEncender }, _ => Abrir(menus));
         return true;
@@ -36,6 +37,7 @@ public class PcInteractable : MonoBehaviour, IInteractable
     {
         menus.Open(MenuScreenId.PcStorage, null, _ =>
         {
+            Sonidos.PcApagar();
             if (guardarAlApagar && GuardadoAutomatico && GameManager.Instance != null)
                 GameManager.Instance.SaveGame();
         });

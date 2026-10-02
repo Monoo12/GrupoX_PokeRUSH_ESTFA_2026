@@ -35,6 +35,8 @@ public static class PrizeGranter
             if (premio.shiny) nuevo.SetShiny(true);
 
             PokenRecibido recibido = jugador.RecibirPokemon(nuevo);
+            if (recibido.Destino != DestinoDePokemon.SinLugar) Sonidos.PokemonRecibido();
+            else Sonidos.ObjetoRecibido();
             switch (recibido.Destino)
             {
                 case DestinoDePokemon.Equipo:
@@ -77,19 +79,27 @@ public static class PrizeGranter
                 jugador.Inventory.AddSpecialItem(premio.specialItem);
                 if (premio.poken == null) partes.Add(premio.BuildMessage());
             }
+            if (premio.poken == null) Sonidos.ObjetoRecibido();
         }
 
         if (premio.item != null && premio.amount > 0)
         {
             jugador.Inventory.AddHealItem(premio.item, premio.amount);
-            if (premio.poken == null && premio.specialItem == null) partes.Add(premio.BuildMessage());
+            if (premio.poken == null && premio.specialItem == null)
+            {
+                partes.Add(premio.BuildMessage());
+                Sonidos.ObjetoRecibido();
+            }
         }
 
         if (premio.money > 0)
         {
             jugador.AddMoney(premio.money);
             if (premio.poken == null && premio.item == null && premio.specialItem == null)
+            {
                 partes.Add($"¡Ganaste {premio.money} monedas!");
+                Sonidos.ObjetoRecibido();
+            }
         }
 
         // La ruleta de mejoras de Martin: no va a la mochila, espera a la

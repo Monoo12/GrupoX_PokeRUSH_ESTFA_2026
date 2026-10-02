@@ -133,6 +133,7 @@ public class BattleFxView : MonoBehaviour
         // vuelo en parabola con la ball girando
         if (ballRenderer != null && ballSpinFrames != null && ballSpinFrames.Length > 0)
         {
+            Sonidos.LanzarBall();
             ballRenderer.gameObject.SetActive(true);
             float frameTime = 0f;
             int frame = 0;
@@ -154,6 +155,7 @@ public class BattleFxView : MonoBehaviour
             }
 
             // apertura + destello
+            Sonidos.PokeballSale();
             if (ballOpenSprite != null) ballRenderer.sprite = ballOpenSprite;
             ballRenderer.transform.position = target;
             if (burstRenderer != null)
@@ -167,6 +169,7 @@ public class BattleFxView : MonoBehaviour
         }
 
         // el Poken aparece creciendo desde el piso (pivot en los pies)
+        Sonidos.Grito(pokenView.Poken);
         yield return AppearGrow(pokenView);
     }
 
@@ -175,6 +178,7 @@ public class BattleFxView : MonoBehaviour
     {
         SpriteRenderer renderer = pokenView.Renderer;
         pokenView.Show();
+        Sonidos.Grito(pokenView.Poken);
         if (renderer == null) yield break;
 
         Vector3 basePos = pokenView.transform.position;
@@ -212,6 +216,7 @@ public class BattleFxView : MonoBehaviour
     // El Poken vuelve a su ball: se encoge hacia el piso y desaparece
     public IEnumerator Recall(PokenView pokenView)
     {
+        Sonidos.Retirar();
         Vector3 fullScale = pokenView.transform.localScale;
         for (float t = 0f; t < recallDuration; t += Time.deltaTime)
         {
@@ -227,6 +232,9 @@ public class BattleFxView : MonoBehaviour
     {
         SpriteRenderer renderer = pokenView.Renderer;
         Vector3 basePos = pokenView.transform.position;
+        // Como en la saga: el grito mas grave y el golpe de la caida.
+        Sonidos.Grito(pokenView.Poken, 0.8f);
+        Sonidos.Debilitado();
 
         for (float t = 0f; t < faintDuration; t += Time.deltaTime)
         {
@@ -362,13 +370,19 @@ public class BattleFxView : MonoBehaviour
         float recovery = anim != null ? anim.recoveryTime : 0.12f;
         float shake = anim != null ? anim.cameraShake : 0.05f;
         bool flash = anim != null && anim.screenFlash;
-        // TODO sonidos: anim.windupSound / anim.impactSound via AudioService cuando haya sfx
+
+        // Sonido del ataque: el propio del movimiento (catalogo de audio) o el
+        // de su tipo. Si la animacion trae uno asignado a mano, manda ese.
+        AudioClip sonidoDeCarga = anim != null && anim.windupSound != null ? anim.windupSound : Sonidos.CargaDe(move);
+        AudioClip sonidoDeImpacto = anim != null && anim.impactSound != null ? anim.impactSound : Sonidos.ImpactoDe(move);
 
         // Movimientos de estado: el efecto va sobre el USUARIO, no sobre el
         // rival, y sin sacudida ni parpadeo (no esta recibiendo un golpe).
         // Sin secuencia asignada, el pulso de color de siempre.
         if (isStatus)
         {
+            Sonidos.Ataque(sonidoDeCarga);
+            Sonidos.Ataque(sonidoDeImpacto);
             bool tieneSecuencia = anim != null && anim.impactFrames != null && anim.impactFrames.Length > 0;
             if (tieneSecuencia)
                 yield return ImpactBurst(attacker, color, impact, 0f, false, anim, false);
@@ -382,6 +396,7 @@ public class BattleFxView : MonoBehaviour
         Vector3 towardDefender = (defender.transform.position - attackerHome).normalized;
 
         // 1) anticipacion: pequeño retroceso de carga
+        Sonidos.Ataque(sonidoDeCarga);
         yield return MoveOver(attacker.transform, attackerHome,
             attackerHome - towardDefender * 0.18f, windup);
 
@@ -439,6 +454,7 @@ public class BattleFxView : MonoBehaviour
         }
 
         // 3) impacto: destello (o secuencia) + parpadeo del defensor + sacudida de camara
+        Sonidos.Ataque(sonidoDeImpacto);
         yield return ImpactBurst(defender, color, impact, shake, flash, anim);
 
         // 4) recuperacion: el atacante vuelve a su lugar

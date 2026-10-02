@@ -91,6 +91,7 @@ public class NpcQueCura : MonoBehaviour, IInteractable
             // Se cura ANTES de mostrar el "listo": si el juego se corta con la
             // caja abierta, la curacion ya esta hecha.
             player.CurarEquipo();
+            Sonidos.Curar();
             Debug.Log($"[Enfermera] '{name}' curo al equipo ({player.Team.Count} Pokemon).");
             StartCoroutine(Destellar());
             Terminar(alCurar, story);

@@ -82,6 +82,7 @@ public class CasinoVendedorNpc : MonoBehaviour, IInteractable
 
         player.SpendMoney(precio);
         player.Inventory.AddSpecialItem(objeto);
+        Sonidos.Comprar();
         CasinoDialogo.Guardar();
         return true;
     }

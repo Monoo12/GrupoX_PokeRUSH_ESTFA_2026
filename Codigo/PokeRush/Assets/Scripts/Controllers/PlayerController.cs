@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour
         if (manager != null)
         {
             manager.SetContext(MenuContextKind.Overworld);
+            if (!MenuManager.AnyOpen) Sonidos.AbrirMenu();
             manager.Toggle(MenuScreenId.Pause);
             return;
         }
@@ -174,7 +175,10 @@ public class PlayerController : MonoBehaviour
 
         // Si hay un obstaculo en el tile destino, no me muevo (choco contra la pared).
         if (Physics2D.OverlapCircle(destination, collisionCheckRadius, obstacleMask) != null)
+        {
+            Sonidos.Choque();
             return;
+        }
 
         _isRunning = isRunning;
         _targetPosition = destination;

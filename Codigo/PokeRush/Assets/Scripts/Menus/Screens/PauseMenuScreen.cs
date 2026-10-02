@@ -209,6 +209,8 @@ public class PauseMenuScreen : MenuScreen
 
         if (aviso != null) Manager.Close(aviso);
         _guardando = false;
+        if (ok) Sonidos.Guardar();
+        else Sonidos.Error();
 
         // Nunca se queda trabado: pase lo que pase se muestra un cartel que el
         // jugador puede cerrar y seguir jugando.

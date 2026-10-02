@@ -500,7 +500,7 @@ public class BlackjackScreen : MenuScreen
         }
 
         _apuesta += ficha;
-        Sonar(chipClip);
+        Sonar(chipClip, Sonidos.Fichas);
         Refrescar();
     }
 
@@ -508,7 +508,7 @@ public class BlackjackScreen : MenuScreen
     {
         if (_apuesta == 0) return;
         _apuesta = 0;
-        Sonar(chipClip);
+        Sonar(chipClip, Sonidos.Fichas);
         Refrescar();
     }
 
@@ -528,7 +528,11 @@ public class BlackjackScreen : MenuScreen
         // Se rearma el zapato ENTRE manos, nunca a mitad de una: cambiar las
         // cartas con una mano abierta es exactamente lo que una mesa de verdad
         // no hace.
-        if (_zapato.Count < BlackjackTable.CorteDelZapato) RearmarZapato();
+        if (_zapato.Count < BlackjackTable.CorteDelZapato)
+        {
+            RearmarZapato();
+            Sonidos.Mezclar();
+        }
 
         _manos.Clear();
         BlackjackHand mano = new BlackjackHand { Bet = ModoPokemon ? 0 : _apuesta };
@@ -581,7 +585,7 @@ public class BlackjackScreen : MenuScreen
 
         mano.Cards.Add(Robar());
         AcomodarFila(mano, fila, centro, tapada, animarLaUltima: true);
-        Sonar(dealClip);
+        Sonar(dealClip, Sonidos.Carta);
     }
 
     private void Pedir()
@@ -757,7 +761,8 @@ public class BlackjackScreen : MenuScreen
         if (_pagoDeLaRonda > _result.MayorPremio) _result.MayorPremio = _pagoDeLaRonda;
 
         MostrarBanner(mejor);
-        Sonar(mejor == BlackjackOutcome.Pierde ? loseClip : winClip);
+        if (mejor == BlackjackOutcome.Pierde) Sonar(loseClip, null);
+        else Sonar(winClip, () => { Sonidos.Fichas(); Sonidos.PremioChico(); });
 
         // Todo en UNA linea, sin '\n'. La caja de mensajes del juego usa
         // lineSpacing 1 con la fuente 'power clear', cuyas metricas son mas
@@ -985,7 +990,7 @@ public class BlackjackScreen : MenuScreen
                 return;
             }
 
-            if (_giro <= 0f) Sonar(flipClip);
+            if (_giro <= 0f) Sonar(flipClip, Sonidos.Carta);
             _giro = Mathf.Clamp01(_giro + dt / Mathf.Max(0.01f, flipSeconds));
 
             Image tapada = dealerCards != null && dealerCards.Length > 1 ? dealerCards[1] : null;
@@ -1377,8 +1382,10 @@ public class BlackjackScreen : MenuScreen
         }
     }
 
-    private static void Sonar(AudioClip clip)
+    // El clip asignado en el prefab manda; sin clip, el del catalogo de audio.
+    private static void Sonar(AudioClip clip, System.Action delCatalogo)
     {
         if (clip != null) AudioService.Instance.PlaySFX(clip);
+        else delCatalogo?.Invoke();
     }
 }

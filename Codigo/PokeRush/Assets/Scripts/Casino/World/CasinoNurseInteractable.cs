@@ -55,6 +55,7 @@ public class CasinoNurseInteractable : MonoBehaviour, IInteractable
             if (!acepto) return;
 
             player.CurarEquipo();
+            Sonidos.Curar();
 
             if (puedePagar)
             {

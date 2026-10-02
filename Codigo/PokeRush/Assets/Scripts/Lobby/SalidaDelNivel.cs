@@ -105,6 +105,7 @@ public class SalidaDelNivel : MonoBehaviour, IInteractable
         _saliendo = true;
         Debug.Log($"[Recorrido] Salida del nivel ({gameObject.scene.name}) hacia {lobby}.");
         CasinoDialogo.Guardar();
+        Sonidos.Teletransporte();
         SceneManager.LoadScene(lobby);
     }
 

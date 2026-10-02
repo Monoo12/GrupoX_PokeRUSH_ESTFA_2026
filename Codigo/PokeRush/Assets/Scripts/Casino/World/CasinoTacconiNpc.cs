@@ -297,6 +297,7 @@ public class CasinoTacconiNpc : MonoBehaviour, IInteractable
 
                 PokenRecibido recibido = player.RecibirPokemon(premio);
                 if (recibido.Destino == DestinoDePokemon.SinLugar) return mensajeSinLugar;
+                Sonidos.PokemonRecibido();
 
                 if (flagGanado != StoryFlag.None && story != null) story.ActivateFlag(flagGanado);
                 Debug.Log($"[Tacconi] Ganaste: {NombrePremio} -> {recibido.Destino}.");

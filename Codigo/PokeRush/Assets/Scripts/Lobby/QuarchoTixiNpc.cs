@@ -183,7 +183,11 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
         if (story == null || story.HasFlag(StoryFlag.Lobby_TixiPresentado)) return;
 
         story.ActivateFlag(StoryFlag.Lobby_TixiPresentado);
-        if (player != null && regaloDeBienvenida > 0) player.AddMoney(regaloDeBienvenida);
+        if (player != null && regaloDeBienvenida > 0)
+        {
+            player.AddMoney(regaloDeBienvenida);
+            Sonidos.ObjetoRecibido();
+        }
         CasinoDialogo.Guardar();
 
         if (dialogueController == null) return;

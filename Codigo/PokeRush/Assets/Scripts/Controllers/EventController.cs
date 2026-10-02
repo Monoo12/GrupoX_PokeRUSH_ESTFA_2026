@@ -58,9 +58,14 @@ public class EventController : MonoBehaviour
 
         if (itemRewards != null && _playerModel != null)
         {
+            bool alguno = false;
             foreach (HealItemDefinition item in itemRewards)
                 if (item != null)
+                {
                     _playerModel.Inventory.AddHealItem(item, 1);
+                    alguno = true;
+                }
+            if (alguno) Sonidos.ObjetoRecibido();
         }
 
         if (defeatDialogue != null && dialogueController != null)

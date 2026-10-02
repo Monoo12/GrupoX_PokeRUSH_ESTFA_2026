@@ -40,6 +40,14 @@ __pycache__/
 Codigo/PokeRush/Assets/Graphics/*
 !Codigo/PokeRush/Assets/Graphics.meta
 
+# === Pack de audio de Essentials (AudioAÑIL) ===
+# Igual que Graphics: vive solo en local (351 MB, y trae un Game.exe que no
+# tiene que ir al repo). Lo que el juego usa se copio a Assets/Audio y a
+# Resources/Audio con nombres claros; ver Documentacion/Documentacion del
+# Codigo/Audio_Del_Juego.md.
+Codigo/PokeRush/Assets/AudioAÑIL/
+Codigo/PokeRush/Assets/AudioAÑIL.meta
+
 # === Escenas de recuperacion que deja Unity al cerrarse mal ===
 Codigo/PokeRush/Assets/_Recovery/
 Codigo/PokeRush/Assets/_Recovery.meta

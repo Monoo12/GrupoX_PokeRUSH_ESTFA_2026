@@ -47,6 +47,7 @@ public class GuardadoRapido : MonoBehaviour
         }
 
         gm.SaveGame();
+        Sonidos.Guardar();
         Debug.Log("[Guardado] Partida de '" + gm.CurrentPlayer.PlayerName + "' guardada con " + tecla + ".");
         Avisar(mensajeOk);
     }

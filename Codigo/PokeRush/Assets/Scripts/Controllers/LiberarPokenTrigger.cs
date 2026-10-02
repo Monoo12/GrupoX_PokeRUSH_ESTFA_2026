@@ -145,6 +145,7 @@ public class LiberarPokenTrigger : MonoBehaviour, IInteractable
     {
         PokenRecibido recibido = player.RecibirPokemon(new PokenModel(poken, nivel));
         _liberado = true;
+        if (recibido.Destino != DestinoDePokemon.SinLugar) Sonidos.PokemonRecibido();
 
         if (otorgaFlag != StoryFlag.None && story != null)
             story.ActivateFlag(otorgaFlag);

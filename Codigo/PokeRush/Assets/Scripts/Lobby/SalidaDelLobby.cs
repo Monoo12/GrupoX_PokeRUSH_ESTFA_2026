@@ -98,6 +98,7 @@ public static class ViajeEntreNiveles
         if (nivel == null) return;
         Debug.Log($"[Recorrido] Salida de la cueva hacia {nivel.Nombre} ({nivel.EscenaDeEntrada}).");
         CasinoDialogo.Guardar();
+        Sonidos.Teletransporte();
         SceneManager.LoadScene(nivel.EscenaDeEntrada);
     }
 }

@@ -18,8 +18,12 @@ public class PokenView : MonoBehaviour
     private int _frameIndex;
     private float _frameTimer;
 
+    // El que esta dibujado ahora (para su grito, en BattleFxView).
+    public PokenModel Poken { get; private set; }
+
     public void SetPoken(PokenModel pokenModel, bool isPlayerSide)
     {
+        Poken = pokenModel;
         PokenDefinition definition = pokenModel.Definition;
 
         // Con frames animados los usa; si no hay, cae al sprite estatico. Los

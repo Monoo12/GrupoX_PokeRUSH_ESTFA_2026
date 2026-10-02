@@ -370,6 +370,7 @@ public class TutorialParte : MonoBehaviour, IInteractable, ReglasDelTutorial.IPa
             player.Inventory.AddHealItem(e.objeto, e.cantidad);
             dados.Add(e.cantidad > 1 ? $"{e.objeto.itemName} x{e.cantidad}" : e.objeto.itemName);
         }
+        if (dados.Count > 0) Sonidos.ObjetoEncontrado();
 
         return dados.Count == 0 ? null : ReglasDelTutorial.Enumerar(dados);
     }

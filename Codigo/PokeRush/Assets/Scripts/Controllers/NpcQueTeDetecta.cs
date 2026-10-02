@@ -177,6 +177,7 @@ public class NpcQueTeDetecta : MonoBehaviour
 
     private IEnumerator MostrarSigno()
     {
+        Sonidos.Exclamacion();
         if (signo == null) yield break;
 
         if (_signo == null)

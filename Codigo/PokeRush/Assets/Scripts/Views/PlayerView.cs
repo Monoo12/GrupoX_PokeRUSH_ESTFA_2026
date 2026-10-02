@@ -125,6 +125,10 @@ public class PlayerView : MonoBehaviour
         {
             _frameTimer -= frameDuration;
             _frameIndex = (_frameIndex + 1) % frames.Length;
+
+            // Cuadros 1 y 3 = el pie apoya (0 y 2 son la pose de paso medio).
+            if (frames.Length >= 4 && (_frameIndex == 1 || _frameIndex == 3))
+                Pasos.DelJugador(playerController.IsRunning);
         }
 
         // Por si cambie a un set con menos cuadros (walk <-> run).

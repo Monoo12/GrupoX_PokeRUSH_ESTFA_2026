@@ -13,11 +13,18 @@ using UnityEngine.UI;
 // se suma a ella. Funciona igual con mouse, teclado o joystick, porque el
 // teclado mueve la SELECCION del EventSystem y eso tambien cuenta como "encima".
 // Todo en tiempo sin escalar: anda aunque el juego este en pausa.
+//
+// Tambien suena: el cursor al moverse la seleccion con el teclado y la
+// confirmacion al elegir (con X, Enter o un click). Son los mismos sonidos de
+// los menus del juego (Sonidos.Cursor / Sonidos.Confirmar).
 [RequireComponent(typeof(Selectable))]
 public class BotonAnimado : MonoBehaviour,
     IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler,
-    ISelectHandler, IDeselectHandler
+    ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerClickHandler
 {
+    // La seleccion inicial de una pantalla (la pone el codigo al abrirla) no
+    // es el jugador moviendose: esa no suena.
+    private static float _silencioHasta;
     [Header("Escala")]
     [SerializeField] private float escalaEncima = 1.05f;
     [SerializeField] private float escalaApretado = 0.95f;
@@ -56,6 +63,8 @@ public class BotonAnimado : MonoBehaviour,
         if (_grupo == null) _grupo = gameObject.AddComponent<CanvasGroup>();
         if (marcaDeElegido != null) marcaDeElegido.SetActive(_elegido);
     }
+
+    private void OnEnable() => _silencioHasta = Time.unscaledTime + 0.25f;
 
     private void OnDisable()
     {
@@ -98,6 +107,22 @@ public class BotonAnimado : MonoBehaviour,
     }
 
     public void OnPointerUp(PointerEventData e) => _apretado = false;
-    public void OnSelect(BaseEventData e) => _seleccionado = true;
+    public void OnSelect(BaseEventData e)
+    {
+        _seleccionado = true;
+        if (Time.unscaledTime >= _silencioHasta && Usable) Sonidos.Cursor();
+    }
+
+    public void OnSubmit(BaseEventData e)
+    {
+        if (Usable) Sonidos.Confirmar();
+    }
+
+    public void OnPointerClick(PointerEventData e)
+    {
+        if (e.button == PointerEventData.InputButton.Left && Usable) Sonidos.Confirmar();
+    }
+
+    private bool Usable => _selectable == null || _selectable.IsInteractable();
     public void OnDeselect(BaseEventData e) => _seleccionado = false;
 }

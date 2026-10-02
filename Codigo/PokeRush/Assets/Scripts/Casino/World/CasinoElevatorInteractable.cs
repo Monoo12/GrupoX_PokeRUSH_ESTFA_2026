@@ -109,6 +109,7 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
     // escena al arrancar para dejar al jugador frente a sus puertas y no en el
     // spawn de la escena, que esta en la entrada del piso.
     private static string _llegandoA;
+    private static SfxEnCurso _viaje;
 
     private void Start()
     {
@@ -118,6 +119,12 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
         var jugador = FindAnyObjectByType<PlayerController>();
         if (jugador != null)
             jugador.TeleportTo(transform.position + (Vector3)llegada, Vector2.down);
+
+        // El zumbido del viaje viene sonando desde el piso anterior (la fuente
+        // sobrevive el cambio de escena): se corta y suena la campanita.
+        _viaje?.Parar(0.25f);
+        _viaje = null;
+        Sonidos.AscensorLlega();
     }
 
     public bool Interact(PlayerModel player, StoryModel story)
@@ -286,6 +293,7 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
         // dinero, el equipo y los flags cruzan solos.
         _llegandoA = escena;
         Avisar(mensaje);
+        _viaje = Sonidos.AscensorViaja();
         SceneLoaderService.Instance.LoadScene(escena);
     }
 

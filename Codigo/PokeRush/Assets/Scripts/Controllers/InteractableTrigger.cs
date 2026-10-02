@@ -303,6 +303,7 @@ public class InteractableTrigger : MonoBehaviour, IInteractable
                 ? $"{e.objeto.itemName} x{e.cantidad}"
                 : e.objeto.itemName);
         }
+        if (partes.Count > 0) Sonidos.ObjetoEncontrado();
 
         if (partes.Count == 0) return null;
 

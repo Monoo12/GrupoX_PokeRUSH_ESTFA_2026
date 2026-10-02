@@ -133,11 +133,15 @@ public class VueltaAlLobby : MonoBehaviour
 
         if (_dialogo == null)
         {
+            Sonidos.Teletransporte();
             SceneManager.LoadScene(RecorridoDeLaHistoria.EscenaDelLobby);
             return;
         }
 
-        _dialogo.StartMessage("", null, new[] { Mensaje },
-            () => SceneManager.LoadScene(RecorridoDeLaHistoria.EscenaDelLobby));
+        _dialogo.StartMessage("", null, new[] { Mensaje }, () =>
+        {
+            Sonidos.Teletransporte();
+            SceneManager.LoadScene(RecorridoDeLaHistoria.EscenaDelLobby);
+        });
     }
 }

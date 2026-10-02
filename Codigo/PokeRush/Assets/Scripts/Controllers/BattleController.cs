@@ -49,6 +49,30 @@ public class BattleController : MonoBehaviour
     // Fin del combate: EventController/GameManager aplican flags, items y save
     public event Action<BattleOutcome> BattleEnded;
 
+    // Los mismos avisos para quien escucha TODAS las peleas sin saber en que
+    // escena estan (la musica: MusicaDelJuego). Empezo = despues de
+    // BattleStarted; Termina = al salir el cartel de victoria o derrota (con
+    // victoria y si escapo); Termino = junto con BattleEnded.
+    public static event Action<BattleController> AlgunaPeleaEmpezo;
+    public static event Action<BattleController, bool, bool> AlgunaPeleaTermina;
+    public static event Action<BattleController, BattleOutcome> AlgunaPeleaTermino;
+
+    // El proyecto no recarga el dominio al entrar a Play: los suscriptores de
+    // la sesion anterior quedarian colgados.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ReiniciarAvisos()
+    {
+        AlgunaPeleaEmpezo = null;
+        AlgunaPeleaTermina = null;
+        AlgunaPeleaTermino = null;
+    }
+
+    // Contra quien es la pelea en curso, tal como la pidieron (antes de
+    // cambiar a la variante "todo cortado"). Null en un salvaje.
+    public NPCDefinition Rival { get; private set; }
+    // El director de la pelea en curso (la de Julieta). Null en las demas.
+    public IDirectorDeCombate Director => _director;
+
     private BattleModel _battleModel;
     private PlayerModel _playerModel;
     private EnemyModel _enemyModel;
@@ -166,6 +190,7 @@ public class BattleController : MonoBehaviour
         CasinoRuletaDeCombate ruletaDeCombate = null, IDirectorDeCombate director = null)
     {
         _director = director;
+        Rival = enemyDefinition;
         _nestorPedidoPorLaPelea = conNestorAliado;
         _ruletaDeCombate = ruletaDeCombate != null && ruletaDeCombate.Configurada
             ? ruletaDeCombate
@@ -224,6 +249,7 @@ public class BattleController : MonoBehaviour
         _trainerIntroSprite = null;
         _bossDefinition = null;
         _bossOriginal = null;
+        Rival = null;
 
         // Un salvaje no es un boss. Sin esto se arrastraba la config del
         // combate ANTERIOR y el salvaje heredaba EnemyCannotFaint: no podia
@@ -349,6 +375,8 @@ public class BattleController : MonoBehaviour
 
         // Avisa antes de la intro para que el mapa se esconda a tiempo
         BattleStarted?.Invoke();
+        AlgunaPeleaEmpezo?.Invoke(this);
+        Sonidos.PrecargarPelea(_playerModel, _enemyModel);
 
         // Red de seguridad: el prefab de combate se guarda DESACTIVADO para no
         // tapar el mapa, y normalmente lo prende MapBattleBridge al escuchar
@@ -1469,6 +1497,9 @@ public class BattleController : MonoBehaviour
                 }
 
                 case BattleEventKind.HpChanged:
+                    // El golpe suena con la barra, no con la animacion del
+                    // ataque: asi un super eficaz se escucha distinto.
+                    Sonidos.DelEvento(ev.Sonido);
                     // La barra drena hasta la foto de ESTE evento, no hasta el
                     // HP del final del turno (ver BattleEvent.HpAfter)
                     if (battleHudView != null)
@@ -1504,6 +1535,7 @@ public class BattleController : MonoBehaviour
                     if (battleFxView != null && view != null && view.gameObject.activeSelf)
                     {
                         bool isRaise = ev.Message != null && ev.Message.Contains("subió");
+                        Sonidos.CambioDeStat(isRaise);
                         yield return battleFxView.PulseTint(view,
                             isRaise ? BattleFxView.PulseStatUp : BattleFxView.PulseStatDown);
                     }
@@ -1518,6 +1550,7 @@ public class BattleController : MonoBehaviour
                         PokenModel poken = ev.TargetIsPlayer
                             ? _battleModel.ActivePlayerPoken
                             : _battleModel.ActiveEnemyPoken;
+                        Sonidos.Estado(poken.CurrentStatus);
                         yield return battleFxView.PulseTint(view,
                             BattleFxView.PulseForStatus(poken.CurrentStatus));
                     }
@@ -1566,6 +1599,8 @@ public class BattleController : MonoBehaviour
         // La pelea con guion apaga lo suyo (vistas y efectos temporales) antes
         // del cartel de resultado.
         _director?.AlTerminar(victory);
+        if (escaped) Sonidos.Huir();
+        AlgunaPeleaTermina?.Invoke(this, victory, escaped);
 
         // El retrato se apaga con el combate. Si queda prendido, el Canvas se
         // esconde con Nestor dibujado y reaparece asi en la pelea siguiente.
@@ -1612,6 +1647,8 @@ public class BattleController : MonoBehaviour
         // Flags, items, dialogo de derrota del boss y guardado: los aplican
         // los suscriptores (EventController / GameManager)
         BattleEnded?.Invoke(outcome);
+        AlgunaPeleaTermino?.Invoke(this, outcome);
+        Sonidos.LiberarPelea();
     }
 
     // ---------- mandos para un director de pelea ----------
