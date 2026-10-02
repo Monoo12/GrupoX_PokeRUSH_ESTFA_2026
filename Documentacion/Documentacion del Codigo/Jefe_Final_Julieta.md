@@ -263,10 +263,17 @@ contradecir nada anterior; todo está en el guion y se cambia desde el Inspector
 
 ## Lo que falta (equipo)
 
-1. **Julieta no tiene arte propio**: usa la científica del pack (hoja
-   `Graphics/Characters/cientifica.png` y retrato `Graphics/Trainers/CIENTIFICA.png`).
-   Como `Assets/Graphics` está en `.gitignore`, esos dos PNG (con su `.meta`) van
-   con `git add -f`.
+1. **Arte de Julieta (2-oct-2026)**: hoja `Graphics/Characters/julieta.png` (4x4 de
+   64x80, 72 px de alto: más grande que el resto porque es la jefa final, lo pidió Augusto) y retrato `Graphics/Trainers/JULIETA.png`, sacados del arte que
+   pasó el equipo en `Graphics/Juli` (Gemini). El retrato es también su sprite de combate:
+   es la figura a su resolución nativa (48x92 en un lienzo de 100x100) importada a
+   **PPU 62,5**, así mide en combate lo mismo que un entrenador de 160x160 a PPU 100.
+   La pose quieta de frente sale de esa misma figura (la de la hoja de Gemini no tenía
+   boca); a los pasos de frente se les pintó la boca 3 filas arriba del mentón. De perfil,
+   la hoja de Gemini traía una sola pose mirando a la izquierda: la izquierda es el espejo
+   de la derecha. La científica del pack la sigue usando la bióloga del Data Center.
+   Como `Assets/Graphics` está en `.gitignore`, los dos PNG (con su `.meta`) van con
+   `git add -f`.
 2. **La UI es de prueba** (barra del PJ, señal, créditos).
 3. **Música**: la pelea usa la del combate de siempre; `CreditosFinales` tiene un
    campo `musica` vacío.

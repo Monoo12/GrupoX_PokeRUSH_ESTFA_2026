@@ -28,10 +28,12 @@ public static class PeleaJulietaAssets
     private const string Pokens = "Assets/Resources/Definitions/Pokens/";
     private const string Perfiles = "Assets/Resources/Definitions/AIProfiles/";
 
-    // Provisorios hasta que el equipo dibuje a Julieta: la cientifica del pack
-    // (la pareja de la hoja 'cientifico' que usa Tixi).
-    public const string RetratoDeJulieta = "Assets/Graphics/Trainers/CIENTIFICA.png";
-    public const string HojaDeJulieta = "cientifica";
+    // El arte que paso el equipo (Graphics/Juli), pasado a pixel art: hoja 4x4
+    // de 64x80 (72 px de alto: mas grande que el resto, es la jefa final) y retrato a resolucion nativa (100x100, importado a PPU 62,5
+    // para medir en combate lo mismo que un entrenador de 160x160 a PPU 100).
+    // La cientifica del pack (la provisoria) la sigue usando la biologa del Data Center.
+    public const string RetratoDeJulieta = "Assets/Graphics/Trainers/JULIETA.png";
+    public const string HojaDeJulieta = "julieta";
     public const string FondoDelCombate = "Assets/Sprites/Battlebacks/Laboratorio_bg.png";
 
     private const string RetratoNestor = "Assets/Sprites/Nestor/NESTOR_retrato_pensando.png";
