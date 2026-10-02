@@ -39,6 +39,18 @@ public static class PeleaJulietaBuilder
     private const string TilesAsset = "Assets/Palettes/JuliTile_Tiles.asset";
     private const string Fuente = "Assets/TextMesh Pro/Fonts/power clear.ttf";
     private const string TextoDeCreditos = "Assets/Resources/Creditos/CreditosFinales.txt";
+    private const string FuenteDeTitulos = "Assets/Fonts/power clear bold.ttf";
+    private const string LogoDelGrupo = "Assets/Sprites/Logos/LevelUpCreators.png";
+
+    // El reparto de los creditos: nombre y de donde sale su retrato.
+    private static readonly (string nombre, string retrato)[] Reparto =
+    {
+        ("Tixi", "Assets/Graphics/Trainers/TIXI.png"),
+        ("Néstor", "Assets/Sprites/Nestor/NESTOR_frente.png"),
+        ("Tacconi", "Assets/Graphics/Trainers/TACCONI.png"),
+        ("Martín Reymar", "Assets/Graphics/Trainers/MARTIN.png"),
+        ("Julieta", "Assets/Graphics/Trainers/JULIETA.png"),
+    };
     private const string Pokens = "Assets/Resources/Definitions/Pokens/";
 
     private const int CapaObstacles = 3;
@@ -175,12 +187,35 @@ public static class PeleaJulietaBuilder
         var so = new SerializedObject(creditos);
         so.FindProperty("texto").objectReferenceValue = AssetDatabase.LoadAssetAtPath<TextAsset>(TextoDeCreditos);
         so.FindProperty("fuente").objectReferenceValue = AssetDatabase.LoadAssetAtPath<Font>(Fuente);
+        so.FindProperty("fuenteDeTitulos").objectReferenceValue = AssetDatabase.LoadAssetAtPath<Font>(FuenteDeTitulos);
+        so.FindProperty("logoDelGrupo").objectReferenceValue = PrimerSprite(LogoDelGrupo);
+
+        SerializedProperty reparto = so.FindProperty("reparto");
+        reparto.ClearArray();
+        foreach ((string nombre, string retrato) in Reparto)
+        {
+            Sprite s = PrimerSprite(retrato);
+            if (s == null) Debug.LogWarning($"[Julieta] Sin retrato para {nombre} en {retrato}.");
+            reparto.InsertArrayElementAtIndex(reparto.arraySize);
+            SerializedProperty p = reparto.GetArrayElementAtIndex(reparto.arraySize - 1);
+            p.FindPropertyRelative("nombre").stringValue = nombre;
+            p.FindPropertyRelative("papel").stringValue = "";
+            p.FindPropertyRelative("retrato").objectReferenceValue = s;
+        }
         so.ApplyModifiedPropertiesWithoutUndo();
 
         EditorSceneManager.SaveScene(scene, EscenaDeCreditos);
         SumarABuildSettings(EscenaDeCreditos);
         AssetDatabase.SaveAssets();
         Debug.Log($"[Julieta] Créditos en {EscenaDeCreditos} (y en Build Settings). El texto se edita en {TextoDeCreditos}.");
+    }
+
+    // El sprite de una imagen: el unico si es Single, el primero si es Multiple.
+    private static Sprite PrimerSprite(string ruta)
+    {
+        Sprite s = AssetDatabase.LoadAssetAtPath<Sprite>(ruta);
+        if (s != null) return s;
+        return AssetDatabase.LoadAllAssetsAtPath(ruta).OfType<Sprite>().FirstOrDefault();
     }
 
     // ------------------------------------------------------------ la sala

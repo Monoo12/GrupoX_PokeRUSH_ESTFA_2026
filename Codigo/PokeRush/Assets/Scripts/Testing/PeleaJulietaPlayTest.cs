@@ -112,6 +112,7 @@ public class PeleaJulietaPlayTest : MonoBehaviour
               _combate.Ruleta != null && _combate.Ruleta.QuienCobra == QuienCobraLaRuleta.AFavorDelJugador);
         Check("Fase 1: sonaron los momentos del arranque", _momentos.Contains("Inicio: Nestor y la ruleta en linea"));
         Check("Fase 1: sin señal de control ni vida del PJ", !_pelea.Lienzo.Senal.Encendida && !_pelea.Lienzo.Vida.Visible);
+        Check("Fase 1: suena el tema de la fase 1", SuenaElTema(c => c.julietaFase1));
         yield return Foto("01-fase1");
 
         // Un par de turnos y se reinicia en el medio.
@@ -193,6 +194,7 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         Check("Fase 2: la lectura de Julieta (el protocolo de Nestor) contra el jugador",
               _combate.Prediccion != null && _combate.Prediccion.Lector == "Julieta");
         Check("Fase 2: la señal de control en pantalla", _pelea.Lienzo.Senal.Encendida);
+        Check("Fase 2: suena el tema de la fase 2", SuenaElTema(c => c.julietaFase2));
         yield return Foto("03-fase2");
 
         // --- fase 2 -> 3
@@ -202,6 +204,7 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         Check("Fase 3: el controlado sigue en el equipo del jugador",
               _pelea.Vinculo.Poken != null && _jugador.Team.Contains(_pelea.Vinculo.Poken));
         Check("Fase 3: la vida del PJ en pantalla", _pelea.Lienzo.Vida.Visible);
+        Check("Fase 3: sigue el tema de la fase 2 (el final arranca en la ruptura)", SuenaElTema(c => c.julietaFase2));
         yield return Foto("04-fase3");
 
         // Que ataque al PJ al menos una vez.
@@ -224,6 +227,7 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         Check("Ruptura: la ruleta vuelve a jugar para el jugador",
               _combate.Ruleta != null && _combate.Ruleta.QuienCobra == QuienCobraLaRuleta.AFavorDelJugador);
         Check("Ruptura: sin lectura de Julieta ni señal", _combate.Prediccion == null && !_pelea.Lienzo.Senal.Encendida);
+        Check("Ruptura: suena el tema final", SuenaElTema(c => c.julietaFinal));
         yield return Foto("06-ruptura");
 
         // --- hasta ganar. El piloto pega sin mirar tipos y llega a la ruptura
@@ -231,14 +235,17 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         // final y no la puntería del piloto.
         foreach (PokenModel p in _jugador.Team) { p.SetCurrentHP(p.MaxHP); p.CureStatus(); }
         _combate.RefrescarHud();
+        // Para no depender del equipo DEMO: el rival activo queda en 1 PS justo
+        // antes de cada ataque del piloto (ver Pegar). Antes se ponia al empezar
+        // la vuelta, pero ahi el turno casi nunca estaba en PlayerTurn y la
+        // pelea se jugaba de verdad: a veces el equipo DEMO perdia (2-oct-2026).
+        _rivalAUnPS = true;
         for (int i = 0; i < 40 && _combate.EnCurso; i++)
         {
-            // Para no depender del equipo DEMO: el rival activo queda en 1 PS.
-            if (_combate.Modelo != null && _combate.Modelo.CurrentPhase == BattlePhase.PlayerTurn)
-                _combate.Modelo.ActiveEnemyPoken.SetCurrentHP(1);
             int turno = _combate.Modelo != null ? _combate.Modelo.CurrentTurn : 0;
             yield return Pilotear(() => !_combate.EnCurso || (_combate.Modelo != null && _combate.Modelo.CurrentTurn > turno), 60f);
         }
+        _rivalAUnPS = false;
 
         Check("Las fases fueron en orden 2, 3, ruptura",
               _fases.SequenceEqual(new[] { FaseDeJulieta.ControlDelSistema, FaseDeJulieta.ControlDelVinculo, FaseDeJulieta.Ruptura }));
@@ -250,6 +257,7 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         // --- el final en la arena
         yield return EsperarHasta(() => _dialogo.IsOpen, 8f);
         Check("El final se cuenta en la arena, despues de la pelea", _dialogo.IsOpen && !_combate.EnCurso);
+        Check("Despues de ganarle suena el tema del final", SuenaElTema(c => c.julietaDespues));
         yield return Foto("07-final");
         int lineas = 0;
         while (_dialogo.IsOpen && lineas < 60)
@@ -266,6 +274,8 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         yield return new WaitForSecondsRealtime(2.5f);
         CreditosFinales creditos = FindAnyObjectByType<CreditosFinales>();
         Check("La escena de creditos tiene sus creditos", creditos != null);
+        yield return new WaitForSecondsRealtime(3f);
+        Check("En los creditos suena su tema", SuenaElTema(c => c.creditos));
         yield return Foto("08-creditos");
         if (creditos != null)
         {
@@ -277,6 +287,16 @@ public class PeleaJulietaPlayTest : MonoBehaviour
 
     // Juega hasta que la fase cambie. Si en 'turnos' no cambio sola (el equipo
     // DEMO no llego a los umbrales de KOs), la adelanta como haria F10.
+    // El tema que esta sonando es el que el catalogo dice para ese momento.
+    private static bool SuenaElTema(System.Func<CatalogoDeAudio, Sonido> cual)
+    {
+        CatalogoDeAudio c = CatalogoDeAudio.Actual;
+        Sonido s = c != null ? cual(c) : null;
+        AudioClip sonando = AudioService.Instance.CurrentMusic;
+        Debug.Log($"[PlayJulieta] musica: {(sonando != null ? sonando.name : "nada")} (esperada {(s != null && s.clip != null ? s.clip.name : "-")})");
+        return s != null && s.clip != null && sonando == s.clip;
+    }
+
     private IEnumerator JugarFase(FaseDeJulieta fase, int turnos)
     {
         int desde = _combate.Modelo != null ? _combate.Modelo.CurrentTurn : 0;
@@ -347,8 +367,11 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    private bool _rivalAUnPS;
+
     private void Pegar(BattleModel m)
     {
+        if (_rivalAUnPS) m.ActiveEnemyPoken.SetCurrentHP(1);
         PokenModel activo = m.ActivePlayerPoken;
         IEnumerable<int> orden = Enumerable.Range(0, activo.Moves.Count)
             .Where(i => activo.Moves[i].HasPP)

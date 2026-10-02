@@ -153,13 +153,40 @@ La barra del PJ vive solo durante la pelea: no se guarda en la partida.
 
 1. Julieta cae (recién se puede en la ruptura) → el combate cierra como victoria.
 2. `AlTerminar` apaga **todo** lo temporal: ruleta, Néstor, lectura, control,
-   barra del PJ, señal.
-3. Se activa `StoryFlag.Julieta_Vencida` y **se guarda la partida**.
+   barra del PJ, señal. Con el cartel de victoria entra el tema
+   `After-vencer-Julieta`.
+3. Se activa `StoryFlag.Julieta_Vencida` en memoria, pero **la partida NO se
+   guarda** (pedido de Augusto, 2-oct-2026): el juego termina en los créditos y
+   vuelve a la pantalla de inicio, sin post-game. "Continuar" lleva otra vez a la
+   cueva, a las puertas del final.
 4. Vuelve el mapa y suena `finalDelJuego` en la arena.
-5. Fundido a negro → `CreditosFinales` → al terminar, `Menu Principal`.
+5. Fundido a negro → `CreditosFinales` → pantalla de FIN → `Menu Principal`.
 
-Los créditos se editan en `Assets/Resources/Creditos/CreditosFinales.txt`
-(`# título`, `## sección`, líneas sueltas). Manteniendo **X** van más rápido.
+### Los créditos
+
+`CreditosFinales` arma toda la secuencia final (ver el comentario del script):
+
+1. **Epílogo** (opcional): las líneas de `GuionDeJulieta.epilogo`, una por
+   pantalla, sobre negro. Vacío = se saltea. Es el lugar para el cierre de la
+   historia cuando esté escrito (admite `{PJ}`).
+2. Entra la música de los créditos (`Creditos/`), el logo de Level Up Creators
+   sobre blanco y el título.
+3. El rollo sube solo, **a la velocidad justa para terminar con la canción**.
+   Tiene el reparto con sus retratos (`@reparto` en el texto).
+4. **Pantalla de FIN**: "Gracias por jugar, {PJ}" y el equipo con el que terminó.
+   El aviso "Presioná X para volver al inicio" aparece recién a los 3,5 s.
+
+**No se puede acelerar ni saltear**: la tecla no hace nada hasta el aviso del
+final. El texto se edita en `Assets/Resources/Creditos/CreditosFinales.txt`
+(`# título`, `## sección`, `@reparto`, líneas sueltas); los retratos del reparto
+los pone `PokeRush > Jefe final (Julieta) > Armar la escena de créditos`.
+
+### La música de la pelea
+
+Sale del `CatalogoDeAudio` (ver `Audio_Del_Juego.md`): fase 1 con su tema, las
+fases 2 y 3 con el de la fase 2, y desde la **Ruptura** el tema final. Para que
+el final arranque en la fase 3: campo **Fase De La Musica Final** de
+`PeleaJulieta` = `ControlDelVinculo`. Al perder vuelve la música de la arena.
 
 ### Si el jugador pierde
 
@@ -275,6 +302,9 @@ contradecir nada anterior; todo está en el guion y se cambia desde el Inspector
    Como `Assets/Graphics` está en `.gitignore`, los dos PNG (con su `.meta`) van con
    `git add -f`.
 2. **La UI es de prueba** (barra del PJ, señal, créditos).
-3. **Música**: la pelea usa la del combate de siempre; `CreditosFinales` tiene un
-   campo `musica` vacío.
-4. **Conectarla al recorrido** cuando la arena esté pintada (ver "Mudarla").
+3. **Música**: hecha (2-oct-2026), ver "La música de la pelea".
+4. **Conectarla al recorrido** cuando la arena esté pintada (ver "Mudarla"). La
+   escena `BossFinal` ya tiene música y pasos en el catálogo de audio, y entra
+   sola en Build Settings con `PokeRush > Release > Aplicar configuracion de release`.
+5. **El final de la historia** (texto provisorio): `finalDelJuego` y `epilogo`
+   del guion.

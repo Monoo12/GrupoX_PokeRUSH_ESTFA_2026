@@ -159,4 +159,9 @@ public class GuionDeJulieta : ScriptableObject
 
     [Header("Si se vuelve a hablarle despues de ganarle (sin ir a los creditos)")]
     public LineaDeJulieta[] yaVencida = new LineaDeJulieta[0];
+
+    [Header("Epilogo: texto sobre negro entre el fundido y los creditos")]
+    [Tooltip("Una linea por pantalla, con {PJ} para el nombre del jugador. Vacio = " +
+             "despues de la arena van directo los creditos. Lo muestra CreditosFinales.")]
+    [TextArea(2, 4)] public string[] epilogo = new string[0];
 }

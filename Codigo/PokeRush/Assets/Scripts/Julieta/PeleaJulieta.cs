@@ -90,6 +90,12 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
              "tiene enfermeria: sin esto, perder deja al jugador sin poder reintentar.")]
     [SerializeField] private bool restaurarEquipoAlPerder = true;
 
+    [Header("Musica (sale del CatalogoDeAudio)")]
+    [Tooltip("Desde que fase suena el tema final. Ruptura = recien cuando Julieta " +
+             "puede caer; ControlDelVinculo = desde que controla un Pokemon del jugador. " +
+             "La fase 1 tiene su tema y las del medio comparten el de la fase 2.")]
+    [SerializeField] private FaseDeJulieta faseDeLaMusicaFinal = FaseDeJulieta.Ruptura;
+
     [Header("Presentacion")]
     [SerializeField] private Color colorDeJulieta = new Color(0.72f, 0.3f, 1f);
     [SerializeField] private string cartelDeControl = "NEURARUSH-LINK · EL SISTEMA ES DE JULIETA";
@@ -222,6 +228,7 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         _peleando = true;
         battleController.BattleEnded -= AlTerminarElCombate;
         battleController.BattleEnded += AlTerminarElCombate;
+        SonarLaMusicaDeLaFase(FaseDeJulieta.Analisis);
         battleController.StartBattle(player, julieta, director: this);
 
         // StartBattle aborta callado si algun equipo no tiene a nadie en pie.
@@ -402,7 +409,14 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
 
     public void RuletaCobro(EfectoDeRuleta efecto, bool alJugador) => _estado.ContarGiro();
 
-    public void AlTerminar(bool victoriaDelJugador) => ApagarEfectos(battleController);
+    public void AlTerminar(bool victoriaDelJugador)
+    {
+        ApagarEfectos(battleController);
+        // Al ganar, el tema del final entra con el cartel de victoria y
+        // acompaña el dialogo hasta el fundido a los creditos.
+        if (victoriaDelJugador && !_reiniciando)
+            MusicaDelJuego.Sonar(CatalogoDeAudio.Actual?.julietaDespues, true, 1.5f);
+    }
 
     // ---------- el guion ----------
 
@@ -577,7 +591,20 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         if (_estado.Fase == fase) return;
         _estado.CambiarDeFase(fase);
         Debug.Log($"[Julieta] === FASE: {fase} === ({_estado.Resumen()})");
+        SonarLaMusicaDeLaFase(fase);
         FaseCambiada?.Invoke(fase);
+    }
+
+    // Fase 1 con su tema, las del medio con el de la fase 2 y, desde
+    // 'faseDeLaMusicaFinal', el final. Pedir el que ya suena no lo reinicia.
+    private void SonarLaMusicaDeLaFase(FaseDeJulieta fase)
+    {
+        CatalogoDeAudio c = CatalogoDeAudio.Actual;
+        if (c == null) return;
+        Sonido tema = fase >= faseDeLaMusicaFinal ? c.julietaFinal
+                    : fase == FaseDeJulieta.Analisis ? c.julietaFase1
+                    : c.julietaFase2;
+        MusicaDelJuego.Sonar(tema, true, 1.2f);
     }
 
     // ---------- el Pokemon controlado ----------
@@ -696,6 +723,7 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         {
             _reiniciando = false;
             RestaurarEquipo();
+            MusicaDelJuego.VolverALaDeLaEscena();
             return;
         }
 
@@ -704,15 +732,17 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         if (outcome != null && outcome.PlayerVictory)
         {
             if (story != null && flagVencida != StoryFlag.None) story.ActivateFlag(flagVencida);
-            // Se guarda ya: si el jugador cierra el juego en el epilogo o en los
-            // creditos, el final no se pierde. (Los bancos de prueba lo apagan.)
-            CasinoDialogo.Guardar();
+            // NO se guarda (pedido de Augusto, 2-oct-2026): el juego termina en
+            // los creditos y vuelve a la pantalla de inicio, sin post-game. La
+            // partida queda como estaba al entrar al ultimo nivel, asi que
+            // "Continuar" lleva otra vez a las puertas del final.
             Debug.Log("[Julieta] VENCIDA. Epilogo y creditos.");
             AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.finalDelJuego : null, IrALosCreditos)));
             return;
         }
 
         if (restaurarEquipoAlPerder) RestaurarEquipo();
+        MusicaDelJuego.VolverALaDeLaEscena();
         Debug.Log("[Julieta] El jugador perdio. Se puede reintentar.");
         AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.alPerder : null, null)));
     }
