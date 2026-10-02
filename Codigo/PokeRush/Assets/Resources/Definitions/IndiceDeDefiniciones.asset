@@ -1,0 +1,2108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c045b7bdb1ca71429f192f4a59daab5, type: 3}
+  m_Name: IndiceDeDefiniciones
+  m_EditorClassIdentifier: Assembly-CSharp::IndiceDeDefiniciones
+  pokens:
+  - nombre: Bulbasaur
+    ruta: Definitions/Pokens/0001_Bulbasaur
+  - nombre: Ivysaur
+    ruta: Definitions/Pokens/0002_Ivysaur
+  - nombre: Venusaur
+    ruta: Definitions/Pokens/0003_Venusaur
+  - nombre: Charmander
+    ruta: Definitions/Pokens/0004_Charmander
+  - nombre: Charmeleon
+    ruta: Definitions/Pokens/0005_Charmeleon
+  - nombre: Charizard
+    ruta: Definitions/Pokens/0006_Charizard
+  - nombre: Squirtle
+    ruta: Definitions/Pokens/0007_Squirtle
+  - nombre: Wartortle
+    ruta: Definitions/Pokens/0008_Wartortle
+  - nombre: Blastoise
+    ruta: Definitions/Pokens/0009_Blastoise
+  - nombre: Rattata
+    ruta: Definitions/Pokens/0019_Rattata
+  - nombre: Raticate
+    ruta: Definitions/Pokens/0020_Raticate
+  - nombre: Pikachu
+    ruta: Definitions/Pokens/0025_Pikachu
+  - nombre: Raichu
+    ruta: Definitions/Pokens/0026_Raichu
+  - nombre: Mankey
+    ruta: Definitions/Pokens/0056_Mankey
+  - nombre: Primeape
+    ruta: Definitions/Pokens/0057_Primeape
+  - nombre: Abra
+    ruta: Definitions/Pokens/0063_Abra
+  - nombre: Kadabra
+    ruta: Definitions/Pokens/0064_Kadabra
+  - nombre: Alakazam
+    ruta: Definitions/Pokens/0065_Alakazam
+  - nombre: Machop
+    ruta: Definitions/Pokens/0066_Machop
+  - nombre: Machoke
+    ruta: Definitions/Pokens/0067_Machoke
+  - nombre: Machamp
+    ruta: Definitions/Pokens/0068_Machamp
+  - nombre: Magnemite
+    ruta: Definitions/Pokens/0081_Magnemite
+  - nombre: Magneton
+    ruta: Definitions/Pokens/0082_Magneton
+  - nombre: Gastly
+    ruta: Definitions/Pokens/0092_Gastly
+  - nombre: Haunter
+    ruta: Definitions/Pokens/0093_Haunter
+  - nombre: Gengar
+    ruta: Definitions/Pokens/0094_Gengar
+  - nombre: Onix
+    ruta: Definitions/Pokens/0095_Onix
+  - nombre: Rhyhorn
+    ruta: Definitions/Pokens/0111_Rhyhorn
+  - nombre: Rhydon
+    ruta: Definitions/Pokens/0112_Rhydon
+  - nombre: Chansey
+    ruta: Definitions/Pokens/0113_Chansey
+  - nombre: Scyther
+    ruta: Definitions/Pokens/0123_Scyther
+  - nombre: Electabuzz
+    ruta: Definitions/Pokens/0125_Electabuzz
+  - nombre: Magmar
+    ruta: Definitions/Pokens/0126_Magmar
+  - nombre: Pinsir
+    ruta: Definitions/Pokens/0127_Pinsir
+  - nombre: Lapras
+    ruta: Definitions/Pokens/0131_Lapras
+  - nombre: Eevee
+    ruta: Definitions/Pokens/0133_Eevee
+  - nombre: Vaporeon
+    ruta: Definitions/Pokens/0134_Vaporeon
+  - nombre: Jolteon
+    ruta: Definitions/Pokens/0135_Jolteon
+  - nombre: Flareon
+    ruta: Definitions/Pokens/0136_Flareon
+  - nombre: Porygon
+    ruta: Definitions/Pokens/0137_Porygon
+  - nombre: Aerodactyl
+    ruta: Definitions/Pokens/0142_Aerodactyl
+  - nombre: Snorlax
+    ruta: Definitions/Pokens/0143_Snorlax
+  - nombre: Articuno
+    ruta: Definitions/Pokens/0144_Articuno
+  - nombre: Zapdos
+    ruta: Definitions/Pokens/0145_Zapdos
+  - nombre: Moltres
+    ruta: Definitions/Pokens/0146_Moltres
+  - nombre: Dratini
+    ruta: Definitions/Pokens/0147_Dratini
+  - nombre: Dragonair
+    ruta: Definitions/Pokens/0148_Dragonair
+  - nombre: Dragonite
+    ruta: Definitions/Pokens/0149_Dragonite
+  - nombre: Mewtwo
+    ruta: Definitions/Pokens/0150_Mewtwo
+  - nombre: Mew
+    ruta: Definitions/Pokens/0151_Mew
+  - nombre: Chikorita
+    ruta: Definitions/Pokens/0152_Chikorita
+  - nombre: Bayleef
+    ruta: Definitions/Pokens/0153_Bayleef
+  - nombre: Meganium
+    ruta: Definitions/Pokens/0154_Meganium
+  - nombre: Cyndaquil
+    ruta: Definitions/Pokens/0155_Cyndaquil
+  - nombre: Quilava
+    ruta: Definitions/Pokens/0156_Quilava
+  - nombre: Typhlosion
+    ruta: Definitions/Pokens/0157_Typhlosion
+  - nombre: Totodile
+    ruta: Definitions/Pokens/0158_Totodile
+  - nombre: Croconaw
+    ruta: Definitions/Pokens/0159_Croconaw
+  - nombre: Feraligatr
+    ruta: Definitions/Pokens/0160_Feraligatr
+  - nombre: Pichu
+    ruta: Definitions/Pokens/0172_Pichu
+  - nombre: Togepi
+    ruta: Definitions/Pokens/0175_Togepi
+  - nombre: Togetic
+    ruta: Definitions/Pokens/0176_Togetic
+  - nombre: Yanma
+    ruta: Definitions/Pokens/0193_Yanma
+  - nombre: Espeon
+    ruta: Definitions/Pokens/0196_Espeon
+  - nombre: Umbreon
+    ruta: Definitions/Pokens/0197_Umbreon
+  - nombre: Unown
+    ruta: Definitions/Pokens/0201_Unown
+  - nombre: Gligar
+    ruta: Definitions/Pokens/0207_Gligar
+  - nombre: Steelix
+    ruta: Definitions/Pokens/0208_Steelix
+  - nombre: Scizor
+    ruta: Definitions/Pokens/0212_Scizor
+  - nombre: Heracross
+    ruta: Definitions/Pokens/0214_Heracross
+  - nombre: Sneasel
+    ruta: Definitions/Pokens/0215_Sneasel
+  - nombre: Swinub
+    ruta: Definitions/Pokens/0220_Swinub
+  - nombre: Piloswine
+    ruta: Definitions/Pokens/0221_Piloswine
+  - nombre: Skarmory
+    ruta: Definitions/Pokens/0227_Skarmory
+  - nombre: Houndour
+    ruta: Definitions/Pokens/0228_Houndour
+  - nombre: Houndoom
+    ruta: Definitions/Pokens/0229_Houndoom
+  - nombre: Phanpy
+    ruta: Definitions/Pokens/0231_Phanpy
+  - nombre: Donphan
+    ruta: Definitions/Pokens/0232_Donphan
+  - nombre: Porygon2
+    ruta: Definitions/Pokens/0233_Porygon2
+  - nombre: Elekid
+    ruta: Definitions/Pokens/0239_Elekid
+  - nombre: Magby
+    ruta: Definitions/Pokens/0240_Magby
+  - nombre: Blissey
+    ruta: Definitions/Pokens/0242_Blissey
+  - nombre: Raikou
+    ruta: Definitions/Pokens/0243_Raikou
+  - nombre: Entei
+    ruta: Definitions/Pokens/0244_Entei
+  - nombre: Suicune
+    ruta: Definitions/Pokens/0245_Suicune
+  - nombre: Larvitar
+    ruta: Definitions/Pokens/0246_Larvitar
+  - nombre: Pupitar
+    ruta: Definitions/Pokens/0247_Pupitar
+  - nombre: Tyranitar
+    ruta: Definitions/Pokens/0248_Tyranitar
+  - nombre: Lugia
+    ruta: Definitions/Pokens/0249_Lugia
+  - nombre: Ho-Oh
+    ruta: Definitions/Pokens/0250_Ho-Oh
+  - nombre: Celebi
+    ruta: Definitions/Pokens/0251_Celebi
+  - nombre: Treecko
+    ruta: Definitions/Pokens/0252_Treecko
+  - nombre: Grovyle
+    ruta: Definitions/Pokens/0253_Grovyle
+  - nombre: Sceptile
+    ruta: Definitions/Pokens/0254_Sceptile
+  - nombre: Torchic
+    ruta: Definitions/Pokens/0255_Torchic
+  - nombre: Combusken
+    ruta: Definitions/Pokens/0256_Combusken
+  - nombre: Blaziken
+    ruta: Definitions/Pokens/0257_Blaziken
+  - nombre: Mudkip
+    ruta: Definitions/Pokens/0258_Mudkip
+  - nombre: Marshtomp
+    ruta: Definitions/Pokens/0259_Marshtomp
+  - nombre: Swampert
+    ruta: Definitions/Pokens/0260_Swampert
+  - nombre: Ralts
+    ruta: Definitions/Pokens/0280_Ralts
+  - nombre: Kirlia
+    ruta: Definitions/Pokens/0281_Kirlia
+  - nombre: Gardevoir
+    ruta: Definitions/Pokens/0282_Gardevoir
+  - nombre: Shroomish
+    ruta: Definitions/Pokens/0285_Shroomish
+  - nombre: Breloom
+    ruta: Definitions/Pokens/0286_Breloom
+  - nombre: Sableye
+    ruta: Definitions/Pokens/0302_Sableye
+  - nombre: Mawile
+    ruta: Definitions/Pokens/0303_Mawile
+  - nombre: Aron
+    ruta: Definitions/Pokens/0304_Aron
+  - nombre: Lairon
+    ruta: Definitions/Pokens/0305_Lairon
+  - nombre: Aggron
+    ruta: Definitions/Pokens/0306_Aggron
+  - nombre: Roselia
+    ruta: Definitions/Pokens/0315_Roselia
+  - nombre: Trapinch
+    ruta: Definitions/Pokens/0328_Trapinch
+  - nombre: Vibrava
+    ruta: Definitions/Pokens/0329_Vibrava
+  - nombre: Flygon
+    ruta: Definitions/Pokens/0330_Flygon
+  - nombre: Swablu
+    ruta: Definitions/Pokens/0333_Swablu
+  - nombre: Altaria
+    ruta: Definitions/Pokens/0334_Altaria
+  - nombre: Feebas
+    ruta: Definitions/Pokens/0349_Feebas
+  - nombre: Milotic
+    ruta: Definitions/Pokens/0350_Milotic
+  - nombre: Shuppet
+    ruta: Definitions/Pokens/0353_Shuppet
+  - nombre: Banette
+    ruta: Definitions/Pokens/0354_Banette
+  - nombre: Duskull
+    ruta: Definitions/Pokens/0355_Duskull
+  - nombre: Dusclops
+    ruta: Definitions/Pokens/0356_Dusclops
+  - nombre: Absol
+    ruta: Definitions/Pokens/0359_Absol
+  - nombre: Snorunt
+    ruta: Definitions/Pokens/0361_Snorunt
+  - nombre: Glalie
+    ruta: Definitions/Pokens/0362_Glalie
+  - nombre: Bagon
+    ruta: Definitions/Pokens/0371_Bagon
+  - nombre: Shelgon
+    ruta: Definitions/Pokens/0372_Shelgon
+  - nombre: Salamence
+    ruta: Definitions/Pokens/0373_Salamence
+  - nombre: Beldum
+    ruta: Definitions/Pokens/0374_Beldum
+  - nombre: Metang
+    ruta: Definitions/Pokens/0375_Metang
+  - nombre: Metagross
+    ruta: Definitions/Pokens/0376_Metagross
+  - nombre: Regirock
+    ruta: Definitions/Pokens/0377_Regirock
+  - nombre: Regice
+    ruta: Definitions/Pokens/0378_Regice
+  - nombre: Registeel
+    ruta: Definitions/Pokens/0379_Registeel
+  - nombre: Latias
+    ruta: Definitions/Pokens/0380_Latias
+  - nombre: Latios
+    ruta: Definitions/Pokens/0381_Latios
+  - nombre: Kyogre
+    ruta: Definitions/Pokens/0382_Kyogre
+  - nombre: Groudon
+    ruta: Definitions/Pokens/0383_Groudon
+  - nombre: Rayquaza
+    ruta: Definitions/Pokens/0384_Rayquaza
+  - nombre: Jirachi
+    ruta: Definitions/Pokens/0385_Jirachi
+  - nombre: Deoxys
+    ruta: Definitions/Pokens/0386_Deoxys
+  - nombre: Turtwig
+    ruta: Definitions/Pokens/0387_Turtwig
+  - nombre: Grotle
+    ruta: Definitions/Pokens/0388_Grotle
+  - nombre: Torterra
+    ruta: Definitions/Pokens/0389_Torterra
+  - nombre: Chimchar
+    ruta: Definitions/Pokens/0390_Chimchar
+  - nombre: Monferno
+    ruta: Definitions/Pokens/0391_Monferno
+  - nombre: Infernape
+    ruta: Definitions/Pokens/0392_Infernape
+  - nombre: Piplup
+    ruta: Definitions/Pokens/0393_Piplup
+  - nombre: Prinplup
+    ruta: Definitions/Pokens/0394_Prinplup
+  - nombre: Empoleon
+    ruta: Definitions/Pokens/0395_Empoleon
+  - nombre: Shinx
+    ruta: Definitions/Pokens/0403_Shinx
+  - nombre: Luxio
+    ruta: Definitions/Pokens/0404_Luxio
+  - nombre: Luxray
+    ruta: Definitions/Pokens/0405_Luxray
+  - nombre: Budew
+    ruta: Definitions/Pokens/0406_Budew
+  - nombre: Roserade
+    ruta: Definitions/Pokens/0407_Roserade
+  - nombre: Drifloon
+    ruta: Definitions/Pokens/0425_Drifloon
+  - nombre: Drifblim
+    ruta: Definitions/Pokens/0426_Drifblim
+  - nombre: Happiny
+    ruta: Definitions/Pokens/0440_Happiny
+  - nombre: Spiritomb
+    ruta: Definitions/Pokens/0442_Spiritomb
+  - nombre: Gible
+    ruta: Definitions/Pokens/0443_Gible
+  - nombre: Gabite
+    ruta: Definitions/Pokens/0444_Gabite
+  - nombre: Garchomp
+    ruta: Definitions/Pokens/0445_Garchomp
+  - nombre: Munchlax
+    ruta: Definitions/Pokens/0446_Munchlax
+  - nombre: Riolu
+    ruta: Definitions/Pokens/0447_Riolu
+  - nombre: Lucario
+    ruta: Definitions/Pokens/0448_Lucario
+  - nombre: Hippopotas
+    ruta: Definitions/Pokens/0449_Hippopotas
+  - nombre: Hippowdon
+    ruta: Definitions/Pokens/0450_Hippowdon
+  - nombre: Skorupi
+    ruta: Definitions/Pokens/0451_Skorupi
+  - nombre: Drapion
+    ruta: Definitions/Pokens/0452_Drapion
+  - nombre: Weavile
+    ruta: Definitions/Pokens/0461_Weavile
+  - nombre: Magnezone
+    ruta: Definitions/Pokens/0462_Magnezone
+  - nombre: Rhyperior
+    ruta: Definitions/Pokens/0464_Rhyperior
+  - nombre: Electivire
+    ruta: Definitions/Pokens/0466_Electivire
+  - nombre: Magmortar
+    ruta: Definitions/Pokens/0467_Magmortar
+  - nombre: Togekiss
+    ruta: Definitions/Pokens/0468_Togekiss
+  - nombre: Yanmega
+    ruta: Definitions/Pokens/0469_Yanmega
+  - nombre: Leafeon
+    ruta: Definitions/Pokens/0470_Leafeon
+  - nombre: Glaceon
+    ruta: Definitions/Pokens/0471_Glaceon
+  - nombre: Gliscor
+    ruta: Definitions/Pokens/0472_Gliscor
+  - nombre: Mamoswine
+    ruta: Definitions/Pokens/0473_Mamoswine
+  - nombre: Porygon-Z
+    ruta: Definitions/Pokens/0474_Porygon-Z
+  - nombre: Gallade
+    ruta: Definitions/Pokens/0475_Gallade
+  - nombre: Dusknoir
+    ruta: Definitions/Pokens/0477_Dusknoir
+  - nombre: Froslass
+    ruta: Definitions/Pokens/0478_Froslass
+  - nombre: Uxie
+    ruta: Definitions/Pokens/0480_Uxie
+  - nombre: Mesprit
+    ruta: Definitions/Pokens/0481_Mesprit
+  - nombre: Azelf
+    ruta: Definitions/Pokens/0482_Azelf
+  - nombre: Dialga
+    ruta: Definitions/Pokens/0483_Dialga
+  - nombre: Palkia
+    ruta: Definitions/Pokens/0484_Palkia
+  - nombre: Heatran
+    ruta: Definitions/Pokens/0485_Heatran
+  - nombre: Regigigas
+    ruta: Definitions/Pokens/0486_Regigigas
+  - nombre: Giratina
+    ruta: Definitions/Pokens/0487_Giratina
+  - nombre: Cresselia
+    ruta: Definitions/Pokens/0488_Cresselia
+  - nombre: Phione
+    ruta: Definitions/Pokens/0489_Phione
+  - nombre: Manaphy
+    ruta: Definitions/Pokens/0490_Manaphy
+  - nombre: Darkrai
+    ruta: Definitions/Pokens/0491_Darkrai
+  - nombre: Shaymin
+    ruta: Definitions/Pokens/0492_Shaymin
+  - nombre: Arceus
+    ruta: Definitions/Pokens/0493_Arceus
+  - nombre: Victini
+    ruta: Definitions/Pokens/0494_Victini
+  - nombre: Snivy
+    ruta: Definitions/Pokens/0495_Snivy
+  - nombre: Servine
+    ruta: Definitions/Pokens/0496_Servine
+  - nombre: Serperior
+    ruta: Definitions/Pokens/0497_Serperior
+  - nombre: Tepig
+    ruta: Definitions/Pokens/0498_Tepig
+  - nombre: Pignite
+    ruta: Definitions/Pokens/0499_Pignite
+  - nombre: Emboar
+    ruta: Definitions/Pokens/0500_Emboar
+  - nombre: Oshawott
+    ruta: Definitions/Pokens/0501_Oshawott
+  - nombre: Dewott
+    ruta: Definitions/Pokens/0502_Dewott
+  - nombre: Samurott
+    ruta: Definitions/Pokens/0503_Samurott
+  - nombre: Drilbur
+    ruta: Definitions/Pokens/0529_Drilbur
+  - nombre: Excadrill
+    ruta: Definitions/Pokens/0530_Excadrill
+  - nombre: Timburr
+    ruta: Definitions/Pokens/0532_Timburr
+  - nombre: Gurdurr
+    ruta: Definitions/Pokens/0533_Gurdurr
+  - nombre: Conkeldurr
+    ruta: Definitions/Pokens/0534_Conkeldurr
+  - nombre: Venipede
+    ruta: Definitions/Pokens/0543_Venipede
+  - nombre: Whirlipede
+    ruta: Definitions/Pokens/0544_Whirlipede
+  - nombre: Scolipede
+    ruta: Definitions/Pokens/0545_Scolipede
+  - nombre: Basculin
+    ruta: Definitions/Pokens/0550_Basculin
+  - nombre: Sandile
+    ruta: Definitions/Pokens/0551_Sandile
+  - nombre: Krokorok
+    ruta: Definitions/Pokens/0552_Krokorok
+  - nombre: Krookodile
+    ruta: Definitions/Pokens/0553_Krookodile
+  - nombre: Darumaka
+    ruta: Definitions/Pokens/0554_Darumaka
+  - nombre: Darmanitan
+    ruta: Definitions/Pokens/0555_Darmanitan
+  - nombre: Yamask
+    ruta: Definitions/Pokens/0562_Yamask
+  - nombre: Cofagrigus
+    ruta: Definitions/Pokens/0563_Cofagrigus
+  - nombre: Solosis
+    ruta: Definitions/Pokens/0577_Solosis
+  - nombre: Duosion
+    ruta: Definitions/Pokens/0578_Duosion
+  - nombre: Reuniclus
+    ruta: Definitions/Pokens/0579_Reuniclus
+  - nombre: Karrablast
+    ruta: Definitions/Pokens/0588_Karrablast
+  - nombre: Escavalier
+    ruta: Definitions/Pokens/0589_Escavalier
+  - nombre: Foongus
+    ruta: Definitions/Pokens/0590_Foongus
+  - nombre: Amoonguss
+    ruta: Definitions/Pokens/0591_Amoonguss
+  - nombre: Ferroseed
+    ruta: Definitions/Pokens/0597_Ferroseed
+  - nombre: Ferrothorn
+    ruta: Definitions/Pokens/0598_Ferrothorn
+  - nombre: Litwick
+    ruta: Definitions/Pokens/0607_Litwick
+  - nombre: Lampent
+    ruta: Definitions/Pokens/0608_Lampent
+  - nombre: Chandelure
+    ruta: Definitions/Pokens/0609_Chandelure
+  - nombre: Axew
+    ruta: Definitions/Pokens/0610_Axew
+  - nombre: Fraxure
+    ruta: Definitions/Pokens/0611_Fraxure
+  - nombre: Haxorus
+    ruta: Definitions/Pokens/0612_Haxorus
+  - nombre: Pawniard
+    ruta: Definitions/Pokens/0624_Pawniard
+  - nombre: Bisharp
+    ruta: Definitions/Pokens/0625_Bisharp
+  - nombre: Deino
+    ruta: Definitions/Pokens/0633_Deino
+  - nombre: Zweilous
+    ruta: Definitions/Pokens/0634_Zweilous
+  - nombre: Hydreigon
+    ruta: Definitions/Pokens/0635_Hydreigon
+  - nombre: Larvesta
+    ruta: Definitions/Pokens/0636_Larvesta
+  - nombre: Volcarona
+    ruta: Definitions/Pokens/0637_Volcarona
+  - nombre: Cobalion
+    ruta: Definitions/Pokens/0638_Cobalion
+  - nombre: Terrakion
+    ruta: Definitions/Pokens/0639_Terrakion
+  - nombre: Virizion
+    ruta: Definitions/Pokens/0640_Virizion
+  - nombre: Tornadus
+    ruta: Definitions/Pokens/0641_Tornadus
+  - nombre: Thundurus
+    ruta: Definitions/Pokens/0642_Thundurus
+  - nombre: Reshiram
+    ruta: Definitions/Pokens/0643_Reshiram
+  - nombre: Zekrom
+    ruta: Definitions/Pokens/0644_Zekrom
+  - nombre: Landorus
+    ruta: Definitions/Pokens/0645_Landorus
+  - nombre: Kyurem
+    ruta: Definitions/Pokens/0646_Kyurem
+  - nombre: Keldeo
+    ruta: Definitions/Pokens/0647_Keldeo
+  - nombre: Meloetta
+    ruta: Definitions/Pokens/0648_Meloetta
+  - nombre: Genesect
+    ruta: Definitions/Pokens/0649_Genesect
+  - nombre: Chespin
+    ruta: Definitions/Pokens/0650_Chespin
+  - nombre: Quilladin
+    ruta: Definitions/Pokens/0651_Quilladin
+  - nombre: Chesnaught
+    ruta: Definitions/Pokens/0652_Chesnaught
+  - nombre: Fennekin
+    ruta: Definitions/Pokens/0653_Fennekin
+  - nombre: Braixen
+    ruta: Definitions/Pokens/0654_Braixen
+  - nombre: Delphox
+    ruta: Definitions/Pokens/0655_Delphox
+  - nombre: Froakie
+    ruta: Definitions/Pokens/0656_Froakie
+  - nombre: Frogadier
+    ruta: Definitions/Pokens/0657_Frogadier
+  - nombre: Greninja
+    ruta: Definitions/Pokens/0658_Greninja
+  - nombre: Fletchling
+    ruta: Definitions/Pokens/0661_Fletchling
+  - nombre: Fletchinder
+    ruta: Definitions/Pokens/0662_Fletchinder
+  - nombre: Talonflame
+    ruta: Definitions/Pokens/0663_Talonflame
+  - nombre: Honedge
+    ruta: Definitions/Pokens/0679_Honedge
+  - nombre: Doublade
+    ruta: Definitions/Pokens/0680_Doublade
+  - nombre: Aegislash
+    ruta: Definitions/Pokens/0681_Aegislash
+  - nombre: Skrelp
+    ruta: Definitions/Pokens/0690_Skrelp
+  - nombre: Dragalge
+    ruta: Definitions/Pokens/0691_Dragalge
+  - nombre: Sylveon
+    ruta: Definitions/Pokens/0700_Sylveon
+  - nombre: Hawlucha
+    ruta: Definitions/Pokens/0701_Hawlucha
+  - nombre: Goomy
+    ruta: Definitions/Pokens/0704_Goomy
+  - nombre: Sliggoo
+    ruta: Definitions/Pokens/0705_Sliggoo
+  - nombre: Goodra
+    ruta: Definitions/Pokens/0706_Goodra
+  - nombre: Klefki
+    ruta: Definitions/Pokens/0707_Klefki
+  - nombre: Phantump
+    ruta: Definitions/Pokens/0708_Phantump
+  - nombre: Trevenant
+    ruta: Definitions/Pokens/0709_Trevenant
+  - nombre: Pumpkaboo
+    ruta: Definitions/Pokens/0710_Pumpkaboo
+  - nombre: Gourgeist
+    ruta: Definitions/Pokens/0711_Gourgeist
+  - nombre: Noibat
+    ruta: Definitions/Pokens/0714_Noibat
+  - nombre: Noivern
+    ruta: Definitions/Pokens/0715_Noivern
+  - nombre: Xerneas
+    ruta: Definitions/Pokens/0716_Xerneas
+  - nombre: Yveltal
+    ruta: Definitions/Pokens/0717_Yveltal
+  - nombre: Zygarde
+    ruta: Definitions/Pokens/0718_Zygarde
+  - nombre: Diancie
+    ruta: Definitions/Pokens/0719_Diancie
+  - nombre: Hoopa
+    ruta: Definitions/Pokens/0720_Hoopa
+  - nombre: Volcanion
+    ruta: Definitions/Pokens/0721_Volcanion
+  - nombre: Rowlet
+    ruta: Definitions/Pokens/0722_Rowlet
+  - nombre: Dartrix
+    ruta: Definitions/Pokens/0723_Dartrix
+  - nombre: Decidueye
+    ruta: Definitions/Pokens/0724_Decidueye
+  - nombre: Litten
+    ruta: Definitions/Pokens/0725_Litten
+  - nombre: Torracat
+    ruta: Definitions/Pokens/0726_Torracat
+  - nombre: Incineroar
+    ruta: Definitions/Pokens/0727_Incineroar
+  - nombre: Popplio
+    ruta: Definitions/Pokens/0728_Popplio
+  - nombre: Brionne
+    ruta: Definitions/Pokens/0729_Brionne
+  - nombre: Primarina
+    ruta: Definitions/Pokens/0730_Primarina
+  - nombre: Grubbin
+    ruta: Definitions/Pokens/0736_Grubbin
+  - nombre: Charjabug
+    ruta: Definitions/Pokens/0737_Charjabug
+  - nombre: Vikavolt
+    ruta: Definitions/Pokens/0738_Vikavolt
+  - nombre: Rockruff
+    ruta: Definitions/Pokens/0744_Rockruff
+  - nombre: Lycanroc
+    ruta: Definitions/Pokens/0745_Lycanroc
+  - nombre: Mareanie
+    ruta: Definitions/Pokens/0747_Mareanie
+  - nombre: Toxapex
+    ruta: Definitions/Pokens/0748_Toxapex
+  - nombre: Mudbray
+    ruta: Definitions/Pokens/0749_Mudbray
+  - nombre: Mudsdale
+    ruta: Definitions/Pokens/0750_Mudsdale
+  - nombre: Bounsweet
+    ruta: Definitions/Pokens/0761_Bounsweet
+  - nombre: Steenee
+    ruta: Definitions/Pokens/0762_Steenee
+  - nombre: Tsareena
+    ruta: Definitions/Pokens/0763_Tsareena
+  - nombre: Wimpod
+    ruta: Definitions/Pokens/0767_Wimpod
+  - nombre: Golisopod
+    ruta: Definitions/Pokens/0768_Golisopod
+  - nombre: "C\xF3digo Cero"
+    ruta: "Definitions/Pokens/0772_C\xF3digo Cero"
+  - nombre: Silvally
+    ruta: Definitions/Pokens/0773_Silvally
+  - nombre: Mimikyu
+    ruta: Definitions/Pokens/0778_Mimikyu
+  - nombre: Jangmo-o
+    ruta: Definitions/Pokens/0782_Jangmo-o
+  - nombre: Hakamo-o
+    ruta: Definitions/Pokens/0783_Hakamo-o
+  - nombre: Kommo-o
+    ruta: Definitions/Pokens/0784_Kommo-o
+  - nombre: Tapu Koko
+    ruta: Definitions/Pokens/0785_Tapu Koko
+  - nombre: Tapu Lele
+    ruta: Definitions/Pokens/0786_Tapu Lele
+  - nombre: Tapu Bulu
+    ruta: Definitions/Pokens/0787_Tapu Bulu
+  - nombre: Tapu Fini
+    ruta: Definitions/Pokens/0788_Tapu Fini
+  - nombre: Cosmog
+    ruta: Definitions/Pokens/0789_Cosmog
+  - nombre: Cosmoem
+    ruta: Definitions/Pokens/0790_Cosmoem
+  - nombre: Solgaleo
+    ruta: Definitions/Pokens/0791_Solgaleo
+  - nombre: Lunala
+    ruta: Definitions/Pokens/0792_Lunala
+  - nombre: Necrozma
+    ruta: Definitions/Pokens/0800_Necrozma
+  - nombre: Magearna
+    ruta: Definitions/Pokens/0801_Magearna
+  - nombre: Marshadow
+    ruta: Definitions/Pokens/0802_Marshadow
+  - nombre: Zeraora
+    ruta: Definitions/Pokens/0807_Zeraora
+  - nombre: Meltan
+    ruta: Definitions/Pokens/0808_Meltan
+  - nombre: Melmetal
+    ruta: Definitions/Pokens/0809_Melmetal
+  - nombre: Grookey
+    ruta: Definitions/Pokens/0810_Grookey
+  - nombre: Thwackey
+    ruta: Definitions/Pokens/0811_Thwackey
+  - nombre: Rillaboom
+    ruta: Definitions/Pokens/0812_Rillaboom
+  - nombre: Scorbunny
+    ruta: Definitions/Pokens/0813_Scorbunny
+  - nombre: Raboot
+    ruta: Definitions/Pokens/0814_Raboot
+  - nombre: Cinderace
+    ruta: Definitions/Pokens/0815_Cinderace
+  - nombre: Sobble
+    ruta: Definitions/Pokens/0816_Sobble
+  - nombre: Drizzile
+    ruta: Definitions/Pokens/0817_Drizzile
+  - nombre: Inteleon
+    ruta: Definitions/Pokens/0818_Inteleon
+  - nombre: Rookidee
+    ruta: Definitions/Pokens/0821_Rookidee
+  - nombre: Corvisquire
+    ruta: Definitions/Pokens/0822_Corvisquire
+  - nombre: Corviknight
+    ruta: Definitions/Pokens/0823_Corviknight
+  - nombre: Chewtle
+    ruta: Definitions/Pokens/0833_Chewtle
+  - nombre: Drednaw
+    ruta: Definitions/Pokens/0834_Drednaw
+  - nombre: Toxel
+    ruta: Definitions/Pokens/0848_Toxel
+  - nombre: Toxtricity
+    ruta: Definitions/Pokens/0849_Toxtricity
+  - nombre: Hatenna
+    ruta: Definitions/Pokens/0856_Hatenna
+  - nombre: Hattrem
+    ruta: Definitions/Pokens/0857_Hattrem
+  - nombre: Hatterene
+    ruta: Definitions/Pokens/0858_Hatterene
+  - nombre: Impidimp
+    ruta: Definitions/Pokens/0859_Impidimp
+  - nombre: Morgrem
+    ruta: Definitions/Pokens/0860_Morgrem
+  - nombre: Grimmsnarl
+    ruta: Definitions/Pokens/0861_Grimmsnarl
+  - nombre: Runerigus
+    ruta: Definitions/Pokens/0867_Runerigus
+  - nombre: Falinks
+    ruta: Definitions/Pokens/0870_Falinks
+  - nombre: Cufant
+    ruta: Definitions/Pokens/0878_Cufant
+  - nombre: Copperajah
+    ruta: Definitions/Pokens/0879_Copperajah
+  - nombre: Duraludon
+    ruta: Definitions/Pokens/0884_Duraludon
+  - nombre: Dreepy
+    ruta: Definitions/Pokens/0885_Dreepy
+  - nombre: Drakloak
+    ruta: Definitions/Pokens/0886_Drakloak
+  - nombre: Dragapult
+    ruta: Definitions/Pokens/0887_Dragapult
+  - nombre: Zacian
+    ruta: Definitions/Pokens/0888_Zacian
+  - nombre: Zamazenta
+    ruta: Definitions/Pokens/0889_Zamazenta
+  - nombre: Eternatus
+    ruta: Definitions/Pokens/0890_Eternatus
+  - nombre: Kubfu
+    ruta: Definitions/Pokens/0891_Kubfu
+  - nombre: Urshifu
+    ruta: Definitions/Pokens/0892_Urshifu
+  - nombre: Zarude
+    ruta: Definitions/Pokens/0893_Zarude
+  - nombre: Regieleki
+    ruta: Definitions/Pokens/0894_Regieleki
+  - nombre: Regidrago
+    ruta: Definitions/Pokens/0895_Regidrago
+  - nombre: Glastrier
+    ruta: Definitions/Pokens/0896_Glastrier
+  - nombre: Spectrier
+    ruta: Definitions/Pokens/0897_Spectrier
+  - nombre: Calyrex
+    ruta: Definitions/Pokens/0898_Calyrex
+  - nombre: Kleavor
+    ruta: Definitions/Pokens/0900_Kleavor
+  - nombre: Basculegion
+    ruta: Definitions/Pokens/0902_Basculegion
+  - nombre: Sneasler
+    ruta: Definitions/Pokens/0903_Sneasler
+  - nombre: Enamorus
+    ruta: Definitions/Pokens/0905_Enamorus
+  - nombre: Sprigatito
+    ruta: Definitions/Pokens/0906_Sprigatito
+  - nombre: Floragato
+    ruta: Definitions/Pokens/0907_Floragato
+  - nombre: Meowscarada
+    ruta: Definitions/Pokens/0908_Meowscarada
+  - nombre: Fuecoco
+    ruta: Definitions/Pokens/0909_Fuecoco
+  - nombre: Crocalor
+    ruta: Definitions/Pokens/0910_Crocalor
+  - nombre: Skeledirge
+    ruta: Definitions/Pokens/0911_Skeledirge
+  - nombre: Quaxly
+    ruta: Definitions/Pokens/0912_Quaxly
+  - nombre: Quaxwell
+    ruta: Definitions/Pokens/0913_Quaxwell
+  - nombre: Quaquaval
+    ruta: Definitions/Pokens/0914_Quaquaval
+  - nombre: Nacli
+    ruta: Definitions/Pokens/0932_Nacli
+  - nombre: Naclstack
+    ruta: Definitions/Pokens/0933_Naclstack
+  - nombre: Garganacl
+    ruta: Definitions/Pokens/0934_Garganacl
+  - nombre: Charcadet
+    ruta: Definitions/Pokens/0935_Charcadet
+  - nombre: Armarouge
+    ruta: Definitions/Pokens/0936_Armarouge
+  - nombre: Ceruledge
+    ruta: Definitions/Pokens/0937_Ceruledge
+  - nombre: Tinkatink
+    ruta: Definitions/Pokens/0957_Tinkatink
+  - nombre: Tinkatuff
+    ruta: Definitions/Pokens/0958_Tinkatuff
+  - nombre: Tinkaton
+    ruta: Definitions/Pokens/0959_Tinkaton
+  - nombre: Cyclizar
+    ruta: Definitions/Pokens/0967_Cyclizar
+  - nombre: Flamigo
+    ruta: Definitions/Pokens/0973_Flamigo
+  - nombre: Dondozo
+    ruta: Definitions/Pokens/0977_Dondozo
+  - nombre: Tatsugiri
+    ruta: Definitions/Pokens/0978_Tatsugiri
+  - nombre: Annihilape
+    ruta: Definitions/Pokens/0979_Annihilape
+  - nombre: Kingambit
+    ruta: Definitions/Pokens/0983_Kingambit
+  - nombre: Colmilargo
+    ruta: Definitions/Pokens/0984_Colmilargo
+  - nombre: Colagrito
+    ruta: Definitions/Pokens/0985_Colagrito
+  - nombre: Furioseta
+    ruta: Definitions/Pokens/0986_Furioseta
+  - nombre: Melenaleteo
+    ruta: Definitions/Pokens/0987_Melenaleteo
+  - nombre: Reptalada
+    ruta: Definitions/Pokens/0988_Reptalada
+  - nombre: Pelarena
+    ruta: Definitions/Pokens/0989_Pelarena
+  - nombre: Ferrodada
+    ruta: Definitions/Pokens/0990_Ferrodada
+  - nombre: Ferrosaco
+    ruta: Definitions/Pokens/0991_Ferrosaco
+  - nombre: Ferropalmas
+    ruta: Definitions/Pokens/0992_Ferropalmas
+  - nombre: Ferrocuello
+    ruta: Definitions/Pokens/0993_Ferrocuello
+  - nombre: Ferropolilla
+    ruta: Definitions/Pokens/0994_Ferropolilla
+  - nombre: "Ferrop\xFAas"
+    ruta: "Definitions/Pokens/0995_Ferrop\xFAas"
+  - nombre: Frigibax
+    ruta: Definitions/Pokens/0996_Frigibax
+  - nombre: Arctibax
+    ruta: Definitions/Pokens/0997_Arctibax
+  - nombre: Baxcalibur
+    ruta: Definitions/Pokens/0998_Baxcalibur
+  - nombre: Wo-Chien
+    ruta: Definitions/Pokens/1001_Wo-Chien
+  - nombre: Chien-Pao
+    ruta: Definitions/Pokens/1002_Chien-Pao
+  - nombre: Ting-Lu
+    ruta: Definitions/Pokens/1003_Ting-Lu
+  - nombre: Chi-Yu
+    ruta: Definitions/Pokens/1004_Chi-Yu
+  - nombre: Bramaluna
+    ruta: Definitions/Pokens/1005_Bramaluna
+  - nombre: "Ferropalad\xEDn"
+    ruta: "Definitions/Pokens/1006_Ferropalad\xEDn"
+  - nombre: Koraidon
+    ruta: Definitions/Pokens/1007_Koraidon
+  - nombre: Miraidon
+    ruta: Definitions/Pokens/1008_Miraidon
+  - nombre: Ondulagua
+    ruta: Definitions/Pokens/1009_Ondulagua
+  - nombre: Ferroverdor
+    ruta: Definitions/Pokens/1010_Ferroverdor
+  - nombre: Okidogi
+    ruta: Definitions/Pokens/1014_Okidogi
+  - nombre: Munkidori
+    ruta: Definitions/Pokens/1015_Munkidori
+  - nombre: Fezandipiti
+    ruta: Definitions/Pokens/1016_Fezandipiti
+  - nombre: Ogerpon
+    ruta: Definitions/Pokens/1017_Ogerpon
+  - nombre: Archaludon
+    ruta: Definitions/Pokens/1018_Archaludon
+  - nombre: Flamariete
+    ruta: Definitions/Pokens/1020_Flamariete
+  - nombre: Electrofuria
+    ruta: Definitions/Pokens/1021_Electrofuria
+  - nombre: Ferromole
+    ruta: Definitions/Pokens/1022_Ferromole
+  - nombre: Ferrotesta
+    ruta: Definitions/Pokens/1023_Ferrotesta
+  - nombre: Terapagos
+    ruta: Definitions/Pokens/1024_Terapagos
+  - nombre: Pecharunt
+    ruta: Definitions/Pokens/1025_Pecharunt
+  - nombre: Aquita
+    ruta: Definitions/Pokens/Aquita
+  - nombre: Bulbi
+    ruta: Definitions/Pokens/Bulbi
+  - nombre: Chispa
+    ruta: Definitions/Pokens/Chispa
+  - nombre: Nestor
+    ruta: Definitions/Pokens/NESTOR
+  movimientos:
+  - nombre: Destructor
+    ruta: Definitions/Moves/0001_Destructor
+  - nombre: "Megapu\xF1o"
+    ruta: "Definitions/Moves/0005_Megapu\xF1o"
+  - nombre: "Pu\xF1o Fuego"
+    ruta: "Definitions/Moves/0007_Pu\xF1o Fuego"
+  - nombre: "Pu\xF1o Hielo"
+    ruta: "Definitions/Moves/0008_Pu\xF1o Hielo"
+  - nombre: "Pu\xF1o Trueno"
+    ruta: "Definitions/Moves/0009_Pu\xF1o Trueno"
+  - nombre: "Ara\xF1azo"
+    ruta: "Definitions/Moves/0010_Ara\xF1azo"
+  - nombre: Agarre
+    ruta: Definitions/Moves/0011_Agarre
+  - nombre: Guillotina
+    ruta: Definitions/Moves/0012_Guillotina
+  - nombre: Danza Espada
+    ruta: Definitions/Moves/0014_Danza Espada
+  - nombre: Tornado
+    ruta: Definitions/Moves/0016_Tornado
+  - nombre: Ataque Ala
+    ruta: Definitions/Moves/0017_Ataque Ala
+  - nombre: Remolino
+    ruta: Definitions/Moves/0018_Remolino
+  - nombre: Vuelo
+    ruta: Definitions/Moves/0019_Vuelo
+  - nombre: Atadura
+    ruta: Definitions/Moves/0020_Atadura
+  - nombre: Atizar
+    ruta: Definitions/Moves/0021_Atizar
+  - nombre: "L\xE1tigo Cepa"
+    ruta: "Definitions/Moves/0022_L\xE1tigo Cepa"
+  - nombre: "Pisot\xF3n"
+    ruta: "Definitions/Moves/0023_Pisot\xF3n"
+  - nombre: Doble Patada
+    ruta: Definitions/Moves/0024_Doble Patada
+  - nombre: Megapatada
+    ruta: Definitions/Moves/0025_Megapatada
+  - nombre: Ataque Arena
+    ruta: Definitions/Moves/0028_Ataque Arena
+  - nombre: Golpe Cabeza
+    ruta: Definitions/Moves/0029_Golpe Cabeza
+  - nombre: Cornada
+    ruta: Definitions/Moves/0030_Cornada
+  - nombre: Ataque Furia
+    ruta: Definitions/Moves/0031_Ataque Furia
+  - nombre: Perforador
+    ruta: Definitions/Moves/0032_Perforador
+  - nombre: Placaje
+    ruta: Definitions/Moves/0033_Placaje
+  - nombre: Golpe Cuerpo
+    ruta: Definitions/Moves/0034_Golpe Cuerpo
+  - nombre: "Constricci\xF3n"
+    ruta: "Definitions/Moves/0035_Constricci\xF3n"
+  - nombre: Derribo
+    ruta: Definitions/Moves/0036_Derribo
+  - nombre: "Sa\xF1a"
+    ruta: "Definitions/Moves/0037_Sa\xF1a"
+  - nombre: Doble Filo
+    ruta: Definitions/Moves/0038_Doble Filo
+  - nombre: Agitacola
+    ruta: Definitions/Moves/0039_Agitacola
+  - nombre: Picotazo Veneno
+    ruta: Definitions/Moves/0040_Picotazo Veneno
+  - nombre: Pin Misil
+    ruta: Definitions/Moves/0042_Pin Misil
+  - nombre: Malicioso
+    ruta: Definitions/Moves/0043_Malicioso
+  - nombre: Mordisco
+    ruta: Definitions/Moves/0044_Mordisco
+  - nombre: "Gru\xF1ido"
+    ruta: "Definitions/Moves/0045_Gru\xF1ido"
+  - nombre: Rugido
+    ruta: Definitions/Moves/0046_Rugido
+  - nombre: Canto
+    ruta: Definitions/Moves/0047_Canto
+  - nombre: "Supers\xF3nico"
+    ruta: "Definitions/Moves/0048_Supers\xF3nico"
+  - nombre: "Anulaci\xF3n"
+    ruta: "Definitions/Moves/0050_Anulaci\xF3n"
+  - nombre: "\xC1cido"
+    ruta: "Definitions/Moves/0051_\xC1cido"
+  - nombre: Ascuas
+    ruta: Definitions/Moves/0052_Ascuas
+  - nombre: Lanzallamas
+    ruta: Definitions/Moves/0053_Lanzallamas
+  - nombre: Neblina
+    ruta: Definitions/Moves/0054_Neblina
+  - nombre: Pistola Agua
+    ruta: Definitions/Moves/0055_Pistola Agua
+  - nombre: Hidrobomba
+    ruta: Definitions/Moves/0056_Hidrobomba
+  - nombre: Surf
+    ruta: Definitions/Moves/0057_Surf
+  - nombre: Rayo Hielo
+    ruta: Definitions/Moves/0058_Rayo Hielo
+  - nombre: Ventisca
+    ruta: Definitions/Moves/0059_Ventisca
+  - nombre: Psicorrayo
+    ruta: Definitions/Moves/0060_Psicorrayo
+  - nombre: Rayo Burbuja
+    ruta: Definitions/Moves/0061_Rayo Burbuja
+  - nombre: Rayo Aurora
+    ruta: Definitions/Moves/0062_Rayo Aurora
+  - nombre: Hiperrayo
+    ruta: Definitions/Moves/0063_Hiperrayo
+  - nombre: Picotazo
+    ruta: Definitions/Moves/0064_Picotazo
+  - nombre: Pico Taladro
+    ruta: Definitions/Moves/0065_Pico Taladro
+  - nombre: "Sumisi\xF3n"
+    ruta: "Definitions/Moves/0066_Sumisi\xF3n"
+  - nombre: Patada Baja
+    ruta: Definitions/Moves/0067_Patada Baja
+  - nombre: Contraataque
+    ruta: Definitions/Moves/0068_Contraataque
+  - nombre: "S\xEDsmico"
+    ruta: "Definitions/Moves/0069_S\xEDsmico"
+  - nombre: Fuerza
+    ruta: Definitions/Moves/0070_Fuerza
+  - nombre: Absorber
+    ruta: Definitions/Moves/0071_Absorber
+  - nombre: Megaagotar
+    ruta: Definitions/Moves/0072_Megaagotar
+  - nombre: Drenadoras
+    ruta: Definitions/Moves/0073_Drenadoras
+  - nombre: Desarrollo
+    ruta: Definitions/Moves/0074_Desarrollo
+  - nombre: Hoja Afilada
+    ruta: Definitions/Moves/0075_Hoja Afilada
+  - nombre: Rayo Solar
+    ruta: Definitions/Moves/0076_Rayo Solar
+  - nombre: Polvo Veneno
+    ruta: Definitions/Moves/0077_Polvo Veneno
+  - nombre: Paralizador
+    ruta: Definitions/Moves/0078_Paralizador
+  - nombre: "Somn\xEDfero"
+    ruta: "Definitions/Moves/0079_Somn\xEDfero"
+  - nombre: "Danza P\xE9talo"
+    ruta: "Definitions/Moves/0080_Danza P\xE9talo"
+  - nombre: Disparo Demora
+    ruta: Definitions/Moves/0081_Disparo Demora
+  - nombre: Giro Fuego
+    ruta: Definitions/Moves/0083_Giro Fuego
+  - nombre: Impactrueno
+    ruta: Definitions/Moves/0084_Impactrueno
+  - nombre: Rayo
+    ruta: Definitions/Moves/0085_Rayo
+  - nombre: Onda Trueno
+    ruta: Definitions/Moves/0086_Onda Trueno
+  - nombre: Trueno
+    ruta: Definitions/Moves/0087_Trueno
+  - nombre: Lanzarrocas
+    ruta: Definitions/Moves/0088_Lanzarrocas
+  - nombre: Terremoto
+    ruta: Definitions/Moves/0089_Terremoto
+  - nombre: Fisura
+    ruta: Definitions/Moves/0090_Fisura
+  - nombre: Excavar
+    ruta: Definitions/Moves/0091_Excavar
+  - nombre: "T\xF3xico"
+    ruta: "Definitions/Moves/0092_T\xF3xico"
+  - nombre: "Confusi\xF3n"
+    ruta: "Definitions/Moves/0093_Confusi\xF3n"
+  - nombre: "Ps\xEDquico"
+    ruta: "Definitions/Moves/0094_Ps\xEDquico"
+  - nombre: Hipnosis
+    ruta: Definitions/Moves/0095_Hipnosis
+  - nombre: Agilidad
+    ruta: Definitions/Moves/0097_Agilidad
+  - nombre: "Ataque R\xE1pido"
+    ruta: "Definitions/Moves/0098_Ataque R\xE1pido"
+  - nombre: Teletransporte
+    ruta: Definitions/Moves/0100_Teletransporte
+  - nombre: Tinieblas
+    ruta: Definitions/Moves/0101_Tinieblas
+  - nombre: "Mim\xE9tico"
+    ruta: "Definitions/Moves/0102_Mim\xE9tico"
+  - nombre: Chirrido
+    ruta: Definitions/Moves/0103_Chirrido
+  - nombre: Doble Equipo
+    ruta: Definitions/Moves/0104_Doble Equipo
+  - nombre: "Recuperaci\xF3n"
+    ruta: "Definitions/Moves/0105_Recuperaci\xF3n"
+  - nombre: Fortaleza
+    ruta: Definitions/Moves/0106_Fortaleza
+  - nombre: "Reducci\xF3n"
+    ruta: "Definitions/Moves/0107_Reducci\xF3n"
+  - nombre: Pantalla de Humo
+    ruta: Definitions/Moves/0108_Pantalla de Humo
+  - nombre: Rayo Confuso
+    ruta: Definitions/Moves/0109_Rayo Confuso
+  - nombre: Refugio
+    ruta: Definitions/Moves/0110_Refugio
+  - nombre: Rizo Defensa
+    ruta: Definitions/Moves/0111_Rizo Defensa
+  - nombre: Pantalla de Luz
+    ruta: Definitions/Moves/0113_Pantalla de Luz
+  - nombre: Niebla
+    ruta: Definitions/Moves/0114_Niebla
+  - nombre: Reflejo
+    ruta: Definitions/Moves/0115_Reflejo
+  - nombre: "Foco Energ\xEDa"
+    ruta: "Definitions/Moves/0116_Foco Energ\xEDa"
+  - nombre: "Metr\xF3nomo"
+    ruta: "Definitions/Moves/0118_Metr\xF3nomo"
+  - nombre: "Autodestrucci\xF3n"
+    ruta: "Definitions/Moves/0120_Autodestrucci\xF3n"
+  - nombre: "Leng\xFCetazo"
+    ruta: "Definitions/Moves/0122_Leng\xFCetazo"
+  - nombre: "Poluci\xF3n"
+    ruta: "Definitions/Moves/0123_Poluci\xF3n"
+  - nombre: Llamarada
+    ruta: Definitions/Moves/0126_Llamarada
+  - nombre: Meteoros
+    ruta: Definitions/Moves/0129_Meteoros
+  - nombre: Cabezazo
+    ruta: Definitions/Moves/0130_Cabezazo
+  - nombre: Amnesia
+    ruta: Definitions/Moves/0133_Amnesia
+  - nombre: "Kin\xE9tico"
+    ruta: "Definitions/Moves/0134_Kin\xE9tico"
+  - nombre: "Ovocuraci\xF3n"
+    ruta: "Definitions/Moves/0135_Ovocuraci\xF3n"
+  - nombre: Patada Salto Alta
+    ruta: Definitions/Moves/0136_Patada Salto Alta
+  - nombre: Deslumbrar
+    ruta: Definitions/Moves/0137_Deslumbrar
+  - nombre: "Comesue\xF1os"
+    ruta: "Definitions/Moves/0138_Comesue\xF1os"
+  - nombre: Gas Venenoso
+    ruta: Definitions/Moves/0139_Gas Venenoso
+  - nombre: Chupavidas
+    ruta: Definitions/Moves/0141_Chupavidas
+  - nombre: "Ataque A\xE9reo"
+    ruta: "Definitions/Moves/0143_Ataque A\xE9reo"
+  - nombre: "Transformaci\xF3n"
+    ruta: "Definitions/Moves/0144_Transformaci\xF3n"
+  - nombre: Espora
+    ruta: Definitions/Moves/0147_Espora
+  - nombre: Salpicadura
+    ruta: Definitions/Moves/0150_Salpicadura
+  - nombre: "Armadura \xC1cida"
+    ruta: "Definitions/Moves/0151_Armadura \xC1cida"
+  - nombre: Martillazo
+    ruta: Definitions/Moves/0152_Martillazo
+  - nombre: "Explosi\xF3n"
+    ruta: "Definitions/Moves/0153_Explosi\xF3n"
+  - nombre: Golpes Furia
+    ruta: Definitions/Moves/0154_Golpes Furia
+  - nombre: Descanso
+    ruta: Definitions/Moves/0156_Descanso
+  - nombre: Avalancha
+    ruta: Definitions/Moves/0157_Avalancha
+  - nombre: Hipercolmillo
+    ruta: Definitions/Moves/0158_Hipercolmillo
+  - nombre: "Conversi\xF3n"
+    ruta: "Definitions/Moves/0160_Conversi\xF3n"
+  - nombre: Triataque
+    ruta: Definitions/Moves/0161_Triataque
+  - nombre: Superdiente
+    ruta: Definitions/Moves/0162_Superdiente
+  - nombre: Cuchillada
+    ruta: Definitions/Moves/0163_Cuchillada
+  - nombre: Sustituto
+    ruta: Definitions/Moves/0164_Sustituto
+  - nombre: Rueda Fuego
+    ruta: Definitions/Moves/0172_Rueda Fuego
+  - nombre: Ronquido
+    ruta: Definitions/Moves/0173_Ronquido
+  - nombre: "Maldici\xF3n"
+    ruta: "Definitions/Moves/0174_Maldici\xF3n"
+  - nombre: Azote
+    ruta: Definitions/Moves/0175_Azote
+  - nombre: "Conversi\xF3n 2"
+    ruta: "Definitions/Moves/0176_Conversi\xF3n 2"
+  - nombre: Aerochorro
+    ruta: Definitions/Moves/0177_Aerochorro
+  - nombre: "Inversi\xF3n"
+    ruta: "Definitions/Moves/0179_Inversi\xF3n"
+  - nombre: Rencor
+    ruta: Definitions/Moves/0180_Rencor
+  - nombre: Nieve Polvo
+    ruta: Definitions/Moves/0181_Nieve Polvo
+  - nombre: "Protecci\xF3n"
+    ruta: "Definitions/Moves/0182_Protecci\xF3n"
+  - nombre: "Ultrapu\xF1o"
+    ruta: "Definitions/Moves/0183_Ultrapu\xF1o"
+  - nombre: Cara Susto
+    ruta: Definitions/Moves/0184_Cara Susto
+  - nombre: Beso Dulce
+    ruta: Definitions/Moves/0186_Beso Dulce
+  - nombre: Tambor
+    ruta: Definitions/Moves/0187_Tambor
+  - nombre: Bomba Lodo
+    ruta: Definitions/Moves/0188_Bomba Lodo
+  - nombre: "Bofet\xF3n Lodo"
+    ruta: "Definitions/Moves/0189_Bofet\xF3n Lodo"
+  - nombre: "P\xFAas"
+    ruta: "Definitions/Moves/0191_P\xFAas"
+  - nombre: "Electroca\xF1\xF3n"
+    ruta: "Definitions/Moves/0192_Electroca\xF1\xF3n"
+  - nombre: Mismo Destino
+    ruta: Definitions/Moves/0194_Mismo Destino
+  - nombre: Canto Mortal
+    ruta: Definitions/Moves/0195_Canto Mortal
+  - nombre: Viento Hielo
+    ruta: Definitions/Moves/0196_Viento Hielo
+  - nombre: "Detecci\xF3n"
+    ruta: "Definitions/Moves/0197_Detecci\xF3n"
+  - nombre: "Ataque \xD3seo"
+    ruta: "Definitions/Moves/0198_Ataque \xD3seo"
+  - nombre: Fijar Blanco
+    ruta: Definitions/Moves/0199_Fijar Blanco
+  - nombre: Enfado
+    ruta: Definitions/Moves/0200_Enfado
+  - nombre: Tormenta de Arena
+    ruta: Definitions/Moves/0201_Tormenta de Arena
+  - nombre: Gigadrenado
+    ruta: Definitions/Moves/0202_Gigadrenado
+  - nombre: Aguante
+    ruta: Definitions/Moves/0203_Aguante
+  - nombre: Encanto
+    ruta: Definitions/Moves/0204_Encanto
+  - nombre: Rodar
+    ruta: Definitions/Moves/0205_Rodar
+  - nombre: Falso Tortazo
+    ruta: Definitions/Moves/0206_Falso Tortazo
+  - nombre: Fanfarronear
+    ruta: Definitions/Moves/0207_Fanfarronear
+  - nombre: Chispa
+    ruta: Definitions/Moves/0209_Chispa
+  - nombre: Corte Furia
+    ruta: Definitions/Moves/0210_Corte Furia
+  - nombre: Ala de Acero
+    ruta: Definitions/Moves/0211_Ala de Acero
+  - nombre: Mal de Ojo
+    ruta: Definitions/Moves/0212_Mal de Ojo
+  - nombre: "Atracci\xF3n"
+    ruta: "Definitions/Moves/0213_Atracci\xF3n"
+  - nombre: "Son\xE1mbulo"
+    ruta: "Definitions/Moves/0214_Son\xE1mbulo"
+  - nombre: Cascabel Cura
+    ruta: Definitions/Moves/0215_Cascabel Cura
+  - nombre: Presente
+    ruta: Definitions/Moves/0217_Presente
+  - nombre: Velo Sagrado
+    ruta: Definitions/Moves/0219_Velo Sagrado
+  - nombre: Divide Dolor
+    ruta: Definitions/Moves/0220_Divide Dolor
+  - nombre: Fuego Sagrado
+    ruta: Definitions/Moves/0221_Fuego Sagrado
+  - nombre: "Pu\xF1o Din\xE1mico"
+    ruta: "Definitions/Moves/0223_Pu\xF1o Din\xE1mico"
+  - nombre: Megacuerno
+    ruta: Definitions/Moves/0224_Megacuerno
+  - nombre: Dragoaliento
+    ruta: Definitions/Moves/0225_Dragoaliento
+  - nombre: Relevo
+    ruta: Definitions/Moves/0226_Relevo
+  - nombre: Otra Vez
+    ruta: Definitions/Moves/0227_Otra Vez
+  - nombre: "Persecuci\xF3n"
+    ruta: "Definitions/Moves/0228_Persecuci\xF3n"
+  - nombre: "Giro R\xE1pido"
+    ruta: "Definitions/Moves/0229_Giro R\xE1pido"
+  - nombre: Dulce Aroma
+    ruta: Definitions/Moves/0230_Dulce Aroma
+  - nombre: "Cola F\xE9rrea"
+    ruta: "Definitions/Moves/0231_Cola F\xE9rrea"
+  - nombre: Garra Metal
+    ruta: Definitions/Moves/0232_Garra Metal
+  - nombre: Llave Vital
+    ruta: Definitions/Moves/0233_Llave Vital
+  - nombre: Sol Matinal
+    ruta: Definitions/Moves/0234_Sol Matinal
+  - nombre: "Fotos\xEDntesis"
+    ruta: "Definitions/Moves/0235_Fotos\xEDntesis"
+  - nombre: Luz Lunar
+    ruta: Definitions/Moves/0236_Luz Lunar
+  - nombre: Poder Oculto
+    ruta: Definitions/Moves/0237_Poder Oculto
+  - nombre: Tajo Cruzado
+    ruta: Definitions/Moves/0238_Tajo Cruzado
+  - nombre: "Cicl\xF3n"
+    ruta: "Definitions/Moves/0239_Cicl\xF3n"
+  - nombre: Danza Lluvia
+    ruta: Definitions/Moves/0240_Danza Lluvia
+  - nombre: "D\xEDa Soleado"
+    ruta: "Definitions/Moves/0241_D\xEDa Soleado"
+  - nombre: Triturar
+    ruta: Definitions/Moves/0242_Triturar
+  - nombre: Manto Espejo
+    ruta: Definitions/Moves/0243_Manto Espejo
+  - nombre: "Autosugesti\xF3n"
+    ruta: "Definitions/Moves/0244_Autosugesti\xF3n"
+  - nombre: Velocidad Extrema
+    ruta: Definitions/Moves/0245_Velocidad Extrema
+  - nombre: Poder Pasado
+    ruta: Definitions/Moves/0246_Poder Pasado
+  - nombre: Bola Sombra
+    ruta: Definitions/Moves/0247_Bola Sombra
+  - nombre: "Premonici\xF3n"
+    ruta: "Definitions/Moves/0248_Premonici\xF3n"
+  - nombre: Golpe Roca
+    ruta: Definitions/Moves/0249_Golpe Roca
+  - nombre: Torbellino
+    ruta: Definitions/Moves/0250_Torbellino
+  - nombre: Paliza
+    ruta: Definitions/Moves/0251_Paliza
+  - nombre: Sorpresa
+    ruta: Definitions/Moves/0252_Sorpresa
+  - nombre: Alboroto
+    ruta: Definitions/Moves/0253_Alboroto
+  - nombre: Reserva
+    ruta: Definitions/Moves/0254_Reserva
+  - nombre: Escupir
+    ruta: Definitions/Moves/0255_Escupir
+  - nombre: Tragar
+    ruta: Definitions/Moves/0256_Tragar
+  - nombre: "Onda \xCDgnea"
+    ruta: "Definitions/Moves/0257_Onda \xCDgnea"
+  - nombre: Tormento
+    ruta: Definitions/Moves/0259_Tormento
+  - nombre: Camelo
+    ruta: Definitions/Moves/0260_Camelo
+  - nombre: Fuego Fatuo
+    ruta: Definitions/Moves/0261_Fuego Fatuo
+  - nombre: Legado
+    ruta: Definitions/Moves/0262_Legado
+  - nombre: Fachada
+    ruta: Definitions/Moves/0263_Fachada
+  - nombre: "Pu\xF1o Certero"
+    ruta: "Definitions/Moves/0264_Pu\xF1o Certero"
+  - nombre: "Se\xF1uelo"
+    ruta: "Definitions/Moves/0266_Se\xF1uelo"
+  - nombre: "Adaptaci\xF3n"
+    ruta: "Definitions/Moves/0267_Adaptaci\xF3n"
+  - nombre: Carga
+    ruta: Definitions/Moves/0268_Carga
+  - nombre: Mofa
+    ruta: Definitions/Moves/0269_Mofa
+  - nombre: Refuerzo
+    ruta: Definitions/Moves/0270_Refuerzo
+  - nombre: Truco
+    ruta: Definitions/Moves/0271_Truco
+  - nombre: "Imitaci\xF3n"
+    ruta: "Definitions/Moves/0272_Imitaci\xF3n"
+  - nombre: Deseo
+    ruta: Definitions/Moves/0273_Deseo
+  - nombre: Arraigo
+    ruta: Definitions/Moves/0275_Arraigo
+  - nombre: Fuerza Bruta
+    ruta: Definitions/Moves/0276_Fuerza Bruta
+  - nombre: Reciclaje
+    ruta: Definitions/Moves/0278_Reciclaje
+  - nombre: Desquite
+    ruta: Definitions/Moves/0279_Desquite
+  - nombre: "Demolici\xF3n"
+    ruta: "Definitions/Moves/0280_Demolici\xF3n"
+  - nombre: Bostezo
+    ruta: Definitions/Moves/0281_Bostezo
+  - nombre: Desarme
+    ruta: Definitions/Moves/0282_Desarme
+  - nombre: Esfuerzo
+    ruta: Definitions/Moves/0283_Esfuerzo
+  - nombre: Estallido
+    ruta: Definitions/Moves/0284_Estallido
+  - nombre: Intercambio
+    ruta: Definitions/Moves/0285_Intercambio
+  - nombre: Sellar
+    ruta: Definitions/Moves/0286_Sellar
+  - nombre: Rabia
+    ruta: Definitions/Moves/0288_Rabia
+  - nombre: Buceo
+    ruta: Definitions/Moves/0291_Buceo
+  - nombre: "Empuj\xF3n"
+    ruta: "Definitions/Moves/0292_Empuj\xF3n"
+  - nombre: Luminicola
+    ruta: Definitions/Moves/0294_Luminicola
+  - nombre: Resplandor
+    ruta: Definitions/Moves/0295_Resplandor
+  - nombre: Bola Neblina
+    ruta: Definitions/Moves/0296_Bola Neblina
+  - nombre: Danza Pluma
+    ruta: Definitions/Moves/0297_Danza Pluma
+  - nombre: Danza Caos
+    ruta: Definitions/Moves/0298_Danza Caos
+  - nombre: "Patada \xCDgnea"
+    ruta: "Definitions/Moves/0299_Patada \xCDgnea"
+  - nombre: Relajo
+    ruta: Definitions/Moves/0303_Relajo
+  - nombre: "Vozarr\xF3n"
+    ruta: "Definitions/Moves/0304_Vozarr\xF3n"
+  - nombre: Colmillo Veneno
+    ruta: Definitions/Moves/0305_Colmillo Veneno
+  - nombre: Garra Brutal
+    ruta: Definitions/Moves/0306_Garra Brutal
+  - nombre: "Pu\xF1o Meteoro"
+    ruta: "Definitions/Moves/0309_Pu\xF1o Meteoro"
+  - nombre: Impresionar
+    ruta: Definitions/Moves/0310_Impresionar
+  - nombre: Meteorobola
+    ruta: Definitions/Moves/0311_Meteorobola
+  - nombre: Aromaterapia
+    ruta: Definitions/Moves/0312_Aromaterapia
+  - nombre: Llanto Falso
+    ruta: Definitions/Moves/0313_Llanto Falso
+  - nombre: Aire Afilado
+    ruta: Definitions/Moves/0314_Aire Afilado
+  - nombre: Sofoco
+    ruta: Definitions/Moves/0315_Sofoco
+  - nombre: Tumba Rocas
+    ruta: Definitions/Moves/0317_Tumba Rocas
+  - nombre: "Eco Met\xE1lico"
+    ruta: "Definitions/Moves/0319_Eco Met\xE1lico"
+  - nombre: Cosquillas
+    ruta: Definitions/Moves/0321_Cosquillas
+  - nombre: "Masa C\xF3smica"
+    ruta: "Definitions/Moves/0322_Masa C\xF3smica"
+  - nombre: Salpicar
+    ruta: Definitions/Moves/0323_Salpicar
+  - nombre: "Pu\xF1o Sombra"
+    ruta: "Definitions/Moves/0325_Pu\xF1o Sombra"
+  - nombre: Paranormal
+    ruta: Definitions/Moves/0326_Paranormal
+  - nombre: Bucle Arena
+    ruta: Definitions/Moves/0328_Bucle Arena
+  - nombre: "Fr\xEDo Polar"
+    ruta: "Definitions/Moves/0329_Fr\xEDo Polar"
+  - nombre: Agua Lodosa
+    ruta: Definitions/Moves/0330_Agua Lodosa
+  - nombre: Semilladora
+    ruta: Definitions/Moves/0331_Semilladora
+  - nombre: "Golpe A\xE9reo"
+    ruta: "Definitions/Moves/0332_Golpe A\xE9reo"
+  - nombre: "Defensa F\xE9rrea"
+    ruta: "Definitions/Moves/0334_Defensa F\xE9rrea"
+  - nombre: Bloqueo
+    ruta: Definitions/Moves/0335_Bloqueo
+  - nombre: Aullido
+    ruta: Definitions/Moves/0336_Aullido
+  - nombre: "Garra Drag\xF3n"
+    ruta: "Definitions/Moves/0337_Garra Drag\xF3n"
+  - nombre: Corpulencia
+    ruta: Definitions/Moves/0339_Corpulencia
+  - nombre: Bote
+    ruta: Definitions/Moves/0340_Bote
+  - nombre: Disparo Lodo
+    ruta: Definitions/Moves/0341_Disparo Lodo
+  - nombre: Cola Veneno
+    ruta: Definitions/Moves/0342_Cola Veneno
+  - nombre: Antojo
+    ruta: Definitions/Moves/0343_Antojo
+  - nombre: "Hoja M\xE1gica"
+    ruta: "Definitions/Moves/0345_Hoja M\xE1gica"
+  - nombre: Paz Mental
+    ruta: Definitions/Moves/0347_Paz Mental
+  - nombre: Hoja Aguda
+    ruta: Definitions/Moves/0348_Hoja Aguda
+  - nombre: "Danza Drag\xF3n"
+    ruta: "Definitions/Moves/0349_Danza Drag\xF3n"
+  - nombre: Pedrada
+    ruta: Definitions/Moves/0350_Pedrada
+  - nombre: Onda Voltio
+    ruta: Definitions/Moves/0351_Onda Voltio
+  - nombre: Hidropulso
+    ruta: Definitions/Moves/0352_Hidropulso
+  - nombre: Deseo Oculto
+    ruta: Definitions/Moves/0353_Deseo Oculto
+  - nombre: Psicoataque
+    ruta: Definitions/Moves/0354_Psicoataque
+  - nombre: Respiro
+    ruta: Definitions/Moves/0355_Respiro
+  - nombre: Gravedad
+    ruta: Definitions/Moves/0356_Gravedad
+  - nombre: Machada
+    ruta: Definitions/Moves/0359_Machada
+  - nombre: Giro Bola
+    ruta: Definitions/Moves/0360_Giro Bola
+  - nombre: Deseo Cura
+    ruta: Definitions/Moves/0361_Deseo Cura
+  - nombre: Salmuera
+    ruta: Definitions/Moves/0362_Salmuera
+  - nombre: Amago
+    ruta: Definitions/Moves/0364_Amago
+  - nombre: Picoteo
+    ruta: Definitions/Moves/0365_Picoteo
+  - nombre: "Viento Af\xEDn"
+    ruta: "Definitions/Moves/0366_Viento Af\xEDn"
+  - nombre: "Acupresi\xF3n"
+    ruta: "Definitions/Moves/0367_Acupresi\xF3n"
+  - nombre: "Represi\xF3n Metal"
+    ruta: "Definitions/Moves/0368_Represi\xF3n Metal"
+  - nombre: Ida y Vuelta
+    ruta: Definitions/Moves/0369_Ida y Vuelta
+  - nombre: A Bocajarro
+    ruta: Definitions/Moves/0370_A Bocajarro
+  - nombre: Vendetta
+    ruta: Definitions/Moves/0371_Vendetta
+  - nombre: Buena Baza
+    ruta: Definitions/Moves/0372_Buena Baza
+  - nombre: Lanzamiento
+    ruta: Definitions/Moves/0374_Lanzamiento
+  - nombre: Truco Fuerza
+    ruta: Definitions/Moves/0379_Truco Fuerza
+  - nombre: Bilis
+    ruta: Definitions/Moves/0380_Bilis
+  - nombre: "Copi\xF3n"
+    ruta: "Definitions/Moves/0383_Copi\xF3n"
+  - nombre: Cambiafuerza
+    ruta: Definitions/Moves/0384_Cambiafuerza
+  - nombre: Cambiadefensa
+    ruta: Definitions/Moves/0385_Cambiadefensa
+  - nombre: "\xDAltima Baza"
+    ruta: "Definitions/Moves/0387_\xDAltima Baza"
+  - nombre: Abatidoras
+    ruta: Definitions/Moves/0388_Abatidoras
+  - nombre: Golpe Bajo
+    ruta: Definitions/Moves/0389_Golpe Bajo
+  - nombre: "P\xFAas T\xF3xicas"
+    ruta: "Definitions/Moves/0390_P\xFAas T\xF3xicas"
+  - nombre: Cambiaalmas
+    ruta: Definitions/Moves/0391_Cambiaalmas
+  - nombre: Acua Aro
+    ruta: Definitions/Moves/0392_Acua Aro
+  - nombre: "Levit\xF3n"
+    ruta: "Definitions/Moves/0393_Levit\xF3n"
+  - nombre: "Envite \xCDgneo"
+    ruta: "Definitions/Moves/0394_Envite \xCDgneo"
+  - nombre: Palmeo
+    ruta: Definitions/Moves/0395_Palmeo
+  - nombre: Esfera Aural
+    ruta: Definitions/Moves/0396_Esfera Aural
+  - nombre: Pulimento
+    ruta: Definitions/Moves/0397_Pulimento
+  - nombre: Puya Nociva
+    ruta: Definitions/Moves/0398_Puya Nociva
+  - nombre: "Pulso Umbr\xEDo"
+    ruta: "Definitions/Moves/0399_Pulso Umbr\xEDo"
+  - nombre: "Tajo Umbr\xEDo"
+    ruta: "Definitions/Moves/0400_Tajo Umbr\xEDo"
+  - nombre: Acua Cola
+    ruta: Definitions/Moves/0401_Acua Cola
+  - nombre: Bomba Germen
+    ruta: Definitions/Moves/0402_Bomba Germen
+  - nombre: "Tajo A\xE9reo"
+    ruta: "Definitions/Moves/0403_Tajo A\xE9reo"
+  - nombre: Tijera X
+    ruta: Definitions/Moves/0404_Tijera X
+  - nombre: Zumbido
+    ruta: Definitions/Moves/0405_Zumbido
+  - nombre: "Pulso Drag\xF3n"
+    ruta: "Definitions/Moves/0406_Pulso Drag\xF3n"
+  - nombre: "Carga Drag\xF3n"
+    ruta: "Definitions/Moves/0407_Carga Drag\xF3n"
+  - nombre: Joya de Luz
+    ruta: Definitions/Moves/0408_Joya de Luz
+  - nombre: "Pu\xF1o Drenaje"
+    ruta: "Definitions/Moves/0409_Pu\xF1o Drenaje"
+  - nombre: "Onda Vac\xEDo"
+    ruta: "Definitions/Moves/0410_Onda Vac\xEDo"
+  - nombre: Onda Certera
+    ruta: Definitions/Moves/0411_Onda Certera
+  - nombre: Energibola
+    ruta: Definitions/Moves/0412_Energibola
+  - nombre: "P\xE1jaro Osado"
+    ruta: "Definitions/Moves/0413_P\xE1jaro Osado"
+  - nombre: Tierra Viva
+    ruta: Definitions/Moves/0414_Tierra Viva
+  - nombre: Trapicheo
+    ruta: Definitions/Moves/0415_Trapicheo
+  - nombre: Gigaimpacto
+    ruta: Definitions/Moves/0416_Gigaimpacto
+  - nombre: "Maquinaci\xF3n"
+    ruta: "Definitions/Moves/0417_Maquinaci\xF3n"
+  - nombre: "Pu\xF1o Bala"
+    ruta: "Definitions/Moves/0418_Pu\xF1o Bala"
+  - nombre: Alud
+    ruta: Definitions/Moves/0419_Alud
+  - nombre: Esquirla Helada
+    ruta: Definitions/Moves/0420_Esquirla Helada
+  - nombre: "Garra Umbr\xEDa"
+    ruta: "Definitions/Moves/0421_Garra Umbr\xEDa"
+  - nombre: Colmillo Rayo
+    ruta: Definitions/Moves/0422_Colmillo Rayo
+  - nombre: Colmillo Hielo
+    ruta: Definitions/Moves/0423_Colmillo Hielo
+  - nombre: "Colmillo \xCDgneo"
+    ruta: "Definitions/Moves/0424_Colmillo \xCDgneo"
+  - nombre: Sombra Vil
+    ruta: Definitions/Moves/0425_Sombra Vil
+  - nombre: Psicocorte
+    ruta: Definitions/Moves/0427_Psicocorte
+  - nombre: Cabezazo Zen
+    ruta: Definitions/Moves/0428_Cabezazo Zen
+  - nombre: "Ca\xF1\xF3n Resplandor"
+    ruta: "Definitions/Moves/0430_Ca\xF1\xF3n Resplandor"
+  - nombre: Despejar
+    ruta: Definitions/Moves/0432_Despejar
+  - nombre: Espacio Raro
+    ruta: Definitions/Moves/0433_Espacio Raro
+  - nombre: Chispazo
+    ruta: Definitions/Moves/0435_Chispazo
+  - nombre: Humareda
+    ruta: Definitions/Moves/0436_Humareda
+  - nombre: Lluevehojas
+    ruta: Definitions/Moves/0437_Lluevehojas
+  - nombre: Latigazo
+    ruta: Definitions/Moves/0438_Latigazo
+  - nombre: Romperrocas
+    ruta: Definitions/Moves/0439_Romperrocas
+  - nombre: Veneno X
+    ruta: Definitions/Moves/0440_Veneno X
+  - nombre: Cabeza de Hierro
+    ruta: Definitions/Moves/0442_Cabeza de Hierro
+  - nombre: Roca Afilada
+    ruta: Definitions/Moves/0444_Roca Afilada
+  - nombre: Trampa Rocas
+    ruta: Definitions/Moves/0446_Trampa Rocas
+  - nombre: Hierba Lazo
+    ruta: Definitions/Moves/0447_Hierba Lazo
+  - nombre: Sentencia
+    ruta: Definitions/Moves/0449_Sentencia
+  - nombre: Picadura
+    ruta: Definitions/Moves/0450_Picadura
+  - nombre: Rayo Carga
+    ruta: Definitions/Moves/0451_Rayo Carga
+  - nombre: Mazazo
+    ruta: Definitions/Moves/0452_Mazazo
+  - nombre: Acua Jet
+    ruta: Definitions/Moves/0453_Acua Jet
+  - nombre: Testarazo
+    ruta: Definitions/Moves/0457_Testarazo
+  - nombre: Doble Golpe
+    ruta: Definitions/Moves/0458_Doble Golpe
+  - nombre: "Distorsi\xF3n"
+    ruta: "Definitions/Moves/0459_Distorsi\xF3n"
+  - nombre: "Corte Vac\xEDo"
+    ruta: "Definitions/Moves/0460_Corte Vac\xEDo"
+  - nombre: Danza Lunar
+    ruta: Definitions/Moves/0461_Danza Lunar
+  - nombre: "Agarr\xF3n"
+    ruta: "Definitions/Moves/0462_Agarr\xF3n"
+  - nombre: "Lluvia \xCDgnea"
+    ruta: "Definitions/Moves/0463_Lluvia \xCDgnea"
+  - nombre: Brecha Negra
+    ruta: Definitions/Moves/0464_Brecha Negra
+  - nombre: Fulgor Semilla
+    ruta: Definitions/Moves/0465_Fulgor Semilla
+  - nombre: "Golpe Umbr\xEDo"
+    ruta: "Definitions/Moves/0467_Golpe Umbr\xEDo"
+  - nombre: Afilagarras
+    ruta: Definitions/Moves/0468_Afilagarras
+  - nombre: Vasta Guardia
+    ruta: Definitions/Moves/0469_Vasta Guardia
+  - nombre: Isoguardia
+    ruta: Definitions/Moves/0470_Isoguardia
+  - nombre: Isofuerza
+    ruta: Definitions/Moves/0471_Isofuerza
+  - nombre: "Zona Extra\xF1a"
+    ruta: "Definitions/Moves/0472_Zona Extra\xF1a"
+  - nombre: Psicocarga
+    ruta: Definitions/Moves/0473_Psicocarga
+  - nombre: "Carga T\xF3xica"
+    ruta: "Definitions/Moves/0474_Carga T\xF3xica"
+  - nombre: Aligerar
+    ruta: Definitions/Moves/0475_Aligerar
+  - nombre: Polvo Ira
+    ruta: Definitions/Moves/0476_Polvo Ira
+  - nombre: "Zona M\xE1gica"
+    ruta: "Definitions/Moves/0478_Zona M\xE1gica"
+  - nombre: "Antia\xE9reo"
+    ruta: "Definitions/Moves/0479_Antia\xE9reo"
+  - nombre: "Llave Cors\xE9"
+    ruta: "Definitions/Moves/0480_Llave Cors\xE9"
+  - nombre: "Onda T\xF3xica"
+    ruta: "Definitions/Moves/0482_Onda T\xF3xica"
+  - nombre: Danza Aleteo
+    ruta: Definitions/Moves/0483_Danza Aleteo
+  - nombre: Cuerpo Pesado
+    ruta: Definitions/Moves/0484_Cuerpo Pesado
+  - nombre: Bola Voltio
+    ruta: Definitions/Moves/0486_Bola Voltio
+  - nombre: Empapar
+    ruta: Definitions/Moves/0487_Empapar
+  - nombre: Nitrocarga
+    ruta: Definitions/Moves/0488_Nitrocarga
+  - nombre: Enrosque
+    ruta: Definitions/Moves/0489_Enrosque
+  - nombre: "Puntapi\xE9"
+    ruta: "Definitions/Moves/0490_Puntapi\xE9"
+  - nombre: "Bomba \xC1cida"
+    ruta: "Definitions/Moves/0491_Bomba \xC1cida"
+  - nombre: Juego Sucio
+    ruta: Definitions/Moves/0492_Juego Sucio
+  - nombre: Onda Simple
+    ruta: Definitions/Moves/0493_Onda Simple
+  - nombre: Cede Paso
+    ruta: Definitions/Moves/0495_Cede Paso
+  - nombre: Canon
+    ruta: Definitions/Moves/0496_Canon
+  - nombre: Eco Voz
+    ruta: Definitions/Moves/0497_Eco Voz
+  - nombre: Niebla Clara
+    ruta: Definitions/Moves/0499_Niebla Clara
+  - nombre: Poder Reserva
+    ruta: Definitions/Moves/0500_Poder Reserva
+  - nombre: Anticipo
+    ruta: Definitions/Moves/0501_Anticipo
+  - nombre: Cambio de Banda
+    ruta: Definitions/Moves/0502_Cambio de Banda
+  - nombre: Escaldar
+    ruta: Definitions/Moves/0503_Escaldar
+  - nombre: Rompecoraza
+    ruta: Definitions/Moves/0504_Rompecoraza
+  - nombre: Pulso Cura
+    ruta: Definitions/Moves/0505_Pulso Cura
+  - nombre: Infortunio
+    ruta: Definitions/Moves/0506_Infortunio
+  - nombre: Cambio de Marcha
+    ruta: Definitions/Moves/0508_Cambio de Marcha
+  - nombre: "Calcinaci\xF3n"
+    ruta: "Definitions/Moves/0510_Calcinaci\xF3n"
+  - nombre: "\xDAltimo Lugar"
+    ruta: "Definitions/Moves/0511_\xDAltimo Lugar"
+  - nombre: "Acr\xF3bata"
+    ruta: "Definitions/Moves/0512_Acr\xF3bata"
+  - nombre: Clonatipo
+    ruta: Definitions/Moves/0513_Clonatipo
+  - nombre: Represalia
+    ruta: Definitions/Moves/0514_Represalia
+  - nombre: Sacrificio
+    ruta: Definitions/Moves/0515_Sacrificio
+  - nombre: Infierno
+    ruta: Definitions/Moves/0517_Infierno
+  - nombre: Voltiocambio
+    ruta: Definitions/Moves/0521_Voltiocambio
+  - nombre: Estoicismo
+    ruta: Definitions/Moves/0522_Estoicismo
+  - nombre: Terratemblor
+    ruta: Definitions/Moves/0523_Terratemblor
+  - nombre: "Vaho G\xE9lido"
+    ruta: "Definitions/Moves/0524_Vaho G\xE9lido"
+  - nombre: "Cola Drag\xF3n"
+    ruta: "Definitions/Moves/0525_Cola Drag\xF3n"
+  - nombre: Avivar
+    ruta: Definitions/Moves/0526_Avivar
+  - nombre: Electrotela
+    ruta: Definitions/Moves/0527_Electrotela
+  - nombre: Voltio Cruel
+    ruta: Definitions/Moves/0528_Voltio Cruel
+  - nombre: Taladradora
+    ruta: Definitions/Moves/0529_Taladradora
+  - nombre: Golpe Bis
+    ruta: Definitions/Moves/0530_Golpe Bis
+  - nombre: Asta Drenaje
+    ruta: Definitions/Moves/0532_Asta Drenaje
+  - nombre: Espada Santa
+    ruta: Definitions/Moves/0533_Espada Santa
+  - nombre: Concha Filo
+    ruta: Definitions/Moves/0534_Concha Filo
+  - nombre: Golpe Calor
+    ruta: Definitions/Moves/0535_Golpe Calor
+  - nombre: "Rizo Algod\xF3n"
+    ruta: "Definitions/Moves/0538_Rizo Algod\xF3n"
+  - nombre: Pulso Noche
+    ruta: Definitions/Moves/0539_Pulso Noche
+  - nombre: Onda Mental
+    ruta: Definitions/Moves/0540_Onda Mental
+  - nombre: Plumerazo
+    ruta: Definitions/Moves/0541_Plumerazo
+  - nombre: Vendaval
+    ruta: Definitions/Moves/0542_Vendaval
+  - nombre: "Bomba \xCDgnea"
+    ruta: "Definitions/Moves/0545_Bomba \xCDgnea"
+  - nombre: Tecno Shock
+    ruta: Definitions/Moves/0546_Tecno Shock
+  - nombre: Canto Arcaico
+    ruta: Definitions/Moves/0547_Canto Arcaico
+  - nombre: "Sable M\xEDstico"
+    ruta: "Definitions/Moves/0548_Sable M\xEDstico"
+  - nombre: "Mundo G\xE9lido"
+    ruta: "Definitions/Moves/0549_Mundo G\xE9lido"
+  - nombre: Ataque Fulgor
+    ruta: Definitions/Moves/0550_Ataque Fulgor
+  - nombre: Llama Azul
+    ruta: Definitions/Moves/0551_Llama Azul
+  - nombre: Danza Llama
+    ruta: Definitions/Moves/0552_Danza Llama
+  - nombre: Alarido
+    ruta: Definitions/Moves/0555_Alarido
+  - nombre: Chuzos
+    ruta: Definitions/Moves/0556_Chuzos
+  - nombre: V de Fuego
+    ruta: Definitions/Moves/0557_V de Fuego
+  - nombre: "Llama Fusi\xF3n"
+    ruta: "Definitions/Moves/0558_Llama Fusi\xF3n"
+  - nombre: "Rayo Fusi\xF3n"
+    ruta: "Definitions/Moves/0559_Rayo Fusi\xF3n"
+  - nombre: Plancha Voladora
+    ruta: Definitions/Moves/0560_Plancha Voladora
+  - nombre: Eructo
+    ruta: Definitions/Moves/0562_Eructo
+  - nombre: Red Viscosa
+    ruta: Definitions/Moves/0564_Red Viscosa
+  - nombre: "Aguij\xF3n Letal"
+    ruta: "Definitions/Moves/0565_Aguij\xF3n Letal"
+  - nombre: Golpe Fantasma
+    ruta: Definitions/Moves/0566_Golpe Fantasma
+  - nombre: Halloween
+    ruta: Definitions/Moves/0567_Halloween
+  - nombre: Rugido de Guerra
+    ruta: Definitions/Moves/0568_Rugido de Guerra
+  - nombre: "Carga Par\xE1bola"
+    ruta: "Definitions/Moves/0570_Carga Par\xE1bola"
+  - nombre: Condena Silvana
+    ruta: Definitions/Moves/0571_Condena Silvana
+  - nombre: Tormenta Floral
+    ruta: Definitions/Moves/0572_Tormenta Floral
+  - nombre: "Liofilizaci\xF3n"
+    ruta: "Definitions/Moves/0573_Liofilizaci\xF3n"
+  - nombre: Voz Cautivadora
+    ruta: Definitions/Moves/0574_Voz Cautivadora
+  - nombre: "\xDAltima Palabra"
+    ruta: "Definitions/Moves/0575_\xDAltima Palabra"
+  - nombre: Beso Drenaje
+    ruta: Definitions/Moves/0577_Beso Drenaje
+  - nombre: Truco Defensa
+    ruta: Definitions/Moves/0578_Truco Defensa
+  - nombre: Campo de Hierba
+    ruta: Definitions/Moves/0580_Campo de Hierba
+  - nombre: Campo de Niebla
+    ruta: Definitions/Moves/0581_Campo de Niebla
+  - nombre: "Caranto\xF1a"
+    ruta: "Definitions/Moves/0583_Caranto\xF1a"
+  - nombre: "Viento Fe\xE9rico"
+    ruta: "Definitions/Moves/0584_Viento Fe\xE9rico"
+  - nombre: Fuerza Lunar
+    ruta: Definitions/Moves/0585_Fuerza Lunar
+  - nombre: Estruendo
+    ruta: Definitions/Moves/0586_Estruendo
+  - nombre: "Cerrojo Fe\xE9rico"
+    ruta: "Definitions/Moves/0587_Cerrojo Fe\xE9rico"
+  - nombre: Escudo Real
+    ruta: Definitions/Moves/0588_Escudo Real
+  - nombre: "Camarader\xEDa"
+    ruta: "Definitions/Moves/0589_Camarader\xEDa"
+  - nombre: Confidencia
+    ruta: Definitions/Moves/0590_Confidencia
+  - nombre: Tormenta de Diamantes
+    ruta: Definitions/Moves/0591_Tormenta de Diamantes
+  - nombre: Chorro de Vapor
+    ruta: Definitions/Moves/0592_Chorro de Vapor
+  - nombre: Paso Dimensional
+    ruta: Definitions/Moves/0593_Paso Dimensional
+  - nombre: Shuriken de Agua
+    ruta: Definitions/Moves/0594_Shuriken de Agua
+  - nombre: Llama Embrujada
+    ruta: Definitions/Moves/0595_Llama Embrujada
+  - nombre: Barrera Espinosa
+    ruta: Definitions/Moves/0596_Barrera Espinosa
+  - nombre: "Niebla Arom\xE1tica"
+    ruta: "Definitions/Moves/0597_Niebla Arom\xE1tica"
+  - nombre: Trampa Venenosa
+    ruta: Definitions/Moves/0599_Trampa Venenosa
+  - nombre: Geocontrol
+    ruta: Definitions/Moves/0601_Geocontrol
+  - nombre: "Aura Magn\xE9tica"
+    ruta: "Definitions/Moves/0602_Aura Magn\xE9tica"
+  - nombre: "Campo El\xE9ctrico"
+    ruta: "Definitions/Moves/0604_Campo El\xE9ctrico"
+  - nombre: "Brillo M\xE1gico"
+    ruta: "Definitions/Moves/0605_Brillo M\xE1gico"
+  - nombre: Ojitos Tiernos
+    ruta: Definitions/Moves/0608_Ojitos Tiernos
+  - nombre: "Moflete Est\xE1tico"
+    ruta: "Definitions/Moves/0609_Moflete Est\xE1tico"
+  - nombre: Acoso
+    ruta: Definitions/Moves/0611_Acoso
+  - nombre: "Pu\xF1o Incremento"
+    ruta: "Definitions/Moves/0612_Pu\xF1o Incremento"
+  - nombre: "Ala Mort\xEDfera"
+    ruta: "Definitions/Moves/0613_Ala Mort\xEDfera"
+  - nombre: Mil Flechas
+    ruta: Definitions/Moves/0614_Mil Flechas
+  - nombre: Mil Temblores
+    ruta: Definitions/Moves/0615_Mil Temblores
+  - nombre: "Fuerza Tel\xFArica"
+    ruta: "Definitions/Moves/0616_Fuerza Tel\xFArica"
+  - nombre: Pulso Primigenio
+    ruta: Definitions/Moves/0618_Pulso Primigenio
+  - nombre: Filo del Abismo
+    ruta: Definitions/Moves/0619_Filo del Abismo
+  - nombre: Ascenso Draco
+    ruta: Definitions/Moves/0620_Ascenso Draco
+  - nombre: Escaramuza
+    ruta: Definitions/Moves/0660_Escaramuza
+  - nombre: "B\xFAnker"
+    ruta: "Definitions/Moves/0661_B\xFAnker"
+  - nombre: "Puntada Sombr\xEDa"
+    ruta: "Definitions/Moves/0662_Puntada Sombr\xEDa"
+  - nombre: Lariat Oscuro
+    ruta: Definitions/Moves/0663_Lariat Oscuro
+  - nombre: Aria Burbuja
+    ruta: Definitions/Moves/0664_Aria Burbuja
+  - nombre: Fuerza Equina
+    ruta: Definitions/Moves/0667_Fuerza Equina
+  - nombre: Absorbefuerza
+    ruta: Definitions/Moves/0668_Absorbefuerza
+  - nombre: Cuchilla Solar
+    ruta: Definitions/Moves/0669_Cuchilla Solar
+  - nombre: Follaje
+    ruta: Definitions/Moves/0670_Follaje
+  - nombre: Aguzar
+    ruta: Definitions/Moves/0673_Aguzar
+  - nombre: Golpe Mordaza
+    ruta: Definitions/Moves/0675_Golpe Mordaza
+  - nombre: "Campo Ps\xEDquico"
+    ruta: "Definitions/Moves/0678_Campo Ps\xEDquico"
+  - nombre: Plancha
+    ruta: Definitions/Moves/0679_Plancha
+  - nombre: "Chuler\xEDa"
+    ruta: "Definitions/Moves/0681_Chuler\xEDa"
+  - nombre: Cuerno Certero
+    ruta: Definitions/Moves/0684_Cuerno Certero
+  - nombre: "N\xFAcleo Castigo"
+    ruta: "Definitions/Moves/0687_N\xFAcleo Castigo"
+  - nombre: Patada Tropical
+    ruta: Definitions/Moves/0688_Patada Tropical
+  - nombre: Fragor Escamas
+    ruta: Definitions/Moves/0691_Fragor Escamas
+  - nombre: "Martillo Drag\xF3n"
+    ruta: "Definitions/Moves/0692_Martillo Drag\xF3n"
+  - nombre: Giro Vil
+    ruta: Definitions/Moves/0693_Giro Vil
+  - nombre: Velo Aurora
+    ruta: Definitions/Moves/0694_Velo Aurora
+  - nombre: "Ca\xF1\xF3n Floral"
+    ruta: "Definitions/Moves/0705_Ca\xF1\xF3n Floral"
+  - nombre: Psicocolmillo
+    ruta: Definitions/Moves/0706_Psicocolmillo
+  - nombre: Pataleta
+    ruta: Definitions/Moves/0707_Pataleta
+  - nombre: Roca Veloz
+    ruta: Definitions/Moves/0709_Roca Veloz
+  - nombre: Hidroariete
+    ruta: Definitions/Moves/0710_Hidroariete
+  - nombre: "L\xE1ser Prisma"
+    ruta: "Definitions/Moves/0711_L\xE1ser Prisma"
+  - nombre: Robasombra
+    ruta: Definitions/Moves/0712_Robasombra
+  - nombre: Meteoimpacto
+    ruta: Definitions/Moves/0713_Meteoimpacto
+  - nombre: "Rayo Umbr\xEDo"
+    ruta: "Definitions/Moves/0714_Rayo Umbr\xEDo"
+  - nombre: Ojos Llorosos
+    ruta: Definitions/Moves/0715_Ojos Llorosos
+  - nombre: Furia Natural
+    ruta: Definitions/Moves/0717_Furia Natural
+  - nombre: Multiataque
+    ruta: Definitions/Moves/0718_Multiataque
+  - nombre: "Pu\xF1os Plasma"
+    ruta: "Definitions/Moves/0721_Pu\xF1os Plasma"
+  - nombre: "G\xE9iser Fot\xF3nico"
+    ruta: "Definitions/Moves/0722_G\xE9iser Fot\xF3nico"
+  - nombre: "Ferropu\xF1o Doble"
+    ruta: "Definitions/Moves/0742_Ferropu\xF1o Doble"
+  - nombre: "Ca\xF1\xF3n Dinamax"
+    ruta: "Definitions/Moves/0744_Ca\xF1\xF3n Dinamax"
+  - nombre: Disparo Certero
+    ruta: Definitions/Moves/0745_Disparo Certero
+  - nombre: Presa Maxilar
+    ruta: Definitions/Moves/0746_Presa Maxilar
+  - nombre: "Basti\xF3n Final"
+    ruta: "Definitions/Moves/0748_Basti\xF3n Final"
+  - nombre: "Polvo M\xE1gico"
+    ruta: "Definitions/Moves/0750_Polvo M\xE1gico"
+  - nombre: Dracoflechas
+    ruta: Definitions/Moves/0751_Dracoflechas
+  - nombre: Cambio de Cancha
+    ruta: Definitions/Moves/0756_Cambio de Cancha
+  - nombre: Estruendo Escama
+    ruta: Definitions/Moves/0775_Estruendo Escama
+  - nombre: Plancha Corporal
+    ruta: Definitions/Moves/0776_Plancha Corporal
+  - nombre: "Bater\xEDa Asalto"
+    ruta: "Definitions/Moves/0778_Bater\xEDa Asalto"
+  - nombre: "Bal\xF3n \xCDgneo"
+    ruta: "Definitions/Moves/0780_Bal\xF3n \xCDgneo"
+  - nombre: Vasto Impacto
+    ruta: Definitions/Moves/0784_Vasto Impacto
+  - nombre: Punzada Rama
+    ruta: Definitions/Moves/0785_Punzada Rama
+  - nombre: Amplificador
+    ruta: Definitions/Moves/0786_Amplificador
+  - nombre: "Choque An\xEDmico"
+    ruta: "Definitions/Moves/0789_Choque An\xEDmico"
+  - nombre: Gota Vital
+    ruta: Definitions/Moves/0791_Gota Vital
+  - nombre: Irreverencia
+    ruta: Definitions/Moves/0793_Irreverencia
+  - nombre: Vasta Fuerza
+    ruta: Definitions/Moves/0797_Vasta Fuerza
+  - nombre: "Allanador F\xE9rreo"
+    ruta: "Definitions/Moves/0798_Allanador F\xE9rreo"
+  - nombre: Alto Voltaje
+    ruta: Definitions/Moves/0804_Alto Voltaje
+  - nombre: Golpe Rastrero
+    ruta: Definitions/Moves/0806_Golpe Rastrero
+  - nombre: Viraje
+    ruta: Definitions/Moves/0812_Viraje
+  - nombre: Ala Bis
+    ruta: Definitions/Moves/0814_Ala Bis
+  - nombre: "Cura Selv\xE1tica"
+    ruta: "Definitions/Moves/0816_Cura Selv\xE1tica"
+  - nombre: Golpe Oscuro
+    ruta: Definitions/Moves/0817_Golpe Oscuro
+  - nombre: Electrojaula
+    ruta: Definitions/Moves/0819_Electrojaula
+  - nombre: "Dracoenerg\xEDa"
+    ruta: "Definitions/Moves/0820_Dracoenerg\xEDa"
+  - nombre: Garra Nociva
+    ruta: Definitions/Moves/0827_Garra Nociva
+  - nombre: "Hachazo P\xE9treo"
+    ruta: "Definitions/Moves/0830_Hachazo P\xE9treo"
+  - nombre: "Cicl\xF3n Primavera"
+    ruta: "Definitions/Moves/0831_Cicl\xF3n Primavera"
+  - nombre: "Poder M\xEDstico"
+    ruta: "Definitions/Moves/0832_Poder M\xEDstico"
+  - nombre: "Erupci\xF3n de Ira"
+    ruta: "Definitions/Moves/0833_Erupci\xF3n de Ira"
+  - nombre: "Envite Acu\xE1tico"
+    ruta: "Definitions/Moves/0834_Envite Acu\xE1tico"
+  - nombre: Arremetida
+    ruta: Definitions/Moves/0838_Arremetida
+  - nombre: "Vendaval G\xE9lido"
+    ruta: "Definitions/Moves/0846_Vendaval G\xE9lido"
+  - nombre: Electormenta
+    ruta: Definitions/Moves/0847_Electormenta
+  - nombre: "Sim\xFAn de Arena"
+    ruta: "Definitions/Moves/0848_Sim\xFAn de Arena"
+  - nombre: Plegaria Lunar
+    ruta: Definitions/Moves/0849_Plegaria Lunar
+  - nombre: "B\xE1lsamo Osado"
+    ruta: "Definitions/Moves/0850_B\xE1lsamo Osado"
+  - nombre: "O\xEDdo Cocina"
+    ruta: "Definitions/Moves/0856_O\xEDdo Cocina"
+  - nombre: "Asalto Espad\xF3n"
+    ruta: "Definitions/Moves/0862_Asalto Espad\xF3n"
+  - nombre: "Salaz\xF3n"
+    ruta: "Definitions/Moves/0864_Salaz\xF3n"
+  - nombre: Genufendiente
+    ruta: Definitions/Moves/0869_Genufendiente
+  - nombre: Truco Floral
+    ruta: Definitions/Moves/0870_Truco Floral
+  - nombre: Canto Ardiente
+    ruta: Definitions/Moves/0871_Canto Ardiente
+  - nombre: "Danza Acu\xE1tica"
+    ruta: "Definitions/Moves/0872_Danza Acu\xE1tica"
+  - nombre: Psicohojas
+    ruta: Definitions/Moves/0875_Psicohojas
+  - nombre: Hidrovapor
+    ruta: Definitions/Moves/0876_Hidrovapor
+  - nombre: Calamidad
+    ruta: Definitions/Moves/0877_Calamidad
+  - nombre: Nitrochoque
+    ruta: Definitions/Moves/0878_Nitrochoque
+  - nombre: Electroderrape
+    ruta: Definitions/Moves/0879_Electroderrape
+  - nombre: "Autotom\xEDa"
+    ruta: "Definitions/Moves/0880_Autotom\xEDa"
+  - nombre: Paisaje Nevado
+    ruta: Definitions/Moves/0883_Paisaje Nevado
+  - nombre: "Pu\xF1o Furia"
+    ruta: "Definitions/Moves/0889_Pu\xF1o Furia"
+  - nombre: "Ca\xF1\xF3n Armadura"
+    ruta: "Definitions/Moves/0890_Ca\xF1\xF3n Armadura"
+  - nombre: Espada Lamento
+    ruta: Definitions/Moves/0891_Espada Lamento
+  - nombre: Martillo Colosal
+    ruta: Definitions/Moves/0893_Martillo Colosal
+  - nombre: Resarcimiento
+    ruta: Definitions/Moves/0894_Resarcimiento
+  - nombre: "Tajo Acu\xE1tico"
+    ruta: "Definitions/Moves/0895_Tajo Acu\xE1tico"
+  - nombre: Garrote Liana
+    ruta: Definitions/Moves/0904_Garrote Liana
+  - nombre: Electrorrayo
+    ruta: Definitions/Moves/0905_Electrorrayo
+  - nombre: "Teracl\xFAster"
+    ruta: "Definitions/Moves/0906_Teracl\xFAster"
+  - nombre: Llama Protectora
+    ruta: Definitions/Moves/0908_Llama Protectora
+  - nombre: "Rel\xE1mpago S\xFAbito"
+    ruta: "Definitions/Moves/0909_Rel\xE1mpago S\xFAbito"
+  - nombre: Filo Potente
+    ruta: Definitions/Moves/0910_Filo Potente
+  - nombre: "Tajo Taqui\xF3n"
+    ruta: "Definitions/Moves/0911_Tajo Taqui\xF3n"
+  - nombre: Cadena Virulenta
+    ruta: Definitions/Moves/0919_Cadena Virulenta

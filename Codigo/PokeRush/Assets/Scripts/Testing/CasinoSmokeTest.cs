@@ -106,7 +106,7 @@ public class CasinoSmokeTest : MonoBehaviour
 
         Check(_creadaPorLaPrueba
                   ? "No hay maquinas en la escena: se prueba con una armada al vuelo"
-                  : $"La escena trae maquinas ya colgadas ({Object.FindObjectsByType<SlotMachineInteractable>(FindObjectsSortMode.None).Length})",
+                  : $"La escena trae maquinas ya colgadas ({Object.FindObjectsByType<SlotMachineInteractable>().Length})",
               true);
 
         StoryModel historia = GameManager.Instance.Story;
@@ -536,7 +536,7 @@ public class CasinoSmokeTest : MonoBehaviour
     private IEnumerator ProbarNpcConRuleta(PlayerModel jugador)
     {
         CasinoTrainerNpc npc = null;
-        foreach (var n in Object.FindObjectsByType<CasinoTrainerNpc>(FindObjectsSortMode.None))
+        foreach (var n in Object.FindObjectsByType<CasinoTrainerNpc>())
             if (n.Ruleta != null && System.Array.IndexOf(n.Ruleta.npcsQueLaPuedenDar, n.FlagVencido) >= 0) { npc = n; break; }
 
         var dialogo = Object.FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);

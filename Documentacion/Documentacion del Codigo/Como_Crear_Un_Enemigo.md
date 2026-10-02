@@ -55,6 +55,10 @@ Antes del enemigo necesitás los `PokenDefinition` de las especies que va a usar
   Llená *Stats base*, *Sprites* y el array *Movimientos*.
 - **Movimiento:** **Create → PokeRush → MoveDefinition**.
 
+Después de crear especies o movimientos, correr **PokeRush → Release → Armar
+indice de definiciones** (el juego los busca por ese índice; la build lo rearma
+sola, pero en el editor sin rearmarlo la consola avisa y se cargan todos).
+
 ### 2. Crear el asset del enemigo
 Click derecho en *Project* → **Create → PokeRush → Characters → EnemyDefinition**.
 Nombralo de forma clara, ej. `Enemy_Rival_Ruta1`.

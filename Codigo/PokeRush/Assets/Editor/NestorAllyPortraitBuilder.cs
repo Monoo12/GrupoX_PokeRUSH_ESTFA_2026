@@ -37,7 +37,9 @@ namespace PokeRush.EditorTools
         // AssetDatabase.GetBuiltinExtraResource.
         private static Font _fuente;
         private static Font FuenteDeUi =>
-            _fuente != null ? _fuente : (_fuente = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
+            _fuente != null ? _fuente
+                : (_fuente = AssetDatabase.LoadAssetAtPath<Font>("Assets/TextMesh Pro/Fonts/power clear.ttf")
+                             ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
 
         // Canvas del combate: 512x384 a resolucion nativa.
         private const float Margen = 6f;

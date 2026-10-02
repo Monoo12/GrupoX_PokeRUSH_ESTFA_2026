@@ -23,6 +23,15 @@ public class DefinitionRepository
     // Evita cargar todo de nuevo si LoadAll() se llama mas de una vez
     private bool _loaded = false;
 
+    // Especies y movimientos se cargan RECIEN cuando se piden (ver
+    // IndiceDeDefiniciones): cargarlos todos al arrancar arrastraba las tiras
+    // animadas de las 445 especies, varios GB de texturas. Null = sin indice,
+    // se cargo todo como antes.
+    private Dictionary<string, string> _rutaDePoken;
+    private Dictionary<string, string> _rutaDeMove;
+    private bool _pokensCompletos;
+    private bool _movesCompletos;
+
     // Constructor privado: nadie puede crear esta clase con "new", solo via Instance
     private DefinitionRepository() { }
 
@@ -33,8 +42,19 @@ public class DefinitionRepository
 
         // Resources.LoadAll<T>("carpeta") busca todos los assets de tipo T dentro de Assets/Resources/carpeta
         // .ToDictionary(p => p.pokenName) crea un diccionario usando el nombre como clave
-        _pokens = Resources.LoadAll<PokenDefinition>("Definitions/Pokens").ToDictionary(p => p.pokenName);
-        _moves = Resources.LoadAll<MoveDefinition>("Definitions/Moves").ToDictionary(m => m.moveName);
+        var indice = Resources.Load<IndiceDeDefiniciones>(IndiceDeDefiniciones.RutaEnResources);
+        if (indice != null && indice.pokens.Count > 0 && indice.movimientos.Count > 0)
+        {
+            _pokens = new Dictionary<string, PokenDefinition>();
+            _moves = new Dictionary<string, MoveDefinition>();
+            _rutaDePoken = Indexar(indice.pokens);
+            _rutaDeMove = Indexar(indice.movimientos);
+        }
+        else
+        {
+            CargarTodosLosPokens();
+            CargarTodosLosMoves();
+        }
         _healItems = Resources.LoadAll<HealItemDefinition>("Definitions/Items").ToDictionary(i => i.itemName);
         _battleItems = Resources.LoadAll<BattleItemDefinition>("Definitions/Items").ToDictionary(i => i.itemName);
         _specialItems = Resources.LoadAll<SpecialItemDefinition>("Definitions/Items").ToDictionary(i => i.itemName);
@@ -50,8 +70,64 @@ public class DefinitionRepository
 
     // Metodos de busqueda: dado un nombre, devuelven el ScriptableObject correspondiente o null si no existe
     // GetValueOrDefault devuelve null automaticamente si la clave no esta en el diccionario, sin tirar error
-    public PokenDefinition GetPoken(string name) => _pokens.GetValueOrDefault(name);
-    public MoveDefinition GetMove(string name) => _moves.GetValueOrDefault(name);
+    public PokenDefinition GetPoken(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return null;
+        if (_pokens.TryGetValue(name, out PokenDefinition p)) return p;
+        if (_rutaDePoken != null && _rutaDePoken.TryGetValue(name, out string ruta))
+        {
+            p = Resources.Load<PokenDefinition>(ruta);
+            if (p != null) { _pokens[name] = p; return p; }
+        }
+        // No esta en el indice (una especie nueva sin rearmarlo): la carga de antes.
+        if (!_pokensCompletos)
+        {
+            Debug.LogWarning($"[Definiciones] '{name}' no esta en el indice: se cargan todas las especies. " +
+                             "Correr PokeRush > Release > Armar indice de definiciones.");
+            CargarTodosLosPokens();
+            return _pokens.GetValueOrDefault(name);
+        }
+        return null;
+    }
+
+    public MoveDefinition GetMove(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return null;
+        if (_moves.TryGetValue(name, out MoveDefinition m)) return m;
+        if (_rutaDeMove != null && _rutaDeMove.TryGetValue(name, out string ruta))
+        {
+            m = Resources.Load<MoveDefinition>(ruta);
+            if (m != null) { _moves[name] = m; return m; }
+        }
+        if (!_movesCompletos)
+        {
+            Debug.LogWarning($"[Definiciones] '{name}' no esta en el indice: se cargan todos los movimientos. " +
+                             "Correr PokeRush > Release > Armar indice de definiciones.");
+            CargarTodosLosMoves();
+            return _moves.GetValueOrDefault(name);
+        }
+        return null;
+    }
+
+    private void CargarTodosLosPokens()
+    {
+        _pokens = Resources.LoadAll<PokenDefinition>("Definitions/Pokens").ToDictionary(p => p.pokenName);
+        _pokensCompletos = true;
+    }
+
+    private void CargarTodosLosMoves()
+    {
+        _moves = Resources.LoadAll<MoveDefinition>("Definitions/Moves").ToDictionary(m => m.moveName);
+        _movesCompletos = true;
+    }
+
+    private static Dictionary<string, string> Indexar(List<IndiceDeDefiniciones.Entrada> entradas)
+    {
+        var d = new Dictionary<string, string>();
+        foreach (IndiceDeDefiniciones.Entrada e in entradas)
+            if (e != null && !string.IsNullOrEmpty(e.nombre) && !string.IsNullOrEmpty(e.ruta)) d[e.nombre] = e.ruta;
+        return d;
+    }
     public HealItemDefinition GetHealItem(string name) => _healItems.GetValueOrDefault(name);
     public BattleItemDefinition GetBattleItem(string name) => _battleItems.GetValueOrDefault(name);
     public SpecialItemDefinition GetSpecialItem(string name) => _specialItems.GetValueOrDefault(name);

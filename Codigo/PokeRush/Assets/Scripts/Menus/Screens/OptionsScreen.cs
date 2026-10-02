@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Menu de Opciones: volumen y controles.
+// Menu de Opciones: volumen, pantalla y controles.
 //
 // Las filas se arman por codigo a partir de GameInputService.RebindableActions:
 // agregar una accion nueva al juego la hace aparecer aca sola, sin tocar el
 // prefab ni esta pantalla.
 public class OptionsScreen : MenuScreen
 {
-    private enum RowKind { Header, MusicVolume, SfxVolume, Rebind, Reset, Back }
+    private enum RowKind { Header, MusicVolume, SfxVolume, Resolution, ScreenMode, Rebind, Reset, Back }
 
     private class Row
     {
@@ -67,6 +67,9 @@ public class OptionsScreen : MenuScreen
         _model.Add(new Row { Kind = RowKind.Header, Label = "Sonido", Selectable = false });
         _model.Add(new Row { Kind = RowKind.MusicVolume, Label = "Música" });
         _model.Add(new Row { Kind = RowKind.SfxVolume, Label = "Efectos" });
+        _model.Add(new Row { Kind = RowKind.Header, Label = "Pantalla", Selectable = false });
+        _model.Add(new Row { Kind = RowKind.Resolution, Label = "Resolución" });
+        _model.Add(new Row { Kind = RowKind.ScreenMode, Label = "Modo" });
         _model.Add(new Row { Kind = RowKind.Header, Label = "Controles", Selectable = false });
 
         foreach (GameAction action in GameInputService.RebindableActions)
@@ -111,6 +114,15 @@ public class OptionsScreen : MenuScreen
                 case RowKind.SfxVolume:
                     widget.Bind(row.Label, VolumeLabel(GameSettings.SfxVolume),
                         GameSettings.SfxVolume, true);
+                    break;
+
+                case RowKind.Resolution:
+                    Vector2Int res = ConfiguracionDePantalla.ResolucionActual;
+                    widget.Bind(row.Label, "< " + res.x + " x " + res.y + " >");
+                    break;
+
+                case RowKind.ScreenMode:
+                    widget.Bind(row.Label, "< " + ConfiguracionDePantalla.NombreDelModo(ConfiguracionDePantalla.ModoActual) + " >");
                     break;
 
                 case RowKind.Rebind:
@@ -209,7 +221,27 @@ public class OptionsScreen : MenuScreen
 
             case RowKind.SfxVolume:
                 GameSettings.SfxVolume = Mathf.Clamp01(GameSettings.SfxVolume + delta * paso);
+                // Para escuchar como queda.
+                Sonidos.Cursor();
                 break;
+
+            case RowKind.Resolution:
+            {
+                List<Vector2Int> lista = ConfiguracionDePantalla.Resoluciones();
+                int i = lista.IndexOf(ConfiguracionDePantalla.ResolucionActual);
+                i = Mathf.Clamp((i < 0 ? lista.Count - 1 : i) + delta, 0, lista.Count - 1);
+                ConfiguracionDePantalla.Poner(lista[i], ConfiguracionDePantalla.ModoActual);
+                break;
+            }
+
+            case RowKind.ScreenMode:
+            {
+                FullScreenMode[] modos = ConfiguracionDePantalla.Modos;
+                int i = System.Array.IndexOf(modos, ConfiguracionDePantalla.ModoActual);
+                i = ((i < 0 ? 0 : i) + delta + modos.Length) % modos.Length;
+                ConfiguracionDePantalla.Poner(ConfiguracionDePantalla.ResolucionActual, modos[i]);
+                break;
+            }
 
             default:
                 return;

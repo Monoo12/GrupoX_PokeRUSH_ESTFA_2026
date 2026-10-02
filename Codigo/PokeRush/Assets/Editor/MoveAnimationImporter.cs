@@ -115,6 +115,10 @@ namespace PokeRush.EditorTools
 
             int genericas = BuildTypeFallbacks(moves.Values);
 
+            // Para medir hacia falta leer los pixeles; en el juego no, y una hoja
+            // legible ocupa el doble de memoria (ver PreparacionDeRelease).
+            PreparacionDeRelease.SoltarPixelesDeLasAnimaciones();
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 

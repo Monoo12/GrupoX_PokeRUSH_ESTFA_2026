@@ -483,15 +483,15 @@ Lo que verifica (59 chequeos, todos en verde al 21-ago-2026 sobre `NestorGOD2`):
 **Qué NO cubre:** que las teclas físicas lleguen (el test llama a `HandleAction`
 directo, no aprieta teclas). Eso hay que probarlo jugando.
 
-> **Al 1-oct-2026 fallan 9 chequeos que no son de los menús**: los de "usar un
-> objeto" en el mundo y en combate. El banco usa el **primer** objeto del bolsillo
-> de medicinas y hoy ese es *Cura Total*, que no cura PS, así que ningún Pokémon es
-> elegible y nada se cura. Fallan igual con la `PartyScreen` anterior (se comprobó
-> volviendo a la versión de `HEAD`). Arreglo pendiente: que el banco elija un
-> objeto que cure PS en vez del primero.
+> **Desde el 2-oct-2026 pasa sin fallos.** Hasta el 1-oct fallaban 9 chequeos de
+> "usar un objeto": el banco usaba el **primer** objeto del bolsillo de medicinas,
+> que era *Cura Total* (no cura PS). Ahora elige uno que cure PS
+> (`IndiceDeUnoQueCura`). Correrlo con una escena de nivel abierta (por ejemplo
+> `Quarcho-Cueva`): necesita una partida cargada y, si no la hay, corta con
+> "No hay partida cargada".
 >
 > El banco **guarda la partida** (`GameManager.SaveGame`): respaldar
-> `%USERPROFILE%/AppData/LocalLow/DefaultCompany/PokeRush/pokerush.db` antes de
+> `%USERPROFILE%/AppData/LocalLow/LevelUP Creators/PokeRush/pokerush.db` antes de
 > correrlo si hay una partida que importe.
 
 Para revisar la UI sin jugar hasta cada pantalla:

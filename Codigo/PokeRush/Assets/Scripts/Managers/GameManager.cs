@@ -74,6 +74,11 @@ public class GameManager : MonoBehaviour
 
         // Conecta las fuentes de audio de la escena al servicio de audio
         AudioService.Instance.Initialize(musicSource, sfxSource);
+
+        // El volumen y la pantalla que eligio el jugador, desde el arranque. Antes
+        // se aplicaban recien cuando aparecia el sistema de menus, asi que la
+        // pantalla de titulo sonaba al 100% aunque se hubiera bajado la musica.
+        GameSettings.Apply();
     }
 
     public void ChangeState(GameState newState)

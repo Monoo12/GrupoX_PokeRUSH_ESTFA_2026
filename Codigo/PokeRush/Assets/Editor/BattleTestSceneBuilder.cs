@@ -30,7 +30,11 @@ namespace PokeRush.EditorTools
         private static readonly Vector2 CanvasSize = new Vector2(512, 384);
 
         private static Font _font;
-        private static Font UiFont => _font != null ? _font : (_font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
+        // La de pixel art del juego (la misma de los menus y del mockup del HUD);
+        // si no esta, la de Unity.
+        private static Font UiFont => _font != null ? _font
+            : (_font = AssetDatabase.LoadAssetAtPath<Font>("Assets/TextMesh Pro/Fonts/power clear.ttf")
+                       ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
 
         [MenuItem("PokeRush/Armar combate de prueba")]
         public static void Build()

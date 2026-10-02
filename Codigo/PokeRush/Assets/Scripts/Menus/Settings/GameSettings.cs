@@ -42,8 +42,14 @@ public static class GameSettings
     {
         AudioService.Instance.SetUserMusicVolume(MusicVolume);
         AudioService.Instance.SetUserSfxVolume(SfxVolume);
+        ConfiguracionDePantalla.AplicarGuardada();
         _applied = true;
     }
+
+    // El proyecto no recarga el dominio al entrar a Play: sin esto, la segunda
+    // vez que se entra en el editor el volumen guardado no se aplicaba.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void Reiniciar() => _applied = false;
 
     public static void ApplyOnce()
     {
@@ -54,6 +60,7 @@ public static class GameSettings
     {
         MusicVolume = DefaultMusicVolume;
         SfxVolume = DefaultSfxVolume;
+        ConfiguracionDePantalla.Restaurar();
         GameInputService.Instance.ResetToDefaults();
     }
 }

@@ -258,6 +258,8 @@ public class MenuSystemSmokeTest : MonoBehaviour
 
     private IEnumerator ProbarBolsa(PlayerModel player)
     {
+        // Antes de abrir: si hay que darle una pocion, la pantalla ya la ve.
+        IndiceDeUnoQueCura(player);
         MenuScreen bolsa = Menus.Open(MenuScreenId.Bag,
             new BagScreenRequest { Context = MenuContextKind.Overworld, Pocket = ItemPocket.Medicine });
         yield return null;
@@ -268,7 +270,13 @@ public class MenuSystemSmokeTest : MonoBehaviour
         Check("La mochila lee el inventario real", entradas.Count > 0);
         if (entradas.Count == 0) yield break;
 
-        HealItemDefinition item = entradas[0].Heal;
+        // El primero del bolsillo puede no curar PS (hoy es Cura Total): se usa
+        // uno que si, llevando el cursor hasta el.
+        int indice = IndiceDeUnoQueCura(player);
+        Check("Hay un objeto que cura PS en la mochila", indice >= 0);
+        if (indice < 0) yield break;
+        for (int i = 0; i < indice; i++) bolsa.HandleAction(GameAction.Down);
+        HealItemDefinition item = BagModel.Build(player.Inventory, ItemPocket.Medicine)[indice].Heal;
         int stockAntes = player.Inventory.CountHealItem(item);
 
         // Buscar un Poken herido y dejarlo en una posicion conocida.
@@ -311,6 +319,24 @@ public class MenuSystemSmokeTest : MonoBehaviour
             yield return null;
         }
         Check("Se vuelve a la pausa despues de usar el objeto", Menus.Top is PauseMenuScreen);
+    }
+
+    // Posicion en el bolsillo Medicinas de un objeto que cura PS. Si no hay
+    // ninguno, se le da una pocion a la partida de prueba.
+    private static int IndiceDeUnoQueCura(PlayerModel player)
+    {
+        List<BagEntry> entradas = BagModel.Build(player.Inventory, ItemPocket.Medicine);
+        int i = entradas.FindIndex(e => e.Heal != null && e.Heal.healAmount > 0);
+        if (i >= 0) return i;
+
+        foreach (HealItemDefinition h in Resources.LoadAll<HealItemDefinition>("Definitions"))
+        {
+            if (h == null || h.healAmount <= 0) continue;
+            player.Inventory.AddHealItem(h, 3);
+            break;
+        }
+        entradas = BagModel.Build(player.Inventory, ItemPocket.Medicine);
+        return entradas.FindIndex(e => e.Heal != null && e.Heal.healAmount > 0);
     }
 
     private IEnumerator ProbarOpciones()
@@ -419,7 +445,10 @@ public class MenuSystemSmokeTest : MonoBehaviour
         Check("La mochila se abre en contexto de combate",
             bolsa is BagScreen && bolsa.Context == MenuContextKind.Battle);
 
-        HealItemDefinition item = BagModel.Build(player.Inventory, ItemPocket.Medicine)[0].Heal;
+        int indice = IndiceDeUnoQueCura(player);
+        if (indice < 0) { Check("Hay un objeto que cura PS en la mochila", false); Menus.CloseAll(); yield break; }
+        for (int i = 0; i < indice; i++) bolsa.HandleAction(GameAction.Down);
+        HealItemDefinition item = BagModel.Build(player.Inventory, ItemPocket.Medicine)[indice].Heal;
         int stockAntes = player.Inventory.CountHealItem(item);
 
         bolsa.HandleAction(GameAction.Confirm);   // submenu
