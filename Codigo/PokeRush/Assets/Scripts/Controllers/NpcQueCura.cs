@@ -48,6 +48,8 @@ public class NpcQueCura : MonoBehaviour, IInteractable
 
     // True desde que arranca la charla hasta que se cierra la ultima caja.
     private bool _ocupada;
+    // El destello en curso, para no dejarlo colgado si el NPC se apaga.
+    private GameObject _velo;
 
     public DialogueDefinition Saludo => saludo;
     public bool Ocupada => _ocupada;
@@ -121,7 +123,9 @@ public class NpcQueCura : MonoBehaviour, IInteractable
                 yield return null;
             }
         }
-        Destroy(velo.canvas.gameObject);
+        GameObject propio = velo.canvas.gameObject;
+        if (_velo == propio) _velo = null;
+        Destroy(propio);
     }
 
     // Un Canvas propio, de pantalla completa, justo debajo del de la caja de
@@ -129,6 +133,7 @@ public class NpcQueCura : MonoBehaviour, IInteractable
     private Image CrearVelo()
     {
         var go = new GameObject("[DestelloDeCuracion]");
+        _velo = go;
         var canvas = go.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         Canvas cajaDeDialogo = dialogueController != null ? dialogueController.GetComponentInParent<Canvas>() : null;
@@ -148,11 +153,13 @@ public class NpcQueCura : MonoBehaviour, IInteractable
     }
 
     // Si el NPC se apaga a mitad (el combate esconde el mapa), el velo no puede
-    // quedar colgado en pantalla.
+    // quedar colgado en pantalla. Se guarda la referencia en vez de buscarlo
+    // por nombre: GameObject.Find mientras se descarga la escena hace saltar
+    // una asercion de Unity ('go.IsActive()').
     private void OnDisable()
     {
         StopAllCoroutines();
-        var velo = GameObject.Find("[DestelloDeCuracion]");
-        if (velo != null) Destroy(velo);
+        if (_velo != null) Destroy(_velo);
+        _velo = null;
     }
 }
