@@ -91,6 +91,7 @@ public static class MenuUiKit
         var text = go.AddComponent<Text>();
         text.font = PixelFont;
         text.fontSize = size;
+        text.lineSpacing = FuentePixel.Interlineado;
         text.text = content;
         text.alignment = anchor;
         text.color = color;

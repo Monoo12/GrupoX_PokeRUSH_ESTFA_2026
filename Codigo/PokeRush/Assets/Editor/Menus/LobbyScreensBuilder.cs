@@ -264,7 +264,6 @@ public static class LobbyScreensBuilder
         Text descripcion = Texto("Descripcion", m, P(DescripcionTutor), DescripcionTutor.size, "", 15,
             TextAnchor.UpperLeft, Tinta);
         descripcion.horizontalOverflow = HorizontalWrapMode.Wrap;
-        descripcion.lineSpacing = 1.1f;
 
         MenuUiKit.SetField(screen, "rowPrefab", fila);
         MenuUiKit.SetField(screen, "rowContainer", lista);

@@ -426,7 +426,6 @@ public static class MenuPrefabBuilder
         Text descripcion = MenuUiKit.Label("Descripcion", marco, new Vector2(92f, -304f),
             new Vector2(404f, 68f), "", 13, TextAnchor.UpperLeft, MenuUiKit.InkDark);
         descripcion.horizontalOverflow = HorizontalWrapMode.Wrap;
-        descripcion.lineSpacing = 1.1f;
 
         // Submenu del objeto: esto SI es un panel propio, porque es un popup y
         // el fondo no tiene ningun hueco para el.

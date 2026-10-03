@@ -313,6 +313,7 @@ namespace PokeRush.EditorTools
             var text = go.AddComponent<Text>();
             text.font = FuenteDeUi;
             text.fontSize = tamañoDeFuente;
+            if (FuentePixel.Es(FuenteDeUi)) text.lineSpacing = FuentePixel.Interlineado;
             text.alignment = TextAnchor.MiddleCenter;
             text.color = Color.white;
             text.horizontalOverflow = HorizontalWrapMode.Wrap;

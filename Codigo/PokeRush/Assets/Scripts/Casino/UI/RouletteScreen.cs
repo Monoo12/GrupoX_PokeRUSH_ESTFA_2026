@@ -657,11 +657,11 @@ public class RouletteScreen : MenuScreen
         string color = ColorEnLetras(_ganador);
         string salio = _ganador == 0 ? "¡Salió el 0!" : $"¡Salió el {_ganador} {color}!";
 
-        // Todo en UNA linea, sin '\n'. La caja de mensajes del juego usa
-        // lineSpacing 1 con la fuente 'power clear', cuyas metricas son mas
-        // bajas que el glifo: dos renglones se pisan entre si. La caja mide 430
+        // Todo en UNA linea, sin '\n': la caja de mensajes del juego mide 430
         // de ancho y estos carteles no pasan de ~50 caracteres, asi que entran
-        // holgados sin necesidad de cortar.
+        // holgados sin necesidad de cortar. (Antes era obligatorio: con
+        // interlineado 1, dos renglones de 'power clear' se pisaban. Ver
+        // FuentePixel.)
         string texto = _pagado > 0
             ? $"{salio} ¡Has obtenido {_pagado} PokéDólares!"
             : $"{salio} Esta vez no hubo suerte.";

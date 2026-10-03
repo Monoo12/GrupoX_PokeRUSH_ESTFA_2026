@@ -190,7 +190,6 @@ public static class CasinoPrefabBuilder
         Text ayuda = MenuUiKit.Label("Ayuda", fondo.transform, Vector2.zero,
             new Vector2(140f, 66f), "IZQ/DER  apuesta\nX  girar\nZ  salir",
             14, TextAnchor.UpperLeft, MenuUiKit.Border);
-        ayuda.lineSpacing = 1.25f;
         Arriba(ayuda.gameObject, new Vector2(364f, 240f), new Vector2(140f, 66f));
 
         // El titulo no va: el gabinete ya tiene el suyo dibujado.

@@ -152,7 +152,7 @@ public class CreditosFinales : MonoBehaviour
                     Vector2.zero, new Vector2(-240f, 0f)),
                 fuente, 32, TextAnchor.MiddleCenter, Color.white);
             t.horizontalOverflow = HorizontalWrapMode.Wrap;
-            t.lineSpacing = 1.3f;
+            t.lineSpacing = FuentePixel.Es(fuente) ? FuentePixel.Interlineado : 1.3f;
             t.text = DialogueController.Marcas(crudo.Trim());
             float hold = Mathf.Max(segundosPorLineaDeEpilogo, 2.5f + crudo.Length * 0.04f);
             yield return Tarjeta(caja, 1.2f, hold, 1.2f);

@@ -764,9 +764,9 @@ public class BlackjackScreen : MenuScreen
         if (mejor == BlackjackOutcome.Pierde) Sonar(loseClip, null);
         else Sonar(winClip, () => { Sonidos.Fichas(); Sonidos.PremioChico(); });
 
-        // Todo en UNA linea, sin '\n'. La caja de mensajes del juego usa
-        // lineSpacing 1 con la fuente 'power clear', cuyas metricas son mas
-        // bajas que el glifo: dos renglones se pisan entre si.
+        // Todo en UNA linea, sin '\n': la caja de mensajes corta sola. (Antes
+        // era obligatorio: con interlineado 1, dos renglones de 'power clear'
+        // se pisaban. Ver FuentePixel.)
         _cartelPendiente = string.Join(" ", textos.ToArray());
         Refrescar();
     }

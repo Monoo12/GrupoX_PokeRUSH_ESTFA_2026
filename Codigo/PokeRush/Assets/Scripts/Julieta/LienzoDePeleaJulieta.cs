@@ -67,6 +67,7 @@ public class LienzoDePeleaJulieta : MonoBehaviour
         var t = rt.gameObject.AddComponent<Text>();
         t.font = fuente;
         t.fontSize = tamanio;
+        if (FuentePixel.Es(fuente)) t.lineSpacing = FuentePixel.Interlineado;
         t.alignment = alineado;
         t.color = color;
         t.horizontalOverflow = HorizontalWrapMode.Overflow;
