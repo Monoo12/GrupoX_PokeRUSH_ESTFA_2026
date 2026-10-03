@@ -224,6 +224,11 @@ public static class CasinoPisoFinalBuilder
         so.FindProperty("escenaDestino").stringValue = "";
         so.FindProperty("requisito").enumValueIndex = (int)CasinoRequisitoTipo.Ninguno;
         so.FindProperty("otorgaFlag").enumValueIndex = (int)StoryFlag.None;
+        // Al reves que en los pisos 1 a 3, aca las puertas estan en la pared de
+        // ABAJO: la llegada por defecto (0, -1) deja al jugador afuera del mapa,
+        // en negro y sin poder moverse. Se llega a la celda de arriba, sobre la
+        // alfombra.
+        so.FindProperty("llegada").vector2Value = Vector2.up;
 
         var abajo = new[]
         {

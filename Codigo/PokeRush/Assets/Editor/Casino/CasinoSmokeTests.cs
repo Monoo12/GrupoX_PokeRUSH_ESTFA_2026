@@ -1,5 +1,9 @@
+using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 // Smoke tests de la logica del casino. Mismo esquema que PokeRushSmokeTests:
 // se corren desde el menu, usan SeededRng para ser reproducibles y reportan a la
@@ -50,6 +54,7 @@ namespace PokeRush.EditorTools
             TestShinyUsaSusSprites();
             TestGananciaDeColor();
             TestAscensorPideElShiny();
+            TestAscensoresDejanEnElPiso();
             TestApuestaDeTacconi();
             TestRevendedorDeLaTarjeta();
             TestRuletaDelEmpresario();
@@ -1066,6 +1071,49 @@ namespace PokeRush.EditorTools
             finally
             {
                 Object.DestroyImmediate(go);
+            }
+        }
+
+        // Al llegar por ascensor el jugador aparece en la celda de 'llegada'. Si
+        // esa celda queda del otro lado de la pared, aparece en negro y no se
+        // puede mover: paso en el piso final, que tiene las puertas en la pared
+        // de abajo y no en la de arriba como los otros tres.
+        private static void TestAscensoresDejanEnElPiso()
+        {
+            string[] pisos =
+            {
+                "Assets/Scenes/Casino Nivel 1.unity",
+                "Assets/Scenes/Casino Nivel 2.unity",
+                "Assets/Scenes/Casino nivel 3.unity",
+                "Assets/Scenes/Casino piso FINAL.unity"
+            };
+
+            foreach (string path in pisos)
+            {
+                Scene previa = SceneManager.GetSceneByPath(path);
+                bool yaAbierta = previa.IsValid() && previa.isLoaded;
+                Scene scene = yaAbierta ? previa : EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);
+                try
+                {
+                    GameObject[] raices = scene.GetRootGameObjects();
+                    Tilemap[] mapas = raices.SelectMany(r => r.GetComponentsInChildren<Tilemap>(true)).ToArray();
+                    Tilemap suelo = mapas.FirstOrDefault(t => t.name == "Suelo");
+                    Tilemap colisiones = mapas.FirstOrDefault(t => t.name == "Colisiones");
+                    var ascensor = raices.SelectMany(r => r.GetComponentsInChildren<CasinoElevatorInteractable>(true)).FirstOrDefault();
+                    if (suelo == null || colisiones == null || ascensor == null)
+                    {
+                        Check(false, $"Ascensor: '{scene.name}' tiene Suelo, Colisiones y ascensor");
+                        continue;
+                    }
+
+                    Vector3Int celda = suelo.WorldToCell(ascensor.PuntoDeLlegada);
+                    Check(suelo.HasTile(celda) && !colisiones.HasTile(celda),
+                          $"Ascensor: en '{scene.name}' se llega a una celda con piso y sin pared ({celda.x},{celda.y})");
+                }
+                finally
+                {
+                    if (!yaAbierta) EditorSceneManager.CloseScene(scene, true);
+                }
             }
         }
 

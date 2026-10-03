@@ -72,6 +72,12 @@ con el jugador todavía parado adentro. Es el mismo cuidado que tiene
 perder contra el jefe dejaba al jugador encerrado con el equipo debilitado.
 No hay puertas dibujadas todavía — el arte va sobre las celdas (-1..1, 3).
 
+**Se llega por ARRIBA del ascensor.** En los pisos 1 a 3 las puertas están en la
+pared de arriba y se aparece en la celda de abajo (`llegada` = (0, -1), el
+default). Acá están en la pared de abajo, así que `llegada` = (0, 1): con el
+default el jugador aparecía afuera del mapa, en negro y sin poder moverse. El
+smoke test `TestAscensoresDejanEnElPiso` revisa la llegada de los cuatro pisos.
+
 ---
 
 ## La ruleta de combate

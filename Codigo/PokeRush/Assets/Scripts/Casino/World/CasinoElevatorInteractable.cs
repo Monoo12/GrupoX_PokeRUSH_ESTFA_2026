@@ -83,7 +83,8 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
 
     [Header("Llegada")]
     [Tooltip("Donde aparece el jugador al llegar a ESTE piso por el ascensor, respecto de " +
-             "este objeto. Por defecto, la celda de enfrente de las puertas.")]
+             "este objeto. Por defecto, la celda de abajo: puertas en la pared de arriba. " +
+             "Si las puertas estan en la pared de abajo (piso final), va (0, 1).")]
     [SerializeField] private Vector2 llegada = new Vector2(0f, -1f);
 
     [Header("Textos")]
@@ -104,6 +105,7 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
     public CasinoRequisitoTipo Requisito => requisito;
     public PokenDefinition EspecieRequerida => especieRequerida;
     public CasinoPisoDestino[] PisosDeAbajo => pisosDeAbajo;
+    public Vector3 PuntoDeLlegada => transform.position + (Vector3)llegada;
 
     // A que escena se esta viajando por ascensor. Lo lee el ascensor de ESA
     // escena al arrancar para dejar al jugador frente a sus puertas y no en el
@@ -118,13 +120,23 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
 
         var jugador = FindAnyObjectByType<PlayerController>();
         if (jugador != null)
-            jugador.TeleportTo(transform.position + (Vector3)llegada, Vector2.down);
+            jugador.TeleportTo(PuntoDeLlegada, MirandoAlSalir());
 
         // El zumbido del viaje viene sonando desde el piso anterior (la fuente
         // sobrevive el cambio de escena): se corta y suena la campanita.
         _viaje?.Parar(0.25f);
         _viaje = null;
         Sonidos.AscensorLlega();
+    }
+
+    // Al salir del ascensor se mira hacia el piso, de espaldas a las puertas:
+    // para el mismo lado en que quedo la llegada.
+    private Vector2 MirandoAlSalir()
+    {
+        if (llegada == Vector2.zero) return Vector2.down;
+        return Mathf.Abs(llegada.x) > Mathf.Abs(llegada.y)
+            ? new Vector2(Mathf.Sign(llegada.x), 0f)
+            : new Vector2(0f, Mathf.Sign(llegada.y));
     }
 
     public bool Interact(PlayerModel player, StoryModel story)
