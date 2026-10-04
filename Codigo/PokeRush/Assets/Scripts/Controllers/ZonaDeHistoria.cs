@@ -22,6 +22,13 @@ public class ZonaDeHistoria : MonoBehaviour
     [Tooltip("No suena con este flag. None = no excluye nada.")]
     [SerializeField] private StoryFlag excluye = StoryFlag.None;
 
+    [Header("Al empezar (opcional)")]
+    [Tooltip("Suena apenas arranca el momento: una alarma, una puerta.")]
+    [SerializeField] private AudioClip sonido;
+    [Tooltip("Pulsos de color sobre el mapa, como una alarma. 0 = ninguno.")]
+    [SerializeField, Min(0)] private int pulsos;
+    [SerializeField] private Color colorDeLosPulsos = new Color(1f, 0.08f, 0.08f, 1f);
+
     [Header("Referencias (opcional: se busca sola)")]
     [SerializeField] private DialogueController dialogueController;
 
@@ -51,6 +58,8 @@ public class ZonaDeHistoria : MonoBehaviour
 
         _contando = true;
         dialogueController.StartDialogue(dialogo, story, () => _contando = false);
+        if (sonido != null) AudioService.Instance.PlaySFX(sonido);
+        DestelloDePantalla.Pulsar(colorDeLosPulsos, pulsos);
     }
 
     // Publico para los tests: si esta partida tiene que ver este momento.

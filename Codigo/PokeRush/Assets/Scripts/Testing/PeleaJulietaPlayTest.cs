@@ -12,8 +12,11 @@ using UnityEngine.SceneManagement;
 //      a mitad de pelea: el equipo vuelve a como entro y todo arranca de cero.
 //   2. La DERROTA por la vida del PJ: el Pokemon controlado lo termina.
 //   3. La pelea ENTERA: las cuatro fases con lo que prende y apaga cada una, el
-//      golpe al PJ, la ruptura, la victoria, el final en la arena y los
-//      creditos.
+//      golpe al PJ, la ruptura, la victoria, el final en la arena (el servidor
+//      destruido y la sala a oscuras), la vuelta a la cueva (epilogo, charla
+//      con Tixi, la ultima conexion) y los creditos.
+//
+// Sirve tambien sobre la arena de verdad (BossFinal): abrirla y lanzarlo.
 //
 // Resultados en el Editor.log con la etiqueta [PlayJulieta] (la consola del MCP
 // no es confiable) y capturas en Capturas/Julieta/. Se lanza desde PokeRush >
@@ -82,6 +85,11 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         // diez minutos.
         typeof(BattleController).GetField("messageDelay", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.SetValue(_combate, 0.3f);
+
+        // En la arena de verdad, al llegar se cuenta la llegada al Ameghino
+        // (una ZonaDeHistoria): se cierra antes de hablarle a Julieta.
+        yield return new WaitForSecondsRealtime(1f);
+        yield return EsperarHasta(() => { if (_dialogo.IsOpen) _dialogo.OnConfirm(); return !_dialogo.IsOpen; }, 15f);
 
         yield return Encuentro();
         yield return DerrotaPorLaVidaDelPJ();
@@ -259,24 +267,77 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         Check("El final se cuenta en la arena, despues de la pelea", _dialogo.IsOpen && !_combate.EnCurso);
         Check("Despues de ganarle suena el tema del final", SuenaElTema(c => c.julietaDespues));
         yield return Foto("07-final");
+        // Entre una caja y la otra puede haber un rato sin ninguna abierta (el
+        // destello del nucleo, el del chip de Julieta): la charla termino recien
+        // cuando pasan unos segundos sin cajas, o cuando cambia la escena.
         int lineas = 0;
-        while (_dialogo.IsOpen && lineas < 60)
+        bool sinLuz = false;
+        float sinCaja = 0f;
+        while (lineas < 300 && sinCaja < 3f && _dialogo != null)
         {
-            _dialogo.OnConfirm();
-            lineas++;
-            yield return new WaitForSecondsRealtime(0.08f);
+            if (_dialogo.IsOpen) { _dialogo.OnConfirm(); lineas++; sinCaja = 0f; }
+            else sinCaja += 0.06f;
+            yield return new WaitForSecondsRealtime(0.06f);
+            if (!sinLuz && _story.HasFlag(StoryFlag.Historia_ServidorPrincipalDestruido))
+            {
+                sinLuz = true;
+                ServidorPrincipal servidor = _pelea.GetComponentInChildren<ServidorPrincipal>(true);
+                Check("Al final el PJ destruye el servidor", servidor == null || servidor.Roto);
+                yield return new WaitForSecondsRealtime(1.8f);
+                yield return Foto("07b-servidor-destruido");
+            }
         }
-        Check("El final tiene su charla entera", lineas >= 10);
+        Check("El final tiene su charla entera (la del PDF)", lineas >= 100);
+        Check("Al final se apagan las luces de la sala", sinLuz);
+
+        // --- la cueva: epilogo, charla con Tixi y la ultima conexion
+        yield return EsperarHasta(() => SceneManager.GetActiveScene().name == FinalDelJuego.EscenaDeLaCueva, 12f);
+        Check("Despues del final se vuelve a la Quarcho Cueva", SceneManager.GetActiveScene().name == FinalDelJuego.EscenaDeLaCueva);
+        EscenaFinalEnLaCueva escena = null;
+        yield return EsperarHasta(() => (escena = FindAnyObjectByType<EscenaFinalEnLaCueva>()) != null, 3f);
+        Check("La cueva arranca la escena final", escena != null);
+        if (escena != null)
+        {
+            escena.Ritmo = 6f;
+            Check("Mientras dura el final no cambia la musica", SuenaElTema(c => c.julietaDespues));
+            yield return EsperarHasta(() => escena == null || escena.Etapa == "epilogo", 8f);
+            Check("Primero el epilogo, sobre negro", escena != null && escena.Etapa == "epilogo");
+            yield return new WaitForSecondsRealtime(0.4f);
+            yield return Foto("08-epilogo");
+
+            yield return EsperarHasta(() => escena == null || escena.Etapa == "charla", 30f);
+            DialogueController dialogoDeLaCueva = FindAnyObjectByType<DialogueController>(FindObjectsInactive.Include);
+            yield return EsperarHasta(() => dialogoDeLaCueva != null && dialogoDeLaCueva.IsOpen, 3f);
+            Check("En la cueva charla Tixi", dialogoDeLaCueva != null && dialogoDeLaCueva.IsOpen);
+            yield return Foto("09-cueva");
+            int lineasDeTixi = 0;
+            float sinCajaEnLaCueva = 0f;
+            while (dialogoDeLaCueva != null && lineasDeTixi < 120 && sinCajaEnLaCueva < 1.5f)
+            {
+                if (dialogoDeLaCueva.IsOpen) { dialogoDeLaCueva.OnConfirm(); lineasDeTixi++; sinCajaEnLaCueva = 0f; }
+                else sinCajaEnLaCueva += 0.06f;
+                yield return new WaitForSecondsRealtime(0.06f);
+            }
+            Check("La charla con Tixi esta entera", lineasDeTixi >= 30);
+
+            yield return EsperarHasta(() => escena == null ||
+                (escena.UltimaLineaDeTerminal ?? "").Contains("VENTRESCA"), 30f);
+            Check("La ultima conexion termina en VENTRESCA AI",
+                  escena != null && (escena.UltimaLineaDeTerminal ?? "").Contains("VENTRESCA"));
+            Check("La camara se aleja", escena != null && escena.AlejamientoDeLaCamara > 1.1f);
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Foto("10-ultima-conexion");
+        }
 
         // --- los creditos
-        yield return EsperarHasta(() => SceneManager.GetActiveScene().name == "CreditosFinales", 12f);
+        yield return EsperarHasta(() => SceneManager.GetActiveScene().name == "CreditosFinales", 20f);
         Check("Despues del final vienen los creditos", SceneManager.GetActiveScene().name == "CreditosFinales");
         yield return new WaitForSecondsRealtime(2.5f);
         CreditosFinales creditos = FindAnyObjectByType<CreditosFinales>();
         Check("La escena de creditos tiene sus creditos", creditos != null);
         yield return new WaitForSecondsRealtime(3f);
         Check("En los creditos suena su tema", SuenaElTema(c => c.creditos));
-        yield return Foto("08-creditos");
+        yield return Foto("11-creditos");
         if (creditos != null)
         {
             creditos.Adelantar();

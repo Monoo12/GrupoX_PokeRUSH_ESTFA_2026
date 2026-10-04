@@ -1,16 +1,16 @@
-# Graph Report - GrupoX_PokeRUSH_ESTFA_2026  (2026-10-03)
+# Graph Report - GrupoX_PokeRUSH_ESTFA_2026  (2026-10-04)
 
 ## Corpus Check
-- 2227 files · ~14,664,074 words
+- 2231 files · ~14,671,300 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6094 nodes · 14087 edges · 318 communities (250 shown, 68 thin omitted)
-- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 898 edges (avg confidence: 0.8)
+- 6164 nodes · 14231 edges · 321 communities (252 shown, 69 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 902 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0bd66e6a`
+- Built from commit: `c8a9cfba`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -235,6 +235,7 @@
 - TacconiScreenshotTaker
 - juli_tileset.py
 - Casino: personajes y ruletas de premios (pisos 1 a 3)
+- GameManager
 - .Capturar
 - RouletteBet
 - LobbyScreensBuilder
@@ -331,6 +332,7 @@
 - .AgregarEvento
 - EfectoDeRuleta
 - TutorialPlayTest.cs
+- LiberationEngine
 
 ## God Nodes (most connected - your core abstractions)
 1. `PlayerModel` - 145 edges
@@ -341,7 +343,7 @@
 6. `PokeRushSmokeTests` - 90 edges
 7. `MoveDefinition` - 83 edges
 8. `PeleaJulieta` - 80 edges
-9. `DialogueDefinition` - 71 edges
+9. `DialogueDefinition` - 72 edges
 10. `BattleModel` - 71 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -359,10 +361,10 @@
 ## Import Cycles
 - None detected.
 
-## Communities (318 total, 68 thin omitted)
+## Communities (321 total, 69 thin omitted)
 
 ### Community 0 - "RouletteScreen"
-Cohesion: 0.09
+Cohesion: 0.08
 Nodes (14): AnimationCurve, AudioClip, bool, Dictionary, float, Image, int, List (+6 more)
 
 ### Community 1 - "JuliArenaSceneBuilder"
@@ -374,16 +376,16 @@ Cohesion: 0.12
 Nodes (16): int, List, MenuItem, Scene, Transform, Vector2, Vector3, ParteFalsa (+8 more)
 
 ### Community 3 - "MenuSystemSmokeTest"
-Cohesion: 0.19
+Cohesion: 0.18
 Nodes (7): List, bool, GameObject, IEnumerator, int, Key, MenuSystemSmokeTest
 
 ### Community 4 - "PokeRushSmokeTests"
-Cohesion: 0.10
+Cohesion: 0.11
 Nodes (3): int, MenuItem, PokeRushSmokeTests
 
 ### Community 5 - ".Build"
-Cohesion: 0.19
-Nodes (6): Font, List, MenuItem, SerializedObject, string, BattleTestSceneBuilder
+Cohesion: 0.14
+Nodes (8): Camera, Font, List, MenuItem, SpriteRenderer, string, Vector3, BattleTestSceneBuilder
 
 ### Community 6 - "PokeApiDtos.cs"
 Cohesion: 0.20
@@ -394,12 +396,12 @@ Cohesion: 0.08
 Nodes (24): 1. Exploración del Mundo, 2. Sistema de Combate, 3. Equipo y Progresión, 4. Inventario y Economía, 5. NPCs, Historia y Servicios, 6. Personalización, 7. Partida y Configuración, 8. Desarrollo (+16 more)
 
 ### Community 8 - "PokeApiDownloader"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (14): Action, bool, Func, IEnumerable, int, string, DownloadReport, PokeApiDownloader (+6 more)
 
 ### Community 9 - "BattleTester"
-Cohesion: 0.08
-Nodes (18): BossBattleConfig, bool, int, BossDefinition, AudioClip, bool, int, Sprite (+10 more)
+Cohesion: 0.12
+Nodes (13): BossDefinition, AudioClip, bool, int, Sprite, int, Sprite, WildEncounterDefinition (+5 more)
 
 ### Community 10 - "com.unity.modules.jsonserialize"
 Cohesion: 0.06
@@ -410,8 +412,8 @@ Cohesion: 0.07
 Nodes (29): depth, source, version, dependencies, depth, source, version, dependencies (+21 more)
 
 ### Community 12 - ".PopulatePoken"
-Cohesion: 0.14
-Nodes (13): Func, Action, Dictionary, Func, List, string, PokeApiAssetGenerator, PokemonDto (+5 more)
+Cohesion: 0.13
+Nodes (14): Action, bool, Dictionary, Func, int, List, string, GenerateReport (+6 more)
 
 ### Community 13 - "preparar_sprites_casino.py"
 Cohesion: 0.21
@@ -430,12 +432,12 @@ Cohesion: 0.12
 Nodes (10): bool, Button, CanvasGroup, float, GameObject, Image, Sprite, string (+2 more)
 
 ### Community 17 - "PokeApiMapper"
-Cohesion: 0.12
-Nodes (7): Dictionary, HashSet, IEnumerable, PokeApiMapper, FieldEffectKind, MoveImplementation, ReglaDeTurnos
+Cohesion: 0.13
+Nodes (8): MoveDto, Dictionary, HashSet, IEnumerable, PokeApiMapper, FieldEffectKind, MoveImplementation, ReglaDeTurnos
 
 ### Community 18 - "MonoBehaviour"
-Cohesion: 0.08
-Nodes (13): EventController, MapController, bool, string, SceneBootstrapper, bool, int, string (+5 more)
+Cohesion: 0.09
+Nodes (10): EventController, MapController, bool, string, SceneBootstrapper, bool, int, string (+2 more)
 
 ### Community 19 - "com.unity.modules.imgui"
 Cohesion: 0.08
@@ -470,24 +472,24 @@ Cohesion: 0.13
 Nodes (14): 1. Tener listas las especies y sus movimientos, 2. Crear el asset del enemigo, 3. Llenar los campos en el Inspector, 4. Configurar el equipo (`pokenTeam`), 5. Disparar la batalla, ✅ Checklist rápido, 🧠 Conceptos previos (leer esto primero), 👾 Cómo crear un enemigo en PokeRush (+6 more)
 
 ### Community 27 - "BattleController"
-Cohesion: 0.21
+Cohesion: 0.19
 Nodes (4): Action, IEnumerator, List, IDirectorDeCombate
 
 ### Community 28 - ".AddImage"
-Cohesion: 0.19
-Nodes (13): Button, Color, float, GameObject, Image, MenuItem, Sprite, string (+5 more)
+Cohesion: 0.21
+Nodes (12): Button, Color, float, GameObject, Image, MenuItem, Sprite, string (+4 more)
 
 ### Community 29 - "PredictionState"
-Cohesion: 0.13
-Nodes (9): List, bool, Func, int, string, PredictedCategory, PredictionSnapshot, PredictionState (+1 more)
+Cohesion: 0.12
+Nodes (11): List, bool, Func, int, List, string, PredictedCategory, PredictionSnapshot (+3 more)
 
 ### Community 30 - "dependencies"
 Cohesion: 0.14
 Nodes (13): dependencies, com.unity.2d.tooling, com.unity.ai.assistant, com.unity.modules.assetbundle, com.unity.modules.cloth, com.unity.modules.screencapture, com.unity.timeline, com.unity.modules.assetbundle (+5 more)
 
 ### Community 31 - "BlackjackSmokeTest"
-Cohesion: 0.08
-Nodes (20): Action, AudioClip, Dictionary, GameObject, List, RectTransform, string, Entry (+12 more)
+Cohesion: 0.10
+Nodes (17): Action, AudioClip, Dictionary, GameObject, List, RectTransform, string, Entry (+9 more)
 
 ### Community 32 - "dependencies"
 Cohesion: 0.07
@@ -507,7 +509,7 @@ Nodes (11): Genero, CreacionPersonajeView, bool, Button, Color, float, Image, In
 
 ### Community 36 - "PeleaJulieta"
 Cohesion: 0.09
-Nodes (12): Color, Action, bool, Color, float, Font, IEnumerator, List (+4 more)
+Nodes (15): Color, FaseDeJulieta, HablanteDeJulieta, Action, bool, Color, float, Font (+7 more)
 
 ### Community 37 - "com.unity.2d.common"
 Cohesion: 0.06
@@ -526,8 +528,8 @@ Cohesion: 0.09
 Nodes (24): dependencies, depth, source, version, dependencies, depth, source, version (+16 more)
 
 ### Community 41 - "PrizeWheelController"
-Cohesion: 0.06
-Nodes (22): bool, Func, int, string, PrizeWheelRequest, PrizeWheelResult, SlotsScreenRequest, SlotsScreenResult (+14 more)
+Cohesion: 0.08
+Nodes (14): AnimationCurve, AudioClip, bool, Button, float, Func, Image, int (+6 more)
 
 ### Community 42 - "com.unity.modules.imageconversion"
 Cohesion: 0.10
@@ -542,16 +544,16 @@ Cohesion: 0.45
 Nodes (9): clear_cell(), main(), set_font(), set_row_text(), set_value_row(), shade_cell(), style_header_rows(), unique_cells() (+1 more)
 
 ### Community 45 - "PokeApiImporterWindow"
-Cohesion: 0.14
-Nodes (8): bool, int, GenerateReport, bool, string, ReglaDeTurnos, MoveTurnRule, PokeRush.EditorTools.PokeApi
+Cohesion: 0.08
+Nodes (13): CasinoProgressModel, int, CasinoTacconiNpc, bool, int, Sprite, string, Action (+5 more)
 
 ### Community 46 - ".Correr"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (7): CrearSiLoPidieron(), Func, IEnumerator, int, RuntimeInitializeOnLoadMethod, string, LobbyPlayTest
 
 ### Community 47 - "DialogueController"
-Cohesion: 0.07
-Nodes (18): Action, int, Sprite, string, DialogueController, Modo, bool, Color (+10 more)
+Cohesion: 0.14
+Nodes (8): Action, int, Sprite, string, DialogueController, Modo, Sprite, Modo
 
 ### Community 48 - "com.unity.modules.uielements"
 Cohesion: 0.09
@@ -562,32 +564,32 @@ Cohesion: 0.09
 Nodes (16): bool, float, GameObject, IEnumerator, Image, int, Text, FortuneSpinWheel (+8 more)
 
 ### Community 50 - "GameAction"
-Cohesion: 0.11
+Cohesion: 0.13
 Nodes (10): char, GameAction, Dictionary, float, HashSet, int, List, string (+2 more)
 
 ### Community 51 - ".BuildSlotsScreen"
-Cohesion: 0.23
-Nodes (9): CasinoPrefabBuilder, float, GameObject, List, MenuItem, string, Text, Transform (+1 more)
+Cohesion: 0.12
+Nodes (14): CasinoPrefabBuilder, float, GameObject, List, MenuItem, string, Text, Transform (+6 more)
 
 ### Community 52 - "DefinitionRepository"
-Cohesion: 0.09
-Nodes (25): Color, GameObject, MenuItem, SerializedProperty, string, HistoriaAssets, Cosa, bool (+17 more)
+Cohesion: 0.16
+Nodes (12): Color, GameObject, List, MenuItem, Scene, Sprite, Tile, Vector2Int (+4 more)
 
 ### Community 53 - "InventoryModel"
-Cohesion: 0.10
-Nodes (11): BattleItemDefinition, int, Sprite, string, VendorDefinition, BattleItemStack, List, HealItemStack (+3 more)
+Cohesion: 0.09
+Nodes (13): BattleItemDefinition, int, Sprite, string, int, Sprite, string, SpecialItemDefinition (+5 more)
 
 ### Community 54 - ".HasFlag"
-Cohesion: 0.21
-Nodes (8): int, Sprite, string, Juego, QuarchoMartinNpc, Ruleta, Juego, Ruleta
+Cohesion: 0.09
+Nodes (18): CasinoDialogo, Action, bool, List, Sprite, CasinoRuletaPagaNpc, int, Sprite (+10 more)
 
 ### Community 55 - "AudioService"
 Cohesion: 0.12
 Nodes (12): CanalDeMusica, AudioService, CanalDeMusica, AudioClip, AudioSource, bool, float, GameObject (+4 more)
 
 ### Community 56 - "CasinoJefeFinalNpc"
-Cohesion: 0.05
-Nodes (21): CasinoJefeFinalNpc, bool, Collider2D, int, List, string, CasinoNpcConCombate, Action (+13 more)
+Cohesion: 0.06
+Nodes (27): CasinoElevatorGuard, int, string, CasinoJefeFinalNpc, bool, Collider2D, int, List (+19 more)
 
 ### Community 57 - "SceneLoaderService"
 Cohesion: 0.36
@@ -598,36 +600,36 @@ Cohesion: 0.25
 Nodes (7): Arquitectura del Proyecto — PokeRush, 📊 Diagramas de Flujo de Datos (DFD), 💻 Entorno de Desarrollo, 📦 Librerías y Paquetes Principales, 🎮 Motor y Lenguaje, 🧩 Patrón de Arquitectura: MVC, 💾 Persistencia de Datos
 
 ### Community 59 - "AnimationShowcaseView"
-Cohesion: 0.31
-Nodes (4): CasinoNurseInteractable, Action, int, string
+Cohesion: 0.06
+Nodes (21): CasinoNurseInteractable, Action, int, string, CasinoVendedorNpc, int, Sprite, string (+13 more)
 
 ### Community 60 - "BattleEvent"
-Cohesion: 0.08
-Nodes (24): CasinoRuletaDeCombate, float, Func, int, List, AbilityEffects, float, int (+16 more)
+Cohesion: 0.07
+Nodes (32): CasinoRuletaDeCombate, float, Func, int, List, AbilityEffects, float, int (+24 more)
 
 ### Community 61 - "MoveAnimationImporter"
 Cohesion: 0.06
 Nodes (29): BuildReport, bool, Dictionary, float, IEnumerable, int, MenuItem, Rect (+21 more)
 
 ### Community 62 - "LobbySmokeTests"
-Cohesion: 0.20
-Nodes (5): GameObject, int, MenuItem, string, LobbySmokeTests
+Cohesion: 0.16
+Nodes (6): GameObject, int, MenuItem, string, LobbySmokeTests, List
 
 ### Community 63 - ".Node"
-Cohesion: 0.14
-Nodes (15): Color, GameObject, List, MenuItem, Sprite, string, Text, TextAnchor (+7 more)
+Cohesion: 0.13
+Nodes (18): Color, GameObject, Image, List, MenuItem, Sprite, string, Text (+10 more)
 
 ### Community 65 - "BagScreen"
-Cohesion: 0.09
-Nodes (15): BagScreen, bool, GameObject, Image, int, List, Sprite, string (+7 more)
+Cohesion: 0.10
+Nodes (14): BagScreen, bool, GameObject, Image, int, List, Sprite, string (+6 more)
 
 ### Community 66 - "NestorAllyPortraitBuilder"
-Cohesion: 0.09
-Nodes (20): float, Font, GameObject, MenuItem, Sprite, string, Text, Transform (+12 more)
+Cohesion: 0.08
+Nodes (22): float, Font, GameObject, MenuItem, Sprite, string, Text, Transform (+14 more)
 
 ### Community 67 - "PcStorageScreen"
-Cohesion: 0.10
-Nodes (13): bool, Color, float, GameObject, Image, int, RectTransform, Sprite (+5 more)
+Cohesion: 0.08
+Nodes (19): bool, Color, float, GameObject, Image, int, RectTransform, Sprite (+11 more)
 
 ### Community 68 - "BattleHudView"
 Cohesion: 0.09
@@ -638,8 +640,8 @@ Cohesion: 0.11
 Nodes (12): GameObject, Image, Text, SlotCellWidget, Action, AudioClip, float, int (+4 more)
 
 ### Community 70 - "SubsystemFeedbackView"
-Cohesion: 0.12
-Nodes (12): Collider2D, string, Transform, Vector2, DoorTrigger, CanvasGroup, Coroutine, float (+4 more)
+Cohesion: 0.18
+Nodes (8): Collider2D, CanvasGroup, Coroutine, float, GameObject, IEnumerator, Text, SubsystemFeedbackView
 
 ### Community 71 - ".BuildScreen"
 Cohesion: 0.12
@@ -650,32 +652,32 @@ Cohesion: 0.19
 Nodes (9): CasinoUiKit, Color, float, GameObject, List, Sprite, string, Transform (+1 more)
 
 ### Community 73 - "BattleTestSceneBuilder"
-Cohesion: 0.32
-Nodes (6): Button, Image, Text, TextAnchor, Transform, Vector2
+Cohesion: 0.27
+Nodes (7): Button, Image, SerializedObject, Text, TextAnchor, Transform, Vector2
 
 ### Community 74 - "MenuUiKit"
-Cohesion: 0.12
-Nodes (10): bool, HashSet, int, EstadoDePeleaJulieta, GuionEnCurso, CondicionDeJulieta, bool, DisparadorDeJulieta (+2 more)
+Cohesion: 0.16
+Nodes (7): bool, HashSet, int, EstadoDePeleaJulieta, GuionEnCurso, bool, MomentoDeJulieta
 
 ### Community 75 - "limpiar_ruleta.py"
 Cohesion: 0.09
 Nodes (33): _banda(), brillo_seleccion(), _escalar(), extraer_rueda(), ficha_apostada(), fondo_de_mesa(), _hsv_a_rgb(), main() (+25 more)
 
 ### Community 76 - ".Build"
-Cohesion: 0.06
-Nodes (23): Color, GameObject, MenuItem, Object, SerializedProperty, string, Transform, Vector2 (+15 more)
+Cohesion: 0.20
+Nodes (10): Color, GameObject, MenuItem, Object, SerializedProperty, string, Transform, Vector2 (+2 more)
 
 ### Community 78 - "PauseMenuScreen"
-Cohesion: 0.15
-Nodes (8): bool, IEnumerator, int, List, string, Text, Transform, PauseMenuScreen
+Cohesion: 0.10
+Nodes (10): Action, MenuScreen, bool, IEnumerator, int, List, string, Text (+2 more)
 
 ### Community 79 - "manifest.json"
 Cohesion: 0.33
 Nodes (5): abilities, downloadedAt, moves, species, tool
 
 ### Community 80 - "PartyScreen"
-Cohesion: 0.13
-Nodes (9): Action, bool, GameObject, int, List, string, Text, Transform (+1 more)
+Cohesion: 0.09
+Nodes (14): bool, GameObject, int, List, string, Text, Transform, PartyScreen (+6 more)
 
 ### Community 83 - "com.unity.dt.app-ui"
 Cohesion: 0.40
@@ -698,16 +700,16 @@ Cohesion: 0.12
 Nodes (15): AssetPostprocessor, AudioImporter, Clase, AudioDelJuegoBuilder, Clase, AudioClip, Dictionary, List (+7 more)
 
 ### Community 104 - "com.unity.modules.assetbundle"
-Cohesion: 0.13
-Nodes (7): AudioClip, bool, RuntimeInitializeOnLoadMethod, Scene, MusicaDelJuego, LoadSceneMode, MusicaDeUnaEscena
+Cohesion: 0.14
+Nodes (6): AudioClip, bool, LoadSceneMode, RuntimeInitializeOnLoadMethod, Scene, MusicaDelJuego
 
 ### Community 112 - "com.unity.modules.screencapture"
-Cohesion: 0.15
-Nodes (16): CatalogoDeAudio, AudioClip, bool, Dictionary, float, List, RuntimeInitializeOnLoadMethod, string (+8 more)
+Cohesion: 0.13
+Nodes (17): CatalogoDeAudio, AudioClip, bool, Dictionary, float, List, RuntimeInitializeOnLoadMethod, string (+9 more)
 
 ### Community 133 - "com.unity.timeline"
-Cohesion: 0.12
-Nodes (9): Action, bool, IEnumerator, List, Sprite, string, Transform, Tipo (+1 more)
+Cohesion: 0.11
+Nodes (10): Action, Action, bool, IEnumerator, List, Sprite, string, Transform (+2 more)
 
 ### Community 135 - "PlayerView"
 Cohesion: 0.24
@@ -731,14 +733,14 @@ Nodes (24): 🔧 Agregar cosas nuevas, Caja de mensajes — `MessageBoxScreen`, 
 
 ### Community 140 - "StoryModel"
 Cohesion: 0.07
-Nodes (17): bool, Collider2D, float, IEnumerator, string, PuertaDelTutorial, Action, bool (+9 more)
+Nodes (15): bool, Collider2D, float, string, PuertaDelTutorial, bool, float, GameObject (+7 more)
 
 ### Community 141 - "InteractableTrigger"
-Cohesion: 0.07
-Nodes (19): CasinoProgressModel, int, CasinoRuletaDeNpcs, IList, int, IReadOnlyList, Action, bool (+11 more)
+Cohesion: 0.16
+Nodes (9): Action, bool, IEnumerator, int, Sprite, string, EntregaDeObjeto, InteractableTrigger (+1 more)
 
 ### Community 142 - ".Apply"
-Cohesion: 0.30
+Cohesion: 0.27
 Nodes (6): bool, int, string, ItemUsageService, ItemUseOutcome, ItemUseResult
 
 ### Community 143 - "Base de datos — Creación y Queries"
@@ -758,8 +760,8 @@ Cohesion: 0.12
 Nodes (16): 1. Armado mínimo de la escena, 2. Los cuatro subsistemas, 3. Puertas, 4. El combate final, 4b. Entrar en combate sin perder el mapa, 5. Regla de diseño del GDD, Cámaras — combate contra un guardia, Cómo armar la torre 1 (Ciberseguridad) (+8 more)
 
 ### Community 147 - "CasinoDecoradoScanner"
-Cohesion: 0.12
-Nodes (18): CasinoDecoradoScanner, List, MenuItem, Tilemap, Vector3, Vector3Int, CasinoInteractionBuilder, GameObject (+10 more)
+Cohesion: 0.18
+Nodes (12): CasinoInteractionBuilder, GameObject, int, MenuItem, Scene, string, Vector2, Mecanica (+4 more)
 
 ### Community 148 - "PlayerController"
 Cohesion: 0.14
@@ -770,8 +772,8 @@ Cohesion: 0.12
 Nodes (16): 1. Un NPC que pregunta antes de pelear, 2. Un NPC que te da un Pokémon, 3. Un botón que abre una barrera, 3b. Marcar un interactuable con un brillito, 4. Un objeto en el piso (pokeball), 4b. Un menú con más de dos opciones, 5. Un mensaje del sistema, Checklist (+8 more)
 
 ### Community 150 - "StoryFlag"
-Cohesion: 0.06
-Nodes (22): BaseEventData, bool, float, PointerEventData, Vector3, MenuPuntero, BotonAnimado, bool (+14 more)
+Cohesion: 0.11
+Nodes (11): BotonAnimado, bool, CanvasGroup, float, GameObject, PointerEventData, Selectable, Vector3 (+3 more)
 
 ### Community 151 - "CasinoSceneRigBuilder"
 Cohesion: 0.19
@@ -814,16 +816,16 @@ Cohesion: 0.17
 Nodes (7): Dictionary, int, MenuItem, Sprite, string, TextureImporter, BattleUiAssetImporter
 
 ### Community 161 - "MessageBoxScreen"
-Cohesion: 0.14
-Nodes (9): bool, float, GameObject, Text, MessageBoxScreen, Image, string, Text (+1 more)
+Cohesion: 0.15
+Nodes (10): bool, float, GameObject, Text, MessageBoxScreen, Image, Sprite, string (+2 more)
 
 ### Community 162 - "TutorialDeLaHabitacion"
 Cohesion: 0.14
 Nodes (10): bool, float, IEnumerator, int, Rect, Sprite, SpriteRenderer, Vector2 (+2 more)
 
 ### Community 163 - "CasinoNpcBuilder"
-Cohesion: 0.08
-Nodes (16): CasinoNpcBuilder, Action, Bounds, Dictionary, float, GameObject, IEnumerable, int (+8 more)
+Cohesion: 0.06
+Nodes (24): CasinoNpcBuilder, Action, Bounds, Dictionary, float, GameObject, IEnumerable, int (+16 more)
 
 ### Community 164 - "Flags de historia y el combate contra Nestor"
 Cohesion: 0.14
@@ -834,8 +836,8 @@ Cohesion: 0.26
 Nodes (5): InitializeOnLoadMethod, MenuItem, PlayModeStateChange, string, MenuSmokeTestRunner
 
 ### Community 166 - "PeleaJulietaAssets"
-Cohesion: 0.15
-Nodes (12): int, MenuItem, Sprite, string, PeleaJulietaAssets, AccionDeJulieta, int, Sprite (+4 more)
+Cohesion: 0.13
+Nodes (15): int, MenuItem, Sprite, string, PeleaJulietaAssets, AccionDeJulieta, CondicionDeJulieta, AudioClip (+7 more)
 
 ### Community 167 - "com.unity.nuget.mono-cecil"
 Cohesion: 0.10
@@ -854,7 +856,7 @@ Cohesion: 0.15
 Nodes (10): BlackjackArtImporter, Dictionary, int, List, MenuItem, Sprite, string, TextureImporter (+2 more)
 
 ### Community 171 - "PauseMenuView"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (9): GameObject, List, Sprite, Text, Transform, InventoryView, Button, GameObject (+1 more)
 
 ### Community 172 - "Cómo correr la demo"
@@ -862,8 +864,8 @@ Cohesion: 0.20
 Nodes (9): Cambiar los iniciales, Creación de personaje, Cómo correr la demo, Dos cosas del import que importan, El recorrido, Guardado, Música, Qué se puede hacer dentro de la torre (+1 more)
 
 ### Community 173 - "TutorialBuilder"
-Cohesion: 0.09
-Nodes (19): Collider2D, GameObject, HashSet, int, List, MenuItem, Scene, Sprite (+11 more)
+Cohesion: 0.07
+Nodes (23): int, Sprite, string, TutorialAssets, Collider2D, GameObject, HashSet, int (+15 more)
 
 ### Community 174 - "NestorSpriteImporter"
 Cohesion: 0.31
@@ -890,11 +892,11 @@ Cohesion: 0.12
 Nodes (3): FixedRng, TileContainer, PokeRush.EditorTools
 
 ### Community 180 - "CasinoElevatorInteractable"
-Cohesion: 0.16
+Cohesion: 0.15
 Nodes (10): CasinoElevatorInteractable, CasinoPisoDestino, CasinoRequisitoTipo, Action, bool, int, string, Vector2 (+2 more)
 
 ### Community 181 - "MoveDefinition"
-Cohesion: 0.21
+Cohesion: 0.24
 Nodes (4): IEnumerable, int, MenuItem, HistoriaSmokeTests
 
 ### Community 182 - "CasinoSmokeTests"
@@ -902,24 +904,24 @@ Cohesion: 0.12
 Nodes (5): int, List, MenuItem, string, CasinoSmokeTests
 
 ### Community 183 - ".Refrescar"
-Cohesion: 0.10
-Nodes (10): HashSet, int, List, RewardCalculator, int, ExperienceTableDefinition, List, Random (+2 more)
+Cohesion: 0.15
+Nodes (6): int, ExperienceTableDefinition, List, Random, Sprite, PokenModel
 
 ### Community 184 - ".ArmarPantalla"
 Cohesion: 0.16
 Nodes (15): Color, float, GameObject, Image, int, MenuItem, Rect, RectTransform (+7 more)
 
 ### Community 185 - "PlayerInputController"
-Cohesion: 0.22
+Cohesion: 0.14
 Nodes (5): bool, HashSet, int, PlayerInputController, Vector2
 
 ### Community 186 - ".Open"
-Cohesion: 0.13
-Nodes (9): BlackjackTableInteractable, Action, bool, int, string, Action, int, string (+1 more)
+Cohesion: 0.16
+Nodes (7): Action, bool, float, int, Sprite, string, QuarchoTixiNpc
 
 ### Community 187 - "BattleModel"
-Cohesion: 0.25
-Nodes (5): CasinoPisoFinalBuilder, int, Scene, string, Vector2
+Cohesion: 0.15
+Nodes (10): bool, float, PointerEventData, Vector3, MenuPuntero, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler (+2 more)
 
 ### Community 188 - "ANDRUSIANIBuilder"
 Cohesion: 0.12
@@ -927,14 +929,14 @@ Nodes (14): int, MenuItem, Sprite, string, ANDRUSIANIBuilder, bool, ColliderType
 
 ### Community 189 - "PokenStorageModel"
 Cohesion: 0.06
-Nodes (25): CasinoDialogo, Action, bool, List, Sprite, CasinoRuletaPagaNpc, int, Sprite (+17 more)
+Nodes (23): BlackjackTableInteractable, Action, bool, int, string, Action, int, string (+15 more)
 
 ### Community 190 - "PeleaJulietaBuilder"
 Cohesion: 0.15
 Nodes (10): GameObject, int, List, MenuItem, Scene, Sprite, string, Tilemap (+2 more)
 
 ### Community 191 - "SlotMachineEngine"
-Cohesion: 0.16
+Cohesion: 0.23
 Nodes (6): int, List, string, SlotLineHit, SlotMachineEngine, SlotSpinResult
 
 ### Community 192 - "RouletteSmokeTest"
@@ -946,8 +948,8 @@ Cohesion: 0.22
 Nodes (6): GameObject, Grid, int, MenuItem, string, ParedesInvisiblesLayer
 
 ### Community 194 - "HealItemDefinition"
-Cohesion: 0.09
-Nodes (16): bool, int, Sprite, string, HealItemDefinition, int, ReglasDeTienda, bool (+8 more)
+Cohesion: 0.13
+Nodes (11): int, ReglasDeTienda, bool, GameObject, Image, int, List, string (+3 more)
 
 ### Community 195 - "CasinoSmokeTestRunner"
 Cohesion: 0.24
@@ -958,8 +960,8 @@ Cohesion: 0.17
 Nodes (10): Bounds, GameObject, int, MenuItem, Scene, Sprite, string, Vector2 (+2 more)
 
 ### Community 197 - "PokenModel"
-Cohesion: 0.09
-Nodes (9): BattleController, bool, Camera, float, IEnumerator, int, List, RuntimeInitializeOnLoadMethod (+1 more)
+Cohesion: 0.07
+Nodes (12): BattleController, bool, Camera, float, IEnumerator, int, List, RuntimeInitializeOnLoadMethod (+4 more)
 
 ### Community 198 - "BloqueInvisible"
 Cohesion: 0.24
@@ -970,15 +972,15 @@ Cohesion: 0.29
 Nodes (5): float, int, MenuItem, Transform, MapaDeColisiones
 
 ### Community 200 - "MenuIconLibrary"
-Cohesion: 0.23
-Nodes (7): StatusEffect, int, FotoDePoken, Image, Sprite, string, MenuIconLibrary
+Cohesion: 0.35
+Nodes (4): Image, Sprite, string, MenuIconLibrary
 
 ### Community 201 - "ANDRUSIANI — herramientas de bloqueo para diseñar mapas"
 Cohesion: 0.29
 Nodes (6): ANDRUSIANI — herramientas de bloqueo para diseñar mapas, Bloques sueltos, Lo que hay, Pintar paredes invisibles (el camino normal), Por qué está hecho así, Verificado
 
 ### Community 202 - "MovimientosDeCombateFixer"
-Cohesion: 0.24
+Cohesion: 0.27
 Nodes (4): List, MenuItem, string, MovimientosDeCombateFixer
 
 ### Community 203 - "Créditos de assets de terceros"
@@ -994,24 +996,24 @@ Cohesion: 0.31
 Nodes (4): MenuItem, Object, string, BattlePrefabBuilder
 
 ### Community 207 - "QuarchoTixiNpc"
-Cohesion: 0.08
-Nodes (19): Action, bool, float, int, Sprite, string, QuarchoTixiNpc, string (+11 more)
+Cohesion: 0.13
+Nodes (10): string, Nivel, RecorridoDeLaHistoria, bool, Collider2D, Nivel, Sprite, string (+2 more)
 
 ### Community 208 - "PeleaJulietaPlayTest"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (9): CrearSiLoPidieron(), bool, Func, IEnumerator, int, List, RuntimeInitializeOnLoadMethod, string (+1 more)
 
 ### Community 209 - "NestorPortraitView"
 Cohesion: 0.05
-Nodes (33): Collider2D, float, HashSet, IEnumerator, int, LayerMask, List, Sprite (+25 more)
+Nodes (32): Collider2D, float, HashSet, IEnumerator, int, LayerMask, List, Sprite (+24 more)
 
 ### Community 210 - "NPCDefinition"
-Cohesion: 0.14
-Nodes (11): int, Sprite, string, TutorialAssets, int, List, Sprite, DialogueDefinition (+3 more)
+Cohesion: 0.07
+Nodes (22): BarreraPorFlag, bool, GameObject, NpcQueHabla, AudioClip, bool, Collider2D, Color (+14 more)
 
 ### Community 211 - "PokenDefinition"
-Cohesion: 0.23
-Nodes (6): bool, IList, int, string, PcLugar, PcReglas
+Cohesion: 0.16
+Nodes (10): List, MenuItem, string, InitialTeamMigrator, AbilityId, AnimatorOverrideController, int, Sprite (+2 more)
 
 ### Community 212 - "NpcJugandoMaquina"
 Cohesion: 0.21
@@ -1022,7 +1024,7 @@ Cohesion: 0.24
 Nodes (5): BlackjackSmokeTestRunner, InitializeOnLoadMethod, MenuItem, PlayModeStateChange, string
 
 ### Community 214 - "RouletteBoard"
-Cohesion: 0.30
+Cohesion: 0.20
 Nodes (4): Dictionary, int, MenuItem, RouletteSmokeTests
 
 ### Community 215 - "DialogueDefinition"
@@ -1030,8 +1032,8 @@ Cohesion: 0.15
 Nodes (8): CrearSiLoPidieron(), Func, IEnumerator, int, RuntimeInitializeOnLoadMethod, string, Vector3, DataCenterHistoriaPlayTest
 
 ### Community 216 - "QuarchoCuevaAssets"
-Cohesion: 0.16
-Nodes (6): Action, Func, int, Sprite, string, QuarchoCuevaAssets
+Cohesion: 0.11
+Nodes (11): Action, Func, int, Sprite, string, QuarchoCuevaAssets, bool, int (+3 more)
 
 ### Community 217 - "TacconiScreenshotTaker"
 Cohesion: 0.29
@@ -1045,9 +1047,13 @@ Nodes (8): componentes(), es_texto(), excluida(), main(), mascara_fondo(), Convi
 Cohesion: 0.08
 Nodes (25): Casino: personajes y ruletas de premios (pisos 1 a 3), Cómo se cambia, Cómo se prueba, El ascensor: subir y bajar, El guardia del ascensor (piso 1), La ruleta de premios de los NPCs, La ruleta del guardia, La ruleta exclusiva del guardia VIP (`RuletaDelGuardiaVip.asset`) (+17 more)
 
+### Community 221 - "GameManager"
+Cohesion: 0.28
+Nodes (6): CasinoDecoradoScanner, List, MenuItem, Tilemap, Vector3, Vector3Int
+
 ### Community 222 - ".Capturar"
-Cohesion: 0.16
-Nodes (14): Color, Font, GameObject, Image, int, RawImage, RectTransform, Sprite (+6 more)
+Cohesion: 0.18
+Nodes (12): Color, Font, Image, int, RawImage, Sprite, string, Transform (+4 more)
 
 ### Community 223 - "RouletteBet"
 Cohesion: 0.18
@@ -1059,15 +1065,15 @@ Nodes (14): Color, float, GameObject, Image, MenuItem, Rect, RectTransform, Spri
 
 ### Community 225 - "AIProfileDefinition"
 Cohesion: 0.06
-Nodes (25): AiContext, int, List, FinalBossAI, float, List, GymLeaderAI, IBattleAI (+17 more)
+Nodes (31): AiContext, int, List, FinalBossAI, float, List, GymLeaderAI, IBattleAI (+23 more)
 
 ### Community 226 - "La mesa de blackjack (piso 3 del casino)"
 Cohesion: 0.18
 Nodes (10): Cómo se arma y cómo se prueba, Cómo se destraba el piso, El arte derivado, El flujo y los botones, La mesa de blackjack (piso 3 del casino), Las piezas, Las reglas que se implementaron, Lo que se ve (+2 more)
 
 ### Community 227 - "MenuTypes.cs"
-Cohesion: 0.20
-Nodes (17): BagScreenResult, bool, float, HashSet, IList, int, string, MessageBoxRequest (+9 more)
+Cohesion: 0.11
+Nodes (26): BagScreenRequest, BagScreenResult, bool, float, HashSet, IList, int, string (+18 more)
 
 ### Community 228 - "MoveTutorScreen"
 Cohesion: 0.16
@@ -1082,19 +1088,19 @@ Cohesion: 0.22
 Nodes (8): Cómo se prueba, Cómo se usa, Guardado, PC de almacenamiento, Piezas, Poner un PC en un nivel nuevo, Qué es, Shiny
 
 ### Community 231 - "LienzoDePeleaJulieta"
-Cohesion: 0.16
+Cohesion: 0.15
 Nodes (12): Color, Font, Image, RectTransform, Text, TextAnchor, Transform, Vector2 (+4 more)
 
 ### Community 232 - "LiberarPokenTrigger"
-Cohesion: 0.22
+Cohesion: 0.20
 Nodes (5): bool, Dictionary, Entrada, List, DefinitionRepository
 
 ### Community 233 - "EstadoDePeleaJulieta"
-Cohesion: 0.31
+Cohesion: 0.27
 Nodes (4): float, HashSet, int, RouletteBoard
 
 ### Community 234 - "BlackjackOutcome"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (8): Action, bool, float, int, Sprite, string, Transform, LiberarPokenTrigger
 
 ### Community 235 - "PlayerModel"
@@ -1102,16 +1108,16 @@ Cohesion: 0.33
 Nodes (3): int, Random, IvSet
 
 ### Community 236 - "SenalDeControlView"
-Cohesion: 0.10
-Nodes (16): AttackType, BattlePokenState, bool, int, float, int, List, StatusEffects (+8 more)
+Cohesion: 0.16
+Nodes (9): AttackType, bool, float, int, DamageCalculator, DamageResult, PokenType, float (+1 more)
 
 ### Community 237 - "CreditosFinales"
-Cohesion: 0.15
-Nodes (13): CreditosFinales, AudioClip, bool, CanvasGroup, Color, float, Font, IEnumerator (+5 more)
+Cohesion: 0.13
+Nodes (16): CreditosFinales, AudioClip, bool, CanvasGroup, Color, float, Font, IEnumerator (+8 more)
 
 ### Community 238 - "El jefe final: la pelea contra Julieta"
-Cohesion: 0.12
-Nodes (16): Cómo probarlo, Cómo se engancha al combate, Decisiones de historia que tomé yo (revisar), Dónde tocar el balance, El final, El guion (cómo se escribe y se cambia), El jefe final: la pelea contra Julieta, El Pokémon controlado y la vida del PJ (+8 more)
+Cohesion: 0.11
+Nodes (17): Cómo probarlo, Cómo se engancha al combate, Decisiones de historia (revisar), Dónde tocar el balance, El final, El guion (cómo se escribe y se cambia), El jefe final: la pelea contra Julieta, El Pokémon controlado y la vida del PJ (+9 more)
 
 ### Community 239 - "IBattleRng"
 Cohesion: 0.14
@@ -1130,19 +1136,19 @@ Cohesion: 0.14
 Nodes (13): Agregar o sacar una parte, Cómo funciona, Cómo pasarlo a otra habitación, El esqueleto, La habitación de Santiago, La habitación tutorial, Lo que elegí yo (revisar si algo no cierra), Lo que eligió Augusto (25-sep-2026) (+5 more)
 
 ### Community 243 - ".TryApplyStatus"
-Cohesion: 0.20
-Nodes (4): MoveEffectExecutor, int, StatStageTable, Stat
+Cohesion: 0.27
+Nodes (3): int, StatStageTable, Stat
 
 ### Community 244 - ".ArmarNavegacion"
-Cohesion: 0.13
-Nodes (10): ActiveFlagRow, DialogueRow, PlayerCosmeticRow, PlayerInventoryRow, PlayerPokenMoveRow, PlayerPokenRow, PlayerRow, List (+2 more)
+Cohesion: 0.29
+Nodes (6): ActiveFlagRow, DialogueRow, PlayerCosmeticRow, PlayerPokenMoveRow, PlayerPokenRow, PlayerRow
 
 ### Community 245 - "MtYDescripciones"
-Cohesion: 0.19
-Nodes (7): int, List, MenuItem, string, MtYDescripciones, Reporte, Reporte
+Cohesion: 0.17
+Nodes (8): Func, int, List, MenuItem, string, MtYDescripciones, Reporte, Reporte
 
 ### Community 246 - "IDirectorDeCombate"
-Cohesion: 0.15
+Cohesion: 0.17
 Nodes (9): Image, Text, HealthBarView, GameObject, Image, List, Text, Transform (+1 more)
 
 ### Community 247 - "El piso final del casino: el pasillo y el jefe"
@@ -1158,7 +1164,7 @@ Cohesion: 0.17
 Nodes (7): bool, float, IEnumerator, LayerMask, Vector2, Vector3, PlayerController
 
 ### Community 250 - "JulietaSmokeTests"
-Cohesion: 0.21
+Cohesion: 0.17
 Nodes (3): int, MenuItem, JulietaSmokeTests
 
 ### Community 251 - "CasinoSlotArtImporter"
@@ -1166,24 +1172,24 @@ Cohesion: 0.19
 Nodes (6): GameObject, Image, string, Text, MoveRowWidget, MoveModel
 
 ### Community 252 - ".OnOpen"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (12): bool, Color, float, GameObject, Image, int, List, RectTransform (+4 more)
 
 ### Community 253 - "BagEntry"
-Cohesion: 0.08
-Nodes (12): Sprite, BattleAIFactory, NestorAllyMode, AIProfileDefinition, BattleAIType, bool, float, int (+4 more)
+Cohesion: 0.10
+Nodes (13): MenuItem, string, AIProfileGenerator, BattleAIFactory, AIProfileDefinition, BattleAIType, bool, float (+5 more)
 
 ### Community 254 - "QuarchoNestorNpc"
-Cohesion: 0.25
-Nodes (7): IList, int, List, MejoraDeBatalla, MejoraPendiente, MejorasDeBatalla, IEnumerable
+Cohesion: 0.12
+Nodes (11): IList, int, List, MejoraDeBatalla, MejoraPendiente, MejorasDeBatalla, IEnumerable, PlayerInventoryRow (+3 more)
 
 ### Community 256 - "BlackjackHand"
-Cohesion: 0.18
-Nodes (7): BattleZoneTrigger, bool, Collider2D, int, int, Sprite, WildEncounterDefinition
+Cohesion: 0.09
+Nodes (11): BattleZoneTrigger, bool, Collider2D, int, bool, NPCDefinition, NurseDefinition, VendorDefinition (+3 more)
 
 ### Community 259 - ".Ir"
-Cohesion: 0.33
-Nodes (3): GameObject, IEnumerator, Image
+Cohesion: 0.12
+Nodes (9): LoadSceneMode, RuntimeInitializeOnLoadMethod, Scene, string, FinalDelJuego, GameObject, IEnumerator, Image (+1 more)
 
 ### Community 260 - "La Quarcho Cueva (el lobby)"
 Cohesion: 0.14
@@ -1194,31 +1200,31 @@ Cohesion: 0.24
 Nodes (3): IEnumerator, Selectable, Paso
 
 ### Community 262 - "VueltaAlLobby"
-Cohesion: 0.06
-Nodes (26): List, TrainerAI, int, List, FieldEffects, FieldTerrain, WeatherKind, Accion (+18 more)
+Cohesion: 0.12
+Nodes (11): int, List, FieldEffects, FieldTerrain, WeatherKind, bool, int, SideState (+3 more)
 
 ### Community 264 - "DemoInventorySeeder"
-Cohesion: 0.24
-Nodes (5): CasinoSlotArtImporter, int, MenuItem, Sprite, string
+Cohesion: 0.19
+Nodes (7): GameState, BorrarSave(), CrearSaveDePrueba(), AudioSource, int, GameManager, ContextMenu
 
 ### Community 265 - "BattleZoneTrigger"
-Cohesion: 0.26
-Nodes (4): int, List, PreciosDelTutor, TutorDeMovimientos
+Cohesion: 0.20
+Nodes (6): Color, GameObject, MenuItem, SerializedProperty, string, HistoriaAssets
 
 ### Community 266 - ".EligibleParticipants"
 Cohesion: 0.25
 Nodes (7): Componentes reutilizables, Creación de personaje — `CreacionPersonajeView`, Cómo se arman, Las pantallas de inicio, Partidas — `SaveSlotMenuView`, Qué hace cada una, Título — `StartScreenView`
 
 ### Community 267 - "BossBattleConfig"
-Cohesion: 0.22
-Nodes (6): Color, GameObject, Image, string, Text, PartyPanelWidget
+Cohesion: 0.25
+Nodes (5): Color, float, IEnumerator, SpriteRenderer, ServidorPrincipal
 
 ### Community 269 - "GuardadoRapido"
 Cohesion: 0.24
 Nodes (6): AnimationShowcaseView, bool, float, IEnumerator, string, Text
 
 ### Community 270 - "PeleaJulietaBancoDePrueba"
-Cohesion: 0.15
+Cohesion: 0.13
 Nodes (10): ConfiguracionDePantalla, List, string, Vector2Int, bool, float, RuntimeInitializeOnLoadMethod, string (+2 more)
 
 ### Community 271 - "Row"
@@ -1226,16 +1232,16 @@ Cohesion: 0.33
 Nodes (4): Dictionary, MenuItem, string, ItemIconAssigner
 
 ### Community 272 - "FixedRng"
-Cohesion: 0.21
-Nodes (8): int, List, string, RouletteBet, RouletteBetKind, RouletteColor, RouletteScreenRequest, RouletteScreenResult
+Cohesion: 0.16
+Nodes (10): IEnumerable, int, List, string, RouletteBet, RouletteBetKind, RouletteColor, RouletteScreenRequest (+2 more)
 
 ### Community 273 - ".AnimateHp"
 Cohesion: 0.18
 Nodes (4): float, GameObject, IEnumerator, MapBattleBridge
 
 ### Community 275 - "BattlePredictionView"
-Cohesion: 0.28
-Nodes (3): Random, SeededRng, UnityRng
+Cohesion: 0.16
+Nodes (7): CasinoRuletaDeNpcs, IList, int, IReadOnlyList, Random, SeededRng, UnityRng
 
 ### Community 276 - "SalidaDelNivel"
 Cohesion: 0.11
@@ -1246,8 +1252,8 @@ Cohesion: 0.15
 Nodes (12): Componentes nuevos o con campos nuevos, Continuidad: quién se acuerda de qué, Decisiones que no están en el PDF (revisar), Dónde se edita cada cosa, El Data Center de Néstor, El recorrido, contado, En el asset, En las líneas (+4 more)
 
 ### Community 278 - ".Move"
-Cohesion: 0.40
-Nodes (3): ColisionesTilemapRuntimeFix, bool, ColliderType
+Cohesion: 0.28
+Nodes (8): bool, Func, int, string, PrizeWheelRequest, PrizeWheelResult, SlotsScreenRequest, SlotsScreenResult
 
 ### Community 279 - "MapBattleBridge"
 Cohesion: 0.18
@@ -1262,20 +1268,20 @@ Cohesion: 0.24
 Nodes (6): ApagonDelNivel, bool, Color, float, int, SpriteRenderer
 
 ### Community 282 - "RouletteTableInteractable"
-Cohesion: 0.20
-Nodes (6): MenuItem, string, InterlineadoDeFuentePixel, float, Font, FuentePixel
+Cohesion: 0.13
+Nodes (14): CanvasGroup, Color, float, Font, Graphic, IEnumerator, Image, int (+6 more)
 
 ### Community 283 - "SenalDeControlView"
 Cohesion: 0.15
 Nodes (10): bool, Color, Font, IEnumerator, Image, RectTransform, Text, Transform (+2 more)
 
 ### Community 284 - "AIProfileGenerator"
-Cohesion: 0.24
-Nodes (6): bool, MenuItem, string, Vector2, PokeApiImporterWindow, EditorWindow
+Cohesion: 0.13
+Nodes (10): bool, MenuItem, string, Vector2, PokeApiImporterWindow, bool, string, ReglaDeTurnos (+2 more)
 
 ### Community 285 - "PrizeWheelInteractable"
-Cohesion: 0.07
-Nodes (28): GameObject, CasinoPrizeTable, Predicate, CasinoElevatorGuard, int, string, CasinoTrainerNpc, string (+20 more)
+Cohesion: 0.11
+Nodes (14): BossRushDefinition, CharacterDefinition, AnimatorOverrideController, Sprite, string, CosmeticDefinition, AnimatorOverrideController, Sprite (+6 more)
 
 ### Community 286 - "MapSceneBuilder"
 Cohesion: 0.33
@@ -1286,8 +1292,8 @@ Cohesion: 0.15
 Nodes (9): caja, IEnumerable, int, Predicate, DestinoDePokemon, PokenRecibido, PokenStorageModel, lugar (+1 more)
 
 ### Community 288 - "BattleAction"
-Cohesion: 0.31
-Nodes (3): bool, Collider2D, ZonaDeHistoria
+Cohesion: 0.28
+Nodes (5): Color, IEnumerator, int, SpriteRenderer, DestelloDePantalla
 
 ### Community 289 - "ExperienceTableGenerator"
 Cohesion: 0.33
@@ -1302,36 +1308,36 @@ Cohesion: 0.28
 Nodes (3): Key, string, GuardadoRapido
 
 ### Community 293 - ".Confirmar"
-Cohesion: 0.32
-Nodes (3): BarreraPorFlag, bool, GameObject
+Cohesion: 0.36
+Nodes (7): Cosa, bool, int, RectInt, string, Npc, Zona
 
 ### Community 294 - "BlackjackOutcome"
-Cohesion: 0.08
-Nodes (19): AbilityId, CosmeticDefinition, AnimatorOverrideController, Sprite, string, int, LearnsetEntry, bool (+11 more)
+Cohesion: 0.09
+Nodes (15): MoveTurnRules, MoveTurnRule, int, LearnsetEntry, bool, int, string, MoveDefinition (+7 more)
 
 ### Community 296 - "BagEntry"
-Cohesion: 0.28
-Nodes (7): ItemPocket, BagEntry, BagModel, bool, int, Sprite, string
+Cohesion: 0.33
+Nodes (3): BossBattleConfig, bool, int
 
 ### Community 297 - ".Capturar"
 Cohesion: 0.36
 Nodes (3): IEnumerator, string, MenuScreenshotTaker
 
 ### Community 298 - "IndiceDeDefiniciones"
-Cohesion: 0.50
-Nodes (4): List, string, Entrada, IndiceDeDefiniciones
+Cohesion: 0.29
+Nodes (4): HashSet, int, List, RewardCalculator
 
 ### Community 299 - ".AnimateHp"
-Cohesion: 0.25
-Nodes (3): Camera, SpriteRenderer, Vector3
+Cohesion: 0.33
+Nodes (4): string, Transform, Vector2, DoorTrigger
 
 ### Community 300 - ".ArmarNavegacion"
 Cohesion: 0.43
 Nodes (7): ataques(), copiar(), efectos(), gritos(), leer_campo(), normalizar(), Copia del pack de audio de Essentials (Assets/AudioAÑIL, solo local) lo que el
 
 ### Community 301 - ".TeleportTo"
-Cohesion: 0.47
-Nodes (3): MenuItem, string, AIProfileGenerator
+Cohesion: 0.40
+Nodes (3): MenuItem, string, InterlineadoDeFuentePixel
 
 ### Community 304 - "OpcionInicial"
 Cohesion: 0.40
@@ -1341,10 +1347,6 @@ Nodes (4): Sprite, string, OpcionInicial, Paso
 Cohesion: 0.33
 Nodes (3): Font, RuntimeInitializeOnLoadMethod, FuentesNitidas
 
-### Community 308 - "Personaje"
-Cohesion: 0.50
-Nodes (3): Sprite, string, Personaje
-
 ### Community 310 - "Devolución docente y datos del grupo"
 Cohesion: 0.50
 Nodes (3): Datos del grupo, Devolución, Devolución docente y datos del grupo
@@ -1353,25 +1355,29 @@ Nodes (3): Datos del grupo, Devolución, Devolución docente y datos del grupo
 Cohesion: 0.50
 Nodes (3): Action, GameObject, EventTriggerType
 
+### Community 318 - "LiberationEngine"
+Cohesion: 0.38
+Nodes (4): Accion, int, List, LiberationEngine
+
 ## Knowledge Gaps
-- **679 isolated node(s):** `Clase`, `Grupo`, `Mecanica`, `Coverage`, `Fase` (+674 more)
+- **680 isolated node(s):** `Clase`, `Grupo`, `Mecanica`, `Coverage`, `Fase` (+675 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **68 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **69 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MenuScreen` connect `BlackjackSmokeTest` to `RouletteScreen`, `MenuSystemSmokeTest`, `MonoBehaviour`, `PlayerController`, `OptionsScreen`, `BlackjackScreen`, `MessageBoxScreen`, `PrizeWheelController`, `.Correr`, `CasinoJefeFinalNpc`, `PokenStorageModel`, `BagScreen`, `HealItemDefinition`, `PcStorageScreen`, `SlotsScreen`, `PauseMenuScreen`, `PartyScreen`, `SummaryScreen`, `MoveTutorScreen`?**
-  _High betweenness centrality (0.071) - this node is a cross-community bridge._
-- **Why does `BattleController` connect `PokenModel` to `BlackjackHand`, `com.unity.timeline`, `VueltaAlLobby`, `BattleTester`, `InteractableTrigger`, `.AnimateHp`, `MonoBehaviour`, `SalidaDelNivel`, `BattleController`, `PredictionState`, `PeleaJulieta`, `BattleFxView`, `PrizeWheelController`, `BattleSystemRoot`, `CasinoJefeFinalNpc`, `PlayerInputController`, `BattleEvent`, `BattleHudView`, `.Build`, `PeleaJulietaPlayTest`, `AIProfileDefinition`, `com.unity.modules.assetbundle`, `BagEntry`?**
-  _High betweenness centrality (0.065) - this node is a cross-community bridge._
-- **Why does `PeleaJulieta` connect `PeleaJulieta` to `.Ir`, `VueltaAlLobby`, `ZonaDePeleaJulieta`, `MonoBehaviour`, `BattleController`, `PrizeWheelInteractable`, `PeleaJulietaAssets`, `PrizeWheelController`, `DialogueController`, `PeleaJulietaBancoDePrueba`, `GameAction`, `CasinoJefeFinalNpc`, `BattleEvent`, `PokenStorageModel`, `PeleaJulietaBuilder`, `PokenModel`, `MenuIconLibrary`, `MenuUiKit`, `PeleaJulietaPlayTest`, `LienzoDePeleaJulieta`, `BagEntry`?**
-  _High betweenness centrality (0.064) - this node is a cross-community bridge._
+- **Why does `MenuScreen` connect `PauseMenuScreen` to `RouletteScreen`, `MenuSystemSmokeTest`, `PlayerController`, `OptionsScreen`, `BlackjackScreen`, `BlackjackSmokeTest`, `MessageBoxScreen`, `PrizeWheelController`, `.Correr`, `PlayerInputController`, `AnimationShowcaseView`, `PokenStorageModel`, `BagScreen`, `HealItemDefinition`, `PcStorageScreen`, `SlotsScreen`, `PartyScreen`, `SummaryScreen`, `MenuTypes.cs`, `MoveTutorScreen`?**
+  _High betweenness centrality (0.078) - this node is a cross-community bridge._
+- **Why does `PlayerModel` connect `AnimationShowcaseView` to `MenuSystemSmokeTest`, `com.unity.timeline`, `VueltaAlLobby`, `DemoInventorySeeder`, `BattleTester`, `StoryModel`, `InteractableTrigger`, `MonoBehaviour`, `SalidaDelNivel`, `.MakeBattleDeLectura`, `BlackjackSmokeTest`, `CreacionPersonajeView`, `PeleaJulieta`, `BlackjackOutcome`, `CasinoSmokeTest`, `PauseMenuView`, `PokeApiImporterWindow`, `DialogueController`, `CasinoElevatorInteractable`, `InventoryModel`, `CasinoSmokeTests`, `.HasFlag`, `CasinoJefeFinalNpc`, `.Refrescar`, `.Open`, `PokenStorageModel`, `LobbySmokeTests`, `RouletteSmokeTest`, `HealItemDefinition`, `PcStorageScreen`, `PokenModel`, `PauseMenuScreen`, `PeleaJulietaPlayTest`, `NPCDefinition`, `com.unity.modules.cloth`, `BlackjackOutcome`, `CreditosFinales`, `MoveRowWidget`, `QuarchoNestorNpc`?**
+  _High betweenness centrality (0.070) - this node is a cross-community bridge._
+- **Why does `BlackjackScreen` connect `BlackjackScreen` to `BattlePokenState`, `PcStorageScreen`, `SlotsScreen`, `BlackjackTableBuilder`, `PauseMenuScreen`, `.LoadPoken`, `SlotMachineDefinition`, `BlackjackSmokeTest`, `BlackjackCard`, `.JugarPartida`?**
+  _High betweenness centrality (0.061) - this node is a cross-community bridge._
 - **What connects `Clase`, `Grupo`, `Mecanica` to the rest of the system?**
-  _679 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _680 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `RouletteScreen` be split into smaller, more focused modules?**
-  _Cohesion score 0.08907563025210084 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.080338266384778 - nodes in this community are weakly interconnected._
 - **Should `TutorialSmokeTests` be split into smaller, more focused modules?**
   _Cohesion score 0.1184939091915836 - nodes in this community are weakly interconnected._
 - **Should `PokeRushSmokeTests` be split into smaller, more focused modules?**
-  _Cohesion score 0.10305250305250305 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10959636460839348 - nodes in this community are weakly interconnected._

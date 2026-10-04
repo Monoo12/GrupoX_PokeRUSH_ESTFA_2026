@@ -64,7 +64,8 @@ public enum AccionDeJulieta
     MostrarVidaDelPJ,          // parametro 1 = mostrar, 0 = esconder
     PerfilDeIA,                // parametro 0 = el de estudiar, 1 = el de pelear en serio
     SenalDeControl,            // parametro 1 = prende la señal de "Julieta controla", 0 = la apaga
-    Destello                   // golpe visual (glitch) sin tocar reglas
+    Destello,                  // golpe visual (glitch) sin tocar reglas
+    RomperServidor             // el PJ destruye el nucleo: el servidor se apaga y la sala queda a oscuras
 }
 
 public enum HablanteDeJulieta
@@ -72,7 +73,8 @@ public enum HablanteDeJulieta
     Julieta,
     PJ,       // el nombre lo pone la partida
     Nestor,
-    Sistema   // sin cartel de nombre: los avisos del NeuraRush-LINK
+    Sistema,  // sin cartel de nombre: los avisos del NeuraRush-LINK y lo que se narra
+    Tixi      // por el transmisor que le dio al PJ en la cueva
 }
 
 [System.Serializable]
@@ -87,6 +89,9 @@ public class LineaDeJulieta
     [Tooltip("Opcional: otra cara para ESTA linea (Nestor asustado, por ejemplo). " +
              "Vacio = el retrato del hablante.")]
     public Sprite retrato;
+
+    [Tooltip("Opcional: suena apenas aparece la linea (una alarma, el nucleo que explota).")]
+    public AudioClip sonido;
 
     [Tooltip("Que le pasa al combate apenas se cierra esta linea.")]
     public AccionDeJulieta accion;
@@ -130,23 +135,29 @@ public class MomentoDeJulieta
     public LineaDeJulieta[] lineas = new LineaDeJulieta[0];
 }
 
-// El guion entero de la pelea: lo que dice antes, durante y despues.
+// El guion entero de la pelea: lo que dice antes, durante y despues, y el
+// cierre del juego (epilogo, la charla final en la cueva y la ultima conexion).
 [CreateAssetMenu(fileName = "GuionDeJulieta", menuName = "PokeRush/Julieta/Guion de la pelea")]
 public class GuionDeJulieta : ScriptableObject
 {
     [Header("Nombres en la caja de dialogo")]
     public string nombreJulieta = "JULIETA";
     public string nombreNestor = "NÉSTOR";
+    public string nombreTixi = "TIXI";
 
     [Header("Retratos (opcionales)")]
     public Sprite retratoJulieta;
     public Sprite retratoNestor;
+    public Sprite retratoTixi;
     [Tooltip("Retrato del PJ segun el genero elegido. Vacio = caja sin cara.")]
     public Sprite retratoPJVaron;
     public Sprite retratoPJMujer;
 
     [Header("En la arena, antes de pelear")]
     public LineaDeJulieta[] alEncontrarla = new LineaDeJulieta[0];
+    [Tooltip("Las veces siguientes (despues de perder): la charla entera no se repite. " +
+             "Vacio = vuelve a decir 'alEncontrarla'.")]
+    public LineaDeJulieta[] alReintentar = new LineaDeJulieta[0];
 
     [Header("Durante la pelea (en orden: si dos se cumplen juntos, suena primero el de arriba)")]
     public MomentoDeJulieta[] momentos = new MomentoDeJulieta[0];
@@ -160,8 +171,22 @@ public class GuionDeJulieta : ScriptableObject
     [Header("Si se vuelve a hablarle despues de ganarle (sin ir a los creditos)")]
     public LineaDeJulieta[] yaVencida = new LineaDeJulieta[0];
 
-    [Header("Epilogo: texto sobre negro entre el fundido y los creditos")]
+    // Lo que sigue lo cuenta EscenaFinalEnLaCueva, en la Quarcho Cueva, entre
+    // el fundido de la arena y los creditos (ver FinalDelJuego).
+
+    [Header("El cierre (despues de la arena)")]
+    [Tooltip("La letra del epilogo y de la ultima conexion. Vacio = la de Unity.")]
+    public Font fuente;
+
+    [Header("Epilogo: texto sobre negro, antes de volver a la cueva")]
     [Tooltip("Una linea por pantalla, con {PJ} para el nombre del jugador. Vacio = " +
-             "despues de la arena van directo los creditos. Lo muestra CreditosFinales.")]
+             "se saltea.")]
     [TextArea(2, 4)] public string[] epilogo = new string[0];
+
+    [Header("La vuelta a la Quarcho Cueva")]
+    [Tooltip("La charla final con Tixi. Vacio = de la cueva se pasa directo a la ultima conexion.")]
+    public DialogueDefinition enLaCueva;
+    [Tooltip("Lo ultimo que aparece en una pantalla de la cueva, linea por linea, " +
+             "mientras la camara se aleja. Vacio = de la charla se va a los creditos.")]
+    [TextArea(1, 2)] public string[] ultimaConexion = new string[0];
 }

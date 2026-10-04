@@ -243,6 +243,7 @@ namespace PokeRush.EditorTools
             Check(D("Historia/Camino/Camino_CruzAtacar")?.otorgaObjeto == HistoriaAssets.Objeto("RaspberryPy"), "Objetos: la RaspBerry sale de patear al Arturito");
             Check(D("Torre1/Dialogos/DC_Nestor_Despues_Protocolo")?.otorgaObjeto == HistoriaAssets.Objeto("ProtocoloNestor"), "Objetos: Nestor da el Protocolo");
             Check(D("Casino/Dialogos/Casino_Tacconi_DespuesDeGanar")?.otorgaObjeto == HistoriaAssets.Objeto("TarjetaPiso4"), "Objetos: Tacconi da la tarjeta del piso 4");
+            Check(D("Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino")?.otorgaObjeto == HistoriaAssets.Objeto("Transmisor"), "Objetos: Tixi da el transmisor al volver del casino");
 
             var cruz = D("Historia/Camino/Camino_Inicio");
             Check(cruz != null && cruz.cancelarElige >= 0 && cruz.respuestas[cruz.cancelarElige].opcion == "Huir",
@@ -312,12 +313,13 @@ namespace PokeRush.EditorTools
 
             Check(Dice(D("Casino/Dialogos/Historia_PisoFinal_GuardiaPasillo1"), Partida(StoryFlag.Historia_Casino_MujerHablo), "tragamonedas"),
                   "Casino: un guardia del ultimo piso sabe que la mujer aviso");
-            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Antes_Tacconi"), Partida(StoryFlag.Historia_TacconiRevelo), "Tacconi"),
-                  "Casino: Martin sabe que Tacconi hablo de mas");
+            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Antes"), Partida(), "participé en tu preparación"),
+                  "Casino: Reymar participo en la preparacion del PJ (historia.pdf)");
             Check(Dice(D("Casino/Dialogos/Casino_Tacconi_DespuesDeGanar"), Partida(), "desarrollo"),
                   "Casino: Tacconi dice que eras parte del desarrollo");
-            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Despues"), Partida(), "BUSCANDO: {PJ}"),
-                  "Casino: en el ultimo piso se busca el nombre del PJ");
+            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Despues"), Partida(), "ACCESO DENEGADO") &&
+                  Dice(D("Casino/Dialogos/Casino_Reymar_Despues"), Partida(), "SERVIDORES RESTANTES: 01"),
+                  "Casino: Julieta cambio los permisos y queda un servidor");
         }
 
         private static void TestVueltasDeTixi()
@@ -342,6 +344,10 @@ namespace PokeRush.EditorTools
                 Check(tixi.VueltaQueToca(Partida(StoryFlag.Lobby_TixiPresentado, StoryFlag.Torre1_NestorLiberado,
                           StoryFlag.Historia_TixiVueltaDelDataCenter, StoryFlag.Casino_Completado))?.name == "Lobby_Tixi_VueltaDelCasino",
                       "Tixi: al volver del casino cuenta lo del casino");
+                var vueltaDelCasino = D("Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino");
+                Check(Dice(vueltaDelCasino, Partida(StoryFlag.Casino_Completado), "sede central de la Liga") &&
+                      Dice(vueltaDelCasino?.siguiente, Partida(StoryFlag.Casino_Completado), "qué pasó realmente en 2026"),
+                      "Tixi: al volver del casino manda a la sede de la Liga y pide preguntarle a Julieta por 2026");
 
                 var memo = D("Lobby/Dialogos/Lobby_Tixi_VueltaDelDataCenter_Memo");
                 Check(memo != null && !memo.TieneQueDecir(Partida()) && memo.TieneQueDecir(Partida(StoryFlag.Historia_DC_MemoLeido)),

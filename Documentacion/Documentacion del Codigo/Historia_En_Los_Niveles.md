@@ -4,13 +4,13 @@ Cómo está contada la historia de PokeRush dentro de cada nivel jugable: qué p
 en cada lugar, quién dice qué, qué cambia según lo que hizo el jugador y dónde se
 edita cada texto.
 
-**Fuente canónica:** `historia.pdf` (el guion del 28-sep-2026: el acto I en 2026,
-el acto II en 2031, la habitación, la Quarcho Cueva, el Data Center de Néstor y el
-casino hasta el ascensor al piso 4). Lo que el PDF dice está implementado casi
-textual (pasado a voseo, como el resto del juego). Lo que el PDF no cubre (los
-NPCs secundarios, el piso 4 del casino, la vuelta a la cueva después del casino)
-se escribió para que encaje con él y con la pelea final contra Julieta
-(`Jefe_Final_Julieta.md`), sin adelantar lo que la historia guarda para el final.
+**Fuente canónica:** `historia.pdf`. La versión del 28-sep-2026 llegaba hasta el
+ascensor al piso 4 del casino; la del **4-oct-2026** completa la historia: el
+laboratorio de Reymar, la vuelta a la cueva, la sede de la Liga, la pelea contra
+Julieta, el epílogo y la última escena en la cueva. Lo que el PDF dice está
+implementado casi textual (pasado a voseo, como el resto del juego). Lo que el PDF
+no cubre (los NPCs secundarios, lo que pasa **adentro** de la pelea final) se
+escribió para que encaje con él (`Jefe_Final_Julieta.md`).
 
 ---
 
@@ -28,8 +28,11 @@ se escribió para que encaje con él y con la pelea final contra Julieta
 | Casino piso 1 | `Casino Nivel 1` | La **mujer que perdió cinco años** (el PDF) y el ambiente: el anciano del aro dorado sobre el Ameghino, el turista que cree que sigue siendo 2026, el chip que hace "clin" cuando perdés, las máquinas que de noche dicen SINCRONIZANDO. |
 | Casino piso 2 | `Casino Nivel 2` | El **croupier** de la primera mesa (el PDF: "¿Número?", la tarjeta, Tacconi). Después, el **jugador** que cuenta que Tacconi estaba en el Ameghino. La **secretaria** reconoce a su hermano si hablaste con el técnico del Data Center. |
 | Casino piso 3 | `Casino nivel 3` | **Tacconi** (el PDF): "¿Te acordás de 2026?", los tres grupos afectados, "vos no aparecés en ninguno". La mano de blackjack por su shiny y la **Tarjeta de acceso P4**. Al ganar: "eras parte del desarrollo", "buscá tu propio nombre", el ascensor al piso 4. |
-| Casino piso 4 | `Casino piso FINAL` | Los guardias (cada uno distinto: la Directora que mira por sus ojos, el zumbido detrás de la pared...). **Reymar** antes ("la casa no juega, calcula") y después: el chip se apaga, se vuelve **Martín**, deja la ruleta y el jugador busca su nombre en el servidor: *EQUIPO DE DESARROLLO: {PJ} (NO VOLUNTARIO). APORTE: MÓDULO DE PROPAGACIÓN.* |
-| Vuelta 2 | `Quarcho-Cueva` | Tixi: SERVIDOR 02 OFFLINE, "vamos a necesitar más sillas". Si Tacconi te lo contó, le preguntás si sabía — y esquiva. Los dos servidores que quedan mandan todo a un tercer punto: **el servidor central**. Llega un mensaje: `print("Buen trabajo. Te espero. -J.")`. Recién ahora están en la cueva **Néstor**, **Martín** y **Tacconi**. |
+| Casino piso 4 | `Casino piso FINAL` | Los guardias (cada uno distinto: la Directora que mira por sus ojos, el zumbido detrás de la pared...). **Reymar** antes (el PDF: el laboratorio que el casino tapa, "participé en tu preparación", el LINK que leía tu cerebro sin destruirlo, "el sistema todavía me reconoce como administrador") y después (el PDF: "¿qué año es?", el laboratorio construido antes que el casino, **ACCESO DENEGADO** porque Julieta cambió los permisos, el PJ destruye el núcleo, **SERVIDORES RESTANTES: 01**). Al final deja la ruleta y va a buscar a Tixi. |
+| Vuelta 2 | `Quarcho-Cueva` | Tixi (el PDF): "¿Reymar?", desconectar devuelve los recuerdos, los datos del PJ que no se pudieron ver, **queda uno: la sede central de la Liga, en el Ameghino**, conectado directo con el sistema principal. Le da el **Transmisor** ("voy a intentar abrirte el acceso") y le pide que le pregunte a Julieta qué pasó realmente en 2026. Recién ahora están en la cueva **Néstor**, **Martín** y **Tacconi**. |
+| La sede | `BossFinal` | La arena de Santiago. Tres momentos al pisar (`ZonaDeHistoria`): la llegada al Ameghino remodelado ("Tanto tiempo..."), la **alarma** al entrar (INTRUSO DETECTADO, pulsos rojos) y la puerta del servidor principal (ACCESO EXCLUSIVO: JULIETA). |
+| Julieta | `BossFinal` | La charla del PDF antes de pelear ("De la misma forma que siempre. Peleando."), la pelea por fases, y después el final entero del PDF: para qué era el LINK, "te estudiamos", Tixi intentó detenerlos, el PJ destruye el servidor, **se apagan las luces**, el chip de Julieta se apaga ("Estoy sola en mi propia cabeza"). Ver `Jefe_Final_Julieta.md`. |
+| El final | `Quarcho-Cueva` | El **epílogo** sobre negro (la radio, la gente recordando, "el mundo vuelve a escuchar su propio silencio"), la última charla con Tixi ("Que vos estabas ahí", "Podemos decidir nosotros", "Por 2026") y la **última conexión** en una pantalla: *NOMBRE EN CLAVE: VENTRESCA AI*. Después, los créditos. |
 
 ---
 
@@ -162,7 +165,7 @@ luces. Al final se recibe el **Protocolo Néstor**.
 | hablaste con el técnico | la secretaria del piso 2 del casino te reconoce el "olor a data center" y se acuerda de su hermano |
 | hablaste con la mujer de las tragamonedas | un guardia del piso 4 sabe que ella avisó |
 | hablaste con el croupier | recién ahí el jugador de la ruleta te cuenta lo de Tacconi |
-| Tacconi te contó lo del registro | un guardia del piso 4 duda de que Tacconi haya perdido de verdad, Reymar lo menciona y Tixi esquiva la pregunta |
+| Tacconi te contó lo del registro | un guardia del piso 4 duda de que Tacconi haya perdido de verdad |
 | cayó el servidor 01 | todos en el Data Center dicen otra cosa y la terminal cambia |
 | ganaste el casino | Martín y Tacconi llegan a la cueva, y Néstor también ("te dije que te iba a buscar") |
 
@@ -170,10 +173,14 @@ luces. Al final se recibe el **Protocolo Néstor**.
 
 Lo que se siembra y lo que **no** se dice todavía:
 
-- **El virus del PJ.** El diario (el plan de la graduación), el PC (`virus_ameghino`
-  vacío, abierto después que vos), Tacconi ("eras parte del desarrollo") y el
-  registro del piso 4 ("MÓDULO DE PROPAGACIÓN", "NO VOLUNTARIO"). Nadie dice qué
-  hizo Julieta con él: eso lo revela la pelea final.
+- **El virus del PJ.** El diario (el plan de la graduación) y el PC (`virus_ameghino`
+  vacío, abierto después que vos). El PDF no lo vuelve a tocar: queda como la razón
+  por la que el PJ estaba escondido en la oficina en 2026.
+- **Qué le hicieron al PJ.** Tacconi ("eras parte del desarrollo"), Reymar
+  ("participé en tu preparación", "eras el único caso que no necesitaba las
+  modificaciones") y Julieta al final ("te estudiamos"). Lo que pasó en "aquella
+  sala" queda abierto a propósito: el juego termina con "¿Por dónde empezamos?
+  Por 2026."
 - **El PJ fuera de los registros.** La zona de las pantallas, el memo de J., la
   foto pixelada, Tacconi ("no aparecés en ninguno"), el registro con el estado
   "[DATO ELIMINADO POR LA ADMINISTRADORA]".
@@ -182,10 +189,11 @@ Lo que se siembra y lo que **no** se dice todavía:
   pierde lo aprendido, Néstor.
 - **Mewtwo y Hoopa.** Solo como sombras: el aro dorado sobre el Ameghino (el
   anciano, Martín), el Mew de Tacconi que apareció el día del portal.
-- **Tixi sabe más de lo que dice.** "Tixi sabe muchas cosas" (Tacconi) y su
-  respuesta esquiva al volver del casino.
-- **Julieta** casi no aparece: la sonrisa congelada en la tele, "la Directora" en
-  boca de otros, la firma "J." y un `print()` al final del casino.
+- **Tixi sabe más de lo que dice.** "Tixi sabe muchas cosas" (Tacconi), "hay
+  demasiadas cosas que no encajan" al volver del casino, y al final Julieta: "intentó
+  detenernos antes del accidente". El PJ lo recuerda en la última escena.
+- **Julieta** casi no aparece hasta la sede: la sonrisa congelada en la tele, "la
+  Directora" en boca de otros, la firma "J." y los permisos cambiados en el casino.
 
 ---
 
@@ -206,15 +214,25 @@ Lo que se siembra y lo que **no** se dice todavía:
 - **La tarjeta del piso 4**: Tacconi la da junto con su shiny. El ascensor sigue
   pidiendo el shiny (no se tocó la mecánica); los textos hablan de la tarjeta.
 - **Los nombres de los niveles** en la salida de la cueva ya no adelantan nada: "el
-  primer Data Center", "el casino", "el servidor central".
-- **Lo que sigue al casino**: los dos servidores que quedan apuntan a un servidor
-  central que no estaba en el mapa. Los servidores 03 y 04 siguen existiendo (si el
-  equipo los hace niveles, no hay que cambiar nada de lo dicho).
+  primer Data Center", "el casino", "la sede central de la Liga".
+- **Cuántos servidores hay.** Tixi dice "cuatro" al principio (el PDF) y después
+  del casino el PDF dice "SERVIDORES RESTANTES: 01" y "queda uno". Se dejó como
+  está en el PDF; si el equipo lo unifica, son las líneas de `Lobby_Tixi_Lore` y
+  de `Casino_Reymar_Despues`.
+- **Reymar en el casino.** El PDF pone el piso 4 como un laboratorio vacío; la
+  escena es un piso del casino con guardias y la mesa de Reymar. La narración dice
+  que el laboratorio está **detrás de un vidrio**, atrás de la mesa ("lo que el
+  casino tapa"), y no nombra la bata (el arte de Reymar es de traje y sombrero).
+  "¿Qué mierda...?" quedó "¿Qué es esto...?". Se le agregaron tres líneas al final
+  que el PDF no tiene: deja la ruleta (la usa la pelea de Julieta) y el PJ lo manda
+  con Tixi (por eso aparece en la cueva).
+- **El transmisor es un objeto clave** (`Transmisor`), y es lo que abre la ruptura
+  de la pelea final: Tixi entra a la red por ahí.
 - **Voces**: el PJ con humor seco y momentos de "no entiendo nada"; Tixi técnica y
   breve (y sin género gramatical, porque el PDF usa los dos); Néstor frío y con
   fallas antes, confundido y cálido después ("Ante todo, buenos días"); Tacconi
-  siempre "llegaste tarde"; Reymar en el casino (el dueño) y Martín cuando se le
-  apaga el chip.
+  siempre "llegaste tarde"; Reymar seco y técnico (el PDF), también después de
+  desconectarse.
 
 ---
 
@@ -227,7 +245,9 @@ Lo que se siembra y lo que **no** se dice todavía:
 | Cueva | `Resources/Definitions/Lobby/Dialogos/Lobby_*` |
 | Data Center | `Resources/Definitions/Torre1/Dialogos/DC_*` (posiciones: tablas de `HistoriaDataCenterBuilder`) |
 | Casino | `Resources/Definitions/Casino/Dialogos/` (`Casino_*`, `Historia_*`, `Jugador*`) |
-| Objetos clave | `Resources/Definitions/Items/` (`CartaAnonima`, `RaspberryPy`, `ProtocoloNestor`, `TarjetaPiso4`) |
+| La sede y el final en la cueva | `Resources/Definitions/Julieta/Dialogos/` (`Final_Sede_*`, `Final_Tixi_EnLaCueva`) |
+| Julieta, el epílogo y la última conexión | `Resources/Definitions/Julieta/GuionDeJulieta.asset` (se rehace desde `PeleaJulietaAssets.cs`) |
+| Objetos clave | `Resources/Definitions/Items/` (`CartaAnonima`, `RaspberryPy`, `ProtocoloNestor`, `TarjetaPiso4`, `Transmisor`) |
 
 Para que un NPC nuevo reaccione a algo: una **variante** en su asset con el flag
 que corresponda. Si hace falta un flag nuevo, va **al final** de `StoryFlag` (las
@@ -241,8 +261,8 @@ escenas guardan los flags como número). Los de la historia empiezan en
 | Menú | Qué hace |
 |---|---|
 | `PokeRush > Historia > Poblar el Data Center de Nestor` | Arma lo de arriba en `NestorGOD2`. |
-| `PokeRush > Historia > Poner iconos a los objetos de la historia` | Pone los iconos del pack a los cuatro objetos clave. |
-| `PokeRush > Historia > Correr smoke tests de la historia` | 115 checks (al 1-oct-2026), `[SmokeHistoria]`: el sistema de diálogos nuevo, que los assets estén sanos (largo de líneas, cadenas, respuestas), la continuidad y que las escenas tengan enganchado lo suyo (leyendo el `.unity`, sin abrirlo). |
+| `PokeRush > Historia > Poner iconos a los objetos de la historia` | Pone los iconos del pack a los cinco objetos clave. |
+| `PokeRush > Historia > Correr smoke tests de la historia` | 122 checks (al 4-oct-2026), `[SmokeHistoria]`: el sistema de diálogos nuevo, que los assets estén sanos (largo de líneas, cadenas, respuestas), la continuidad y que las escenas tengan enganchado lo suyo (leyendo el `.unity`, sin abrirlo). |
 | `PokeRush > Historia > Probar el Data Center en Play` | 41 checks, `[PlayHistoria]`: habla con todos, pisa las zonas, Néstor antes y después, el apagón, el Protocolo, todos cambian, la salida y la vuelta de Tixi. Capturas en `Capturas/Historia/`. No guarda. |
 
 `Probar la cueva en Play` (33) y `Probar el tutorial en Play` (61) también recorren
@@ -255,5 +275,5 @@ lo nuevo: las vueltas de Tixi, la carta, la puerta y el camino con Cruz.
 >
 > Los PNG del pack que usan los NPCs nuevos (`Graphics/Characters`: asistenta,
 > operaria, operario, chaval1, cerebrito, cientifica, `Followers/PORYGON`; `Graphics/Trainers/CIENTIFICA`;
-> `Graphics/Items`: AIRMAIL, UPGRADE, DUBIOUSDISC, REDCARD) están en `.gitignore`:
+> `Graphics/Items`: AIRMAIL, UPGRADE, DUBIOUSDISC, REDCARD, DEVONSCOPE) están en `.gitignore`:
 > se suben con `git add -f` junto con su `.meta`.

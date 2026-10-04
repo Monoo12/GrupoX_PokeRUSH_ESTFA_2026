@@ -30,7 +30,8 @@ public static class PreparacionDeRelease
     private const string Logo = "Assets/Sprites/Logos/LevelUpCreators.png";
 
     // El recorrido de la historia, en orden. El indice 0 es el que abre el juego.
-    // BossFinal entra cuando exista (la arena de Santiago): ver Jefe_Final_Julieta.md.
+    // BossFinal es la arena de Santiago con la pelea contra Julieta (ver
+    // Jefe_Final_Julieta.md); una escena que no exista se saltea sola.
     public static readonly string[] Escenas =
     {
         "Assets/Scenes/Menu Principal.unity",

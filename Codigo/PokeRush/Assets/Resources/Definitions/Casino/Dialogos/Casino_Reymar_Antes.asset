@@ -12,22 +12,111 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Casino_Reymar_Antes
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: "REYMAR"
+  speakerName: REYMAR
   speakerPortrait: {fileID: 21300000, guid: 97358298e5121c8408cf32d53e1270c9, type: 3}
   lines:
-  - "[] Detr\xE1s de la mesa, sentado como si fuera parte del mueble, hay un hombre repartiendo cartas para nadie."
-  - "[REYMAR] Pas\xE1. Este es el piso 4. El que no existe."
-  - "[REYMAR] Soy Mart\xEDn Reymar, el due\xF1o de este casino. O eso dice el cartel de la puerta."
-  - "[PJ] Vengo por el servidor."
-  - "[REYMAR] Todos vienen por algo. La mayor\xEDa, por plata. Vos ven\xEDs por lo \xFAnico que no est\xE1 en juego."
-  - "[REYMAR] \xBFSab\xE9s por qu\xE9 la casa siempre gana? Porque la casa no juega. La casa calcula."
-  - "[REYMAR] Yo solo giro la rueda. Los n\xFAmeros los pone alguien m\xE1s arriba. Mucho m\xE1s arriba."
+  - "[] Detr\xE1s de la mesa hay un hombre sentado que no juega."
+  - "[] Atr\xE1s suyo, detr\xE1s de un vidrio, est\xE1 lo que el casino tapa: un
+    laboratorio."
+  - "[] Tubos de ensayo, computadoras, muestras biol\xF3gicas y grandes tanques transparentes."
+  - "[] En las paredes todav\xEDa pueden verse algunos logos antiguos del Ameghino."
+  - "[PJ] \xBFQu\xE9 es esto...?"
+  - "[] Dentro de uno de los tanques hay un l\xEDquido extra\xF1o conectado a varios
+    cables."
+  - "[PJ] \xBFReymar?"
+  - '[] Reymar se quita los guantes.'
+  - "[PJ] \xBFTrabajabas en el Ameghino?"
+  - "[REYMAR] S\xED."
+  - "[PJ] \xBFEn 2026?"
+  - "[REYMAR] S\xED."
+  - "[PJ] \xBFY eras parte del proyecto?"
+  - '[REYMAR] Finalmente llegamos a la pregunta interesante.'
+  - "[PJ] Entonces s\xED."
+  - '[] Las puertas del ascensor se cierran.'
+  - "[REYMAR] Ahora s\xED tenemos tiempo."
+  - '[PJ] Entonces vamos directo al combate.'
+  - "[REYMAR] No tan r\xE1pido. Antes de pelear, quiero comprobar algo."
+  - "[PJ] \xBFQu\xE9?"
+  - "[REYMAR] Tu nuca... No ten\xE9s cicatriz."
+  - "[PJ] \xBFY?"
+  - '[REYMAR] Todos los que sobrevivieron al primer contacto tienen una.'
+  - "[PJ] Yo no soy como los dem\xE1s."
+  - "[REYMAR] Eso ya lo s\xE9."
+  - "[PJ] \xBFPor qu\xE9?"
+  - "[REYMAR] Porque yo particip\xE9 en tu preparaci\xF3n."
+  - "[PJ] \xBFEn mi qu\xE9?"
+  - '[] Reymar guarda silencio.'
+  - "[PJ] Repet\xED eso."
+  - "[REYMAR] Dije que particip\xE9 en tu preparaci\xF3n."
+  - "[PJ] \xBFQu\xE9 preparaci\xF3n?"
+  - "[REYMAR] Antes de 2026, el NeuraRush-LINK todav\xEDa ten\xEDa un problema."
+  - "[PJ] \xBFCu\xE1l?"
+  - '[REYMAR] El cerebro humano no soportaba la transferencia.'
+  - "[PJ] \xBFY?"
+  - "[REYMAR] Los primeros sujetos sufr\xEDan da\xF1os neurol\xF3gicos."
+  - "[PJ] \xBFSujetos?"
+  - '[REYMAR] Voluntarios.'
+  - "[PJ] \xBFVoluntarios?"
+  - '[REYMAR] ...'
+  - "[PJ] No parec\xE9s muy convencido."
+  - "[REYMAR] Porque algunos dejaron de ser voluntarios despu\xE9s de conectarse."
+  - "[PJ] \xBFQu\xE9 les hicieron?"
+  - '[REYMAR] Intentamos estabilizar el proceso.'
+  - "[PJ] \xBFC\xF3mo?"
+  - "[REYMAR] Mediante modificaciones bioqu\xEDmicas."
+  - "[PJ] \xBFEn humanos?"
+  - '[REYMAR] ...'
+  - '[PJ] Reymar.'
+  - "[REYMAR] S\xED."
+  - "[] Te qued\xE1s en silencio."
+  - "[PJ] \xBFYo fui uno de esos?"
+  - '[REYMAR] No.'
+  - "[PJ] \xBFEntonces qu\xE9 hice?"
+  - '[REYMAR] Vos eras diferente.'
+  - '[PJ] Todos me dicen eso.'
+  - "[REYMAR] Porque nadie entiende por qu\xE9 funcionaste."
+  - "[PJ] \xBFFuncion\xE9?"
+  - "[REYMAR] El NeuraRush-LINK pod\xEDa leer tu actividad cerebral sin destruirla."
+  - '[PJ] Entonces...'
+  - "[REYMAR] Eras el \xFAnico caso que no necesitaba las modificaciones."
+  - "[PJ] \xBFY por qu\xE9?"
+  - '[REYMAR] Nunca lo descubrimos.'
+  - "[PJ] \xBFJulieta lo sab\xEDa?"
+  - "[REYMAR] S\xED."
+  - "[PJ] \xBFY por eso me dej\xF3 vivo?"
+  - '[REYMAR] No.'
+  - "[PJ] \xBFEntonces?"
+  - "[REYMAR] Porque quer\xEDa repetir el experimento."
+  - "[PJ] \xBFY qu\xE9 tiene que ver el servidor?"
+  - '[REYMAR] El servidor guarda los datos de todos los experimentos.'
+  - "[PJ] Entonces ah\xED est\xE1 mi informaci\xF3n."
+  - '[REYMAR] Toda.'
+  - '[PJ] Entonces voy a entrar.'
+  - '[REYMAR] No.'
+  - "[PJ] \xBFPor qu\xE9?"
+  - "[REYMAR] Porque si destru\xEDs este servidor..."
+  - '[] Reymar mira las pantallas.'
+  - '[REYMAR] ...todos esos datos van a desaparecer.'
+  - "[PJ] \xBFY eso ser\xEDa malo?"
+  - "[REYMAR] Para vos, s\xED."
+  - "[PJ] \xBFPor qu\xE9?"
+  - "[REYMAR] Porque probablemente sea la \xFAnica forma de descubrir qu\xE9 te hicieron."
+  - '[] Silencio.'
+  - '[PJ] Entonces dejame pasar.'
+  - '[REYMAR] No puedo.'
+  - "[PJ] \xBFNo quer\xE9s?"
+  - '[REYMAR] No puedo.'
+  - "[PJ] \xBFPor qu\xE9?"
+  - "[REYMAR] Porque el sistema todav\xEDa me reconoce como uno de sus administradores."
+  - '[] Reymar te muestra su nuca. Su NeuraRush-LINK comienza a iluminarse.'
+  - '[REYMAR] Y mientras siga conectado... tengo que protegerlo.'
+  - "[PJ] Entonces supongo que vamos a tener que arreglarlo a las pi\xF1as..."
   requiredFlag: 0
   grantsFlag: 85
   otrosHablantes: []
   variantes: []
   otorgaObjeto: {fileID: 0}
-  pregunta: ""
+  pregunta: 
   respuestas: []
   cancelarElige: -1
-  siguiente: {fileID: 11400000, guid: bd77546ed3cea1137b9c247e1208c2f5, type: 2}
+  siguiente: {fileID: 0}

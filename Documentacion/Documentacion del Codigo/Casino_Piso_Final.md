@@ -235,9 +235,10 @@ fuera del editor parece congelado. Se destraba poniendo
 
 1. ~~Los textos de los seis guardias son de relleno.~~ Desde el 28-sep-2026 cada
    guardia dice algo distinto de la historia, y el jefe tiene `dialogoAntes`
-   (`Casino_Reymar_Antes`, la primera vez) y `dialogoDespues` (`Casino_Reymar_Despues`:
-   se le apaga el chip, deja la ruleta y el jugador busca su nombre en el servidor).
-   Ver `Historia_En_Los_Niveles.md`.
+   (`Casino_Reymar_Antes`, la primera vez) y `dialogoDespues` (`Casino_Reymar_Despues`).
+   Desde el 4-oct-2026 los dos son los de `historia.pdf`: el laboratorio que el
+   casino tapa, "participé en tu preparación", el acceso denegado y el núcleo
+   destruido. Ver `Historia_En_Los_Niveles.md`.
 2. **Los iconos de la ruleta son items del pack** (Ataque X, orbe tóxico, cola
    lenta, placa en blanco, monedero). Se leen, pero no son arte propio.
 3. **El ascensor no tiene puertas dibujadas.**

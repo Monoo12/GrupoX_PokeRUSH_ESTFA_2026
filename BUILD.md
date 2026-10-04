@@ -87,7 +87,7 @@ El proyecto de Unity está en la subcarpeta **`Codigo/PokeRush`**.
 | 7 | `Assets/Scenes/Casino Nivel 2.unity` | Casino, piso 2 |
 | 8 | `Assets/Scenes/Casino nivel 3.unity` | Casino, piso 3 |
 | 9 | `Assets/Scenes/Casino piso FINAL.unity` | Casino, piso final (jefe Reymar) |
-| 10 | `Assets/Scenes/BossFinal.unity` | Arena de Julieta (**cuando exista**) |
+| 10 | `Assets/Scenes/BossFinal.unity` | Arena de Julieta (la de Santiago, con la pelea) |
 | 11 | `Assets/Scenes/CreditosFinales.unity` | Créditos |
 
 **No hace falta cargarlas a mano**: el menú **PokeRush → Release → Aplicar
@@ -165,7 +165,7 @@ se sube al repo.
 |---|---|
 | **Errores `SQLite` / `sqlite-net` no encontrado** al abrir | El paquete se baja de GitHub con git. Instalar Git, verificar `git --version`, cerrar Unity Hub y Unity, borrar `Codigo/PokeRush/Library/PackageCache` y volver a abrir. |
 | **Sprites o personajes invisibles** (rosados o vacíos) | Falta un PNG del pack `Assets/Graphics` que nadie subió con `git add -f`. Ver la regla en el README (sección Git) y avisar a quien lo agregó. |
-| La build dice *"Scene ... couldn't be loaded"* o la salida de la cueva dice que el jefe no está | La escena no está en la lista. Correr *Aplicar configuracion de release*. Si es `BossFinal`, todavía no existe (ver README → Problemas conocidos). |
+| La build dice *"Scene ... couldn't be loaded"* o la salida de la cueva dice que el jefe no está | La escena no está en la lista. Correr *Aplicar configuracion de release*. |
 | *"Build completed with a result of 'Failed'"* sin más datos | Mirar la consola de Unity (o `build.log` en la opción C) y buscar la primera línea con `error`. Casi siempre es un error de compilación de un script que se editó. |
 | El batchmode termina enseguida con código 1 y un log cortado | El proyecto está abierto en el editor (Unity no deja abrirlo dos veces). Cerrar el editor. |
 | El juego arranca y **no suena nada** | Falta `Assets/Resources/Audio/CatalogoDeAudio.asset`: correr *PokeRush → Audio → Armar todo el audio*. |

@@ -12,33 +12,101 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Casino_Reymar_Despues
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: "MART\xCDN"
+  speakerName: REYMAR
   speakerPortrait: {fileID: 21300000, guid: 97358298e5121c8408cf32d53e1270c9, type: 3}
   lines:
-  - "[] Reymar suelta las cartas. El chip de su nuca chisporrotea."
-  - "[SISTEMA] CONEXI\xD3N PERDIDA. ERROR CR\xCDTICO. DESCONEXI\xD3N DEL USUARIO."
-  - "[MART\xCDN] ..."
-  - "[MART\xCDN] \xBFCu\xE1ntas manos jugu\xE9? ...No, no me contestes. Cinco a\xF1os. Perd\xED cinco a\xF1os sentado ac\xE1."
-  - "[MART\xCDN] Me acuerdo del d\xEDa de la onda. Estaba en la calle y vi un aro dorado, enorme, abierto arriba del Ameghino. Despu\xE9s, nada."
-  - "[MART\xCDN] La ruleta... llev\xE1tela. Si alguna vez fue m\xEDa, ahora es tuya."
-  - "[MART\xCDN] Cuando se me pase el mareo, voy a ir a buscar a ese tal Tixi. Dicen que ah\xED se juega limpio."
-  - "[] Detr\xE1s de la mesa, la pared se abre. Hay un rack solo, enorme, lleno de luces. El servidor."
-  - "[] Antes de que se apague, hac\xE9s lo que dijo Tacconi: busc\xE1s tu nombre."
-  - "[SISTEMA] BUSCANDO: {PJ}... 1 RESULTADO."
-  - "[SISTEMA] REGISTRO 2026. PRIMER EXPERIMENTO NEURARUSH-LINK. RESPONSABLE: J."
-  - "[SISTEMA] EQUIPO DE DESARROLLO: {PJ} (NO VOLUNTARIO). APORTE: M\xD3DULO DE PROPAGACI\xD3N."
-  - "[SISTEMA] ESTADO DEL SUJETO: [DATO ELIMINADO POR LA ADMINISTRADORA]."
-  - "[PJ] \xBF\"M\xF3dulo de propagaci\xF3n\"? \xBF\"No voluntario\"?"
-  - "[SISTEMA] SERVIDOR 02: DESCONEXI\xD3N INICIADA."
-  - "[] Las luces del rack se apagan de a una. Lo \xFAltimo que queda en la pantalla es una letra: J."
+  - "[] El \xFAltimo Pok\xE9mon de Reymar cae. Reymar intenta mantenerse de pie."
+  - '[REYMAR] No...'
+  - '[] Su NeuraRush-LINK comienza a emitir pulsos irregulares.'
+  - '[REYMAR] Otra vez...'
+  - "[PJ] \xBFQu\xE9 pasa?"
+  - '[REYMAR] No puedo...'
+  - '[] El dispositivo comienza a fallar.'
+  - "[SISTEMA] ERROR DE CONEXI\xD3N. USUARIO INESTABLE. DESCONEXI\xD3N INICIADA."
+  - '[] El chip se apaga. Reymar cae de rodillas.'
+  - '[PJ] Reymar.'
+  - '[REYMAR] ...'
+  - "[PJ] \xBFEst\xE1s bien?"
+  - "[REYMAR] \xBFQu\xE9... a\xF1o es?"
+  - '[PJ] 2031.'
+  - '[] Reymar abre los ojos.'
+  - "[REYMAR] Cinco a\xF1os..."
+  - "[PJ] S\xED."
+  - "[REYMAR] Pens\xE9 que hab\xEDan sido meses."
+  - "[PJ] \xBFQu\xE9 record\xE1s?"
+  - '[REYMAR] El laboratorio.'
+  - "[PJ] \xBFEl Ameghino?"
+  - "[REYMAR] S\xED."
+  - '[] Reymar mira alrededor.'
+  - '[REYMAR] Todo esto...'
+  - "[PJ] \xBFQu\xE9?"
+  - '[REYMAR] Lo construimos nosotros.'
+  - "[PJ] \xBFEl casino?"
+  - '[REYMAR] No. El laboratorio.'
+  - "[PJ] \xBFY el casino?"
+  - '[REYMAR] Lo construyeron encima.'
+  - "[PJ] \xBFPor qu\xE9?"
+  - '[REYMAR] Para esconderlo.'
+  - "[PJ] \xBFDe qui\xE9n?"
+  - '[REYMAR] De todos.'
+  - '[] Reymar se levanta lentamente.'
+  - "[REYMAR] Julieta sab\xEDa que si alguien encontraba los datos originales..."
+  - "[PJ] \xBFQu\xE9?"
+  - "[REYMAR] ...podr\xEDa reconstruir el NeuraRush-LINK."
+  - "[PJ] \xBFO destruirlo?"
+  - '[REYMAR] Las dos cosas.'
+  - "[PJ] Entonces ac\xE1 est\xE1n los datos."
+  - "[REYMAR] S\xED."
+  - "[PJ] \xBFY mis datos?"
+  - '[] Reymar mira al servidor central.'
+  - "[REYMAR] Ah\xED."
+  - '[PJ] Quiero verlos.'
+  - '[REYMAR] No creo que te guste lo que encuentres.'
+  - "[PJ] Despu\xE9s de todo lo que vi, ya me acostumbr\xE9."
+  - '[] Reymar camina hasta una computadora.'
+  - "[REYMAR] Esper\xE1."
+  - '[] Intenta acceder al sistema.'
+  - "[SISTEMA] IDENTIFICACI\xD3N REQUERIDA. ADMINISTRADOR REYMAR."
+  - '[SISTEMA] ACCESO DENEGADO.'
+  - "[REYMAR] \xBFQu\xE9?"
+  - "[PJ] \xBFQu\xE9 pasa?"
+  - '[REYMAR] Cambiaron los permisos.'
+  - "[PJ] \xBFQui\xE9n?"
+  - '[REYMAR] Julieta.'
+  - '[] Las luces del laboratorio comienzan a parpadear.'
+  - "[SISTEMA] INTRUSI\xD3N DETECTADA. PROTOCOLO DE CONTENCI\xD3N ACTIVADO."
+  - "[PJ] \xBFEso es malo?"
+  - '[REYMAR] Bastante.'
+  - "[PJ] \xBFPodemos apagarlo?"
+  - "[REYMAR] No desde ac\xE1."
+  - '[PJ] Entonces...'
+  - '[REYMAR] Hay que destruir el servidor.'
+  - "[PJ] Ahora s\xED estamos de acuerdo."
+  - "[] Te acerc\xE1s al n\xFAcleo del servidor."
+  - "[SISTEMA] ADVERTENCIA. LA ELIMINACI\xD3N DEL SERVIDOR PROVOCAR\xC1 LA P\xC9RDIDA
+    TOTAL DE LOS DATOS."
+  - '[PJ] Lo siento, Reymar.'
+  - '[REYMAR] No.'
+  - "[PJ] \xBFQu\xE9?"
+  - '[REYMAR] Hacelo.'
+  - "[] Destru\xEDs el n\xFAcleo. Todo el laboratorio comienza a apagarse."
+  - "[SISTEMA] SERVIDOR 02: DESCONEXI\xD3N. DATOS CORRUPTOS. CONEXI\xD3N CON LA RED
+    PRINCIPAL PERDIDA."
+  - '[] Las luces se apagan. Solo queda encendida una pantalla.'
+  - '[SISTEMA] SERVIDORES RESTANTES: 01'
+  - '[] La pantalla se apaga.'
+  - "[REYMAR] La ruleta de la mesa... llev\xE1tela. Si alguna vez fue m\xEDa, ahora
+    es tuya."
+  - "[PJ] And\xE1 a la Quarcho Cueva. Tixi te va a ayudar a ordenar lo que recuerdes."
+  - '[REYMAR] Cuando se me pase el mareo.'
+  - '[SISTEMA] OBJETIVO COMPLETADO: SEGUNDO SERVIDOR DESTRUIDO.'
+  - '[SISTEMA] NUEVO OBJETIVO: REGRESAR CON TIXI. SERVIDORES RESTANTES: 1.'
   requiredFlag: 0
   grantsFlag: 86
-  otrosHablantes:
-  - nombre: "REYMAR"
-    retrato: {fileID: 21300000, guid: 97358298e5121c8408cf32d53e1270c9, type: 3}
+  otrosHablantes: []
   variantes: []
   otorgaObjeto: {fileID: 0}
-  pregunta: ""
+  pregunta: 
   respuestas: []
   cancelarElige: -1
   siguiente: {fileID: 0}

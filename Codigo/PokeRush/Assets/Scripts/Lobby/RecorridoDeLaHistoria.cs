@@ -79,8 +79,9 @@ public static class RecorridoDeLaHistoria
         },
         new Nivel
         {
-            // La escena todavia no existe: la salida lo avisa en vez de romper.
-            Nombre = "el servidor central",
+            // La arena de Santiago, con la pelea contra Julieta adentro. Si no
+            // esta en Build Settings, la salida lo avisa en vez de romper.
+            Nombre = "la sede central de la Liga",
             EscenaDeEntrada = "BossFinal",
             Escenas = new[] { "BossFinal" },
             FlagCompletado = StoryFlag.None

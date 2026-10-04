@@ -16,6 +16,10 @@ using UnityEngine.Tilemaps;
 //       (JuliTile), Julieta al fondo, la zona que arranca la pelea y todo el
 //       rig (jugador, camara, combate, dialogo, GameManager con un equipo de
 //       fin de juego). Se regenera entera: no se trabaja sobre ella.
+//   PokeRush > Jefe final (Julieta) > Mudar la pelea a la arena (BossFinal)
+//       La arena de Santiago (ArenaJuli_Vacia, renombrada BossFinal): le pone
+//       la pelea en la sala redonda, la historia de la llegada (las zonas y el
+//       apagon), el rig, y la suma a Build Settings. Se puede volver a correr.
 //   PokeRush > Jefe final (Julieta) > Preparar la escena abierta (después de pegar)
 //       En la arena definitiva, con el objeto 'PeleaJulieta' ya pegado adentro
 //       de MapaRaiz: agrega lo que falte (jugador, camara, combate, dialogo,
@@ -24,7 +28,7 @@ using UnityEngine.Tilemaps;
 //       Crea CreditosFinales y la suma a Build Settings (el final la carga).
 //
 // Lo que se copia a la arena es UN objeto: 'PeleaJulieta'. Adentro estan
-// Julieta (el NPC) y la Zona; todo se busca solo al arrancar.
+// Julieta (el NPC), la Zona y el Servidor; todo se busca solo al arrancar.
 //
 // Los assets (Julieta, el guion) los crea PeleaJulietaAssets y no se pisan.
 public static class PeleaJulietaBuilder
@@ -32,6 +36,14 @@ public static class PeleaJulietaBuilder
     public const string EscenaDePrueba = "Assets/Scenes/BossJulieta_Prueba.unity";
     public const string EscenaDeCreditos = "Assets/Scenes/CreditosFinales.unity";
     public const string Raiz = "PeleaJulieta";
+
+    // La arena definitiva: la de Santiago, con el nombre que espera el
+    // recorrido (RecorridoDeLaHistoria) y el catalogo de audio.
+    public const string EscenaDeLaArena = "Assets/Scenes/BossFinal.unity";
+    // Como la subio Santiago (3-oct-2026, "primera version de la arena").
+    public const string EscenaDeSantiago = "Assets/Scenes/ArenaJuli_Vacia.unity";
+    private const string HistoriaDeLaSede = "HistoriaDeLaSede";
+    private const string DialogosDeLaSede = PeleaJulietaAssets.Carpeta + "/Dialogos/";
 
     private const string PlayerPrefab = "Assets/Prefabs/Player.prefab";
     private const string CombatePrefab = "Assets/Prefabs/Combate/SistemaDeCombate.prefab";
@@ -77,6 +89,31 @@ public static class PeleaJulietaBuilder
     private static readonly Vector2 CentroDeLaZona = new Vector2(0.5f, 3f);      // celdas y 2..3
     private static readonly Vector2 TamanioDeLaZona = new Vector2(5f, 2f);       // x -2..2
     private static readonly Vector2 Spawn = new Vector2(0.5f, -3.5f);            // celda (0, -4)
+    private static readonly Vector2 PosicionServidor = new Vector2(0.5f, 5.5f);   // el borde de abajo
+
+    // ------------------------------------------------------------ la arena de Santiago
+
+    // Afuera (y 0..1, el jugador aparece en (0,0)), la puerta en (1,4), el
+    // edificio (y 5..10), el pasillo (x 0..1, y 11..16) y la sala redonda
+    // (y 17..24) con la pokeball en el centro. Julieta va arriba de todo, con
+    // el servidor atras: es un callejon, asi que puede tapar las dos columnas.
+    private static readonly Vector2 ArenaJulieta = new Vector2(1f, 22.5f);
+    private static readonly Vector2 ArenaServidor = new Vector2(1f, 23.5f);
+    private static readonly Vector2 ArenaCentroDeLaZona = new Vector2(1f, 19.5f);   // fila 19, x -2..3
+    private static readonly Vector2 ArenaTamanioDeLaZona = new Vector2(6f, 1f);
+
+    // La historia de la llegada (historia.pdf, "Sede central de la Liga"):
+    // una zona para pisar cada momento. Centro, tamaño, dialogo y efecto.
+    private static readonly (string nombre, Vector2 centro, Vector2 tamanio, string dialogo,
+                             string sonido, int pulsos)[] ZonasDeLaSede =
+    {
+        // Afuera, donde aparece: el jugador ya esta parado adentro al llegar.
+        ("Llegada", new Vector2(0.5f, 1f), new Vector2(20f, 2f), "Final_Sede_Llegada", null, 0),
+        // Recien entrado: la alarma.
+        ("Intruso", new Vector2(1f, 5.5f), new Vector2(4f, 1f), "Final_Sede_Intruso", "alarma.ogg", 5),
+        // La boca del pasillo que lleva a la sala del servidor.
+        ("Puerta", new Vector2(1f, 11.5f), new Vector2(2f, 1f), "Final_Sede_Puerta", "puerta_se_abre.ogg", 0),
+    };
 
     // Indices de la hoja JuliTile (ver JuliArenaSceneBuilder).
     private const int HojaCols = 48;
@@ -98,10 +135,10 @@ public static class PeleaJulietaBuilder
         GameObject mapaRaiz = AsegurarRaiz(scene, "MapaRaiz");
         if (!ArmarSala(mapaRaiz)) return;
 
-        PeleaJulieta pelea = ArmarPelea(mapaRaiz);
+        PeleaJulieta pelea = ArmarPelea(mapaRaiz, PosicionJulieta, CentroDeLaZona, TamanioDeLaZona, PosicionServidor);
         if (pelea == null) return;
 
-        if (!ArmarRig(scene, mapaRaiz, pelea, Spawn, conEquipoDePrueba: true)) return;
+        if (!ArmarRig(scene, mapaRaiz, pelea, Spawn, conEquipoDePrueba: true, conBanco: true)) return;
         ReponerColisiones(scene);
         Physics2D.SyncTransforms();
 
@@ -148,7 +185,7 @@ public static class PeleaJulietaBuilder
         Vector2 spawn = Buscar<PlayerController>(scene) is PlayerController pc
             ? (Vector2)pc.transform.position
             : (Vector2)pelea.transform.position + new Vector2(0f, -4f);
-        if (!ArmarRig(scene, mapaRaiz, pelea, spawn, conEquipoDePrueba: false)) return;
+        if (!ArmarRig(scene, mapaRaiz, pelea, spawn, conEquipoDePrueba: false, conBanco: false)) return;
         ConfigurarPelea(pelea);
         ReponerColisiones(scene);
         Physics2D.SyncTransforms();
@@ -164,6 +201,127 @@ public static class PeleaJulietaBuilder
 
         EditorSceneManager.SaveScene(scene);
         Debug.Log($"[Julieta] TERMINADO. '{scene.name}' tiene la pelea contra Julieta lista para jugar.");
+    }
+
+    [MenuItem("PokeRush/Jefe final (Julieta)/Mudar la pelea a la arena (BossFinal)")]
+    public static void MudarALaArena()
+    {
+        if (!PuedeTocarEscenas()) return;
+
+        // La escena de Santiago pasa a llamarse BossFinal. MoveAsset conserva
+        // la GUID: nada de lo que la referencia se rompe.
+        if (!System.IO.File.Exists(EscenaDeLaArena))
+        {
+            if (!System.IO.File.Exists(EscenaDeSantiago))
+            {
+                Debug.LogError($"[Julieta] No está la arena: ni {EscenaDeLaArena} ni {EscenaDeSantiago}.");
+                return;
+            }
+            string error = AssetDatabase.MoveAsset(EscenaDeSantiago, EscenaDeLaArena);
+            if (!string.IsNullOrEmpty(error)) { Debug.LogError($"[Julieta] No se pudo renombrar la arena: {error}"); return; }
+            Debug.Log($"[Julieta] {EscenaDeSantiago} -> {EscenaDeLaArena}.");
+        }
+
+        // Los assets se leen DESPUES de abrir la escena (ver builder-assets-de-otra-escena).
+        Scene scene = EditorSceneManager.OpenScene(EscenaDeLaArena, OpenSceneMode.Single);
+        GameObject mapaRaiz = scene.GetRootGameObjects().FirstOrDefault(r => r.name == "MapaRaiz");
+        if (mapaRaiz == null)
+        {
+            Debug.LogError("[Julieta] La arena no tiene MapaRaiz (el objeto que se esconde durante la pelea).");
+            return;
+        }
+
+        PeleaJulieta pelea = Buscar<PeleaJulieta>(scene);
+        if (pelea == null)
+            pelea = ArmarPelea(mapaRaiz, ArenaJulieta, ArenaCentroDeLaZona, ArenaTamanioDeLaZona, ArenaServidor);
+        else if (pelea.GetComponentInChildren<ServidorPrincipal>(true) == null)
+            ArmarServidor(pelea.gameObject, ArenaServidor);
+        if (pelea == null) return;
+
+        ArmarHistoriaDeLaSede(mapaRaiz);
+        AbrirPuertas(scene);
+
+        Vector2 spawn = Buscar<PlayerController>(scene) is PlayerController pc
+            ? (Vector2)pc.transform.position
+            : new Vector2(0.5f, 0.5f);
+        if (!ArmarRig(scene, mapaRaiz, pelea, spawn, conEquipoDePrueba: true, conBanco: false)) return;
+        ConfigurarPelea(pelea);
+        ReponerColisiones(scene);
+        Physics2D.SyncTransforms();
+
+        List<string> problemas = Verificar(scene, spawn);
+        EditorSceneManager.MarkSceneDirty(scene);
+        if (problemas.Count > 0)
+        {
+            foreach (string p in problemas) Debug.LogError($"[Julieta] {p}");
+            Debug.LogError("[Julieta] La arena quedó armada pero NO se guardó.");
+            return;
+        }
+
+        EditorSceneManager.SaveScene(scene);
+        SumarABuildSettings(EscenaDeLaArena);
+        AssetDatabase.SaveAssets();
+        Debug.Log($"[Julieta] TERMINADO. La pelea contra Julieta está en {EscenaDeLaArena} (y en Build Settings).");
+    }
+
+    // La llegada a la sede de la Liga (historia.pdf): afuera, la alarma al
+    // entrar y la puerta del servidor, cada una en una zona para pisar; y el
+    // apagon de la sala cuando el PJ destruye el servidor. Se rehace entera.
+    private static void ArmarHistoriaDeLaSede(GameObject mapaRaiz)
+    {
+        Transform vieja = mapaRaiz.transform.Find(HistoriaDeLaSede);
+        if (vieja != null) Object.DestroyImmediate(vieja.gameObject);
+
+        var raiz = new GameObject(HistoriaDeLaSede);
+        raiz.transform.SetParent(mapaRaiz.transform, false);
+
+        var apagon = raiz.AddComponent<ApagonDelNivel>();
+        var soApagon = new SerializedObject(apagon);
+        soApagon.FindProperty("flagQueApaga").enumValueIndex = (int)StoryFlag.Historia_ServidorPrincipalDestruido;
+        soApagon.ApplyModifiedPropertiesWithoutUndo();
+
+        foreach (var z in ZonasDeLaSede)
+        {
+            string ruta = DialogosDeLaSede + z.dialogo + ".asset";
+            var dialogo = AssetDatabase.LoadAssetAtPath<DialogueDefinition>(ruta);
+            if (dialogo == null) Debug.LogWarning($"[Julieta] Falta el dialogo {ruta}: la zona '{z.nombre}' no va a decir nada.");
+
+            var go = new GameObject("Zona_" + z.nombre);
+            go.transform.SetParent(raiz.transform, false);
+            go.transform.position = new Vector3(z.centro.x, z.centro.y, 0f);
+            go.layer = CapaDefault;
+            var box = go.AddComponent<BoxCollider2D>();
+            box.isTrigger = true;
+            box.size = z.tamanio;
+
+            var so = new SerializedObject(go.AddComponent<ZonaDeHistoria>());
+            so.FindProperty("dialogo").objectReferenceValue = dialogo;
+            if (z.sonido != null)
+                so.FindProperty("sonido").objectReferenceValue =
+                    AssetDatabase.LoadAssetAtPath<AudioClip>(PeleaJulietaAssets.CarpetaDeSonidos + z.sonido);
+            so.FindProperty("pulsos").intValue = z.pulsos;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+    }
+
+    // En la primera version de la arena la puerta del edificio estaba en
+    // Colisiones Y en Techos. Techos quiere decir "se pasa por abajo" (se
+    // dibuja encima del jugador), asi que la copia de Colisiones sobraba y no
+    // dejaba entrar. Toda celda que este en las dos capas pierde la de
+    // Colisiones; el dibujo queda en Techos.
+    private static void AbrirPuertas(Scene scene)
+    {
+        var tilemaps = scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Tilemap>(true)).ToList();
+        Tilemap colisiones = tilemaps.FirstOrDefault(t => t.name == "Colisiones");
+        Tilemap techos = tilemaps.FirstOrDefault(t => t.name == "Techos");
+        if (colisiones == null || techos == null) return;
+
+        foreach (Vector3Int p in techos.cellBounds.allPositionsWithin)
+        {
+            if (!techos.HasTile(p) || !colisiones.HasTile(p)) continue;
+            colisiones.SetTile(p, null);
+            Debug.Log($"[Julieta] La celda {p} (puerta: está en Techos) ya no es pared.");
+        }
     }
 
     [MenuItem("PokeRush/Jefe final (Julieta)/Armar la escena de créditos")]
@@ -257,10 +415,10 @@ public static class PeleaJulietaBuilder
             }
         }
 
-        // La pokeball del centro de la arena, la pantalla arriba y las banderas.
+        // La pokeball del centro de la arena y las banderas. La pantalla de
+        // arriba es el Servidor (un objeto de la pelea, no un tile).
         Poner(suelo, -1, 0, PokeballArriba, 2, 1);
         Poner(suelo, -1, -1, PokeballAbajo, 2, 1);
-        Poner(col, -2, MaxY, PantallaGrande, 4, 2);
         Poner(col, -5, MaxY - 2, BanderaRoja, 1, 3);
         Poner(col, 5, MaxY - 2, BanderaAzul, 1, 3);
         col.SetTile(new Vector3Int(MinX, MinY, 0), Tile(PosteLuz));
@@ -287,7 +445,8 @@ public static class PeleaJulietaBuilder
 
     // ------------------------------------------------------------ la pelea (lo que se copia)
 
-    private static PeleaJulieta ArmarPelea(GameObject mapaRaiz)
+    private static PeleaJulieta ArmarPelea(GameObject mapaRaiz, Vector2 posJulieta, Vector2 centroDeLaZona,
+                                           Vector2 tamanioDeLaZona, Vector2 posServidor)
     {
         var raiz = new GameObject(Raiz);
         raiz.transform.SetParent(mapaRaiz.transform, false);
@@ -296,22 +455,67 @@ public static class PeleaJulietaBuilder
         // Julieta: solida (capa Obstacles) para hablarle con X. El X lo atiende
         // PeleaJulieta, que esta en el padre (PlayerController busca con
         // GetComponentInParent).
-        GameObject julieta = CasinoNpcBuilder.Personaje(raiz, "Julieta", PosicionJulieta,
+        GameObject julieta = CasinoNpcBuilder.Personaje(raiz, "Julieta", posJulieta,
                                                         PeleaJulietaAssets.HojaDeJulieta, CasinoNpcBuilder.Abajo);
+        // Parada entre dos columnas (el centro de la sala de la arena): tapa las
+        // dos, asi se le puede hablar desde cualquiera.
+        if (Mathf.Abs(Mathf.Repeat(posJulieta.x, 1f) - 0.5f) > 0.01f)
+            julieta.GetComponent<BoxCollider2D>().size = new Vector2(1.9f, 0.9f);
 
         // La zona de delante: pisarla arranca el encuentro. Default + trigger.
         var zona = new GameObject("Zona");
         zona.transform.SetParent(raiz.transform, false);
-        zona.transform.position = new Vector3(CentroDeLaZona.x, CentroDeLaZona.y, 0f);
+        zona.transform.position = new Vector3(centroDeLaZona.x, centroDeLaZona.y, 0f);
         zona.layer = CapaDefault;
         var box = zona.AddComponent<BoxCollider2D>();
         box.isTrigger = true;
-        box.size = TamanioDeLaZona;
+        box.size = tamanioDeLaZona;
         zona.AddComponent<ZonaDePeleaJulieta>();
+
+        ArmarServidor(raiz, posServidor);
 
         if (!ConfigurarPelea(pelea)) return null;
         Debug.Log($"[Julieta] Julieta en {julieta.transform.position}, zona en {zona.transform.position}.");
         return pelea;
+    }
+
+    // El servidor principal, atras de Julieta: la pantalla grande de la hoja
+    // de la arena (JuliTile, 4x2), armada con sprites sueltos para que se pueda
+    // apagar sola al final (ServidorPrincipal). 'abajo' es el centro del borde
+    // de abajo. Es solido: no se camina por detras.
+    private static void ArmarServidor(GameObject raiz, Vector2 abajo)
+    {
+        Dictionary<string, TileBase> tiles = AssetDatabase.LoadAllAssetsAtPath(TilesAsset)
+            .OfType<TileBase>().ToDictionary(t => t.name, t => t);
+
+        var go = new GameObject("Servidor");
+        go.transform.SetParent(raiz.transform, false);
+        go.transform.position = new Vector3(abajo.x, abajo.y, 0f);
+        go.layer = CapaObstacles;
+        var box = go.AddComponent<BoxCollider2D>();
+        box.size = new Vector2(4f, 2f);
+        box.offset = new Vector2(0f, 1f);
+
+        for (int f = 0; f < 2; f++)
+        for (int c = 0; c < 4; c++)
+        {
+            tiles.TryGetValue($"JuliTile_00_{PantallaGrande + f * HojaCols + c:0000}", out TileBase t);
+            Sprite sprite = (t as Tile)?.sprite;
+            if (sprite == null) { Debug.LogWarning("[Julieta] Falta un pedazo de la pantalla del servidor (JuliTile)."); continue; }
+
+            var parte = new GameObject($"Pantalla_{f}_{c}");
+            parte.transform.SetParent(go.transform, false);
+            parte.transform.localPosition = new Vector3(c - 1.5f, (1 - f) + 0.5f, 0f);
+            // Un pixel del tile = un pixel de la grilla: la hoja va a 32 por celda.
+            parte.transform.localScale = Vector3.one * (sprite.pixelsPerUnit / 32f);
+            var sr = parte.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            // Como los personajes: con el eje Y del Renderer2D, Julieta (mas
+            // abajo) se dibuja adelante.
+            sr.sortingOrder = 15;
+        }
+
+        go.AddComponent<ServidorPrincipal>();
     }
 
     // Enchufa los assets al componente. Solo llena lo que esta vacio: si el
@@ -350,8 +554,11 @@ public static class PeleaJulietaBuilder
 
     // ------------------------------------------------------------ el rig
 
+    // conEquipoDePrueba: el GameManager de la escena trae un equipo de fin de
+    // juego para entrar por Play directo (viniendo de la cueva manda el de la
+    // partida). conBanco: los atajos F9/F10/F11, solo en la escena de prueba.
     private static bool ArmarRig(Scene scene, GameObject mapaRaiz, PeleaJulieta pelea, Vector2 spawn,
-                                 bool conEquipoDePrueba)
+                                 bool conEquipoDePrueba, bool conBanco)
     {
         if (mapaRaiz.GetComponentInChildren<Grid>(true) == null)
         {
@@ -365,7 +572,7 @@ public static class PeleaJulietaBuilder
         AsegurarEventSystem(scene);
         GameObject combate = AsegurarCombate(scene);
         if (combate == null) return false;
-        AsegurarSistema(scene, mapaRaiz, combate, player, conBanco: conEquipoDePrueba);
+        AsegurarSistema(scene, mapaRaiz, combate, player, conBanco: conBanco);
         AsegurarDialogo(scene);
         return true;
     }

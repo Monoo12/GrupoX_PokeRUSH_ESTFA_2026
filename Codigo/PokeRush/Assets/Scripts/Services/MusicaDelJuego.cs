@@ -26,6 +26,14 @@ public class MusicaDelJuego : MonoBehaviour
     private bool _enPelea;
     private Scene _escenaAtendida;   // la ultima que ya eligio su musica
 
+    // Mientras este prendido, cambiar de escena no cambia la musica: el final
+    // del juego lleva el tema de despues de vencer a Julieta de la arena a la
+    // cueva (ver FinalDelJuego).
+    public static bool Sostener { get; set; }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void Limpiar() => Sostener = false;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Crear()
     {
@@ -108,6 +116,7 @@ public class MusicaDelJuego : MonoBehaviour
         if (modo != LoadSceneMode.Single || escena == _escenaAtendida) return;
         _escenaAtendida = escena;
         _enPelea = false;
+        if (Sostener) return;
 
         // La escena que trae su propio MusicaDeEscena lo hace sonar en su Start.
         if (FindAnyObjectByType<MusicaDeEscena>() != null) return;

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: add55da467d09504c924f5aa415c5bf4, type: 3}
+  m_Name: Transmisor
+  m_EditorClassIdentifier: Assembly-CSharp::SpecialItemDefinition
+  itemName: Transmisor de Tixi
+  description: "Un dispositivo que arm\xF3 Tixi. Si lleg\xE1s al servidor principal,
+    Tixi va a poder conectarse desde la Quarcho Cueva e intentar abrirte el acceso."
+  icon: {fileID: -1857666687013357906, guid: 4a38ddf2da62d05409e1d7006ca41091, type: 3}
+  buyPrice: 0
+  effectDescription: "Por ac\xE1 Tixi puede entrar a la red de Julieta."
+  triggersFlag: 0

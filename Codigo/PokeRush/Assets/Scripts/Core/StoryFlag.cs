@@ -181,5 +181,15 @@ public enum StoryFlag
     // Data Center: la terminal del salon y la foto de la mesa de Nestor ya se
     // vieron (apagan su brillo).
     Historia_DC_TerminalLeida,
-    Historia_DC_FotoVista
+    Historia_DC_FotoVista,
+
+    // El jefe final, en la sede de la Liga (el viejo Ameghino): lo que pasa al
+    // llegar, al entrar (la alarma) y frente a la puerta del servidor
+    // principal. Los enciende cada ZonaDeHistoria de la arena.
+    Historia_SedeLlegada,
+    Historia_SedeIntruso,
+    Historia_SedePuerta,
+    // El PJ destruyo el nucleo del servidor principal: se apagan las luces de
+    // la sala (ApagonDelNivel). Lo enciende el final de PeleaJulieta.
+    Historia_ServidorPrincipalDestruido
 }

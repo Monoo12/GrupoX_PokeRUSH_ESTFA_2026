@@ -7,7 +7,7 @@ Menu Principal -> Creacion de personaje -> (habitacion tutorial) -> Quarcho Cuev
   -> Data Center de Nestor -> Quarcho Cueva -> Casino -> Quarcho Cueva -> Jefe final
 ```
 
-> La **habitación tutorial** es `habitacion.unity` (ver `Tutorial_Habitacion.md`): la creación de personaje lleva ahí y su puerta, a la cueva (`RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje`). El **jefe final** todavía no existe: la salida lo dice en vez de romper (ver más abajo).
+> La **habitación tutorial** es `habitacion.unity` (ver `Tutorial_Habitacion.md`): la creación de personaje lleva ahí y su puerta, a la cueva (`RecorridoDeLaHistoria.EscenaDespuesDeCrearPersonaje`). El **jefe final** es `BossFinal` (la arena de Santiago con la pelea contra Julieta), y después de vencerla el juego **vuelve a la cueva** para la última escena con Tixi (ver `Jefe_Final_Julieta.md` → "El final").
 
 ---
 
@@ -130,7 +130,7 @@ En el casino `chances` queda vacío y se juega sin tope, como siempre.
 - **Una sola puerta para todos los niveles.** Adónde lleva lo deciden los flags (`RecorridoDeLaHistoria.SiguienteNivel`), no la puerta. Tixi ("Viajar") y la puerta dicen y cargan lo mismo (`ViajeEntreNiveles`).
 - La puerta es una **zona para pisar**: trigger en la capa `Default` (en `Obstacles` frenaría al jugador). Detrás hay un tope invisible para no salir caminando al vacío.
 - Antes de hablar con Tixi no abre.
-- Si la escena del nivel no está en Build Settings (hoy, `BossFinal`), avisa que el camino todavía no está abierto.
+- Si la escena del nivel no está en Build Settings, avisa que el camino todavía no está abierto en vez de romper.
 
 **La vuelta a la cueva** la hace `VueltaAlLobby`, que se crea solo al arrancar el juego y vive entre escenas: si en una escena de un nivel se enciende el flag de "completado" de ese nivel (`Torre1_NestorLiberado`, `Casino_Completado`), espera a que no haya combate, cartel ni menú abiertos, dice "¡Nivel superado!" y carga la cueva. **No hace falta tocar NestorGOD2 ni los pisos del casino.** Volver a entrar a un nivel ya completo no expulsa a nadie.
 
@@ -138,7 +138,9 @@ En el casino `chances` queda vacío y se juega sin tope, como siempre.
 
 > Como `SaveService` no guarda la escena, **"Continuar" siempre arranca en la cueva**, y la salida igual sabe adónde ir.
 
-Agregar un nivel es sumar una entrada a `RecorridoDeLaHistoria.Niveles` (nombre, escena de entrada, escenas del nivel y flag de completado). Cuando exista el jefe final, alcanza con que su escena se llame `BossFinal` (o cambiar ese nombre ahí) y esté en Build Settings.
+Agregar un nivel es sumar una entrada a `RecorridoDeLaHistoria.Niveles` (nombre, escena de entrada, escenas del nivel y flag de completado). El último es "la sede central de la Liga" (`BossFinal`), sin flag de completado: el jefe final cierra el juego.
+
+**El final del juego en la cueva (4-oct-2026).** Después de vencer a Julieta, `FinalDelJuego` carga la cueva y le agrega `EscenaFinalEnLaCueva` (la escena no se toca): epílogo sobre negro, el PJ frente a Tixi, la charla final y la última conexión, y de ahí los créditos. Mientras dura, Tixi no habla sola (`FinalDelJuego.EnCurso`), la música no cambia y F2 no guarda.
 
 ---
 
@@ -179,6 +181,5 @@ git add -f "Codigo/PokeRush/Assets/Graphics/Characters/tixi.png"* \
 ## Pendiente (del equipo)
 
 - El **lore** de Tixi y las charlas de Néstor y Martín (`Resources/Definitions/Lobby/Dialogos`): hoy es texto de relleno.
-- La escena del **jefe final** (`BossFinal`).
 - La **música** de la cueva: no hay pista propia, sigue sonando la de la escena anterior.
 - Las pantallas de la tienda y del tutor son **de prueba** con el arte del pack: las finales las diseña el equipo.

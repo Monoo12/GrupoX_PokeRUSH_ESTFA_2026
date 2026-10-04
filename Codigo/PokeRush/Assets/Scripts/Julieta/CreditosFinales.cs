@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// La secuencia final del juego. Se llega aca despues de ganarle a Julieta.
+// Los creditos del juego. Se llega aca despues de ganarle a Julieta y de la
+// ultima escena en la Quarcho Cueva (el epilogo y la charla con Tixi los
+// cuenta EscenaFinalEnLaCueva; ver FinalDelJuego).
 //
-//   1. EPILOGO (opcional): las lineas de GuionDeJulieta.epilogo, de a una,
-//      sobre negro. Vacio = se saltea. Mientras tanto sigue el tema del final.
-//   2. Entra la musica de los creditos y aparecen el logo del grupo y el
+//   1. Entra la musica de los creditos y aparecen el logo del grupo y el
 //      titulo del juego.
-//   3. El ROLLO sube solo. Su velocidad se calcula para que termine junto con
+//   2. El ROLLO sube solo. Su velocidad se calcula para que termine junto con
 //      la cancion: los creditos duran lo que dura la musica.
-//   4. PANTALLA FINAL: "FIN", el nombre del jugador y su equipo. Recien unos
+//   3. PANTALLA FINAL: "FIN", el nombre del jugador y su equipo. Recien unos
 //      segundos despues aparece el aviso de la tecla; con eso se vuelve a la
 //      pantalla de inicio.
 //
@@ -32,7 +32,6 @@ using UnityEngine.UI;
 public class CreditosFinales : MonoBehaviour
 {
     public const string RutaDelTexto = "Creditos/CreditosFinales";
-    public const string RutaDelGuion = "Definitions/Julieta/GuionDeJulieta";
 
     [System.Serializable]
     public class Personaje
@@ -62,7 +61,6 @@ public class CreditosFinales : MonoBehaviour
     [SerializeField, Min(10f)] private float velocidadMaxima = 85f;
     [Tooltip("Lo que se reserva al final de la cancion para la pantalla de FIN.")]
     [SerializeField, Min(0f)] private float segundosParaElFinal = 14f;
-    [SerializeField, Min(1f)] private float segundosPorLineaDeEpilogo = 5f;
     [Tooltip("Cuanto espera la pantalla de FIN antes de aceptar la tecla.")]
     [SerializeField, Min(0f)] private float esperaAntesDelAviso = 3.5f;
     [SerializeField] private string escenaAlTerminar = "Menu Principal";
@@ -126,8 +124,6 @@ public class CreditosFinales : MonoBehaviour
 
     private IEnumerator Correr()
     {
-        yield return Epilogo();
-
         EmpezarMusica();
         yield return Tarjeta(TarjetaDelGrupo(), 1.2f, 2.8f, 1.0f);
         yield return Tarjeta(TarjetaDelTitulo(), 1.2f, 2.6f, 1.2f);
@@ -136,27 +132,6 @@ public class CreditosFinales : MonoBehaviour
         yield return Subir();
 
         yield return PantallaFinal();
-    }
-
-    private IEnumerator Epilogo()
-    {
-        var guion = Resources.Load<GuionDeJulieta>(RutaDelGuion);
-        if (guion == null || guion.epilogo == null) yield break;
-
-        foreach (string crudo in guion.epilogo)
-        {
-            if (string.IsNullOrWhiteSpace(crudo)) continue;
-            RectTransform caja = Bloque("Epilogo");
-            Text t = LienzoDePeleaJulieta.Texto(
-                LienzoDePeleaJulieta.Rect(caja, "Linea", Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f),
-                    Vector2.zero, new Vector2(-240f, 0f)),
-                fuente, 32, TextAnchor.MiddleCenter, Color.white);
-            t.horizontalOverflow = HorizontalWrapMode.Wrap;
-            t.lineSpacing = FuentePixel.Es(fuente) ? FuentePixel.Interlineado : 1.3f;
-            t.text = DialogueController.Marcas(crudo.Trim());
-            float hold = Mathf.Max(segundosPorLineaDeEpilogo, 2.5f + crudo.Length * 0.04f);
-            yield return Tarjeta(caja, 1.2f, hold, 1.2f);
-        }
     }
 
     private void EmpezarMusica()

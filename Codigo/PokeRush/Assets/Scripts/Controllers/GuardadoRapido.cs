@@ -33,6 +33,8 @@ public class GuardadoRapido : MonoBehaviour
         // Con la caja abierta la tecla la maneja el dialogo: guardar en el medio
         // de una decision dejaria el save a mitad de camino.
         if (dialogueController != null && dialogueController.IsOpen) return;
+        // El final del juego no se guarda (ver PeleaJulieta).
+        if (FinalDelJuego.EnCurso) return;
 
         Guardar();
     }

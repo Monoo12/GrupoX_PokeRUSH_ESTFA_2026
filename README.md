@@ -7,7 +7,7 @@ Proyectos del Instituto Tecnológico Florentino Ameghino (2026).
 El jugador despierta en 2031 en un mundo donde un chip, el NeuraRush-LINK,
 controla a la gente. Desde la Quarcho Cueva sale a liberar los servidores: el
 Data Center de Néstor, el casino de cuatro pisos de Martín Reymar y, al final,
-el servidor central de Julieta.
+la sede central de la Liga, donde espera Julieta.
 
 - **Género:** RPG / combate por turnos (fan game académico, sin fines de lucro).
 - **Plataforma:** Windows 10 y 11 (64 bits).
@@ -68,7 +68,8 @@ Si Unity muestra advertencias al abrir, ver [BUILD.md → Problemas comunes](BUI
 
 `Menu Principal → MenuSaves → CreacionPersonaje → habitacion (tutorial) →
 Quarcho-Cueva → NestorGOD2 → Quarcho-Cueva → Casino Nivel 1 → 2 → 3 → piso FINAL →
-Quarcho-Cueva → BossFinal (arena de Julieta) → CreditosFinales → Menu Principal`
+Quarcho-Cueva → BossFinal (arena de Julieta) → Quarcho-Cueva (epílogo y última
+escena con Tixi) → CreditosFinales → Menu Principal`
 
 ### Controles
 
@@ -233,14 +234,10 @@ sacar el aviso: **PokeRush → Release → Armar indice de definiciones**.
 
 ## Problemas conocidos
 
-- **La arena de Julieta (`BossFinal`) la está terminando Santiago.** Hasta que esté
-  en Build Settings, la salida de la cueva avisa que el jefe final todavía no está,
-  y el final y los créditos solo se pueden jugar desde la escena de prueba
-  `BossJulieta_Prueba` (Play directo). Cómo conectarla:
-  `Documentacion/Documentacion del Codigo/Jefe_Final_Julieta.md` → "Mudarla a la arena definitiva".
-- **El texto del final de la historia es provisorio**: se reemplaza en
-  `Assets/Resources/Definitions/Julieta/GuionDeJulieta.asset` (`finalDelJuego` y
-  `epilogo`) sin tocar código.
+- **La arena de Julieta (`BossFinal`) es la primera versión de Santiago**, ya con
+  la pelea adentro y en Build Settings. Si Santiago la sigue pintando, tiene que
+  traerse `BossFinal.unity` (antes se llamaba `ArenaJuli_Vacia`): las escenas se
+  mergean como binario. Ver `Jefe_Final_Julieta.md` → "La arena".
 - La primera apertura del proyecto es lenta (importación de ~25.000 archivos).
 
 ---

@@ -12,27 +12,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
   m_Name: Lobby_Tixi_VueltaDelCasino
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: "TIXI"
+  speakerName: TIXI
   speakerPortrait: {fileID: 21300000, guid: 29f022df382dcbf47a02f8d6628d92f5, type: 3}
   lines: []
   requiredFlag: 0
   grantsFlag: 0
   otrosHablantes: []
   variantes:
-  - nota: "Primera vuelta despues del casino"
+  - nota: Primera vuelta despues del casino (historia.pdf, Regreso a QuarchoCueva)
     requiere: 50
     requiereTambien: 0
     excluye: 71
     lineas:
-    - "[] Tixi te espera con dos tazas de caf\xE9. Una est\xE1 fr\xEDa: se olvid\xF3 de tomarla."
-    - "[TIXI] Te segu\xED por las c\xE1maras del casino. Bueno, por las que quedaban."
-    - "[SISTEMA] SERVIDOR 02: OFFLINE."
-    - "[TIXI] Dos de cuatro. \xBFY el due\xF1o del casino?"
-    - "[PJ] Mart\xEDn. Se desconect\xF3. Dijo que iba a venir para ac\xE1."
-    - "[TIXI] Entonces vamos a necesitar m\xE1s sillas."
+    - "[] Tixi est\xE1 frente a las computadoras, revisando los datos de los servidores."
+    - "[TIXI] \xA1{PJ}! Estaba esperando los datos del servidor. \xBFLo destruiste?"
+    - "[PJ] S\xED. Y conoc\xED a un bioqu\xEDmico bastante particular."
+    - "[TIXI] \xBFReymar?"
+    - "[PJ] \xBFLo conoc\xE9s?"
+    - "[TIXI] Encontr\xE9 su nombre en algunos registros del Ameghino. \xBFQu\xE9
+      pas\xF3 con \xE9l?"
+    - "[PJ] Se desconect\xF3 del sistema. Recuper\xF3 sus recuerdos."
+    - '[TIXI] Entonces funciona.'
+    - "[PJ] \xBFQu\xE9 cosa?"
+    - "[TIXI] Lo que pas\xF3 con N\xE9stor. Desconectar a alguien del NeuraRush-LINK
+      puede devolverle sus recuerdos. \xBFEncontraste algo m\xE1s?"
+    - "[PJ] El servidor ten\xEDa informaci\xF3n sobre los experimentos originales.
+      Tambi\xE9n hab\xEDa datos sobre m\xED."
+    - "[TIXI] \xBFY pudiste acceder?"
+    - "[PJ] No. Julieta cambi\xF3 los permisos."
+    - '[TIXI] Por supuesto que lo hizo...'
+    - "[PJ] Pero hay algo que s\xED descubr\xED."
+    - "[TIXI] \xBFQu\xE9?"
+    - '[PJ] Reymar dijo que el laboratorio estaba construido antes que el casino.'
+    - '[PJ] Lo escondieron para que nadie encontrara los experimentos.'
+    - "[TIXI] Tiene sentido. La Liga lleva a\xF1os ocultando informaci\xF3n sobre
+      los primeros servidores."
+    - "[PJ] \xBFY ahora qu\xE9?"
+    - '[] Tixi se queda mirando el mapa.'
+    - '[TIXI] Queda uno.'
+    - "[PJ] El \xFAltimo servidor."
+    - "[TIXI] S\xED. Y, a diferencia de los anteriores, este no est\xE1 en un edificio
+      cualquiera."
+    - "[PJ] \xBFD\xF3nde est\xE1?"
+    - '[TIXI] En la sede central de la Liga.'
+    - "[PJ] \xBFEn el Ameghino?"
+    - '[TIXI] Exactamente.'
+    - "[PJ] Bueno... supongo que era cuesti\xF3n de tiempo."
+    - "[TIXI] Hay algo m\xE1s. El \xFAltimo servidor no funciona como los otros."
+    - "[TIXI] Est\xE1 conectado directamente con el sistema principal de NeuraRush-LINK."
+    - "[PJ] \xBFY eso qu\xE9 significa?"
+    - '[TIXI] Que Julieta tiene acceso a todo. Cada persona conectada, cada servidor,
+      cada registro...'
+    - "[PJ] \xBFY si lo destruimos?"
+    - "[TIXI] No lo s\xE9. Nunca nadie lleg\xF3 tan lejos."
+    - "[TIXI] {PJ}, escuchame. Si lleg\xE1s hasta Julieta, no sabemos qu\xE9 puede
+      hacer. Tiene el control de toda la red."
+    - "[PJ] Ya me enfrent\xE9 a sus guardianes."
+    - '[TIXI] Esto es diferente.'
+    - "[PJ] \xBFTen\xE9s alguna otra idea?"
+    - '[] Tixi guarda silencio.'
+    - '[TIXI] No.'
+    - '[PJ] Entonces voy a terminarlo.'
+    - "[TIXI] Esper\xE1."
+    - '[] Tixi se acerca y te entrega un dispositivo.'
     otorgaFlag: 71
-  otorgaObjeto: {fileID: 0}
-  pregunta: ""
+  otorgaObjeto: {fileID: 11400000, guid: ebf13da03181fc7489c023af7aa33eac, type: 2}
+  pregunta: 
   respuestas: []
   cancelarElige: -1
-  siguiente: {fileID: 11400000, guid: 92816f01fad7c2d09b01a366258d0f2a, type: 2}
+  siguiente: {fileID: 11400000, guid: bc03de728f5741648b56f3540a1e5751, type: 2}

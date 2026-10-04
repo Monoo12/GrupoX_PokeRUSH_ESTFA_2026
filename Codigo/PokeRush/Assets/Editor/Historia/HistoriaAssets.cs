@@ -22,6 +22,8 @@ public static class HistoriaAssets
         ("RaspberryPy", "Assets/Graphics/Items/UPGRADE.png"),
         ("ProtocoloNestor", "Assets/Graphics/Items/DUBIOUSDISC.png"),
         ("TarjetaPiso4", "Assets/Graphics/Items/REDCARD.png"),
+        // Se lo da Tixi al volver del casino: abre la red de Julieta en la pelea.
+        ("Transmisor", "Assets/Graphics/Items/DEVONSCOPE.png"),
     };
 
     // "Torre1/Dialogos/DC_Guardia" -> el asset. Null (y aviso) si no existe.

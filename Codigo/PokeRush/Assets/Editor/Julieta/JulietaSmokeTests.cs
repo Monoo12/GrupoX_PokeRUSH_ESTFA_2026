@@ -7,7 +7,8 @@ using UnityEngine;
 // corren desde el menu, usan SeededRng y reportan a la Console con la etiqueta
 // [JulietaSmokeTests]. Prueban las REGLAS (el guion y sus fases, la ruleta dada
 // vuelta, el Pokemon controlado, la vida del PJ) sin abrir la escena; lo que se
-// ve lo prueba PeleaJulietaPlayTest en Play.
+// ve lo prueba PeleaJulietaPlayTest en Play. Tambien que el cierre del juego
+// (historia.pdf) y la arena de Santiago (BossFinal) esten armados.
 namespace PokeRush.EditorTools
 {
     public static class JulietaSmokeTests
@@ -39,6 +40,8 @@ namespace PokeRush.EditorTools
             TestAssetsDeLaPelea();
             TestGuionDelProyectoLlegaAlFinal();
             TestGuionDelProyectoRecorrePorTurnos();
+            TestElCierreDelJuego();
+            TestLaArena();
 
             if (_failed == 0)
                 Debug.Log($"[JulietaSmokeTests] TODOS OK: {_passed} checks pasaron.");
@@ -521,6 +524,72 @@ namespace PokeRush.EditorTools
                 Check(fases.SequenceEqual(new[] { FaseDeJulieta.ControlDelSistema, FaseDeJulieta.ControlDelVinculo, FaseDeJulieta.Ruptura }),
                       $"Guion simulado (un KO cada {turnosPorKO} turnos): pasa por las fases en orden");
             }
+        }
+
+        // El cierre de la historia.pdf: la ruptura la abre Tixi por el
+        // transmisor, el final destruye el servidor y el resto esta en el guion.
+        private static void TestElCierreDelJuego()
+        {
+            GuionDeJulieta g = GuionDelProyecto();
+            if (g == null) return;
+
+            MomentoDeJulieta ruptura = g.momentos.FirstOrDefault(m => m.fase == FaseDeJulieta.ControlDelVinculo &&
+                m.lineas.Any(l => l.accion == AccionDeJulieta.PasarAFase && l.parametro == (int)FaseDeJulieta.Ruptura));
+            Check(ruptura != null && ruptura.lineas.Any(l => l.hablante == HablanteDeJulieta.Tixi),
+                  "Cierre: en la ruptura habla Tixi (el transmisor)");
+            Check(g.retratoTixi != null && !string.IsNullOrEmpty(g.nombreTixi), "Cierre: Tixi tiene nombre y retrato en el guion");
+            Check(g.alReintentar != null && g.alReintentar.Length > 0, "Cierre: al reintentar no se repite la charla entera");
+            Check(g.alEncontrarla.Any(l => l.texto.Contains("Peleando")), "Cierre: antes de pelear dice lo del PDF ('Peleando.')");
+
+            Check(g.finalDelJuego.Count(l => l.accion == AccionDeJulieta.RomperServidor) == 1,
+                  "Cierre: el final destruye el servidor una vez");
+            Check(g.finalDelJuego.Any(l => l.texto.Contains("Estoy sola en mi propia cabeza")),
+                  "Cierre: el final es el del PDF");
+            Check(g.finalDelJuego.Count(l => l.sonido != null) >= 2, "Cierre: suenan el nucleo y el chip de Julieta");
+
+            Check(g.epilogo != null && g.epilogo.Count(e => !string.IsNullOrWhiteSpace(e)) >= 4, "Cierre: hay epilogo");
+            Check(g.enLaCueva != null && g.enLaCueva.lines != null && g.enLaCueva.lines.Length >= 30,
+                  "Cierre: la charla final con Tixi esta en el guion");
+            Check(g.ultimaConexion != null && g.ultimaConexion.Length > 0 &&
+                  g.ultimaConexion[g.ultimaConexion.Length - 1].Contains("VENTRESCA AI"),
+                  "Cierre: la ultima conexion termina en VENTRESCA AI");
+            Check(g.fuente != null, "Cierre: el epilogo tiene la fuente del juego");
+
+            // El mismo tope que los dialogos del mapa (HistoriaSmokeTests): mas
+            // largo no entra en la caja.
+            var todas = g.alEncontrarla.Concat(g.alReintentar).Concat(g.alPerder).Concat(g.finalDelJuego)
+                .Concat(g.yaVencida).Concat(g.momentos.SelectMany(m => m.lineas));
+            foreach (LineaDeJulieta l in todas)
+                if (l != null && l.texto != null && l.texto.Length > 125)
+                    Check(false, $"Guion: linea demasiado larga ({l.texto.Length}): {l.texto.Substring(0, 40)}...");
+        }
+
+        // La arena de Santiago con la pelea adentro, leida como texto (sin abrirla).
+        private static void TestLaArena()
+        {
+            string ruta = PeleaJulietaBuilder.EscenaDeLaArena;
+            Check(System.IO.File.Exists(ruta), $"Arena: existe {ruta} (PokeRush > Jefe final > Mudar la pelea a la arena)");
+            if (!System.IO.File.Exists(ruta)) return;
+
+            string escena = System.IO.File.ReadAllText(ruta);
+            bool Usa(string asset) => escena.Contains(AssetDatabase.AssetPathToGUID(asset));
+
+            Check(Usa("Assets/Scripts/Julieta/PeleaJulieta.cs"), "Arena: tiene la pelea");
+            Check(Usa("Assets/Scripts/Julieta/ServidorPrincipal.cs"), "Arena: tiene el servidor principal");
+            Check(Usa("Assets/Scripts/Controllers/ApagonDelNivel.cs"), "Arena: se apagan las luces al destruir el servidor");
+            Check(Usa(PeleaJulietaAssets.RutaGuion), "Arena: la pelea usa el guion del proyecto");
+            foreach (string zona in new[] { "Final_Sede_Llegada", "Final_Sede_Intruso", "Final_Sede_Puerta" })
+            {
+                string path = PeleaJulietaAssets.Carpeta + "/Dialogos/" + zona + ".asset";
+                var d = AssetDatabase.LoadAssetAtPath<DialogueDefinition>(path);
+                Check(d != null && d.grantsFlag != StoryFlag.None, $"Arena: {zona} existe y marca su flag (suena una vez)");
+                Check(Usa(path), $"Arena: la zona {zona} esta en la escena");
+            }
+            Check(!escena.Contains("PeleaJulietaBancoDePrueba") &&
+                  !Usa("Assets/Scripts/Testing/PeleaJulietaBancoDePrueba.cs"), "Arena: no lleva el banco de pruebas");
+            Check(EditorBuildSettings.scenes.Any(s => s.enabled && s.path == ruta), "Arena: esta en Build Settings");
+            Check(RecorridoDeLaHistoria.Niveles.Last().EscenaDeEntrada ==
+                  System.IO.Path.GetFileNameWithoutExtension(ruta), "Arena: el recorrido termina en ella");
         }
     }
 }

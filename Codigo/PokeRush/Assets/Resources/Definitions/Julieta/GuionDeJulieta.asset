@@ -14,52 +14,177 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GuionDeJulieta
   nombreJulieta: JULIETA
   nombreNestor: "N\xC9STOR"
+  nombreTixi: TIXI
   retratoJulieta: {fileID: 21300000, guid: 7e8dce24e0e8c7d42bf0cec1efd2c72d, type: 3}
   retratoNestor: {fileID: 21300000, guid: 0f1798d60322fc14596167ce820d37b1, type: 3}
+  retratoTixi: {fileID: 21300000, guid: 29f022df382dcbf47a02f8d6628d92f5, type: 3}
   retratoPJVaron: {fileID: 8673283512139689658, guid: eca01f3401e93744f9cd142adb0750b9, type: 3}
   retratoPJMujer: {fileID: 8673283512139689658, guid: 5ca8ccf995d05b04195d663ed0f1c411, type: 3}
   alEncontrarla:
   - hablante: 3
-    texto: SERVIDOR CENTRAL DE NEURARUSH-LINK. USUARIO SIN REGISTRAR EN LA SALA.
+    texto: "En el centro de la sala est\xE1 el servidor principal, conectado a cientos
+      de cables que recorren las paredes."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "Frente a \xE9l est\xE1 Julieta."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: Llegaste, {PJ}. Tarde, como siempre. Pero llegaste.
+    texto: Llegaste.
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 1
-    texto: Julieta.
+    texto: "\xBFEsperabas que viniera?"
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: Profesora Julieta. Que el mundo se haya dado vuelta no es excusa para
-      perder los modales.
+    texto: "Despu\xE9s de todo lo que hiciste, era cuesti\xF3n de tiempo."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 1
-    texto: Vengo a apagar todo esto.
+    texto: "Destru\xED tus servidores."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: "Ya s\xE9. Apagaste mis servidores uno por uno, desconectaste a N\xE9stor,
-      te llevaste el casino de Mart\xEDn."
+    texto: "Lo s\xE9."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Desconect\xE9 a tus guardianes."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: "Mewtwo y Hoopa tambi\xE9n est\xE1n ac\xE1. Vinieron en 2026 a detenerme,
-      \xBFte acord\xE1s? Ahora pelean para m\xED."
+    texto: "Tambi\xE9n lo s\xE9."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Y ahora voy a destruir este.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: "Ven\xED. Mostrame lo que aprendiste. Quiero ver con qu\xE9 me vas a enfrentar."
+    texto: "Se ve que pensar no es lo tuyo... \xBFDe verdad pens\xE1s que es tan
+      sencillo?"
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta se da vuelta y observa el servidor.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "\xBFSab\xE9s cu\xE1ntas personas dependen de esto?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Demasiadas.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "\xBFY sab\xE9s qu\xE9 pasar\xEDa si lo destruyeras?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: No me interesa.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Claro que no. Nunca te interes\xF3 entender lo que hicimos."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Entonces explic\xE1melo."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta se queda en silencio unos segundos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Est\xE1 bien. Pero primero vas a tener que demostrarme que realmente
+      merec\xE9s estar ac\xE1."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFY c\xF3mo pens\xE1s hacer eso?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: De la misma forma que siempre.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta se pone frente a vos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Peleando.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Por fin.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  alReintentar:
+  - hablante: 0
+    texto: Volviste.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Bien. Demostrame que esta vez s\xED merec\xE9s estar ac\xE1."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   momentos:
@@ -73,27 +198,32 @@ MonoBehaviour:
     - hablante: 3
       texto: "PROTOCOLO N\xC9STOR: EN L\xCDNEA."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 4
       parametro: 0
     - hablante: 2
       texto: "{PJ}, estoy conectado. Yo le leo las jugadas, vos peg\xE1."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 3
-      texto: "RULETA DE MART\xCDN: EN L\xCDNEA. JUEGA A FAVOR DE {PJ}."
+      texto: "RULETA DE REYMAR: EN L\xCDNEA. JUEGA A FAVOR DE {PJ}."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 2
       parametro: 1
     - hablante: 0
-      texto: "N\xE9stor en tu o\xEDdo y la ruleta de Mart\xEDn en el bolsillo. Qu\xE9
+      texto: "N\xE9stor en tu o\xEDdo y la ruleta de Reymar en el bolsillo. Qu\xE9
         bien equipado ven\xEDs."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 11
       parametro: 0
     - hablante: 0
       texto: Adelante. Yo solo voy a mirar.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F1: primera lectura de Nestor'
@@ -106,17 +236,20 @@ MonoBehaviour:
     - hablante: 0
       texto: "Ah\xED est\xE1. El Protocolo N\xE9stor."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Ve la jugada antes de que pase, \xBFno? Qu\xE9 curioso. As\xED pienso
         yo."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 2
       texto: "No la escuches, {PJ}. Segu\xED."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F1: primer giro de la ruleta'
@@ -127,14 +260,16 @@ MonoBehaviour:
       valor: 1
     lineas:
     - hablante: 0
-      texto: "La ruleta de Mart\xEDn. Te la dio cuando lo desconectaste, \xBFno?"
+      texto: "La ruleta de Reymar. Te la dio cuando lo desconectaste, \xBFno?"
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Un generador de n\xFAmeros al azar. Qu\xE9 nombre lindo para algo que
         no existe."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F1: Julieta pierde el primero'
@@ -147,12 +282,14 @@ MonoBehaviour:
     - hablante: 0
       texto: Golpe limpio. Lo anoto.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Siempre fuiste as\xED en clase: r\xE1pido para romper cosas, lento
         para preguntarte por qu\xE9 funcionan."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F1: Julieta termina de estudiar'
@@ -166,12 +303,14 @@ MonoBehaviour:
       texto: "Tres turnos. Ya s\xE9 cu\xE1nto tarda N\xE9stor en recalcular y cada
         cu\xE1nto gira la ruleta."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "\xBFSab\xE9s qu\xE9 es lo gracioso, {PJ}? Todo lo que te est\xE1 ayudando
-        sali\xF3 de mi c\xF3digo."
+        corre sobre mi red."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F1 -> F2: Julieta cambia las reglas'
@@ -188,52 +327,62 @@ MonoBehaviour:
     - hablante: 0
       texto: "Suficiente. Ya entend\xED c\xF3mo pele\xE1s."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Ahora te explico yo c\xF3mo funciona esto."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 13
       parametro: 0
     - hablante: 3
       texto: 'NEURARUSH-LINK: ACCESO DE ADMINISTRADORA CONCEDIDO.'
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 12
       parametro: 1
     - hablante: 2
       texto: "\xA1{PJ}! Se meti\xF3 en el canal... no... no la puedo sacar..."
       retrato: {fileID: 21300000, guid: a4969c809e8096346880bff78dd80c5e, type: 3}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 3
       texto: "PROTOCOLO N\xC9STOR: CONEXI\xD3N PERDIDA."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 5
       parametro: 0
     - hablante: 0
-      texto: "El Protocolo N\xE9stor lo escrib\xED yo. N\xE9stor aprendi\xF3 a leer
-        una jugada porque yo le ense\xF1\xE9."
+      texto: "El Protocolo N\xE9stor es una funci\xF3n de mi NeuraRush-LINK. N\xE9stor
+        la usaba porque yo se la di."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
-      texto: "Ahora lee las tuyas. Para m\xED."
+      texto: "Ahora lee tus jugadas. Para m\xED."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 6
       parametro: 0
     - hablante: 3
-      texto: "RULETA DE MART\xCDN: PREMIOS REASIGNADOS. JUEGA A FAVOR DE: JULIETA."
+      texto: 'RULETA DE REYMAR: PREMIOS REASIGNADOS. JUEGA A FAVOR DE: JULIETA.'
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 2
       parametro: 2
     - hablante: 0
-      texto: "Y la ruleta... Mart\xEDn la giraba. Yo la program\xE9."
+      texto: "Y la ruleta... Reymar la giraba. Yo cambi\xE9 los permisos."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 11
       parametro: 1
     - hablante: 0
       texto: La casa siempre gana, {PJ}. Y la casa soy yo.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 1
       parametro: 1
   - nombre: 'F2: primer giro dado vuelta'
@@ -247,11 +396,13 @@ MonoBehaviour:
       texto: "\xBFLo ves? Los mismos n\xFAmeros, la misma rueda. Lo \xFAnico que
         cambi\xF3 es para qui\xE9n juega."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Eso es el azar, {PJ}: una regla que todav\xEDa nadie te cont\xF3."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F2: 2026'
@@ -264,27 +415,33 @@ MonoBehaviour:
     - hablante: 0
       texto: "\xBFTe acord\xE1s de la oficina de la directora? El d\xEDa de la graduaci\xF3n."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 1
-      texto: "Estaba ah\xED. Lo vi todo."
+      texto: "Estaba ah\xED. Vi el portal, a Mewtwo, a Hoopa... y a vos tir\xE1ndoles
+        el LINK."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
-      texto: "Ya s\xE9 que estabas ah\xED. Escondido, esperando que la red se cayera
-        para meter un virus que llevabas a\xF1os escribiendo."
+      texto: "Viste el final. \xBFY de lo que pas\xF3 antes en esa sala, qu\xE9 te
+        acord\xE1s?"
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 1
-      texto: "...\xBFC\xF3mo sab\xE9s eso?"
+      texto: "...\xBFQu\xE9 pas\xF3 antes?"
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
-      texto: "Porque lo encontr\xE9 mucho antes de que vos pudieras usarlo."
+      texto: Ganame y te lo cuento.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F2: Julieta pierde otro'
@@ -297,11 +454,13 @@ MonoBehaviour:
     - hablante: 0
       texto: "Segu\xEDs pegando fuerte. Pero ya no est\xE1s peleando contra mis Pok\xE9mon."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Est\xE1s peleando contra las reglas. Y las reglas son m\xEDas."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F2: el jugador pierde uno'
@@ -315,6 +474,7 @@ MonoBehaviour:
       texto: "Uno menos. En 2026 la red colaps\xF3 en un segundo. Tu equipo va a
         tardar un poco m\xE1s."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F2 -> F3: Julieta entra al vinculo'
@@ -331,45 +491,44 @@ MonoBehaviour:
     - hablante: 0
       texto: "Te voy a mostrar para qu\xE9 sirve de verdad el NeuraRush-LINK."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
-      texto: "No es para ense\xF1ar. Ense\xF1ar es lento: la gente se equivoca, se
-        olvida, se rebela."
+      texto: "Conecta. Personas, m\xE1quinas... Pok\xE9mon."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
-      texto: "El LINK no ense\xF1a, {PJ}. Escribe. Escribe lo que ten\xE9s que saber...
-        y borra lo que no."
+      texto: "Y un Pok\xE9mon conectado escucha a quien tiene la red."
       retrato: {fileID: 0}
-      accion: 0
-      parametro: 0
-    - hablante: 0
-      texto: "Y un Pok\xE9mon es un v\xEDnculo. Un v\xEDnculo tambi\xE9n se puede
-        escribir."
-      retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 13
       parametro: 0
     - hablante: 3
       texto: 'NEURARUSH-LINK: ACCEDIENDO A {POKEMON}...'
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 8
       parametro: 0
     - hablante: 1
       texto: "\xA1{POKEMON}! \xA1Soy yo!"
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 10
       parametro: 1
     - hablante: 0
       texto: Sigue en tu equipo. Sigue teniendo tu nombre en la ficha. Pero ya no
         te escucha.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Ahora no alcanza con ganarme, {PJ}. Ten\xE9s que sobrevivirte."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 1
       parametro: 2
   - nombre: 'F3: primer golpe al PJ'
@@ -382,11 +541,13 @@ MonoBehaviour:
     - hablante: 1
       texto: "\xA1Agh...! \xA1{POKEMON}, par\xE1!"
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Duele porque es tuyo. Para eso sirve un v\xEDnculo."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F3: Tacconi y el registro'
@@ -400,21 +561,25 @@ MonoBehaviour:
       texto: "Tacconi encontr\xF3 mi nombre en un registro de 2026. El del primer
         experimento del LINK."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 1
       texto: Dijo que yo no era uno de los sujetos. Que era parte del desarrollo.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Tacconi siempre ley\xF3 de m\xE1s."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
       texto: "Pero esta vez ley\xF3 bien."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F3: el PJ se da cuenta'
@@ -428,6 +593,7 @@ MonoBehaviour:
       texto: "Si lo dejo en el campo me va a terminar... Tengo que sacarlo. O terminar
         esto r\xE1pido."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F3: el PJ al limite'
@@ -438,9 +604,10 @@ MonoBehaviour:
       valor: 30
     lineas:
     - hablante: 0
-      texto: "Mirate, {PJ}. En 2026 quer\xEDas tirar abajo la red del colegio. Ahora
-        la red te tira abajo a vos."
+      texto: "Mirate, {PJ}. Cinco a\xF1os esquivando el chip, y te tira abajo tu
+        propio equipo."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'F3: el controlado cayo'
@@ -453,11 +620,13 @@ MonoBehaviour:
     - hablante: 0
       texto: "Uno menos. No importa: tu equipo tiene m\xE1s puertas."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 3
       texto: 'NEURARUSH-LINK: ACCEDIENDO A {POKEMON}...'
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 8
       parametro: 0
   - nombre: 'F3: el ultimo de Julieta'
@@ -468,11 +637,12 @@ MonoBehaviour:
       valor: 0
     lineas:
     - hablante: 0
-      texto: "Me queda uno. Y mientras el sistema sea m\xEDo, no cae."
+      texto: "Me queda uno. Y mientras la red sea m\xEDa, no cae."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
-  - nombre: 'F3 -> Ruptura: el PJ rompe el control'
+  - nombre: 'F3 -> Ruptura: Tixi abre la red'
     fase: 2
     cualquierFase: 0
     cuando:
@@ -482,75 +652,95 @@ MonoBehaviour:
       valor: 0
     lineas:
     - hablante: 0
-      texto: "\xBFTodav\xEDa no lo entendiste? No eras un sujeto del experimento,
-        {PJ}. Eras un autor."
+      texto: "\xBFVes, {PJ}? As\xED se ve una red cuando tiene due\xF1a."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
+      accion: 0
+      parametro: 0
+    - hablante: 3
+      texto: 'TRANSMISOR EXTERNO DETECTADO. ORIGEN: DESCONOCIDO.'
+      retrato: {fileID: 0}
+      sonido: {fileID: 8300000, guid: 18ccca17fc1978044bec67f47023d9c0, type: 3}
+      accion: 13
+      parametro: 0
+    - hablante: 4
+      texto: "\xA1{PJ}! \xA1Entr\xE9! El transmisor me abri\xF3 una puerta en la
+        red. No s\xE9 cu\xE1nto la puedo sostener."
+      retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 0
-      texto: "Tu virus es lo que deja al LINK entrar en una cabeza sin pedir permiso.
-        Lo encontr\xE9 en el servidor del colegio y lo us\xE9."
+      texto: "\xBFQui\xE9n m\xE1s est\xE1 en mi red?"
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
+      accion: 0
+      parametro: 0
+    - hablante: 4
+      texto: 'El chip nunca te pudo escribir, {PJ}. Hablale a {POKEMON} por el LINK:
+        a vos te va a escuchar.'
+      retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 1
-      texto: Por eso el chip de mi nuca no me hace nada...
+      texto: "{POKEMON}... soy yo. Volv\xE9."
       retrato: {fileID: 0}
-      accion: 0
-      parametro: 0
-    - hablante: 0
-      texto: "Un virus no infecta a quien lo escribi\xF3."
-      retrato: {fileID: 0}
-      accion: 0
-      parametro: 0
-    - hablante: 1
-      texto: "Entonces tu sistema tambi\xE9n me escucha a m\xED."
-      retrato: {fileID: 0}
-      accion: 0
-      parametro: 0
-    - hablante: 1
-      texto: "{POKEMON}... soy yo. Este c\xF3digo es m\xEDo. \xA1Desconectate!"
-      retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 13
       parametro: 0
     - hablante: 3
-      texto: "FIRMA DE AUTOR RECONOCIDA. V\xCDNCULO LIBERADO."
+      texto: "V\xCDNCULO LIBERADO."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 9
       parametro: 0
     - hablante: 3
       texto: 'LECTURA DE LA ADMINISTRADORA: REVOCADA.'
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 7
       parametro: 0
     - hablante: 3
       texto: "PROTOCOLO N\xC9STOR: EN L\xCDNEA."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 4
       parametro: 0
     - hablante: 2
-      texto: "\xA1{PJ}! \xA1Volv\xED! Lo que hiciste abri\xF3 el canal de nuevo."
+      texto: "\xA1{PJ}! \xA1Volv\xED! Alguien abri\xF3 el canal de nuevo."
       retrato: {fileID: 21300000, guid: 853498d5f00c6fa45a5a2b62a53fa1c5, type: 3}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
     - hablante: 3
-      texto: "RULETA DE MART\xCDN: JUEGA A FAVOR DE {PJ}."
+      texto: 'RULETA DE REYMAR: JUEGA A FAVOR DE {PJ}.'
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 2
       parametro: 1
     - hablante: 0
       texto: No... esto no estaba en el plan.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 12
+      parametro: 0
+    - hablante: 4
+      texto: "Ya est\xE1. Terminalo, {PJ}."
+      retrato: {fileID: 0}
+      sonido: {fileID: 0}
+      accion: 0
       parametro: 0
     - hablante: 1
       texto: Estoy bien. Sigo en pie.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 10
       parametro: 0
     - hablante: 1
-      texto: "Aprend\xED de la mejor, profe. Ahora terminemos."
+      texto: "Ahora s\xED, profe. Terminemos."
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 1
       parametro: 3
   - nombre: 'Ruptura: el ultimo de Julieta'
@@ -563,6 +753,7 @@ MonoBehaviour:
     - hablante: 0
       texto: Me queda uno, {PJ}. Y no lo pienso soltar.
       retrato: {fileID: 0}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   - nombre: 'Ruptura: Nestor acompana'
@@ -575,142 +766,854 @@ MonoBehaviour:
     - hablante: 2
       texto: "Ella nunca perdi\xF3 un turno en su vida, {PJ}. Que este sea el primero."
       retrato: {fileID: 21300000, guid: 8ce26824c4e18f74aa1d4a5ea277d149, type: 3}
+      sonido: {fileID: 0}
       accion: 0
       parametro: 0
   alPerder:
   - hablante: 0
     texto: "Esto es lo que te quer\xEDa mostrar, {PJ}. Sin mis reglas no hay juego."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
     texto: "Tu equipo vuelve a como entr\xF3. No me sirve de nada ganarle a alguien
       roto."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
     texto: "Cuando quieras, volv\xE9 a intentarlo. Yo no me voy a ning\xFAn lado."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   finalDelJuego:
   - hablante: 3
-    texto: 'NEURARUSH-LINK: ADMINISTRADORA DESCONECTADA.'
+    texto: "El \xFAltimo Pok\xE9mon de Julieta cae. Ella se queda de pie unos segundos..."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 3
-    texto: "MEWTWO: CONEXI\xD3N PERDIDA. HOOPA: CONEXI\xD3N PERDIDA."
+    texto: ...y finalmente cae de rodillas.
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
-  - hablante: 0
-    texto: ...
-    retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 0
+  - hablante: 1
     texto: "Se termin\xF3."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: No...
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 1
-    texto: "\xBFPor qu\xE9, Julieta? \xBFPor qu\xE9 todo esto?"
+    texto: "S\xED."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta mira hacia el servidor principal.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: "Porque vi a mis alumnos equivocarse durante a\xF1os. Olvidarse todo al
-      otro d\xEDa del examen. Quedarse atr\xE1s."
+    texto: "Si destru\xEDs ese servidor, todo va a terminar."
     retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 0
-    texto: "El LINK iba a arreglar eso. Nadie m\xE1s se iba a quedar atr\xE1s."
-    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 1
-    texto: "Nadie se iba a quedar atr\xE1s porque nadie se iba a poder mover."
+    texto: Eso es exactamente lo que vine a hacer.
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: "Cuando se abri\xF3 el portal, el mundo se rompi\xF3. Alguien ten\xEDa
-      que escribir las reglas nuevas."
+    texto: "No entend\xE9s lo que est\xE1s haciendo."
     retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 0
-    texto: Si no era yo, no iba a ser nadie.
-    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 1
-    texto: "Hab\xEDa que dejar que la gente se equivoque. Eso tambi\xE9n es aprender."
+    texto: "Entonces explic\xE1melo."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
-    texto: "Lo dice el que quer\xEDa voltear la red del colegio por venganza."
+    texto: El NeuraRush-LINK no fue creado para controlar personas.
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 1
-    texto: "S\xED. Y mir\xE1: mi virus termin\xF3 sirviendo para algo."
+    texto: "\xBFEntonces para qu\xE9?"
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Para conectar.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFConectar qu\xE9?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Personas. M\xE1quinas. Pok\xE9mon. Todo."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Y para hacer eso destruyeron la vida de miles de personas.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Fue un accidente.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFUn accidente que dur\xF3 cinco a\xF1os?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Despu\xE9s de 2026 ya no hab\xEDa vuelta atr\xE1s."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Siempre hubo una vuelta atr\xE1s."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: No.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta te mira.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Vos sos la prueba de eso.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFQu\xE9 quer\xE9s decir?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Vos sobreviviste sin modificaciones. Sin estabilizadores. Sin depender
+      del chip.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Eso ya me lo dijo Reymar.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Reymar no sab\xEDa todo."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Entonces decime.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Cuando comenzamos los primeros experimentos, necesit\xE1bamos encontrar
+      una forma de conectar un cerebro humano al sistema..."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: ...sin destruirlo.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Y me usaron para eso.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Te estudiamos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFSin que yo lo supiera?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Eras el \xFAnico caso que funcionaba."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFY qu\xE9 pas\xF3 despu\xE9s?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: El accidente.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFY despu\xE9s?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Despu\xE9s intentamos controlar lo que hab\xEDamos creado."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Y terminaron conectando a todo el mundo.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: No exactamente.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFQu\xE9 significa eso?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "El NeuraRush-LINK no oblig\xF3 a todos a conectarse."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFEntonces?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Una vez que comenz\xF3 a expandirse, las personas empezaron a conectarse
+      voluntariamente."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFPor qu\xE9?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Porque pod\xEDan hacer cosas que antes eran imposibles."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Compartir conocimientos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Comunicarse sin hablar.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Aprender en segundos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Incluso conectar sus pensamientos con Pok\xE9mon."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Y tambi\xE9n perdieron sus recuerdos."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Algunos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Se convirtieron en otra cosa.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Tal vez.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Entonces todo esto...
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Es el resultado de intentar solucionar un problema que nosotros mismos
+      creamos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Silencio.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "No importa cu\xE1nto intentes justificarlo."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Hay gente que perdi\xF3 cinco a\xF1os de su vida."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Lo s\xE9."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Entonces se termin\xF3."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Si destru\xEDs el servidor, tambi\xE9n vas a destruir toda la red."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Tixi dijo lo mismo.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "\xBFTixi?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "S\xED."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Entonces finalmente te encontr\xF3."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFConoc\xEDas a Tixi?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Todos los que trabajamos en el proyecto conoc\xEDamos su trabajo."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFTixi tambi\xE9n estuvo en el proyecto?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: No como vos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFQu\xE9 significa eso?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Que intent\xF3 detenernos antes del accidente."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFY por qu\xE9 nunca me lo cont\xF3?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Porque probablemente ten\xEDa miedo de que recordaras."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFRecordar qu\xE9?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Lo que pas\xF3 en aquella sala."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "Te qued\xE1s en silencio."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFQu\xE9 pas\xF3?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Vos estabas ah\xED cuando comenz\xF3 todo."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Yo...
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Y viste c\xF3mo empez\xF3 el primer experimento."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: No recuerdo nada.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Por eso sos el \xFAnico que todav\xEDa puede decidir qu\xE9 hacer con
+      esto."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFQu\xE9 quer\xE9s decir?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Si destru\xEDs el servidor, nadie podr\xE1 volver a utilizar el NeuraRush-LINK."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Entonces lo voy a destruir.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Pero tampoco vas a poder recuperar tus propios recuerdos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "Mir\xE1s el servidor."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Ya perd\xED cinco a\xF1os."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: No voy a perder el resto de mi vida intentando recuperarlos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 0
     texto: ...
     retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 0
-    texto: Aprobado, {PJ}.
-    retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 3
-    texto: "SERVIDOR CENTRAL: APAG\xC1NDOSE. DESCONECTANDO TODOS LOS CHIPS..."
-    retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 3
-    texto: MEMORIAS RESTAURADAS.
-    retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 2
-    texto: "{PJ}... lo lograste. Lo recuerdo todo. Todos lo est\xE1n recordando."
-    retrato: {fileID: 21300000, guid: 853498d5f00c6fa45a5a2b62a53fa1c5, type: 3}
-    accion: 0
-    parametro: 0
-  - hablante: 0
-    texto: "En 2026 Mewtwo dijo que el futuro todav\xEDa pod\xEDa salvarse."
-    retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 0
-    texto: "Parece que ten\xEDa raz\xF3n."
-    retrato: {fileID: 0}
-    accion: 0
-    parametro: 0
-  - hablante: 0
-    texto: "And\xE1, {PJ}. Tixi te est\xE1 esperando en la Quarcho Cueva. Y esta
-      vez nadie va a olvidar lo que pas\xF3."
-    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   - hablante: 1
-    texto: Nos vemos, profe.
+    texto: "Se termin\xF3, Julieta."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "Te acerc\xE1s al servidor principal."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Esper\xE1."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFQu\xE9?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Quiz\xE1s alg\xFAn d\xEDa entiendas por qu\xE9 lo hicimos."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Quiz\xE1s."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Pero no va a ser con esto conectado.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "Destru\xEDs el n\xFAcleo del servidor."
+    retrato: {fileID: 0}
+    sonido: {fileID: 8300000, guid: b392e0f5ab093224f85209def7f74dbc, type: 3}
+    accion: 14
+    parametro: 0
+  - hablante: 3
+    texto: ADVERTENCIA. SERVIDOR PRINCIPAL DESTRUIDO.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "CONEXI\xD3N CON NEURARUSH-LINK INTERRUMPIDA. DESCONEXI\xD3N GLOBAL INICIADA."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "Las luces de la sala comienzan a apagarse. Los cables que recorren las
+      paredes dejan de emitir energ\xEDa."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta observa el servidor destruido.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Cinco a\xF1os..."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "S\xED."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Todo este tiempo...
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Se termin\xF3."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: El NeuraRush-LINK de Julieta comienza a emitir pulsos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 13
+    parametro: 0
+  - hablante: 3
+    texto: "ERROR CR\xCDTICO. CONEXI\xD3N PERDIDA. DESCONEXI\xD3N INICIADA."
+    retrato: {fileID: 0}
+    sonido: {fileID: 8300000, guid: 89c1cf6d8cdc93f42b880d8f99168bd1, type: 3}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: El chip de Julieta se apaga. Julieta cae al suelo.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: Julieta.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: ...
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFEst\xE1s bien?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "No s\xE9."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta se mira las manos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "\xBFQu\xE9 a\xF1o es?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: 2031.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta cierra los ojos.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Entonces funcion\xF3."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFQu\xE9 cosa?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Por primera vez en cinco a\xF1os..."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Estoy sola en mi propia cabeza.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "No le respond\xE9s."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "\xBFQu\xE9 vas a hacer ahora?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: No tengo idea.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "\xBFY Tixi?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "Esper\xE1ndome."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: "Entonces and\xE1."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 1
+    texto: "\xBFY vos?"
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: Julieta mira el servidor destruido.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 0
+    texto: Yo tengo mucho que recordar.
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  - hablante: 3
+    texto: "Te das vuelta y empez\xE1s a caminar hacia la salida."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
   yaVencida:
   - hablante: 0
-    texto: "Ya est\xE1, {PJ}. And\xE1 con Tixi."
+    texto: "Yo tengo mucho que recordar, {PJ}. And\xE1 con Tixi."
     retrato: {fileID: 0}
+    sonido: {fileID: 0}
     accion: 0
     parametro: 0
+  fuente: {fileID: 12800000, guid: ce613fd9a1354ef4aafb425fb3f9a744, type: 3}
+  epilogo:
+  - "Horas despu\xE9s."
+  - Desde una radio se narran noticias de distintas partes del mundo.
+  - "Personas y Pok\xE9mon comienzan a recuperar sus recuerdos."
+  - "Algunos se abrazan.\nOtros simplemente permanecen en silencio, intentando entender
+    qu\xE9 ocurri\xF3."
+  - En distintas ciudades, los dispositivos conectados al NeuraRush-LINK dejan de
+    funcionar.
+  - El mundo vuelve a escuchar su propio silencio.
+  enLaCueva: {fileID: 11400000, guid: 45ebff9a31bcb2f41a02188e52e0a9c8, type: 2}
+  ultimaConexion:
+  - "\xDALTIMA CONEXI\xD3N DETECTADA."
+  - "UBICACI\xD3N: DESCONOCIDA."
+  - CONECTANDO NEURARUSH-LINK...
+  - CONECTANDO NEURARUSH-LINK...
+  - CONECTANDO NEURARUSH-LINK...
+  - ERROR.
+  - ERROR.
+  - "INICIANDO PROCESO DE RECUPERACI\xD3N GLOBAL..."
+  - INICIANDO PROCESO.
+  - 'NOMBRE EN CLAVE: VENTRESCA AI'

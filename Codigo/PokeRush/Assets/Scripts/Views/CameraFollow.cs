@@ -47,6 +47,11 @@ public class CameraFollow : MonoBehaviour
     private Vector3 _ultimaDibujada;
     private Vector3 _velocity;
 
+    // Multiplica el zoom de diseno: 1 = el de la escena, mas = la camara se
+    // aleja. Lo usa el final del juego en la cueva ("la camara se aleja
+    // lentamente"). Con evitarRayasEntreTiles el zoom va de a pixel por celda.
+    public float Alejamiento { get; set; } = 1f;
+
     private void Awake()
     {
         _cam = GetComponent<Camera>();
@@ -88,12 +93,17 @@ public class CameraFollow : MonoBehaviour
         }
 
         Vector3 dibujada = _posSuave;
+        float ortho = _orthoBase * Mathf.Max(0.1f, Alejamiento);
         if (evitarRayasEntreTiles && _cam != null && _cam.orthographic && _cam.pixelHeight > 0)
         {
             float celda = Mathf.Max(0.0001f, tamanioDeCelda);
-            int pixeles = PixelesPorCelda(_cam.pixelHeight, _orthoBase, celda);
+            int pixeles = PixelesPorCelda(_cam.pixelHeight, ortho, celda);
             _cam.orthographicSize = _cam.pixelHeight * celda / (2f * pixeles);
             dibujada = PegarAlPixel(_posSuave, pixeles / celda, _cam.pixelWidth, _cam.pixelHeight);
+        }
+        else if (_cam != null && !Mathf.Approximately(Alejamiento, 1f))
+        {
+            _cam.orthographicSize = ortho;
         }
 
         transform.position = dibujada;

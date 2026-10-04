@@ -10,24 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
-  m_Name: Casino_Reymar_Antes_Tacconi
+  m_Name: Final_Sede_Llegada
   m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
-  speakerName: "REYMAR"
-  speakerPortrait: {fileID: 21300000, guid: 97358298e5121c8408cf32d53e1270c9, type: 3}
-  lines: []
+  speakerName: 
+  speakerPortrait: {fileID: 0}
+  lines:
+  - '[] El antiguo edificio del Ameghino. Lo remodelaron entero.'
+  - '[] Ahora es una enorme sede corporativa, rodeada de guardias y sistemas de seguridad.'
+  - '[PJ] Tanto tiempo...'
+  - "[] Te qued\xE1s mirando el edificio unos segundos."
+  - '[PJ] Bueno. A terminar con esto.'
   requiredFlag: 0
-  grantsFlag: 0
+  grantsFlag: 90
   otrosHablantes: []
-  variantes:
-  - nota: "Despues de ganarle a Tacconi"
-    requiere: 84
-    requiereTambien: 0
-    excluye: 0
-    lineas:
-    - "[REYMAR] Y Tacconi habl\xF3 de m\xE1s, \xBFno? Siempre lee de m\xE1s."
-    otorgaFlag: 0
+  variantes: []
   otorgaObjeto: {fileID: 0}
-  pregunta: ""
+  pregunta: 
   respuestas: []
   cancelarElige: -1
   siguiente: {fileID: 0}

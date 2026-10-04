@@ -11,13 +11,13 @@ using UnityEngine;
 // (PokeRush > Jefe final (Julieta) > Rehacer el guion desde el código), que
 // avisa que pisa.
 //
-// El guion sigue la historia (Downloads/historia.pdf y el GDD): 2026, la oficina
-// de la directora, el NeuraRush-LINK, Mewtwo y Hoopa, el PJ escondido con su
-// virus, Nestor y el Protocolo Nestor, Tacconi y el registro del primer
-// experimento, la ruleta de Martin. Lo que la historia todavia no decia (POR QUE
-// el PJ es inmune y para que era de verdad el LINK) esta resuelto aca de una
-// forma que no contradice nada de lo anterior, y esta marcado en
-// Jefe_Final_Julieta.md como decision a revisar por el equipo.
+// El guion sigue la historia (Downloads/historia.pdf, version del 4-oct-2026):
+// la charla de antes de pelear ("Servidor principal"), la de despues ("Combate
+// final -- Julieta"), el epilogo y la ultima conexion de la cueva salen del
+// PDF casi palabra por palabra. Lo que el PDF no cuenta es lo de ADENTRO de la
+// pelea (las cuatro fases); esos textos no adelantan lo que Julieta explica al
+// final, y la ruptura la abre el transmisor que Tixi le da al PJ en la cueva.
+// Ver "Decisiones de historia" en Jefe_Final_Julieta.md.
 public static class PeleaJulietaAssets
 {
     public const string Carpeta = "Assets/Resources/Definitions/Julieta";
@@ -42,6 +42,19 @@ public static class PeleaJulietaAssets
     private const string RetratoNestorPreocupado = "Assets/Sprites/Nestor/NESTOR_retrato_preocupado.png";
     private const string RetratoPJVaron = "Assets/Sprites/Trainers/POKEMONTRAINER_RojoNeutro.png";
     private const string RetratoPJMujer = "Assets/Sprites/Trainers/POKEMONTRAINER_HojaNeutra.png";
+    // El mismo retrato que usa Tixi en la cueva (QuarchoTixiNpc).
+    private const string RetratoDeTixi = "Assets/Graphics/Trainers/TIXI.png";
+    private const string FuenteDelFinal = "Assets/TextMesh Pro/Fonts/power clear.ttf";
+
+    // La charla final con Tixi en la cueva: un DialogueDefinition, como el
+    // resto de lo que dice Tixi (el texto se edita en el asset).
+    public const string RutaCharlaEnLaCueva = Carpeta + "/Dialogos/Final_Tixi_EnLaCueva.asset";
+
+    // Los efectos del final (sacados del pack de Essentials, AudioAÑIL/SE).
+    public const string CarpetaDeSonidos = "Assets/Audio/Efectos/Final/";
+    private const string SonidoTransmisor = CarpetaDeSonidos + "transmisor.ogg";
+    private const string SonidoNucleo = CarpetaDeSonidos + "nucleo_destruido.wav";
+    private const string SonidoChip = CarpetaDeSonidos + "chip_apagado.ogg";
 
     // El equipo: tecnologia y mente, ninguno repetido de Nestor, y los dos del
     // portal de 2026 como ases (GDD: "sus dos ases son los dos Pokemon del
@@ -144,6 +157,17 @@ public static class PeleaJulietaAssets
         => new LineaDeJulieta(HablanteDeJulieta.Nestor, t, a, p) { retrato = cara != null ? Sprite(cara) : null };
     private static LineaDeJulieta S(string t, AccionDeJulieta a = AccionDeJulieta.Ninguna, int p = 0)
         => new LineaDeJulieta(HablanteDeJulieta.Sistema, t, a, p);
+    // Lo que se narra va sin cartel de nombre, igual que los avisos del sistema.
+    private static LineaDeJulieta Narra(string t, AccionDeJulieta a = AccionDeJulieta.Ninguna, int p = 0)
+        => new LineaDeJulieta(HablanteDeJulieta.Sistema, t, a, p);
+    private static LineaDeJulieta T(string t, AccionDeJulieta a = AccionDeJulieta.Ninguna, int p = 0)
+        => new LineaDeJulieta(HablanteDeJulieta.Tixi, t, a, p);
+    private static LineaDeJulieta Sonando(LineaDeJulieta l, string sonido)
+    {
+        l.sonido = AssetDatabase.LoadAssetAtPath<AudioClip>(sonido);
+        if (l.sonido == null) Debug.LogWarning($"[Julieta] No esta el sonido {sonido}.");
+        return l;
+    }
     private static CondicionDeJulieta C(DisparadorDeJulieta d, int v = 0) => new CondicionDeJulieta(d, v);
 
     private static MomentoDeJulieta M(string nombre, FaseDeJulieta fase, CondicionDeJulieta[] cuando,
@@ -157,10 +181,13 @@ public static class PeleaJulietaAssets
     {
         g.nombreJulieta = "JULIETA";
         g.nombreNestor = "NÉSTOR";
+        g.nombreTixi = "TIXI";
         g.retratoJulieta = CasinoNpcBuilder.SpriteRetrato(RetratoDeJulieta);
         g.retratoNestor = Sprite(RetratoNestor);
+        g.retratoTixi = CasinoNpcBuilder.SpriteRetrato(RetratoDeTixi);
         g.retratoPJVaron = PrimerSprite(RetratoPJVaron);
         g.retratoPJMujer = PrimerSprite(RetratoPJMujer);
+        g.fuente = AssetDatabase.LoadAssetAtPath<Font>(FuenteDelFinal);
 
         const FaseDeJulieta F1 = FaseDeJulieta.Analisis;
         const FaseDeJulieta F2 = FaseDeJulieta.ControlDelSistema;
@@ -168,20 +195,48 @@ public static class PeleaJulietaAssets
         const FaseDeJulieta F4 = FaseDeJulieta.Ruptura;
 
         // ---------------------------------------------------------- en la arena
+        // historia.pdf, "Servidor principal". Lo de antes (la llegada al
+        // Ameghino, la alarma, la puerta) lo cuentan las zonas de la arena.
 
         g.alEncontrarla = new[]
         {
-            S("SERVIDOR CENTRAL DE NEURARUSH-LINK. USUARIO SIN REGISTRAR EN LA SALA."),
-            J("Llegaste, {PJ}. Tarde, como siempre. Pero llegaste."),
-            PJ("Julieta."),
-            J("Profesora Julieta. Que el mundo se haya dado vuelta no es excusa para perder los modales."),
-            PJ("Vengo a apagar todo esto."),
-            J("Ya sé. Apagaste mis servidores uno por uno, desconectaste a Néstor, te llevaste el casino de Martín."),
-            J("Mewtwo y Hoopa también están acá. Vinieron en 2026 a detenerme, ¿te acordás? Ahora pelean para mí."),
-            J("Vení. Mostrame lo que aprendiste. Quiero ver con qué me vas a enfrentar."),
+            Narra("En el centro de la sala está el servidor principal, conectado a cientos de cables que recorren las paredes."),
+            Narra("Frente a él está Julieta."),
+            J("Llegaste."),
+            PJ("¿Esperabas que viniera?"),
+            J("Después de todo lo que hiciste, era cuestión de tiempo."),
+            PJ("Destruí tus servidores."),
+            J("Lo sé."),
+            PJ("Desconecté a tus guardianes."),
+            J("También lo sé."),
+            PJ("Y ahora voy a destruir este."),
+            J("Se ve que pensar no es lo tuyo... ¿De verdad pensás que es tan sencillo?"),
+            Narra("Julieta se da vuelta y observa el servidor."),
+            J("¿Sabés cuántas personas dependen de esto?"),
+            PJ("Demasiadas."),
+            J("¿Y sabés qué pasaría si lo destruyeras?"),
+            PJ("No me interesa."),
+            J("Claro que no. Nunca te interesó entender lo que hicimos."),
+            PJ("Entonces explicámelo."),
+            Narra("Julieta se queda en silencio unos segundos."),
+            J("Está bien. Pero primero vas a tener que demostrarme que realmente merecés estar acá."),
+            PJ("¿Y cómo pensás hacer eso?"),
+            J("De la misma forma que siempre."),
+            Narra("Julieta se pone frente a vos."),
+            J("Peleando."),
+            PJ("Por fin."),
+        };
+
+        g.alReintentar = new[]
+        {
+            J("Volviste."),
+            J("Bien. Demostrame que esta vez sí merecés estar acá."),
         };
 
         // ---------------------------------------------------------- la pelea
+        // El PDF no cuenta la pelea por dentro. Lo que se dice aca no adelanta
+        // lo que Julieta explica al final (los experimentos, la sala de 2026):
+        // solo lo promete ("ganame y te lo cuento").
 
         var m = new List<MomentoDeJulieta>();
 
@@ -190,8 +245,8 @@ public static class PeleaJulietaAssets
         m.Add(M("Inicio: Nestor y la ruleta en linea", F1, new[] { C(DisparadorDeJulieta.AlEmpezar) },
             S("PROTOCOLO NÉSTOR: EN LÍNEA.", AccionDeJulieta.EncenderNestor),
             N("{PJ}, estoy conectado. Yo le leo las jugadas, vos pegá."),
-            S("RULETA DE MARTÍN: EN LÍNEA. JUEGA A FAVOR DE {PJ}.", AccionDeJulieta.EncenderRuleta, AFavorDelJugador),
-            J("Néstor en tu oído y la ruleta de Martín en el bolsillo. Qué bien equipado venís.",
+            S("RULETA DE REYMAR: EN LÍNEA. JUEGA A FAVOR DE {PJ}.", AccionDeJulieta.EncenderRuleta, AFavorDelJugador),
+            J("Néstor en tu oído y la ruleta de Reymar en el bolsillo. Qué bien equipado venís.",
               AccionDeJulieta.PerfilDeIA, 0),
             J("Adelante. Yo solo voy a mirar.")));
 
@@ -201,7 +256,7 @@ public static class PeleaJulietaAssets
             N("No la escuches, {PJ}. Seguí.")));
 
         m.Add(M("F1: primer giro de la ruleta", F1, new[] { C(DisparadorDeJulieta.RuletaGiroEnLaFase, 1) },
-            J("La ruleta de Martín. Te la dio cuando lo desconectaste, ¿no?"),
+            J("La ruleta de Reymar. Te la dio cuando lo desconectaste, ¿no?"),
             J("Un generador de números al azar. Qué nombre lindo para algo que no existe.")));
 
         m.Add(M("F1: Julieta pierde el primero", F1, new[] { C(DisparadorDeJulieta.AlRivalLeQuedan, 5) },
@@ -210,7 +265,7 @@ public static class PeleaJulietaAssets
 
         m.Add(M("F1: Julieta termina de estudiar", F1, new[] { C(DisparadorDeJulieta.TurnosEnLaFase, 3) },
             J("Tres turnos. Ya sé cuánto tarda Néstor en recalcular y cada cuánto gira la ruleta."),
-            J("¿Sabés qué es lo gracioso, {PJ}? Todo lo que te está ayudando salió de mi código.")));
+            J("¿Sabés qué es lo gracioso, {PJ}? Todo lo que te está ayudando corre sobre mi red.")));
 
         // ----- La vuelta: pasa a la fase 2 -----
         m.Add(M("F1 -> F2: Julieta cambia las reglas", F1, new[]
@@ -224,11 +279,11 @@ public static class PeleaJulietaAssets
             S("NEURARUSH-LINK: ACCESO DE ADMINISTRADORA CONCEDIDO.", AccionDeJulieta.SenalDeControl, 1),
             N("¡{PJ}! Se metió en el canal... no... no la puedo sacar...", cara: RetratoNestorShock),
             S("PROTOCOLO NÉSTOR: CONEXIÓN PERDIDA.", AccionDeJulieta.ApagarNestor),
-            J("El Protocolo Néstor lo escribí yo. Néstor aprendió a leer una jugada porque yo le enseñé."),
-            J("Ahora lee las tuyas. Para mí.", AccionDeJulieta.EncenderLecturaDeJulieta),
-            S("RULETA DE MARTÍN: PREMIOS REASIGNADOS. JUEGA A FAVOR DE: JULIETA.",
+            J("El Protocolo Néstor es una función de mi NeuraRush-LINK. Néstor la usaba porque yo se la di."),
+            J("Ahora lee tus jugadas. Para mí.", AccionDeJulieta.EncenderLecturaDeJulieta),
+            S("RULETA DE REYMAR: PREMIOS REASIGNADOS. JUEGA A FAVOR DE: JULIETA.",
               AccionDeJulieta.EncenderRuleta, AFavorDelRival),
-            J("Y la ruleta... Martín la giraba. Yo la programé.", AccionDeJulieta.PerfilDeIA, 1),
+            J("Y la ruleta... Reymar la giraba. Yo cambié los permisos.", AccionDeJulieta.PerfilDeIA, 1),
             J("La casa siempre gana, {PJ}. Y la casa soy yo.", AccionDeJulieta.PasarAFase, (int)F2)));
 
         // ===== FASE 2: el sistema es de Julieta. =====
@@ -239,10 +294,10 @@ public static class PeleaJulietaAssets
 
         m.Add(M("F2: 2026", F2, new[] { C(DisparadorDeJulieta.TurnosEnLaFase, 2) },
             J("¿Te acordás de la oficina de la directora? El día de la graduación."),
-            PJ("Estaba ahí. Lo vi todo."),
-            J("Ya sé que estabas ahí. Escondido, esperando que la red se cayera para meter un virus que llevabas años escribiendo."),
-            PJ("...¿Cómo sabés eso?"),
-            J("Porque lo encontré mucho antes de que vos pudieras usarlo.")));
+            PJ("Estaba ahí. Vi el portal, a Mewtwo, a Hoopa... y a vos tirándoles el LINK."),
+            J("Viste el final. ¿Y de lo que pasó antes en esa sala, qué te acordás?"),
+            PJ("...¿Qué pasó antes?"),
+            J("Ganame y te lo cuento.")));
 
         m.Add(M("F2: Julieta pierde otro", F2, new[] { C(DisparadorDeJulieta.AlRivalLeQuedan, 3) },
             J("Seguís pegando fuerte. Pero ya no estás peleando contra mis Pokémon."),
@@ -251,7 +306,7 @@ public static class PeleaJulietaAssets
         m.Add(M("F2: el jugador pierde uno", F2, new[] { C(DisparadorDeJulieta.JugadorPerdio, 1) },
             J("Uno menos. En 2026 la red colapsó en un segundo. Tu equipo va a tardar un poco más.")));
 
-        // ----- La ruptura del vinculo: pasa a la fase 3 -----
+        // ----- Julieta entra al vinculo: pasa a la fase 3 -----
         m.Add(M("F2 -> F3: Julieta entra al vinculo", F2, new[]
             {
                 C(DisparadorDeJulieta.TurnosEnLaFase, 5),
@@ -259,9 +314,8 @@ public static class PeleaJulietaAssets
                 C(DisparadorDeJulieta.RivalSalvado),
             },
             J("Te voy a mostrar para qué sirve de verdad el NeuraRush-LINK."),
-            J("No es para enseñar. Enseñar es lento: la gente se equivoca, se olvida, se rebela."),
-            J("El LINK no enseña, {PJ}. Escribe. Escribe lo que tenés que saber... y borra lo que no."),
-            J("Y un Pokémon es un vínculo. Un vínculo también se puede escribir.", AccionDeJulieta.Destello),
+            J("Conecta. Personas, máquinas... Pokémon."),
+            J("Y un Pokémon conectado escucha a quien tiene la red.", AccionDeJulieta.Destello),
             S("NEURARUSH-LINK: ACCEDIENDO A {POKEMON}...", AccionDeJulieta.ControlarPokemon),
             PJ("¡{POKEMON}! ¡Soy yo!", AccionDeJulieta.MostrarVidaDelPJ, 1),
             J("Sigue en tu equipo. Sigue teniendo tu nombre en la ficha. Pero ya no te escucha."),
@@ -283,35 +337,39 @@ public static class PeleaJulietaAssets
             PJ("Si lo dejo en el campo me va a terminar... Tengo que sacarlo. O terminar esto rápido.")));
 
         m.Add(M("F3: el PJ al limite", F3, new[] { C(DisparadorDeJulieta.VidaDelPJBaja, 30) },
-            J("Mirate, {PJ}. En 2026 querías tirar abajo la red del colegio. Ahora la red te tira abajo a vos.")));
+            J("Mirate, {PJ}. Cinco años esquivando el chip, y te tira abajo tu propio equipo.")));
 
         m.Add(M("F3: el controlado cayo", F3, new[] { C(DisparadorDeJulieta.ControladoCayo) },
             J("Uno menos. No importa: tu equipo tiene más puertas."),
             S("NEURARUSH-LINK: ACCEDIENDO A {POKEMON}...", AccionDeJulieta.ControlarPokemon)));
 
         m.Add(M("F3: el ultimo de Julieta", F3, new[] { C(DisparadorDeJulieta.UltimoDelRival) },
-            J("Me queda uno. Y mientras el sistema sea mío, no cae.")));
+            J("Me queda uno. Y mientras la red sea mía, no cae.")));
 
-        // ----- El PJ rompe el control: fase final -----
-        m.Add(M("F3 -> Ruptura: el PJ rompe el control", F3, new[]
+        // ----- La ruptura: el transmisor de Tixi abre la red -----
+        // historia.pdf, vuelta del casino: "Si conseguís llegar al servidor,
+        // voy a poder conectarme desde acá e intentar abrirte el acceso". Julieta
+        // no sabe quien entro: se entera recien al final ("¿Tixi?").
+        m.Add(M("F3 -> Ruptura: Tixi abre la red", F3, new[]
             {
                 C(DisparadorDeJulieta.TurnosEnLaFase, 5),
                 C(DisparadorDeJulieta.RivalSalvado),
             },
-            J("¿Todavía no lo entendiste? No eras un sujeto del experimento, {PJ}. Eras un autor."),
-            J("Tu virus es lo que deja al LINK entrar en una cabeza sin pedir permiso. Lo encontré en el servidor del colegio y lo usé."),
-            PJ("Por eso el chip de mi nuca no me hace nada..."),
-            J("Un virus no infecta a quien lo escribió."),
-            PJ("Entonces tu sistema también me escucha a mí."),
-            PJ("{POKEMON}... soy yo. Este código es mío. ¡Desconectate!", AccionDeJulieta.Destello),
-            S("FIRMA DE AUTOR RECONOCIDA. VÍNCULO LIBERADO.", AccionDeJulieta.LiberarPokemon),
+            J("¿Ves, {PJ}? Así se ve una red cuando tiene dueña."),
+            Sonando(S("TRANSMISOR EXTERNO DETECTADO. ORIGEN: DESCONOCIDO.", AccionDeJulieta.Destello), SonidoTransmisor),
+            T("¡{PJ}! ¡Entré! El transmisor me abrió una puerta en la red. No sé cuánto la puedo sostener."),
+            J("¿Quién más está en mi red?"),
+            T("El chip nunca te pudo escribir, {PJ}. Hablale a {POKEMON} por el LINK: a vos te va a escuchar."),
+            PJ("{POKEMON}... soy yo. Volvé.", AccionDeJulieta.Destello),
+            S("VÍNCULO LIBERADO.", AccionDeJulieta.LiberarPokemon),
             S("LECTURA DE LA ADMINISTRADORA: REVOCADA.", AccionDeJulieta.ApagarLecturaDeJulieta),
             S("PROTOCOLO NÉSTOR: EN LÍNEA.", AccionDeJulieta.EncenderNestor),
-            N("¡{PJ}! ¡Volví! Lo que hiciste abrió el canal de nuevo.", cara: RetratoNestorFeliz),
-            S("RULETA DE MARTÍN: JUEGA A FAVOR DE {PJ}.", AccionDeJulieta.EncenderRuleta, AFavorDelJugador),
+            N("¡{PJ}! ¡Volví! Alguien abrió el canal de nuevo.", cara: RetratoNestorFeliz),
+            S("RULETA DE REYMAR: JUEGA A FAVOR DE {PJ}.", AccionDeJulieta.EncenderRuleta, AFavorDelJugador),
             J("No... esto no estaba en el plan.", AccionDeJulieta.SenalDeControl, 0),
+            T("Ya está. Terminalo, {PJ}."),
             PJ("Estoy bien. Sigo en pie.", AccionDeJulieta.MostrarVidaDelPJ, 0),
-            PJ("Aprendí de la mejor, profe. Ahora terminemos.", AccionDeJulieta.PasarAFase, (int)F4)));
+            PJ("Ahora sí, profe. Terminemos.", AccionDeJulieta.PasarAFase, (int)F4)));
 
         // ===== RUPTURA: todo vuelve al jugador y Julieta ya puede caer. =====
 
@@ -333,36 +391,180 @@ public static class PeleaJulietaAssets
         };
 
         // ---------------------------------------------------------- el final
+        // historia.pdf, "Combate final -- Julieta", entero. Despues vienen el
+        // epilogo y la cueva (EscenaFinalEnLaCueva) y los creditos.
 
         g.finalDelJuego = new[]
         {
-            S("NEURARUSH-LINK: ADMINISTRADORA DESCONECTADA."),
-            S("MEWTWO: CONEXIÓN PERDIDA. HOOPA: CONEXIÓN PERDIDA."),
+            Narra("El último Pokémon de Julieta cae. Ella se queda de pie unos segundos..."),
+            Narra("...y finalmente cae de rodillas."),
+            PJ("Se terminó."),
+            J("No..."),
+            PJ("Sí."),
+            Narra("Julieta mira hacia el servidor principal."),
+            J("Si destruís ese servidor, todo va a terminar."),
+            PJ("Eso es exactamente lo que vine a hacer."),
+            J("No entendés lo que estás haciendo."),
+            PJ("Entonces explicámelo."),
+            J("El NeuraRush-LINK no fue creado para controlar personas."),
+            PJ("¿Entonces para qué?"),
+            J("Para conectar."),
+            PJ("¿Conectar qué?"),
+            J("Personas. Máquinas. Pokémon. Todo."),
+            PJ("Y para hacer eso destruyeron la vida de miles de personas."),
+            J("Fue un accidente."),
+            PJ("¿Un accidente que duró cinco años?"),
+            J("Después de 2026 ya no había vuelta atrás."),
+            PJ("Siempre hubo una vuelta atrás."),
+            J("No."),
+            Narra("Julieta te mira."),
+            J("Vos sos la prueba de eso."),
+            PJ("¿Qué querés decir?"),
+            J("Vos sobreviviste sin modificaciones. Sin estabilizadores. Sin depender del chip."),
+            PJ("Eso ya me lo dijo Reymar."),
+            J("Reymar no sabía todo."),
+            PJ("Entonces decime."),
+            J("Cuando comenzamos los primeros experimentos, necesitábamos encontrar una forma de conectar un cerebro humano al sistema..."),
+            J("...sin destruirlo."),
+            PJ("Y me usaron para eso."),
+            J("Te estudiamos."),
+            PJ("¿Sin que yo lo supiera?"),
+            J("Eras el único caso que funcionaba."),
+            PJ("¿Y qué pasó después?"),
+            J("El accidente."),
+            PJ("¿Y después?"),
+            J("Después intentamos controlar lo que habíamos creado."),
+            PJ("Y terminaron conectando a todo el mundo."),
+            J("No exactamente."),
+            PJ("¿Qué significa eso?"),
+            J("El NeuraRush-LINK no obligó a todos a conectarse."),
+            PJ("¿Entonces?"),
+            J("Una vez que comenzó a expandirse, las personas empezaron a conectarse voluntariamente."),
+            PJ("¿Por qué?"),
+            J("Porque podían hacer cosas que antes eran imposibles."),
+            J("Compartir conocimientos."),
+            J("Comunicarse sin hablar."),
+            J("Aprender en segundos."),
+            J("Incluso conectar sus pensamientos con Pokémon."),
+            PJ("Y también perdieron sus recuerdos."),
+            J("Algunos."),
+            PJ("Se convirtieron en otra cosa."),
+            J("Tal vez."),
+            PJ("Entonces todo esto..."),
+            J("Es el resultado de intentar solucionar un problema que nosotros mismos creamos."),
+            Narra("Silencio."),
+            PJ("No importa cuánto intentes justificarlo."),
+            PJ("Hay gente que perdió cinco años de su vida."),
+            J("Lo sé."),
+            PJ("Entonces se terminó."),
+            J("Si destruís el servidor, también vas a destruir toda la red."),
+            PJ("Tixi dijo lo mismo."),
+            J("¿Tixi?"),
+            PJ("Sí."),
+            J("Entonces finalmente te encontró."),
+            PJ("¿Conocías a Tixi?"),
+            J("Todos los que trabajamos en el proyecto conocíamos su trabajo."),
+            PJ("¿Tixi también estuvo en el proyecto?"),
+            J("No como vos."),
+            PJ("¿Qué significa eso?"),
+            J("Que intentó detenernos antes del accidente."),
+            PJ("¿Y por qué nunca me lo contó?"),
+            J("Porque probablemente tenía miedo de que recordaras."),
+            PJ("¿Recordar qué?"),
+            J("Lo que pasó en aquella sala."),
+            Narra("Te quedás en silencio."),
+            PJ("¿Qué pasó?"),
+            J("Vos estabas ahí cuando comenzó todo."),
+            PJ("Yo..."),
+            J("Y viste cómo empezó el primer experimento."),
+            PJ("No recuerdo nada."),
+            J("Por eso sos el único que todavía puede decidir qué hacer con esto."),
+            PJ("¿Qué querés decir?"),
+            J("Si destruís el servidor, nadie podrá volver a utilizar el NeuraRush-LINK."),
+            PJ("Entonces lo voy a destruir."),
+            J("Pero tampoco vas a poder recuperar tus propios recuerdos."),
+            Narra("Mirás el servidor."),
+            PJ("Ya perdí cinco años."),
+            PJ("No voy a perder el resto de mi vida intentando recuperarlos."),
             J("..."),
-            J("Se terminó."),
-            PJ("¿Por qué, Julieta? ¿Por qué todo esto?"),
-            J("Porque vi a mis alumnos equivocarse durante años. Olvidarse todo al otro día del examen. Quedarse atrás."),
-            J("El LINK iba a arreglar eso. Nadie más se iba a quedar atrás."),
-            PJ("Nadie se iba a quedar atrás porque nadie se iba a poder mover."),
-            J("Cuando se abrió el portal, el mundo se rompió. Alguien tenía que escribir las reglas nuevas."),
-            J("Si no era yo, no iba a ser nadie."),
-            PJ("Había que dejar que la gente se equivoque. Eso también es aprender."),
-            J("Lo dice el que quería voltear la red del colegio por venganza."),
-            PJ("Sí. Y mirá: mi virus terminó sirviendo para algo."),
+            PJ("Se terminó, Julieta."),
+            Narra("Te acercás al servidor principal."),
+            J("Esperá."),
+            PJ("¿Qué?"),
+            J("Quizás algún día entiendas por qué lo hicimos."),
+            PJ("Quizás."),
+            PJ("Pero no va a ser con esto conectado."),
+            Sonando(Narra("Destruís el núcleo del servidor.", AccionDeJulieta.RomperServidor), SonidoNucleo),
+            S("ADVERTENCIA. SERVIDOR PRINCIPAL DESTRUIDO."),
+            S("CONEXIÓN CON NEURARUSH-LINK INTERRUMPIDA. DESCONEXIÓN GLOBAL INICIADA."),
+            Narra("Las luces de la sala comienzan a apagarse. Los cables que recorren las paredes dejan de emitir energía."),
+            Narra("Julieta observa el servidor destruido."),
+            J("Cinco años..."),
+            PJ("Sí."),
+            J("Todo este tiempo..."),
+            PJ("Se terminó."),
+            Narra("El NeuraRush-LINK de Julieta comienza a emitir pulsos.", AccionDeJulieta.Destello),
+            Sonando(S("ERROR CRÍTICO. CONEXIÓN PERDIDA. DESCONEXIÓN INICIADA."), SonidoChip),
+            Narra("El chip de Julieta se apaga. Julieta cae al suelo."),
+            PJ("Julieta."),
             J("..."),
-            J("Aprobado, {PJ}."),
-            S("SERVIDOR CENTRAL: APAGÁNDOSE. DESCONECTANDO TODOS LOS CHIPS..."),
-            S("MEMORIAS RESTAURADAS."),
-            N("{PJ}... lo lograste. Lo recuerdo todo. Todos lo están recordando.", cara: RetratoNestorFeliz),
-            J("En 2026 Mewtwo dijo que el futuro todavía podía salvarse."),
-            J("Parece que tenía razón."),
-            J("Andá, {PJ}. Tixi te está esperando en la Quarcho Cueva. Y esta vez nadie va a olvidar lo que pasó."),
-            PJ("Nos vemos, profe."),
+            PJ("¿Estás bien?"),
+            J("No sé."),
+            Narra("Julieta se mira las manos."),
+            J("¿Qué año es?"),
+            PJ("2031."),
+            Narra("Julieta cierra los ojos."),
+            J("Entonces funcionó."),
+            PJ("¿Qué cosa?"),
+            J("Por primera vez en cinco años..."),
+            J("Estoy sola en mi propia cabeza."),
+            Narra("No le respondés."),
+            J("¿Qué vas a hacer ahora?"),
+            PJ("No tengo idea."),
+            J("¿Y Tixi?"),
+            PJ("Esperándome."),
+            J("Entonces andá."),
+            PJ("¿Y vos?"),
+            Narra("Julieta mira el servidor destruido."),
+            J("Yo tengo mucho que recordar."),
+            Narra("Te das vuelta y empezás a caminar hacia la salida."),
         };
 
         g.yaVencida = new[]
         {
-            J("Ya está, {PJ}. Andá con Tixi."),
+            J("Yo tengo mucho que recordar, {PJ}. Andá con Tixi."),
+        };
+
+        // ---------------------------------------------------------- el cierre
+        // historia.pdf, "Epílogo" y "QuarchoCueva". Lo cuenta
+        // EscenaFinalEnLaCueva; la charla con Tixi es un DialogueDefinition
+        // (se edita desde el asset, como el resto de la cueva).
+
+        g.epilogo = new[]
+        {
+            "Horas después.",
+            "Desde una radio se narran noticias de distintas partes del mundo.",
+            "Personas y Pokémon comienzan a recuperar sus recuerdos.",
+            "Algunos se abrazan.\nOtros simplemente permanecen en silencio, intentando entender qué ocurrió.",
+            "En distintas ciudades, los dispositivos conectados al NeuraRush-LINK dejan de funcionar.",
+            "El mundo vuelve a escuchar su propio silencio.",
+        };
+
+        g.enLaCueva = AssetDatabase.LoadAssetAtPath<DialogueDefinition>(RutaCharlaEnLaCueva);
+        if (g.enLaCueva == null) Debug.LogWarning($"[Julieta] Falta la charla final con Tixi ({RutaCharlaEnLaCueva}).");
+
+        g.ultimaConexion = new[]
+        {
+            "ÚLTIMA CONEXIÓN DETECTADA.",
+            "UBICACIÓN: DESCONOCIDA.",
+            "CONECTANDO NEURARUSH-LINK...",
+            "CONECTANDO NEURARUSH-LINK...",
+            "CONECTANDO NEURARUSH-LINK...",
+            "ERROR.",
+            "ERROR.",
+            "INICIANDO PROCESO DE RECUPERACIÓN GLOBAL...",
+            "INICIANDO PROCESO.",
+            "NOMBRE EN CLAVE: VENTRESCA AI",
         };
     }
 

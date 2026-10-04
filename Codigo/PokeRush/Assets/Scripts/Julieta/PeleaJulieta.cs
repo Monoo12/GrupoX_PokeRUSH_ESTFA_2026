@@ -84,6 +84,9 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
 
     [Header("Final")]
     [SerializeField] private StoryFlag flagVencida = StoryFlag.Julieta_Vencida;
+    [Tooltip("Lo enciende RomperServidor: el ApagonDelNivel de la arena lo escucha y apaga las luces.")]
+    [SerializeField] private StoryFlag flagServidorDestruido = StoryFlag.Historia_ServidorPrincipalDestruido;
+    [Tooltip("Despues de la cueva (ver FinalDelJuego). Si la cueva no esta en Build Settings, se va directo.")]
     [SerializeField] private string escenaDeCreditos = "CreditosFinales";
     [SerializeField, Min(0.05f)] private float segundosDeFundido = 1.5f;
     [Tooltip("Si pierde, el equipo vuelve a como entro a la pelea. La arena no " +
@@ -123,6 +126,8 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
     private bool _elControladoYaActuo;
     private bool _salvadoAnunciado;
     private bool _armado = true;
+    // Ya escucho la charla entera de antes de pelear: los reintentos van cortos.
+    private bool _yaSeEncontraron;
     private System.Action _pendiente;
     private LienzoDePeleaJulieta _lienzo;
 
@@ -210,7 +215,14 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
             return;
         }
 
-        StartCoroutine(DecirYSeguir(guion != null ? guion.alEncontrarla : null, () => Lanzar(player)));
+        LineaDeJulieta[] charla = guion == null ? null
+            : _yaSeEncontraron && guion.alReintentar != null && guion.alReintentar.Length > 0 ? guion.alReintentar
+            : guion.alEncontrarla;
+        StartCoroutine(DecirYSeguir(charla, () =>
+        {
+            _yaSeEncontraron = true;
+            Lanzar(player);
+        }));
     }
 
     // Arranca la pelea de cero. Publico para el banco de pruebas.
@@ -266,9 +278,12 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
 
         PrepararDesdeCero();
         _armado = true;
+        _yaSeEncontraron = false;
+        GetComponentInChildren<ServidorPrincipal>(true)?.Reparar();
 
         StoryModel story = GameManager.Instance != null ? GameManager.Instance.Story : null;
         if (story != null && flagVencida != StoryFlag.None) story.ActiveFlags.Remove(flagVencida);
+        if (story != null && flagServidorDestruido != StoryFlag.None) story.ActiveFlags.Remove(flagServidorDestruido);
         Debug.Log("[Julieta] Pelea reiniciada desde cero.");
     }
 
@@ -477,6 +492,8 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
             yield break;
         }
 
+        if (linea.sonido != null) AudioService.Instance.PlaySFX(linea.sonido);
+
         bool cerrada = false;
         dialogueController.StartMessage(nombre, retrato, new[] { texto }, () => cerrada = true);
 
@@ -582,6 +599,16 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
             case AccionDeJulieta.Destello:
                 AsegurarLienzo();
                 yield return _lienzo.Senal.Destello();
+                break;
+
+            case AccionDeJulieta.RomperServidor:
+                GetComponentInChildren<ServidorPrincipal>(true)?.Romper();
+                // Las luces de la sala las apaga el ApagonDelNivel de la arena,
+                // que mira este flag.
+                StoryModel story = GameManager.Instance != null ? GameManager.Instance.Story : null;
+                if (story != null && flagServidorDestruido != StoryFlag.None) story.ActivateFlag(flagServidorDestruido);
+                AsegurarLienzo();
+                yield return _lienzo.Senal.Destello(1f);
                 break;
         }
     }
@@ -736,8 +763,8 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
             // los creditos y vuelve a la pantalla de inicio, sin post-game. La
             // partida queda como estaba al entrar al ultimo nivel, asi que
             // "Continuar" lleva otra vez a las puertas del final.
-            Debug.Log("[Julieta] VENCIDA. Epilogo y creditos.");
-            AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.finalDelJuego : null, IrALosCreditos)));
+            Debug.Log("[Julieta] VENCIDA. Final, epilogo, la cueva y los creditos.");
+            AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.finalDelJuego : null, IrAlFinal)));
             return;
         }
 
@@ -747,11 +774,13 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.alPerder : null, null)));
     }
 
-    private void IrALosCreditos()
+    // Fundido a la Quarcho Cueva: el epilogo, la charla con Tixi y la ultima
+    // conexion (FinalDelJuego), y de ahi a los creditos.
+    private void IrAlFinal()
     {
         if (!string.IsNullOrEmpty(escenaDeCreditos) && Application.CanStreamedLevelBeLoaded(escenaDeCreditos))
         {
-            FundidoAEscena.Ir(escenaDeCreditos, segundosDeFundido);
+            FinalDelJuego.Empezar(escenaDeCreditos, segundosDeFundido);
             return;
         }
 
@@ -842,6 +871,7 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         {
             case HablanteDeJulieta.Julieta: return guion != null ? guion.nombreJulieta : "JULIETA";
             case HablanteDeJulieta.Nestor: return guion != null ? guion.nombreNestor : "NÉSTOR";
+            case HablanteDeJulieta.Tixi: return guion != null ? guion.nombreTixi : "TIXI";
             case HablanteDeJulieta.PJ: return NombreDelPJ();
             default: return "";
         }
@@ -854,6 +884,7 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         {
             case HablanteDeJulieta.Julieta: return guion.retratoJulieta;
             case HablanteDeJulieta.Nestor: return guion.retratoNestor;
+            case HablanteDeJulieta.Tixi: return guion.retratoTixi;
             case HablanteDeJulieta.PJ:
                 PlayerModel p = _jugador ?? (GameManager.Instance != null ? GameManager.Instance.CurrentPlayer : null);
                 return p != null && p.Genero == Genero.Mujer ? guion.retratoPJMujer : guion.retratoPJVaron;

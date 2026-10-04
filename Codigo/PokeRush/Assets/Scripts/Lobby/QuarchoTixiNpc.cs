@@ -120,6 +120,8 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
     private void Update()
     {
         if (_presentandose || _contandoVuelta || _enEscena) return;
+        // El final del juego tiene su propia charla (EscenaFinalEnLaCueva).
+        if (FinalDelJuego.EnCurso) return;
 
         GameManager gm = GameManager.Instance;
         if (gm == null || gm.Story == null || gm.CurrentPlayer == null) return;
