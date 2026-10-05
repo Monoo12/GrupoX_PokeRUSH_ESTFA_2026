@@ -86,7 +86,7 @@ MonoBehaviour:
   - escena: Casino Nivel 1
     musica:
       clip: {fileID: 8300000, guid: 35745dc0b16c8e0438093f2b615dee43, type: 3}
-      volumen: 1
+      volumen: 1.45
       ganancia: 0.704
     combate:
       clip: {fileID: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
   - escena: Casino Nivel 2
     musica:
       clip: {fileID: 8300000, guid: 16d77363ef855c34f9886d83814cf14c, type: 3}
-      volumen: 1
+      volumen: 1.5
       ganancia: 0.607
     combate:
       clip: {fileID: 0}
@@ -106,7 +106,7 @@ MonoBehaviour:
   - escena: Casino nivel 3
     musica:
       clip: {fileID: 8300000, guid: f0718a28e4f788b4f92e03278e59afa0, type: 3}
-      volumen: 1
+      volumen: 1.25
       ganancia: 1.31
     combate:
       clip: {fileID: 0}
@@ -212,11 +212,11 @@ MonoBehaviour:
     ganancia: 1.9
   cursor:
     clip: {fileID: 8300000, guid: 448f099d7f681f84b8ec7a76d0bcbf8d, type: 3}
-    volumen: 1
+    volumen: 0.65
     ganancia: 1.606
   confirmar:
     clip: {fileID: 8300000, guid: caddcbd49fc0d104c9997cc38fed497d, type: 3}
-    volumen: 1
+    volumen: 0.33
     ganancia: 3
   cancelar:
     clip: {fileID: 8300000, guid: 6382c358ef9099c43a1c16070f3b484e, type: 3}

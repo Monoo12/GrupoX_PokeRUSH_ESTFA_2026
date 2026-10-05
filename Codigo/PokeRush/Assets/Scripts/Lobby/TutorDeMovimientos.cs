@@ -42,6 +42,7 @@ public static class TutorDeMovimientos
         foreach (MoveDefinition move in poken.Definition.mtMoves)
         {
             if (move == null || move.implementation == MoveImplementation.NotImplemented) continue;
+            if (MovimientosRetirados.EstaRetirado(move)) continue;   // Excavar (5-oct)
             if (poken.KnowsMove(move) || lista.Contains(move)) continue;
             lista.Add(move);
         }

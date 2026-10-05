@@ -4,12 +4,15 @@ using UnityEngine;
 // El servidor principal de NeuraRush-LINK, detras de Julieta: la pantalla que
 // el PJ destruye al final ("El PJ destruye el nucleo del servidor").
 //
-// Es solo lo que se ve. Lo rompe la accion RomperServidor del guion (la usa el
-// final, despues de la pelea): parpadea como una pantalla que se quema y queda
-// apagada. Reiniciar la pelea lo vuelve a prender.
+// Se le habla con X: despues de ganarle a Julieta, cada toque es un tramo del
+// final (ver GuionDeJulieta). Lo que dice y cuando lo decide PeleaJulieta, que
+// esta en el padre; esto solo le avisa.
+//
+// Lo que se ve: lo rompe la accion RomperServidor del guion: parpadea como una
+// pantalla que se quema y queda apagada. Reiniciar la pelea lo vuelve a prender.
 //
 // Vive adentro del objeto PeleaJulieta, asi se muda con ella a la arena.
-public class ServidorPrincipal : MonoBehaviour
+public class ServidorPrincipal : MonoBehaviour, IInteractable
 {
     [Tooltip("Vacio = todos los SpriteRenderer de los hijos.")]
     [SerializeField] private SpriteRenderer[] partes;
@@ -25,6 +28,13 @@ public class ServidorPrincipal : MonoBehaviour
         if (partes == null || partes.Length == 0) partes = GetComponentsInChildren<SpriteRenderer>(true);
         _colores = new Color[partes.Length];
         for (int i = 0; i < partes.Length; i++) _colores[i] = partes[i] != null ? partes[i].color : Color.white;
+    }
+
+    // Tocarlo con X. Antes de ganarle a Julieta no hace nada: la que habla es ella.
+    public bool Interact(PlayerModel player, StoryModel story)
+    {
+        PeleaJulieta pelea = GetComponentInParent<PeleaJulieta>();
+        return pelea != null && pelea.TocarElServidor(player, story);
     }
 
     public void Romper()

@@ -21,6 +21,8 @@ public class DialogueController : MonoBehaviour
 
     // Mientras esto sea true, el jugador no se mueve.
     public bool IsOpen => _modo != Modo.Cerrado;
+    // Hay una pregunta (Si/No o lista) esperando respuesta. Lo usan los bancos de prueba.
+    public bool EsperandoEleccion => _modo == Modo.Pregunta;
 
     private Modo _modo = Modo.Cerrado;
 

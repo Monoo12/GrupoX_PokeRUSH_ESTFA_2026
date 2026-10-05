@@ -35,7 +35,7 @@ using UnityEngine.Tilemaps;
 // uno este sobre piso libre y que se llegue caminando.
 public static class HistoriaDataCenterBuilder
 {
-    private const string Escena = "Assets/Scenes/NestorGOD2.unity";
+    public const string Escena = "Assets/Scenes/NestorGOD2.unity";
     private const string Contenedor = "HistoriaDataCenter";
     private const string T = "Torre1/Dialogos/";
     private const int CapaDefault = 0;
@@ -485,7 +485,7 @@ public static class HistoriaDataCenterBuilder
     // los pierde tambien en disco (en el juego no se nota porque
     // ColisionesTilemapRuntimeFix los repone, pero la escena tiene que quedar
     // bien). Mismo arreglo que CasinoNpcBuilder: todo tile de Colisiones en Grid.
-    private static void ReponerColisiones(Scene scene)
+    public static void ReponerColisiones(Scene scene)
     {
         Tilemap colisiones = scene.GetRootGameObjects()
             .SelectMany(r => r.GetComponentsInChildren<Tilemap>(true))

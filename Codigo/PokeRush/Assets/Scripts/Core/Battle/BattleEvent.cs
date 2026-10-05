@@ -14,7 +14,10 @@ public enum BattleEventKind
     PlayerMustSwitch, // el Poken del jugador cayo: el motor espera que ELIJA reemplazo
     WeatherChanged,   // empezo/termino un clima (actualizar overlay)
     TerrainChanged,   // empezo/termino un terreno (actualizar overlay)
-    BattleEnded       // fin del combate
+    BattleEnded,      // fin del combate
+    Visibilidad,      // un Poken se esconde (Excavar, Vuelo...) o vuelve a aparecer (ver Visible)
+    QuiereAprender,   // subio de nivel y quiere aprender Move, pero ya sabe 4: el jugador decide (ver Poken)
+    RivalVaAEnviar    // cayo el del rival y el motor espera: el jugador puede cambiar antes de que entre el siguiente
 }
 
 // Que sonido le corresponde a un evento. Lo marca el TurnEngine, que es el que
@@ -58,6 +61,14 @@ public class BattleEvent
     // curacion de una pocion saltara directo al valor final —ya con el golpe
     // del rival restado— y el ataque siguiente no moviera la barra.
     public int HpAfter = -1;
+
+    // Solo en Visibilidad: false = se escondio (bajo tierra, en el aire, bajo
+    // el agua), true = volvio a aparecer.
+    public bool Visible = true;
+
+    // Solo en QuiereAprender: el Poken del jugador que subio de nivel (Move es
+    // el movimiento nuevo). Puede no ser el que esta en el campo.
+    public PokenModel Poken;
 
     public static BattleEvent Msg(string text)
         => new BattleEvent { Kind = BattleEventKind.Message, Message = text };

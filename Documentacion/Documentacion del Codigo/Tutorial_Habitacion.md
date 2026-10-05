@@ -99,6 +99,11 @@ Una parte ya hecha sigue sirviendo de atajo: la mochila del cuarto abre la Bolsa
 - La partida DEMO (entrar por Play directo) arranca con **un Lucario Nv 20**, como una partida recién creada.
 - En `habitacion`: no hay una mochila dibujada, así que **la mochila y el equipo comparten la biblioteca** (una columna cada uno). El diario va en la mesita del velador y la compañera parada en el medio del cuarto.
 
+### Lo del playtest del 4-oct
+
+- **Una flecha marca la salida** (`FlechaIndicadora`, hija de la `Puerta`): aparece con `Tutorial_Completado` y apunta a la puerta. Usa la hoja animada `Graphics/UI/down_arrow.png` del pack (ocho cuadros de 28x40 que ya rebotan; venía mal cortada y `TutorialBuilder.FlechaHaciaAbajo` la corta bien). El cierre lo dice: "La puerta ya abre: la flecha marca la salida". En una habitación ya armada: `PokeRush > Tutorial > Poner la flecha de la salida (escena abierta)`.
+- **La compañera explica la tabla de tipos** antes de la pelea (`Tutorial_Pelea`): Agua > Fuego > Planta > Agua, súper eficaz pega el doble y lo poco eficaz la mitad, lo Eléctrico no le hace nada a la Tierra, y que al lado de cada movimiento se ve su tipo, PP, potencia y precisión.
+
 ---
 
 ## Cómo pasarlo a otra habitación

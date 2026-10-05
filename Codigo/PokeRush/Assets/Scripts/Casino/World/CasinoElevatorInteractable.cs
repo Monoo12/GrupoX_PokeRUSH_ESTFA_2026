@@ -74,12 +74,16 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
     [SerializeField] private StoryFlag otorgaFlag = StoryFlag.None;
 
     [Header("Deuda")]
-    [Tooltip("Con una deuda abierta con la enfermeria, el ascensor no sube. " +
-             "Es lo que le da peso a que te curen fiado.")]
+    [Tooltip("Con una deuda abierta con la enfermeria y plata para pagarla, el " +
+             "ascensor no sube hasta que se pague. Sin plata sube igual: la deuda " +
+             "queda anotada (si no, el jugador quedaria encerrado).")]
     [SerializeField] private bool bloqueaConDeuda = true;
-    [Tooltip("Cartel cuando hay deuda. {0} = lo que se debe.")]
+    [Tooltip("Cartel cuando no paga la deuda pudiendo. {0} = lo que se debe.")]
     [SerializeField, TextArea(2, 3)] private string mensajeConDeuda =
         "El de seguridad te frena: primero pagale las {0} monedas a la enfermeria.";
+    [Tooltip("Pregunta cuando hay deuda y alcanza la plata. {0} = lo que se debe.")]
+    [SerializeField, TextArea(2, 3)] private string preguntaPagarDeuda =
+        "Le debés {0} monedas a la enfermería y el de seguridad no te deja subir sin pagar. ¿Le pagás ahora?";
 
     [Header("Llegada")]
     [Tooltip("Donde aparece el jugador al llegar a ESTE piso por el ascensor, respecto de " +
@@ -176,11 +180,22 @@ public class CasinoElevatorInteractable : MonoBehaviour, IInteractable
             return;
         }
 
-        // La deuda frena la subida SIEMPRE, incluso si el piso ya estaba
-        // superado: si no, bastaria con subir una vez para no pagarla nunca mas.
-        if (bloqueaConDeuda && player.HasDebt)
+        // La deuda frena la subida si se puede pagar, incluso con el piso ya
+        // superado: si no, bastaria con subir una vez para no pagarla nunca
+        // mas. Sin plata para pagarla se sube igual (playtest del 5-oct: la
+        // deuda trabada dejaba al jugador encerrado, sin plata ni peleas).
+        if (bloqueaConDeuda && player.HasDebt && player.Money >= player.Debt)
         {
-            Avisar(string.Format(mensajeConDeuda, player.Debt));
+            Preguntar(string.Format(preguntaPagarDeuda, player.Debt), paga =>
+            {
+                if (!paga)
+                {
+                    Avisar(string.Format(mensajeConDeuda, player.Debt));
+                    return;
+                }
+                player.PayDebt(player.Debt);
+                IntentarSubir(player, story, preguntar);
+            });
             return;
         }
 

@@ -8,6 +8,9 @@ public static class StatusEffects
     public const float ThawChance = 0.20f;
     public const float ConfusionSelfHitChance = 1f / 3f;
     public const int ConfusionSelfHitPower = 40;
+    // Valor inicial del contador de confusion (ver TryApplyStatus).
+    public const int MinTurnosDeConfusion = 2;
+    public const int MaxTurnosDeConfusion = 5;
     // Fracciones del MaxHP por turno
     public const int BurnDamageDivisor = 16;
     public const int PoisonDamageDivisor = 8;
@@ -46,7 +49,12 @@ public static class StatusEffects
                 return false;
             }
             target.IsConfused = true;
-            target.ConfusionTurnsLeft = rng.Range(1, 5); // 1-4 turnos
+            // 2-5, como en la saga (Gen 7+). El contador baja en cada accion y
+            // la que lo deja en 0 es la que "se le pasa" (y actua normal), asi
+            // que pelea confuso entre 1 y 4 turnos. Hasta el 5-oct era 1-4: una
+            // de cada cuatro veces la confusion se pasaba en la primera accion
+            // y no hacia nada.
+            target.ConfusionTurnsLeft = rng.Range(MinTurnosDeConfusion, MaxTurnosDeConfusion + 1);
             events.Add(BattleEvent.Of(BattleEventKind.StatusChanged, IsPlayerSide(target), $"¡{name} está confuso!"));
             return true;
         }
@@ -159,8 +167,13 @@ public static class StatusEffects
                 {
                     int damage = ConfusionSelfDamage(actor);
                     actor.Poken.TakeDamage(damage);
-                    events.Add(BattleEvent.Of(BattleEventKind.HpChanged, IsPlayerSide(actor),
-                        "¡Está tan confuso que se hirió a sí mismo!"));
+                    BattleEvent golpe = BattleEvent.Of(BattleEventKind.HpChanged, IsPlayerSide(actor),
+                        "¡Está tan confuso que se hirió a sí mismo!");
+                    // La barra baja hasta ESTE golpe y no hasta los PS del final
+                    // del turno (si despues lo golpea el rival, va en su evento).
+                    golpe.HpAfter = actor.Poken.CurrentHP;
+                    golpe.Sonido = SonidoDelEvento.Golpe;
+                    events.Add(golpe);
                     return false;
                 }
             }

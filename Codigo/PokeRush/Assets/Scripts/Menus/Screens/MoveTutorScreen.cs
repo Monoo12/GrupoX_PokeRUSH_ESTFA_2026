@@ -16,6 +16,10 @@ using UnityEngine.UI;
 //                vuelve al paso 1 sin cobrar nada.
 // Siempre pregunta el precio antes de cobrar. Las reglas son de
 // TutorDeMovimientos, no de esta pantalla.
+//
+// Tambien la usa el combate al subir de nivel (MoveTutorRequest.AprenderEste):
+// arranca directo en el paso 2, sin precio, y elegir el nuevo o volver
+// pregunta si deja de aprenderlo (como en la saga).
 public class MoveTutorScreen : MenuScreen
 {
     private enum Paso { Aprender, Olvidar }
@@ -64,6 +68,16 @@ public class MoveTutorScreen : MenuScreen
     [SerializeField] private string olvidoYAprendio = "1, 2 y... ¡Puf! {0} olvidó {1}... ¡y aprendió {2}!";
     [SerializeField] private string sinDescripcion = "Sin descripción.";
 
+    [Header("Al subir de nivel")]
+    [Tooltip("{0} = el movimiento nuevo.")]
+    [SerializeField] private string pieSubirDeNivel = "Aprender {0}";
+    [Tooltip("{0} = el que olvida, {1} = el nuevo.")]
+    [SerializeField] private string preguntaOlvidarGratis = "¿Olvidar {0} para aprender {1}?";
+    [Tooltip("{0} = el Pokemon, {1} = el nuevo.")]
+    [SerializeField] private string preguntaDejarDeAprender = "¿Que {0} deje de aprender {1}?";
+    [Tooltip("{0} = el Pokemon, {1} = el nuevo.")]
+    [SerializeField] private string noAprendio = "{0} no aprendió {1}.";
+
     private WidgetPool<TutorMoveRowWidget> _rows;
     private readonly List<MoveDefinition> _ensenables = new List<MoveDefinition>();
     private readonly MoveTutorResult _result = new MoveTutorResult();
@@ -78,6 +92,8 @@ public class MoveTutorScreen : MenuScreen
     // El paso 1 recuerda donde estaba el cursor al volver del paso 2.
     private int _cursorAprender;
     private MoveDefinition _nuevo;
+    // Modo "subir de nivel": solo el paso 2, sin precio (ver AprenderEste).
+    private bool _alSubirDeNivel;
 
     protected override void OnOpen(object payload)
     {
@@ -95,6 +111,14 @@ public class MoveTutorScreen : MenuScreen
             _rows = new WidgetPool<TutorMoveRowWidget>(rowPrefab, rowContainer != null ? rowContainer : transform);
 
         _ensenables.Clear();
+        _alSubirDeNivel = pedido != null && pedido.AprenderEste != null && _poken != null;
+        if (_alSubirDeNivel)
+        {
+            _nuevo = pedido.AprenderEste;
+            _cursorAprender = 0;
+            IrA(Paso.Olvidar);
+            return;
+        }
         _ensenables.AddRange(TutorDeMovimientos.Ensenables(_poken));
 
         _cursorAprender = 0;
@@ -147,9 +171,11 @@ public class MoveTutorScreen : MenuScreen
             titleText.text = _paso == Paso.Aprender ? string.Format(tituloAprender, _maestro) : tituloOlvidar;
 
         if (footerText != null)
-            footerText.text = _paso == Paso.Aprender
-                ? string.Format(pieAprender, Player != null ? Player.Money : 0)
-                : string.Format(pieOlvidar, _nuevo != null ? _nuevo.moveName : "", Precio(_nuevo));
+            footerText.text = _alSubirDeNivel
+                ? string.Format(pieSubirDeNivel, _nuevo != null ? _nuevo.moveName : "")
+                : _paso == Paso.Aprender
+                    ? string.Format(pieAprender, Player != null ? Player.Money : 0)
+                    : string.Format(pieOlvidar, _nuevo != null ? _nuevo.moveName : "", Precio(_nuevo));
 
         if (pokenNameText != null)
             pokenNameText.text = _poken != null ? $"{_poken.Definition.pokenName}  Nv{_poken.Level}" : "";
@@ -278,7 +304,8 @@ public class MoveTutorScreen : MenuScreen
                 else ElegirParaOlvidar();
                 break;
             case GameAction.Cancel:
-                if (_paso == Paso.Olvidar) IrA(Paso.Aprender);
+                if (_alSubirDeNivel) PreguntarDejarDeAprender();
+                else if (_paso == Paso.Olvidar) IrA(Paso.Aprender);
                 else CloseSelf();
                 break;
         }
@@ -315,6 +342,7 @@ public class MoveTutorScreen : MenuScreen
 
     private void ElegirParaOlvidar()
     {
+        if (_alSubirDeNivel) { ElegirAlSubirDeNivel(); return; }
         if (EsLaFilaNueva(_cursor)) { IrA(Paso.Aprender); return; }
 
         MoveDefinition viejo = MovimientoDeLaFila(_cursor);
@@ -325,6 +353,44 @@ public class MoveTutorScreen : MenuScreen
         {
             if (!si) return;
             Ensenar(_nuevo, indice, precio, viejo);
+        });
+    }
+
+    // ---------- subir de nivel ----------
+
+    private void ElegirAlSubirDeNivel()
+    {
+        if (EsLaFilaNueva(_cursor)) { PreguntarDejarDeAprender(); return; }
+
+        MoveDefinition viejo = MovimientoDeLaFila(_cursor);
+        int indice = _cursor;
+        Ask(string.Format(preguntaOlvidarGratis, viejo != null ? viejo.moveName : "-", _nuevo.moveName), si =>
+        {
+            if (!si) return;
+            if (_poken == null || !_poken.ReplaceMove(indice, _nuevo))
+            {
+                ShowMessage("No se pudo aprender.");
+                return;
+            }
+
+            _result.Aprendido = _nuevo;
+            _result.Olvidado = viejo;
+            _result.Pagado = 0;
+            Refresh();
+            ShowMessage(string.Format(olvidoYAprendio, _poken.Definition.pokenName,
+                viejo != null ? viejo.moveName : "-", _nuevo.moveName), CloseSelf);
+        });
+    }
+
+    private void PreguntarDejarDeAprender()
+    {
+        string nombre = _poken != null ? _poken.Definition.pokenName : "";
+        Ask(string.Format(preguntaDejarDeAprender, nombre, _nuevo != null ? _nuevo.moveName : ""), si =>
+        {
+            if (!si) return;
+            _result.Aprendido = null;
+            _result.Olvidado = null;
+            ShowMessage(string.Format(noAprendio, nombre, _nuevo != null ? _nuevo.moveName : ""), CloseSelf);
         });
     }
 

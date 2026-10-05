@@ -165,10 +165,25 @@ public class GuionDeJulieta : ScriptableObject
     [Header("Si el jugador pierde")]
     public LineaDeJulieta[] alPerder = new LineaDeJulieta[0];
 
-    [Header("Final del juego: despues de ganarle, antes de los creditos")]
+    // El final va DE A TRAMOS, con el jugador caminando entre uno y otro
+    // (playtest del 4-oct: era una charla de 130 cajas seguidas):
+    //   finalDelJuego         solo, apenas vuelve el mapa;
+    //   enElServidor          al tocar el servidor la primera vez;
+    //   alDestruirlo          al tocarlo de nuevo: se destruye el nucleo;
+    //   conJulietaEnElSuelo   al hablarle a Julieta, ya a oscuras. Despues, el
+    //                         fundido a la cueva.
+    // Un tramo vacio se saltea y se pasa directo al siguiente.
+    [Header("Final del juego, de a tramos (ver el comentario del codigo)")]
+    [Tooltip("Apenas termina la pelea.")]
     public LineaDeJulieta[] finalDelJuego = new LineaDeJulieta[0];
+    [Tooltip("Al tocar el servidor la primera vez.")]
+    public LineaDeJulieta[] enElServidor = new LineaDeJulieta[0];
+    [Tooltip("Al tocar el servidor de nuevo. Aca va la accion RomperServidor.")]
+    public LineaDeJulieta[] alDestruirlo = new LineaDeJulieta[0];
+    [Tooltip("Al hablarle a Julieta con el servidor destruido. Despues, la cueva y los creditos.")]
+    public LineaDeJulieta[] conJulietaEnElSuelo = new LineaDeJulieta[0];
 
-    [Header("Si se vuelve a hablarle despues de ganarle (sin ir a los creditos)")]
+    [Header("Si se le habla a Julieta antes de terminar con el servidor")]
     public LineaDeJulieta[] yaVencida = new LineaDeJulieta[0];
 
     // Lo que sigue lo cuenta EscenaFinalEnLaCueva, en la Quarcho Cueva, entre

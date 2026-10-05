@@ -401,11 +401,20 @@ public static class PeleaJulietaAssets
             PJ("Se terminó."),
             J("No..."),
             PJ("Sí."),
-            Narra("Julieta mira hacia el servidor principal."),
             J("Si destruís ese servidor, todo va a terminar."),
             PJ("Eso es exactamente lo que vine a hacer."),
             J("No entendés lo que estás haciendo."),
             PJ("Entonces explicámelo."),
+            // En el PDF esta mirada va antes de "Si destruis ese servidor": se
+            // corrio al final del tramo porque es la que manda al PJ al servidor.
+            Narra("Julieta mira hacia el servidor principal, que sigue encendido detrás de ella."),
+        };
+
+        // Lo que sigue va en tramos (playtest del 4-oct: era un bloque muy largo
+        // de leer): cada uno arranca cuando el PJ toca el servidor con X, y el
+        // ultimo cuando le habla a Julieta. Lo encadena PeleaJulieta.
+        g.enElServidor = new[]
+        {
             J("El NeuraRush-LINK no fue creado para controlar personas."),
             PJ("¿Entonces para qué?"),
             J("Para conectar."),
@@ -453,6 +462,10 @@ public static class PeleaJulietaAssets
             PJ("Entonces todo esto..."),
             J("Es el resultado de intentar solucionar un problema que nosotros mismos creamos."),
             Narra("Silencio."),
+        };
+
+        g.alDestruirlo = new[]
+        {
             PJ("No importa cuánto intentes justificarlo."),
             PJ("Hay gente que perdió cinco años de su vida."),
             J("Lo sé."),
@@ -499,6 +512,10 @@ public static class PeleaJulietaAssets
             S("CONEXIÓN CON NEURARUSH-LINK INTERRUMPIDA. DESCONEXIÓN GLOBAL INICIADA."),
             Narra("Las luces de la sala comienzan a apagarse. Los cables que recorren las paredes dejan de emitir energía."),
             Narra("Julieta observa el servidor destruido."),
+        };
+
+        g.conJulietaEnElSuelo = new[]
+        {
             J("Cinco años..."),
             PJ("Sí."),
             J("Todo este tiempo..."),
@@ -532,7 +549,7 @@ public static class PeleaJulietaAssets
 
         g.yaVencida = new[]
         {
-            J("Yo tengo mucho que recordar, {PJ}. Andá con Tixi."),
+            Narra("Julieta no te mira: mira el servidor principal."),
         };
 
         // ---------------------------------------------------------- el cierre

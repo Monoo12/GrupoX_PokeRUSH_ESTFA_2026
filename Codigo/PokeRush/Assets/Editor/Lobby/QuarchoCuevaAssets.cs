@@ -19,10 +19,15 @@ public static class QuarchoCuevaAssets
     private const string IconosRuleta = "Assets/Graphics/Ruleta/";
     private const string IconosItems = "Assets/Graphics/Items/";
 
-    // Lo que cuesta cada tiro de las ruletas de Martin.
-    public const int PrecioRuletaPokemon = 400;
-    public const int PrecioRuletaObjetos = 150;
-    public const int PrecioRuletaMejoras = 250;
+    // Lo que cuesta cada tiro de las ruletas de Martin (playtest del 5-oct:
+    // "ajusta el precio"). A 150 la de objetos era plata gratis: solo los
+    // gajos de 300 y 1000 ya devolvian 168 por tiro de promedio. Ahora la
+    // plata se saca del Entrenamiento intenso del chip (400 a 1200 por
+    // victoria): un tiro de objetos o de mejoras es mas o menos una pelea y
+    // uno de Pokemon, dos o tres.
+    public const int PrecioRuletaPokemon = 1500;
+    public const int PrecioRuletaObjetos = 600;
+    public const int PrecioRuletaMejoras = 500;
 
     // ---------- dialogos (texto del equipo: no se pisan) ----------
 

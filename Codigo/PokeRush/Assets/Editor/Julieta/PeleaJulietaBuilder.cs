@@ -234,8 +234,13 @@ public static class PeleaJulietaBuilder
         PeleaJulieta pelea = Buscar<PeleaJulieta>(scene);
         if (pelea == null)
             pelea = ArmarPelea(mapaRaiz, ArenaJulieta, ArenaCentroDeLaZona, ArenaTamanioDeLaZona, ArenaServidor);
-        else if (pelea.GetComponentInChildren<ServidorPrincipal>(true) == null)
+        else
+        {
+            // El servidor se rehace siempre: es del builder (collider, brillo).
+            ServidorPrincipal viejo = pelea.GetComponentInChildren<ServidorPrincipal>(true);
+            if (viejo != null) Object.DestroyImmediate(viejo.gameObject);
             ArmarServidor(pelea.gameObject, ArenaServidor);
+        }
         if (pelea == null) return;
 
         ArmarHistoriaDeLaSede(mapaRaiz);
@@ -492,9 +497,12 @@ public static class PeleaJulietaBuilder
         go.transform.SetParent(raiz.transform, false);
         go.transform.position = new Vector3(abajo.x, abajo.y, 0f);
         go.layer = CapaObstacles;
+        // El collider arranca media celda mas arriba que el dibujo: asi la
+        // fila de adelante queda libre y se lo puede tocar con X parado ahi
+        // (el final se juega tocandolo).
         var box = go.AddComponent<BoxCollider2D>();
-        box.size = new Vector2(4f, 2f);
-        box.offset = new Vector2(0f, 1f);
+        box.size = new Vector2(4f, 1.5f);
+        box.offset = new Vector2(0f, 1.25f);
 
         for (int f = 0; f < 2; f++)
         for (int c = 0; c < 4; c++)
@@ -516,6 +524,16 @@ public static class PeleaJulietaBuilder
         }
 
         go.AddComponent<ServidorPrincipal>();
+
+        // Brilla mientras hay que ir a tocarlo: desde que Julieta cae hasta que
+        // se destruye el nucleo.
+        BrilloInteractuable brillo = HistoriaAssets.Brillo(go, StoryFlag.Historia_ServidorPrincipalDestruido,
+                                                           StoryFlag.Julieta_Vencida, new Color(0.45f, 0.9f, 1f, 0.55f));
+        var soBrillo = new SerializedObject(brillo);
+        soBrillo.FindProperty("desplazamiento").vector2Value = new Vector2(0f, 1f);
+        soBrillo.FindProperty("sortingOrder").intValue = 16;
+        soBrillo.FindProperty("escalaGeneral").floatValue = 1.8f;
+        soBrillo.ApplyModifiedPropertiesWithoutUndo();
     }
 
     // Enchufa los assets al componente. Solo llena lo que esta vacio: si el

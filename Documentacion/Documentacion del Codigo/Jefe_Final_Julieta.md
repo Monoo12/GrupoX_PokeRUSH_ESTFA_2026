@@ -111,7 +111,10 @@ Todo vive en `GuionDeJulieta.asset` y se edita desde el Inspector, sin tocar có
   - `cuando`: una o varias condiciones — **alcanza con una**;
   - `lineas`: quién habla (`Julieta`, `PJ`, `Nestor`, `Sistema`), el texto, una
     cara opcional y **una acción que se ejecuta al cerrarse la línea**.
-- **`alPerder`**, **`finalDelJuego`**, **`yaVencida`**.
+- **`alPerder`** y el final de a tramos: **`finalDelJuego`** (al caer Julieta),
+  **`enElServidor`** y **`alDestruirlo`** (al tocar el servidor con X, dos veces)
+  y **`conJulietaEnElSuelo`** (al hablarle después). **`yaVencida`** es lo que se
+  ve si se le habla a Julieta antes de terminar con el servidor.
 - El cierre: **`epilogo`**, **`enLaCueva`** (un DialogueDefinition) y
   **`ultimaConexion`** (ver "El final").
 
@@ -191,9 +194,18 @@ Liga -- Ameghino") la cuentan tres `ZonaDeHistoria` adentro de
    guarda** (pedido de Augusto, 2-oct-2026): el juego termina en los créditos y
    vuelve a la pantalla de inicio, sin post-game. "Continuar" lleva otra vez a la
    cueva, a las puertas del final.
-4. Vuelve el mapa y suena `finalDelJuego` en la arena: el final entero del PDF.
-   En el medio el PJ **destruye el núcleo** (`RomperServidor`): la pantalla se
-   quema, explota el sonido y **se apagan las luces de la sala**.
+4. Vuelve el mapa y el final del PDF se juega **de a tramos** (playtest del
+   4-oct: eran 130 cajas seguidas). `PeleaJulieta.EtapaFinal` lleva la cuenta:
+   - `finalDelJuego` (10 cajas): Julieta cae y mira el servidor, que brilla;
+   - el PJ va al **servidor principal** y lo toca con X (`ServidorPrincipal` es
+     `IInteractable`): `enElServidor` (47), lo que Julieta explica;
+   - lo toca otra vez: `alDestruirlo` (46). En el medio el PJ **destruye el
+     núcleo** (`RomperServidor`): la pantalla se quema, explota el sonido y **se
+     apagan las luces de la sala**;
+   - le habla a **Julieta**, que quedó en el suelo: `conJulietaEnElSuelo` (29),
+     el chip que se apaga y "Estoy sola en mi propia cabeza".
+   La zona de la pelea ya no arranca nada después de ganarle. Un tramo vacío en
+   el guion se saltea solo.
 5. Fundido a la **Quarcho Cueva** (`FinalDelJuego`), que arranca en negro:
    - el **epílogo**, línea por línea (con aceptar se pasa a la siguiente);
    - aparece la cueva con el PJ parado frente a Tixi, y **Tixi charla**
@@ -230,6 +242,14 @@ el final arranque en la fase 3: campo **Fase De La Musica Final** de
 `PeleaJulieta` = `ControlDelVinculo`. Al perder vuelve la música de la arena.
 
 ### Si el jugador pierde
+
+> **Desde el playtest del 5-oct**, después de la charla de la derrota pregunta
+> "¿Volvés a la Quarcho Cueva a prepararte?" (**Volver** / **Reintentar**). Volver guarda (sin
+> el flag de Julieta: Tixi lo vuelve a llevar al último nivel) y funde a la cueva, donde la
+> enfermera cura gratis, Tixi vende y está el Entrenamiento intenso del chip para juntar plata.
+> Reintentar deja todo como antes. Es `PeleaJulieta.OfrecerVolverALaCueva`
+> (`ofrecerVolverALaCueva` en el Inspector).
+
 
 Por equipo debilitado o porque la vida del PJ llegó a 0: Julieta habla y **el
 equipo vuelve a como entró a la pelea** (la arena no tiene enfermería). Para
@@ -306,11 +326,12 @@ Todo desde el Inspector de `PeleaJulieta` o desde assets, sin recompilar:
 
 - **Equipo y niveles**: `Julieta.asset`. Hoy: Magnezone 33, Alakazam 34,
   Genesect 34, Metagross 35, **Hoopa 37 y Mewtwo 38** (los dos del portal).
-  Un escalón arriba de Reymar (26-29).
+  Un escalón arriba de Reymar (24-27).
 - **Cuándo cambia cada fase**: las condiciones de los momentos `F1 -> F2`,
   `F2 -> F3` y `F3 -> Ruptura` en el guion.
 - **Néstor**: probabilidad 45%, cooldown 2, gracia 1, máximo 3 (en el casino son
-  20/4/2/2: acá tiene que notarse que está).
+  20/2/1/2 desde el playtest del 4-oct, antes 20/4/2/2: acá tiene que notarse
+  que está).
 - **La lectura de Julieta**: cada 3 turnos, con aviso un turno antes.
 - **El controlado**: 60% en el campo, 35% fuera de orden, golpe 16% + potencia.
   **Vida del PJ**: 100.

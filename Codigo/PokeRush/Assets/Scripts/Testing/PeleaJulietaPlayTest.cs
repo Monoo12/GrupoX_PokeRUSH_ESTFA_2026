@@ -12,8 +12,8 @@ using UnityEngine.SceneManagement;
 //      a mitad de pelea: el equipo vuelve a como entro y todo arranca de cero.
 //   2. La DERROTA por la vida del PJ: el Pokemon controlado lo termina.
 //   3. La pelea ENTERA: las cuatro fases con lo que prende y apaga cada una, el
-//      golpe al PJ, la ruptura, la victoria, el final en la arena (el servidor
-//      destruido y la sala a oscuras), la vuelta a la cueva (epilogo, charla
+//      golpe al PJ, la ruptura, la victoria, el final en la arena por tramos
+//      (tocar el servidor dos veces, la sala a oscuras, hablarle a Julieta), la vuelta a la cueva (epilogo, charla
 //      con Tixi, la ultima conexion) y los creditos.
 //
 // Sirve tambien sobre la arena de verdad (BossFinal): abrirla y lanzarlo.
@@ -170,6 +170,21 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         yield return EsperarHasta(() => _dialogo.IsOpen, 6f);
         Check("Al perder, Julieta habla en la arena", _dialogo.IsOpen);
         yield return Foto("02-derrota");
+
+        // Despues de la charla pregunta si vuelve a la cueva (playtest del
+        // 5-oct). Aca se elige "Reintentar": el resto de la prueba sigue en la arena.
+        string arena = SceneManager.GetActiveScene().name;
+        float limite = Time.realtimeSinceStartup + 10f;
+        while (_dialogo.IsOpen && !_dialogo.EsperandoEleccion && Time.realtimeSinceStartup < limite)
+        {
+            _dialogo.OnConfirm();
+            yield return new WaitForSecondsRealtime(0.1f);
+        }
+        Check("Al perder, se ofrece volver a la Quarcho Cueva", _dialogo.EsperandoEleccion);
+        yield return Foto("02b-volver-a-la-cueva");
+        if (_dialogo.EsperandoEleccion) _dialogo.OnCancel();
+        yield return new WaitForSecondsRealtime(0.3f);
+        Check("'Reintentar' se queda en la arena", SceneManager.GetActiveScene().name == arena && !_pelea.Conversando);
         yield return CerrarDialogos();
         Check("Al perder, el equipo vuelve a como entro",
               _jugador.Team.Select(p => p.CurrentHP).SequenceEqual(psAntes));
@@ -267,27 +282,39 @@ public class PeleaJulietaPlayTest : MonoBehaviour
         Check("El final se cuenta en la arena, despues de la pelea", _dialogo.IsOpen && !_combate.EnCurso);
         Check("Despues de ganarle suena el tema del final", SuenaElTema(c => c.julietaDespues));
         yield return Foto("07-final");
-        // Entre una caja y la otra puede haber un rato sin ninguna abierta (el
-        // destello del nucleo, el del chip de Julieta): la charla termino recien
-        // cuando pasan unos segundos sin cajas, o cuando cambia la escena.
-        int lineas = 0;
-        bool sinLuz = false;
-        float sinCaja = 0f;
-        while (lineas < 300 && sinCaja < 3f && _dialogo != null)
-        {
-            if (_dialogo.IsOpen) { _dialogo.OnConfirm(); lineas++; sinCaja = 0f; }
-            else sinCaja += 0.06f;
-            yield return new WaitForSecondsRealtime(0.06f);
-            if (!sinLuz && _story.HasFlag(StoryFlag.Historia_ServidorPrincipalDestruido))
-            {
-                sinLuz = true;
-                ServidorPrincipal servidor = _pelea.GetComponentInChildren<ServidorPrincipal>(true);
-                Check("Al final el PJ destruye el servidor", servidor == null || servidor.Roto);
-                yield return new WaitForSecondsRealtime(1.8f);
-                yield return Foto("07b-servidor-destruido");
-            }
-        }
-        Check("El final tiene su charla entera (la del PDF)", lineas >= 100);
+        // El final va en tramos: lo que dice al caer, el servidor (dos veces) y
+        // Julieta en el suelo. Cada tramo se lee entero antes de tocar lo que sigue.
+        _lineasLeidas = 0;
+        yield return LeerElTramo();
+        Check("Al caer Julieta, el final espera que el PJ vaya al servidor",
+              _pelea.EtapaFinal == PeleaJulieta.EtapaDelFinal.VaAlServidor);
+
+        _pelea.Interact(_jugador, _story);
+        yield return LeerElTramo();
+        Check("Hablarle a Julieta antes del servidor no adelanta el final",
+              _pelea.EtapaFinal == PeleaJulieta.EtapaDelFinal.VaAlServidor);
+
+        ServidorPrincipal servidor = _pelea.GetComponentInChildren<ServidorPrincipal>(true);
+        Check("Hay un servidor para tocar", servidor != null);
+        if (servidor == null) yield break;
+
+        Check("Tocar el servidor sigue el final", servidor.Interact(_jugador, _story));
+        yield return LeerElTramo();
+        Check("Primer tramo en el servidor: todavia no se rompe",
+              _pelea.EtapaFinal == PeleaJulieta.EtapaDelFinal.LoDestruye && !servidor.Roto);
+
+        Check("Tocarlo otra vez lo destruye", servidor.Interact(_jugador, _story));
+        yield return LeerElTramo();
+        bool sinLuz = _story.HasFlag(StoryFlag.Historia_ServidorPrincipalDestruido);
+        Check("Al final el PJ destruye el servidor", servidor.Roto && sinLuz);
+        Check("Despues de destruirlo falta hablar con Julieta",
+              _pelea.EtapaFinal == PeleaJulieta.EtapaDelFinal.HablaConJulieta);
+        yield return new WaitForSecondsRealtime(1.8f);
+        yield return Foto("07b-servidor-destruido");
+
+        _pelea.Interact(_jugador, _story);
+        yield return LeerElTramo();
+        Check("El final tiene su charla entera (la del PDF)", _lineasLeidas >= 100);
         Check("Al final se apagan las luces de la sala", sinLuz);
 
         // --- la cueva: epilogo, charla con Tixi y la ultima conexion
@@ -398,6 +425,21 @@ public class PeleaJulietaPlayTest : MonoBehaviour
                 yield return new WaitForSecondsRealtime(0.3f);
                 continue;
             }
+            if (arriba is MoveTutorScreen tutor)
+            {
+                // Subio de nivel sabiendo cuatro: no aprende.
+                tutor.HandleAction(GameAction.Cancel);
+                yield return new WaitForSecondsRealtime(0.15f);
+                continue;
+            }
+            if (arriba is MessageBoxScreen && MenuManager.Instance.BelowTop is MoveTutorScreen)
+            {
+                // "¿Dejar de aprender?": la caja arranca en NO, hay que subir al SI.
+                arriba.HandleAction(GameAction.Up);
+                arriba.HandleAction(GameAction.Confirm);
+                yield return new WaitForSecondsRealtime(0.15f);
+                continue;
+            }
             if (arriba is MessageBoxScreen cartel)
             {
                 cartel.HandleAction(GameAction.Confirm);
@@ -482,6 +524,25 @@ public class PeleaJulietaPlayTest : MonoBehaviour
                 yield break;
             yield return new WaitForSecondsRealtime(0.06f);
         }
+    }
+
+    // Cierra cajas hasta que pasan unos segundos sin ninguna (entre una y la
+    // otra puede haber un rato vacio: el destello del nucleo, el del chip de
+    // Julieta) o hasta que cambia la escena.
+    private int _lineasLeidas;
+
+    private IEnumerator LeerElTramo()
+    {
+        yield return EsperarHasta(() => _dialogo == null || _dialogo.IsOpen, 3f);
+        float sinCaja = 0f;
+        int lineas = 0;
+        while (lineas < 200 && sinCaja < 3f && _dialogo != null)
+        {
+            if (_dialogo.IsOpen) { _dialogo.OnConfirm(); lineas++; _lineasLeidas++; sinCaja = 0f; }
+            else sinCaja += 0.06f;
+            yield return new WaitForSecondsRealtime(0.06f);
+        }
+        Debug.Log($"[PlayJulieta] Tramo leido: {lineas} cajas.");
     }
 
     private IEnumerator CerrarDialogos()

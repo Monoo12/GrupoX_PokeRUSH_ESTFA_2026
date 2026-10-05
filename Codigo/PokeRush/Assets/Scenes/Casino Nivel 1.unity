@@ -4971,7 +4971,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5664d87f91095b4e8ad73995a748c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CasinoNurseInteractable
-  costo: 30
+  costo: 100
   nombre: ENFERMERA
   preguntaCobrando: Te dejo el equipo como nuevo por {0} monedas. Te lo hago?
   preguntaFiando: No te alcanza... Mira, te curo igual y me lo debes. Te anoto {0}?
@@ -31210,7 +31210,7 @@ MonoBehaviour:
   retrato: {fileID: 21300000, guid: d67ba901590278c4eba4add4f31526e1, type: 3}
   mensajeSinEquipo: "Con el equipo as\xED no se puede pelear. Pas\xE1 por la enfermer\xEDa."
   flagPase: 24
-  precio: 500
+  precio: 4000
   objetoRequerido: {fileID: 0}
   rival: {fileID: 11400000, guid: 879ad839187eb004eb781ad6de2e42ba, type: 2}
   flagVencido: 25

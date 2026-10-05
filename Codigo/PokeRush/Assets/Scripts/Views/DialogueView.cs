@@ -221,7 +221,7 @@ public class DialogueView : MonoBehaviour
         }
 
         // Ventana arriba de la caja, contra el borde derecho. El ancho sale de
-        // la opcion mas larga: "Ruleta de Pokémon ($400)" no entra en los 104
+        // la opcion mas larga: "Ruleta de Pokémon ($1500)" no entra en los 104
         // del panel de Si/No.
         float ancho = Mathf.Max(_tamanio.x, anchoDelTexto + 24f);
         float alto = _margen * 2f + _paso * (filas - 1) + _altoDeRenglon;

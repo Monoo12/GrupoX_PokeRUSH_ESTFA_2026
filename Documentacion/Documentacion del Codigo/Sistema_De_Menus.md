@@ -70,6 +70,17 @@ dos por frame para que una Z no retroceda dos niveles de golpe.
 menú tiene teclas escritas adentro: si mañana "Aceptar" pasa a ser la K, todos
 los menús y también el movimiento del Overworld usan la K.
 
+**Las pantallas hechas con botones de Unity** (partidas, creación de personaje)
+navegan con el `EventSystem`, que de fábrica solo acepta Enter, Espacio y el
+botón A: en el playtest del 4-oct "a veces se aceptaba con la X, a veces con
+Enter y a veces con el mouse". `TeclasDeLaInterfaz` (`Menus/Core`) les suma las
+mismas teclas que el resto del juego sin tocar el `EventSystem`: `Aceptar()`
+aprieta el botón seleccionado con la tecla de Aceptar (X, o la que esté en
+Opciones) y `Volver()` atiende Volver y Escape. La pantalla de partidas
+(`SaveSlotMenuView`) lo usa y muestra la ayuda "Flechas: mover · X / Enter:
+elegir · Z / Esc: volver · También con el mouse"; la creación de personaje ya lo hacía por su
+cuenta. El mouse sigue andando en las dos.
+
 ---
 
 ## 📦 Qué hay y dónde está
@@ -259,6 +270,13 @@ La pantalla del equipo tiene un modo `PartyScreenMode.SelectAny`: elegir cualqui
 Pokémon y devolverlo, sin submenú (lo usa Tacconi para elegir qué apostar).
 
 ### Tienda — `ShopScreen` y tutor de movimientos — `MoveTutorScreen`
+
+> **Modo "subir de nivel" (playtest del 5-oct).** Con `MoveTutorRequest.AprenderEste`, el tutor
+> arranca directo en "¿Qué olvida?", sin lista ni precio: elegir uno de los cuatro pregunta
+> "¿Olvidar X para aprender Y?" y elegir el nuevo (o volver) pregunta si deja de aprenderlo. Lo
+> abre el combate cuando un Pokémon que ya sabe cuatro quiere aprender otro.
+> `MenuManager.BelowTop` (la pantalla de abajo de la que está arriba) lo usan los bancos de
+> prueba para saber qué pregunta tienen delante.
 
 Las dos pantallas de la Quarcho Cueva (`MenuScreenId.Shop` y `MoveTutor`), con el arte
 del pack: la tienda es `Graphics/UI/Mart` (se abre encima del mapa, sin oscurecer) y el

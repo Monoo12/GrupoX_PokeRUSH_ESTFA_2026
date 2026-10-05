@@ -191,5 +191,23 @@ public enum StoryFlag
     Historia_SedePuerta,
     // El PJ destruyo el nucleo del servidor principal: se apagan las luces de
     // la sala (ApagonDelNivel). Lo enciende el final de PeleaJulieta.
-    Historia_ServidorPrincipalDestruido
+    Historia_ServidorPrincipalDestruido,
+
+    // Playtest del 4-oct: los dialogos largos van de a tramos, mientras se
+    // camina. Reymar habla mientras el PJ va hacia su mesa (cuatro zonas, del
+    // final del pasillo a la mesa) y Tixi da el transmisor recien cuando el PJ
+    // va a salir.
+    Historia_ReymarTramo1,
+    Historia_ReymarTramo2,
+    Historia_ReymarTramo3,
+    Historia_ReymarTramo4,
+    Historia_TixiTransmisor,
+
+    // La quinta ruleta de premios de los NPCs del casino (antes eran cuatro).
+    Casino_RuletaNpc_5,
+
+    // Lo que pasa despues de ganarle a Reymar, partido en dos: la charla en la
+    // mesa y, atras de la mesa, la computadora del laboratorio y el servidor 02
+    // (una ZonaDeHistoria que enciende esto).
+    Historia_ReymarServidor
 }

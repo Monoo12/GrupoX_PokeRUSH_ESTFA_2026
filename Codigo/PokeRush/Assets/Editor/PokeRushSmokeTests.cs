@@ -20,86 +20,109 @@ namespace PokeRush.EditorTools
             _passed = 0;
             _failed = 0;
 
-            TestIvSetRoundtrip();
-            TestStatFormula();
-            TestStatStages();
-            TestTypeChartNone();
-            TestLearnsetSelection();
-            TestXpFormula();
-            TestBurnResidual();
-            TestParalysisRate();
-            TestSleepWakes();
-            TestSturdy();
-            TestLevitate();
-            TestIntimidate();
-            TestStruggle();
-            TestTurnEngineDeterminism();
-            TestMultiHitRange();
-            TestWeatherDamageModifiers();
-            TestWeatherResidualAndEnd();
-            TestStealthRockOnSwitchIn();
-            TestScreensHalveDamage();
-            TestTrainerNeverPicksIneffective();
-            TestTrainerSkipsRedundantStatus();
-            TestGymLeaderPrefersGuaranteedKo();
-            TestGymLeaderSwitchesOnBadMatchup();
-            TestWildFavorsSuperEffective();
+            // GameManager deja puesto el especial de respaldo y el proyecto no
+            // recarga el dominio: sin esto, los Pokemon de prueba de cualquier
+            // test ganarian un ataque especial de mas segun si antes hubo un Play.
+            var respaldoAntes = PokenModel.EspecialDeRespaldo;
+            PokenModel.EspecialDeRespaldo = null;
+            try
+            {
+                TestIvSetRoundtrip();
+                TestStatFormula();
+                TestStatStages();
+                TestTypeChartNone();
+                TestLearnsetSelection();
+                TestXpFormula();
+                TestBurnResidual();
+                TestParalysisRate();
+                TestSleepWakes();
+                TestSturdy();
+                TestLevitate();
+                TestIntimidate();
+                TestStruggle();
+                TestTurnEngineDeterminism();
+                TestMultiHitRange();
+                TestWeatherDamageModifiers();
+                TestWeatherResidualAndEnd();
+                TestStealthRockOnSwitchIn();
+                TestScreensHalveDamage();
+                TestTrainerNeverPicksIneffective();
+                TestTrainerSkipsRedundantStatus();
+                TestGymLeaderPrefersGuaranteedKo();
+                TestGymLeaderSwitchesOnBadMatchup();
+                TestWildFavorsSuperEffective();
 
-            // Estados de vida/muerte y fin de combate (bugs del boss)
-            TestEsElUltimoExcluyeAlActivo();
-            TestDebilitadoNoPuedeSerActivo();
-            TestBossNoSalvaAlAnteultimo();
-            TestCombateTerminaAlCaerElUltimo();
-            TestMuertoNoRecibeTurno();
-            TestJugadorCaidoEsperaEleccion();
-            TestReemplazoRivalInvalidoNoRevive();
+                // Estados de vida/muerte y fin de combate (bugs del boss)
+                TestEsElUltimoExcluyeAlActivo();
+                TestDebilitadoNoPuedeSerActivo();
+                TestBossNoSalvaAlAnteultimo();
+                TestCombateTerminaAlCaerElUltimo();
+                TestMuertoNoRecibeTurno();
+                TestJugadorCaidoEsperaEleccion();
+                TestReemplazoRivalInvalidoNoRevive();
 
-            // Subsistemas de la torre -> dificultad del boss
-            TestSubsistemasSinCortarDanElBossMasDuro();
-            TestCadaSubsistemaAflojaLoSuyo();
-            TestFirewallEsParcialPeroMelmetalEsTodoONada();
+                // Subsistemas de la torre -> dificultad del boss
+                TestSubsistemasSinCortarDanElBossMasDuro();
+                TestCadaSubsistemaAflojaLoSuyo();
+                TestFirewallEsParcialPeroMelmetalEsTodoONada();
 
-            // La fase de liberacion: a quien se libera y como se lo ve
-            TestLaVarianteLiberaANestor();
-            TestNestorSinMelmetalTraeUnSoloUnown();
-            TestNestorSeQuedaQuietoEnCombate();
+                // La fase de liberacion: a quien se libera y como se lo ve
+                TestLaVarianteLiberaANestor();
+                TestNestorSinMelmetalTraeUnSoloUnown();
+                TestNestorSeQuedaQuietoEnCombate();
 
-            // La lectura de Nestor: que varie y que el aviso no mienta
-            TestLecturaVariaConElEquipoDelPrimerNivel();
-            TestLecturaNoAnulaLaUnicaSalida();
-            TestLecturaDeLaMochilaNoEsperaAlCriticoDeVida();
-            TestLecturaNoLeeLoQueElJugadorNoPuedeHacer();
-            TestLecturaCadaTresTurnos();
-            TestAvisoAnticipadoNoMiente();
+                // La lectura de Nestor: que varie y que el aviso no mienta
+                TestLecturaVariaConElEquipoDelPrimerNivel();
+                TestLecturaNoAnulaLaUnicaSalida();
+                TestLecturaDeLaMochilaNoEsperaAlCriticoDeVida();
+                TestLecturaNoLeeLoQueElJugadorNoPuedeHacer();
+                TestLecturaCadaTresTurnos();
+                TestAvisoAnticipadoNoMiente();
 
-            // La lectura ALIADA de Nestor (nivel 2): que sea rara, que salga de
-            // la accion que la IA eligio, y que el bloqueo se note en el motor
-            TestNestorNoLeeEnLosPrimerosTurnos();
-            TestNestorRespetaCooldownYTope();
-            TestNestorEsRaroConLosValoresPorDefecto();
-            TestNestorLeeElRemateYLeSacaElTurno();
-            TestNestorNoQuemaElTurnoPorUnGolpeFlojo();
-            TestNestorLeeLaCuracionDelRival();
-            TestNestorNoLeeElForcejeo();
-            TestNestorAliadoDisponible();
-            TestTamanioDeLosPokemonEnCombate();
-            TestPcYShinySobrevivenAlGuardado();
-            TestWaitDejaAlRivalSinActuar();
-            TestElEnumDeAccionesNoSeCorrio();
+                // La lectura ALIADA de Nestor (nivel 2): que sea rara, que salga de
+                // la accion que la IA eligio, y que el bloqueo se note en el motor
+                TestNestorNoLeeEnLosPrimerosTurnos();
+                TestNestorRespetaCooldownYTope();
+                TestNestorEsRaroConLosValoresPorDefecto();
+                TestNestorLeeElRemateYLeSacaElTurno();
+                TestNestorNoQuemaElTurnoPorUnGolpeFlojo();
+                TestNestorLeeLaCuracionDelRival();
+                TestNestorNoLeeElForcejeo();
+                TestNestorAliadoDisponible();
+                TestTamanioDeLosPokemonEnCombate();
+                TestPcYShinySobrevivenAlGuardado();
+                TestWaitDejaAlRivalSinActuar();
+                TestElEnumDeAccionesNoSeCorrio();
 
-            // Movimientos de dos turnos (cargar / fuera de alcance / recargar)
-            TestHiperrayoObligaADescansar();
-            TestHiperrayoQueNoPegaNoDescansa();
-            TestRayoSolarCargaUnTurno();
-            TestRayoSolarConSolNoCarga();
-            TestVueloQuedaFueraDeAlcance();
-            TestCabezazoSubeLaDefensaAlCargar();
-            TestLosMovimientosDelProyectoTienenSuRegla();
+                // Movimientos de dos turnos (cargar / fuera de alcance / recargar)
+                TestHiperrayoObligaADescansar();
+                TestHiperrayoQueNoPegaNoDescansa();
+                TestRayoSolarCargaUnTurno();
+                TestRayoSolarConSolNoCarga();
+                TestVueloQuedaFueraDeAlcance();
+                TestCabezazoSubeLaDefensaAlCargar();
+                TestLosMovimientosDelProyectoTienenSuRegla();
 
-            // Que todo Pokemon pueda pegar, y que el menu muestre bien los tipos
-            TestSiempreHayUnAtaque();
-            TestLasEspeciesDelProyectoPuedenPegar();
-            TestIconosDeTiposYEstadosDelMenu();
+                // Que todo Pokemon pueda pegar, y que el menu muestre bien los tipos
+                TestSiempreHayUnAtaque();
+                TestLasEspeciesDelProyectoPuedenPegar();
+                TestIconosDeTiposYEstadosDelMenu();
+
+                // Playtest del 5-oct
+                TestConfusionDuraDeDosACinco();
+                TestTodosTienenUnAtaqueEspecial();
+                TestExcavarNoSeAprende();
+                TestElRivalAvisaAQuienManda();
+                TestSinBancoNoSeOfreceCambio();
+                TestRuletasSinRepetidos();
+                TestEntrenamientoDelChip();
+                TestFondosDeCombatePorLugar();
+                TestBolasDelRivalEnElHud();
+            }
+            finally
+            {
+                PokenModel.EspecialDeRespaldo = respaldoAntes;
+            }
 
             if (_failed == 0)
                 Debug.Log($"[SmokeTests] TODOS OK: {_passed} checks pasaron.");
@@ -1843,6 +1866,338 @@ namespace PokeRush.EditorTools
                 if (s == null || s.name != $"status_{par.Value}_0") estadosBien = false;
             }
             Check(estadosBien, "Iconos del menu: cada estado usa su fila de la hoja");
+        }
+
+        // ---------- playtest del 5-oct ----------
+
+        // Un rng que siempre da lo mismo: Value() fijo y Range() el minimo.
+        private class RngFijo : IBattleRng
+        {
+            private readonly float _valor;
+            public RngFijo(float valor) { _valor = valor; }
+            public float Value() => _valor;
+            public int Range(int minInclusive, int maxExclusive) => minInclusive;
+            public float Range(float minInclusive, float maxInclusive) => minInclusive;
+        }
+
+        // Antes el contador arrancaba en 1-4 y una de cada cuatro veces la
+        // confusion se pasaba en la primera accion sin hacer nada.
+        private static void TestConfusionDuraDeDosACinco()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+            int minimo = int.MaxValue, maximo = int.MinValue;
+            bool siempreSigueConfuso = true;
+            for (int semilla = 0; semilla < 300; semilla++)
+            {
+                var estado = new BattlePokenState(MakeDummy("Confuso", 100, 50, golpe), isPlayerSide: true);
+                var events = new List<BattleEvent>();
+                StatusEffects.TryApplyStatus(estado, StatusEffect.Confused, events, new SeededRng(semilla), showFailMessage: true);
+                minimo = Mathf.Min(minimo, estado.ConfusionTurnsLeft);
+                maximo = Mathf.Max(maximo, estado.ConfusionTurnsLeft);
+
+                // La primera accion nunca se la saca.
+                StatusEffects.CanAct(estado, events, new RngFijo(0.99f));
+                if (!estado.IsConfused) siempreSigueConfuso = false;
+            }
+            Check(minimo == StatusEffects.MinTurnosDeConfusion && maximo == StatusEffects.MaxTurnosDeConfusion,
+                $"Confusion: el contador arranca entre 2 y 5 (salio {minimo}-{maximo})");
+            Check(siempreSigueConfuso, "Confusion: la primera accion despues de confundirse sigue confusa");
+
+            // El autogolpe pierde la accion, baja los PS y la barra baja hasta ese golpe.
+            var herido = new BattlePokenState(MakeDummy("Herido", 100, 50, golpe), isPlayerSide: true);
+            var ev = new List<BattleEvent>();
+            StatusEffects.TryApplyStatus(herido, StatusEffect.Confused, ev, new SeededRng(3), showFailMessage: true);
+            int antes = herido.Poken.CurrentHP;
+            bool actua = StatusEffects.CanAct(herido, ev, new RngFijo(0f));
+            BattleEvent golpeSolo = ev.LastOrDefault(e => e.Kind == BattleEventKind.HpChanged);
+            Check(!actua && herido.Poken.CurrentHP < antes && golpeSolo != null && golpeSolo.HpAfter == herido.Poken.CurrentHP,
+                "Confusion: el autogolpe le saca la accion y le baja la barra hasta ese golpe");
+
+            // Cambiar de Pokemon se la saca (estado nuevo).
+            var model = MakeBattle(MakeDummy("A", 100, 50, golpe), MakeDummy("R", 100, 50, golpe));
+            model.Player.Team.Add(MakeDummy("B", 100, 50, golpe));
+            model.PlayerState.IsConfused = true;
+            model.PlayerState.ConfusionTurnsLeft = 3;
+            model.SwitchPlayerPoken(1);
+            Check(!model.PlayerState.IsConfused, "Confusion: al cambiar de Pokemon se pasa");
+        }
+
+        // Todo Pokemon tiene algun ataque especial (y sigue con su fisico).
+        private static void TestTodosTienenUnAtaqueEspecial()
+        {
+            var antes = PokenModel.EspecialDeRespaldo;
+            var ascuas = MakeMove("Ascuas", PokenType.Fire, AttackType.Special, 40, 100, 25);
+            var meteoros = MakeMove("Meteoros", PokenType.Normal, AttackType.Special, 60, 100, 20);
+            PokenModel.EspecialDeRespaldo = t => t == PokenType.Fire ? ascuas : t == PokenType.Normal ? meteoros : null;
+            try
+            {
+                var aranazo = MakeMove("Arañazo", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+                var fuego = MakeSpecies("Fueguito", PokenType.Fire, PokenType.None, 40, 50, 40, 50, 40, 50);
+                fuego.learnset = new[] { new LearnsetEntry { move = aranazo, level = 1 } };
+                var p = new PokenModel(fuego, 10, FixedIvs);
+                Check(p.Moves.Exists(m => m.Definition == ascuas) && p.Moves.Exists(m => m.Definition == aranazo),
+                    "Especial: con solo fisicos suma el especial basico de su tipo y conserva el fisico");
+
+                // Con cuatro: se va uno de estado, nunca el fisico mas fuerte.
+                var fuerte = MakeMove("Golpe Fuerte", PokenType.Normal, AttackType.Physical, 90, 100, 10);
+                var grunido = MakeMove("Gruñido", PokenType.Normal, AttackType.Status, 0, 100, 40);
+                var malicioso = MakeMove("Malicioso", PokenType.Normal, AttackType.Status, 0, 100, 30);
+                var normal = MakeSpecies("Normalito", PokenType.Normal, PokenType.None, 40, 50, 40, 50, 40, 50);
+                normal.learnset = new[]
+                {
+                    new LearnsetEntry { move = aranazo, level = 1 },
+                    new LearnsetEntry { move = grunido, level = 2 },
+                    new LearnsetEntry { move = malicioso, level = 3 },
+                    new LearnsetEntry { move = fuerte, level = 4 }
+                };
+                var q = new PokenModel(normal, 10, FixedIvs);
+                Check(q.Moves.Count == 4 && q.Moves.Exists(m => m.Definition == meteoros)
+                      && q.Moves.Exists(m => m.Definition == fuerte) && q.Moves.Exists(m => m.Definition == aranazo),
+                    "Especial: con cuatro movimientos reemplaza uno de estado y no los fisicos");
+
+                // Un tipo sin respaldo (Agua en este test) cae al Normal.
+                var agua = MakeSpecies("Aguita", PokenType.Water, PokenType.None, 40, 50, 40, 50, 40, 50);
+                agua.learnset = new[] { new LearnsetEntry { move = aranazo, level = 1 } };
+                Check(new PokenModel(agua, 10, FixedIvs).Moves.Exists(m => m.Definition == meteoros),
+                    "Especial: un tipo sin especial de respaldo recibe el Normal");
+
+                // Si su learnset ya le deja uno, usa ese y no el de respaldo.
+                var pistola = MakeMove("Pistola Agua", PokenType.Water, AttackType.Special, 40, 100, 25);
+                var a2 = MakeMove("A2", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+                var a3 = MakeMove("A3", PokenType.Normal, AttackType.Physical, 45, 100, 35);
+                var a4 = MakeMove("A4", PokenType.Normal, AttackType.Physical, 50, 100, 35);
+                var agua2 = MakeSpecies("Aguita2", PokenType.Water, PokenType.None, 40, 50, 40, 50, 40, 50);
+                agua2.learnset = new[]
+                {
+                    new LearnsetEntry { move = pistola, level = 1 },
+                    new LearnsetEntry { move = aranazo, level = 2 },
+                    new LearnsetEntry { move = a2, level = 3 },
+                    new LearnsetEntry { move = a3, level = 4 },
+                    new LearnsetEntry { move = a4, level = 5 }
+                };
+                var r = new PokenModel(agua2, 10, FixedIvs);
+                Check(r.Moves.Exists(m => m.Definition == pistola) && !r.Moves.Exists(m => m.Definition == meteoros)
+                      && r.Moves.Exists(m => m.Definition == a4),
+                    "Especial: prefiere el especial de su learnset al de respaldo");
+
+                // Sin respaldo cargado (los tests de antes) no inventa nada.
+                PokenModel.EspecialDeRespaldo = null;
+                Check(!new PokenModel(fuego, 10, FixedIvs).Moves.Exists(m => PokenModel.EsAtaqueEspecial(m.Definition)),
+                    "Especial: sin respaldo cargado no se agrega nada");
+            }
+            finally
+            {
+                PokenModel.EspecialDeRespaldo = antes;
+            }
+        }
+
+        // Excavar (pokeApiId 91) se saco del juego: no se aprende por ningun lado.
+        private static void TestExcavarNoSeAprende()
+        {
+            var excavar = MakeMove("Excavar", PokenType.Ground, AttackType.Physical, 80, 100, 10);
+            excavar.pokeApiId = 91;
+            var lodo = MakeMove("Bofetón Lodo", PokenType.Ground, AttackType.Special, 20, 100, 10);
+            var topo = MakeSpecies("Topito", PokenType.Ground, PokenType.None, 40, 50, 40, 50, 40, 50);
+            topo.learnset = new[]
+            {
+                new LearnsetEntry { move = lodo, level = 1 },
+                new LearnsetEntry { move = excavar, level = 5 }
+            };
+            var p = new PokenModel(topo, 10, FixedIvs);
+            Check(!p.Moves.Exists(m => m.Definition == excavar), "Excavar: no entra entre los movimientos iniciales");
+            Check(!p.TryLearnMove(excavar), "Excavar: no se aprende al subir de nivel");
+            Check(p.Moves.Count == 0 || !p.ReplaceMove(0, excavar), "Excavar: el tutor no lo puede enseñar");
+
+            p.Moves.Add(new MoveModel(excavar));
+            Check(p.QuitarMovimientosRetirados() && !p.Moves.Exists(m => m.Definition == excavar) && p.Moves.Count > 0,
+                "Excavar: una partida guardada con Excavar lo pierde al cargar y no queda sin ataques");
+        }
+
+        // Al caer un rival se anuncia el que viene y el jugador puede cambiar
+        // ANTES de que entre (como en los juegos originales).
+        private static void TestElRivalAvisaAQuienManda()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 250, 100, 35);
+            var suave = MakeMove("Suave", PokenType.Normal, AttackType.Physical, 1, 100, 35);
+            var atacante = MakeDummy("Atacante", 200, 200, golpe);
+            var banco = MakeDummy("Banco", 200, 5, suave);
+            var rivalA = MakeDummy("RivalA", 40, 5, suave);
+            var rivalB = MakeDummy("RivalB", 200, 5, suave);
+
+            var model = MakeBattleConBancos(new List<PokenModel> { atacante, banco }, new List<PokenModel> { rivalA, rivalB });
+            var engine = new TurnEngine(model, new SeededRng(21)) { OfrecerCambioAntesDeQueEntre = true };
+            rivalA.SetCurrentHP(1);
+            List<BattleEvent> events = engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+
+            Check(rivalA.IsFainted && model.AwaitingEnemyReplacement && model.ActiveEnemyIndex == 0,
+                "Rival avisa: el que viene espera a que el jugador decida");
+            Check(events.Exists(e => e.Kind == BattleEventKind.RivalVaAEnviar && e.Message.Contains("RivalB")),
+                "Rival avisa: se anuncia a quien va a enviar");
+            Check(engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0)).Count == 0,
+                "Rival avisa: mientras espera, el motor no corre turnos");
+
+            List<BattleEvent> entrada = engine.CompleteEnemyReplacement(1);
+            Check(!model.AwaitingEnemyReplacement && model.ActiveEnemyIndex == 1 && model.ActivePlayerIndex == 1,
+                "Rival avisa: el jugador cambia y despues entra el anunciado");
+            Check(entrada.Exists(e => e.Kind == BattleEventKind.PokenSwitched && e.TargetIsPlayer)
+                  && entrada.Exists(e => e.Kind == BattleEventKind.PokenSwitched && !e.TargetIsPlayer),
+                "Rival avisa: salen los dos cambios");
+
+            // Quedarse con el mismo: solo entra el rival.
+            var model2 = MakeBattleConBancos(new List<PokenModel> { MakeDummy("Atacante", 200, 200, golpe), MakeDummy("Banco", 200, 5, suave) },
+                new List<PokenModel> { MakeDummy("RivalA", 40, 5, suave), MakeDummy("RivalB", 200, 5, suave) });
+            var engine2 = new TurnEngine(model2, new SeededRng(22)) { OfrecerCambioAntesDeQueEntre = true };
+            model2.Enemy.Team[0].SetCurrentHP(1);
+            engine2.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            List<BattleEvent> sinCambio = engine2.CompleteEnemyReplacement(-1);
+            Check(model2.ActivePlayerIndex == 0 && model2.ActiveEnemyIndex == 1
+                  && !sinCambio.Exists(e => e.Kind == BattleEventKind.PokenSwitched && e.TargetIsPlayer),
+                "Rival avisa: si el jugador se queda, solo entra el rival");
+        }
+
+        // Sin nadie en el banco no hay nada que ofrecer: entra directo, como antes.
+        private static void TestSinBancoNoSeOfreceCambio()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 250, 100, 35);
+            var suave = MakeMove("Suave", PokenType.Normal, AttackType.Physical, 1, 100, 35);
+            var model = MakeBattleConBancos(new List<PokenModel> { MakeDummy("Solo", 200, 200, golpe) },
+                new List<PokenModel> { MakeDummy("RivalA", 40, 5, suave), MakeDummy("RivalB", 200, 5, suave) });
+            var engine = new TurnEngine(model, new SeededRng(23)) { OfrecerCambioAntesDeQueEntre = true };
+            model.Enemy.Team[0].SetCurrentHP(1);
+            List<BattleEvent> events = engine.ResolveTurn(BattleAction.Move(0), BattleAction.Move(0));
+            Check(!model.AwaitingEnemyReplacement && model.ActiveEnemyIndex == 1
+                  && !events.Exists(e => e.Kind == BattleEventKind.RivalVaAEnviar),
+                "Rival avisa: sin banco del jugador, el rival entra directo");
+        }
+
+        // Las ruletas: sin repetir lo que el jugador ya tiene ni dos iguales en la rueda.
+        private static void TestRuletasSinRepetidos()
+        {
+            var especies = new Dictionary<string, PokenDefinition>();
+            PokenDefinition Cargar(string nombre)
+            {
+                if (!especies.TryGetValue(nombre, out PokenDefinition d))
+                {
+                    d = MakeSpecies(nombre, PokenType.Normal, PokenType.None, 40, 40, 40, 40, 40, 40);
+                    especies[nombre] = d;
+                }
+                return d;
+            }
+            Sprite Icono(string nombre)
+            {
+                var s = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 4, 4), Vector2.zero);
+                s.name = nombre;
+                return s;
+            }
+
+            var jugador = new PlayerModel("Tester");
+            jugador.Team.Add(new PokenModel(Cargar("Pikachu"), 10, FixedIvs));
+            jugador.Team.Add(new PokenModel(Cargar("Eevee"), 10, FixedIvs));
+
+            Sprite poke = Icono("icon_pokeball"), master = Icono("icon_masterball");
+            var tabla = new[]
+            {
+                new Prize { poken = Cargar("Pikachu"), icon = poke, prizeName = "Pikachu" },
+                new Prize { poken = Cargar("Eevee"), icon = poke, prizeName = "Eevee" },
+                new Prize { poken = Cargar("Togepi"), icon = poke, prizeName = "Togepi" },
+                new Prize { poken = Cargar("Togepi"), icon = poke, prizeName = "Togepi" },
+                new Prize { prizeName = "Poción", icon = Icono("icon_pocion") },
+                new Prize { poken = Cargar("Dratini"), icon = master, prizeName = "Dratini" }
+            };
+
+            bool bien = true, rarezaBien = true, tablaIntacta = true;
+            for (int semilla = 0; semilla < 50; semilla++)
+            {
+                Prize[] rueda = VariedadDeLasRuletas.Preparar(tabla, jugador, Cargar, new System.Random(semilla));
+                var vistas = new HashSet<string>();
+                foreach (Prize premio in rueda)
+                {
+                    if (premio.poken == null) continue;
+                    string n = premio.poken.pokenName;
+                    if (n == "Pikachu" || n == "Eevee" || !vistas.Add(n)) bien = false;
+                }
+                if (!System.Array.Exists(VariedadDeLasRuletas.MuyRaras, n => n == rueda[5].poken.pokenName)) rarezaBien = false;
+                if (rueda[4].poken != null || rueda[4].prizeName != "Poción") bien = false;
+            }
+            if (tabla[0].poken.pokenName != "Pikachu" || tabla[5].poken.pokenName != "Dratini") tablaIntacta = false;
+
+            Check(bien, "Ruletas: ningun gajo repite un Pokemon del equipo ni otro gajo, y los objetos quedan igual");
+            Check(rarezaBien, "Ruletas: el gajo de Master Ball sale del pozo de los epicos");
+            Check(tablaIntacta, "Ruletas: la tabla (asset compartido) no se modifica");
+            Check(VariedadDeLasRuletas.RarezaDe(new Prize { icon = Icono("icon_greatball") }) == VariedadDeLasRuletas.Rareza.Buena
+                  && VariedadDeLasRuletas.RarezaDe(new Prize { icon = Icono("icon_ultraball") }) == VariedadDeLasRuletas.Rareza.Rara,
+                "Ruletas: la rareza sale del icono del gajo");
+        }
+
+        // El Entrenamiento intenso del chip: premios, niveles y rivales.
+        private static void TestEntrenamientoDelChip()
+        {
+            var go = new GameObject("ChipDePrueba");
+            try
+            {
+                var chip = go.AddComponent<EntrenamientoDelChip>();
+                Check(chip.PremioDe(1) == 400 && chip.PremioDe(2) == 500 && chip.PremioDe(9) == 1200 && chip.PremioDe(20) == 1200,
+                    "Chip: paga 400 el primero, 100 mas por racha, con tope 1200");
+                Check(chip.NivelDelRival(1, 30) == 25 && chip.NivelDelRival(6, 30) == 30 && chip.NivelDelRival(15, 30) == 35
+                      && chip.NivelDelRival(1, 3) == 5,
+                    "Chip: el rival arranca 5 niveles abajo, sube uno por combate y no pasa de +5");
+                Check(chip.PozoDe(1) == EntrenamientoDelChip.Comunes && chip.PozoDe(5) == EntrenamientoDelChip.Fuertes
+                      && System.Array.IndexOf(chip.PozoDe(10), "Garchomp") >= 0,
+                    "Chip: de la quinta salen los fuertes y de la decima tambien los pseudolegendarios");
+
+                // Todos los nombres de los pozos existen en el proyecto.
+                var indice = Resources.Load<IndiceDeDefiniciones>(IndiceDeDefiniciones.RutaEnResources);
+                var nombres = new HashSet<string>(indice != null ? indice.pokens.Select(e => e.nombre) : new string[0]);
+                var faltan = EntrenamientoDelChip.Comunes.Concat(EntrenamientoDelChip.Fuertes).Concat(EntrenamientoDelChip.Elite)
+                    .Where(n => !nombres.Contains(n)).ToList();
+                Check(indice != null && faltan.Count == 0,
+                    $"Chip: todas las especies de los pozos existen ({string.Join(", ", faltan)})");
+
+                EnemyDefinition rival = chip.ArmarRival(3, 30, 1234);
+                bool tresDistintos = rival != null && rival.pokenTeam.Length == 3
+                    && rival.pokenTeam.Select(e => e.species).Distinct().Count() == 3
+                    && rival.pokenTeam.All(e => e.level == 27);
+                Check(tresDistintos && rival.moneyReward == 600,
+                    "Chip: el rival trae tres Pokemon distintos al nivel de su combate y paga lo de su racha");
+                if (rival != null) Object.DestroyImmediate(rival);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        // Los fondos: cada piso del casino tiene el suyo y Reymar no pelea en el pasto.
+        private static void TestFondosDeCombatePorLugar()
+        {
+            Sprite piso1 = FondosDeCombate.DeLaEscena("Casino Nivel 1");
+            Sprite piso3 = FondosDeCombate.DeLaEscena("Casino nivel 3");
+            Check(piso1 != null && piso3 != null && piso1 != piso3,
+                "Fondos: los pisos del casino tienen fondos propios y distintos");
+            Check(FondosDeCombate.DeLaEscena("Casino Nivel 3") == piso3,
+                "Fondos: el nombre de la escena no distingue mayusculas");
+            Check(FondosDeCombate.DeLaEscena("EscenaQueNoExiste") == null, "Fondos: una escena sin fila no tiene fondo");
+
+            var reymar = Resources.Load<EnemyDefinition>("Definitions/Casino/JefeFinalCasino");
+            Check(reymar != null && reymar.battleBackground != null && reymar.battleBackground.name != "Pradera_bg",
+                "Fondos: Reymar tiene su fondo propio");
+        }
+
+        // Las Poke Balls chiquitas del rival estan en el HUD del prefab.
+        private static void TestBolasDelRivalEnElHud()
+        {
+            const string ruta = "Assets/Prefabs/Combate/SistemaDeCombate.prefab";
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(ruta);
+            BattleHudView hud = prefab != null ? prefab.GetComponentInChildren<BattleHudView>(true) : null;
+            if (hud == null) { Check(false, "HUD: el prefab del combate tiene BattleHudView"); return; }
+
+            var so = new SerializedObject(hud);
+            SerializedProperty bolas = so.FindProperty("enemyTeamBalls");
+            bool seis = bolas != null && bolas.arraySize == 6;
+            for (int i = 0; seis && i < 6; i++)
+                if (bolas.GetArrayElementAtIndex(i).objectReferenceValue == null) seis = false;
+            Check(seis && so.FindProperty("teamBallFainted").objectReferenceValue != null,
+                "HUD: seis Poke Balls del equipo rival cableadas, con su sprite de debilitado");
         }
 
         // Los valores del enum se serializan por numero. Si alguien mete algo

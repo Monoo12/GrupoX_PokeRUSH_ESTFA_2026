@@ -27,7 +27,8 @@ public static class TutorialAssets
     public const string NombreDelRival = "COMPAÑERA";
     public const string HojaDelRival = "chica1";
     public const string RetratoDelRival = "Assets/Graphics/Trainers/CHICA.png";
-    private const string FondoDeLaPelea = "Assets/Sprites/Battlebacks/Interior_bg.png";
+    // Antes Interior_bg (un blanco liso): ver FondosDeCombateBuilder.
+    private const string FondoDeLaPelea = FondosDeCombateBuilder.FondoDelRivalDelTutorial;
 
     // Un solo Pokemon, flojo: el inicial llega a Nv 20 desde la creacion de
     // personaje. Normal a proposito: a Lucario le pega doble lo de Lucha y a
@@ -73,14 +74,17 @@ public static class TutorialAssets
 
     public static DialogueDefinition Pelea(Sprite retrato) => Dialogo("Tutorial_Pelea", NombreDelRival, retrato,
         "¡Por fin te despertaste! Antes de salir, una de práctica.",
-        "LUCHAR: elegís un movimiento. Fijate el tipo: hay ataques que pegan el doble y otros que no le hacen nada.",
+        "LUCHAR: elegís un movimiento. Al lado de cada uno ves su tipo, sus PP, su potencia y su precisión.",
+        "Y fijate la tabla de tipos: el Agua apaga el Fuego, el Fuego quema la Planta y la Planta absorbe el Agua.",
+        "Si tu ataque le gana al tipo del rival pega el doble: es súper eficaz. Si pierde, pega la mitad.",
+        "Y hay tipos que ni se tocan: lo Eléctrico no le hace nada a la Tierra. Pensá contra qué peleás antes de pegar.",
         "MOCHILA: usás un objeto, pero se te va el turno. POKÉMON: cambiás al que pelea. HUIR: solo contra salvajes.",
         "Si perdés no pasa nada: te curo y probamos de nuevo. ¡Vamos!");
 
     public static DialogueDefinition Cierre() => Dialogo("Tutorial_Cierre", "", null,
         "¡Listo! Ya sabés lo básico.",
         "Afuera te espera la Quarcho Cueva: desde ahí salís a cada nivel y volvés al terminarlo.",
-        "La puerta ya abre. ¡Suerte!");
+        "La puerta ya abre: la flecha marca la salida. ¡Suerte!");
 
     private static DialogueDefinition Dialogo(string archivo, string hablante, Sprite retrato, params string[] lineas)
     {

@@ -58,6 +58,11 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
              "cada una se marca con su flag para no repetirse.")]
     [SerializeField] private DialogueDefinition[] alVolver = new DialogueDefinition[0];
 
+    [Tooltip("Lo que Tixi dice antes de dejarte viajar, si tiene algo para decir " +
+             "en esta partida (el transmisor, despues del casino). Es el mismo asset " +
+             "que el 'antesDeSalir' de la puerta: digas lo que digas, sale una vez.")]
+    [SerializeField] private DialogueDefinition antesDeViajar;
+
     [Header("La tienda")]
     [Tooltip("Lo que vende. Usa 'healItemsForSale'; el precio es el buyPrice de cada objeto.")]
     [SerializeField] private VendorDefinition tienda;
@@ -79,6 +84,12 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
     [SerializeField] private string opcionIr = "Vamos";
     [SerializeField] private string opcionNoIr = "Todavía no";
     [SerializeField, TextArea(2, 4)] private string mensajeSinTienda = "Hoy no tengo nada para vender.";
+
+    [Header("El entrenamiento del chip")]
+    [Tooltip("La torre de batalla de la cueva (playtest del 5-oct). Sale en el menu " +
+             "cuando esta disponible (ver EntrenamientoDelChip.flagQueLoAbre).")]
+    [SerializeField] private EntrenamientoDelChip entrenamiento;
+    [SerializeField] private string opcionEntrenar = "Entrenamiento intenso del chip";
 
     [Header("Caminar hasta vos")]
     [Tooltip("Al hablar sola se acerca al jugador y despues vuelve a su lugar. " +
@@ -221,20 +232,28 @@ public class QuarchoTixiNpc : MonoBehaviour, IInteractable
             return true;
         }
 
+        // El menu se arma segun lo que haya: el entrenamiento del chip recien
+        // aparece despues del casino. "Nada" va siempre ultima (Escape la elige).
+        var opciones = new System.Collections.Generic.List<string>();
+        var acciones = new System.Collections.Generic.List<System.Action>();
+        opciones.Add(opcionComprar); acciones.Add(() => AbrirTienda(null));
+        if (entrenamiento != null && entrenamiento.Disponible(story))
+        {
+            opciones.Add(opcionEntrenar);
+            acciones.Add(() => entrenamiento.Ofrecer(player));
+        }
+        opciones.Add(opcionViajar);
+        acciones.Add(() => ViajeEntreNiveles.Preguntar(dialogueController, nombre, retrato, story,
+            preguntaViaje, opcionIr, opcionNoIr, antesDeViajar));
+        opciones.Add(opcionCharlar); acciones.Add(() => Charlar(story));
+        opciones.Add(opcionNada); acciones.Add(null);
+
         // Ya estas al lado: no camina, solo te mira mientras charlan.
         Conversar(() => CasinoDialogo.Elegir(dialogueController, nombre, retrato, saludo,
-            new[] { opcionComprar, opcionViajar, opcionCharlar, opcionNada },
+            opciones.ToArray(),
             eleccion =>
             {
-                switch (eleccion)
-                {
-                    case 0: AbrirTienda(null); break;
-                    case 1:
-                        ViajeEntreNiveles.Preguntar(dialogueController, nombre, retrato, story,
-                            preguntaViaje, opcionIr, opcionNoIr);
-                        break;
-                    case 2: Charlar(story); break;
-                }
+                if (eleccion >= 0 && eleccion < acciones.Count) acciones[eleccion]?.Invoke();
             }), acercarse: false);
         return true;
     }

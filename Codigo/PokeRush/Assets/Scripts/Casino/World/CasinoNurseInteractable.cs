@@ -2,10 +2,14 @@ using UnityEngine;
 
 // La enfermera del casino.
 //
-// Cura al equipo por una moneda... o fiado. Si el jugador no tiene con que
-// pagar igual lo cura, pero le anota la deuda, y con deuda encima el ascensor no
-// lo deja subir de piso. Es la red de seguridad del casino: nadie queda trabado
-// sin poder curarse, pero perder toda la plata tiene consecuencias.
+// Cura al equipo por unas monedas... o fiado. Si el jugador no tiene con que
+// pagar igual lo cura y le anota la deuda, SIN TOPE (playtest del 5-oct: con la
+// deuda trabada se podia quedar sin peleas, sin plata y sin poder curarse, casi
+// un game over). Con plata en el bolsillo primero ofrece saldar lo que se debe.
+//
+// La deuda tiene su peso en el ascensor: si el jugador puede pagarla, no lo
+// deja subir hasta que la pague. Si no le alcanza, sube igual y la deuda queda
+// anotada para cuando tenga (ver CasinoElevatorInteractable).
 //
 // La deuda vive en PlayerModel (se guarda con la partida), no aca: si viviera en
 // este componente, cambiar de piso la borraria.
@@ -14,7 +18,7 @@ public class CasinoNurseInteractable : MonoBehaviour, IInteractable
 {
     [Header("Precio")]
     [Tooltip("Lo que cuesta la curacion.")]
-    [Min(0)] [SerializeField] private int costo = 30;
+    [Min(0)] [SerializeField] private int costo = 100;
 
     [Header("Textos")]
     [SerializeField] private string nombre = "ENFERMERA";
@@ -22,33 +26,60 @@ public class CasinoNurseInteractable : MonoBehaviour, IInteractable
         "Te dejo el equipo como nuevo por {0} monedas. Te lo hago?";
     [SerializeField, TextArea(2, 3)] private string preguntaFiando =
         "No te alcanza... Mira, te curo igual y me lo debes. Te anoto {0}?";
+    [Tooltip("{0} = el precio, {1} = lo que ya se debe.")]
+    [SerializeField, TextArea(2, 3)] private string preguntaFiandoConDeuda =
+        "Ya me debés {1}, pero acá nadie se queda sin curar. ¿Te anoto {0} más?";
     [SerializeField, TextArea(2, 3)] private string mensajeCurado =
         "Listo, tu equipo esta como nuevo.";
-    [SerializeField, TextArea(2, 3)] private string mensajeFiado =
-        "Curado. Me debes {0} monedas: sin saldarlas no vas a poder subir de piso.";
+    [Tooltip("{0} = lo que se debe en total.")]
+    [SerializeField, TextArea(2, 3)] private string mensajeFiadoAnotado =
+        "Curado. Me debés {0} monedas en total: pagámelas cuando tengas.";
     [SerializeField, TextArea(2, 3)] private string mensajeSano =
         "Tu equipo esta perfecto, no hace falta.";
+    [Tooltip("{0} = lo que se debe.")]
+    [SerializeField, TextArea(2, 3)] private string mensajeSanoConDeuda =
+        "Tu equipo está perfecto. Eso sí: me seguís debiendo {0}.";
     [SerializeField, TextArea(2, 3)] private string preguntaPagarDeuda =
         "Me debes {0}. Me las pagas ahora?";
     [SerializeField, TextArea(2, 3)] private string mensajeDeudaSaldada =
         "Saldado. Ahora si, suerte alla arriba.";
     [SerializeField, TextArea(2, 3)] private string mensajeDeudaParcial =
         "Me diste {0}. Todavia me debes {1}.";
-    [SerializeField, TextArea(2, 3)] private string mensajeSinNadaParaPagar =
-        "No tenes con que. Anda a ganar algo y volve.";
+
+    public int Costo => costo;
 
     public bool Interact(PlayerModel player, StoryModel story)
     {
         if (player == null) return false;
 
-        // Lo primero es la deuda: mientras exista, la enfermera cobra antes de
-        // volver a fiar. Si no, se podria acumular deuda infinita gratis.
-        if (player.HasDebt) { OfrecerPagar(player); return true; }
+        bool necesitaCurarse = player.EquipoNecesitaCuracion;
 
-        if (!player.EquipoNecesitaCuracion) { Decir(mensajeSano); return true; }
+        // Con deuda y algo de plata, primero ofrece saldar; despues, si hace
+        // falta, cura (cobrando lo que se pueda o fiado otra vez).
+        if (player.HasDebt && player.Money > 0)
+        {
+            OfrecerPagar(player, () => { if (necesitaCurarse) OfrecerCurar(player); });
+            return true;
+        }
 
+        if (!necesitaCurarse)
+        {
+            Decir(player.HasDebt ? string.Format(mensajeSanoConDeuda, player.Debt) : mensajeSano);
+            return true;
+        }
+
+        OfrecerCurar(player);
+        return true;
+    }
+
+    private void OfrecerCurar(PlayerModel player)
+    {
         bool puedePagar = player.Money >= costo;
-        string pregunta = string.Format(puedePagar ? preguntaCobrando : preguntaFiando, costo);
+        string pregunta = puedePagar
+            ? string.Format(preguntaCobrando, costo)
+            : player.HasDebt
+                ? string.Format(preguntaFiandoConDeuda, costo, player.Debt)
+                : string.Format(preguntaFiando, costo);
 
         Preguntar(pregunta, acepto =>
         {
@@ -65,45 +96,38 @@ public class CasinoNurseInteractable : MonoBehaviour, IInteractable
             else
             {
                 player.AddDebt(costo);
-                Decir(string.Format(mensajeFiado, costo));
+                Decir(string.Format(mensajeFiadoAnotado, player.Debt));
             }
         });
-
-        return true;
     }
 
-    private void OfrecerPagar(PlayerModel player)
+    private void OfrecerPagar(PlayerModel player, System.Action despues)
     {
         int deuda = player.Debt;
 
-        if (player.Money <= 0)
-        {
-            Decir(mensajeSinNadaParaPagar);
-            return;
-        }
-
         Preguntar(string.Format(preguntaPagarDeuda, deuda), acepto =>
         {
-            if (!acepto) return;
+            if (!acepto) { despues?.Invoke(); return; }
 
             int pagado = player.PayDebt(deuda);
             Decir(player.HasDebt
                 ? string.Format(mensajeDeudaParcial, pagado, player.Debt)
-                : mensajeDeudaSaldada);
+                : mensajeDeudaSaldada, despues);
         });
     }
 
     // ---------- carteles ----------
 
-    private void Decir(string mensaje)
+    private void Decir(string mensaje, System.Action alCerrar = null)
     {
-        if (string.IsNullOrEmpty(mensaje)) return;
+        if (string.IsNullOrEmpty(mensaje)) { alCerrar?.Invoke(); return; }
 
         MenuManager menus = MenuManager.Instance;
-        if (menus == null) { Debug.Log($"[{nombre}] {mensaje}"); return; }
+        if (menus == null) { Debug.Log($"[{nombre}] {mensaje}"); alCerrar?.Invoke(); return; }
 
         menus.SetContext(MenuContextKind.Overworld);
-        menus.Open(MenuScreenId.MessageBox, new MessageBoxRequest { Message = mensaje });
+        menus.Open(MenuScreenId.MessageBox, new MessageBoxRequest { Message = mensaje },
+            _ => alCerrar?.Invoke());
     }
 
     private void Preguntar(string pregunta, System.Action<bool> respuesta)

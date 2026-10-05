@@ -53,8 +53,11 @@ public static class CasinoPrefabBuilder
     //
     // La tabla de pagos respeta la que esta DIBUJADA abajo del gabinete (777 =
     // 300, 777 azul = 90, caritas = 15, bichos = 8, cereza = 2), y los pesos
-    // estan elegidos para que la maquina devuelva ~86% de lo apostado: la casa
-    // gana a la larga pero una racha existe. Son tres lineas, las tres filas,
+    // estan elegidos para que la maquina devuelva ~89% de lo apostado y pague
+    // en 1 de cada 4 tiradas: la casa gana a la larga pero una racha existe.
+    // (Hasta el 4-oct devolvia 86% y pagaba 1 de cada 7; Augusto pidio 1 de
+    // cada 5 y el 5-oct 1 de cada 4. Se tocaron solo los pesos para no
+    // contradecir el dibujo.) Son tres lineas, las tres filas,
     // que es lo que marcan los indicadores 1/2/3 del dibujo.
     //
     // Al tocar estos numeros, correr PokeRush/Casino/Correr smoke tests del
@@ -82,12 +85,12 @@ public static class CasinoPrefabBuilder
 
         def.simbolos = new[]
         {
-            Simbolo("Cereza",    Icono(0), 60, 2),
-            Simbolo("Magnemite", Icono(1), 48, 8),
-            Simbolo("Gastly",    Icono(2), 36, 8),
-            Simbolo("Psyduck",   Icono(4), 26, 15),
-            Simbolo("Pikachu",   Icono(3), 18, 15),
-            Simbolo("Siete azul", Icono(6), 8, 90),
+            Simbolo("Cereza",    Icono(0), 100, 2),
+            Simbolo("Magnemite", Icono(1), 50, 8),
+            Simbolo("Gastly",    Icono(2), 44, 8),
+            Simbolo("Psyduck",   Icono(4), 20, 15),
+            Simbolo("Pikachu",   Icono(3), 16, 15),
+            Simbolo("Siete azul", Icono(6), 6, 90),
             Simbolo("Siete rojo", Icono(5), 3, 300),
             Comodin("Replay",    Icono(7), 1, 500)
         };

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3d57b2abb2b4144a32ad59dafd0f54, type: 3}
+  m_Name: TiendaDelCasino
+  m_EditorClassIdentifier: Assembly-CSharp::VendorDefinition
+  characterName: TENDERO
+  portrait: {fileID: 0}
+  worldFrontSprite: {fileID: 0}
+  worldBackSprite: {fileID: 0}
+  worldSideSprite: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  defaultDialogue: {fileID: 0}
+  requiredFlag: 0
+  grantsFlag: 0
+  canBattleLater: 0
+  healItemsForSale:
+  - {fileID: 11400000, guid: ccfc97a284e7c644d8775a8988b1e571, type: 2}
+  - {fileID: 11400000, guid: 591415124781d9f4d965a386828fc48d, type: 2}
+  - {fileID: 11400000, guid: 2ec7aa1bf32fb5645a1a380a1f2331f7, type: 2}
+  - {fileID: 11400000, guid: 1e4294c1a393e8b4e938e6aa4489f0fd, type: 2}
+  - {fileID: 11400000, guid: 43236114f17bd934ea0f508d0bab6d6b, type: 2}
+  - {fileID: 11400000, guid: 1a92f953fe4b647478beb5f427887d4e, type: 2}
+  battleItemsForSale: []

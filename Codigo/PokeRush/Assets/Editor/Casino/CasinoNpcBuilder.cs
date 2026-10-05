@@ -114,8 +114,15 @@ public static class CasinoNpcBuilder
     // Ganar MAS que esto al color (rojo o negro) en un giro abre la ruleta de premios.
     private const int UmbralRuletaPorColor = 200;
 
+    // Lo que cobra el guardia del ascensor del piso 1 por dejar subir sin pelear.
+    // Es MAS de lo que trae el PJ al llegar al casino (unas 2.700-3.350 monedas
+    // si gasto poco en la cueva): la gracia es que juegue un rato a las maquinas
+    // o pelee (con los del piso o con el guardia, que deja pasar gratis). Hasta
+    // el 4-oct eran 500 y se pagaba sin pensarlo (playtest del 4-oct).
+    public const int PrecioDelPaseDelPiso1 = 4000;
+
     // Lo que cobra el empresario del piso 3 por cada tiro de su ruleta.
-    private const int PrecioRuletaDelEmpresario = 200;
+    private const int PrecioRuletaDelEmpresario = 300;
 
     // El Pokemon de Tacconi, que pide el ascensor del piso 3.
     private const string EspecieDeTacconi = "0789_Cosmog";
@@ -308,7 +315,7 @@ public static class CasinoNpcBuilder
             {
                 var g = Personaje(raiz, "GuardiaAscensor", new Vector2(3.5f, 19.5f), "maton", Abajo);
                 ConfigurarGuardia(g.AddComponent<CasinoElevatorGuard>(), "GUARDIA", guardia, ruletaGuardia,
-                    StoryFlag.Casino_Piso1_PaseAscensor, StoryFlag.Casino_GuardiaVencido, 500, null);
+                    StoryFlag.Casino_Piso1_PaseAscensor, StoryFlag.Casino_GuardiaVencido, PrecioDelPaseDelPiso1, null);
 
                 var a = Personaje(raiz, "ApostadorCasino", new Vector2(-3.5f, 12.5f), "Lider 1 bw", Izquierda);
                 ConfigurarEntrenador(a.AddComponent<CasinoTrainerNpc>(), "APOSTADOR", apostador,
@@ -660,7 +667,7 @@ public static class CasinoNpcBuilder
     // la primera vez que se corrio esto. En el juego no se nota porque
     // ColisionesTilemapRuntimeFix los repone en Awake, pero la escena tiene que
     // quedar bien guardada.
-    private static void ReponerColisiones(Scene scene)
+    internal static void ReponerColisiones(Scene scene)
     {
         Tilemap colisiones = scene.GetRootGameObjects()
             .SelectMany(r => r.GetComponentsInChildren<Tilemap>(true))
@@ -711,7 +718,7 @@ public static class CasinoNpcBuilder
     // Replica PlayerController con los datos de ESTA escena (no con Physics2D:
     // los tres pisos usan las mismas coordenadas, y si hay otro piso abierto sus
     // colliders se mezclarian con los de este).
-    private static List<string> Verificar(Scene scene, GameObject personajes)
+    internal static List<string> Verificar(Scene scene, GameObject personajes)
     {
         var problemas = new List<string>();
         GameObject[] roots = scene.GetRootGameObjects();
@@ -1062,8 +1069,9 @@ public static class CasinoNpcBuilder
         return def;
     }
 
-    // La ruleta de los NPCs de los pisos 1 y 3: 35% Pokemon, 40% curativos y
-    // 25% plata. SIN Tarjeta VIP: en el piso 1 todavia no sirve y en el 3 ya no.
+    // La ruleta de los NPCs de los pisos 1 y 3: 65% Pokemon, 23% curativos y
+    // 12% plata (era 35% Pokemon: el playtest del 4-oct pidio llegar al final
+    // con mas equipo, y Augusto fijo el 65%). SIN Tarjeta VIP: en el piso 1 todavia no sirve y en el 3 ya no.
     //
     // Si la tabla quedo con la tarjeta (se le metio el 14-sep y despues se
     // pidio que solo saliera en el piso 2), se vuelve UNA vez al reparto de antes.
@@ -1090,8 +1098,8 @@ public static class CasinoNpcBuilder
         return tabla;
     }
 
-    // La ruleta de los NPCs del piso 2: ~33% Pokemon, 15% la Tarjeta VIP, 31%
-    // curativos y 21% plata (lo pidio el enunciado: ~15% de tarjeta en los
+    // La ruleta de los NPCs del piso 2: 65% Pokemon, 15% la Tarjeta VIP, 13%
+    // curativos y 7% plata (lo pidio el enunciado: ~15% de tarjeta en los
     // combates del piso 2).
     private static CasinoPrizeTable TablaDeLosNpcsDelPiso2(SpecialItemDefinition tarjeta)
     {
@@ -1141,26 +1149,26 @@ public static class CasinoNpcBuilder
 
     private static Prize[] PremiosDeLosNpcs() => new[]
     {
-        PremioPokemon("0025_Pikachu", 15, 13, "icon_pokeball", 300),
-        PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 17, "icon_pocion"),
-        PremioPlata(150, 17),
-        PremioPokemon("0133_Eevee", 15, 12, "icon_greatball", 300),
-        PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 15, "icon_superpocion"),
-        PremioPokemon("0175_Togepi", 15, 10, "icon_pokeball", 300),
-        PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 8, "icon_hiperpocion"),
-        PremioPlata(400, 8)
+        PremioPokemon("0025_Pikachu", 15, 23, "icon_pokeball", 300),
+        PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 10, "icon_pocion"),
+        PremioPlata(150, 8),
+        PremioPokemon("0133_Eevee", 15, 22, "icon_greatball", 300),
+        PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 9, "icon_superpocion"),
+        PremioPokemon("0175_Togepi", 15, 20, "icon_pokeball", 300),
+        PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 4, "icon_hiperpocion"),
+        PremioPlata(400, 4)
     };
 
     private static Prize[] PremiosDeLosNpcsDelPiso2(SpecialItemDefinition tarjeta) => new[]
     {
-        PremioPokemon("0025_Pikachu", 15, 12, "icon_pokeball", 300),
-        PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 17, "icon_pocion"),
+        PremioPokemon("0025_Pikachu", 15, 22, "icon_pokeball", 300),
+        PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 7, "icon_pocion"),
         PremioObjetoClave(tarjeta, PesoTarjetaEnLaRuleta),
-        PremioPokemon("0133_Eevee", 15, 11, "icon_greatball", 300),
-        PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 14, "icon_superpocion"),
-        PremioPlata(150, 13),
-        PremioPokemon("0175_Togepi", 15, 10, "icon_pokeball", 300),
-        PremioPlata(400, 8)
+        PremioPokemon("0133_Eevee", 15, 22, "icon_greatball", 300),
+        PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 6, "icon_superpocion"),
+        PremioPlata(150, 5),
+        PremioPokemon("0175_Togepi", 15, 21, "icon_pokeball", 300),
+        PremioPlata(400, 2)
     };
 
     // La ruleta exclusiva del guardia VIP: siempre un Pokemon, mejores que los
@@ -1220,7 +1228,7 @@ public static class CasinoNpcBuilder
     }
 
     // La ruleta que abren las mesas del piso 2 al ganar mas de 200 al color:
-    // 25% Pokemon, 40% curativos y 35% plata.
+    // 65% Pokemon, 18% curativos y 17% plata.
     private static CasinoPrizeTable TablaDeLaMesa()
     {
         string path = $"{DefinitionFolder}/RuletaDeLaMesa.asset";
@@ -1230,14 +1238,14 @@ public static class CasinoNpcBuilder
         tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
         tabla.premios = new[]
         {
-            PremioPokemon("0172_Pichu", 15, 13, "icon_pokeball", 300),
-            PremioPlata(250, 16),
-            PremioObjeto("Pocion", "Poción", "Pociones", "una", 2, 18, "icon_pocion"),
-            PremioPokemon("0440_Happiny", 15, 12, "icon_greatball", 300),
-            PremioPlata(500, 12),
-            PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 1, 14, "icon_superpocion"),
-            PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 8, "icon_hiperpocion"),
-            PremioPlata(1000, 7)
+            PremioPokemon("0172_Pichu", 15, 33, "icon_pokeball", 300),
+            PremioPlata(250, 8),
+            PremioObjeto("Pocion", "Poción", "Pociones", "una", 2, 8, "icon_pocion"),
+            PremioPokemon("0440_Happiny", 15, 32, "icon_greatball", 300),
+            PremioPlata(500, 6),
+            PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 1, 6, "icon_superpocion"),
+            PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 4, "icon_hiperpocion"),
+            PremioPlata(1000, 3)
         };
         AssetDatabase.CreateAsset(tabla, path);
         return tabla;

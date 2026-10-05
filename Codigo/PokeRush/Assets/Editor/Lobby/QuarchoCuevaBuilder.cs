@@ -37,7 +37,6 @@ using UnityEngine.Tilemaps;
 public static class QuarchoCuevaBuilder
 {
     public const string Escena = "Assets/Scenes/Quarcho-Cueva.unity";
-    private const string EscenaDeLaMesa = "Assets/Scenes/Casino piso FINAL.unity";
     private const string EscenaModelo = "Assets/Scenes/NestorGOD2.unity";
     private const string EscenaCreacion = "Assets/Scenes/CreacionPersonaje.unity";
     private const string EscenaSaves = "Assets/Scenes/MenuSaves.unity";
@@ -82,14 +81,28 @@ public static class QuarchoCuevaBuilder
     // Martin sentado atras, del lado recto (el del croupier); se le habla desde
     // arriba o desde el costado derecho.
     private static readonly Vector3Int MesaEnLaCueva = new Vector3Int(-4, -4, 0);
-    private static readonly Vector3Int MesaEnElCasino = new Vector3Int(-1, 29, 0);
     private static readonly Vector2Int TamanioDeLaMesa = new Vector2Int(3, 2);
-    // El busto va 0,4 celdas METIDO en la mesa, como en el piso final.
-    private static readonly Vector2 ApoyoDeMartin = new Vector2(-2.5f, -2.4f);
+    // El busto va METIDO en la mesa, como en el piso final: el borde que se
+    // ve de la mesa esta en y ~ -2,53 (la fila de arriba del tile es
+    // transparente); con la base en -2,4 quedaba separado (playtest 5-oct).
+    private static readonly Vector2 ApoyoDeMartin = new Vector2(-2.5f, -2.85f);
     // Martin ocupa la fila de atras de la mesa (y -2).
     private static readonly Vector2 SillaDeMartin = new Vector2(-2.5f, -1.5f);
     // Tacconi parado al costado derecho de la mesa de Martin: juega sus apuestas ahi.
     public static readonly Vector2 Tacconi = new Vector2(-0.5f, -3.5f);
+
+    // La enfermera (playtest del 4-oct): a la izquierda del escritorio del PC,
+    // contra la pared de arriba, sin tapar el paso hacia la sala de Nestor.
+    // Cura gratis y habla como la del Data Center (NpcQueCura).
+    public static readonly Vector2 Enfermera = new Vector2(-5.5f, 1.5f);
+    private const string HojaDeLaEnfermera = "enfermera";
+    private const string DialogoDeLaEnfermera = "Lobby/Dialogos/Lobby_Enfermera";
+
+    // Lo que Tixi le dice al PJ cuando se va de la cueva despues de la vuelta
+    // del casino: le da el transmisor. Antes iba pegado al final de esa charla
+    // (playtest del 4-oct: demasiado texto seguido). Lo dicen la puerta del
+    // este y el viaje con Tixi, lo que se use primero.
+    private const string DialogoDelTransmisor = "Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino_Transmisor";
 
     // Mew: el premio de Tacconi en la cueva. Nv 30, un escalon arriba de los
     // Pokemon de las ruletas de Martin.
@@ -130,8 +143,7 @@ public static class QuarchoCuevaBuilder
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
         // El equipo de respaldo se lee de NestorGOD2 antes de abrir la cueva
-        // (como ruta: ver LeerEquipoInicialDelModelo). La mesa de Martin se copia
-        // DESPUES, con la cueva abierta (ver CopiarLaMesaDelCasino).
+        // (como ruta: ver LeerEquipoInicialDelModelo).
         var equipo = LeerEquipoInicialDelModelo(out int[] niveles);
 
         Scene scene = EditorSceneManager.OpenScene(Escena, OpenSceneMode.Single);
@@ -194,46 +206,31 @@ public static class QuarchoCuevaBuilder
 
     // ------------------------------------------------------------- la mesa
 
-    // Copia los tiles de la mesa de cartas del ultimo piso del casino a la mesa
-    // de la cueva. Se abre el piso final ADITIVO con la cueva ya abierta, se
-    // copian seis celdas y se cierra SIN guardar.
+    // Pone en la cueva los seis tiles de la mesa de cartas del ultimo piso del
+    // casino, cargados del tileset por nombre (los mismos que dibuja
+    // CasinoPisoFinalBuilder).
     //
-    // Con la cueva abierta y no antes: si se leen los tiles, se cierra el piso y
-    // despues se abre la cueva en modo Single, Unity descarga los assets de los
-    // tiles en el medio y la mesa se guarda vacia (paso: Martin quedaba sentado
-    // en el aire).
+    // Hasta el 4-oct se copiaban del tilemap del piso final, abriendolo aditivo.
+    // Desde que alla la mesa es un dibujo agrandado, en esas celdas hay el tile
+    // invisible que frena: copiarlas dejaba la mesa de la cueva sin dibujo.
     private static int CopiarLaMesaDelCasino(Tilemap destino)
     {
-        Scene previa = SceneManager.GetSceneByPath(EscenaDeLaMesa);
-        bool yaAbierta = previa.IsValid() && previa.isLoaded;
-        Scene scene = yaAbierta ? previa : EditorSceneManager.OpenScene(EscenaDeLaMesa, OpenSceneMode.Additive);
-
         int copiados = 0;
-        Tilemap colisiones = scene.GetRootGameObjects()
-            .SelectMany(r => r.GetComponentsInChildren<Tilemap>(true))
-            .FirstOrDefault(t => t.name == "Colisiones");
-
-        if (colisiones != null)
+        for (int dy = 0; dy < TamanioDeLaMesa.y; dy++)
+        for (int dx = 0; dx < TamanioDeLaMesa.x; dx++)
         {
-            for (int dy = 0; dy < TamanioDeLaMesa.y; dy++)
-            for (int dx = 0; dx < TamanioDeLaMesa.x; dx++)
-            {
-                var origen = MesaEnElCasino + new Vector3Int(dx, dy, 0);
-                TileBase tile = colisiones.GetTile(origen);
-                if (tile == null) continue;
+            TileBase tile = CasinoPisoFinalBuilder.TileDeLaMesa(dy, dx);
+            if (tile == null) continue;
 
-                Vector3Int celda = MesaEnLaCueva + new Vector3Int(dx, dy, 0);
-                destino.SetTile(celda, tile);
-                destino.SetTransformMatrix(celda, colisiones.GetTransformMatrix(origen));
-                copiados++;
-            }
+            Vector3Int celda = MesaEnLaCueva + new Vector3Int(dx, dy, 0);
+            destino.SetTile(celda, tile);
+            destino.SetTransformMatrix(celda, Matrix4x4.identity);
+            copiados++;
         }
 
-        if (!yaAbierta) EditorSceneManager.CloseScene(scene, true);
-
         if (copiados != TamanioDeLaMesa.x * TamanioDeLaMesa.y)
-            Debug.LogWarning($"[Lobby] La mesa del piso final dio {copiados} tiles en vez de " +
-                             $"{TamanioDeLaMesa.x * TamanioDeLaMesa.y}: revisa MesaEnElCasino.");
+            Debug.LogWarning($"[Lobby] La mesa de cartas dio {copiados} tiles en vez de " +
+                             $"{TamanioDeLaMesa.x * TamanioDeLaMesa.y}: revisa CasinoPisoFinalBuilder.TilesDeLaMesa.");
         return copiados;
     }
 
@@ -466,6 +463,7 @@ public static class QuarchoCuevaBuilder
 
         PonerTixi(lobby, retratoTixi);
         PonerPc(lobby);
+        PonerEnfermera(lobby);
         PonerSalida(lobby);
         GameObject nestor = PonerNestor(lobby, retratoNestor);
         GameObject mesaGo = PonerMesa(grid);
@@ -528,6 +526,7 @@ public static class QuarchoCuevaBuilder
         HistoriaAssets.PonerLista(so.FindProperty("alVolver"),
             "Lobby/Dialogos/Lobby_Tixi_VueltaDelDataCenter",
             "Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino");
+        so.FindProperty("antesDeViajar").objectReferenceValue = HistoriaAssets.Dialogo(DialogoDelTransmisor);
         so.ApplyModifiedPropertiesWithoutUndo();
     }
 
@@ -551,7 +550,9 @@ public static class QuarchoCuevaBuilder
         var zona = salida.AddComponent<BoxCollider2D>();
         zona.size = new Vector2(0.8f, 0.8f);
         zona.isTrigger = true;
-        salida.AddComponent<SalidaDelLobby>();
+        var puerta = new SerializedObject(salida.AddComponent<SalidaDelLobby>());
+        puerta.FindProperty("antesDeSalir").objectReferenceValue = HistoriaAssets.Dialogo(DialogoDelTransmisor);
+        puerta.ApplyModifiedPropertiesWithoutUndo();
 
         var tope = new GameObject("TopeDeLaPuerta");
         tope.transform.SetParent(lobby.transform, false);
@@ -749,6 +750,184 @@ public static class QuarchoCuevaBuilder
     // celdas: piso del Suelo, paredes de Colisiones y los colliders solidos del
     // lobby (con TODOS los personajes prendidos: si se llega con todos a la
     // vista, se llega con menos).
+    // La enfermera, con sus cuatro dialogos (saludo, curado, sano, no gracias).
+    public static GameObject PonerEnfermera(GameObject lobby)
+    {
+        GameObject go = CasinoNpcBuilder.Personaje(lobby, "Enfermera", Enfermera, HojaDeLaEnfermera, CasinoNpcBuilder.Abajo);
+        var so = new SerializedObject(go.AddComponent<NpcQueCura>());
+        so.FindProperty("saludo").objectReferenceValue = HistoriaAssets.Dialogo(DialogoDeLaEnfermera);
+        so.FindProperty("alCurar").objectReferenceValue = HistoriaAssets.Dialogo(DialogoDeLaEnfermera + "_Curado");
+        so.FindProperty("yaEstaSano").objectReferenceValue = HistoriaAssets.Dialogo(DialogoDeLaEnfermera + "_Sano");
+        so.FindProperty("alRechazar").objectReferenceValue = HistoriaAssets.Dialogo(DialogoDeLaEnfermera + "_NoGracias");
+        so.ApplyModifiedPropertiesWithoutUndo();
+        return go;
+    }
+
+    // Lo del playtest del 4-oct sobre la cueva YA armada, sin rehacer el lobby
+    // entero: la enfermera y el transmisor al salir. Idempotente.
+    [MenuItem("PokeRush/Quarcho Cueva/Poner la enfermera y el transmisor al salir")]
+    public static void PonerEnfermeraYTransmisor()
+    {
+        if (EditorApplication.isPlaying) return;
+        Scene abierta = SceneManager.GetSceneByPath(Escena);
+        if (abierta.IsValid() && abierta.isLoaded && abierta.isDirty)
+        {
+            Debug.LogError("[Lobby] La Quarcho Cueva esta abierta con cambios sin guardar: no se toco nada.");
+            return;
+        }
+
+        Scene scene = EditorSceneManager.OpenScene(Escena, OpenSceneMode.Single);
+        GameObject mapaRaiz = scene.GetRootGameObjects().FirstOrDefault(r => r.name == "MapaRaiz");
+        Transform lobby = mapaRaiz != null ? mapaRaiz.transform.Find(Contenedor) : null;
+        if (lobby == null)
+        {
+            Debug.LogError("[Lobby] La cueva no tiene MapaRaiz/Lobby: corre 'Armar el lobby'.");
+            return;
+        }
+
+        Transform vieja = lobby.Find("Enfermera");
+        if (vieja != null) Object.DestroyImmediate(vieja.gameObject);
+        PonerEnfermera(lobby.gameObject);
+
+        DialogueDefinition transmisor = HistoriaAssets.Dialogo(DialogoDelTransmisor);
+        foreach (SalidaDelLobby salida in lobby.GetComponentsInChildren<SalidaDelLobby>(true))
+        {
+            var so = new SerializedObject(salida);
+            so.FindProperty("antesDeSalir").objectReferenceValue = transmisor;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+        foreach (QuarchoTixiNpc tixi in lobby.GetComponentsInChildren<QuarchoTixiNpc>(true))
+        {
+            var so = new SerializedObject(tixi);
+            so.FindProperty("antesDeViajar").objectReferenceValue = transmisor;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        ReponerColisiones(scene);
+        Physics2D.SyncTransforms();
+        List<string> problemas = Verificar(scene, lobby.gameObject);
+        if (problemas.Count > 0)
+        {
+            foreach (string p in problemas) Debug.LogError($"[Lobby] {p}");
+            Debug.LogError("[Lobby] La cueva NO se guardo.");
+            EditorSceneManager.OpenScene(Escena, OpenSceneMode.Single);
+            return;
+        }
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        Debug.Log("[Lobby] Enfermera y transmisor al salir: listo y guardado.");
+    }
+
+    // ---------------------------------------------------------------- el chip
+
+    private const string CombatePrefab = "Assets/Prefabs/Combate/SistemaDeCombate.prefab";
+    private const string PerfilesDeIa = "Assets/Resources/Definitions/AIProfiles/";
+    // Los entrenadores virtuales: frentes del pack que ya usa el casino (estan
+    // en git), sin los de la historia (Julieta, Martin, Tacconi, Tixi...).
+    private static readonly string[] FrentesDelChip =
+    {
+        "CABALLERO", "CHICA", "CIENTIFICA", "CIENTIFICO", "GUAY", "JOVENRICA", "JUGON", "KARATEKA",
+        "MALABARISTA", "MATON", "MAXIMO", "MEDIUM", "MODELO", "MOTORISTA", "POKEMANIACO",
+        "VETERANA", "VETERANO"
+    };
+
+    // El Entrenamiento intenso del chip (playtest del 5-oct) sobre la cueva YA
+    // armada: el sistema de combate (la cueva no tenia peleas), el puente
+    // mapa-combate, el entrenamiento y la opcion en el menu de Tixi. Idempotente.
+    [MenuItem("PokeRush/Quarcho Cueva/Poner el entrenamiento intenso del chip")]
+    public static void PonerEntrenamientoDelChip()
+    {
+        if (EditorApplication.isPlaying) return;
+        Scene abierta = SceneManager.GetSceneByPath(Escena);
+        if (abierta.IsValid() && abierta.isLoaded && abierta.isDirty)
+        {
+            Debug.LogError("[Lobby] La Quarcho Cueva esta abierta con cambios sin guardar: no se toco nada.");
+            return;
+        }
+
+        Scene scene = EditorSceneManager.OpenScene(Escena, OpenSceneMode.Single);
+        GameObject[] raices = scene.GetRootGameObjects();
+        GameObject mapaRaiz = raices.FirstOrDefault(r => r.name == "MapaRaiz");
+        GameObject sistema = raices.FirstOrDefault(r => r.name == "Sistema");
+        Transform lobby = mapaRaiz != null ? mapaRaiz.transform.Find(Contenedor) : null;
+        if (lobby == null || sistema == null)
+        {
+            Debug.LogError("[Lobby] La cueva no tiene MapaRaiz/Lobby o Sistema: corre 'Armar el lobby'.");
+            return;
+        }
+
+        // El combate: el prefab de siempre, apagado hasta que arranca una pelea.
+        GameObject combate = raices.FirstOrDefault(r => r.name == "SistemaDeCombate");
+        if (combate == null)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(CombatePrefab);
+            if (prefab == null) { Debug.LogError($"[Lobby] Falta {CombatePrefab}."); return; }
+            combate = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
+            combate.name = "SistemaDeCombate";
+        }
+        combate.SetActive(false);
+        var battleController = combate.GetComponent<BattleController>();
+
+        // El puente: esconde el mapa durante la pelea y lo devuelve al terminar.
+        var bridge = sistema.GetComponent<MapBattleBridge>();
+        if (bridge == null) bridge = sistema.AddComponent<MapBattleBridge>();
+        var soBridge = new SerializedObject(bridge);
+        soBridge.FindProperty("mapaRaiz").objectReferenceValue = mapaRaiz;
+        soBridge.FindProperty("combateRaiz").objectReferenceValue = combate;
+        soBridge.FindProperty("battleController").objectReferenceValue = battleController;
+        soBridge.FindProperty("playerController").objectReferenceValue = mapaRaiz.GetComponentInChildren<PlayerController>(true);
+        soBridge.ApplyModifiedPropertiesWithoutUndo();
+
+        // El entrenamiento, FUERA de MapaRaiz (ver EntrenamientoDelChip).
+        GameObject chipGo = raices.FirstOrDefault(r => r.name == "EntrenamientoDelChip");
+        if (chipGo == null)
+        {
+            chipGo = new GameObject("EntrenamientoDelChip");
+            SceneManager.MoveGameObjectToScene(chipGo, scene);
+        }
+        var chip = chipGo.GetComponent<EntrenamientoDelChip>();
+        if (chip == null) chip = chipGo.AddComponent<EntrenamientoDelChip>();
+
+        var soChip = new SerializedObject(chip);
+        soChip.FindProperty("battleController").objectReferenceValue = battleController;
+        soChip.FindProperty("dialogueController").objectReferenceValue =
+            raices.SelectMany(r => r.GetComponentsInChildren<DialogueController>(true)).FirstOrDefault();
+        soChip.FindProperty("retrato").objectReferenceValue = CasinoNpcBuilder.SpriteRetrato($"{Retratos}{RetratoDeTixi}.png");
+        var frentes = FrentesDelChip
+            .Select(f => CasinoNpcBuilder.SpriteRetrato($"{Retratos}{f}.png"))
+            .Where(f => f != null).ToArray();
+        SerializedProperty lista = soChip.FindProperty("entrenadores");
+        lista.arraySize = frentes.Length;
+        for (int i = 0; i < frentes.Length; i++) lista.GetArrayElementAtIndex(i).objectReferenceValue = frentes[i];
+        soChip.FindProperty("iaDeLosPrimeros").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AIProfileDefinition>(PerfilesDeIa + "Trainer.asset");
+        soChip.FindProperty("iaDelMedio").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AIProfileDefinition>(PerfilesDeIa + "GymLeader.asset");
+        soChip.FindProperty("iaDeLosUltimos").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AIProfileDefinition>(PerfilesDeIa + "Elite.asset");
+        soChip.ApplyModifiedPropertiesWithoutUndo();
+
+        foreach (QuarchoTixiNpc tixi in lobby.GetComponentsInChildren<QuarchoTixiNpc>(true))
+        {
+            var so = new SerializedObject(tixi);
+            so.FindProperty("entrenamiento").objectReferenceValue = chip;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        ReponerColisiones(scene);
+        Physics2D.SyncTransforms();
+        List<string> problemas = Verificar(scene, lobby.gameObject);
+        if (problemas.Count > 0)
+        {
+            foreach (string p in problemas) Debug.LogError($"[Lobby] {p}");
+            Debug.LogError("[Lobby] La cueva NO se guardo.");
+            EditorSceneManager.OpenScene(Escena, OpenSceneMode.Single);
+            return;
+        }
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        Debug.Log($"[Lobby] Entrenamiento intenso del chip: combate, puente y Tixi listos ({frentes.Length} entrenadores). Guardado.");
+    }
+
     private static List<string> Verificar(Scene scene, GameObject lobby)
     {
         var problemas = new List<string>();

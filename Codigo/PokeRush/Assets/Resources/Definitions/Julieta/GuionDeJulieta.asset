@@ -820,12 +820,6 @@ MonoBehaviour:
     sonido: {fileID: 0}
     accion: 0
     parametro: 0
-  - hablante: 3
-    texto: Julieta mira hacia el servidor principal.
-    retrato: {fileID: 0}
-    sonido: {fileID: 0}
-    accion: 0
-    parametro: 0
   - hablante: 0
     texto: "Si destru\xEDs ese servidor, todo va a terminar."
     retrato: {fileID: 0}
@@ -850,6 +844,14 @@ MonoBehaviour:
     sonido: {fileID: 0}
     accion: 0
     parametro: 0
+  - hablante: 3
+    texto: "Julieta mira hacia el servidor principal, que sigue encendido detr\xE1s
+      de ella."
+    retrato: {fileID: 0}
+    sonido: {fileID: 0}
+    accion: 0
+    parametro: 0
+  enElServidor:
   - hablante: 0
     texto: El NeuraRush-LINK no fue creado para controlar personas.
     retrato: {fileID: 0}
@@ -1136,6 +1138,7 @@ MonoBehaviour:
     sonido: {fileID: 0}
     accion: 0
     parametro: 0
+  alDestruirlo:
   - hablante: 1
     texto: "No importa cu\xE1nto intentes justificarlo."
     retrato: {fileID: 0}
@@ -1414,6 +1417,7 @@ MonoBehaviour:
     sonido: {fileID: 0}
     accion: 0
     parametro: 0
+  conJulietaEnElSuelo:
   - hablante: 0
     texto: "Cinco a\xF1os..."
     retrato: {fileID: 0}
@@ -1589,8 +1593,8 @@ MonoBehaviour:
     accion: 0
     parametro: 0
   yaVencida:
-  - hablante: 0
-    texto: "Yo tengo mucho que recordar, {PJ}. And\xE1 con Tixi."
+  - hablante: 3
+    texto: 'Julieta no te mira: mira el servidor principal.'
     retrato: {fileID: 0}
     sonido: {fileID: 0}
     accion: 0

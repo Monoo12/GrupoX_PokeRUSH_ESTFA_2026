@@ -2,6 +2,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 // Arma el ULTIMO piso del casino: el pasillo de guardias y el jefe que espera
 // atras de la mesa de poker.
@@ -19,9 +20,14 @@ using UnityEngine.SceneManagement;
 //   - El ascensor del fondo del pasillo, que solo BAJA. El ultimo piso no
 //     tiene enfermeria: sin esto, perder contra el jefe deja al jugador
 //     encerrado con el equipo debilitado.
+//   - La enfermera, enfrente del PC del fondo del pasillo (playtest del 4-oct).
 //   - Seis guardias iguales, tres por lado, mirando a la alfombra.
 //   - Martin Reymar, un busto sentado atras de la mesa, y la ZONA que hay
 //     delante de la mesa: pisarla arranca la pelea. Al jefe no se le habla.
+//     La mesa y el busto van agrandados (la sala se veia vacia).
+//   - La charla de Reymar de a tramos: cuatro ZonaDeHistoria en el camino
+//     hasta la mesa, y una mas atras de la mesa para despues de ganarle (la
+//     computadora del laboratorio y el servidor 02).
 //
 // TODO (equipo): los textos de los seis guardias son DE RELLENO. Los assets
 // estan en Assets/Resources/Definitions/Casino/Dialogos/Historia_PisoFinal_Guardia*.asset
@@ -45,17 +51,25 @@ public static class CasinoPisoFinalBuilder
     private const string NombreDelJefe = "REYMAR";
 
     // Los seis guardias del pasillo: tres de cada lado, sobre las columnas que
-    // quedan libres al costado de la alfombra (x = -3 y x = 3). La alfombra
-    // (x = -2 a 2) y las dos columnas de los bordes quedan libres para caminar.
+    // quedan libres al costado de la alfombra (x = -3 y x = 3, o sea centros
+    // -2,5 y 3,5). La alfombra (x = -2 a 2) y las dos columnas de los bordes
+    // quedan libres para caminar. Hasta el 4-oct los de la izquierda estaban
+    // en -3,5: contra la pared y no al lado de la alfombra.
     private static readonly (string nombre, Vector2 celda, int mira)[] Guardias =
     {
-        ("GuardiaPasillo1", new Vector2(-3.5f, 7.5f), CasinoNpcBuilder.Derecha),
+        ("GuardiaPasillo1", new Vector2(-2.5f, 7.5f), CasinoNpcBuilder.Derecha),
         ("GuardiaPasillo2", new Vector2(3.5f, 7.5f), CasinoNpcBuilder.Izquierda),
-        ("GuardiaPasillo3", new Vector2(-3.5f, 12.5f), CasinoNpcBuilder.Derecha),
+        ("GuardiaPasillo3", new Vector2(-2.5f, 12.5f), CasinoNpcBuilder.Derecha),
         ("GuardiaPasillo4", new Vector2(3.5f, 12.5f), CasinoNpcBuilder.Izquierda),
-        ("GuardiaPasillo5", new Vector2(-3.5f, 17.5f), CasinoNpcBuilder.Derecha),
+        ("GuardiaPasillo5", new Vector2(-2.5f, 17.5f), CasinoNpcBuilder.Derecha),
         ("GuardiaPasillo6", new Vector2(3.5f, 17.5f), CasinoNpcBuilder.Izquierda)
     };
+
+    // La enfermera, en la esquina de abajo a la derecha del pasillo, enfrente
+    // del PC (-3,5; 4,5): las dos cosas al bajar del ascensor, como en los pisos
+    // 2 y 3. Arriba del PC quedaba parada sobre el monitor. Antes este piso no
+    // tenia y perder contra Reymar obligaba a bajar a curarse.
+    private static readonly Vector2 CeldaDeLaEnfermera = new Vector2(4.5f, 4.5f);
 
     // Relleno hasta que llegue la historia. Todos dicen lo mismo a proposito:
     // son seis guardias iguales de un mismo cordon de seguridad.
@@ -70,20 +84,66 @@ public static class CasinoPisoFinalBuilder
     // Por eso el objeto vive donde esta la hitbox y el dibujo va como hijo,
     // corrido hasta la mesa.
     //
-    // La mesa de cartas ocupa las celdas (-1..1, 29..30). La zona cubre el
-    // frente de la mesa, que es por donde se llega caminando por la alfombra.
-    private static readonly Vector2 CentroDeLaZona = new Vector2(0.5f, 27.5f);
-    private static readonly Vector2 TamanoDeLaZona = new Vector2(5f, 3f);
+    // La mesa de cartas agrandada ocupa las celdas (-2..2, 28..30). La zona
+    // cubre las dos filas de adelante, que es por donde se llega caminando por
+    // la alfombra; los costados quedan libres para ir atras de la mesa.
+    private static readonly Vector2 CentroDeLaZona = new Vector2(0.5f, 27f);
+    private static readonly Vector2 TamanoDeLaZona = new Vector2(5f, 2f);
 
-    // Donde apoya el busto de Martin. Va 0,4 celdas METIDO en la mesa para que
-    // esta le tape la base y se lea como sentado; el borde de arriba de la mesa
-    // esta en y = 31.
-    private static readonly Vector2 ApoyoDeMartin = new Vector2(0.5f, 30.6f);
+    // La mesa: la del tileset (3x2 tiles en Colisiones) dibujada una vez y
+    // media mas grande, como hijo del jefe. En el tilemap queda en su lugar el
+    // tile invisible que frena, en todo lo que ocupa la mesa grande y en la
+    // fila del asiento de Martin. Crece hacia ABAJO: el borde de arriba sigue
+    // en y = 31 y el busto no se mete en la pared del fondo.
+    private const string TilesetDelCasino = "2D_TopDown_Tileset_Casino_1024x512";
+    private const string TileInvisible = "Assets/Palettes/ColisionInvisible.asset";
+    private const float EscalaDeLaMesa = 1.5f;
+    private static readonly string[,] TilesDeLaMesa =   // [fila desde abajo, columna]
+    {
+        { "0413", "0414", "0415" },
+        { "0381", "0382", "0383" }
+    };
+    private static readonly Vector2 EsquinaDeLaMesa = new Vector2(-1.75f, 28f);
+    private static readonly RectInt CeldasDeLaMesa = new RectInt(-2, 28, 5, 3);
+    private static readonly RectInt CeldasDelAsiento = new RectInt(-1, 31, 3, 1);
 
-    // Orden de dibujo del busto. Los NPCs van en 15 y la mesa vive en el tilemap
-    // 'Colisiones', que dibuja en 10: con 5 Martin queda DETRAS de la mesa y
-    // delante del piso, que es lo que hace el efecto de estar sentado.
-    private const int OrdenDetrasDeLaMesa = 5;
+    // Donde apoya el busto de Martin: metido en la mesa para que esta le tape
+    // la base y se lea como sentado. Las celdas llegan a y = 31, pero los
+    // tiles de arriba tienen 17 filas transparentes: el borde que se VE esta
+    // en y ~ 30,2. Con la base en 30,45 se veia el piso entre el cuerpo y la
+    // mesa (playtest del 5-oct: "el cuerpo no debe estar separado de la
+    // mesa"); en 29,85 la mesa le tapa 0,35. Va 1,4 veces mas grande que un
+    // personaje.
+    private static readonly Vector2 ApoyoDeMartin = new Vector2(0.5f, 29.85f);
+    private const float EscalaDeMartin = 1.4f;
+
+    // Orden de dibujo. El busto va DETRAS de la mesa (12) y delante de las
+    // paredes del tilemap Colisiones (10): agrandado, la cabeza pasa por
+    // delante de la pared del fondo. Los personajes van en 15.
+    private const int OrdenDetrasDeLaMesa = 11;
+    private const int OrdenDeLaMesa = 12;
+
+    // La charla de antes de pelear (historia.pdf) de a tramos, mientras el PJ
+    // camina hacia la mesa: el final del pasillo, el paso a la sala y dos filas
+    // de la sala. Lo que queda lo dice al pisar la zona de la pelea
+    // (Casino_Reymar_Antes). Cada tramo pide el anterior y ninguno suena si
+    // Reymar ya se presento (partidas de antes de esto).
+    private static readonly (string nombre, string dialogo, Vector2 centro, Vector2 tamano, StoryFlag requiere)[] Tramos =
+    {
+        ("ZonaReymar1", "Casino_Reymar_Tramo1", new Vector2(0.5f, 19.5f), new Vector2(9f, 1f), StoryFlag.None),
+        ("ZonaReymar2", "Casino_Reymar_Tramo2", new Vector2(0.5f, 21.5f), new Vector2(3f, 1f), StoryFlag.Historia_ReymarTramo1),
+        ("ZonaReymar3", "Casino_Reymar_Tramo3", new Vector2(0.5f, 23.5f), new Vector2(15f, 1f), StoryFlag.Historia_ReymarTramo2),
+        ("ZonaReymar4", "Casino_Reymar_Tramo4", new Vector2(0.5f, 25.5f), new Vector2(15f, 1f), StoryFlag.Historia_ReymarTramo3)
+    };
+
+    // Despues de ganarle: Reymar manda al PJ atras de la mesa (mensajeVictoria)
+    // y ahi, frente al vidrio del laboratorio, pasa lo de la computadora y el
+    // servidor 02 (Casino_Reymar_Servidor). Un brillo marca el lugar.
+    private static readonly Vector2 CentroDelLaboratorio = new Vector2(0.5f, 32f);
+    private static readonly Vector2 TamanoDelLaboratorio = new Vector2(15f, 2f);
+    private static readonly Vector2 BrilloDelLaboratorio = new Vector2(-3.5f, 0.6f);   // relativo a la zona
+    private const string MensajeDeVictoria =
+        "Vení, atrás de la mesa. Desde la computadora del laboratorio te muestro tus datos.";
 
     // El ascensor: sobre la pared del fondo del pasillo, debajo de la alfombra.
     private static readonly Vector2 CeldaDelAscensor = new Vector2(0.5f, 3.5f);
@@ -122,13 +182,22 @@ public static class CasinoPisoFinalBuilder
                         CasinoNpcBuilder.Dialogo("Historia_PisoFinal_" + g.nombre, "GUARDIA", LineasDeRelleno));
                 }
 
+                CasinoNpcBuilder.Personaje(raiz, "EnfermeraCasino", CeldaDeLaEnfermera, "enfermera", CasinoNpcBuilder.Izquierda)
+                    .AddComponent<CasinoNurseInteractable>();
+
                 PonerAlJefe(raiz, jefe, ruleta);
             },
-            PonerElAscensor);
+            escena =>
+            {
+                PonerElAscensor(escena);
+                PonerLaMesaEnElTilemap(escena);
+                PonerLosTramos(escena);
+            });
 
         if (!ok) return;
 
-        Debug.Log($"[PisoFinal] Listo: {Guardias.Length} guardias, el jefe y el ascensor de bajada.");
+        Debug.Log($"[PisoFinal] Listo: {Guardias.Length} guardias, la enfermera, el jefe con su mesa, " +
+                  $"{Tramos.Length} tramos de charla y el ascensor de bajada.");
         Debug.LogWarning("[PisoFinal] TODO equipo: los textos de los guardias son de relleno " +
                          $"({CasinoNpcBuilder.DialogosFolder}/Historia_PisoFinal_Guardia*.asset).");
     }
@@ -168,7 +237,7 @@ public static class CasinoPisoFinalBuilder
         var visual = new GameObject("Visual");
         visual.transform.SetParent(go.transform, false);
         visual.transform.position = new Vector3(ApoyoDeMartin.x, ApoyoDeMartin.y, 0f);
-        visual.transform.localScale = Vector3.one * CasinoNpcBuilder.EscalaDelVisual;
+        visual.transform.localScale = Vector3.one * (CasinoNpcBuilder.EscalaDelVisual * EscalaDeMartin);
 
         var sr = visual.AddComponent<SpriteRenderer>();
         sr.sprite = CasinoNpcBuilder.SpriteDePersonaje(SpriteDeMartin);
@@ -176,6 +245,8 @@ public static class CasinoPisoFinalBuilder
         if (sr.sprite == null)
             Debug.LogError($"[PisoFinal] No se pudo cargar {SpriteDeMartin}. " +
                            "Corre scripts/preparar_sprites_casino.py.");
+
+        DibujarLaMesa(go.transform);
 
         var npc = go.AddComponent<CasinoJefeFinalNpc>();
         var so = new SerializedObject(npc);
@@ -191,7 +262,143 @@ public static class CasinoPisoFinalBuilder
         // La historia: lo que dice la primera vez y cuando se le apaga el chip.
         so.FindProperty("dialogoAntes").objectReferenceValue = HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Reymar_Antes");
         so.FindProperty("dialogoDespues").objectReferenceValue = HistoriaAssets.Dialogo("Casino/Dialogos/Casino_Reymar_Despues");
+        // Lo ultimo que dice despues de ganarle: manda al PJ atras de la mesa,
+        // donde sigue la historia (ver PonerLosTramos).
+        so.FindProperty("mensajeVictoria").stringValue = MensajeDeVictoria;
         so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
+    // Los seis tiles de la mesa del tileset, agrandados. Van en mundo, no
+    // relativos al jefe: la zona y la mesa estan en lugares distintos.
+    private static void DibujarLaMesa(Transform jefe)
+    {
+        var mesa = new GameObject("Mesa");
+        mesa.transform.SetParent(jefe, false);
+        mesa.transform.position = Vector3.zero;
+
+        for (int fila = 0; fila < TilesDeLaMesa.GetLength(0); fila++)
+            for (int col = 0; col < TilesDeLaMesa.GetLength(1); col++)
+            {
+                Sprite sprite = TileDelCasino(TilesDeLaMesa[fila, col]);
+                var pieza = new GameObject($"Mesa_{fila}{col}");
+                pieza.transform.SetParent(mesa.transform, false);
+
+                // Esquina de abajo a la izquierda de este tile, mas el pivote
+                // del sprite (los tiles son de 1x1 unidad a 32 px).
+                Vector2 pivote = sprite != null
+                    ? new Vector2(sprite.pivot.x / sprite.rect.width, sprite.pivot.y / sprite.rect.height)
+                    : new Vector2(0.5f, 0.5f);
+                Vector2 esquina = EsquinaDeLaMesa + new Vector2(col, fila) * EscalaDeLaMesa;
+                pieza.transform.position = esquina + pivote * EscalaDeLaMesa;
+                pieza.transform.localScale = Vector3.one * EscalaDeLaMesa;
+
+                var sr = pieza.AddComponent<SpriteRenderer>();
+                sr.sprite = sprite;
+                sr.sortingOrder = OrdenDeLaMesa;
+            }
+    }
+
+    // El tile (asset) de la mesa original en esa fila (desde abajo) y columna:
+    // la mesa de Martin en la cueva usa los mismos (QuarchoCuevaBuilder).
+    public static TileBase TileDeLaMesa(int fila, int col)
+    {
+        string nombre = $"{TilesetDelCasino}_{TilesDeLaMesa[fila, col]}";
+        foreach (string guid in AssetDatabase.FindAssets($"{nombre} t:TileBase"))
+        {
+            var tile = AssetDatabase.LoadAssetAtPath<TileBase>(AssetDatabase.GUIDToAssetPath(guid));
+            if (tile != null && tile.name == nombre) return tile;
+        }
+        Debug.LogError($"[PisoFinal] No se encontro el tile {nombre} del casino.");
+        return null;
+    }
+
+    private static Sprite TileDelCasino(string numero)
+    {
+        string nombre = $"{TilesetDelCasino}_{numero}";
+        foreach (string guid in AssetDatabase.FindAssets($"{TilesetDelCasino} t:Texture2D"))
+            foreach (Object o in AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GUIDToAssetPath(guid)))
+                if (o is Sprite s && s.name == nombre) return s;
+        Debug.LogError($"[PisoFinal] No se encontro el tile {nombre} del casino.");
+        return null;
+    }
+
+    // En el tilemap Colisiones la mesa grande y el asiento de Martin son el
+    // tile invisible: frena sin dibujar (la mesa la dibuja DibujarLaMesa). Pisa
+    // los tiles de la mesa original, que quedaban adentro.
+    private static void PonerLaMesaEnElTilemap(Scene scene)
+    {
+        Tilemap colisiones = scene.GetRootGameObjects()
+            .SelectMany(r => r.GetComponentsInChildren<Tilemap>(true))
+            .FirstOrDefault(t => t.name == "Colisiones");
+        var invisible = AssetDatabase.LoadAssetAtPath<TileBase>(TileInvisible);
+        if (colisiones == null || invisible == null)
+        {
+            Debug.LogError($"[PisoFinal] Falta el tilemap Colisiones o {TileInvisible}: la mesa no frena.");
+            return;
+        }
+
+        foreach (RectInt zona in new[] { CeldasDeLaMesa, CeldasDelAsiento })
+            foreach (Vector2Int c in zona.allPositionsWithin)
+            {
+                var celda = new Vector3Int(c.x, c.y, 0);
+                colisiones.SetTile(celda, invisible);
+                colisiones.SetColliderType(celda, Tile.ColliderType.Grid);
+            }
+    }
+
+    // ---------- la charla de a tramos ----------
+
+    // Van en su propio contenedor y no con los personajes: son zonas para pisar,
+    // y la del paso a la sala esta sobre la alfombra (Decorado), donde el
+    // tilemap Suelo no tiene tile y la verificacion de personajes la rechaza.
+    private const string ContenedorDeLaCharla = "CharlaDeReymar";
+
+    private static void PonerLosTramos(Scene scene)
+    {
+        GameObject mapaRaiz = scene.GetRootGameObjects().FirstOrDefault(r => r.name == "MapaRaiz");
+        if (mapaRaiz == null) return;
+        Transform vieja = mapaRaiz.transform.Find(ContenedorDeLaCharla);
+        if (vieja != null) Object.DestroyImmediate(vieja.gameObject);
+        var raiz = new GameObject(ContenedorDeLaCharla);
+        raiz.transform.SetParent(mapaRaiz.transform, false);
+
+        foreach (var t in Tramos)
+            ZonaDeCharla(raiz, t.nombre, t.centro, t.tamano, "Casino/Dialogos/" + t.dialogo,
+                         t.requiere, StoryFlag.Historia_ReymarPresentado);
+
+        GameObject laboratorio = ZonaDeCharla(raiz, "ZonaReymarServidor", CentroDelLaboratorio, TamanoDelLaboratorio,
+                                              "Casino/Dialogos/Casino_Reymar_Servidor",
+                                              StoryFlag.Casino_JefeFinalVencido, StoryFlag.None);
+
+        // El brillo prende al ganarle y se apaga cuando paso lo del servidor.
+        var brillo = new GameObject("Brillo");
+        brillo.transform.SetParent(laboratorio.transform, false);
+        brillo.transform.localPosition = BrilloDelLaboratorio;
+        HistoriaAssets.Brillo(brillo, StoryFlag.Historia_ReymarServidor, StoryFlag.Casino_JefeFinalVencido,
+                              new Color(0.45f, 0.85f, 1f, 0.55f));
+    }
+
+    // Una ZonaDeHistoria: en Default y en trigger (en Obstacles frenaria al
+    // jugador, ver el comentario de PonerAlJefe).
+    private static GameObject ZonaDeCharla(GameObject raiz, string nombre, Vector2 centro, Vector2 tamano,
+                                           string dialogo, StoryFlag requiere, StoryFlag excluye)
+    {
+        var go = new GameObject(nombre);
+        go.transform.SetParent(raiz.transform, false);
+        go.transform.position = new Vector3(centro.x, centro.y, 0f);
+        go.layer = CapaDefault;
+
+        var col = go.AddComponent<BoxCollider2D>();
+        col.size = tamano;
+        col.isTrigger = true;
+
+        var zona = go.AddComponent<ZonaDeHistoria>();
+        var so = new SerializedObject(zona);
+        so.FindProperty("dialogo").objectReferenceValue = HistoriaAssets.Dialogo(dialogo);
+        so.FindProperty("requiere").enumValueIndex = (int)requiere;
+        so.FindProperty("excluye").enumValueIndex = (int)excluye;
+        so.ApplyModifiedPropertiesWithoutUndo();
+        return go;
     }
 
     // ---------- el ascensor ----------
@@ -249,25 +456,27 @@ public static class CasinoPisoFinalBuilder
     // ---------- assets ----------
 
     // El rival mas duro del casino, pero sin pasarse: seis Pokemon de nivel
-    // 26-29 contra los cuatro de nivel 21-23 del guardia VIP, que era lo mas
-    // dificil hasta ahora. Equipo de mafioso (siniestro y fantasma) con Gengar
-    // de as. El perfil Elite es un escalon arriba del GymLeader del guardia VIP
+    // 24-27 contra los cuatro de nivel 21-23 del guardia VIP, que era lo mas
+    // dificil hasta ahora (eran 26-29: el playtest del 4-oct pidio bajarlo).
+    // Equipo de mafioso (siniestro y fantasma) con Gengar de as. El perfil Elite es un escalon arriba del GymLeader del guardia VIP
     // y todavia no es el FinalBoss, que queda para el jefe del juego.
     private static EnemyDefinition ArmarElJefe()
     {
         EnemyDefinition def = CasinoNpcBuilder.Enemigo(
             "JefeFinalCasino", "Reymar", 3000, StoryFlag.Casino_JefeFinalVencido,
             RetratoDelJefe, "Elite",
-            ("0359_Absol", 26),
-            ("0452_Drapion", 26),
-            ("0625_Bisharp", 27),
-            ("0553_Krookodile", 27),
-            ("0461_Weavile", 28),
-            ("0094_Gengar", 29));
+            ("0359_Absol", 24),
+            ("0452_Drapion", 24),
+            ("0625_Bisharp", 25),
+            ("0553_Krookodile", 25),
+            ("0461_Weavile", 26),
+            ("0094_Gengar", 27));
 
         if (def != null)
         {
-            def.battleBackground = CasinoNpcBuilder.SpriteSimple("Assets/Sprites/Battlebacks/InteriorRojo_bg.png");
+            // Antes InteriorRojo (un degrade liso); desde el playtest del 5-oct
+            // la arena grande, como el resto de los fondos (FondosDeCombateBuilder).
+            def.battleBackground = CasinoNpcBuilder.SpriteSimple(FondosDeCombateBuilder.FondoDeReymar);
             EditorUtility.SetDirty(def);
         }
         return def;

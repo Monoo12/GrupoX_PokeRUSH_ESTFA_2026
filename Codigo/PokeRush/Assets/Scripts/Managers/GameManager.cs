@@ -72,6 +72,9 @@ public class GameManager : MonoBehaviour
         // Ataque de ultimo recurso para especies sin ninguno (PokenModel.AsegurarUnAtaque)
         PokenModel.DefaultMove = DefinitionRepository.Instance.GetMove("Placaje");
 
+        // Ataque especial basico por tipo (PokenModel.AsegurarUnAtaqueEspecial)
+        PokenModel.EspecialDeRespaldo = AtaquesEspecialesDeRespaldo.DelTipo;
+
         // Conecta las fuentes de audio de la escena al servicio de audio
         AudioService.Instance.Initialize(musicSource, sfxSource);
 

@@ -327,7 +327,17 @@ public class CasinoSmokeTest : MonoBehaviour
         Check("Sin plata la enfermera cura igual", primero.CurrentHP == primero.MaxHP);
         Check($"Y queda la deuda anotada ({jugador.Debt})", jugador.Debt == costo);
 
-        // --- el ascensor no deja subir debiendo ---
+        // --- deuda sin tope: con deuda y sin plata, vuelve a curar fiado ---
+        primero.TakeDamage(primero.MaxHP / 2);
+        enfermera.Interact(jugador, historia);
+        yield return null;
+        yield return Contestar(true);
+        yield return Contestar(true);   // el "curado, me debes..."
+
+        Check("Con deuda y sin plata la enfermera vuelve a curar", primero.CurrentHP == primero.MaxHP);
+        Check($"Y la deuda se acumula ({jugador.Debt})", jugador.Debt == 2 * costo);
+
+        // --- el ascensor no deja subir debiendo, si alcanza la plata ---
         var ascensor = Object.FindAnyObjectByType<CasinoElevatorInteractable>();
         if (ascensor != null)
         {
@@ -337,9 +347,10 @@ public class CasinoSmokeTest : MonoBehaviour
             ascensor.Interact(jugador, historia);
             yield return null;
 
-            Check("Con deuda encima el ascensor no sube",
+            Check("Con deuda y plata el ascensor pregunta si paga",
                   Menus.Top is MessageBoxScreen);
-            yield return Contestar(true);
+            yield return Contestar(false);   // no paga: lo frena el de seguridad (Contestar cierra el aviso)
+            Check("Sin pagar la deuda sigue", jugador.HasDebt);
         }
 
         // --- pagar la deuda ---
@@ -348,6 +359,7 @@ public class CasinoSmokeTest : MonoBehaviour
         yield return Contestar(true);
 
         Check("Se le puede pagar la deuda a la enfermera", !jugador.HasDebt);
+        yield return Contestar(true);   // el "saldado"
     }
 
     // Contesta la caja de mensajes que este arriba de la pila (y la cierra).
@@ -481,7 +493,7 @@ public class CasinoSmokeTest : MonoBehaviour
         yield return null;
         Check("El guardia pregunta si le pagas", dialogo.IsOpen);
 
-        dialogo.OnConfirm();               // "Pagar 500" es la primera opcion
+        dialogo.OnConfirm();               // "Pagar <precio>" es la primera opcion
         yield return null;
         Check($"Pagar le cobra {guardia.Precio}", jugador.Money == antes - guardia.Precio);
         Check("Pagar da el pase del ascensor", historia.HasFlag(guardia.FlagPase));
@@ -551,7 +563,7 @@ public class CasinoSmokeTest : MonoBehaviour
         yield return null;
 
         // Se fuerza que le toque: todos los demas de la lista ya vencidos y
-        // ninguna ruleta usada -> es el ultimo combate y le deben las cuatro.
+        // ninguna ruleta usada -> es el ultimo combate y le deben todas.
         foreach (StoryFlag uso in CasinoRuletaDeNpcs.FlagsDeUso) historia.ActiveFlags.Remove(uso);
         foreach (StoryFlag otro in npc.Ruleta.npcsQueLaPuedenDar)
             if (otro != npc.FlagVencido) historia.ActivateFlag(otro);
@@ -578,14 +590,14 @@ public class CasinoSmokeTest : MonoBehaviour
         Check("Ya vencido, el NPC solo habla", dialogo.IsOpen && !MenuManager.AnyOpen);
         yield return CerrarDialogo(dialogo);
 
-        // --- con las cuatro ruletas usadas, ganarle no la da ---
+        // --- con todas las ruletas usadas, ganarle no la da ---
         foreach (StoryFlag uso in CasinoRuletaDeNpcs.FlagsDeUso) historia.ActivateFlag(uso);
         historia.ActiveFlags.Remove(npc.FlagVencido);
         Llamar(npc, "AlTerminar", new BattleOutcome { PlayerVictory = true }, historia);
         yield return EsperarHasta(() => dialogo.IsOpen, 2f);
         yield return AvanzarHastaQueSeCierre(dialogo);
         for (int i = 0; i < 5; i++) yield return null;
-        Check("Con las cuatro ruletas usadas, ganarle no abre la ruleta", !(Menus.Top is PrizeWheelController));
+        Check("Con todas las ruletas usadas, ganarle no abre la ruleta", !(Menus.Top is PrizeWheelController));
     }
 
     // En modo premio: no se puede salir sin girar, entrega y se cierra sola.

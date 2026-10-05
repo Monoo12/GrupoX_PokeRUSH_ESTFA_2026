@@ -73,6 +73,14 @@ public class BattleModel
     public bool AwaitingPlayerReplacement { get; private set; }
     public void SetAwaitingPlayerReplacement(bool value) => AwaitingPlayerReplacement = value;
 
+    // Cayo el del rival y el que sigue ya esta elegido, pero todavia no entro:
+    // el combate espera a que el jugador diga si cambia antes (el modo "Cambio"
+    // de la saga). -1 = no hay nada pendiente. Mientras tanto no se resuelve
+    // ningun turno; lo cierra TurnEngine.CompleteEnemyReplacement.
+    public int ReemplazoRivalPendiente { get; private set; } = -1;
+    public bool AwaitingEnemyReplacement => ReemplazoRivalPendiente >= 0;
+    public void SetReemplazoRivalPendiente(int indice) => ReemplazoRivalPendiente = indice;
+
     public void SetPhase(BattlePhase phase) => CurrentPhase = phase;
     public void AdvanceTurn() => CurrentTurn++;
 
@@ -108,6 +116,7 @@ public class BattleModel
     public void Finish(bool playerVictory)
     {
         AwaitingPlayerReplacement = false;
+        ReemplazoRivalPendiente = -1;
         IsBattleOver = true;
         IsPlayerVictory = playerVictory;
         CurrentPhase = BattlePhase.End;

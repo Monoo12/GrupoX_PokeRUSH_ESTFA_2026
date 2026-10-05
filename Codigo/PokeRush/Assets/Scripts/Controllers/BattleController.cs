@@ -134,9 +134,9 @@ public class BattleController : MonoBehaviour
     [Tooltip("Chance de que Nestor lea la jugada, cumplidos el cooldown y la gracia.")]
     [SerializeField, Range(0f, 1f)] private float nestorProbabilidad = 0.20f;
     [Tooltip("Turnos minimos entre dos lecturas.")]
-    [SerializeField, Min(0)] private int nestorCooldownTurnos = 4;
+    [SerializeField, Min(0)] private int nestorCooldownTurnos = 2;
     [Tooltip("Turnos del arranque en los que Nestor solo mira.")]
-    [SerializeField, Min(0)] private int nestorTurnosDeGracia = 2;
+    [SerializeField, Min(0)] private int nestorTurnosDeGracia = 1;
     [Tooltip("Tope de lecturas por combate. Es el freno mas importante.")]
     [SerializeField, Min(1)] private int nestorMaximoPorCombate = 2;
     [Tooltip("Cuanto tiene que pegar un ataque comun, en fraccion de tus PS " +
@@ -153,6 +153,12 @@ public class BattleController : MonoBehaviour
     // El Poken de este lado se debilito y espera reemplazo (el cambio no hace retirada)
     private bool _playerFaintedPendingSwitch;
     private bool _enemyFaintedPendingSwitch;
+    // El fondo que trae el prefab: el ultimo recurso de ApplyBackground. Sin
+    // guardarlo, una pelea sin fondo heredaba el de la pelea anterior. Se toma
+    // en el primer ApplyBackground y no en Awake: la primera pelea arranca con
+    // el combate todavia apagado (MapBattleBridge lo prende con BattleStarted).
+    private Sprite _fondoDelPrefab;
+    private bool _fondoDelPrefabGuardado;
 
     private void Awake()
     {
@@ -263,6 +269,8 @@ public class BattleController : MonoBehaviour
 
     private void BeginBattle(PlayerModel player, EnemyModel enemy, Sprite background = null)
     {
+        // Sin fondo propio del rival, el del lugar donde se pelea (ver FondosDeCombate).
+        if (background == null) background = FondosDeCombate.DeLaEscena(gameObject.scene.name);
         ApplyBackground(background);
         _playerModel = player;
         _enemyModel = enemy;
@@ -332,6 +340,13 @@ public class BattleController : MonoBehaviour
         _enemyAI = BattleAIFactory.Create(_aiProfile);
         _engine.EnemyReplacementSelector =
             model => _enemyAI.ChooseReplacement(AiContext.ForEnemy(model, _aiProfile));
+
+        // Modo "Cambio" de la saga (playtest del 5-oct): al caer el del rival
+        // se anuncia el siguiente y el jugador puede cambiar antes. No en las
+        // peleas con guion (Julieta: su guion cuenta los KO por turno) ni con
+        // el rastreo de la torre activo (ahi no se puede cambiar).
+        _engine.OfrecerCambioAntesDeQueEntre = usarPartyCompartida && _director == null
+                                               && (_bossConfig == null || _bossConfig.PermiteCambio);
 
         // El boss con fase de liberacion no puede caer: queda en 1 PS y el
         // combate sigue hasta que se resuelva la fase.
@@ -914,6 +929,13 @@ public class BattleController : MonoBehaviour
             // Se conserva de donde vino: si el reemplazo anterior salio de la
             // liberacion y el que entro tambien cayo, seguimos en esa fase.
             PedirReemplazo(_reemplazoDesdeLiberacion);
+            yield break;
+        }
+
+        // Cayo el del rival y el siguiente espera: ¿cambia el jugador antes?
+        if (_battleModel.AwaitingEnemyReplacement)
+        {
+            yield return OfrecerCambioRoutine();
             yield break;
         }
 
@@ -1577,6 +1599,25 @@ public class BattleController : MonoBehaviour
                 case BattleEventKind.BattleEnded:
                     battleHudView?.UpdateHud(_battleModel);
                     break;
+
+                // Excavar, Vuelo, Buceo...: el Poken se esconde al cargar y
+                // vuelve a aparecer al soltar el golpe.
+                case BattleEventKind.Visibilidad:
+                    if (view != null)
+                        yield return ev.Visible ? view.Aparecer() : view.Esconder();
+                    break;
+
+                // Subio de nivel y ya sabe cuatro: decide el jugador.
+                case BattleEventKind.QuiereAprender:
+                    yield return QuiereAprenderRoutine(ev.Poken, ev.Move, ev.Message);
+                    messageHandled = true;
+                    break;
+
+                // El anuncio de quien viene; la pregunta la hace
+                // ContinuarDespuesDelTurno cuando termina de reproducirse todo.
+                case BattleEventKind.RivalVaAEnviar:
+                    battleHudView?.UpdateHud(_battleModel);
+                    break;
             }
 
             if (!messageHandled && !string.IsNullOrEmpty(ev.Message))
@@ -1589,6 +1630,132 @@ public class BattleController : MonoBehaviour
             if (ev.ExtraPause > 0f)
                 yield return new WaitForSeconds(ev.ExtraPause);
         }
+
+        // Si la carga se perdio por otro lado (se durmio, lo cambiaron, la
+        // pelea termino), el que estaba escondido vuelve a verse.
+        SincronizarEscondidos();
+    }
+
+    private void SincronizarEscondidos()
+    {
+        if (_battleModel == null) return;
+        if (playerPokenView != null && playerPokenView.Escondido && !_battleModel.PlayerState.SemiInvulnerable)
+            playerPokenView.DejarDeEsconder();
+        if (enemyPokenView != null && enemyPokenView.Escondido && !_battleModel.EnemyState.SemiInvulnerable)
+            enemyPokenView.DejarDeEsconder();
+    }
+
+    // ---------- aprender un movimiento al subir de nivel ----------
+
+    // Como en la saga: "X quiere aprender Y, pero ya conoce 4 movimientos.
+    // ¿Olvidar uno?" -> la pantalla de "¿Qué olvida?" (la del tutor de Nestor,
+    // sin precio) -> "1, 2 y... ¡Puf!". Decir que no, o volver, lo deja como
+    // estaba.
+    private IEnumerator QuiereAprenderRoutine(PokenModel poken, MoveDefinition move, string anuncio)
+    {
+        if (poken == null || move == null) yield break;
+        string nombre = poken.Definition.pokenName;
+
+        Announce(anuncio);
+        yield return new WaitForSeconds(messageDelay);
+
+        MenuManager menus = MenuManager.HasInstance ? MenuManager.Instance : null;
+        bool aprendio = false;
+        if (menus != null && _battleModel != null)
+        {
+            menus.SetContext(MenuContextKind.Battle);
+            battleHudView?.HideMenus();
+
+            bool? olvidar = null;
+            MenuScreen pregunta = menus.Open(MenuScreenId.MessageBox,
+                new MessageBoxRequest
+                {
+                    Message = $"¿Olvidar un movimiento para que {nombre} aprenda {move.moveName}?",
+                    IsQuestion = true
+                },
+                r => olvidar = r is MessageBoxResult mb && mb.Confirmed);
+            if (pregunta != null)
+                yield return new WaitUntil(() => olvidar.HasValue || _battleModel == null);
+
+            if (olvidar == true && _battleModel != null)
+            {
+                bool cerrada = false;
+                MoveTutorResult resultado = null;
+                MenuScreen pantalla = menus.Open(MenuScreenId.MoveTutor,
+                    new MoveTutorRequest { Poken = poken, AprenderEste = move, Maestro = "" },
+                    raw => { resultado = raw as MoveTutorResult; cerrada = true; });
+                if (pantalla != null)
+                    yield return new WaitUntil(() => cerrada || _battleModel == null);
+                // La pantalla ya mostro el "1, 2 y... ¡Puf!" o el "no aprendio".
+                if (pantalla != null) yield break;
+                aprendio = resultado != null && resultado.Aprendido != null;
+            }
+        }
+
+        if (!aprendio)
+        {
+            Announce($"{nombre} no aprendió {move.moveName}.");
+            yield return new WaitForSeconds(messageDelay);
+        }
+    }
+
+    // ---------- modo "Cambio": avisar quien viene ----------
+
+    // El motor se freno con el siguiente del rival elegido pero sin entrar
+    // (TurnEngine.OfrecerCambioAntesDeQueEntre). Se pregunta si el jugador
+    // cambia; con lo que diga, entran los dos y el combate sigue.
+    private IEnumerator OfrecerCambioRoutine()
+    {
+        int elegido = -1;
+        int siguiente = _battleModel.ReemplazoRivalPendiente;
+        string quien = siguiente >= 0 && siguiente < _battleModel.Enemy.Team.Count
+            ? _battleModel.Enemy.Team[siguiente].Definition.pokenName
+            : "otro Pokémon";
+
+        MenuManager menus = usarPartyCompartida && MenuManager.HasInstance ? MenuManager.Instance : null;
+        if (menus != null)
+        {
+            menus.SetContext(MenuContextKind.Battle);
+            battleHudView?.HideMenus();
+
+            bool? cambia = null;
+            MenuScreen pregunta = menus.Open(MenuScreenId.MessageBox,
+                new MessageBoxRequest
+                {
+                    Message = $"El rival va a enviar a {quien}. ¿Querés cambiar de Pokémon?",
+                    IsQuestion = true
+                },
+                r => cambia = r is MessageBoxResult mb && mb.Confirmed);
+            if (pregunta != null)
+                yield return new WaitUntil(() => cambia.HasValue || _battleModel == null);
+            if (_battleModel == null) yield break;
+
+            if (cambia == true)
+            {
+                bool cerrada = false;
+                PartyScreenResult resultado = null;
+                MenuScreen equipo = menus.Open(MenuScreenId.Party, new PartyScreenRequest
+                {
+                    Mode = PartyScreenMode.SelectSwitch,
+                    Context = MenuContextKind.Battle,
+                    CanCancel = true,
+                    BlockedIndices = new HashSet<int> { _battleModel.ActivePlayerIndex },
+                    Prompt = $"¿A quién mandás contra {quien}?"
+                }, raw => { resultado = raw as PartyScreenResult; cerrada = true; });
+                if (equipo != null)
+                    yield return new WaitUntil(() => cerrada || _battleModel == null);
+                if (_battleModel == null) yield break;
+
+                if (resultado != null && !resultado.Cancelled && resultado.SelectedIndex >= 0)
+                    elegido = resultado.SelectedIndex;
+            }
+        }
+
+        _battleModel.SetPhase(BattlePhase.CalculatingResult);
+        battleHudView?.HideMenus();
+        yield return PlayEvents(_engine.CompleteEnemyReplacement(elegido));
+        if (_battleModel == null) yield break;
+        yield return ContinuarDespuesDelTurno();
     }
 
     private IEnumerator EndBattleRoutine()
@@ -1732,11 +1899,18 @@ public class BattleController : MonoBehaviour
 
     // ---------- utilidades ----------
 
-    // Cambia el fondo (si el enemigo trae uno) y lo escala para cubrir la camara
+    // Cambia el fondo (el del rival o el del lugar; si no hay, el del prefab)
+    // y lo escala para cubrir la camara
     private void ApplyBackground(Sprite background)
     {
         if (backgroundRenderer == null) return;
+        if (!_fondoDelPrefabGuardado)
+        {
+            _fondoDelPrefab = backgroundRenderer.sprite;
+            _fondoDelPrefabGuardado = true;
+        }
         if (background != null) backgroundRenderer.sprite = background;
+        else if (_fondoDelPrefab != null) backgroundRenderer.sprite = _fondoDelPrefab;
         if (backgroundRenderer.sprite == null) return;
 
         // La del prefab manda: Camera.main en un mapa es la de exploracion y

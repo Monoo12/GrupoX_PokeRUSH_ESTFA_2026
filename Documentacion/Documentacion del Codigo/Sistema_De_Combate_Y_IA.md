@@ -370,8 +370,8 @@ manda el Inspector en `BattleController` (sección **"Lectura aliada de Nestor (
 | Campo | Por defecto | Qué hace |
 |---|---|---|
 | `nestorProbabilidad` | **20%** | Chance por turno, una vez pasados los otros frenos |
-| `nestorCooldownTurnos` | **4** | Turnos mínimos entre dos lecturas |
-| `nestorTurnosDeGracia` | **2** | Al principio Nestor solo mira |
+| `nestorCooldownTurnos` | **2** | Turnos mínimos entre dos lecturas (era 4 hasta el playtest del 4-oct) |
+| `nestorTurnosDeGracia` | **1** | Al principio Nestor solo mira (era 2) |
 | `nestorMaximoPorCombate` | **2** | El freno más importante |
 | `nestorFraccionDeGolpeFuerte` | **0.45** | Cuánto tiene que pegar un golpe común para costarle el turno |
 
@@ -447,7 +447,7 @@ Todas siguen las reglas de la saga principal.
 | **Parálisis** | 25% de perder el turno. La **velocidad baja a la mitad**. |
 | **Sueño** | No puede actuar durante 1-3 turnos (se despierta solo). |
 | **Congelación** | No puede actuar; 20% de descongelarse por turno. Un golpe de Fuego lo descongela. |
-| **Confusión** | 33% de golpearse a sí mismo (daño físico sin tipo). Dura 1-4 turnos. **Es volátil.** |
+| **Confusión** | 33% de golpearse a sí mismo (daño físico sin tipo, la barra baja en ese momento). El contador arranca en 2-5 y baja con cada acción: pelea confuso de 1 a 4 turnos. **Es volátil** (se pasa al cambiar de Pokémon). |
 
 **Inmunidades por tipo:** los de Fuego no se queman, los de tipo Eléctrico no se paralizan,
 Veneno y Acero no se envenenan, Hielo no se congela.
@@ -471,6 +471,24 @@ Los movimientos como Danza Espada (+2 Ataque) o Malicioso (-1 Ataque rival) modi
 
 El jugador puede **cambiar de Pokémon como acción de turno** (consume el turno: el rival
 ataca al que entra). En la escena de prueba se hace con las teclas **F1-F6**.
+
+### Modo "Cambio": el rival avisa a quién manda (playtest del 5-oct)
+
+Como en la saga: cuando cae un Pokémon del rival y le quedan más, el motor **no lo
+reemplaza enseguida**. Con `TurnEngine.OfrecerCambioAntesDeQueEntre` prendido, elige el
+siguiente (la IA, `EnemyReplacementSelector`), lo deja en `BattleModel.ReemplazoRivalPendiente`,
+emite `RivalVaAEnviar` ("El rival va a enviar a X.") y se frena: `ResolveTurn` no corre
+mientras `AwaitingEnemyReplacement`.
+
+`BattleController.OfrecerCambioRoutine` pregunta "¿Querés cambiar de Pokémon?" (la caja
+arranca en NO) y, si dice que sí, abre el equipo. Después llama a
+`TurnEngine.CompleteEnemyReplacement(indice)`: si el jugador eligió a alguien, entra
+primero el suyo; después el del rival, con sus habilidades de entrada y las trampas del campo.
+Cambiar así **no gasta turno**.
+
+No se ofrece si el jugador no tiene a quién cambiar, en las peleas con guion
+(`IDirectorDeCombate`: Julieta cuenta los KO por turno) ni con el rastreo de la torre activo
+(`BossBattleConfig.PermiteCambio`).
 
 ### Forcejeo (Struggle)
 
@@ -567,8 +585,11 @@ XP = XP_base_del_rival × nivel_del_rival / 7
 ```
 
 Al subir de nivel, el Pokémon **aprende automáticamente** los movimientos de su learnset
-correspondientes a ese nivel (si tiene menos de 4). Si ya tiene 4, por ahora solo avisa
-(el flujo para reemplazar un movimiento es parte de la UI final).
+correspondientes a ese nivel si tiene menos de 4. Si ya sabe 4 (playtest del 5-oct), el motor
+emite `QuiereAprender` y `BattleController.QuiereAprenderRoutine` pregunta, como en los
+originales: "¿Olvidar un movimiento para que X aprenda Y?". Si dice que sí, se abre la pantalla
+del tutor de MTs en modo **subir de nivel** (`MoveTutorRequest.AprenderEste`): sin precio, se
+elige cuál olvida ("1, 2 y... ¡Puf!") o se elige no aprenderlo. Si dice que no, "X no aprendió Y".
 
 ### Learnsets por nivel
 
@@ -595,6 +616,28 @@ Además, a las especies que no aprenden **ningún** ataque por nivel se les agre
 ataques que sí aprenden por MT, tutor o huevo (o uno básico de su tipo si no hay): lo hace el
 importador al generar y, sobre lo ya importado, `PokeRush > Combate > Dar ataques a las
 especies que no tienen`.
+
+### Todo Pokémon tiene un ataque especial (playtest del 5-oct)
+
+`PokenModel.AsegurarUnAtaqueEspecial()` corre después de `AsegurarUnAtaque` (en el constructor,
+así vale también para los rivales, y en `SaveService` al cargar): si no sabe ningún ataque
+**especial**, le da el más nuevo que su learnset ya le deja conocer y, si no hay, uno básico de
+su tipo (`AtaquesEspecialesDeRespaldo`: Ascuas, Pistola Agua, Impactrueno, Confusión,
+Dragoaliento...; si su tipo no tiene, el Normal, Meteoros). Con lugar lo suma; con cuatro,
+reemplaza al que menos rinde (uno de estado vale como potencia 30), **nunca al físico más
+fuerte**: tiene que seguir pegando de las dos maneras.
+
+El de respaldo lo inyecta `GameManager` (`PokenModel.EspecialDeRespaldo`). Los smoke tests lo
+dejan en null mientras corren: el proyecto no recarga el dominio y si quedó puesto de un Play,
+los Pokémon de prueba ganarían un ataque de más.
+
+### Movimientos retirados: Excavar (playtest del 5-oct)
+
+`MovimientosRetirados` lista los movimientos que el juego no usa aunque estén importados, por
+`pokeApiId` (el nombre se puede retocar). Hoy solo Excavar (91), "muy bug". No se borra el asset
+ni se tocan los learnsets: se filtra en los iniciales, al subir de nivel, en el tutor y en el
+de respaldo, y `PokenModel.QuitarMovimientosRetirados` se lo saca a una partida vieja al cargar
+(y le devuelve con qué pegar). Volver a habilitarlo es sacarlo de la lista.
 
 ### Movimientos de dos turnos
 
@@ -623,6 +666,21 @@ Reglas (en `TurnEngine` y `MoveTurnRules`):
 - Todo esto es estado volátil (`BattlePokenState`): se pierde al cambiar de Pokémon.
 - Si la lectura de Néstor le anula la jugada a un rival que estaba cargando o por descansar,
   eso también se pierde.
+
+**Excavar, Vuelo, Buceo y compañía, como en la saga (playtest del 4-oct).** En el turno de
+carga el Pokémon **se esconde**: el motor emite un `BattleEvent` de tipo `Visibilidad` y
+`PokenView.Esconder` lo hunde y lo desvanece; al soltar el golpe vuelve (`Aparecer`). Mientras
+está escondido los ataques **fallan**, salvo los que lo alcanzan
+(`MoveTurnRules.AlcanceContraEscondido`, por `pokeApiId`):
+
+| Escondido con | Lo alcanzan (x2) | Lo alcanzan (x1) |
+|---|---|---|
+| Excavar | Terremoto, Magnitud | Fisura |
+| Vuelo, Bote, Caída Libre | Tornado, Ciclón | Trueno, Vendaval, Gancho Alto, Antiaéreo, Mil Flechas |
+| Buceo | Surf, Torbellino | — |
+
+Si el combate termina o se cambia de Pokémon con uno escondido, `SetPoken` y
+`SincronizarEscondidos` lo vuelven a mostrar: nunca queda invisible en la pelea siguiente.
 
 Las reglas salen de un catálogo por nombre en `PokeApiMapper` (PokeAPI no trae ese dato). Para
 aplicarlas a lo ya importado: `PokeRush > Combate > Aplicar carga y recarga a los movimientos`.

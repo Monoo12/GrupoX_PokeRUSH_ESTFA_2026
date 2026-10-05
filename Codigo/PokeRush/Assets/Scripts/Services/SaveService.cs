@@ -264,8 +264,12 @@ public class SaveService
         }
 
         // Un Pokemon guardado sin ningun ataque (de antes de que existiera esta
-        // regla, como los Abra de la ruleta) recupera uno al cargar.
+        // regla, como los Abra de la ruleta) recupera uno al cargar. Lo mismo
+        // con las reglas del 5-oct: sin movimientos retirados (Excavar) y con
+        // al menos un ataque especial.
+        poken.QuitarMovimientosRetirados();
         poken.AsegurarUnAtaque();
+        poken.AsegurarUnAtaqueEspecial();
 
         return poken;
     }

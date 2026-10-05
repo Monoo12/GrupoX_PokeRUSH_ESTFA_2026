@@ -376,11 +376,11 @@ namespace PokeRush.EditorTools
                 if (dieron.Count != CasinoRuletaDeNpcs.MaximoPorPartida) siempreCuatro = false;
                 foreach (StoryFlag f in dieron) veces[f] = veces.TryGetValue(f, out int v) ? v + 1 : 1;
             }
-            Check(siempreCuatro, $"con los {ElegiblesDelProyecto.Length} NPCs del proyecto, ganandole a todos la ruleta sale exactamente 4 veces");
+            Check(siempreCuatro, $"con los {ElegiblesDelProyecto.Length} NPCs del proyecto, ganandole a todos la ruleta sale exactamente {CasinoRuletaDeNpcs.MaximoPorPartida} veces");
 
-            // Peleando en cualquier orden, cada uno deberia estar en 4 de cada N
+            // Peleando en cualquier orden, cada uno deberia estar en tope de cada N
             // partidas.
-            float esperado = 4f / ElegiblesDelProyecto.Length;
+            float esperado = (float)CasinoRuletaDeNpcs.MaximoPorPartida / ElegiblesDelProyecto.Length;
             bool parejo = true;
             foreach (StoryFlag f in ElegiblesDelProyecto)
             {
@@ -465,20 +465,23 @@ namespace PokeRush.EditorTools
                 combinaciones.Add(string.Join("+", dieron));
             }
 
-            // Los ocho primeros del orden caen en un par con ruleta: ~50% cada uno.
+            // Los primeros 2 x tope del orden caen en un par con ruleta: ~50% cada uno.
+            int conRuleta = 2 * CasinoRuletaDeNpcs.MaximoPorPartida;
             bool parejo = true;
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < conRuleta; i++)
             {
                 float proporcion = (veces.TryGetValue(ElegiblesDelProyecto[i], out int v) ? v : 0) / (float)partidas;
                 if (proporcion < 0.46f || proporcion > 0.54f) parejo = false;
             }
             bool despuesNoSale = true;
-            for (int i = 8; i < ElegiblesDelProyecto.Length; i++)
+            for (int i = conRuleta; i < ElegiblesDelProyecto.Length; i++)
                 if (veces.ContainsKey(ElegiblesDelProyecto[i])) despuesNoSale = false;
 
-            Check(parejo, "con el mismo orden de peleas, cada NPC de los cuatro primeros pares la da ~1 de cada 2 partidas");
-            Check(despuesNoSale, "del noveno combate en adelante ya no sale (tope de 4)");
-            Check(combinaciones.Count == 16, $"salen las 16 combinaciones posibles (salieron {combinaciones.Count})");
+            Check(parejo, $"con el mismo orden de peleas, cada NPC de los {CasinoRuletaDeNpcs.MaximoPorPartida} primeros pares la da ~1 de cada 2 partidas");
+            Check(despuesNoSale, $"del combate {conRuleta + 1} en adelante ya no sale (tope de {CasinoRuletaDeNpcs.MaximoPorPartida})");
+            // Una de las dos por cada par: 2 elevado al tope.
+            int posibles = 1 << CasinoRuletaDeNpcs.MaximoPorPartida;
+            Check(combinaciones.Count == posibles, $"salen las {posibles} combinaciones posibles (salieron {combinaciones.Count})");
         }
 
         private static void TestRuletaDeNpcsNuncaPasaDeCuatro()
@@ -494,7 +497,7 @@ namespace PokeRush.EditorTools
             var story = new StoryModel();
             foreach (StoryFlag uso in CasinoRuletaDeNpcs.FlagsDeUso) story.ActivateFlag(uso);
             Check(CasinoRuletaDeNpcs.Probabilidad(story, ElegiblesDelProyecto, ElegiblesDelProyecto[0]) == 0f,
-                  "con las cuatro ruletas usadas, la probabilidad es 0");
+                  "con todas las ruletas de la partida usadas, la probabilidad es 0");
 
             // El primer combate: 1/2. El segundo: seguro si el primero no la dio,
             // nada si la dio.

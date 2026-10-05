@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0f91ab8d2ed2e846b7d97bd368fc013, type: 3}
+  m_Name: Lobby_Enfermera
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueDefinition
+  speakerName: ENFERMERA
+  speakerPortrait: {fileID: 0}
+  lines:
+  - "[ENFERMERA] Tixi me pidi\xF3 que me quede en la cueva. Entre servidor y servidor,
+    alguien tiene que curar a tu equipo."
+  - "[ENFERMERA] Ac\xE1 no se cobra: te lo curo gratis, las veces que haga falta."
+  requiredFlag: 0
+  grantsFlag: 0
+  otrosHablantes: []
+  variantes: []
+  otorgaObjeto: {fileID: 0}
+  pregunta: 
+  respuestas: []
+  cancelarElige: -1
+  siguiente: {fileID: 0}

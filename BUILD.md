@@ -104,7 +104,7 @@ Todo esto lo aplica **PokeRush → Release → Aplicar configuracion de release*
 |---|---|---|
 | Company Name | `LevelUP Creators` | Define la carpeta de la partida: `AppData/LocalLow/LevelUP Creators/PokeRush` |
 | Product Name | `PokeRush` | Nombre de la ventana y del .exe |
-| Version | `1.0.0` | |
+| Version | `1.2.0` | |
 | Icono | `Assets/Sprites/Logos/IconoDelJuego.png` | Logo de Level Up Creators |
 | Splash | Logo de Level Up Creators sobre blanco, sin el de Unity | |
 | Fullscreen Mode | Fullscreen Window, resolución nativa | En el juego: Opciones → Pantalla |
@@ -129,7 +129,7 @@ punto 10 y genera la build. Tarda unos minutos; al terminar, la consola dice
 `[Release] Build Succeeded ...`.
 
 **Opción B — a mano:** *File → Build Profiles → Windows → Build*, y elegir como
-carpeta `Codigo/PokeRush/Builds/PokeRush_1.0.0`. (Correr antes *Aplicar
+carpeta `Codigo/PokeRush/Builds/PokeRush_1.2.0`. (Correr antes *Aplicar
 configuracion de release*.)
 
 **Opción C — por línea de comandos** (con Unity **cerrado** en ese proyecto):
@@ -143,7 +143,7 @@ Termina con código 0 si salió bien y 1 si falló; el detalle queda en `build.l
 ## 12. Dónde queda la build
 
 ```
-Codigo/PokeRush/Builds/PokeRush_1.0.0/
+Codigo/PokeRush/Builds/PokeRush_1.2.0/
 ├── PokeRush.exe          ← el juego
 ├── PokeRush_Data/        ← los datos (tiene que viajar junto al .exe)
 ├── MonoBleedingEdge/     ← el runtime de Mono
@@ -155,7 +155,7 @@ La carpeta `PokeRush_BurstDebugInformation_DoNotShip` que deja Unity la borra
 la herramienta al terminar (no se entrega). Si se genera a mano (opción B),
 borrarla antes de comprimir.
 
-Para entregarla se comprime **la carpeta entera** `PokeRush_1.0.0` en un .zip.
+Para entregarla se comprime **la carpeta entera** `PokeRush_1.2.0` en un .zip.
 El .exe solo no anda. La carpeta `Builds/` está en el `.gitignore`: la build no
 se sube al repo.
 

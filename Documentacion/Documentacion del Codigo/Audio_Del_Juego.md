@@ -72,6 +72,10 @@ fundido cruzado (0,8 s, campo `fundidoEntreCanciones` del catálogo).
 
 ---
 
+> **Playtest del 5-oct:** la música de los pisos 1, 2 y 3 del casino sube con el retoque de
+> `volumen` (1,45 / 1,5 / 1,25) y el "clinc" de aceptar baja a 0,33 (su ganancia de 3 lo dejaba
+> el triple que el resto); el cursor, a 0,65. Todo en `CatalogoDeAudio.asset`.
+
 ## Efectos
 
 | Momento | Sonido | Dónde se dispara |

@@ -25,6 +25,13 @@ public class TurnEngine
     // (los lideres eligen por matchup); por defecto manda el primero con vida.
     public System.Func<BattleModel, int> EnemyReplacementSelector;
 
+    // Modo "Cambio" de la saga (playtest del 5-oct): cuando cae el Poken del
+    // rival y le queda otro, el motor anuncia cual va a mandar y SE DETIENE
+    // (BattleModel.ReemplazoRivalPendiente) para que el jugador pueda cambiar
+    // el suyo antes de que entre. Lo cierra CompleteEnemyReplacement. Apagado
+    // (lo de siempre), el siguiente entra en el acto. Lo prende el controller.
+    public bool OfrecerCambioAntesDeQueEntre;
+
     // Jefes que no pueden caer: en vez de debilitarse quedan en 1 PS. Lo setea
     // BattleController cuando el boss tiene fase de liberacion.
     //
@@ -60,7 +67,7 @@ public class TurnEngine
         // caido, este turno NO existe. En vez de dejar actuar a un muerto se
         // resuelve el debilitamiento pendiente y se devuelve el control: es lo
         // que evita el bucle "sigo peleando contra el que ya cayo".
-        if (_model.IsBattleOver || _model.AwaitingPlayerReplacement) return events;
+        if (_model.IsBattleOver || _model.AwaitingPlayerReplacement || _model.AwaitingEnemyReplacement) return events;
         if (_model.PlayerState.Poken.IsFainted || _model.EnemyState.Poken.IsFainted)
         {
             HandleFaints(events);
@@ -343,12 +350,23 @@ public class TurnEngine
         return AccionForzada(estado) ?? elegida;
     }
 
+    // El movimiento con el que se escondio el que esta cargando. Null = ninguno.
+    private static MoveDefinition MovimientoCargado(BattlePokenState estado)
+    {
+        int i = estado.ChargingMoveIndex;
+        return i >= 0 && i < estado.Poken.Moves.Count ? estado.Poken.Moves[i].Definition : null;
+    }
+
     // Primer turno de un movimiento de carga: mensaje, stats del turno de carga
     // (Cabezazo sube Defensa) y, si corresponde, queda fuera de alcance.
     private void EmpezarCarga(BattlePokenState atacante, int indice, MoveDefinition move, List<BattleEvent> events)
     {
         atacante.ChargingMoveIndex = indice;
         atacante.SemiInvulnerable = move.turnRule == MoveTurnRule.ChargeInvulnerable;
+        // Se mete bajo tierra (o se va al aire, o bajo el agua): en pantalla
+        // desaparece hasta que suelte el golpe.
+        if (atacante.SemiInvulnerable)
+            events.Add(new BattleEvent { Kind = BattleEventKind.Visibilidad, TargetIsPlayer = atacante.IsPlayerSide, Visible = false });
         BattleEvent.Add(events, MoveTurnRules.MensajeDeCarga(move, atacante.Poken.Definition.pokenName));
 
         if (move.chargeStatChanges == null) return;
@@ -446,6 +464,9 @@ public class TurnEngine
         bool sueltaLaCarga = attacker.ChargingMoveIndex >= 0 && attacker.ChargingMoveIndex == action.MoveIndex;
         if (sueltaLaCarga)
         {
+            // Sale de abajo de la tierra (o baja del aire) para pegar.
+            if (attacker.SemiInvulnerable)
+                events.Add(new BattleEvent { Kind = BattleEventKind.Visibilidad, TargetIsPlayer = attackerIsPlayer, Visible = true });
             attacker.CancelarCarga();
         }
         else
@@ -471,11 +492,18 @@ public class TurnEngine
         }
 
         // Vuelo, Excavar, Buceo...: mientras el rival esta fuera de alcance, lo
-        // que va dirigido a el falla (lo que el atacante se aplica a si mismo, no).
+        // que va dirigido a el falla (lo que el atacante se aplica a si mismo,
+        // no). Salvo lo que en la saga si lo alcanza: Terremoto al que cavo,
+        // Trueno al que vuela, Surf al que bucea (ver MoveTurnRules).
+        float alcanceContraEscondido = 1f;
         if (defender.SemiInvulnerable && MoveTurnRules.ApuntaAlRival(move))
         {
-            BattleEvent.Add(events, $"¡{defenderName} está fuera de alcance! ¡El ataque falló!");
-            return;
+            alcanceContraEscondido = MoveTurnRules.AlcanceContraEscondido(MovimientoCargado(defender), move);
+            if (alcanceContraEscondido <= 0f)
+            {
+                BattleEvent.Add(events, $"¡{defenderName} está fuera de alcance! ¡El ataque falló!");
+                return;
+            }
         }
 
         // Precision (con stages de precision/evasion)
@@ -536,7 +564,10 @@ public class TurnEngine
         for (int i = 0; i < plannedHits && !defender.Poken.IsFainted; i++)
         {
             DamageResult result = DamageCalculator.Calculate(attacker, defender, move, _rng, _model);
-            int damage = AbilityEffects.ModifyIncomingDamage(defender, result.Damage, out bool endured);
+            int bruto = alcanceContraEscondido > 1f
+                ? System.Math.Max(1, (int)System.Math.Round(result.Damage * alcanceContraEscondido))
+                : result.Damage;
+            int damage = AbilityEffects.ModifyIncomingDamage(defender, bruto, out bool endured);
             damage = AbsorberEscudo(defender, damage, events);
             sturdyEndured |= endured;
             anyCrit |= result.IsCritical;
@@ -721,6 +752,17 @@ public class TurnEngine
                 return;
             }
 
+            // Modo "Cambio": se anuncia quien viene y se espera la decision del
+            // jugador (solo si el suyo sigue en pie y tiene a quien mandar).
+            if (OfrecerCambioAntesDeQueEntre && !_model.PlayerState.Poken.IsFainted
+                && BattleTeamRules.HayBanco(_model.Player.Team, _model.ActivePlayerIndex))
+            {
+                _model.SetReemplazoRivalPendiente(next);
+                events.Add(BattleEvent.Of(BattleEventKind.RivalVaAEnviar, false,
+                    $"El rival va a enviar a {_model.Enemy.Team[next].Definition.pokenName}."));
+                return;
+            }
+
             _model.SwitchEnemyPoken(next);
             events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
                 $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
@@ -789,6 +831,47 @@ public class TurnEngine
         return events;
     }
 
+    // El jugador ya dijo si cambia antes de que entre el siguiente del rival
+    // (modo "Cambio", ver OfrecerCambioAntesDeQueEntre). indiceDelJugador < 0
+    // o el mismo que esta = no cambia. Primero entra el suyo (sin gastar turno,
+    // como en la saga) y despues el del rival; las trampas pueden debilitar a
+    // cualquiera de los dos y se resuelve en el acto.
+    public List<BattleEvent> CompleteEnemyReplacement(int indiceDelJugador)
+    {
+        var events = new List<BattleEvent>();
+        if (!_model.AwaitingEnemyReplacement || _model.IsBattleOver) return events;
+
+        int next = _model.ReemplazoRivalPendiente;
+        _model.SetReemplazoRivalPendiente(-1);
+
+        if (indiceDelJugador >= 0 && indiceDelJugador != _model.ActivePlayerIndex
+            && BattleTeamRules.EsIndiceVivo(_model.Player.Team, indiceDelJugador))
+        {
+            DoSwitch(isPlayer: true, indiceDelJugador, events);
+            AnnounceFaintIfNeeded(_model.PlayerState, events);
+        }
+
+        // El elegido ya no sirve (no deberia pasar): se cae al primer vivo.
+        if (!BattleTeamRules.EsIndiceVivo(_model.Enemy.Team, next)) next = ElegirReemplazoRival();
+        if (next < 0)
+        {
+            _model.Finish(playerVictory: true);
+            events.Add(BattleEvent.Of(BattleEventKind.BattleEnded, true));
+            return events;
+        }
+
+        _model.SwitchEnemyPoken(next);
+        events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
+            $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
+        AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
+        FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);
+        AnnounceFaintIfNeeded(_model.EnemyState, events);
+
+        HandleFaints(events);
+        Sellar(events, 0);
+        return events;
+    }
+
     // Reparte la XP del Poken rival caido entre los participantes vivos.
     private void AwardExperience(List<BattleEvent> events)
     {
@@ -816,10 +899,22 @@ public class TurnEngine
                 foreach (MoveDefinition move in poken.MovesLearnedAt(level))
                 {
                     if (poken.KnowsMove(move)) continue;
-                    BattleEvent.Add(events, poken.TryLearnMove(move)
-                        ? $"¡{name} aprendió {move.moveName}!"
-                        : $"{name} quiere aprender {move.moveName}, pero ya conoce 4 movimientos.");
-                    // TODO: flujo de reemplazo de movimientos (UI definitiva)
+                    if (poken.TryLearnMove(move))
+                    {
+                        BattleEvent.Add(events, $"¡{name} aprendió {move.moveName}!");
+                        continue;
+                    }
+
+                    // Ya sabe cuatro: decide el jugador, como en la saga. El
+                    // BattleController pregunta y abre la pantalla de olvidar.
+                    events.Add(new BattleEvent
+                    {
+                        Kind = BattleEventKind.QuiereAprender,
+                        TargetIsPlayer = true,
+                        Poken = poken,
+                        Move = move,
+                        Message = $"{name} quiere aprender {move.moveName}, pero ya conoce 4 movimientos."
+                    });
                 }
             }
         }

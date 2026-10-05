@@ -243,7 +243,15 @@ namespace PokeRush.EditorTools
             Check(D("Historia/Camino/Camino_CruzAtacar")?.otorgaObjeto == HistoriaAssets.Objeto("RaspberryPy"), "Objetos: la RaspBerry sale de patear al Arturito");
             Check(D("Torre1/Dialogos/DC_Nestor_Despues_Protocolo")?.otorgaObjeto == HistoriaAssets.Objeto("ProtocoloNestor"), "Objetos: Nestor da el Protocolo");
             Check(D("Casino/Dialogos/Casino_Tacconi_DespuesDeGanar")?.otorgaObjeto == HistoriaAssets.Objeto("TarjetaPiso4"), "Objetos: Tacconi da la tarjeta del piso 4");
-            Check(D("Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino")?.otorgaObjeto == HistoriaAssets.Objeto("Transmisor"), "Objetos: Tixi da el transmisor al volver del casino");
+            // Desde el playtest del 4-oct el transmisor sale cuando el PJ se va de
+            // la cueva (antesDeSalir / antesDeViajar), no al final de la charla.
+            var transmisor = D("Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino_Transmisor");
+            Check(transmisor?.otorgaObjeto == HistoriaAssets.Objeto("Transmisor") &&
+                  D("Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino")?.otorgaObjeto == null,
+                  "Objetos: Tixi da el transmisor cuando el PJ se va, no en la charla de la vuelta");
+            Check(transmisor != null && transmisor.requiredFlag == StoryFlag.Historia_TixiVueltaDelCasino &&
+                  transmisor.grantsFlag == StoryFlag.Historia_TixiTransmisor,
+                  "Objetos: el transmisor pide la charla de la vuelta del casino y se da una vez");
 
             var cruz = D("Historia/Camino/Camino_Inicio");
             Check(cruz != null && cruz.cancelarElige >= 0 && cruz.respuestas[cruz.cancelarElige].opcion == "Huir",
@@ -313,12 +321,16 @@ namespace PokeRush.EditorTools
 
             Check(Dice(D("Casino/Dialogos/Historia_PisoFinal_GuardiaPasillo1"), Partida(StoryFlag.Historia_Casino_MujerHablo), "tragamonedas"),
                   "Casino: un guardia del ultimo piso sabe que la mujer aviso");
-            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Antes"), Partida(), "participé en tu preparación"),
+            // Desde el 4-oct la charla de Reymar va de a tramos (Tramo1..4 al ir
+            // hacia la mesa, Antes al llegar; Despues y Servidor al ganarle).
+            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Tramo3"), Partida(), "participé en tu preparación"),
                   "Casino: Reymar participo en la preparacion del PJ (historia.pdf)");
+            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Antes"), Partida(), "tengo que protegerlo"),
+                  "Casino: el ultimo tramo de Reymar es el que lleva a la pelea");
             Check(Dice(D("Casino/Dialogos/Casino_Tacconi_DespuesDeGanar"), Partida(), "desarrollo"),
                   "Casino: Tacconi dice que eras parte del desarrollo");
-            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Despues"), Partida(), "ACCESO DENEGADO") &&
-                  Dice(D("Casino/Dialogos/Casino_Reymar_Despues"), Partida(), "SERVIDORES RESTANTES: 01"),
+            Check(Dice(D("Casino/Dialogos/Casino_Reymar_Servidor"), Partida(), "ACCESO DENEGADO") &&
+                  Dice(D("Casino/Dialogos/Casino_Reymar_Servidor"), Partida(), "SERVIDORES RESTANTES: 01"),
                   "Casino: Julieta cambio los permisos y queda un servidor");
         }
 
@@ -346,8 +358,11 @@ namespace PokeRush.EditorTools
                       "Tixi: al volver del casino cuenta lo del casino");
                 var vueltaDelCasino = D("Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino");
                 Check(Dice(vueltaDelCasino, Partida(StoryFlag.Casino_Completado), "sede central de la Liga") &&
-                      Dice(vueltaDelCasino?.siguiente, Partida(StoryFlag.Casino_Completado), "qué pasó realmente en 2026"),
-                      "Tixi: al volver del casino manda a la sede de la Liga y pide preguntarle a Julieta por 2026");
+                      Dice(D("Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino_Transmisor"),
+                           Partida(StoryFlag.Casino_Completado, StoryFlag.Historia_TixiVueltaDelCasino), "qué pasó realmente en 2026"),
+                      "Tixi: al volver del casino manda a la sede de la Liga y, al salir, pide preguntarle a Julieta por 2026");
+                Check(vueltaDelCasino != null && vueltaDelCasino.siguiente == null,
+                      "Tixi: la vuelta del casino ya no sigue de corrido con el transmisor");
 
                 var memo = D("Lobby/Dialogos/Lobby_Tixi_VueltaDelDataCenter_Memo");
                 Check(memo != null && !memo.TieneQueDecir(Partida()) && memo.TieneQueDecir(Partida(StoryFlag.Historia_DC_MemoLeido)),
@@ -389,6 +404,12 @@ namespace PokeRush.EditorTools
             Check(EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Tixi_VueltaDelDataCenter") &&
                   EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino"), "Escena: Tixi cuenta las vueltas");
             Check(EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Tixi_Charla"), "Escena: Tixi tiene charla");
+            Check(EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino_Transmisor"),
+                  "Escena: la salida de la cueva y el viaje con Tixi dan el transmisor");
+            string cueva = File.ReadAllText("Assets/Scenes/Quarcho-Cueva.unity");
+            Check(EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Enfermera") &&
+                  cueva.Contains(AssetDatabase.AssetPathToGUID("Assets/Scripts/Controllers/NpcQueCura.cs")),
+                  "Escena: la cueva tiene enfermera");
             Check(EscenaUsa("Quarcho-Cueva", "Lobby/Dialogos/Lobby_Tacconi_Presentacion"), "Escena: Tacconi se presenta en la cueva");
             Check(EscenaUsa("habitacion", "Historia/Camino/Camino_Inicio"), "Escena: la puerta de la habitacion cuenta el camino");
             Check(EscenaUsa("Casino Nivel 2", "Casino/Dialogos/Casino_Croupier"), "Escena: hay un croupier en el piso 2");
@@ -396,6 +417,9 @@ namespace PokeRush.EditorTools
                   EscenaUsa("Casino nivel 3", "Casino/Dialogos/Casino_Tacconi_DespuesDeGanar"), "Escena: Tacconi cuenta lo del registro");
             Check(EscenaUsa("Casino piso FINAL", "Casino/Dialogos/Casino_Reymar_Antes") &&
                   EscenaUsa("Casino piso FINAL", "Casino/Dialogos/Casino_Reymar_Despues"), "Escena: Martin tiene su historia");
+            Check(Enumerable.Range(1, 4).All(i => EscenaUsa("Casino piso FINAL", $"Casino/Dialogos/Casino_Reymar_Tramo{i}")) &&
+                  EscenaUsa("Casino piso FINAL", "Casino/Dialogos/Casino_Reymar_Servidor"),
+                  "Escena: la charla de Martin va de a tramos (cuatro antes, el servidor despues)");
         }
     }
 }

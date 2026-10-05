@@ -122,6 +122,9 @@ namespace PokeRush.EditorTools
 
         // ---------- la ruleta ----------
 
+        // Cuantas etapas mueve un gajo (bajo de 2 a 1 en el playtest del 4-oct).
+        private static int Etapas => CasinoRuletaDeCombate.EtapasPorGajo;
+
         private static void TestLaRuletaDelCasinoNoCambio()
         {
             // La del jefe del casino tiene que seguir exactamente igual: todo al
@@ -131,7 +134,7 @@ namespace PokeRush.EditorTools
 
             BattleModel m = PeleaSimple();
             ruleta.Cobrar(ruleta.Premios[0], m, new SeededRng(1), out bool alJugador, out string cartel);
-            Check(alJugador && m.PlayerState.GetStage(Stat.Attack) == -2 && m.EnemyState.GetStage(Stat.Attack) == 0,
+            Check(alJugador && m.PlayerState.GetStage(Stat.Attack) == -Etapas && m.EnemyState.GetStage(Stat.Attack) == 0,
                   "Casino: la baja le cae al jugador, como siempre");
             Check(cartel == "del casino", "Casino: el cartel es el del premio");
 
@@ -161,8 +164,8 @@ namespace PokeRush.EditorTools
             ruleta.Cobrar(Gajo(EfectoDeRuleta.SubirAtaque), m, new SeededRng(1), out _, out _);
             ruleta.Cobrar(Gajo(EfectoDeRuleta.BajarDefensa), m, new SeededRng(1), out _, out _);
             ruleta.Cobrar(Gajo(EfectoDeRuleta.BloquearTurno), m, new SeededRng(1), out _, out _);
-            Check(m.PlayerState.GetStage(Stat.Attack) == 2, "A favor del jugador: su ataque sube");
-            Check(m.EnemyState.GetStage(Stat.Defense) == -2 && m.PlayerState.GetStage(Stat.Defense) == 0,
+            Check(m.PlayerState.GetStage(Stat.Attack) == Etapas, "A favor del jugador: su ataque sube");
+            Check(m.EnemyState.GetStage(Stat.Defense) == -Etapas && m.PlayerState.GetStage(Stat.Defense) == 0,
                   "A favor del jugador: la defensa floja es del rival");
             Check(m.EnemyState.Flinched && !m.PlayerState.Flinched, "A favor del jugador: el turno lo pierde el rival");
 
@@ -192,7 +195,7 @@ namespace PokeRush.EditorTools
             BattleModel m = PeleaSimple();
             ruleta.Cobrar(Gajo(EfectoDeRuleta.SubirAtaque), m, new SeededRng(1), out _, out _);
             ruleta.Cobrar(Gajo(EfectoDeRuleta.BajarAtaque), m, new SeededRng(1), out _, out _);
-            Check(m.EnemyState.GetStage(Stat.Attack) == 2 && m.PlayerState.GetStage(Stat.Attack) == -2,
+            Check(m.EnemyState.GetStage(Stat.Attack) == Etapas && m.PlayerState.GetStage(Stat.Attack) == -Etapas,
                   "A favor del rival: lo bueno al rival y lo malo al jugador");
 
             // Darla vuelta a mitad es cambiar el campo: la misma ruleta.
@@ -482,8 +485,11 @@ namespace PokeRush.EditorTools
                   Tiene(FaseDeJulieta.ControlDelVinculo, AccionDeJulieta.SenalDeControl, 0),
                   "Ruptura: todo vuelve al jugador");
 
-            Check(g.alEncontrarla.Length > 0 && g.alPerder.Length > 0 && g.finalDelJuego.Length >= 10,
-                  "Guion: tiene encuentro, derrota y un final completo");
+            Check(g.alEncontrarla.Length > 0 && g.alPerder.Length > 0 && g.finalDelJuego.Length > 0,
+                  "Guion: tiene encuentro, derrota y el arranque del final");
+            Check(g.enElServidor.Length > 0 && g.alDestruirlo.Length > 0 && g.conJulietaEnElSuelo.Length > 0,
+                  "Guion: el final esta partido en tramos (servidor, destruirlo, Julieta en el suelo)");
+            Check(Final(g).Count() >= 60, "Guion: el final del PDF esta completo entre los tramos");
         }
 
         // Simula la pelea con el guion del proyecto: el rival pierde un Pokemon
@@ -541,11 +547,15 @@ namespace PokeRush.EditorTools
             Check(g.alReintentar != null && g.alReintentar.Length > 0, "Cierre: al reintentar no se repite la charla entera");
             Check(g.alEncontrarla.Any(l => l.texto.Contains("Peleando")), "Cierre: antes de pelear dice lo del PDF ('Peleando.')");
 
-            Check(g.finalDelJuego.Count(l => l.accion == AccionDeJulieta.RomperServidor) == 1,
-                  "Cierre: el final destruye el servidor una vez");
-            Check(g.finalDelJuego.Any(l => l.texto.Contains("Estoy sola en mi propia cabeza")),
+            Check(Final(g).Count(l => l.accion == AccionDeJulieta.RomperServidor) == 1 &&
+                  g.alDestruirlo.Any(l => l.accion == AccionDeJulieta.RomperServidor),
+                  "Cierre: el servidor se destruye una vez, en su tramo");
+            Check(g.conJulietaEnElSuelo.Any(l => l.texto.Contains("Estoy sola en mi propia cabeza")),
                   "Cierre: el final es el del PDF");
-            Check(g.finalDelJuego.Count(l => l.sonido != null) >= 2, "Cierre: suenan el nucleo y el chip de Julieta");
+            Check(Final(g).Count(l => l.sonido != null) >= 2, "Cierre: suenan el nucleo y el chip de Julieta");
+            // Ningun tramo es un bloque eterno (playtest del 4-oct).
+            foreach (var tramo in new[] { g.finalDelJuego, g.enElServidor, g.alDestruirlo, g.conJulietaEnElSuelo })
+                Check(tramo.Length <= 50, $"Cierre: un tramo del final tiene {tramo.Length} lineas (max 50)");
 
             Check(g.epilogo != null && g.epilogo.Count(e => !string.IsNullOrWhiteSpace(e)) >= 4, "Cierre: hay epilogo");
             Check(g.enLaCueva != null && g.enLaCueva.lines != null && g.enLaCueva.lines.Length >= 30,
@@ -557,12 +567,16 @@ namespace PokeRush.EditorTools
 
             // El mismo tope que los dialogos del mapa (HistoriaSmokeTests): mas
             // largo no entra en la caja.
-            var todas = g.alEncontrarla.Concat(g.alReintentar).Concat(g.alPerder).Concat(g.finalDelJuego)
+            var todas = g.alEncontrarla.Concat(g.alReintentar).Concat(g.alPerder).Concat(Final(g))
                 .Concat(g.yaVencida).Concat(g.momentos.SelectMany(m => m.lineas));
             foreach (LineaDeJulieta l in todas)
                 if (l != null && l.texto != null && l.texto.Length > 125)
                     Check(false, $"Guion: linea demasiado larga ({l.texto.Length}): {l.texto.Substring(0, 40)}...");
         }
+
+        // El final entero, en el orden en que se lee.
+        private static IEnumerable<LineaDeJulieta> Final(GuionDeJulieta g) =>
+            g.finalDelJuego.Concat(g.enElServidor).Concat(g.alDestruirlo).Concat(g.conJulietaEnElSuelo);
 
         // La arena de Santiago con la pelea adentro, leida como texto (sin abrirla).
         private static void TestLaArena()

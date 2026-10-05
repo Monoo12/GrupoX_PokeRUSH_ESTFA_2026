@@ -87,6 +87,8 @@ public class MenuManager : MonoBehaviour
         new Dictionary<MenuScreenId, MenuScreen>();
 
     public MenuScreen Top => _stack.Count > 0 ? _stack[_stack.Count - 1].Screen : null;
+    // La que quedo abajo de Top (la que hizo la pregunta, por ejemplo). Null si no hay.
+    public MenuScreen BelowTop => _stack.Count > 1 ? _stack[_stack.Count - 2].Screen : null;
 
     private void Awake()
     {

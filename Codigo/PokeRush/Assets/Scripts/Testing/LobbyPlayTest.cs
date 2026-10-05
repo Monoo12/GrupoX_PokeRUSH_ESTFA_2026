@@ -273,13 +273,236 @@ public class LobbyPlayTest : MonoBehaviour
         _dialogo.OnCancel();
         yield return CerrarDialogos();
 
+        // ---- 7b. El entrenamiento intenso del chip (playtest del 5-oct) ----
+        yield return EntrenamientoDelChip(tixi, player, story);
+
+        // ---- 7c. Aprender al subir de nivel (el tutor en modo "subir de nivel") ----
+        yield return AprenderAlSubirDeNivel(player, menus);
+
         // ---- 8. La salida ----
         RecorridoDeLaHistoria.Nivel siguiente = RecorridoDeLaHistoria.SiguienteNivel(story);
         Check("Despues del casino la salida apunta al jefe final", siguiente?.EscenaDeEntrada == "BossFinal");
-        Check("Como la escena del jefe todavia no existe, la salida no la carga", !ViajeEntreNiveles.SePuedeCargar(siguiente));
+        // Desde el 4-oct BossFinal existe (la arena de Santiago con Julieta).
+        Check("La escena del jefe final esta en Build Settings y la salida la carga", ViajeEntreNiveles.SePuedeCargar(siguiente));
         Check("El casino si esta en Build Settings", Application.CanStreamedLevelBeLoaded("Casino Nivel 1"));
 
         Terminar();
+    }
+
+    // Tixi -> "Entrenamiento intenso del chip" -> conectarse -> ganar el
+    // primer combate (el rival a 1 PS) -> retirarse. Tiene que pagar lo del
+    // primer combate y devolver el equipo curado.
+    private IEnumerator EntrenamientoDelChip(QuarchoTixiNpc tixi, PlayerModel player, StoryModel story)
+    {
+        var chip = FindAnyObjectByType<EntrenamientoDelChip>(FindObjectsInactive.Include);
+        var combate = FindAnyObjectByType<BattleController>(FindObjectsInactive.Include);
+        Check("La cueva tiene el entrenamiento del chip y su combate", chip != null && combate != null);
+        if (chip == null || combate == null) yield break;
+        Check("Despues del casino el chip esta disponible", chip.Disponible(story));
+
+        // Con un solo Pokemon no hay a quien cambiar: se suma uno para probar el
+        // aviso del rival (modo "Cambio"). La partida DEMO no se guarda.
+        if (player.Team.Count < 2)
+        {
+            PokenDefinition lucario = DefinitionRepository.Instance.GetPoken("Lucario");
+            if (lucario != null) player.Team.Add(new PokenModel(lucario, 20));
+        }
+
+        yield return EsperarHasta(() => tixi.Libre, 8f);
+        tixi.Interact(player, story);
+        yield return new WaitForSecondsRealtime(0.3f);
+        _dialogo.OnNavigate(1);
+        Check("La segunda opcion de Tixi es el entrenamiento del chip", TextoElegido().Contains("chip"));
+        yield return Foto("20-tixi-menu-chip");
+
+        int plata = player.Money;
+        int premio = chip.PremioDe(1);
+        _dialogo.OnConfirm();
+        // La explicacion y la pregunta ("Conectarme" es la primera opcion).
+        float limite = Time.realtimeSinceStartup + 6f;
+        while (!HayOpciones() && Time.realtimeSinceStartup < limite)
+        {
+            _dialogo.OnConfirm();
+            yield return new WaitForSecondsRealtime(0.25f);
+        }
+        Check("El chip explica y pregunta si se conecta", HayOpciones() && TextoDeLaCaja().Contains(premio.ToString()));
+        yield return Foto("21-chip-pregunta");
+        _dialogo.OnConfirm();
+
+        // "Simulacion 1..." y arranca la pelea.
+        limite = Time.realtimeSinceStartup + 8f;
+        while (!combate.EnCurso && Time.realtimeSinceStartup < limite)
+        {
+            if (_dialogo.IsOpen) _dialogo.OnConfirm();
+            yield return new WaitForSecondsRealtime(0.25f);
+        }
+        Check("El chip arranca un combate", combate.EnCurso && chip.EnCurso);
+        if (!combate.EnCurso) yield break;
+        Check("El rival virtual trae tres Pokemon", combate.Modelo.Enemy.Team.Count == 3);
+        yield return new WaitForSecondsRealtime(3f);
+        yield return Foto("22-chip-combate");
+
+        _probarElCambio = player.Team.Count(p => !p.IsFainted) > 1;
+        _cambioPreguntado = false;
+        _relevoElegido = -1;
+        _cambioHecho = false;
+        yield return GanarElCombate(combate, 90f);
+        Check("El primer combate del chip se gana", !combate.EnCurso);
+        if (_probarElCambio)
+        {
+            Check("Al caer un rival, avisa a quien manda y pregunta si cambia", _cambioPreguntado);
+            Check("Diciendo que si, el elegido entra antes que el rival", _cambioHecho);
+        }
+
+        // "¡Racha de 1! ... ¿Seguís?" -> Retirarme (la segunda).
+        yield return EsperarHasta(() => HayOpciones(), 8f);
+        Check("Despues de ganar pregunta si sigue", HayOpciones() && chip.Racha == 1);
+        yield return Foto("23-chip-seguir");
+        _dialogo.OnCancel();
+        yield return EsperarHasta(() => !chip.EnCurso, 3f);
+        yield return Foto("24-chip-fin");
+        yield return CerrarDialogos();
+
+        Check("Retirarse termina el entrenamiento", !chip.EnCurso);
+        Check($"El primer combate paga {premio}", player.Money == plata + premio);
+        Check("El equipo sale curado", !player.EquipoNecesitaCuracion);
+    }
+
+    // La pantalla que abre el combate cuando un Pokemon que ya sabe cuatro
+    // quiere aprender otro. Primero "no aprenderlo" y despues olvidar el primero.
+    private IEnumerator AprenderAlSubirDeNivel(PlayerModel player, MenuManager menus)
+    {
+        PokenModel alumno = player.Team.FirstOrDefault(p => p.Moves.Count == 4);
+        MoveDefinition nuevo = DefinitionRepository.Instance.GetMove("Lanzallamas");
+        Check("Hay un Pokemon con cuatro movimientos y un movimiento para aprender", alumno != null && nuevo != null);
+        if (alumno == null || nuevo == null || alumno.KnowsMove(nuevo)) yield break;
+
+        var antes = alumno.Moves.Select(mv => mv.Definition).ToList();
+        menus.SetContext(MenuContextKind.Battle);
+        menus.Open(MenuScreenId.MoveTutor, new MoveTutorRequest { Poken = alumno, AprenderEste = nuevo, Maestro = "" });
+        yield return EsperarHasta(() => menus.Top is MoveTutorScreen, 3f);
+        Check("Subir de nivel abre el tutor en modo 'que olvida'", menus.Top is MoveTutorScreen);
+        yield return Foto("25-subir-de-nivel");
+
+        // Volver = "¿dejar de aprender?" -> SI.
+        menus.Top.HandleAction(GameAction.Cancel);
+        yield return EsperarHasta(() => menus.Top is MessageBoxScreen, 2f);
+        yield return Foto("25b-dejar-de-aprender");
+        menus.Top.HandleAction(GameAction.Up);
+        menus.Top.HandleAction(GameAction.Confirm);
+        yield return new WaitForSecondsRealtime(0.3f);
+        yield return CerrarCarteles(menus, 4f);
+        Check("No aprenderlo deja los cuatro de antes", alumno.Moves.Select(mv => mv.Definition).SequenceEqual(antes));
+
+        // Olvidar el primero -> SI -> lo aprende en su lugar.
+        menus.Open(MenuScreenId.MoveTutor, new MoveTutorRequest { Poken = alumno, AprenderEste = nuevo, Maestro = "" });
+        yield return EsperarHasta(() => menus.Top is MoveTutorScreen, 3f);
+        menus.Top.HandleAction(GameAction.Confirm);
+        yield return EsperarHasta(() => menus.Top is MessageBoxScreen, 2f);
+        yield return Foto("25c-olvidar-el-primero");
+        menus.Top.HandleAction(GameAction.Up);
+        menus.Top.HandleAction(GameAction.Confirm);
+        yield return new WaitForSecondsRealtime(0.3f);
+        yield return Foto("25d-aprendio");
+        yield return CerrarCarteles(menus, 4f);
+        Check("Olvidando el primero, el nuevo queda en su lugar",
+              alumno.Moves[0].Definition == nuevo && alumno.Moves.Skip(1).Select(mv => mv.Definition).SequenceEqual(antes.Skip(1)));
+        Check("El tutor se cierra solo despues", !MenuManager.AnyOpen);
+        menus.SetContext(MenuContextKind.Overworld);
+    }
+
+    private static IEnumerator CerrarCarteles(MenuManager menus, float segundos)
+    {
+        float limite = Time.realtimeSinceStartup + segundos;
+        while (menus.Top is MessageBoxScreen && Time.realtimeSinceStartup < limite)
+        {
+            menus.Top.HandleAction(GameAction.Confirm);
+            yield return new WaitForSecondsRealtime(0.3f);
+        }
+    }
+
+    // Para probar el aviso del rival una vez (ver EntrenamientoDelChip).
+    private bool _probarElCambio;
+    private bool _cambioPreguntado;
+    private int _relevoElegido = -1;
+    private bool _cambioHecho;
+
+    // Pelea con el rival a 1 PS: el ataque que mas pega y listo. El primer
+    // aviso del rival ("va a enviar a...") se contesta que SI y se manda al
+    // otro, si _probarElCambio; los demas carteles, con NO. Si sube de nivel
+    // sabiendo cuatro, no aprende.
+    private IEnumerator GanarElCombate(BattleController combate, float segundos)
+    {
+        float limite = Time.realtimeSinceStartup + segundos;
+        float turnoListoDesde = -1f;
+        // Lo que va diciendo la barra de mensajes, para el log.
+        Text mensajes = Campo<Text>(FindAnyObjectByType<BattleHudView>(FindObjectsInactive.Include), "messageText");
+        string ultimo = null;
+        while (combate.EnCurso && Time.realtimeSinceStartup < limite)
+        {
+            if (mensajes != null && mensajes.text != ultimo)
+            {
+                ultimo = mensajes.text;
+                if (!string.IsNullOrEmpty(ultimo)) Debug.Log($"[PlayLobby] Combate: {ultimo}");
+            }
+            MenuScreen arriba = MenuManager.HasInstance ? MenuManager.Instance.Top : null;
+            if (arriba is MoveTutorScreen) { arriba.HandleAction(GameAction.Cancel); yield return new WaitForSecondsRealtime(0.15f); continue; }
+            if (arriba is MessageBoxScreen && MenuManager.Instance.BelowTop is MoveTutorScreen)
+            {
+                arriba.HandleAction(GameAction.Up);
+                arriba.HandleAction(GameAction.Confirm);
+                yield return new WaitForSecondsRealtime(0.15f);
+                continue;
+            }
+            if (arriba is MessageBoxScreen aviso && _probarElCambio && !_cambioPreguntado
+                && (Campo<Text>(aviso, "messageText")?.text ?? "").Contains("va a enviar"))
+            {
+                _cambioPreguntado = true;
+                yield return Foto("22b-chip-aviso-del-rival");
+                aviso.HandleAction(GameAction.Up);             // la caja arranca en NO
+                aviso.HandleAction(GameAction.Confirm);
+                yield return new WaitForSecondsRealtime(0.3f);
+                continue;
+            }
+            if (arriba is PartyScreen equipo && _cambioPreguntado && _relevoElegido < 0 && combate.Modelo != null)
+            {
+                BattleModel bm = combate.Modelo;
+                for (int i = 0; i < bm.Player.Team.Count; i++)
+                    if (i != bm.ActivePlayerIndex && !bm.Player.Team[i].IsFainted) { _relevoElegido = i; break; }
+                yield return Foto("22c-chip-elegir-relevo");
+                for (int n = 0; n < 12 && equipo.CursorIndex != _relevoElegido; n++) equipo.HandleAction(GameAction.Right);
+                equipo.HandleAction(GameAction.Confirm);
+                yield return new WaitForSecondsRealtime(0.15f);
+                // Si abrio el submenu del Pokemon, la primera opcion es mandarlo.
+                if (MenuManager.Instance.Top == equipo) equipo.HandleAction(GameAction.Confirm);
+                yield return new WaitForSecondsRealtime(0.15f);
+                continue;
+            }
+            if (arriba is MessageBoxScreen) { arriba.HandleAction(GameAction.Confirm); yield return new WaitForSecondsRealtime(0.15f); continue; }
+            if (arriba is PartyScreen) { arriba.HandleAction(GameAction.Cancel); yield return new WaitForSecondsRealtime(0.15f); continue; }
+
+            BattleModel m = combate.Modelo;
+            if (m != null && _relevoElegido >= 0 && m.ActivePlayerIndex == _relevoElegido) _cambioHecho = true;
+            if (m != null && m.CurrentPhase == BattlePhase.PlayerTurn)
+            {
+                if (turnoListoDesde < 0f) turnoListoDesde = Time.realtimeSinceStartup;
+                if (BattleHudView.IsNavigating || Time.realtimeSinceStartup - turnoListoDesde > 2.5f)
+                {
+                    m.ActiveEnemyPoken.SetCurrentHP(1);
+                    PokenModel activo = m.ActivePlayerPoken;
+                    int mejor = Enumerable.Range(0, activo.Moves.Count)
+                        .Where(i => activo.Moves[i].HasPP && PokenModel.SirveParaPegar(activo.Moves[i].Definition))
+                        .OrderByDescending(i => activo.Moves[i].Definition.power)
+                        .DefaultIfEmpty(0).First();
+                    Debug.Log($"[PlayLobby] Turno: {activo.Definition.pokenName} ({activo.CurrentHP} PS) usa " +
+                              $"{activo.Moves[mejor].Definition.moveName} contra {m.ActiveEnemyPoken.Definition.pokenName}.");
+                    combate.SelectMove(mejor);
+                    turnoListoDesde = -1f;
+                }
+            }
+            else turnoListoDesde = -1f;
+            yield return null;
+        }
     }
 
     // ---------- utilidades ----------

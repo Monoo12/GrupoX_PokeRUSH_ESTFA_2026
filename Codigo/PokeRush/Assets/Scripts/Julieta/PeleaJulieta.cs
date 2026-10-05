@@ -92,6 +92,13 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
     [Tooltip("Si pierde, el equipo vuelve a como entro a la pelea. La arena no " +
              "tiene enfermeria: sin esto, perder deja al jugador sin poder reintentar.")]
     [SerializeField] private bool restaurarEquipoAlPerder = true;
+    [Tooltip("Despues de perder, ofrecer volver a la Quarcho Cueva a curarse, comprar y " +
+             "reacomodar el equipo (playtest del 5-oct). Se vuelve por el camino de siempre.")]
+    [SerializeField] private bool ofrecerVolverALaCueva = true;
+    [SerializeField, TextArea(2, 3)] private string preguntaVolverALaCueva =
+        "¿Volvés a la Quarcho Cueva a prepararte? Tixi te puede traer de nuevo hasta acá.";
+    [SerializeField] private string opcionVolverALaCueva = "Volver";
+    [SerializeField] private string opcionQuedarse = "Reintentar";
 
     [Header("Musica (sale del CatalogoDeAudio)")]
     [Tooltip("Desde que fase suena el tema final. Ruptura = recien cuando Julieta " +
@@ -128,6 +135,11 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
     private bool _armado = true;
     // Ya escucho la charla entera de antes de pelear: los reintentos van cortos.
     private bool _yaSeEncontraron;
+
+    // El final va de a tramos (ver GuionDeJulieta): en que punto esta.
+    public enum EtapaDelFinal { Ninguna, VaAlServidor, LoDestruye, HablaConJulieta, Terminado }
+    private EtapaDelFinal _final = EtapaDelFinal.Ninguna;
+    public EtapaDelFinal EtapaFinal => _final;
     private System.Action _pendiente;
     private LienzoDePeleaJulieta _lienzo;
 
@@ -187,6 +199,9 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
     public void AlPisarLaZona()
     {
         if (!_armado || _peleando || _conversando) return;
+        // Despues de ganarle, la zona ya no arranca nada: el final se juega
+        // tocando el servidor y hablandole a Julieta.
+        if (_final != EtapaDelFinal.Ninguna) return;
         _armado = false;
         GameManager gm = GameManager.Instance;
         Encarar(gm != null ? gm.CurrentPlayer : null, gm != null ? gm.Story : null);
@@ -199,6 +214,13 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         if (player == null)
         {
             Debug.LogWarning("[Julieta] No hay partida cargada.");
+            return;
+        }
+
+        if (_final == EtapaDelFinal.HablaConJulieta)
+        {
+            StartCoroutine(DecirYSeguir(guion != null ? guion.conJulietaEnElSuelo : null,
+                                        () => SeguirElFinal(EtapaDelFinal.Terminado)));
             return;
         }
 
@@ -279,6 +301,7 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         PrepararDesdeCero();
         _armado = true;
         _yaSeEncontraron = false;
+        _final = EtapaDelFinal.Ninguna;
         GetComponentInChildren<ServidorPrincipal>(true)?.Reparar();
 
         StoryModel story = GameManager.Instance != null ? GameManager.Instance.Story : null;
@@ -763,15 +786,101 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
             // los creditos y vuelve a la pantalla de inicio, sin post-game. La
             // partida queda como estaba al entrar al ultimo nivel, asi que
             // "Continuar" lleva otra vez a las puertas del final.
-            Debug.Log("[Julieta] VENCIDA. Final, epilogo, la cueva y los creditos.");
-            AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.finalDelJuego : null, IrAlFinal)));
+            Debug.Log("[Julieta] VENCIDA. El final, de a tramos: el servidor, Julieta, la cueva y los creditos.");
+            AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.finalDelJuego : null,
+                                                             () => SeguirElFinal(EtapaDelFinal.VaAlServidor))));
             return;
         }
 
         if (restaurarEquipoAlPerder) RestaurarEquipo();
         MusicaDelJuego.VolverALaDeLaEscena();
-        Debug.Log("[Julieta] El jugador perdio. Se puede reintentar.");
-        AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.alPerder : null, null)));
+        Debug.Log("[Julieta] El jugador perdio. Se puede reintentar o volver a la cueva.");
+        AlVolverAlMapa(() => StartCoroutine(DecirYSeguir(guion != null ? guion.alPerder : null, OfrecerVolverALaCueva)));
+    }
+
+    // Perder contra Julieta no deja al jugador encerrado en la arena con lo que
+    // traia (playtest del 5-oct): puede volver a la cueva, donde la enfermera
+    // cura gratis, Tixi vende y Nestor enseña movimientos. La partida se guarda
+    // sin el flag de Julieta, asi que Tixi lo vuelve a mandar al ultimo nivel.
+    // "Reintentar" deja todo como antes: se le vuelve a hablar a Julieta.
+    private void OfrecerVolverALaCueva()
+    {
+        if (!ofrecerVolverALaCueva) return;
+        string lobby = RecorridoDeLaHistoria.EscenaDelLobby;
+        if (!RecorridoDeLaHistoria.EstaEnBuildSettings(lobby)) return;
+
+        _conversando = true;
+        CasinoDialogo.Preguntar(dialogueController, "", null, preguntaVolverALaCueva,
+            opcionVolverALaCueva, opcionQuedarse, volver =>
+            {
+                // Si vuelve, queda "conversando" durante el fundido: que nadie
+                // arranque la pelea mientras se carga la cueva.
+                if (!volver) { _conversando = false; return; }
+                Debug.Log($"[Julieta] Vuelve a {lobby} a reequiparse.");
+                CasinoDialogo.Guardar();
+                Sonidos.Teletransporte();
+                FundidoAEscena.Ir(lobby, segundosDeFundido);
+            });
+    }
+
+    // ---------- el final, de a tramos ----------
+
+    // Tocar el servidor con X (lo llama ServidorPrincipal). Antes de ganarle a
+    // Julieta no hace nada.
+    public bool TocarElServidor(PlayerModel player, StoryModel story)
+    {
+        if (_peleando || _conversando) return false;
+        switch (_final)
+        {
+            case EtapaDelFinal.VaAlServidor:
+                StartCoroutine(DecirYSeguir(guion != null ? guion.enElServidor : null,
+                                            () => SeguirElFinal(EtapaDelFinal.LoDestruye)));
+                return true;
+            case EtapaDelFinal.LoDestruye:
+                StartCoroutine(DecirYSeguir(guion != null ? guion.alDestruirlo : null,
+                                            () => SeguirElFinal(EtapaDelFinal.HablaConJulieta)));
+                return true;
+            case EtapaDelFinal.HablaConJulieta:
+                StartCoroutine(DecirYSeguir(new[] { new LineaDeJulieta(HablanteDeJulieta.Sistema,
+                    "El núcleo está destruido. Julieta sigue en el suelo.") }, null));
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // Pasa a la etapa del final. Un tramo vacio en el guion se saltea.
+    private void SeguirElFinal(EtapaDelFinal etapa)
+    {
+        _final = etapa;
+        Debug.Log($"[Julieta] Final: {etapa}.");
+        switch (etapa)
+        {
+            case EtapaDelFinal.VaAlServidor:
+                if (Vacio(guion?.enElServidor)) SeguirElFinal(EtapaDelFinal.LoDestruye);
+                break;
+            case EtapaDelFinal.LoDestruye:
+                if (Vacio(guion?.alDestruirlo))
+                {
+                    StartCoroutine(Ejecutar(AccionDeJulieta.RomperServidor, 0, null));
+                    SeguirElFinal(EtapaDelFinal.HablaConJulieta);
+                }
+                break;
+            case EtapaDelFinal.HablaConJulieta:
+                if (Vacio(guion?.conJulietaEnElSuelo)) SeguirElFinal(EtapaDelFinal.Terminado);
+                break;
+            case EtapaDelFinal.Terminado:
+                IrAlFinal();
+                break;
+        }
+    }
+
+    private static bool Vacio(LineaDeJulieta[] lineas)
+    {
+        if (lineas == null) return true;
+        foreach (LineaDeJulieta l in lineas)
+            if (l != null && (!string.IsNullOrEmpty(l.texto) || l.accion != AccionDeJulieta.Ninguna)) return false;
+        return true;
     }
 
     // Fundido a la Quarcho Cueva: el epilogo, la charla con Tixi y la ultima

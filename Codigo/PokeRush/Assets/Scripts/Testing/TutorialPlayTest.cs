@@ -191,7 +191,18 @@ public class TutorialPlayTest : MonoBehaviour
         float finPelea = Time.realtimeSinceStartup + 120f;
         while (combate.gameObject.activeInHierarchy && Time.realtimeSinceStartup < finPelea)
         {
-            combate.SelectMove(ataque);
+            // Si sube de nivel sabiendo cuatro, el tutor pregunta que olvida:
+            // no aprende (Cancelar y "si, dejar de aprender": la caja arranca
+            // en NO). Cualquier otro cartel se contesta con lo que tenga marcado.
+            MenuScreen arriba = MenuManager.HasInstance ? MenuManager.Instance.Top : null;
+            if (arriba is MoveTutorScreen) arriba.HandleAction(GameAction.Cancel);
+            else if (arriba is MessageBoxScreen && MenuManager.Instance.BelowTop is MoveTutorScreen)
+            {
+                arriba.HandleAction(GameAction.Up);
+                arriba.HandleAction(GameAction.Confirm);
+            }
+            else if (arriba is MessageBoxScreen) arriba.HandleAction(GameAction.Confirm);
+            else combate.SelectMove(ataque);
             yield return new WaitForSecondsRealtime(0.5f);
         }
         Check("La pelea termina", !combate.gameObject.activeInHierarchy);

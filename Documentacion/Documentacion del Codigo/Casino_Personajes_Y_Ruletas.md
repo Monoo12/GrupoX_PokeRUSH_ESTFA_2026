@@ -110,12 +110,12 @@ lo saltea nada.
 
 | Piso | Personaje | Qué hace | Celda |
 |---|---|---|---|
-| 1 | **Guardia** (`GuardiaAscensor`) | Pide 500 monedas o que le ganes para usar el ascensor. Ganarle da la ruleta de Pokémon | (3.5, 19.5), al lado del ascensor |
+| 1 | **Guardia** (`GuardiaAscensor`) | Pide 4000 monedas o que le ganes para usar el ascensor. Ganarle da la ruleta de Pokémon | (3.5, 19.5), al lado del ascensor |
 | 1 | Apostador | Pelea una vez (Raticate y Kadabra, Nv12). Paga 100 | (-3.5, 12.5) |
 | 1 | Malabarista | Pelea una vez (Mimikyu y Klefki, Nv14) | (9.5, 15.5) |
 | 1 | Motorista | Pelea una vez (Magby Nv13, Rhyhorn Nv14) | (-10.5, 4.5) |
 | 1 | Pokemaníaco | Pelea una vez (Elekid Nv13, Aron Nv14) | (-9.5, 15.5) |
-| 1 | Enfermera | Cura por 30 monedas o fiado | (4.5, 12.5) |
+| 1 | Enfermera | Cura por 100 monedas o fiado, sin tope de deuda | (4.5, 12.5) |
 | 1 | Anciano | Historia | (5.5, 4.5) |
 | 1 | 8 jugadores (`JugadorTragaperras1..8`) | Juegan a las tragaperras: dan saltitos y dicen una frase | en taburetes, ver abajo |
 | 2 | Joven rica | Pelea una vez (Togepi Nv15, Sableye Nv16) | (-10.5, 10.5), charlando con la damisela entre las mesas de la izquierda |
@@ -139,7 +139,8 @@ lo saltea nada.
 | 3 | Gángster | Pelea una vez (Houndour Nv18, Skorupi Nv19) | (-3.5, 16.5), al costado de la mesa de Tacconi, mirando a la alfombra |
 | 3 | Crupiera | Pelea una vez (Porygon Nv18, Lampent Nv19) | (5.5, 16.5), en su descanso, apoyada en la barra |
 | 3 | Enfermera | Cura | (-13.5, 19.5), arriba a la izquierda, con el PC al lado |
-| 3 | **Empresario** | Vende tiros de su ruleta de premios (200 c/u); si le decís que no, cuenta su historia | (11.5, 14.5), sentado en el restaurante |
+| 3 | **Empresario** | Vende tiros de su ruleta de premios (300 c/u); si le decís que no, cuenta su historia | (11.5, 14.5), sentado en el restaurante |
+| 3 | **Tendero** (`TenderoCasino`) | La tienda del piso: lo mismo que vende Tixi, a los mismos precios | (-11.5, 19.5), a la derecha de la enfermera y el PC |
 | 3 | Jubilado | Historia | (5.5, 9.5), sentado en el restaurante |
 | 3 | 4 jugadores (`JugadorBlackjack1..4`) | Juegan al blackjack: parados debajo de los banquitos (el lado curvo de la mesa), mirando a la mesa. Del lado recto va el croupier. Uno juega en la mesa de Tacconi | ver abajo |
 
@@ -173,7 +174,7 @@ en la tabla `Jugadores` del builder.
 `CasinoElevatorGuard`. El ascensor del piso 1 **ya no pide tener 500 juntados**: pide el
 flag `Casino_Piso1_PaseAscensor`, que da el guardia.
 
-- **Con plata suficiente** pregunta si le pagás. Sí → cobra `precio` (500) y da el pase.
+- **Con plata suficiente** pregunta si le pagás. Sí → cobra `precio` (4000; eran 500 hasta el 4-oct) y da el pase.
   No → ofrece pelear.
 - **Sin plata** va directo a ofrecer la pelea.
 - **Ganándole** da el pase y abre **su ruleta de Pokémon**, una sola vez en la partida
@@ -207,7 +208,7 @@ vive adentro. Eso lo resuelve la base `CasinoNpcConCombate`.
 
 ## La ruleta de premios de los NPCs
 
-**Una cada dos combates ganados, hasta cuatro por partida, y no siempre con los mismos NPCs.**
+**Una cada dos combates ganados, hasta cinco por partida (eran cuatro hasta el 4-oct), y no siempre con los mismos NPCs.**
 
 Regla (`CasinoRuletaDeNpcs`): los combates contra los NPCs de la lista se agrupan de a dos, en
 el orden en que los ganás (1.º y 2.º, 3.º y 4.º, …). En cada par sale **exactamente una**
@@ -218,13 +219,13 @@ ruleta:
 
 Con eso:
 
-- ganando 2, 4, 6 u 8 combates salen 1, 2, 3 o 4 ruletas; del noveno en adelante ya no sale;
+- ganando 2, 4, 6, 8 o 10 combates salen 1 a 5 ruletas; del undécimo en adelante ya no sale;
 - aunque pelees siempre en el mismo orden, cuál de los dos NPCs del par la da cambia de
-  partida en partida (hay 16 combinaciones posibles);
+  partida en partida (hay 32 combinaciones posibles);
 - peleando en cualquier orden, ninguno de los doce la da más seguido que otro.
 
 No hace falta guardar "quiénes son los elegidos" ni contar combates aparte: los combates
-ganados son los flags de vencido, y los usos son cuatro flags (`Casino_RuletaNpc_1` a `_4`)
+ganados son los flags de vencido, y los usos son cinco flags (`Casino_RuletaNpc_1` a `_5`)
 que el guardado ya persiste. La pelea del guardia no cuenta: tiene su propia ruleta.
 
 ### Premios
@@ -236,34 +237,35 @@ sirve y en el 3 ya no).
 
 | Premio | Peso |
 |---|---|
-| Pikachu Nv15 | 13 |
-| Eevee Nv15 | 12 |
-| Togepi Nv15 | 10 |
-| Poción x3 | 17 |
-| Superpoción x2 | 15 |
-| Hiperpoción x1 | 8 |
-| 150 monedas | 17 |
-| 400 monedas | 8 |
+| Pikachu Nv15 | 23 |
+| Eevee Nv15 | 22 |
+| Togepi Nv15 | 20 |
+| Poción x3 | 10 |
+| Superpoción x2 | 9 |
+| Hiperpoción x1 | 4 |
+| 150 monedas | 8 |
+| 400 monedas | 4 |
 
-**35% Pokémon, 40% curativos y 25% plata.**
+**65% Pokémon, 23% curativos y 12% plata.** (Hasta el 4-oct era 35% Pokémon: el playtest
+pidió llegar al final con más equipo, y Augusto fijó el 65%.)
 
 **Piso 2** (`Resources/Definitions/Casino/RuletaDeLosNpcsPiso2.asset`), con la tarjeta:
 
 | Premio | Peso |
 |---|---|
-| Pikachu Nv15 | 12 |
-| Eevee Nv15 | 11 |
-| Togepi Nv15 | 10 |
+| Pikachu Nv15 | 22 |
+| Eevee Nv15 | 22 |
+| Togepi Nv15 | 21 |
 | **Tarjeta VIP** | 15 |
-| Poción x3 | 17 |
-| Superpoción x2 | 14 |
-| 150 monedas | 13 |
-| 400 monedas | 8 |
+| Poción x3 | 7 |
+| Superpoción x2 | 6 |
+| 150 monedas | 5 |
+| 400 monedas | 2 |
 
-**33% Pokémon, 15% Tarjeta VIP, 31% curativos y 21% plata.**
+**65% Pokémon, 15% Tarjeta VIP, 13% curativos y 7% plata.**
 
 Las dos tienen **la misma** lista en `npcsQueLaPuedenDar`: los flags de los dieciséis NPCs que
-dan ruleta, de los tres pisos. La regla de "una cada dos combates, hasta cuatro" cuenta a todos
+dan ruleta, de los tres pisos. La regla de "una cada dos combates, hasta cinco" cuenta a todos
 juntos; la tabla solo decide **qué premios** tiene la rueda que sale. No están los guardias, que
 tienen la suya, ni el magnate, que da la tarjeta directo.
 
@@ -295,8 +297,10 @@ marca la rareza:
 - **Bajar no pide nada**: volver a un piso anterior tiene que poder hacerse siempre. Con dos pisos
   debajo pregunta a cuál (PISO 2 / PISO 1). Con más, va de a uno ("MÁS ABAJO").
 - **Volver no elige nada**: cancelar la pregunta no te baja de piso (`MessageBoxResult.Cancelled`).
-- **La deuda con la enfermería frena solo la subida.** Bloquear la bajada podría dejarte encerrado
-  sin forma de juntar la plata.
+- **La deuda con la enfermería frena solo la subida, y solo si alcanza para pagarla.** Si alcanza,
+  el ascensor pregunta si la salda ahí mismo; si no, sube igual y la deuda queda anotada
+  (playtest del 5-oct: con la deuda trabada se podía quedar sin peleas, sin plata y sin poder
+  curarse). Bloquear la bajada podría dejarte encerrado sin forma de juntar la plata.
 - **Al llegar por el ascensor** aparecés frente a las puertas del piso de destino, no en el spawn
   de la escena.
 
@@ -343,7 +347,7 @@ tres formas:
 
 ## Piso 3: la ruleta del empresario
 
-El empresario (`CasinoRuletaPagaNpc`) cobra **200 monedas por tiro** y gira una vez la
+El empresario (`CasinoRuletaPagaNpc`) cobra **300 monedas por tiro** y gira una vez la
 ruleta de premios. Se puede tirar todas las veces que alcance la plata. Si le decís que no,
 dice su diálogo de historia (`charla` = `Historia_Piso3_Empresario`), así que ese texto se
 sigue reescribiendo en el asset como el de los demás NPCs.
@@ -378,16 +382,16 @@ o negro, se abre la ruleta de premios apenas cerrás el cartel del resultado.
 
 | Premio | Peso |
 |---|---|
-| Pichu Nv15 | 13 |
-| Happiny Nv15 | 12 |
-| Poción x2 | 18 |
-| Superpoción | 14 |
-| Hiperpoción | 8 |
-| 250 monedas | 16 |
-| 500 monedas | 12 |
-| 1000 monedas | 7 |
+| Pichu Nv15 | 33 |
+| Happiny Nv15 | 32 |
+| Poción x2 | 8 |
+| Superpoción | 6 |
+| Hiperpoción | 4 |
+| 250 monedas | 8 |
+| 500 monedas | 6 |
+| 1000 monedas | 3 |
 
-**25% Pokémon.** Todas las ruletas de premios del casino dan alguna chance de Pokémon.
+**65% Pokémon** (era 25%). Todas las ruletas de premios del casino dan alguna chance de Pokémon.
 
 ---
 
@@ -436,6 +440,74 @@ liberados de la torre y para el de Tacconi.
 
 ---
 
+## La economía (playtest del 4-oct)
+
+Se ajustó con lo que trae el PJ al entrar al casino. Lo que suma antes:
+
+| De dónde | Monedas |
+|---|---|
+| Partida nueva | 100 |
+| Rival del tutorial | 100 |
+| Data Center (seguridad, nodos, guardia de cámaras) | ~650 |
+| Néstor | 1500 |
+| Regalo de bienvenida de Tixi | 1000 |
+| **Al llegar al casino** | **~2.700-3.350** (menos lo que gaste en la cueva) |
+
+**La plata tiene que pesar.** El pase del guardia del piso 1 cuesta **4000**,
+más de lo que trae el PJ: para subir pagando hay que pelear con los del piso o
+jugar un rato a las máquinas, y si no, ganarle al guardia (deja pasar gratis y da
+una ruleta con Pokémon). Hasta el 4-oct costaba 500 y se pagaba sin pensarlo.
+
+| Qué | Precio |
+|---|---|
+| Pase del guardia del piso 1 (o ganarle) | **4000** (era 500) |
+| Premio de los entrenadores del casino | 100-230 (sin cambios) |
+| Tarjeta VIP (revendedor) | 1500 (sin cambios) |
+| Tiro de la ruleta del empresario (siempre Pokémon Nv24-26) | **300** (era 200: un Pokémon seguro salía regalado) |
+| Poción / Superpoción / Hiperpoción | 200 / 700 / 1200 (sin cambios) |
+| Poción Máxima / Revivir / Cura Total | 2500 / 1500 / 400 (sin cambios) |
+
+El número del pase está en `CasinoNpcBuilder.PrecioDelPaseDelPiso1` y en el
+`precio` del guardia en la escena del piso 1: se cambia en el Inspector.
+
+**Las tragaperras** devolvían el 86% y pagaban en 1 de cada 7 tiradas. Augusto
+pidió **1 de cada 5**: se tocaron **solo los pesos** (para no contradecir la tabla
+de pagos dibujada en el gabinete) y ahora pagan en 1 de cada 5 y devuelven el
+~88%. La casa sigue ganando a la larga (el smoke test falla si la devolución
+llega a 100%), pero con apuestas de hasta 100 y los sietes pagando 90 y 300, una
+racha alcanza para el pase.
+**El blackjack** ya tenía reglas estándar (el croupier se planta en 17, el
+blackjack paga 3:2): no se tocó.
+
+Varios NPCs ahora **nombran al empresario** (el anciano del piso 1, la damisela
+del piso 2, el jubilado del piso 3 y Tixi antes de mandar al PJ al casino).
+
+### Playtest del 5-oct
+
+- **Tragaperras: 1 de cada 4** (25,1%), devolviendo ~89-90%. Otra vez solo los
+  pesos (`CasinoPrefabBuilder` y `MaquinaBasica.asset`): cereza 100, Magnemite 50,
+  Gastly 44, Psyduck 20, Pikachu 16, siete azul 6, siete rojo 3, comodín (Replay) 1.
+- **La enfermera cobra 100** (era 30) y **fía sin tope**: siempre cura. Con plata
+  y deuda, primero ofrece saldar. El ascensor solo exige la deuda si alcanza.
+- **Una tienda en el piso 3** (`CasinoTiendaNpc`, la pone
+  `PokeRush > Casino > Poner la tienda del piso 3`): la misma lista que Tixi
+  (`TiendaDelCasino.asset` se copia de `TiendaDeTixi`), en su propio contenedor
+  (`TiendaCasino`) para que rearmar los personajes del piso no la borre.
+- **Las ruletas cambian de Pokémon en cada giro** (`VariedadDeLasRuletas`): la
+  tabla dice cuántos gajos son Pokémon, a qué nivel y de qué rareza (el ícono de
+  la ball); la especie sale de un pozo por rareza, sin repetir lo que el jugador
+  ya tiene (equipo y PC) ni otro gajo de la misma rueda:
+
+  | Ícono | Pozo |
+  |---|---|
+  | Poké Ball | Los iniciales de todas las regiones, Pikachu, Eevee, Togepi, Shinx, Houndour, Gastly, Abra, Machop, Magnemite, Swablu, Snorunt, Litwick, Rockruff, Fletchling, Drilbur, Sneasel |
+  | Super Ball | Riolu, Ralts, Axew, Scyther, Porygon, Honedge, Mimikyu, Absol, Munchlax, Charcadet, Noibat, Toxel, Tinkatink, Rookidee, Sableye, Larvesta, Hatenna, Aron |
+  | Ultra Ball | Dratini, Larvitar, Bagon, Beldum, Gible, Deino, Goomy, Jangmo-o, Dreepy, Frigibax, Lapras, Snorlax |
+  | Master Ball | Lucario, Charizard, Greninja, Blaziken, Gengar, Gardevoir, Umbreon, Sylveon, Infernape, Decidueye |
+
+  Las Poké Ball traen primeras formas: al nivel de las ruletas nada se pasa de
+  fuerte. Los épicos ya evolucionados quedan para la Master Ball, la más rara.
+
 ## Cómo se cambia
 
 - **Porcentajes o Pokémon de una ruleta:** abrir el asset de la tabla y tocar los `premios`.
@@ -446,7 +518,7 @@ liberados de la torre y para el de Tacconi.
 - **Umbral de la ruleta por color:** `umbralRuletaPorColor` en cada mesa de ruleta del piso 2
   (o `UmbralRuletaPorColor` en el builder, que lo pone en las seis).
 - **Precio de la Tarjeta VIP:** `precio` del revendedor (o `PrecioTarjeta` en el builder).
-- **Precio del tiro del empresario:** `precio` de su `CasinoRuletaPagaNpc` (arranca en 200).
+- **Precio del tiro del empresario:** `precio` de su `CasinoRuletaPagaNpc` (arranca en 300).
 - **Textos de historia:** `Resources/Definitions/Casino/Dialogos/Historia_*.asset`. Son
   **provisorios**: se reescriben en el asset sin abrir la escena. `NpcQueHabla` también
   acepta un `dialogoRepetido` para las veces siguientes.
@@ -485,7 +557,7 @@ liberados de la torre y para el de Tacconi.
   - la regla de la ruleta sobre miles de partidas (siempre dos si se les gana a todos, sin
     favoritos, nunca más de dos);
   - la entrega de premios (plata, Pokémon y equipo lleno);
-  - que las tablas del proyecto sigan dando chance de Pokémon (la de los NPCs, 33%; el test
+  - que las tablas del proyecto sigan dando chance de Pokémon (las de los NPCs, 65%; el test
     pide al menos 25%) y un Pokémon seguro en la del guardia.
 - Los mismos smoke tests prueban también lo de los pisos 2 y 3:
   - la ganancia al color y el umbral de la ruleta por color;
@@ -500,7 +572,7 @@ liberados de la torre y para el de Tacconi.
 - En Play, recorrido completo:
   1. hablar con el guardia sin plata, perder y volver;
   2. ganarle y girar su ruleta;
-  3. ganarles a los NPCs y ver que la ruleta sale una cada dos combates, hasta cuatro;
+  3. ganarles a los NPCs y ver que la ruleta sale una cada dos combates, hasta cinco;
   4. en el piso 2, conseguir la Tarjeta VIP (magnate, ruleta o revendedor) y mostrársela al
      guardia VIP;
   5. ganarle más de 200 al rojo en una mesa y girar la ruleta de premios;

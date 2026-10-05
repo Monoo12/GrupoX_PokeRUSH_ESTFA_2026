@@ -175,6 +175,10 @@ public class MoveTutorRequest
     public string Maestro = "NÉSTOR";
     // Null = los precios por defecto de PreciosDelTutor.
     public PreciosDelTutor Precios;
+    // Subir de nivel en un combate: el Pokemon ya sabe cuatro y quiere este.
+    // La pantalla arranca directo en "¿Qué olvida?", sin lista ni precio, y
+    // elegir el nuevo (o volver) pregunta si deja de aprenderlo.
+    public MoveDefinition AprenderEste;
 }
 
 public class MoveTutorResult

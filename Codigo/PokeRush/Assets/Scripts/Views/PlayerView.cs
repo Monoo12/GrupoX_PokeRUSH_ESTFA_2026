@@ -4,6 +4,15 @@ using UnityEngine;
 // (IsMoving) y si corre (IsRunning). Lee el estado del PlayerController, asi la
 // logica de movimiento queda separada de lo visual (MVC).
 // Va en el mismo GameObject que el SpriteRenderer del jugador.
+//
+// La animacion va ATADA A LOS TILES, no al reloj (playtest del 5-oct: "parece
+// cojo"). Antes avanzaba un cuadro cada 1/fps segundos y volvia al cuadro 0
+// cada vez que el personaje quedaba quieto, y entre un tile y el siguiente
+// siempre queda quieto un instante: a 4 tiles por segundo y 8 cuadros por
+// segundo, cada tile mostraba "parado -> paso con el pie derecho" y el pie
+// izquierdo no se veia nunca. Ahora cada tile es medio ciclo: la primera mitad
+// con un pie adelante y la segunda parado, y el tile siguiente con el otro
+// pie, igual que en los juegos.
 [RequireComponent(typeof(SpriteRenderer))]
 public class PlayerView : MonoBehaviour
 {
@@ -40,14 +49,11 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private DirectionalAnimation walkMujer;
     [SerializeField] private DirectionalAnimation runMujer;
 
-    [Header("Velocidad de animacion")]
-    [Tooltip("Cuadros por segundo al caminar.")]
-    [SerializeField] private float walkFps = 6f;
-    [Tooltip("Cuadros por segundo al correr.")]
-    [SerializeField] private float runFps = 10f;
+    [Header("Ritmo")]
+    [Tooltip("Parte del paso (0-1) que se ve con el pie adelante; el resto, parado.")]
+    [SerializeField, Range(0.2f, 0.9f)] private float mitadConElPie = 0.55f;
 
-    private float _frameTimer;
-    private int _frameIndex;
+    private int _ultimoPaso = -1;
     private bool _skinResuelta;
 
     // Autollenar referencias al agregar el componente en el editor.
@@ -106,40 +112,38 @@ public class PlayerView : MonoBehaviour
             return;
 
         if (moving)
-            Animate(frames, running ? runFps : walkFps);
+            Animate(frames);
         else
             ShowIdle(frames);
     }
 
-    private void Animate(Sprite[] frames, float fps)
+    // Los cuatro cuadros de cada direccion son: 0 parado, 1 un pie, 2 parado
+    // (en algunas hojas, otra pose de parado), 3 el otro pie. Los tiles pares
+    // van 1 -> 2 y los impares 3 -> 0, asi dos tiles seguidos recorren el ciclo
+    // entero y los pies se alternan.
+    private void Animate(Sprite[] frames)
     {
-        if (frames.Length == 1)
+        int paso = playerController.PasosDados;
+        if (paso != _ultimoPaso)
         {
-            spriteRenderer.sprite = frames[0];
+            _ultimoPaso = paso;
+            Pasos.DelJugador(playerController.IsRunning);
+        }
+
+        if (frames.Length < 4)
+        {
+            spriteRenderer.sprite = frames[Mathf.Min(1, frames.Length - 1)];
             return;
         }
 
-        _frameTimer += Time.deltaTime;
-        float frameDuration = 1f / Mathf.Max(0.01f, fps);
-        if (_frameTimer >= frameDuration)
-        {
-            _frameTimer -= frameDuration;
-            _frameIndex = (_frameIndex + 1) % frames.Length;
-
-            // Cuadros 1 y 3 = el pie apoya (0 y 2 son la pose de paso medio).
-            if (frames.Length >= 4 && (_frameIndex == 1 || _frameIndex == 3))
-                Pasos.DelJugador(playerController.IsRunning);
-        }
-
-        // Por si cambie a un set con menos cuadros (walk <-> run).
-        _frameIndex = Mathf.Clamp(_frameIndex, 0, frames.Length - 1);
-        spriteRenderer.sprite = frames[_frameIndex];
+        bool pieDerecho = (paso & 1) == 0;
+        bool conElPieAdelante = playerController.ProgresoDelPaso < mitadConElPie;
+        int cuadro = pieDerecho ? (conElPieAdelante ? 1 : 2) : (conElPieAdelante ? 3 : 0);
+        spriteRenderer.sprite = frames[cuadro];
     }
 
     private void ShowIdle(Sprite[] frames)
     {
-        _frameTimer = 0f;
-        _frameIndex = 0;
         spriteRenderer.sprite = frames[0];
     }
 }

@@ -19,7 +19,7 @@ public class CasinoElevatorGuard : CasinoNpcConCombate, IInteractable
     [Header("Pase")]
     [Tooltip("Flag que deja usar el ascensor. El ascensor del piso lo pide con requisito = Flag.")]
     [SerializeField] private StoryFlag flagPase = StoryFlag.Casino_Piso1_PaseAscensor;
-    [Min(0)] [SerializeField] private int precio = 500;
+    [Min(0)] [SerializeField] private int precio = 4000;
     [Tooltip("Si esta puesto, el guardia no cobra: pide ver este objeto clave " +
              "(piso 2: la Tarjeta VIP). Sin el objeto, igual se le puede ganar.")]
     [SerializeField] private SpecialItemDefinition objetoRequerido;

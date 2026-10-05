@@ -54,15 +54,16 @@ public class CasinoRuletaDeCombate
     // otra cantidad hace que el puntero frene entre dos.
     public const int Gajos = 8;
 
-    // Cuanto mueve un stage cada gajo. Dos es el escalon clasico ("subio mucho"
-    // / "bajo mucho"): uno solo no se nota y tres desbalancea la pelea.
-    public const int EtapasPorGajo = 2;
+    // Cuanto mueve un stage cada gajo. Era dos ("subio mucho"), pero la rueda
+    // gira cada dos turnos y los gajos se acumulan: en el playtest del 4-oct
+    // quedaba demasiado pesada. Uno por gajo sigue notandose al acumularse.
+    public const int EtapasPorGajo = 1;
 
     // El mordisco de SacarVida y la cura de DarPocion, en fraccion de los PS
     // maximos del Poken. La cura es mas grande que el mordisco porque el
     // jugador ya esta peleando contra seis Pokemon y contra la ruleta.
     public const float FraccionDeMordisco = 0.125f;  // un octavo
-    public const float FraccionDeCura = 0.5f;        // media barra
+    public const float FraccionDeCura = 0.35f;       // un tercio largo
 
     // Tope de TirarDeNuevo encadenados. Sin esto, con mala suerte la ruleta se
     // podria quedar girando sola para siempre.

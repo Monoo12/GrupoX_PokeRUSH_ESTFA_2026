@@ -78,8 +78,15 @@ la lógica (por ejemplo, cuando se haga la versión final con otro estilo).
    **fondo según el tipo del movimiento** (Fuego rojo, Agua azul...) desde la
    tabla `moveSpritesByType`, y el nombre se escribe encima con un `Text`.
    El panel lateral muestra **PP actual/máximo** y el **ícono de TIPO** del
-   movimiento bajo el puntero (hover implementado con un `EventTrigger`
-   agregado por código en `AddHoverHandler`). Si ningún movimiento tiene PP,
+   movimiento bajo el puntero, y a su izquierda **`PanelDatos`** (playtest del
+   4-oct) suma la **categoría** (físico / especial / estado, de
+   `Graphics/UI/category.png`), la **potencia** ("POT 80", o "POT ---" si es de
+   estado) y la **precisión** ("PRE 95", o "PRE ---" si nunca falla). Lo arma
+   `PokeRush > Combate > Agregar panel de potencia y precision`
+   (`PanelDeDatosDelMovimientoBuilder`) sobre el prefab `SistemaDeCombate`; las
+   escenas que tienen una copia suelta y no la instancia del prefab
+   (`CombatePrueba`, `battleTry`, solo de prueba) no lo tienen. El hover está implementado con un `EventTrigger`
+   agregado por código en `AddHoverHandler`. Si ningún movimiento tiene PP,
    abrir este menú dispara directamente `MoveChosen(0)` y el controller lo
    convierte en Forcejeo.
 3. **Equipo** (`teamPanel`) — overlay oscuro con los 6 Pokémon: nombre, PS, y
@@ -213,8 +220,24 @@ Cada enemigo define su propio escenario con el campo nuevo
    sprite y lo **escala solo** para cubrir la cámara (usa el máximo entre la
    proporción de ancho y de alto, así nunca quedan bordes).
 
-Si el campo queda vacío se usa el fondo que tenga la escena (Pradera por
-defecto en la escena de prueba).
+Si el campo queda vacío, el del **lugar** donde se pelea: la tabla
+`Resources/Definitions/Combate/FondosDeCombate.asset` (escena → fondo, la arma
+`PokeRush > Combate > Elegir los fondos de combate`). Y si la escena no está en la
+tabla, el del prefab (Pradera). Antes una pelea sin fondo se quedaba con el de la
+pelea anterior. Los fondos de cada lugar están en `Playtest_5_Oct_2026.md`.
+
+## ⚪ Las Poké Balls del equipo rival (playtest del 5-oct)
+
+Debajo de la barra del databox rival, del lado izquierdo (donde el sprite es
+transparente), una Poké Ball chiquita por Pokémon del rival:
+**roja** si sigue en pie, **rosada** si tiene un estado, **gris** si se debilitó.
+Contra un salvaje no se muestran. Las actualiza `BattleHudView.UpdateEnemyTeamBalls`
+en cada `UpdateHud`.
+
+Los íconos son los del pack (`icon_ball`, `_status`, `_faint`) a la mitad: el arte
+es 2x, así que a 15 px no se pierde ningún pixel (`Sprites/UI/Battle/icon_ball_small*`).
+Las pone en el prefab `PokeRush > Combate > Agregar las Poke Balls del rival`
+(se puede volver a correr).
 
 ---
 

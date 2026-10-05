@@ -42,6 +42,21 @@ public class PlayerController : MonoBehaviour
     public bool IsRunning => _isRunning;
     public Vector2 Facing => _facing;
 
+    // Cuantos pasos (tiles) arranco desde que existe. La animacion alterna el
+    // pie con esto: un pie por tile, como en la saga (ver PlayerView).
+    public int PasosDados { get; private set; }
+
+    // Cuanto del paso en curso ya recorrio: 0 al arrancar, 1 al llegar.
+    public float ProgresoDelPaso
+    {
+        get
+        {
+            if (!_isMoving || tileSize <= 0f) return 1f;
+            float falta = Vector2.Distance(transform.position, _targetPosition) / tileSize;
+            return Mathf.Clamp01(1f - falta);
+        }
+    }
+
     private void Awake()
     {
         // El personaje arranca quieto, alineado a su tile actual.
@@ -182,6 +197,7 @@ public class PlayerController : MonoBehaviour
 
         _isRunning = isRunning;
         _targetPosition = destination;
+        PasosDados++;
         StartCoroutine(MoveRoutine(isRunning ? runSpeed : walkSpeed));
     }
 

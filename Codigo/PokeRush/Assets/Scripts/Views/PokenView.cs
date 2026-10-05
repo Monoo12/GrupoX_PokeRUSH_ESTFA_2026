@@ -23,6 +23,7 @@ public class PokenView : MonoBehaviour
 
     public void SetPoken(PokenModel pokenModel, bool isPlayerSide)
     {
+        DejarDeEsconder();
         Poken = pokenModel;
         PokenDefinition definition = pokenModel.Definition;
 
@@ -58,6 +59,63 @@ public class PokenView : MonoBehaviour
             _frameIndex = (_frameIndex + 1) % _frames.Length;
         }
         spriteRenderer.sprite = _frames[_frameIndex];
+    }
+
+    // ---------- escondido (Excavar, Vuelo, Buceo...) ----------
+
+    // Mientras carga un movimiento que lo deja fuera de alcance, el Poken no se
+    // ve: se hunde (o sube) y desaparece, y vuelve al soltar el golpe. Solo es
+    // el sprite: el GameObject sigue activo para que la barra y los efectos lo
+    // encuentren.
+    public bool Escondido { get; private set; }
+    private Vector3 _posicionVisible;
+
+    public System.Collections.IEnumerator Esconder(float segundos = 0.35f)
+    {
+        if (Escondido || spriteRenderer == null) yield break;
+        Escondido = true;
+        Transform t = spriteRenderer.transform;
+        _posicionVisible = t.localPosition;
+        Color c = spriteRenderer.color;
+        for (float s = 0f; s < segundos; s += Time.deltaTime)
+        {
+            float k = s / segundos;
+            t.localPosition = _posicionVisible + Vector3.down * (0.6f * k);
+            spriteRenderer.color = new Color(c.r, c.g, c.b, 1f - k);
+            yield return null;
+        }
+        spriteRenderer.enabled = false;
+        t.localPosition = _posicionVisible;
+        spriteRenderer.color = new Color(c.r, c.g, c.b, 1f);
+    }
+
+    public System.Collections.IEnumerator Aparecer(float segundos = 0.25f)
+    {
+        if (!Escondido || spriteRenderer == null) yield break;
+        Escondido = false;
+        Transform t = spriteRenderer.transform;
+        Color c = spriteRenderer.color;
+        spriteRenderer.enabled = true;
+        for (float s = 0f; s < segundos; s += Time.deltaTime)
+        {
+            float k = s / segundos;
+            t.localPosition = _posicionVisible + Vector3.down * (0.6f * (1f - k));
+            spriteRenderer.color = new Color(c.r, c.g, c.b, k);
+            yield return null;
+        }
+        t.localPosition = _posicionVisible;
+        spriteRenderer.color = new Color(c.r, c.g, c.b, 1f);
+    }
+
+    // Vuelve a verse de una, sin animacion (cambio de Poken, fin de pelea).
+    public void DejarDeEsconder()
+    {
+        if (!Escondido || spriteRenderer == null) return;
+        Escondido = false;
+        spriteRenderer.enabled = true;
+        spriteRenderer.transform.localPosition = _posicionVisible;
+        Color c = spriteRenderer.color;
+        spriteRenderer.color = new Color(c.r, c.g, c.b, 1f);
     }
 
     public void Show()

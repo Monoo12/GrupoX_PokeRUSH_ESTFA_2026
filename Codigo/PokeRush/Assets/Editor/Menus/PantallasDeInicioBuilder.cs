@@ -124,6 +124,34 @@ public static class PantallasDeInicioBuilder
 
     // ---------------------------------------------------------------- partidas
 
+    // Las mismas teclas en todas las pantallas (playtest del 4-oct: "a veces se
+    // acepta con X, a veces con Enter, a veces con el mouse").
+    private const string AyudaDeTeclas =
+        "Flechas: mover     X / Enter: elegir     Z / Esc: volver     También con el mouse";
+
+    [MenuItem("PokeRush/UI/Poner la ayuda de teclas en MenuSaves")]
+    public static void AyudaEnPartidas()
+    {
+        if (!SinCambiosPendientes()) return;
+        Scene scene = EditorSceneManager.OpenScene(EscenaPartidas, OpenSceneMode.Single);
+        SaveSlotMenuView vista = Buscar<SaveSlotMenuView>(scene);
+        if (vista == null) { Debug.LogError("[Inicio] MenuSaves no tiene SaveSlotMenuView."); return; }
+        PonerAyuda(vista);
+        Guardar(scene);
+    }
+
+    // Abajo de todo, como en la creacion de personaje.
+    private static void PonerAyuda(SaveSlotMenuView vista)
+    {
+        Canvas canvas = vista.GetComponentInParent<Canvas>();
+        if (canvas == null) return;
+        Transform raiz = canvas.rootCanvas.transform;
+        Borrar(raiz, "Ayuda");
+        Text ayuda = Texto("Ayuda", raiz, AyudaDeTeclas, 24, TextAnchor.MiddleCenter, TintaSuave, false);
+        ayuda.raycastTarget = false;
+        Ubicar(ayuda.gameObject, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 26f), new Vector2(1400f, 34f));
+    }
+
     private static bool PulirPartidas()
     {
         Scene scene = EditorSceneManager.OpenScene(EscenaPartidas, OpenSceneMode.Single);
@@ -164,6 +192,8 @@ public static class PantallasDeInicioBuilder
         Sprite mujer = SubSprite(EntrenadoraCaminando, "POKEMONTRAINER_HojaNeutra_walk_2_0");
         if (mujer != null) vistaSo.FindProperty("spriteMujer").objectReferenceValue = mujer;
         vistaSo.ApplyModifiedPropertiesWithoutUndo();
+
+        PonerAyuda(vista);
 
         // "Próximo: el primer Data Center" no entraba en la cajita de la ruta.
         Text ruta = vista.GetComponentsInChildren<Text>(true).FirstOrDefault(t => t.name == "RutaText");
@@ -324,8 +354,7 @@ public static class PantallasDeInicioBuilder
 
         // ---- pie: las teclas ----
         Text ayuda = Texto("Ayuda", canvasGo.transform,
-            "Flechas: mover     X / Enter: elegir     Z / Esc: volver     También con el mouse",
-            24, TextAnchor.MiddleCenter, TintaSuave, false);
+            AyudaDeTeclas, 24, TextAnchor.MiddleCenter, TintaSuave, false);
         Ubicar(ayuda.gameObject, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 34f), new Vector2(1400f, 34f));
 
         // Arranca en el primer paso; la vista igual los ordena en Start.

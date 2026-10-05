@@ -465,6 +465,120 @@ public static class TutorialBuilder
         tope.transform.localPosition = new Vector3(0f, -1f, 0f);
         tope.layer = CapaObstacles;
         tope.AddComponent<BoxCollider2D>().size = new Vector2(0.9f, 0.9f);
+
+        PonerFlecha(puerta);
+    }
+
+    // ---------- la flecha de la salida ----------
+
+    // La hoja animada de Essentials: ocho cuadros de 28x40 que ya suben y bajan.
+    // Venia importada como UN sprite de 224x28 (mal cortada): FlechaHaciaAbajo
+    // la corta bien la primera vez.
+    private const string HojaDeLaFlecha = "Assets/Graphics/UI/down_arrow.png";
+    private const int CuadrosDeLaFlecha = 8;
+    private static readonly Vector2Int CuadroDeLaFlecha = new Vector2Int(28, 40);
+
+    // Una flecha sobre la puerta, apuntando hacia afuera
+    // (playtest del 4-oct: no se encontraba la salida). Aparece al terminar el
+    // tutorial, que es cuando la puerta abre. Va hija de la puerta: si la
+    // puerta se mueve, la flecha va con ella.
+    private static void PonerFlecha(GameObject puerta)
+    {
+        Transform vieja = puerta.transform.Find("Flecha");
+        if (vieja != null) Object.DestroyImmediate(vieja.gameObject);
+
+        var flecha = new GameObject("Flecha");
+        flecha.transform.SetParent(puerta.transform, false);
+        flecha.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+
+        Sprite[] cuadros = FlechaHaciaAbajo();
+        var sr = flecha.AddComponent<SpriteRenderer>();
+        sr.sprite = cuadros.Length > 0 ? cuadros[0] : null;
+        sr.sortingOrder = 16;   // sobre los personajes (15): es una indicacion
+
+        var so = new SerializedObject(flecha.AddComponent<FlechaIndicadora>());
+        SerializedProperty lista = so.FindProperty("cuadros");
+        lista.arraySize = cuadros.Length;
+        for (int i = 0; i < cuadros.Length; i++) lista.GetArrayElementAtIndex(i).objectReferenceValue = cuadros[i];
+        so.FindProperty("cuadrosPorSegundo").floatValue = 8f;
+        so.FindProperty("direccion").vector2Value = Vector2.down;
+        // Los cuadros ya rebotan: el recorrido extra es apenas un empujon.
+        so.FindProperty("recorrido").floatValue = 0.1f;
+        so.FindProperty("apareceCon").enumValueIndex = (int)StoryFlag.Tutorial_Completado;
+        so.FindProperty("seVaCon").enumValueIndex = (int)StoryFlag.None;
+        so.ApplyModifiedPropertiesWithoutUndo();
+
+        if (cuadros.Length != CuadrosDeLaFlecha)
+            Debug.LogWarning($"[Tutorial] La flecha salio con {cuadros.Length} cuadros (esperaba {CuadrosDeLaFlecha}): revisa {HojaDeLaFlecha}.");
+    }
+
+    public static Sprite[] FlechaHaciaAbajo()
+    {
+        var cortados = AssetDatabase.LoadAllAssetsAtPath(HojaDeLaFlecha).OfType<Sprite>()
+            .OrderBy(sp => sp.rect.x).ToArray();
+        if (cortados.Length == CuadrosDeLaFlecha) return cortados;
+
+        var importer = AssetImporter.GetAtPath(HojaDeLaFlecha) as TextureImporter;
+        if (importer == null)
+        {
+            Debug.LogError($"[Tutorial] No encontre {HojaDeLaFlecha}.");
+            return new Sprite[0];
+        }
+
+        // Pixel art del mismo tamanio que los tiles (32 px por celda).
+        importer.textureType = TextureImporterType.Sprite;
+        importer.spriteImportMode = SpriteImportMode.Multiple;
+        importer.filterMode = FilterMode.Point;
+        importer.textureCompression = TextureImporterCompression.Uncompressed;
+        importer.mipmapEnabled = false;
+        importer.alphaIsTransparency = true;
+        importer.spritePixelsPerUnit = 32;
+        importer.SaveAndReimport();
+
+        // Unity 6 ignora 'spritesheet': los cortes van por el data provider.
+        var factories = new UnityEditor.U2D.Sprites.SpriteDataProviderFactories();
+        factories.Init();
+        var provider = factories.GetSpriteEditorDataProviderFromObject(importer);
+        provider.InitSpriteEditorDataProvider();
+        var rects = new List<SpriteRect>();
+        var pares = new List<SpriteNameFileIdPair>();
+        for (int i = 0; i < CuadrosDeLaFlecha; i++)
+        {
+            var r = new SpriteRect
+            {
+                name = $"down_arrow_{i}",
+                spriteID = GUID.Generate(),
+                rect = new Rect(i * CuadroDeLaFlecha.x, 0f, CuadroDeLaFlecha.x, CuadroDeLaFlecha.y),
+                alignment = SpriteAlignment.Center,
+                pivot = new Vector2(0.5f, 0.5f)
+            };
+            rects.Add(r);
+            pares.Add(new SpriteNameFileIdPair(r.name, r.spriteID));
+        }
+        provider.SetSpriteRects(rects.ToArray());
+        provider.GetDataProvider<UnityEditor.U2D.Sprites.ISpriteNameFileIdDataProvider>()?.SetNameFileIdPairs(pares);
+        provider.Apply();
+        AssetDatabase.ImportAsset(HojaDeLaFlecha, ImportAssetOptions.ForceUpdate);
+
+        return AssetDatabase.LoadAllAssetsAtPath(HojaDeLaFlecha).OfType<Sprite>().OrderBy(sp => sp.rect.x).ToArray();
+    }
+
+    // Lo mismo sobre la habitacion ya armada, sin rehacer nada mas.
+    [MenuItem("PokeRush/Tutorial/Poner la flecha de la salida (escena abierta)")]
+    public static void PonerFlechaEnLaEscenaAbierta()
+    {
+        if (EditorApplication.isPlaying) return;
+        Scene scene = SceneManager.GetActiveScene();
+        PuertaDelTutorial puerta = Buscar<PuertaDelTutorial>(scene);
+        if (puerta == null)
+        {
+            Debug.LogError("[Tutorial] La escena abierta no tiene PuertaDelTutorial.");
+            return;
+        }
+        PonerFlecha(puerta.gameObject);
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        Debug.Log($"[Tutorial] Flecha de la salida puesta en '{scene.name}' sobre {puerta.transform.position}.");
     }
 
     // El brillo sin flag propio: lo toma de la TutorialParte, asi cambiar el

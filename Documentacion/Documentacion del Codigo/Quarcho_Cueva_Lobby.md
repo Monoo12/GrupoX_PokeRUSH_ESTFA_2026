@@ -35,14 +35,15 @@ Los **textos** (diálogos) y el **balance** (precios, premios) se crean una vez 
 
 | Personaje | Celda | Aparece | Qué hace |
 |---|---|---|---|
-| **Tixi** | (1, 2), en el hueco entre el escritorio y la biblioteca | Siempre | Lore, tienda, te manda al siguiente nivel |
+| **Tixi** | (1, 2), en el hueco entre el escritorio y la biblioteca | Siempre | Lore, tienda, te manda al siguiente nivel; después del casino, el **Entrenamiento intenso del chip** |
 | **PC** | el escritorio de la computadora (x −3..−1, fila 2) | Siempre | El PC de siempre |
+| **Enfermera** | (−6, 1), a la izquierda del escritorio, contra la pared | Siempre (desde el playtest del 4-oct) | Cura gratis (`NpcQueCura`, como la del Data Center; textos `Lobby_Enfermera*`). Desde el 5-oct el saludo lo dice: "Acá no se cobra" |
 | **Néstor** | (−12, 2), entre los racks de servidores | `Casino_Completado` (en el guion se queda en su Data Center hasta recordar; antes era `Torre1_NestorLiberado`) | Tutor de MTs |
 | **Martín** | sentado atrás de su mesa en el rincón de juegos, celdas (−4..−2, −4..−3), contra la pared de abajo y al lado de la máquina arcade | `Casino_Completado` | Tres ruletas y los juegos del casino |
 | **Tacconi** | (−1, −4), al costado derecho de la mesa de Martín | `Casino_Completado` | Tres chances de ganarle un Mew |
 | **Salida** | (6, 0), la puerta del este | Siempre (abre después de Tixi) | Al siguiente nivel |
 
-Los que se suman con la historia se guardan **apagados** y los prende un `BarreraPorFlag` al revés que vive en `Lobby/Apariciones` (así no se ven un frame antes de que llegue el flag). La mesa de Martín es la **misma mesa de cartas del último piso del casino**: el builder copia sus seis tiles a un `Tilemap` propio (`Grid/MesaDeMartin`) en modo *Individual*, para que se ordene por altura con los personajes (Martín queda detrás de la mesa y el que juega, delante).
+Los que se suman con la historia se guardan **apagados** y los prende un `BarreraPorFlag` al revés que vive en `Lobby/Apariciones` (así no se ven un frame antes de que llegue el flag). La mesa de Martín es la **misma mesa de cartas del último piso del casino**: el builder pone sus seis tiles (cargados del tileset por nombre: `CasinoPisoFinalBuilder.TileDeLaMesa`; desde el 4-oct la del casino es un dibujo agrandado y ya no se copia de esa escena) en un `Tilemap` propio (`Grid/MesaDeMartin`) en modo *Individual*, para que se ordene por altura con los personajes (Martín queda detrás de la mesa y el que juega, delante).
 
 > Mover a alguien es cambiar la tabla de posiciones al principio de `QuarchoCuevaBuilder` y volver a correr `Armar el lobby`. Cada posición tiene su comentario con el por qué.
 
@@ -51,7 +52,7 @@ Los que se suman con la historia se guardan **apagados** y los prende un `Barrer
 ## Tixi
 
 - **La primera vez habla sola** apenas llegás (`hablaAlLlegar`): cuenta el lore (`Resources/Definitions/Lobby/Dialogos/Lobby_Tixi_Lore`), te da un **regalo de bienvenida** y te ofrece la tienda. Recién ahí se activa `Lobby_TixiPresentado`, que es lo que abre la salida.
-- Después es un menú: **Comprar / Viajar / Charlar / Nada**. "Charlar" usa el asset `charla` si se carga uno; si no, dice a qué nivel toca ir.
+- Después es un menú: **Comprar / Viajar / Charlar / Nada**, y después del casino **Comprar / Entrenamiento intenso del chip / Viajar / Charlar / Nada** (el menú se arma según lo que haya; "Nada" va siempre última). "Charlar" usa el asset `charla` si se carga uno; si no, dice a qué nivel toca ir.
 - La tienda vende lo que dice `Resources/Definitions/Lobby/TiendaDeTixi` (`healItemsForSale`). El precio es el `buyPrice` de cada objeto.
 
 > ⚠️ **El lore es texto de relleno.** Lo escribe el equipo en `Lobby_Tixi_Lore`. El builder no pisa el asset.
@@ -93,9 +94,15 @@ El menú: **Ruleta de Pokémon / de objetos / de mejoras**, **Juegos del casino*
 
 | Ruleta | Precio | Qué da |
 |---|---|---|
-| Pokémon | 400 | Siempre un Pokémon Nv 28–30 (rareza por el ícono, igual que las del casino) |
-| Objetos | 150 | Curativos, Revivir, Cura Total o plata |
-| Mejoras | 250 | Una mejora para **la próxima batalla** |
+| Pokémon | 1500 | Siempre un Pokémon Nv 28–30 (rareza por el ícono, igual que las del casino; la especie se sortea, ver `Casino_Personajes_Y_Ruletas.md`) |
+| Objetos | 600 | Curativos, Revivir, Cura Total o plata |
+| Mejoras | 500 | Una mejora para **la próxima batalla** |
+
+Precios del playtest del 5-oct (eran 400 / 150 / 250). A 150 la de objetos era plata gratis:
+solo los gajos de 300 y 1000 ya devolvían 168 por tiro de promedio. La plata de la cueva ahora
+sale del **Entrenamiento intenso del chip** (abajo): un tiro de objetos o de mejoras es más o
+menos una victoria, uno de Pokémon, dos o tres. Están en `QuarchoCuevaAssets.PrecioRuleta*` y
+en el `precio` de cada ruleta de Martín en la escena.
 
 Las tres son `CasinoPrizeTable` en `Resources/Definitions/Lobby/` y abren la **misma ruleta de premios** del casino.
 
@@ -112,6 +119,29 @@ Las tres son `CasinoPrizeTable` en `Resources/Definitions/Lobby/` y abren la **m
 Código: `MejorasDeBatalla` (reglas puras), `PlayerModel.MejorasPendientes`, `BattleModel.MejorasDelJugador`, `Prize.mejora` y `PrizeGranter`.
 
 ---
+
+## El Entrenamiento intenso del chip (playtest del 5-oct)
+
+La fuente de plata de la cueva, como una torre de batalla. Lo ofrece **Tixi** en su menú
+(segunda opción) **después del casino**: antes rompería la economía del casino, que cuenta con
+que el PJ llega justo al pase de 4000 (`flagQueLoAbre`, en `None` está siempre).
+
+- Rivales virtuales (`EntrenamientoDelChip.ArmarRival`: un `EnemyDefinition` en memoria, sin
+  asset) uno detrás de otro, con **tres Pokémon** evolucionados y el frente de un entrenador del
+  pack al azar.
+- **Antes de cada combate se cura el equipo**, y al terminar también.
+- Cada victoria paga (el `moneyReward` del rival, lo cobra el `BattleController` como cualquier
+  pelea) y sube la racha: **400, 500, 600... hasta 1200**.
+- Después de cada victoria: **Seguir / Retirarme**. Perder corta la racha; lo ganado queda.
+- El rival arranca **5 niveles por debajo** del Pokémon más alto del equipo y sube uno por combate
+  (tope +5). De la 5.ª racha salen especies fuertes (iniciales finales, Lucario, Gengar, Scizor...)
+  y de la 10.ª, los pseudolegendarios. IA `Trainer`, `GymLeader` desde la 4.ª y `Elite` desde la 7.ª.
+
+La cueva no tenía combates. `PokeRush > Quarcho Cueva > Poner el entrenamiento intenso del chip`
+agrega el prefab `SistemaDeCombate` (apagado), el `MapBattleBridge` en `Sistema`, el objeto
+`EntrenamientoDelChip` en la raíz (**fuera de `MapaRaiz`**: el combate esconde el mapa y eso
+mataría sus corrutinas) y la referencia en Tixi. El fondo de esas peleas es `Extra` (ver
+`FondosDeCombate`). Lo prueba `LobbyPlayTest` (Tixi → conectarse → ganar → retirarse).
 
 ## Tacconi: tres chances por un Mew
 
@@ -130,6 +160,9 @@ En el casino `chances` queda vacío y se juega sin tope, como siempre.
 - **Una sola puerta para todos los niveles.** Adónde lleva lo deciden los flags (`RecorridoDeLaHistoria.SiguienteNivel`), no la puerta. Tixi ("Viajar") y la puerta dicen y cargan lo mismo (`ViajeEntreNiveles`).
 - La puerta es una **zona para pisar**: trigger en la capa `Default` (en `Obstacles` frenaría al jugador). Detrás hay un tope invisible para no salir caminando al vacío.
 - Antes de hablar con Tixi no abre.
+- **El transmisor sale al irse** (playtest del 4-oct). La charla de la vuelta del casino (`Lobby_Tixi_VueltaDelCasino`) termina en "Entonces voy a terminarlo."; el resto (Tixi se acerca, le da el **Transmisor** y le pide que le pregunte a Julieta por 2026) es `Lobby_Tixi_VueltaDelCasino_Transmisor`, que suena **una vez** antes de la pregunta de viaje, sea por la puerta (`SalidaDelLobby.antesDeSalir`) o por Tixi (`QuarchoTixiNpc.antesDeViajar`). Pide `Historia_TixiVueltaDelCasino` y marca `Historia_TixiTransmisor`.
+
+> Lo del 4-oct se aplicó sobre la cueva ya armada con `PokeRush > Quarcho Cueva > Poner la enfermera y el transmisor al salir` (no rehace el lobby). `Armar el lobby` también lo pone.
 - Si la escena del nivel no está en Build Settings, avisa que el camino todavía no está abierto en vez de romper.
 
 **La vuelta a la cueva** la hace `VueltaAlLobby`, que se crea solo al arrancar el juego y vive entre escenas: si en una escena de un nivel se enciende el flag de "completado" de ese nivel (`Torre1_NestorLiberado`, `Casino_Completado`), espera a que no haya combate, cartel ni menú abiertos, dice "¡Nivel superado!" y carga la cueva. **No hace falta tocar NestorGOD2 ni los pisos del casino.** Volver a entrar a un nivel ya completo no expulsa a nadie.

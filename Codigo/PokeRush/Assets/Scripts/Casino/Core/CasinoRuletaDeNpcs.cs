@@ -2,15 +2,16 @@ using System.Collections.Generic;
 
 // Cuando un NPC del casino da la ruleta de premios al ganarle.
 //
-// La regla pedida: sale UNA vez cada dos combates ganados, hasta cuatro por
-// partida, y no siempre con los mismos NPCs.
+// La regla pedida: sale UNA vez cada dos combates ganados, hasta cinco por
+// partida (eran cuatro: en el playtest del 4-oct se llegaba al jefe final con
+// muy pocos Pokemon), y no siempre con los mismos NPCs.
 //
 // Los combates contra NPCs de la lista se agrupan de a dos, en el orden en que
 // el jugador los gana (1-2, 3-4, 5-6, 7-8). En cada par sale exactamente una:
 //   - al primero del par le toca con probabilidad 1/2;
 //   - si no le toco, al segundo le toca seguro.
 // Es el sorteo de "k entre m" hecho de a uno, pero dentro de cada par. Asi:
-//   - ganando 2, 4, 6 u 8 combates salen 1, 2, 3 o 4 ruletas, y despues no mas;
+//   - ganando 2, 4, 6, 8 o 10 combates salen 1, 2, 3, 4 o 5 ruletas, y despues no mas;
 //   - aunque el jugador pelee siempre en el mismo orden, cual de los dos NPCs
 //     del par la da cambia de partida en partida;
 //   - peleando en cualquier orden, ninguno la da mas seguido que otro.
@@ -25,7 +26,8 @@ public static class CasinoRuletaDeNpcs
         StoryFlag.Casino_RuletaNpc_1,
         StoryFlag.Casino_RuletaNpc_2,
         StoryFlag.Casino_RuletaNpc_3,
-        StoryFlag.Casino_RuletaNpc_4
+        StoryFlag.Casino_RuletaNpc_4,
+        StoryFlag.Casino_RuletaNpc_5
     };
 
     // Cada cuantos combates ganados sale una.

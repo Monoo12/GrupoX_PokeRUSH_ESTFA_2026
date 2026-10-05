@@ -98,6 +98,12 @@ public class SaveSlotMenuView : MonoBehaviour
         // volvemos a seleccionar la tarjeta para que las flechas siempre anden.
         if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
             SeleccionarPrimero();
+
+        // Las mismas teclas que en el resto del juego: X acepta, Z / Esc vuelve
+        // (Enter y el mouse ya andaban por el EventSystem).
+        if (IgnorarClick) return;
+        if (TeclasDeLaInterfaz.Volver()) { OnBackClicked(); return; }
+        TeclasDeLaInterfaz.Aceptar();
     }
 
     // Selecciona la tarjeta del save como punto de partida de la navegacion.

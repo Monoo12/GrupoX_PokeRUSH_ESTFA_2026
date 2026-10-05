@@ -28,6 +28,12 @@ public class SalidaDelLobby : MonoBehaviour
     [SerializeField] private string opcionIr = "Ir";
     [SerializeField] private string opcionNo = "Todavía no";
 
+    [Header("Antes de salir (opcional)")]
+    [Tooltip("Lo que pasa al ir a salir, si tiene algo para decir en esta partida: " +
+             "Tixi te frena y te da el transmisor despues del casino. Suena una vez " +
+             "(lo marca su flag) y recien despues pregunta adonde vas.")]
+    [SerializeField] private DialogueDefinition antesDeSalir;
+
     private bool _armado = true;
 
     private void Awake()
@@ -49,7 +55,7 @@ public class SalidaDelLobby : MonoBehaviour
             return;
         }
 
-        ViajeEntreNiveles.Preguntar(dialogueController, "", null, story, pregunta, opcionIr, opcionNo);
+        ViajeEntreNiveles.Preguntar(dialogueController, "", null, story, pregunta, opcionIr, opcionNo, antesDeSalir);
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -67,10 +73,24 @@ public static class ViajeEntreNiveles
         "El camino hacia {0} todavía no está abierto. Por ahora, la historia llega hasta acá.";
     public const string MensajeSinNiveles = "No queda ningún nivel por delante.";
 
-    // Pregunta "¿Salís hacia X?" y, si acepta, carga el nivel.
+    // Pregunta "¿Salís hacia X?" y, si acepta, carga el nivel. 'antes', si
+    // tiene algo para decir en esta partida, suena primero (una vez: lo marca
+    // su flag) y la pregunta viene despues.
     public static void Preguntar(DialogueController dialogo, string nombre, Sprite retrato,
-                                 StoryModel story, string pregunta, string si, string no)
+                                 StoryModel story, string pregunta, string si, string no,
+                                 DialogueDefinition antes = null)
     {
+        if (antes != null && dialogo != null && antes.TieneQueDecir(story)
+            && (antes.FlagPara(story) == StoryFlag.None || story == null || !story.HasFlag(antes.FlagPara(story))))
+        {
+            dialogo.StartDialogue(antes, story, () =>
+            {
+                CasinoDialogo.Guardar();
+                Preguntar(dialogo, nombre, retrato, story, pregunta, si, no);
+            });
+            return;
+        }
+
         RecorridoDeLaHistoria.Nivel nivel = RecorridoDeLaHistoria.SiguienteNivel(story);
         if (nivel == null)
         {

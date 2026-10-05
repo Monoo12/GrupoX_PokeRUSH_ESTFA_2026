@@ -15,8 +15,9 @@ Todo lo visible se genera con un builder del editor, como el resto del casino.
 |---|---|
 | `Scripts/Casino/Core/CasinoRuletaDeCombate.cs` | **Las reglas de la ruleta de combate.** Qué hace cada gajo y cada cuántos turnos aparece. No toca la escena ni la UI: se prueba sin abrir un combate. |
 | `Scripts/Casino/World/CasinoJefeFinalNpc.cs` | El jefe en el mapa: lanza la pelea con la ruleta, reparte la mano de blackjack al terminar y arranca la revancha. |
-| `Editor/Casino/CasinoPisoFinalBuilder.cs` | Arma la escena: los seis guardias, el jefe y el ascensor de bajada. Crea el rival y la tabla de la ruleta. |
-| `Resources/Definitions/Casino/JefeFinalCasino.asset` | El rival: seis Pokémon de nivel 26-29, perfil de IA `Elite`. |
+| `Editor/Casino/CasinoPisoFinalBuilder.cs` | Arma la escena: los seis guardias, la enfermera, el jefe con su mesa agrandada, las zonas de la charla de Reymar y el ascensor de bajada. Crea el rival y la tabla de la ruleta. |
+| `Resources/Definitions/Casino/JefeFinalCasino.asset` | El rival: seis Pokémon de nivel 24-27, perfil de IA `Elite`. |
+| `Resources/Definitions/Casino/Dialogos/Casino_Reymar_*.asset` | La charla de `historia.pdf` de a tramos: `Tramo1..4` (camino a la mesa), `Antes` (al pisar la zona de la pelea), `Despues` (al ganarle) y `Servidor` (atrás de la mesa). |
 | `Resources/Definitions/Casino/RuletaDelJefeFinal.asset` | Los ocho gajos de la ruleta, con sus pesos. |
 | `Sprites/Casino/martin_sentado.png` | El busto de Martín, 51x52. Lo prepara `scripts/preparar_sprites_casino.py` a partir de `Assets/Martin/`. |
 | `Graphics/Trainers/MARTIN.png` | Su retrato de la caja de diálogo, 160x160. |
@@ -34,24 +35,32 @@ Lo demás **ya existía y se reusa entero**: la pantalla de la ruleta
 solo cuelga los objetos.
 
 ```
-  y=30.6   [ MARTIN ]              ← busto, metido atrás de la mesa
-  y=29-30  ▓▓▓ mesa de póker ▓▓▓
-  y=26-29  ░░░ ZONA ░░░            ← pisarla arranca la pelea
-  y=23-25  sala
-  y=20-21  puerta angosta
-  y=4-19   pasillo: 3 guardias por lado, alfombra en el medio
+  y=31-32  ··· laboratorio ···     ← después de ganarle: la computadora y el servidor 02
+  y=30.45  [ MARTIN ]              ← busto x1,4, metido atrás de la mesa
+  y=28-30  ▓▓▓ mesa de póker ▓▓▓   ← dibujada x1,5; en Colisiones, el tile invisible
+  y=26-27  ░░░ ZONA ░░░            ← pisarla arranca la pelea (charla Antes)
+  y=25     ─ tramo 4 ─
+  y=23     ─ tramo 3 ─             ← sala (x -7..7)
+  y=21     ─ tramo 2 ─             ← puerta angosta (y 20-22)
+  y=19     ─ tramo 1 ─
+  y=4-18   pasillo: 3 guardias por lado al lado de la alfombra (x -2,5 y 3,5)
+  y=4      PC (x -3,5) y enfermera (x 4,5)
   y=3      ascensor (solo baja)
 ```
 
 **Al jefe no se le habla: la pelea la dispara una zona.** El objeto `JefeFinal`
-vive donde está la **hitbox** (5x3 celdas delante de la mesa) y su `Collider2D`
+vive donde está la **hitbox** (5x2 celdas delante de la mesa) y su `Collider2D`
 está en *Is Trigger*. Martín es un hijo de ese objeto, con la posición puesta en
 mundo: la zona y el dibujo están en lugares distintos a propósito.
 
-**Martín está sentado.** Su sprite es un **busto** (de la cintura para arriba) y
-se apoya en y = 30,6, o sea 0,4 celdas metido dentro de la mesa. Para que la mesa
-lo tape en vez de taparse él, su `sortingOrder` es **5**: los NPCs van en 15 y la
-mesa vive en el tilemap `Colisiones`, que dibuja en 10.
+**Martín está sentado.** Su sprite es un **busto** (de la cintura para arriba),
+1,4 veces más grande que un personaje, y se apoya en y = 30,45, metido dentro de
+la mesa. La mesa ya no es la del tilemap: desde el 4-oct es un objeto `Mesa` hijo
+del jefe que dibuja los mismos seis tiles **una vez y media más grandes**
+(`sortingOrder` 12), y en `Colisiones` queda el tile invisible que frena (celdas
+x -2..2, y 28..30, más la fila del asiento). Martín va en 11: detrás de la mesa y
+delante de las paredes (10), así la cabeza agrandada no queda tapada por la pared
+del fondo. Los NPCs van en 15.
 
 > **La zona va en la capa `Default`, no en `Obstacles` como el resto de las
 > interacciones del casino.** No es un descuido. El proyecto tiene *Queries Hit
@@ -68,8 +77,10 @@ entero durante la pelea, así que al volver Unity re-dispara el `OnTriggerEnter2
 con el jugador todavía parado adentro. Es el mismo cuidado que tiene
 `BattleZoneTrigger`; sin eso, la pelea se relanza en bucle.
 
-**El ascensor solo baja.** El último piso no tiene enfermería: sin una salida,
-perder contra el jefe dejaba al jugador encerrado con el equipo debilitado.
+**El ascensor solo baja.** Sin una salida, perder contra el jefe dejaba al
+jugador encerrado con el equipo debilitado. Desde el 4-oct además hay
+**enfermera** (`CasinoNurseInteractable`, la misma de los otros pisos) en la
+esquina de abajo a la derecha, enfrente del PC.
 No hay puertas dibujadas todavía — el arte va sobre las celdas (-1..1, 3).
 
 **Se llega por ARRIBA del ascensor.** En los pisos 1 a 3 las puertas están en la
@@ -102,10 +113,10 @@ pelea contra Julieta reusa **esta misma ruleta** con los otros dos modos
 
 | Gajo | Qué hace | Peso |
 |---|---|---|
-| Ataque | +2 al Ataque | 15 |
-| Poción | cura media barra | 14 |
-| Ataque flojo | −2 al Ataque | 13 |
-| Defensa floja | −2 a la Defensa | 13 |
+| Ataque | +1 al Ataque | 15 |
+| Poción | cura un 35% de la barra | 14 |
+| Ataque flojo | −1 al Ataque | 13 |
+| Defensa floja | −1 a la Defensa | 13 |
 | Cambio de tipo | pasa a ser de UN tipo sorteado | 12 |
 | La casa cobra | le saca 1/8 de los PS máximos | 12 |
 | Turno perdido | pierde el turno | 11 |
@@ -165,14 +176,15 @@ tope, dos jugadores parejos se quedan jugando para siempre.
 Todo desde el Inspector o desde assets, sin recompilar:
 
 - **El equipo del jefe y los niveles**: `Resources/Definitions/Casino/JefeFinalCasino.asset`.
-  Hoy son seis de nivel 26-29 con IA `Elite`, un escalón arriba del guardia VIP
+  Hoy son seis de nivel 24-27 (eran 26-29 hasta el playtest del 4-oct) con IA `Elite`, un escalón arriba del guardia VIP
   (cuatro de nivel 21-23 con `GymLeader`) y todavía por debajo de `FinalBoss`.
 - **Los pesos de la ruleta**: `Resources/Definitions/Casino/RuletaDelJefeFinal.asset`.
   El builder **no la pisa** si ya existe.
 - **Cada cuántos turnos gira** y **cuántas revanchas hay**: en el
   `CasinoJefeFinalNpc` de la escena.
-- **Cuánto mueve cada gajo** (los 2 escalones, el 1/8, la media barra): las
-  constantes de `CasinoRuletaDeCombate`.
+- **Cuánto mueve cada gajo** (1 escalón, el 1/8, el 35% de la barra): las
+  constantes de `CasinoRuletaDeCombate` (`EtapasPorGajo`, `FraccionDeCura`).
+  Hasta el 4-oct eran 2 escalones y media barra: los buffos se sentían demasiado.
 
 ---
 
@@ -230,6 +242,44 @@ fuera del editor parece congelado. Se destraba poniendo
 `Application.runInBackground = true` en la sesión de Play.
 
 ---
+
+## La charla de Reymar de a tramos (playtest del 4-oct)
+
+La charla de `historia.pdf` antes de la pelea eran 94 cajas seguidas. Ahora se
+cuenta mientras el PJ camina hacia la mesa, con cuatro `ZonaDeHistoria` en el
+contenedor `MapaRaiz/CharlaDeReymar` (van aparte de los personajes porque la del
+paso está sobre la alfombra, que es Decorado y no Suelo):
+
+| Zona | Dónde | Qué dice | Pide | Marca |
+|---|---|---|---|---|
+| `ZonaReymar1` | fin del pasillo (y 19) | el laboratorio detrás del vidrio, "¿Reymar?" | — | `Historia_ReymarTramo1` |
+| `ZonaReymar2` | puerta angosta (y 21) | los guantes, el Ameghino, "ahora sí tenemos tiempo" | tramo 1 | `Historia_ReymarTramo2` |
+| `ZonaReymar3` | sala (y 23) | la cicatriz, "participé en tu preparación" | tramo 2 | `Historia_ReymarTramo3` |
+| `ZonaReymar4` | sala (y 25) | los voluntarios, el único caso que funcionó | tramo 3 | `Historia_ReymarTramo4` |
+| zona de la pelea | frente a la mesa | `Casino_Reymar_Antes`: Julieta, el servidor, "tengo que protegerlo" | — | `Historia_ReymarPresentado` |
+
+Ninguna suena si `Historia_ReymarPresentado` ya está (partidas de antes del cambio).
+
+Después de ganarle pasa lo mismo: `Casino_Reymar_Despues` se corta en "Reymar
+camina hasta una computadora", y Reymar manda al PJ atrás de la mesa
+(`mensajeVictoria`). Ahí, frente al vidrio del laboratorio (y 31-32, con un brillo
+celeste que marca el lugar), la `ZonaReymarServidor` cuenta el resto
+(`Casino_Reymar_Servidor`: acceso denegado, el núcleo destruido, SERVIDORES
+RESTANTES: 01) y marca `Historia_ReymarServidor`.
+
+---
+
+## El busto de Reymar pegado a la mesa (playtest del 5-oct)
+
+"El cuerpo de Reymar no debe estar separado de la mesa." Las celdas de la mesa
+llegan a y = 31, pero los tiles de arriba tienen 17 filas transparentes: el borde
+que **se ve** está en y ≈ 30,2. Con la base del busto en 30,45 se veía piso entre
+el cuerpo y la mesa. Ahora apoya en **29,85** (`CasinoPisoFinalBuilder.ApoyoDeMartin`):
+la mesa le tapa 0,35. En la cueva pasa lo mismo con su mesa: -2,85 (era -2,4).
+Las dos escenas se corrigieron en el YAML, sin rearmar los pisos.
+
+Su pelea ahora es en el fondo **Campeon** (era un rojo liso), y las de los guardias
+del pasillo en **BaseVillano** (ver `Playtest_5_Oct_2026.md`).
 
 ## Lo que falta (equipo)
 

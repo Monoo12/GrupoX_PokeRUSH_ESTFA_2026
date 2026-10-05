@@ -60,6 +60,10 @@ public class Prize
     [Tooltip("Pisa el texto del cartel. Vacio = se arma solo con nombre y cantidad.")]
     [TextArea(2, 3)] public string customMessage = "";
 
+    // Copia superficial: la usa VariedadDeLasRuletas para cambiar la especie de
+    // un gajo sin tocar la tabla (que es un asset compartido).
+    public Prize Copiar() => (Prize)MemberwiseClone();
+
     // "¡Has obtenido una Hiperpoción!" / "¡Has obtenido 3 Poké Balls!"
     public string BuildMessage()
     {
@@ -206,6 +210,11 @@ public class PrizeWheelController : MenuScreen
         _enJuego = pedido != null && pedido.Prizes != null && pedido.Prizes.Length > 0
             ? pedido.Prizes
             : prizes;
+
+        // Cada gajo de Pokemon sortea su especie de un pozo de su rareza, sin
+        // repetir las que el jugador ya tiene (ver VariedadDeLasRuletas).
+        _enJuego = VariedadDeLasRuletas.Preparar(_enJuego, Player,
+            nombre => DefinitionRepository.Instance.GetPoken(nombre), new System.Random());
 
         _recompensaUnica = pedido != null && pedido.RecompensaUnica;
         _entregar = pedido != null ? pedido.Entregar : null;

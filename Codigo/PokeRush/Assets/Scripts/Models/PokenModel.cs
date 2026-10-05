@@ -12,6 +12,12 @@ public class PokenModel
     // agrega nada.
     public static MoveDefinition DefaultMove;
 
+    // Ataque ESPECIAL de respaldo por tipo para una especie que a su nivel no
+    // aprende ninguno (ver AsegurarUnAtaqueEspecial): Ascuas para Fuego,
+    // Pistola Agua para Agua... Lo inyecta GameManager (AtaquesEspecialesDeRespaldo);
+    // sin inyectar, solo se usa lo que trae el learnset de la especie.
+    public static System.Func<PokenType, MoveDefinition> EspecialDeRespaldo;
+
     // RNG propio para generar IVs sin depender de UnityEngine (clase pura).
     private static readonly System.Random IvRandom = new System.Random();
 
@@ -80,6 +86,7 @@ public class PokenModel
         Moves = new List<MoveModel>();
         LearnInitialMoves();
         AsegurarUnAtaque();
+        AsegurarUnAtaqueEspecial();
         RecalculateStats();
         CurrentHP = MaxHP;
     }
@@ -97,6 +104,7 @@ public class PokenModel
             {
                 if (entry == null || entry.move == null || entry.level > Level) continue;
                 if (entry.move.implementation == MoveImplementation.NotImplemented) continue;
+                if (MovimientosRetirados.EstaRetirado(entry.move)) continue;
                 if (learnable.Exists(e => e.move == entry.move)) continue;
                 learnable.Add(entry);
             }
@@ -113,6 +121,7 @@ public class PokenModel
             foreach (MoveDefinition moveDef in Definition.moves)
             {
                 if (moveDef == null || moveDef.implementation == MoveImplementation.NotImplemented) continue;
+                if (MovimientosRetirados.EstaRetirado(moveDef)) continue;
                 Moves.Add(new MoveModel(moveDef));
                 if (Moves.Count >= 4) break;
             }
@@ -124,7 +133,12 @@ public class PokenModel
     // Un movimiento que sirve para pegar: hace daño y esta implementado.
     public static bool SirveParaPegar(MoveDefinition move)
         => move != null && move.implementation != MoveImplementation.NotImplemented
-           && move.power > 0 && move.attackType != AttackType.Status;
+           && move.power > 0 && move.attackType != AttackType.Status
+           && !MovimientosRetirados.EstaRetirado(move);
+
+    // Un ataque especial que sirve para pegar.
+    public static bool EsAtaqueEspecial(MoveDefinition move)
+        => SirveParaPegar(move) && move.attackType == AttackType.Special;
 
     // Todo Pokemon tiene que poder pegar. Con learnset, "los ultimos 4" pueden
     // ser todos de estado (Togepi a nivel 15), y hay especies que por nivel no
@@ -188,6 +202,116 @@ public class PokenModel
         return SirveParaPegar(DefaultMove) ? DefaultMove : null;
     }
 
+    // ---------- que tenga algun ataque especial ----------
+
+    // Todo Pokemon tiene al menos un ataque ESPECIAL (playtest del 5-oct).
+    // Primero el especial mas nuevo que su learnset ya le deja conocer; si no
+    // tiene ninguno a este nivel, uno basico de su tipo (EspecialDeRespaldo:
+    // Ascuas, Pistola Agua, Impactrueno...).
+    //
+    // Con lugar lo suma. Si ya sabe cuatro, reemplaza al que menos rinde (uno
+    // de estado vale como potencia 30), pero nunca a su ataque fisico mas
+    // fuerte: tiene que seguir pegando de las dos maneras.
+    //
+    // Lo llama el constructor (asi vale tambien para los rivales) y SaveService
+    // al cargar una partida de antes de esta regla.
+    public void AsegurarUnAtaqueEspecial()
+    {
+        if (Definition == null) return;
+        if (Moves.Exists(m => m != null && EsAtaqueEspecial(m.Definition))) return;
+
+        MoveDefinition especial = EspecialDelLearnset();
+        if (especial == null && EspecialDeRespaldo != null)
+        {
+            especial = EspecialDeRespaldo(Definition.type);
+            if (!EsAtaqueEspecial(especial) && Definition.type2 != PokenType.None)
+                especial = EspecialDeRespaldo(Definition.type2);
+            if (!EsAtaqueEspecial(especial)) especial = EspecialDeRespaldo(PokenType.Normal);
+        }
+        if (!EsAtaqueEspecial(especial) || KnowsMove(especial)) return;
+
+        if (Moves.Count < 4)
+        {
+            Moves.Add(new MoveModel(especial));
+            return;
+        }
+        Moves[LugarParaElEspecial()] = new MoveModel(especial);
+    }
+
+    // El especial mas nuevo del learnset que ya puede conocer.
+    private MoveDefinition EspecialDelLearnset()
+    {
+        if (Definition.learnset == null) return null;
+        MoveDefinition mejor = null;
+        int nivelMejor = -1;
+        foreach (LearnsetEntry entry in Definition.learnset)
+        {
+            if (entry == null || !EsAtaqueEspecial(entry.move) || entry.level > Level) continue;
+            if (entry.level > nivelMejor) { mejor = entry.move; nivelMejor = entry.level; }
+        }
+        return mejor;
+    }
+
+    private int LugarParaElEspecial()
+    {
+        int fisicoProtegido = -1, potenciaProtegida = -1;
+        for (int i = 0; i < Moves.Count; i++)
+        {
+            MoveDefinition d = Moves[i]?.Definition;
+            if (SirveParaPegar(d) && d.attackType == AttackType.Physical && d.power > potenciaProtegida)
+            {
+                fisicoProtegido = i;
+                potenciaProtegida = d.power;
+            }
+        }
+
+        int lugar = 0;
+        int peor = int.MaxValue;
+        for (int i = 0; i < Moves.Count; i++)
+        {
+            if (i == fisicoProtegido) continue;
+            MoveDefinition d = Moves[i]?.Definition;
+            int rinde = d == null || d.implementation == MoveImplementation.NotImplemented ? -1
+                : d.attackType == AttackType.Status ? 30 : d.power;
+            if (rinde < peor) { peor = rinde; lugar = i; }
+        }
+        return lugar;
+    }
+
+    // ---------- movimientos retirados (Excavar) ----------
+
+    // Saca los movimientos que el juego ya no usa (ver MovimientosRetirados) y
+    // le devuelve con que pegar. Para las partidas guardadas de antes: lo
+    // llama SaveService al cargar. Devuelve si saco alguno.
+    public bool QuitarMovimientosRetirados()
+    {
+        int antes = Moves.Count;
+        Moves.RemoveAll(m => m != null && MovimientosRetirados.EstaRetirado(m.Definition));
+        if (Moves.Count == antes) return false;
+
+        // El lugar que quedo se llena con lo mas nuevo que su learnset le deja
+        // conocer y todavia no sabe.
+        if (Definition != null && Definition.learnset != null)
+        {
+            var candidatos = new List<LearnsetEntry>();
+            foreach (LearnsetEntry entry in Definition.learnset)
+            {
+                if (entry == null || entry.move == null || entry.level > Level) continue;
+                if (entry.move.implementation == MoveImplementation.NotImplemented) continue;
+                if (MovimientosRetirados.EstaRetirado(entry.move) || KnowsMove(entry.move)) continue;
+                candidatos.Add(entry);
+            }
+            candidatos.Sort((a, b) => b.level.CompareTo(a.level));
+            foreach (LearnsetEntry entry in candidatos)
+            {
+                if (Moves.Count >= 4) break;
+                if (!KnowsMove(entry.move)) Moves.Add(new MoveModel(entry.move));
+            }
+        }
+        AsegurarUnAtaque();
+        return true;
+    }
+
     // Movimientos del learnset que se aprenden exactamente al nivel dado
     // (para el aviso de "quiere aprender X" al subir de nivel).
     public List<MoveDefinition> MovesLearnedAt(int level)
@@ -197,6 +321,7 @@ public class PokenModel
         foreach (LearnsetEntry entry in Definition.learnset)
         {
             if (entry == null || entry.move == null || entry.level != level) continue;
+            if (MovimientosRetirados.EstaRetirado(entry.move)) continue;
             if (!result.Contains(entry.move)) result.Add(entry.move);
         }
         return result;
@@ -219,11 +344,11 @@ public class PokenModel
     public bool KnowsMove(MoveDefinition move)
         => Moves.Exists(m => m.Definition == move);
 
-    // Intenta aprender un movimiento. Devuelve false si ya conoce 4
-    // (el flujo de reemplazo llega con la UI definitiva).
+    // Intenta aprender un movimiento. Devuelve false si ya conoce 4: en el
+    // combate el jugador decide cual olvida (BattleEventKind.QuiereAprender).
     public bool TryLearnMove(MoveDefinition move)
     {
-        if (move == null || KnowsMove(move)) return false;
+        if (move == null || KnowsMove(move) || MovimientosRetirados.EstaRetirado(move)) return false;
         if (Moves.Count >= 4) return false;
         Moves.Add(new MoveModel(move));
         return true;
@@ -234,7 +359,7 @@ public class PokenModel
     // Lo usa el tutor de MTs de Nestor.
     public bool ReplaceMove(int index, MoveDefinition move)
     {
-        if (move == null || KnowsMove(move)) return false;
+        if (move == null || KnowsMove(move) || MovimientosRetirados.EstaRetirado(move)) return false;
         if (index < 0 || index >= Moves.Count) return false;
         Moves[index] = new MoveModel(move);
         return true;

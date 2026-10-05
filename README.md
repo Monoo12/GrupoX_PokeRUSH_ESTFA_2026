@@ -99,7 +99,7 @@ pantalla de partidas).
 
 Paso a paso en **[BUILD.md](BUILD.md)**. Resumen: abrir el proyecto y elegir
 **PokeRush → Release → Generar build de Windows**. La build queda en
-`Codigo/PokeRush/Builds/PokeRush_1.0.0/PokeRush.exe`.
+`Codigo/PokeRush/Builds/PokeRush_1.2.0/PokeRush.exe`.
 
 ---
 
@@ -185,7 +185,7 @@ y los créditos del juego. Es material de fan game de uso académico, sin fines 
 
 | | |
 |---|---|
-| Juego | **1.0.0** |
+| Juego | **1.2.0** |
 | Unity | 6000.4.2f1 |
 | URP | 17.4.0 |
 | Input System | 1.19.0 |
@@ -247,6 +247,12 @@ sacar el aviso: **PokeRush → Release → Armar indice de definiciones**.
 `Documentacion/Documentacion del Codigo/` tiene un `.md` por sistema: combate e IA,
 menús, HUD, casino, Quarcho Cueva, historia en los niveles, tutorial, jefe final,
 **audio** (`Audio_Del_Juego.md`) y cómo armar mapas, enemigos y diálogos.
+
+Lo que cambió en la **1.1.0** (el playtest del 4-oct) está resumido en
+`Playtest_4_Oct_2026.md`, y lo de la **1.2.0** (el playtest del 5-oct: el
+Entrenamiento intenso del chip, el aviso del rival, aprender movimientos al subir
+de nivel, los fondos de combate, la tienda del piso 3...) en
+`Playtest_5_Oct_2026.md`, con el documento de cada sistema donde está el detalle.
 
 ---
 

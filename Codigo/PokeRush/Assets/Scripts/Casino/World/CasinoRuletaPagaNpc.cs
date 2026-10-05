@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Un NPC del casino que vende tiros de la ruleta de premios. En el piso 3 es el
-// empresario: por 'precio' monedas (200 de arranque) se gira una vez su ruleta,
+// empresario: por 'precio' monedas (300 de arranque) se gira una vez su ruleta,
 // que siempre da un Pokemon. Se puede tirar todas las veces que se quiera
 // mientras alcance la plata.
 //
@@ -19,7 +19,7 @@ public class CasinoRuletaPagaNpc : MonoBehaviour, IInteractable
     [Header("La ruleta")]
     [SerializeField] private CasinoPrizeTable ruleta;
     [Tooltip("Lo que cuesta cada tiro.")]
-    [Min(0)] [SerializeField] private int precio = 200;
+    [Min(0)] [SerializeField] private int precio = 300;
 
     [Header("Quien habla (vacio = los de 'charla')")]
     [SerializeField] private string nombre = "";

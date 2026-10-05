@@ -73,6 +73,9 @@ public class DefinitionRepository
     public PokenDefinition GetPoken(string name)
     {
         if (string.IsNullOrEmpty(name)) return null;
+        // Las ruletas y el ataque especial de respaldo piden por nombre fuera
+        // del GameManager (smoke tests de editor): sin esto, _pokens es null.
+        if (!_loaded) LoadAll();
         if (_pokens.TryGetValue(name, out PokenDefinition p)) return p;
         if (_rutaDePoken != null && _rutaDePoken.TryGetValue(name, out string ruta))
         {
@@ -93,6 +96,7 @@ public class DefinitionRepository
     public MoveDefinition GetMove(string name)
     {
         if (string.IsNullOrEmpty(name)) return null;
+        if (!_loaded) LoadAll();
         if (_moves.TryGetValue(name, out MoveDefinition m)) return m;
         if (_rutaDeMove != null && _rutaDeMove.TryGetValue(name, out string ruta))
         {

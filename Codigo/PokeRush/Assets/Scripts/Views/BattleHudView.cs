@@ -33,6 +33,16 @@ public class BattleHudView : MonoBehaviour
     [SerializeField] private Image enemyHpFill;
     [SerializeField] private Image enemyStatusIcon;
 
+    // Las Poke Balls chiquitas debajo del databox rival, como en la saga:
+    // cuantos Pokemon trae el entrenador y cuantos le quedan (playtest del
+    // 5-oct). Las pone PokeRush > Combate > Agregar las Poke Balls del rival.
+    [Header("Equipo del rival")]
+    [Tooltip("Una por lugar del equipo, de izquierda a derecha. Las que sobran se apagan.")]
+    [SerializeField] private Image[] enemyTeamBalls = new Image[0];
+    [SerializeField] private Sprite teamBallHealthy;
+    [SerializeField] private Sprite teamBallStatus;
+    [SerializeField] private Sprite teamBallFainted;
+
     [Header("Mensajes")]
     [SerializeField] private Text messageText;
 
@@ -70,6 +80,11 @@ public class BattleHudView : MonoBehaviour
     [SerializeField] private Text[] moveNameTexts = new Text[4];
     [SerializeField] private Text ppText;
     [SerializeField] private Image moveTypeIcon;
+    [Tooltip("Panel de al lado: categoria (fisico/especial/estado), potencia y " +
+             "precision. Lo arma PokeRush > Combate > Agregar panel de potencia y precision.")]
+    [SerializeField] private RawImage moveCategoryIcon;
+    [SerializeField] private Text movePowerText;
+    [SerializeField] private Text moveAccuracyText;
     [SerializeField] private Button fightBackButton;
 
     [Header("Menu de equipo")]
@@ -249,9 +264,31 @@ public class BattleHudView : MonoBehaviour
         if (enemyNameText != null) enemyNameText.text = enemy.Definition.pokenName;
         if (enemyLevelText != null) enemyLevelText.text = $"Nv. {enemy.Level}";
         UpdateStatusIcon(enemyStatusIcon, enemy);
+        UpdateEnemyTeamBalls(battleModel.Enemy);
 
         ApplyHpVisuals(player, enemy);
         ApplyShieldVisuals(battleModel);
+    }
+
+    // Una bola por Pokemon del rival: roja si sigue en pie, rosada si tiene
+    // un estado, gris si se debilito. Contra un salvaje no hay: es uno solo.
+    private void UpdateEnemyTeamBalls(EnemyModel rival)
+    {
+        if (enemyTeamBalls == null) return;
+        bool entrenador = rival != null && !rival.IsWild;
+        for (int i = 0; i < enemyTeamBalls.Length; i++)
+        {
+            Image bola = enemyTeamBalls[i];
+            if (bola == null) continue;
+            PokenModel poken = entrenador && i < rival.Team.Count ? rival.Team[i] : null;
+            bola.gameObject.SetActive(poken != null);
+            if (poken == null) continue;
+
+            Sprite sprite = poken.IsFainted ? teamBallFainted
+                : poken.CurrentStatus != StatusEffect.None ? teamBallStatus
+                : teamBallHealthy;
+            if (sprite != null) bola.sprite = sprite;
+        }
     }
 
     // Escudo del nucleo. Se dibuja como barra y no como mensaje porque el
@@ -567,11 +604,30 @@ public class BattleHudView : MonoBehaviour
 
         MoveModel move = moves[moveIndex];
         if (ppText != null) ppText.text = $"PP {move.CurrentPP}/{move.Definition.maxPP}";
+        MostrarDatosDelMovimiento(move.Definition);
         if (moveTypeIcon != null)
         {
             Sprite icon = SpriteForType(typeIconsByType, move.Definition.type);
             moveTypeIcon.sprite = icon;
             moveTypeIcon.enabled = icon != null;
+        }
+    }
+
+    // Potencia y precision como en la saga: "---" cuando no aplica (los de
+    // estado no tienen potencia; los que nunca fallan no tienen precision).
+    // La categoria sale de Graphics/UI/category.png: fisico, especial y estado,
+    // una fila cada uno.
+    private void MostrarDatosDelMovimiento(MoveDefinition def)
+    {
+        if (def == null) return;
+        if (movePowerText != null)
+            movePowerText.text = def.power > 0 && def.attackType != AttackType.Status ? $"POT {def.power}" : "POT ---";
+        if (moveAccuracyText != null)
+            moveAccuracyText.text = def.alwaysHits || def.accuracy <= 0 ? "PRE ---" : $"PRE {def.accuracy}";
+        if (moveCategoryIcon != null)
+        {
+            int fila = (int)def.attackType;
+            moveCategoryIcon.uvRect = new Rect(0f, 1f - (fila + 1) / 3f, 1f, 1f / 3f);
         }
     }
 
