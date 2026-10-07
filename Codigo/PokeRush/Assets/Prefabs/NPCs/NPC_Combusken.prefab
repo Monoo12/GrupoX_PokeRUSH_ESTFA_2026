@@ -183,11 +183,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5bf834dc28e8044596f95129f6eb580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LiberarPokenTrigger
-  poken: {fileID: 11400000, guid: 26409456b46d3e547bd828ea343f0b42, type: 2}
-  nivel: 20
-  nombreQueHabla: Combusken
+  poken: {fileID: 11400000, guid: c3af4ab6d86327a47ae17fca2518cc63, type: 2}
+  nivel: 44
+  nombreQueHabla: Blaziken
   retrato: {fileID: 0}
-  pregunta: 'Combusken esta encerrado y te mira desde la jaula.
+  pregunta: 'Blaziken esta encerrado y te mira desde la jaula.
 
     Lo liberas?'
   opcionSi: Si
@@ -195,6 +195,7 @@ MonoBehaviour:
   mensajeSi: '{0} se solto y te sigue. Se unio al equipo!'
   mensajeNo: Lo dejaste donde estaba.
   mensajeEquipoLleno: Tu equipo ya esta completo. No podes llevarlo.
+  mensajeAlPc: "{0} se solt\xF3. Tu equipo est\xE1 completo: lo mandaste al PC ({1})."
   mensajeYaLiberado: Ya no hay nadie aca.
   tambienPorTrigger: 1
   radioDeteccion: 1.2

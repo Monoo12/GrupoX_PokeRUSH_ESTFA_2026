@@ -617,6 +617,27 @@ ataques que sí aprenden por MT, tutor o huevo (o uno básico de su tipo si no h
 importador al generar y, sobre lo ya importado, `PokeRush > Combate > Dar ataques a las
 especies que no tienen`.
 
+### Todo Pokémon pega con sus tipos (rebalanceo del 6-oct)
+
+`PokenModel.AsegurarAtaquesDeSusTipos()` corre en el constructor entre
+`AsegurarUnAtaque` y `AsegurarUnAtaqueEspecial`. Desde que el juego entrega formas finales a
+nivel alto, "los 4 de mayor nivel" dejaban sets que no representan a la especie: Blaziken a Nv
+40 sin nada de Lucha, Greninja sin nada Siniestro, Mew con un solo ataque (Roca), Delphox
+pegando Fuego con Giro Fuego (35). Por cada uno de sus tipos:
+
+- si no sabe ningún ataque de ese tipo, aprende el que más pega (potencia × precisión) entre
+  los que su learnset ya le deja; si a su nivel no hay ninguno, el primero que aprendería;
+- si sabe uno pero el learnset le deja otro que pega al menos el doble
+  (`MejoraQueValeElCambio` = 2), lo cambia en el mismo lugar (Giro Fuego 35 → Llama
+  Embrujada 75; no Psicorrayo 65 → Premonición 120, que ya pega bien: con 1,5 el Silvally de
+  Néstor pasaba a Multiataque, con 1,75 su Delphox a Premonición, y Néstor pegaba bastante
+  más).
+
+Con cuatro movimientos va donde estaba el que menos rinde, cuidando el físico más fuerte, el
+único ataque de su otro tipo y el único especial (`LugarParaReemplazar`, que también usa la
+regla del especial de abajo). **Solo al crearse**: `SaveService` no la llama, así que un
+Pokémon guardado conserva lo que eligió el jugador con el tutor.
+
 ### Todo Pokémon tiene un ataque especial (playtest del 5-oct)
 
 `PokenModel.AsegurarUnAtaqueEspecial()` corre después de `AsegurarUnAtaque` (en el constructor,

@@ -92,13 +92,15 @@ public class EntrenamientoDelChip : MonoBehaviour
 
     // ---------- los rivales ----------
 
-    // Evolucionados conocidos, de poder parejo: el nivel hace la dificultad.
+    // Formas finales conocidas, de poder parejo: el nivel hace la dificultad.
+    // (Desde el 6-oct-2026 sin formas intermedias: Primeape, Magneton, Rhydon,
+    // Electabuzz, Magmar, Dusclops y Bisharp dejaron lugar a otros finales.)
     public static readonly string[] Comunes =
     {
-        "Raichu", "Primeape", "Machamp", "Magneton", "Rhydon", "Electabuzz", "Magmar", "Pinsir",
+        "Raichu", "Hawlucha", "Machamp", "Vikavolt", "Mudsdale", "Scolipede", "Drednaw", "Pinsir",
         "Heracross", "Houndoom", "Donphan", "Breloom", "Flygon", "Altaria", "Vaporeon", "Jolteon",
-        "Flareon", "Espeon", "Steelix", "Skarmory", "Banette", "Dusclops", "Glalie", "Luxray",
-        "Roserade", "Leafeon", "Glaceon", "Froslass", "Bisharp", "Krookodile", "Lycanroc", "Noivern",
+        "Flareon", "Espeon", "Steelix", "Skarmory", "Banette", "Cofagrigus", "Glalie", "Luxray",
+        "Roserade", "Leafeon", "Glaceon", "Froslass", "Absol", "Krookodile", "Lycanroc", "Noivern",
         "Talonflame", "Toxtricity", "Corviknight", "Gliscor", "Yanmega"
     };
 

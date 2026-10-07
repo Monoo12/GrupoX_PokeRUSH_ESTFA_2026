@@ -73,12 +73,12 @@ public static class PeleaJulietaBuilder
     // verdad manda el equipo que viene de la partida.
     private static readonly (string especie, int nivel)[] EquipoDePrueba =
     {
-        ("0448_Lucario", 36),
-        ("0257_Blaziken", 35),
-        ("0445_Garchomp", 36),
-        ("0282_Gardevoir", 35),
-        ("0094_Gengar", 35),
-        ("0550_Basculin", 34),
+        ("0448_Lucario", 50),
+        ("0257_Blaziken", 48),
+        ("0445_Garchomp", 50),
+        ("0282_Gardevoir", 49),
+        ("0094_Gengar", 49),
+        ("0902_Basculegion", 47),
     };
 
     // ------------------------------------------------------------ la sala de prueba

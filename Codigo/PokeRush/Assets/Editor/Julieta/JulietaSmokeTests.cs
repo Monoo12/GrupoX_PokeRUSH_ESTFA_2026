@@ -22,26 +22,38 @@ namespace PokeRush.EditorTools
             _passed = 0;
             _failed = 0;
 
-            TestLaRuletaDelCasinoNoCambio();
-            TestRuletaAFavorDelJugador();
-            TestRuletaAFavorDelRival();
-            TestElMordiscoNoDebilitaAlRival();
-            TestGuionAlEmpezarYUnaVez();
-            TestGuionFiltraPorFase();
-            TestGuionAlcanzaConUnaCondicion();
-            TestGuionCuentaTurnosDesdeLaFase();
-            TestAdelantarLaFase();
-            TestVidaDelPJ();
-            TestControladoEnElCampo();
-            TestControladoFueraDeOrden();
-            TestElegirMovimientoYVictima();
-            TestGolpeAlPJEscalaConLaPotencia();
-            TestPrediccionConOtroLector();
-            TestAssetsDeLaPelea();
-            TestGuionDelProyectoLlegaAlFinal();
-            TestGuionDelProyectoRecorrePorTurnos();
-            TestElCierreDelJuego();
-            TestLaArena();
+            // Igual que PokeRushSmokeTests: GameManager (o el simulador de
+            // balance) deja puesto el especial de respaldo y el proyecto no
+            // recarga el dominio; sin esto, "Cansado" ganaria un especial con PP.
+            var respaldoAntes = PokenModel.EspecialDeRespaldo;
+            PokenModel.EspecialDeRespaldo = null;
+            try
+            {
+                TestLaRuletaDelCasinoNoCambio();
+                TestRuletaAFavorDelJugador();
+                TestRuletaAFavorDelRival();
+                TestElMordiscoNoDebilitaAlRival();
+                TestGuionAlEmpezarYUnaVez();
+                TestGuionFiltraPorFase();
+                TestGuionAlcanzaConUnaCondicion();
+                TestGuionCuentaTurnosDesdeLaFase();
+                TestAdelantarLaFase();
+                TestVidaDelPJ();
+                TestControladoEnElCampo();
+                TestControladoFueraDeOrden();
+                TestElegirMovimientoYVictima();
+                TestGolpeAlPJEscalaConLaPotencia();
+                TestPrediccionConOtroLector();
+                TestAssetsDeLaPelea();
+                TestGuionDelProyectoLlegaAlFinal();
+                TestGuionDelProyectoRecorrePorTurnos();
+                TestElCierreDelJuego();
+                TestLaArena();
+            }
+            finally
+            {
+                PokenModel.EspecialDeRespaldo = respaldoAntes;
+            }
 
             if (_failed == 0)
                 Debug.Log($"[JulietaSmokeTests] TODOS OK: {_passed} checks pasaron.");

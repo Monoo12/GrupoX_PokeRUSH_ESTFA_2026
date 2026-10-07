@@ -133,22 +133,23 @@ public static class QuarchoCuevaAssets
     // ---------- las ruletas de Martin ----------
 
     // Siempre un Pokemon, un escalon arriba de la del empresario del piso 3
-    // (Nv 28-30: se gira despues del casino). El icono marca la rareza, como
-    // en el resto de las ruletas:
+    // (Nv 50-52: se gira despues del casino, para llegar a Julieta). El icono
+    // marca la rareza, como en el resto de las ruletas (todas formas finales,
+    // ver VariedadDeLasRuletas):
     //   Poke Ball  (comun):     4 x 15% = 60%
     //   Great Ball (bueno):     2 x 12% = 24%
     //   Ultra Ball (raro):      1 x 12% = 12%
     //   Master Ball (muy raro): 1 x  4% =  4%
     public static CasinoPrizeTable RuletaDePokemon() => Tabla("RuletaDeMartin_Pokemon", () => new[]
     {
-        Pokemon("0425_Drifloon", 28, 15, "icon_pokeball"),
-        Pokemon("0447_Riolu", 29, 12, "icon_greatball"),
-        Pokemon("0551_Sandile", 28, 15, "icon_pokeball"),
-        Pokemon("0782_Jangmo-o", 30, 12, "icon_ultraball"),
-        Pokemon("0607_Litwick", 28, 15, "icon_pokeball"),
-        Pokemon("0704_Goomy", 29, 12, "icon_greatball"),
-        Pokemon("0661_Fletchling", 28, 15, "icon_pokeball"),
-        Pokemon("0885_Dreepy", 30, 4, "icon_masterball")
+        Pokemon("0425_Drifloon", 50, 15, "icon_pokeball"),
+        Pokemon("0447_Riolu", 51, 12, "icon_greatball"),
+        Pokemon("0551_Sandile", 50, 15, "icon_pokeball"),
+        Pokemon("0782_Jangmo-o", 52, 12, "icon_ultraball"),
+        Pokemon("0607_Litwick", 50, 15, "icon_pokeball"),
+        Pokemon("0704_Goomy", 51, 12, "icon_greatball"),
+        Pokemon("0661_Fletchling", 50, 15, "icon_pokeball"),
+        Pokemon("0885_Dreepy", 52, 4, "icon_masterball")
     });
 
     // Curativos y plata: 72% objetos, 28% plata.

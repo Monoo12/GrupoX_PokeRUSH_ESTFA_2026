@@ -20,10 +20,11 @@ public class GameManager : MonoBehaviour
     // Inspector no deja elegir algo que no exista, y si alguien borra el asset
     // el campo queda visiblemente en None.
     //
-    // Eleccion del equipo (por si se retoca): Gastly es Fantasma/Veneno, INMUNE
-    // a Normal, o sea que los STAB de Raticate y Porygon-Z le hacen cero.
-    // Basculin aguanta a Braixen y Combusken le pega a Melmetal y Porygon-Z
-    // con Lucha. Uno por amenaza.
+    // Es el equipo DEMO de cada escena (entrar por Play sin pasar por el menu);
+    // en el juego de verdad manda el inicial de la creacion de personaje. Desde
+    // el rebalanceo del 6-oct-2026 cada escena trae uno a la altura de su etapa
+    // (Gengar Nv 42 en el Data Center, 43-47 en el casino, seis de Nv 47-50 en
+    // la arena de Julieta): con el Gastly Nv 20 de antes no se le ganaba a nadie.
     [Tooltip("Arrastra los PokenDefinition. El orden define el equipo.")]
     [SerializeField] private PokenDefinition[] equipoInicial;
     [Tooltip("Nivel de cada Poken, en el mismo orden. Si faltan, se usa 5.")]

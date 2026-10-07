@@ -33964,8 +33964,8 @@ MonoBehaviour:
   mensajeExito: Las camaras Unifi fueron apadas!
   mensajeYaHecho: Ya apagaste el sistema de rastreo Talentino!
   mensajeSinRecursos: Tu equipo no aguanta la sobrecarga.
-  preguntaAntes: 'Ves en la camara a Nico Cruz chamuyando a Rocio! Aunque tiene otros
-    usos...
+  preguntaAntes: 'Ves a "La directora" introduciendo chips Neura-LINK a Dante! Aunque
+    tiene otros usos...
 
     Cortas la energia?'
   nombreQuePregunta: Panel
@@ -39870,7 +39870,7 @@ PrefabInstance:
     - target: {fileID: 671909558386190906, guid: eb21d233ecff4264faeeaae17857fc33, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 637402350, guid: b8edb7bd65ba7d946ae86e987a6e6993, type: 3}
+      objectReference: {fileID: 251384898, guid: afd63f1823dc8964eb4cf1d835822920, type: 3}
     - target: {fileID: 3294179901440863031, guid: eb21d233ecff4264faeeaae17857fc33, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.28
@@ -40438,13 +40438,41 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.01
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.28
+      value: -0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4785437459957203028, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078210807171842336, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1288741643, guid: 42704e7ec0eb97f49a789600afdca100, type: 3}
     - target: {fileID: 8821280432013973669, guid: 840e24a6af4008f42a864a519da63cf3, type: 3}
       propertyPath: m_Name
       value: NPC_Combusken
@@ -42565,8 +42593,8 @@ MonoBehaviour:
   musicSource: {fileID: 1705495627}
   sfxSource: {fileID: 1705495626}
   equipoInicial:
-  - {fileID: 11400000, guid: 8d957a971298af649af76aa768dd2958, type: 2}
-  nivelesIniciales: 14000000
+  - {fileID: 11400000, guid: 88540799f22a50943b266132505a5e35, type: 2}
+  nivelesIniciales: 2a000000
   dineroInicial: 100
 --- !u!4 &1705495625
 Transform:

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 504422a14b133c34d8babd69bdc394bb, type: 3}
   m_Name: RivalDelTutorial
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
-  characterName: "COMPA\xD1ERA"
+  characterName: Rebeca
   portrait: {fileID: 0}
   worldFrontSprite: {fileID: 0}
   worldBackSprite: {fileID: 0}
@@ -23,8 +23,8 @@ MonoBehaviour:
   grantsFlag: 0
   canBattleLater: 0
   pokenTeam:
-  - species: {fileID: 11400000, guid: 633e41c5f5326594e9ef2dbb95d7aa34, type: 2}
-    level: 10
+  - species: {fileID: 11400000, guid: 6f1e62902db612945abea49accf38710, type: 2}
+    level: 38
   battleFrontSprite: {fileID: 21300000, guid: 1575ff0858080f14b8a6a30f2f005ff0, type: 3}
   battleBackSprite: {fileID: 0}
   battleMusic: {fileID: 0}

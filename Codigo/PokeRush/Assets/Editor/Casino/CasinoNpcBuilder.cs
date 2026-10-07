@@ -126,6 +126,9 @@ public static class CasinoNpcBuilder
 
     // El Pokemon de Tacconi, que pide el ascensor del piso 3.
     private const string EspecieDeTacconi = "0789_Cosmog";
+    // El Cosmog es un chiste (Salpicadura y Teletransporte) y la llave del
+    // ascensor: no pelea. Va al nivel del piso para no desentonar en el PC.
+    private const int NivelDelCosmog = 45;
 
     // El sprite de Tacconi: la pose de frente de la hoja que paso el equipo
     // (Assets/Tacconi/), recortada y con el fondo sacado. El retrato de la caja
@@ -229,49 +232,55 @@ public static class CasinoNpcBuilder
         System.IO.Directory.CreateDirectory(DialogosFolder);
 
         // ---------- rivales ----------
+        // Rebalanceo del 6-oct-2026: el juego no tiene evolucion y es corto, asi
+        // que todos pelean con formas finales (casi siempre la evolucion de lo
+        // que traian) y a la altura del jugador, que llega al casino con su
+        // inicial a Nv 42-44. Piso 1 Nv 41-43, piso 2 Nv 44-46, piso 3 Nv 47-49;
+        // los guardias un escalon arriba de su piso. Medido con
+        // PokeRush > Balance > Simular la partida (ver Rebalanceo_Oct_2026.md).
         EnemyDefinition guardia = Enemigo("GuardiaAscensor", "Guardia", 300, StoryFlag.Casino_GuardiaVencido,
-            "MATON", "GymLeader", ("0228_Houndour", 18), ("0552_Krokorok", 18), ("0093_Haunter", 19));
+            "MATON", "GymLeader", ("0229_Houndoom", 43), ("0553_Krookodile", 43), ("0094_Gengar", 44));
         EnemyDefinition apostador = Enemigo("ApostadorCasino", "Apostador", 100, StoryFlag.Casino_ApostadorVencido,
-            "JUGON", "Trainer", ("0020_Raticate", 12), ("0064_Kadabra", 12));
+            "JUGON", "Trainer", ("0065_Alakazam", 41), ("0026_Raichu", 41));
         EnemyDefinition malabarista = Enemigo("MalabaristaCasino", "Malabarista", 120, StoryFlag.Casino_MalabaristaVencido,
-            "MALABARISTA", "Trainer", ("0778_Mimikyu", 14), ("0707_Klefki", 14));
+            "MALABARISTA", "Trainer", ("0778_Mimikyu", 42), ("0707_Klefki", 42));
         EnemyDefinition jovenRica = Enemigo("JovenRicaCasino", "Joven rica", 150, StoryFlag.Casino_JovenRicaVencida,
-            "JOVENRICA", "Trainer", ("0175_Togepi", 15), ("0302_Sableye", 16));
+            "JOVENRICA", "Trainer", ("0468_Togekiss", 44), ("0700_Sylveon", 45));
         EnemyDefinition modelo = Enemigo("ModeloCasino", "Modelo", 150, StoryFlag.Casino_ModeloVencida,
-            "MODELO", "Trainer", ("0607_Litwick", 15), ("0353_Shuppet", 16));
+            "MODELO", "Trainer", ("0478_Froslass", 44), ("0350_Milotic", 45));
         EnemyDefinition macarra = Enemigo("MacarraCasino", "Macarra", 180, StoryFlag.Casino_MacarraVencido,
-            "MACARRA", "Trainer", ("0215_Sneasel", 17), ("0551_Sandile", 17));
+            "MACARRA", "Trainer", ("0461_Weavile", 47), ("0553_Krookodile", 48));
         EnemyDefinition guay = Enemigo("GuayCasino", "Guay", 220, StoryFlag.Casino_GuayVencido,
-            "GUAY", "Trainer", ("0207_Gligar", 17), ("0227_Skarmory", 18), ("0359_Absol", 18));
+            "GUAY", "Trainer", ("0472_Gliscor", 47), ("0823_Corviknight", 48), ("0359_Absol", 48));
         EnemyDefinition motorista = Enemigo("MotoristaCasino", "Motorista", 110, StoryFlag.Casino_MotoristaVencido,
-            "MOTORISTA", "Trainer", ("0240_Magby", 13), ("0111_Rhyhorn", 14));
+            "MOTORISTA", "Trainer", ("0467_Magmortar", 42), ("0464_Rhyperior", 43));
         EnemyDefinition pokemaniaco = Enemigo("PokemaniacoCasino", "Pokemaníaco", 120, StoryFlag.Casino_PokemaniacoVencido,
-            "POKEMANIACO", "Trainer", ("0239_Elekid", 13), ("0304_Aron", 14));
+            "POKEMANIACO", "Trainer", ("0466_Electivire", 42), ("0306_Aggron", 43));
         EnemyDefinition medium = Enemigo("MediumCasino", "Médium", 160, StoryFlag.Casino_MediumVencido,
-            "MEDIUM", "Trainer", ("0355_Duskull", 16), ("0092_Gastly", 16));
+            "MEDIUM", "Trainer", ("0477_Dusknoir", 44), ("0858_Hatterene", 45));
         EnemyDefinition ladron = Enemigo("LadronCasino", "Ladrón", 170, StoryFlag.Casino_LadronVencido,
-            "LADRON", "Trainer", ("0624_Pawniard", 16), ("0303_Mawile", 17));
+            "LADRON", "Trainer", ("0908_Meowscarada", 45), ("0903_Sneasler", 45));
         EnemyDefinition veterano = Enemigo("VeteranoCasino", "Veterano", 200, StoryFlag.Casino_VeteranoVencido,
-            "VETERANO", "Trainer", ("0232_Donphan", 18), ("0305_Lairon", 18));
+            "VETERANO", "Trainer", ("0232_Donphan", 48), ("0208_Steelix", 49));
         EnemyDefinition karateka = Enemigo("KaratekaCasino", "Karateka", 210, StoryFlag.Casino_KaratekaVencido,
-            "KARATEKA", "Trainer", ("0057_Primeape", 18), ("0447_Riolu", 18));
+            "KARATEKA", "Trainer", ("0979_Annihilape", 48), ("0448_Lucario", 48));
 
         // Piso 2. El guardia VIP es mas dificil que el del piso 1 (4 Pokemon,
-        // nivel 21-23, IA de lider); el magnate, "algo complicado" (3 Pokemon
-        // de nivel 19-20 cuando el resto del piso anda por el 15-17).
+        // nivel 48-49, IA de lider); el magnate, "algo complicado" (3 Pokemon
+        // de nivel 45-46 cuando el resto del piso anda por el 44-45).
         EnemyDefinition guardiaVip = Enemigo("GuardiaVipCasino", "Guardia VIP", 500, StoryFlag.Casino_GuardiaVipVencido,
-            "ELITEROCKET", "GymLeader", ("0215_Sneasel", 21), ("0093_Haunter", 22), ("0552_Krokorok", 22), ("0082_Magneton", 23));
+            "ELITEROCKET", "GymLeader", ("0461_Weavile", 48), ("0442_Spiritomb", 48), ("0530_Excadrill", 49), ("0462_Magnezone", 49));
         EnemyDefinition magnate = Enemigo("MagnateCasino", "Magnate", 400, StoryFlag.Casino_MagnateVencido,
-            "CABALLERO", "Trainer", ("0281_Kirlia", 19), ("0233_Porygon2", 20), ("0608_Lampent", 20));
+            "CABALLERO", "Trainer", ("0282_Gardevoir", 45), ("0612_Haxorus", 45), ("0609_Chandelure", 46));
         EnemyDefinition tahur = Enemigo("TahurCasino", "Tahúr", 170, StoryFlag.Casino_TahurVencido,
-            "MAXIMO", "Trainer", ("0562_Yamask", 16), ("0679_Honedge", 17));
+            "MAXIMO", "Trainer", ("0563_Cofagrigus", 45), ("0681_Aegislash", 45));
         EnemyDefinition bailarina = Enemigo("BailarinaCasino", "Bailarina", 160, StoryFlag.Casino_BailarinaVencida,
-            "CHICA", "Trainer", ("0333_Swablu", 16), ("0315_Roselia", 17));
+            "CHICA", "Trainer", ("0334_Altaria", 44), ("0407_Roserade", 45));
         // Piso 3.
         EnemyDefinition gangster = Enemigo("GangsterCasino", "Gángster", 230, StoryFlag.Casino_GangsterVencido,
-            "ROCKETO", "Trainer", ("0228_Houndour", 18), ("0451_Skorupi", 19));
+            "ROCKETO", "Trainer", ("0727_Incineroar", 47), ("0452_Drapion", 48));
         EnemyDefinition crupiera = Enemigo("CrupieraCasino", "Crupiera", 220, StoryFlag.Casino_CrupieraVencida,
-            "VETERANA", "Trainer", ("0137_Porygon", 18), ("0608_Lampent", 19));
+            "VETERANA", "Trainer", ("0474_Porygon-Z", 47), ("0936_Armarouge", 48));
 
         SpecialItemDefinition tarjeta = TarjetaVip();
 
@@ -977,7 +986,7 @@ public static class CasinoNpcBuilder
         so.FindProperty("nombre").stringValue = "TACCONI";
         so.FindProperty("retrato").objectReferenceValue = SpriteRetrato($"{Retratos}{retrato}.png");
         so.FindProperty("especiePremio").objectReferenceValue = cosmog;
-        so.FindProperty("nivelPremio").intValue = 15;
+        so.FindProperty("nivelPremio").intValue = NivelDelCosmog;
         so.FindProperty("premioShiny").boolValue = true;
         so.FindProperty("flagGanado").enumValueIndex = (int)StoryFlag.Casino_TacconiVencido;
         // La historia (historia.pdf): lo que sabe del registro de 2026 y la tarjeta del piso 4.
@@ -1134,14 +1143,14 @@ public static class CasinoNpcBuilder
         tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
         tabla.premios = new[]
         {
-            PremioPokemon("0063_Abra", 15, 15, "icon_pokeball", 500),
-            PremioPokemon("0133_Eevee", 16, 12, "icon_greatball", 500),
-            PremioPokemon("0066_Machop", 15, 15, "icon_pokeball", 500),
-            PremioPokemon("0123_Scyther", 17, 12, "icon_ultraball", 500),
-            PremioPokemon("0081_Magnemite", 15, 15, "icon_pokeball", 500),
-            PremioPokemon("0137_Porygon", 16, 12, "icon_greatball", 500),
-            PremioPokemon("0228_Houndour", 15, 15, "icon_pokeball", 500),
-            PremioPokemon("0147_Dratini", 18, 4, "icon_masterball", 500)
+            PremioPokemon("0063_Abra", 44, 15, "icon_pokeball", 500),
+            PremioPokemon("0133_Eevee", 45, 12, "icon_greatball", 500),
+            PremioPokemon("0066_Machop", 44, 15, "icon_pokeball", 500),
+            PremioPokemon("0123_Scyther", 46, 12, "icon_ultraball", 500),
+            PremioPokemon("0081_Magnemite", 44, 15, "icon_pokeball", 500),
+            PremioPokemon("0137_Porygon", 45, 12, "icon_greatball", 500),
+            PremioPokemon("0228_Houndour", 44, 15, "icon_pokeball", 500),
+            PremioPokemon("0147_Dratini", 46, 4, "icon_masterball", 500)
         };
         AssetDatabase.CreateAsset(tabla, path);
         return tabla;
@@ -1149,25 +1158,25 @@ public static class CasinoNpcBuilder
 
     private static Prize[] PremiosDeLosNpcs() => new[]
     {
-        PremioPokemon("0025_Pikachu", 15, 23, "icon_pokeball", 300),
+        PremioPokemon("0025_Pikachu", 44, 23, "icon_pokeball", 300),
         PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 10, "icon_pocion"),
         PremioPlata(150, 8),
-        PremioPokemon("0133_Eevee", 15, 22, "icon_greatball", 300),
+        PremioPokemon("0133_Eevee", 44, 22, "icon_greatball", 300),
         PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 9, "icon_superpocion"),
-        PremioPokemon("0175_Togepi", 15, 20, "icon_pokeball", 300),
+        PremioPokemon("0175_Togepi", 44, 20, "icon_pokeball", 300),
         PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 4, "icon_hiperpocion"),
         PremioPlata(400, 4)
     };
 
     private static Prize[] PremiosDeLosNpcsDelPiso2(SpecialItemDefinition tarjeta) => new[]
     {
-        PremioPokemon("0025_Pikachu", 15, 22, "icon_pokeball", 300),
+        PremioPokemon("0025_Pikachu", 46, 22, "icon_pokeball", 300),
         PremioObjeto("Pocion", "Poción", "Pociones", "una", 3, 7, "icon_pocion"),
         PremioObjetoClave(tarjeta, PesoTarjetaEnLaRuleta),
-        PremioPokemon("0133_Eevee", 15, 22, "icon_greatball", 300),
+        PremioPokemon("0133_Eevee", 46, 22, "icon_greatball", 300),
         PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 2, 6, "icon_superpocion"),
         PremioPlata(150, 5),
-        PremioPokemon("0175_Togepi", 15, 21, "icon_pokeball", 300),
+        PremioPokemon("0175_Togepi", 46, 21, "icon_pokeball", 300),
         PremioPlata(400, 2)
     };
 
@@ -1186,14 +1195,14 @@ public static class CasinoNpcBuilder
         tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
         tabla.premios = new[]
         {
-            PremioPokemon("0403_Shinx", 21, 15, "icon_pokeball", 800),
-            PremioPokemon("0610_Axew", 22, 12, "icon_greatball", 800),
-            PremioPokemon("0529_Drilbur", 21, 15, "icon_pokeball", 800),
-            PremioPokemon("0246_Larvitar", 22, 12, "icon_ultraball", 800),
-            PremioPokemon("0361_Snorunt", 21, 15, "icon_pokeball", 800),
-            PremioPokemon("0443_Gible", 22, 12, "icon_greatball", 800),
-            PremioPokemon("0231_Phanpy", 21, 15, "icon_pokeball", 800),
-            PremioPokemon("0371_Bagon", 23, 4, "icon_masterball", 800)
+            PremioPokemon("0403_Shinx", 47, 15, "icon_pokeball", 800),
+            PremioPokemon("0610_Axew", 48, 12, "icon_greatball", 800),
+            PremioPokemon("0529_Drilbur", 47, 15, "icon_pokeball", 800),
+            PremioPokemon("0246_Larvitar", 49, 12, "icon_ultraball", 800),
+            PremioPokemon("0361_Snorunt", 47, 15, "icon_pokeball", 800),
+            PremioPokemon("0443_Gible", 48, 12, "icon_greatball", 800),
+            PremioPokemon("0231_Phanpy", 47, 15, "icon_pokeball", 800),
+            PremioPokemon("0371_Bagon", 49, 4, "icon_masterball", 800)
         };
         AssetDatabase.CreateAsset(tabla, path);
         return tabla;
@@ -1214,14 +1223,14 @@ public static class CasinoNpcBuilder
         tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
         tabla.premios = new[]
         {
-            PremioPokemon("0092_Gastly", 24, 15, "icon_pokeball", 200),
-            PremioPokemon("0280_Ralts", 25, 12, "icon_greatball", 200),
-            PremioPokemon("0304_Aron", 24, 15, "icon_pokeball", 200),
-            PremioPokemon("0215_Sneasel", 25, 12, "icon_ultraball", 200),
-            PremioPokemon("0302_Sableye", 24, 15, "icon_pokeball", 200),
-            PremioPokemon("0374_Beldum", 25, 12, "icon_greatball", 200),
-            PremioPokemon("0543_Venipede", 24, 15, "icon_pokeball", 200),
-            PremioPokemon("0633_Deino", 26, 4, "icon_masterball", 200)
+            PremioPokemon("0092_Gastly", 47, 15, "icon_pokeball", 200),
+            PremioPokemon("0280_Ralts", 48, 12, "icon_greatball", 200),
+            PremioPokemon("0304_Aron", 47, 15, "icon_pokeball", 200),
+            PremioPokemon("0215_Sneasel", 49, 12, "icon_ultraball", 200),
+            PremioPokemon("0302_Sableye", 47, 15, "icon_pokeball", 200),
+            PremioPokemon("0374_Beldum", 48, 12, "icon_greatball", 200),
+            PremioPokemon("0543_Venipede", 47, 15, "icon_pokeball", 200),
+            PremioPokemon("0633_Deino", 49, 4, "icon_masterball", 200)
         };
         AssetDatabase.CreateAsset(tabla, path);
         return tabla;
@@ -1238,10 +1247,10 @@ public static class CasinoNpcBuilder
         tabla = ScriptableObject.CreateInstance<CasinoPrizeTable>();
         tabla.premios = new[]
         {
-            PremioPokemon("0172_Pichu", 15, 33, "icon_pokeball", 300),
+            PremioPokemon("0172_Pichu", 45, 33, "icon_pokeball", 300),
             PremioPlata(250, 8),
             PremioObjeto("Pocion", "Poción", "Pociones", "una", 2, 8, "icon_pocion"),
-            PremioPokemon("0440_Happiny", 15, 32, "icon_greatball", 300),
+            PremioPokemon("0440_Happiny", 45, 32, "icon_greatball", 300),
             PremioPlata(500, 6),
             PremioObjeto("SuperPocion", "Superpoción", "Superpociones", "una", 1, 6, "icon_superpocion"),
             PremioObjeto("HiperPocion", "Hiperpoción", "Hiperpociones", "una", 1, 4, "icon_hiperpocion"),

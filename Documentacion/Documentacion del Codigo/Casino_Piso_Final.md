@@ -16,7 +16,7 @@ Todo lo visible se genera con un builder del editor, como el resto del casino.
 | `Scripts/Casino/Core/CasinoRuletaDeCombate.cs` | **Las reglas de la ruleta de combate.** Qué hace cada gajo y cada cuántos turnos aparece. No toca la escena ni la UI: se prueba sin abrir un combate. |
 | `Scripts/Casino/World/CasinoJefeFinalNpc.cs` | El jefe en el mapa: lanza la pelea con la ruleta, reparte la mano de blackjack al terminar y arranca la revancha. |
 | `Editor/Casino/CasinoPisoFinalBuilder.cs` | Arma la escena: los seis guardias, la enfermera, el jefe con su mesa agrandada, las zonas de la charla de Reymar y el ascensor de bajada. Crea el rival y la tabla de la ruleta. |
-| `Resources/Definitions/Casino/JefeFinalCasino.asset` | El rival: seis Pokémon de nivel 24-27, perfil de IA `Elite`. |
+| `Resources/Definitions/Casino/JefeFinalCasino.asset` | El rival: seis Pokémon de nivel 46-49 (Absol, Drapion, Grimmsnarl, Kingambit, Tyranitar e Hydreigon), perfil de IA `Elite`. |
 | `Resources/Definitions/Casino/Dialogos/Casino_Reymar_*.asset` | La charla de `historia.pdf` de a tramos: `Tramo1..4` (camino a la mesa), `Antes` (al pisar la zona de la pelea), `Despues` (al ganarle) y `Servidor` (atrás de la mesa). |
 | `Resources/Definitions/Casino/RuletaDelJefeFinal.asset` | Los ocho gajos de la ruleta, con sus pesos. |
 | `Sprites/Casino/martin_sentado.png` | El busto de Martín, 51x52. Lo prepara `scripts/preparar_sprites_casino.py` a partir de `Assets/Martin/`. |
@@ -176,8 +176,8 @@ tope, dos jugadores parejos se quedan jugando para siempre.
 Todo desde el Inspector o desde assets, sin recompilar:
 
 - **El equipo del jefe y los niveles**: `Resources/Definitions/Casino/JefeFinalCasino.asset`.
-  Hoy son seis de nivel 24-27 (eran 26-29 hasta el playtest del 4-oct) con IA `Elite`, un escalón arriba del guardia VIP
-  (cuatro de nivel 21-23 con `GymLeader`) y todavía por debajo de `FinalBoss`.
+  Hoy son seis de nivel 46-49, todos formas finales (rebalanceo del 6-oct-2026; eran 24-27), con IA `Elite`,
+  un escalón arriba del guardia VIP (cuatro de nivel 48-49 con `GymLeader`) y todavía por debajo de `FinalBoss`.
 - **Los pesos de la ruleta**: `Resources/Definitions/Casino/RuletaDelJefeFinal.asset`.
   El builder **no la pisa** si ya existe.
 - **Cada cuántos turnos gira** y **cuántas revanchas hay**: en el

@@ -39,6 +39,22 @@ public class LiberationEngine
     private const int DanoDesgaste = 12;
     private const int DanoDirigido = 22;
 
+    // Los danos de arriba estan medidos para el equipo de Nv 20 con el que se
+    // llegaba a la torre (~62 PS). Desde el rebalanceo del 6-oct-2026 se llega
+    // a Nv 42-44, con mas del doble de PS: fijos, la fase se aguantaba sin
+    // curar ni cambiar. Escalan con los PS del que recibe el golpe, nunca por
+    // debajo de la tabla.
+    private const float PsDeReferencia = 62f;
+
+    // Cuanto sigue a los PS (1 = en proporcion directa). Medido con el
+    // simulador de balance sobre 120 partidas por valor: con 0 la fase casi
+    // nunca mata a nadie (5 de 120 sin cortar nada); con 1 mata hasta al que
+    // corto todo (22 de 120), porque las Pociones curan lo mismo que a Nv 20;
+    // con 0.6 hay que protegerse, cambiar y curarse y se pasa casi siempre
+    // (11 de 120 cortando todo, 20 sin cortar nada). Lo toca el banco de
+    // balance para comparar.
+    public static float ExponenteDeEscala = 0.6f;
+
     // Lo que se le devuelve al chip si el jugador ataca
     private const int TurnosQueRetrocede = 2;
 
@@ -178,6 +194,8 @@ public class LiberationEngine
 
         // Escala con los turnos aguantados: la fase se pone tensa hacia el final
         dano += TurnosAguantados * 2;
+        dano = UnityEngine.Mathf.RoundToInt(dano * UnityEngine.Mathf.Pow(
+            UnityEngine.Mathf.Max(1f, objetivo.MaxHP / PsDeReferencia), ExponenteDeEscala));
 
         // Protegerse contra el ataque equivocado sirve, pero poco
         if (protegido)

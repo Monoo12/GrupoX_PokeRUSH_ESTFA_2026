@@ -116,7 +116,7 @@ public class TutorialPlayTest : MonoBehaviour
         // ---- 3. La pelea antes de tiempo ----
         pelea.Interact(player, story);
         yield return new WaitForSecondsRealtime(0.3f);
-        Check("La compañera pide terminar lo demas primero", _dialogo.IsOpen && TextoDeLaCaja().Contains("Primero"));
+        Check("Rebeca pide terminar lo demas primero", _dialogo.IsOpen && TextoDeLaCaja().Contains("Primero"));
         Check("...y la pelea no arranca", !combate.gameObject.activeInHierarchy);
         yield return Foto("04-pelea-antes-de-tiempo");
         yield return CerrarDialogos();
@@ -217,7 +217,7 @@ public class TutorialPlayTest : MonoBehaviour
         yield return Foto("09-cierre");
         yield return CerrarDialogos();
         Check("Queda Tutorial_Completado", story.HasFlag(StoryFlag.Tutorial_Completado));
-        Check("La compañera deja de brillar", !Brilla(pelea));
+        Check("Rebeca deja de brillar", !Brilla(pelea));
 
         // ---- 6. La puerta terminada ----
         yield return UsarLaPuerta(jugador, puerta);

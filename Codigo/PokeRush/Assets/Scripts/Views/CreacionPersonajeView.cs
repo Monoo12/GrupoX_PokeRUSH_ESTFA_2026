@@ -81,7 +81,10 @@ public class CreacionPersonajeView : MonoBehaviour
     [SerializeField] private Text descripcionInicial;
     [SerializeField] private Button continuarInicial;
     [SerializeField] private Button volverInicial;
-    [SerializeField] private int nivelInicial = 15;
+    // Nv 42 desde el rebalanceo del 6-oct-2026: el inicial ya es su forma
+    // final (Lucario, Gengar, Greninja) y a este nivel los tres pegan con sus
+    // tipos (Gengar recien sabe Pulso Umbrio a Nv 42). Manda la escena.
+    [SerializeField] private int nivelInicial = 42;
     [Tooltip("Cuadros por segundo del Pokemon elegido (usa sus battleFrontFrames).")]
     [SerializeField] private float cuadrosPorSegundo = 24f;
 

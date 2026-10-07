@@ -60,7 +60,7 @@ public static class TutorialBuilder
     // El jugador despierta al lado de la cama (arriba a la izquierda).
     private static readonly Vector2Int CeldaDespertar = new Vector2Int(-4, 3);
     private static readonly Vector2Int CeldaCama = new Vector2Int(-5, 3);
-    // La compañera, parada en el medio del cuarto: se la ve apenas se despierta.
+    // Rebeca, la compañera, parada en el medio del cuarto: se la ve apenas se despierta.
     private static readonly Vector2Int CeldaCompanera = new Vector2Int(3, 0);
 
     // Los muebles que son partes: celda de abajo a la izquierda y tamanio. El
@@ -418,7 +418,7 @@ public static class TutorialBuilder
     private static void PonerCompanera(GameObject partes)
     {
         Sprite retrato = CasinoNpcBuilder.SpriteRetrato(TutorialAssets.RetratoDelRival);
-        GameObject go = CasinoNpcBuilder.Personaje(partes, "Companera", Centro(CeldaCompanera, Vector2Int.one),
+        GameObject go = CasinoNpcBuilder.Personaje(partes, "Rebeca", Centro(CeldaCompanera, Vector2Int.one),
                                                    TutorialAssets.HojaDelRival, CasinoNpcBuilder.Izquierda);
 
         var parte = go.AddComponent<TutorialParte>();

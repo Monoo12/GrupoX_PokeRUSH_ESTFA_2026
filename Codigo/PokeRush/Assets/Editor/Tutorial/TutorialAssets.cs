@@ -22,19 +22,25 @@ public static class TutorialAssets
     private const string Perfiles = "Assets/Resources/Definitions/AIProfiles/";
     public const string RutaPocion = "Assets/Resources/Definitions/Items/Pocion.asset";
 
-    // El rival: la persona que esta en el cuarto. Nombre, hoja y retrato son
-    // PROVISORIOS (del pack, ya versionados): los decide el equipo.
-    public const string NombreDelRival = "COMPAÑERA";
+    // El rival: Rebeca, la compañera que esta en el cuarto (nombre pedido el
+    // 6-oct-2026). Hoja y retrato son PROVISORIOS (del pack, ya versionados):
+    // los decide el equipo. En combate va con mayuscula inicial (como Reymar o
+    // Julieta) y en las cajas de dialogo en mayusculas (como todos los hablantes).
+    public const string NombreDelRival = "Rebeca";
+    public const string HablanteDelRival = "REBECA";
     public const string HojaDelRival = "chica1";
     public const string RetratoDelRival = "Assets/Graphics/Trainers/CHICA.png";
     // Antes Interior_bg (un blanco liso): ver FondosDeCombateBuilder.
     private const string FondoDeLaPelea = FondosDeCombateBuilder.FondoDelRivalDelTutorial;
 
-    // Un solo Pokemon, flojo: el inicial llega a Nv 20 desde la creacion de
-    // personaje. Normal a proposito: a Lucario le pega doble lo de Lucha y a
-    // Gengar no le hace nada, que es justo lo que explica la charla de antes.
-    private const string EspecieDelRival = "0133_Eevee";
-    private const int NivelDelRival = 10;
+    // Un solo Pokemon, de practica. Desde el rebalanceo del 6-oct-2026 el
+    // inicial llega a Nv 42 y ya evolucionado, y el Eevee de Rebeca tambien:
+    // Vaporeon Nv 38. Agua a proposito, como la charla de antes (el Agua apaga
+    // el Fuego...), y parejo para los tres iniciales: en el simulador de
+    // balance Lucario, Gengar y Greninja le ganan 95-100% de las veces en
+    // 3-4 turnos, terminando con la mitad de la vida.
+    private const string EspecieDelRival = "0134_Vaporeon";
+    private const int NivelDelRival = 38;
     private const int PlataDelRival = 100;
 
     // ---------- dialogos (texto del equipo: no se pisan) ----------
@@ -72,7 +78,7 @@ public static class TutorialAssets
         "También podés cambiar la tecla de cada acción, si las de siempre no te sirven.",
         "En el menú (Z) están como Opciones.");
 
-    public static DialogueDefinition Pelea(Sprite retrato) => Dialogo("Tutorial_Pelea", NombreDelRival, retrato,
+    public static DialogueDefinition Pelea(Sprite retrato) => Dialogo("Tutorial_Pelea", HablanteDelRival, retrato,
         "¡Por fin te despertaste! Antes de salir, una de práctica.",
         "LUCHAR: elegís un movimiento. Al lado de cada uno ves su tipo, sus PP, su potencia y su precisión.",
         "Y fijate la tabla de tipos: el Agua apaga el Fuego, el Fuego quema la Planta y la Planta absorbe el Agua.",

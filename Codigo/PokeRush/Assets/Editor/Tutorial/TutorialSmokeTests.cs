@@ -332,7 +332,7 @@ namespace PokeRush.EditorTools
             if (pelea != null)
             {
                 var sr = pelea.GetComponentInChildren<SpriteRenderer>(true);
-                Check(sr != null && sr.sprite != null, "Esqueleto: la compañera tiene sprite");
+                Check(sr != null && sr.sprite != null, "Esqueleto: Rebeca (la compañera) tiene sprite");
             }
 
             var puerta = tutorial.GetComponentInChildren<PuertaDelTutorial>(true);

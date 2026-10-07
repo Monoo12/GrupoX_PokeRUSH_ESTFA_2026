@@ -111,33 +111,33 @@ lo saltea nada.
 | Piso | Personaje | Qué hace | Celda |
 |---|---|---|---|
 | 1 | **Guardia** (`GuardiaAscensor`) | Pide 4000 monedas o que le ganes para usar el ascensor. Ganarle da la ruleta de Pokémon | (3.5, 19.5), al lado del ascensor |
-| 1 | Apostador | Pelea una vez (Raticate y Kadabra, Nv12). Paga 100 | (-3.5, 12.5) |
-| 1 | Malabarista | Pelea una vez (Mimikyu y Klefki, Nv14) | (9.5, 15.5) |
-| 1 | Motorista | Pelea una vez (Magby Nv13, Rhyhorn Nv14) | (-10.5, 4.5) |
-| 1 | Pokemaníaco | Pelea una vez (Elekid Nv13, Aron Nv14) | (-9.5, 15.5) |
+| 1 | Apostador | Pelea una vez (Alakazam y Raichu, Nv41). Paga 100 | (-3.5, 12.5) |
+| 1 | Malabarista | Pelea una vez (Mimikyu y Klefki, Nv42) | (9.5, 15.5) |
+| 1 | Motorista | Pelea una vez (Magmortar Nv42, Rhyperior Nv43) | (-10.5, 4.5) |
+| 1 | Pokemaníaco | Pelea una vez (Electivire Nv42, Aggron Nv43) | (-9.5, 15.5) |
 | 1 | Enfermera | Cura por 100 monedas o fiado, sin tope de deuda | (4.5, 12.5) |
 | 1 | Anciano | Historia | (5.5, 4.5) |
 | 1 | 8 jugadores (`JugadorTragaperras1..8`) | Juegan a las tragaperras: dan saltitos y dicen una frase | en taburetes, ver abajo |
-| 2 | Joven rica | Pelea una vez (Togepi Nv15, Sableye Nv16) | (-10.5, 10.5), charlando con la damisela entre las mesas de la izquierda |
-| 2 | Modelo | Pelea una vez (Litwick Nv15, Shuppet Nv16) | (0.5, 5.5), posando al final de la alfombra |
-| 2 | Médium | Pelea una vez (Duskull y Gastly, Nv16) | (-13.5, 15.5), en la mesa de arriba a la izquierda |
-| 2 | Ladrón | Pelea una vez (Pawniard Nv16, Mawile Nv17) | (13.5, 11.5), pegado a una jugadora de la mesa 04 |
+| 2 | Joven rica | Pelea una vez (Togekiss Nv44, Sylveon Nv45) | (-10.5, 10.5), charlando con la damisela entre las mesas de la izquierda |
+| 2 | Modelo | Pelea una vez (Froslass Nv44, Milotic Nv45) | (0.5, 5.5), posando al final de la alfombra |
+| 2 | Médium | Pelea una vez (Dusknoir Nv44, Hatterene Nv45) | (-13.5, 15.5), en la mesa de arriba a la izquierda |
+| 2 | Ladrón | Pelea una vez (Meowscarada y Sneasler, Nv45) | (13.5, 11.5), pegado a una jugadora de la mesa 04 |
 | 2 | **Guardia VIP** (`GuardiaVipCasino`) | Pide la **Tarjeta VIP** o que le ganes para usar el ascensor. Ganarle da su ruleta exclusiva | (2.5, 19.5), a la derecha de la puerta del ascensor |
-| 2 | **Magnate** | Pelea una vez (Kirlia Nv19, Porygon2 y Lampent Nv20). **Ganarle da la Tarjeta VIP** | (12.5, 18.5), en la cabecera de la mesa 06, al lado de la esquina VIP |
+| 2 | **Magnate** | Pelea una vez (Gardevoir y Haxorus Nv45, Chandelure Nv46). **Ganarle da la Tarjeta VIP** | (12.5, 18.5), en la cabecera de la mesa 06, al lado de la esquina VIP |
 | 2 | **Revendedor** | Vende la Tarjeta VIP por 1500 | (15.5, 19.5), en la esquina de arriba a la derecha |
-| 2 | Tahúr | Pelea una vez (Yamask Nv16, Honedge Nv17) | (-5.5, 16.5), en la mesa decorativa más cerca de la alfombra |
-| 2 | Bailarina | Pelea una vez (Swablu Nv16, Roselia Nv17) | (-7.5, 5.5), calentando en el espacio libre de abajo |
+| 2 | Tahúr | Pelea una vez (Cofagrigus y Aegislash, Nv45) | (-5.5, 16.5), en la mesa decorativa más cerca de la alfombra |
+| 2 | Bailarina | Pelea una vez (Altaria Nv44, Roserade Nv45) | (-7.5, 5.5), calentando en el espacio libre de abajo |
 | 2 | Enfermera | Cura | (-13.5, 19.5), arriba a la izquierda, con el PC al lado |
 | 2 | Damisela | Historia | (-8.5, 10.5), charlando con la joven rica |
 | 2 | Secretaria | Historia | (-1.5, 19.5), a la izquierda de la puerta del ascensor |
 | 2 | 6 jugadores (`JugadorRuleta1..6`) | Juegan a la ruleta, uno en el frente de cada mesa. Algunos dan pistas | ver abajo |
 | 3 | **Tacconi** | Juega su **Cosmog shiny** a una mano de blackjack contra uno de tus Pokémon | (-6.5, 18.5), del lado del croupier de **su** mesa (la de arriba a la derecha) |
-| 3 | Macarra | Pelea una vez (Sneasel y Sandile, Nv17) | (3.5, 12.5), al costado de la alfombra |
-| 3 | Guay | Pelea una vez (Gligar Nv17, Skarmory y Absol Nv18) | (5.5, 19.5), al lado de la rockola |
-| 3 | Veterano | Pelea una vez (Donphan y Lairon, Nv18) | (-8.5, 16.5), mirando la mesa de Tacconi desde el pasillo |
-| 3 | Karateka | Pelea una vez (Primeape y Riolu, Nv18) | (4.5, 5.5), en el espacio libre de abajo |
-| 3 | Gángster | Pelea una vez (Houndour Nv18, Skorupi Nv19) | (-3.5, 16.5), al costado de la mesa de Tacconi, mirando a la alfombra |
-| 3 | Crupiera | Pelea una vez (Porygon Nv18, Lampent Nv19) | (5.5, 16.5), en su descanso, apoyada en la barra |
+| 3 | Macarra | Pelea una vez (Weavile Nv47, Krookodile Nv48) | (3.5, 12.5), al costado de la alfombra |
+| 3 | Guay | Pelea una vez (Gliscor Nv47, Corviknight y Absol Nv48) | (5.5, 19.5), al lado de la rockola |
+| 3 | Veterano | Pelea una vez (Donphan Nv48, Steelix Nv49) | (-8.5, 16.5), mirando la mesa de Tacconi desde el pasillo |
+| 3 | Karateka | Pelea una vez (Annihilape y Lucario, Nv48) | (4.5, 5.5), en el espacio libre de abajo |
+| 3 | Gángster | Pelea una vez (Incineroar Nv47, Drapion Nv48) | (-3.5, 16.5), al costado de la mesa de Tacconi, mirando a la alfombra |
+| 3 | Crupiera | Pelea una vez (Porygon-Z Nv47, Armarouge Nv48) | (5.5, 16.5), en su descanso, apoyada en la barra |
 | 3 | Enfermera | Cura | (-13.5, 19.5), arriba a la izquierda, con el PC al lado |
 | 3 | **Empresario** | Vende tiros de su ruleta de premios (300 c/u); si le decís que no, cuenta su historia | (11.5, 14.5), sentado en el restaurante |
 | 3 | **Tendero** (`TenderoCasino`) | La tienda del piso: lo mismo que vende Tixi, a los mismos precios | (-11.5, 19.5), a la derecha de la enfermera y el PC |
@@ -181,9 +181,9 @@ flag `Casino_Piso1_PaseAscensor`, que da el guardia.
   (`Casino_GuardiaVencido`).
 - **Perdiendo** no pasa nada: se puede volver a intentar o pagar.
 
-El combate es medianamente difícil a propósito: Houndour Nv18, Krokorok Nv18 y Haunter
-Nv19, con perfil de IA `GymLeader`. El equipo del jugador llega al casino alrededor del
-nivel 15–17.
+El combate es medianamente difícil a propósito: Houndoom Nv43, Krookodile Nv43 y Gengar
+Nv44, con perfil de IA `GymLeader`. El equipo del jugador llega al casino alrededor del
+nivel 42–44 (rebalanceo del 6-oct-2026: todo forma final; ver `Rebalanceo_Oct_2026.md`).
 
 ---
 
@@ -237,9 +237,9 @@ sirve y en el 3 ya no).
 
 | Premio | Peso |
 |---|---|
-| Pikachu Nv15 | 23 |
-| Eevee Nv15 | 22 |
-| Togepi Nv15 | 20 |
+| Pokémon (Poké Ball) Nv44 | 23 |
+| Pokémon (Super Ball) Nv44 | 22 |
+| Pokémon (Poké Ball) Nv44 | 20 |
 | Poción x3 | 10 |
 | Superpoción x2 | 9 |
 | Hiperpoción x1 | 4 |
@@ -253,9 +253,9 @@ pidió llegar al final con más equipo, y Augusto fijó el 65%.)
 
 | Premio | Peso |
 |---|---|
-| Pikachu Nv15 | 22 |
-| Eevee Nv15 | 22 |
-| Togepi Nv15 | 21 |
+| Pokémon (Poké Ball) Nv46 | 22 |
+| Pokémon (Super Ball) Nv46 | 22 |
+| Pokémon (Poké Ball) Nv46 | 21 |
 | **Tarjeta VIP** | 15 |
 | Poción x3 | 7 |
 | Superpoción x2 | 6 |
@@ -281,10 +281,10 @@ marca la rareza:
 
 | Rareza | Ícono | Pokémon | Peso |
 |---|---|---|---|
-| Común | Poké Ball | Abra, Machop, Magnemite, Houndour (Nv15) | 15 c/u (60%) |
-| Bueno | Great Ball | Eevee, Porygon (Nv16) | 12 c/u (24%) |
-| Raro | Ultra Ball | Scyther (Nv17) | 12% |
-| Muy raro | Master Ball | Dratini (Nv18) | 4% |
+| Común | Poké Ball | del pozo Poké Ball (Nv44) | 15 c/u (60%) |
+| Bueno | Great Ball | del pozo Super Ball (Nv45) | 12 c/u (24%) |
+| Raro | Ultra Ball | del pozo Ultra Ball (Nv46) | 12% |
+| Muy raro | Master Ball | del pozo Master Ball (Nv46) | 4% |
 
 ---
 
@@ -320,14 +320,14 @@ El guardia VIP es un `CasinoElevatorGuard` con **`objetoRequerido`**: no cobra, 
 Tarjeta VIP.
 
 - **Con la tarjeta** te da el pase.
-- **Sin la tarjeta** ofrece pelear. Es más difícil que el del piso 1: Sneasel Nv21, Haunter y
-  Krokorok Nv22 y Magneton Nv23, con IA de líder.
+- **Sin la tarjeta** ofrece pelear. Es más difícil que el del piso 1: Weavile y Spiritomb Nv48,
+  Excadrill y Magnezone Nv49, con IA de líder.
 - **Ganándole** te da el pase y **su ruleta exclusiva**, que siempre da un Pokémon.
 
 **La Tarjeta VIP** (`Resources/Definitions/Items/TarjetaVip.asset`, objeto clave) se consigue de
 tres formas:
 
-1. **Ganándole al magnate** (`CasinoTrainerNpc.objetoAlGanar`): tres Pokémon de nivel 19-20,
+1. **Ganándole al magnate** (`CasinoTrainerNpc.objetoAlGanar`): tres Pokémon de nivel 45-46,
    cuando el resto del piso anda por el 15-17.
 2. **En la ruleta de premios de los combates del piso 2**: es uno de los gajos, con ~15%. Si ya
    la tenés, paga 400 monedas en su lugar (`moneyIfOwned`). En las ruletas de los NPCs de los
@@ -338,10 +338,10 @@ tres formas:
 
 | Rareza | Ícono | Pokémon | Peso |
 |---|---|---|---|
-| Común | Poké Ball | Shinx, Drilbur, Snorunt, Phanpy (Nv21) | 15 c/u (60%) |
-| Bueno | Great Ball | Axew, Gible (Nv22) | 12 c/u (24%) |
-| Raro | Ultra Ball | Larvitar (Nv22) | 12% |
-| Muy raro | Master Ball | Bagon (Nv23) | 4% |
+| Común | Poké Ball | del pozo Poké Ball (Nv47) | 15 c/u (60%) |
+| Bueno | Great Ball | del pozo Super Ball (Nv48) | 12 c/u (24%) |
+| Raro | Ultra Ball | del pozo Ultra Ball (Nv49) | 12% |
+| Muy raro | Master Ball | del pozo Master Ball (Nv49) | 4% |
 
 ---
 
@@ -360,10 +360,10 @@ sigue reescribiendo en el asset como el de los demás NPCs.
 
 | Rareza | Ícono | Pokémon | Peso |
 |---|---|---|---|
-| Común | Poké Ball | Gastly, Aron, Sableye, Venipede (Nv24) | 15 c/u (60%) |
-| Bueno | Great Ball | Ralts, Beldum (Nv25) | 12 c/u (24%) |
-| Raro | Ultra Ball | Sneasel (Nv25) | 12% |
-| Muy raro | Master Ball | Deino (Nv26) | 4% |
+| Común | Poké Ball | del pozo Poké Ball (Nv47) | 15 c/u (60%) |
+| Bueno | Great Ball | del pozo Super Ball (Nv48) | 12 c/u (24%) |
+| Raro | Ultra Ball | del pozo Ultra Ball (Nv49) | 12% |
+| Muy raro | Master Ball | del pozo Master Ball (Nv49) | 4% |
 
 ---
 
@@ -382,8 +382,8 @@ o negro, se abre la ruleta de premios apenas cerrás el cartel del resultado.
 
 | Premio | Peso |
 |---|---|
-| Pichu Nv15 | 33 |
-| Happiny Nv15 | 32 |
+| Pokémon (Poké Ball) Nv45 | 33 |
+| Pokémon (Super Ball) Nv45 | 32 |
 | Poción x2 | 8 |
 | Superpoción | 6 |
 | Hiperpoción | 4 |
@@ -463,7 +463,7 @@ una ruleta con Pokémon). Hasta el 4-oct costaba 500 y se pagaba sin pensarlo.
 | Pase del guardia del piso 1 (o ganarle) | **4000** (era 500) |
 | Premio de los entrenadores del casino | 100-230 (sin cambios) |
 | Tarjeta VIP (revendedor) | 1500 (sin cambios) |
-| Tiro de la ruleta del empresario (siempre Pokémon Nv24-26) | **300** (era 200: un Pokémon seguro salía regalado) |
+| Tiro de la ruleta del empresario (siempre Pokémon Nv47-49) | **300** (era 200: un Pokémon seguro salía regalado) |
 | Poción / Superpoción / Hiperpoción | 200 / 700 / 1200 (sin cambios) |
 | Poción Máxima / Revivir / Cura Total | 2500 / 1500 / 400 (sin cambios) |
 
@@ -500,13 +500,15 @@ del piso 2, el jubilado del piso 3 y Tixi antes de mandar al PJ al casino).
 
   | Ícono | Pozo |
   |---|---|
-  | Poké Ball | Los iniciales de todas las regiones, Pikachu, Eevee, Togepi, Shinx, Houndour, Gastly, Abra, Machop, Magnemite, Swablu, Snorunt, Litwick, Rockruff, Fletchling, Drilbur, Sneasel |
-  | Super Ball | Riolu, Ralts, Axew, Scyther, Porygon, Honedge, Mimikyu, Absol, Munchlax, Charcadet, Noibat, Toxel, Tinkatink, Rookidee, Sableye, Larvesta, Hatenna, Aron |
-  | Ultra Ball | Dratini, Larvitar, Bagon, Beldum, Gible, Deino, Goomy, Jangmo-o, Dreepy, Frigibax, Lapras, Snorlax |
-  | Master Ball | Lucario, Charizard, Greninja, Blaziken, Gengar, Gardevoir, Umbreon, Sylveon, Infernape, Decidueye |
+  | Poké Ball | Formas finales conocidas de poder parejo: Raichu, Machamp, Alakazam, las Eeveelutions, Luxray, Houndoom, Scizor, Heracross, Altaria, Absol, Talonflame, Corviknight, Mimikyu... |
+  | Super Ball | Los iniciales finales de todas las regiones y los favoritos: Charizard, Greninja, Lucario, Gengar, Gardevoir, Togekiss, Lapras, Snorlax, Chandelure, Kingambit... |
+  | Ultra Ball | Los pseudolegendarios ya evolucionados (Dragonite, Tyranitar, Garchomp, Hydreigon...) y Volcarona |
+  | Master Ball | Legendarios: las tres aves, las tres bestias, Latias, Latios, Heatran, el trío espadachín, Zeraora, Tapu Koko y Tapu Lele |
 
-  Las Poké Ball traen primeras formas: al nivel de las ruletas nada se pasa de
-  fuerte. Los épicos ya evolucionados quedan para la Master Ball, la más rara.
+  Desde el rebalanceo del 6-oct-2026 todo es forma final: el juego no tiene
+  evolución, así que un Pikachu de la ruleta quedaba Pikachu toda la partida.
+  La rareza dice cuán fuerte es la forma final; el nivel lo pone la tabla (ver
+  `Rebalanceo_Oct_2026.md`).
 
 ## Cómo se cambia
 

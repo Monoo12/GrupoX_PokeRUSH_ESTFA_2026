@@ -38,7 +38,9 @@ public class BossBattleConfig
 
     // --- numeros de balance, todos en un solo lugar ---
 
-    public const int EscudoPorNodoActivo = 10;    // 3 nodos activos = 30 PS de escudo
+    // 3 nodos activos = 75 PS de escudo: ~un golpe del equipo de Nv 40 (era 10
+    // por nodo con el de Nv 20; ver el rebalanceo del 6-oct-2026).
+    public const int EscudoPorNodoActivo = 25;
     public const int TurnosLiberacionBase = 4;    // 4 turnos con la energia cortada
     public const int MultiplicadorSinEnergia = 2; // 8 turnos si no la cortaste
 

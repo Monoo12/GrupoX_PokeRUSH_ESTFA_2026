@@ -19,7 +19,9 @@ public class PokenModel
     public static System.Func<PokenType, MoveDefinition> EspecialDeRespaldo;
 
     // RNG propio para generar IVs sin depender de UnityEngine (clase pura).
-    private static readonly System.Random IvRandom = new System.Random();
+    // El simulador de balance lo cambia por uno con semilla y despues lo
+    // devuelve: misma semilla, mismo informe.
+    public static System.Random IvRandom = new System.Random();
 
     public PokenDefinition Definition { get; private set; }
 
@@ -86,6 +88,7 @@ public class PokenModel
         Moves = new List<MoveModel>();
         LearnInitialMoves();
         AsegurarUnAtaque();
+        AsegurarAtaquesDeSusTipos();
         AsegurarUnAtaqueEspecial();
         RecalculateStats();
         CurrentHP = MaxHP;
@@ -202,6 +205,93 @@ public class PokenModel
         return SirveParaPegar(DefaultMove) ? DefaultMove : null;
     }
 
+    // ---------- que pegue con sus tipos ----------
+
+    // Si el mejor ataque de su tipo que le deja el learnset pega al menos el
+    // doble que el que ya sabe, lo cambia (Giro Fuego 35 -> Llama Embrujada 75).
+    // No antes: con 1.75 un Delphox de Nv 36 cambiaba Psicorrayo (65) por
+    // Premonicion (120, que en este motor pega en el acto) y el primer jefe se
+    // volvia injusto para Lucario y Gengar.
+    private const float MejoraQueValeElCambio = 2f;
+
+    // Todo Pokemon sabe pegar con cada uno de sus tipos (rebalanceo del
+    // 6-oct-2026, cuando el juego paso a entregar formas finales a nivel alto).
+    // Con "los ultimos 4 del learnset" una forma final queda con un set que no
+    // la representa: Blaziken a Nv 40 no sabe nada de Lucha, Greninja nada
+    // Siniestro, Mew un solo ataque y de tipo Roca. Por cada uno de sus tipos:
+    //   - si no sabe ningun ataque de ese tipo, aprende el mas fuerte que su
+    //     learnset ya le deja; si a su nivel no hay ninguno, el primero que
+    //     aprenderia (como AsegurarUnAtaque);
+    //   - si sabe uno pero el learnset le deja otro que pega el doble o mas
+    //     (MejoraQueValeElCambio), lo cambia por ese en el mismo lugar.
+    // Con lugar lo suma; si no, va donde estaba el que menos rinde, sin tocar
+    // su fisico mas fuerte ni el unico ataque de su otro tipo.
+    //
+    // Solo al crearse: uno guardado conserva los movimientos que eligio el jugador.
+    public void AsegurarAtaquesDeSusTipos()
+    {
+        if (Definition == null || Definition.learnset == null || Definition.learnset.Length == 0) return;
+        AsegurarAtaqueDelTipo(Definition.type);
+        if (Definition.type2 != PokenType.None && Definition.type2 != Definition.type)
+            AsegurarAtaqueDelTipo(Definition.type2);
+    }
+
+    private void AsegurarAtaqueDelTipo(PokenType tipo)
+    {
+        MoveDefinition mejor = MejorAtaqueDelTipo(tipo);
+        if (mejor == null || KnowsMove(mejor)) return;
+
+        int sabido = -1;
+        float rindeSabido = 0f;
+        for (int i = 0; i < Moves.Count; i++)
+        {
+            MoveDefinition d = Moves[i]?.Definition;
+            if (!SirveParaPegar(d) || d.type != tipo || Rinde(d) <= rindeSabido) continue;
+            sabido = i;
+            rindeSabido = Rinde(d);
+        }
+
+        if (sabido >= 0)
+        {
+            if (Rinde(mejor) >= rindeSabido * MejoraQueValeElCambio) Moves[sabido] = new MoveModel(mejor);
+            return;
+        }
+
+        if (Moves.Count < 4)
+        {
+            Moves.Add(new MoveModel(mejor));
+            return;
+        }
+        Moves[LugarParaReemplazar(cuidarElEspecial: true)] = new MoveModel(mejor);
+    }
+
+    // El ataque de ese tipo que mas pega entre los que ya puede conocer; si no
+    // hay ninguno a su nivel, el primero que aprenderia.
+    private MoveDefinition MejorAtaqueDelTipo(PokenType tipo)
+    {
+        MoveDefinition mejor = null, primero = null;
+        int nivelPrimero = int.MaxValue;
+        foreach (LearnsetEntry entry in Definition.learnset)
+        {
+            if (entry == null || !SirveParaPegar(entry.move) || entry.move.type != tipo) continue;
+            if (entry.level <= Level)
+            {
+                if (mejor == null || Rinde(entry.move) > Rinde(mejor)) mejor = entry.move;
+            }
+            else if (entry.level < nivelPrimero)
+            {
+                primero = entry.move;
+                nivelPrimero = entry.level;
+            }
+        }
+        return mejor ?? primero;
+    }
+
+    // Lo que pega un ataque para compararlo con otro: potencia por precision
+    // (los que no fallan traen precision 0 y cuentan como 100).
+    private static float Rinde(MoveDefinition d)
+        => d.power * (d.accuracy > 0 ? d.accuracy : 100) / 100f;
+
     // ---------- que tenga algun ataque especial ----------
 
     // Todo Pokemon tiene al menos un ataque ESPECIAL (playtest del 5-oct).
@@ -235,7 +325,7 @@ public class PokenModel
             Moves.Add(new MoveModel(especial));
             return;
         }
-        Moves[LugarParaElEspecial()] = new MoveModel(especial);
+        Moves[LugarParaReemplazar(cuidarElEspecial: false)] = new MoveModel(especial);
     }
 
     // El especial mas nuevo del learnset que ya puede conocer.
@@ -252,7 +342,12 @@ public class PokenModel
         return mejor;
     }
 
-    private int LugarParaElEspecial()
+    // Donde va un ataque nuevo cuando ya sabe cuatro: en el lugar del que menos
+    // rinde (uno de estado vale como potencia 30). Nunca en el de su fisico mas
+    // fuerte, ni en el del unico ataque que tiene de uno de sus tipos, ni (si se
+    // pide) en el del unico especial. Si todo esta cuidado, el que menos rinde
+    // fuera del fisico mas fuerte.
+    private int LugarParaReemplazar(bool cuidarElEspecial)
     {
         int fisicoProtegido = -1, potenciaProtegida = -1;
         for (int i = 0; i < Moves.Count; i++)
@@ -265,11 +360,39 @@ public class PokenModel
             }
         }
 
-        int lugar = 0;
+        var cuidados = new HashSet<int>();
+        if (fisicoProtegido >= 0) cuidados.Add(fisicoProtegido);
+        CuidarSiEsElUnico(cuidados, d => Definition != null && d.type == Definition.type);
+        if (Definition != null && Definition.type2 != PokenType.None)
+            CuidarSiEsElUnico(cuidados, d => d.type == Definition.type2);
+        if (cuidarElEspecial) CuidarSiEsElUnico(cuidados, d => d.attackType == AttackType.Special);
+
+        int lugar = MenosRinde(cuidados);
+        if (lugar < 0)
+            lugar = MenosRinde(fisicoProtegido >= 0 ? new HashSet<int> { fisicoProtegido } : new HashSet<int>());
+        return lugar < 0 ? 0 : lugar;
+    }
+
+    private void CuidarSiEsElUnico(HashSet<int> cuidados, System.Func<MoveDefinition, bool> cumple)
+    {
+        int unico = -1;
+        for (int i = 0; i < Moves.Count; i++)
+        {
+            MoveDefinition d = Moves[i]?.Definition;
+            if (!SirveParaPegar(d) || !cumple(d)) continue;
+            if (unico >= 0) return;   // hay dos: ninguno es el unico
+            unico = i;
+        }
+        if (unico >= 0) cuidados.Add(unico);
+    }
+
+    private int MenosRinde(HashSet<int> cuidados)
+    {
+        int lugar = -1;
         int peor = int.MaxValue;
         for (int i = 0; i < Moves.Count; i++)
         {
-            if (i == fisicoProtegido) continue;
+            if (cuidados.Contains(i)) continue;
             MoveDefinition d = Moves[i]?.Definition;
             int rinde = d == null || d.implementation == MoveImplementation.NotImplemented ? -1
                 : d.attackType == AttackType.Status ? 30 : d.power;

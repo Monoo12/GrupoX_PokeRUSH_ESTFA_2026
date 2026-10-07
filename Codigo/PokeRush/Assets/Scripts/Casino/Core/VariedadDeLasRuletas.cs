@@ -18,39 +18,49 @@ public static class VariedadDeLasRuletas
 {
     public enum Rareza { Comun, Buena, Rara, MuyRara }
 
-    // Poke Ball: iniciales de todas las regiones y los mas conocidos, en su
-    // primera forma. Nada que se vaya de mambo al nivel de las ruletas.
+    // Desde el rebalanceo del 6-oct-2026 todos los pozos son FORMAS FINALES: el
+    // juego no tiene evolucion y es corto, asi que un Bulbasaur de la ruleta
+    // quedaba Bulbasaur toda la partida. La rareza ahora dice cuan fuerte es la
+    // forma final, y el nivel lo sigue poniendo la tabla.
+
+    // Poke Ball: formas finales conocidas de poder parejo (Eeveelutions,
+    // Raichu, Scizor...). Ninguna supera a un inicial final.
     public static readonly string[] Comunes =
     {
-        "Bulbasaur", "Charmander", "Squirtle", "Pikachu", "Eevee",
-        "Chikorita", "Cyndaquil", "Totodile", "Treecko", "Torchic", "Mudkip",
-        "Turtwig", "Chimchar", "Piplup", "Snivy", "Tepig", "Oshawott",
-        "Chespin", "Fennekin", "Froakie", "Rowlet", "Litten", "Popplio",
-        "Grookey", "Scorbunny", "Sobble", "Sprigatito", "Fuecoco", "Quaxly",
-        "Togepi", "Shinx", "Houndour", "Gastly", "Abra", "Machop", "Magnemite",
-        "Swablu", "Snorunt", "Litwick", "Rockruff", "Fletchling", "Drilbur", "Sneasel"
+        "Raichu", "Machamp", "Alakazam", "Vaporeon", "Jolteon", "Flareon", "Espeon",
+        "Umbreon", "Leafeon", "Glaceon", "Sylveon", "Luxray", "Houndoom", "Scizor",
+        "Heracross", "Altaria", "Absol", "Breloom", "Talonflame", "Lycanroc",
+        "Toxtricity", "Corviknight", "Mimikyu", "Krookodile", "Hawlucha", "Donphan",
+        "Froslass", "Roserade", "Scolipede", "Drednaw"
     };
 
-    // Super Ball: los que todos quieren tener, todavia sin evolucionar.
+    // Super Ball: los iniciales finales de todas las regiones y los favoritos.
     public static readonly string[] Buenas =
     {
-        "Riolu", "Ralts", "Axew", "Scyther", "Porygon", "Honedge", "Mimikyu",
-        "Absol", "Munchlax", "Charcadet", "Noibat", "Toxel", "Tinkatink",
-        "Rookidee", "Sableye", "Larvesta", "Hatenna", "Aron"
+        "Venusaur", "Charizard", "Blastoise", "Meganium", "Typhlosion", "Feraligatr",
+        "Sceptile", "Blaziken", "Swampert", "Torterra", "Infernape", "Empoleon",
+        "Serperior", "Emboar", "Samurott", "Chesnaught", "Delphox", "Greninja",
+        "Decidueye", "Incineroar", "Primarina", "Rillaboom", "Cinderace", "Inteleon",
+        "Meowscarada", "Skeledirge", "Quaquaval", "Lucario", "Gengar", "Gardevoir",
+        "Gallade", "Togekiss", "Chandelure", "Aegislash", "Lapras", "Snorlax",
+        "Milotic", "Magnezone", "Weavile", "Mamoswine", "Excadrill", "Conkeldurr",
+        "Haxorus", "Annihilape", "Kingambit", "Ceruledge", "Armarouge"
     };
 
-    // Ultra Ball: los pseudolegendarios en su primera forma y dos clasicos.
+    // Ultra Ball: los pseudolegendarios ya evolucionados y Volcarona.
     public static readonly string[] Raras =
     {
-        "Dratini", "Larvitar", "Bagon", "Beldum", "Gible", "Deino", "Goomy",
-        "Jangmo-o", "Dreepy", "Frigibax", "Lapras", "Snorlax"
+        "Dragonite", "Tyranitar", "Salamence", "Metagross", "Garchomp", "Hydreigon",
+        "Goodra", "Kommo-o", "Dragapult", "Baxcalibur", "Volcarona"
     };
 
-    // Master Ball (la mas rara de todas): los epicos, ya evolucionados.
+    // Master Ball (la mas rara de todas): legendarios. Ninguno de los de
+    // portada (Mewtwo, Rayquaza...): esos son de Julieta.
     public static readonly string[] MuyRaras =
     {
-        "Lucario", "Charizard", "Greninja", "Blaziken", "Gengar", "Gardevoir",
-        "Umbreon", "Sylveon", "Infernape", "Decidueye"
+        "Articuno", "Zapdos", "Moltres", "Raikou", "Entei", "Suicune", "Latias",
+        "Latios", "Heatran", "Cobalion", "Terrakion", "Virizion", "Zeraora",
+        "Tapu Koko", "Tapu Lele"
     };
 
     public static string[] Pozo(Rareza rareza)

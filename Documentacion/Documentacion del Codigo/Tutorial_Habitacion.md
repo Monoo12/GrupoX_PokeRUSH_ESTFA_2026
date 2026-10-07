@@ -23,7 +23,7 @@ Hay dos escenas:
 | PC | el escritorio con la computadora (x −7..−5, y 3..4) | PC de almacenamiento |
 | Diario | la mesita con el velador (−7, 0) | menú de pausa y guardado |
 | Tele | el mueble de la tele (x −4..−1, y 3..5) | Opciones |
-| Compañera | parada en (−1, 0) | la pelea |
+| Rebeca (la compañera) | parada en (−1, 0) | la pelea |
 | Puerta | la puerta de madera de la pared derecha (x 2, y −2..0) | **se usa con X** (ver abajo) |
 
 Dos cosas distintas del esqueleto:
@@ -79,7 +79,7 @@ En la Scene view cada parte dibuja un recuadro amarillo con su nombre (la pelea 
 | PC | `Pc` | el PC de almacenamiento | `Tutorial_Pc` |
 | Diario | `Guardar` | el menú de pausa (ahí está Guardar) y cuenta F2 | `Tutorial_Guardar` |
 | Tele | `Opciones` | Opciones: volumen y teclas | `Tutorial_Opciones` |
-| Compañera | `Pelea` | la pelea de práctica | `Tutorial_Pelea` |
+| Rebeca (la compañera) | `Pelea` | la pelea de práctica | `Tutorial_Pelea` |
 
 Una parte ya hecha sigue sirviendo de atajo: la mochila del cuarto abre la Bolsa sin volver a explicar.
 
@@ -95,9 +95,9 @@ Una parte ya hecha sigue sirviendo de atajo: la mochila del cuarto abre la Bolsa
 - La pelea **cura el equipo antes y después**, ganes o pierdas. Si perdés, no cuenta y se puede repetir.
 - **Omitir da lo mismo que hacerlo**: te llevás las Pociones de la mochila. Saltearlo no deja en desventaja.
 - En la puerta, **"Seguir" va primero y es lo que elige Escape**: machacar una tecla nunca saltea el tutorial.
-- El rival: **COMPAÑERA** con un **Eevee Nv 10**, IA `Wild`, $100. Normal a propósito: a Lucario lo de Lucha le pega doble y a Gengar lo Normal no le hace nada, que es justo lo que cuenta la charla de antes. Sprite (`chica1`) y retrato (`CHICA`) **provisorios**, del pack y ya versionados.
-- La partida DEMO (entrar por Play directo) arranca con **un Lucario Nv 20**, como una partida recién creada.
-- En `habitacion`: no hay una mochila dibujada, así que **la mochila y el equipo comparten la biblioteca** (una columna cada uno). El diario va en la mesita del velador y la compañera parada en el medio del cuarto.
+- El rival: **Rebeca** (la compañera; en las cajas, `REBECA`) con un **Vaporeon Nv 38** (era COMPAÑERA con un Eevee Nv 10 hasta el rebalanceo del 6-oct-2026), IA `Wild`, $100. Agua, como la charla de antes (el Agua apaga el Fuego...), y pareja para los tres iniciales de Nv 42: en el simulador de balance le ganan 95-100% de las veces en 3-4 turnos. Sprite (`chica1`) y retrato (`CHICA`) **provisorios**, del pack y ya versionados.
+- La partida DEMO (entrar por Play directo) arranca con **un Lucario Nv 42**, como una partida recién creada.
+- En `habitacion`: no hay una mochila dibujada, así que **la mochila y el equipo comparten la biblioteca** (una columna cada uno). El diario va en la mesita del velador y Rebeca parada en el medio del cuarto.
 
 ### Lo del playtest del 4-oct
 

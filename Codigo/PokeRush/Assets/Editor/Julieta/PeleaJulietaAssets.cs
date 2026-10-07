@@ -58,15 +58,20 @@ public static class PeleaJulietaAssets
 
     // El equipo: tecnologia y mente, ninguno repetido de Nestor, y los dos del
     // portal de 2026 como ases (GDD: "sus dos ases son los dos Pokemon del
-    // portal"). Un escalon arriba del jefe del casino (26-29).
+    // portal"). Rebalanceo del 6/7-oct-2026: su as (Mewtwo 50) queda arriba
+    // del de Reymar (49) y el resto, 43-47. En el simulador (6 contra 6, sin el
+    // guion) el equipo tipico de la partida le gana al primer intento: con
+    // 47-52, 11%; con 45-50, 27%; asi, 43%. Lo que mas pesa es Mewtwo y que
+    // Alakazam no llegue a Premonicion (120, la aprende a Nv 45). El guion suma
+    // ayudas y trabas: es la pelea a probar a mano.
     private static readonly (string especie, int nivel)[] Equipo =
     {
-        ("0462_Magnezone", 33),
-        ("0065_Alakazam", 34),
-        ("0649_Genesect", 34),
-        ("0376_Metagross", 35),
-        ("0720_Hoopa", 37),
-        ("0150_Mewtwo", 38),
+        ("0462_Magnezone", 43),
+        ("0065_Alakazam", 44),
+        ("0649_Genesect", 44),
+        ("0376_Metagross", 45),
+        ("0720_Hoopa", 47),
+        ("0150_Mewtwo", 50),
     };
 
     // ------------------------------------------------------------ Julieta

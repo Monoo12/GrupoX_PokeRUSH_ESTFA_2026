@@ -111,6 +111,8 @@ namespace PokeRush.EditorTools
                 // Playtest del 5-oct
                 TestConfusionDuraDeDosACinco();
                 TestTodosTienenUnAtaqueEspecial();
+                TestPeganConSusTipos();
+                TestElChipEscalaConLosPs();
                 TestExcavarNoSeAprende();
                 TestElRivalAvisaAQuienManda();
                 TestSinBancoNoSeOfreceCambio();
@@ -1988,6 +1990,108 @@ namespace PokeRush.EditorTools
             finally
             {
                 PokenModel.EspecialDeRespaldo = antes;
+            }
+        }
+
+        // Rebalanceo del 6-oct-2026: una forma final creada a nivel alto pega con
+        // sus tipos (Blaziken sin Lucha, Mew sin Psiquico... ya no).
+        private static void TestPeganConSusTipos()
+        {
+            var antes = PokenModel.EspecialDeRespaldo;
+            PokenModel.EspecialDeRespaldo = null;
+            try
+            {
+                // Fuego/Lucha cuyos "ultimos 4" son Normal y Volador.
+                var patada = MakeMove("Patada", PokenType.Fire, AttackType.Physical, 85, 90, 15);
+                var doble = MakeMove("Doble", PokenType.Fighting, AttackType.Physical, 30, 100, 30);
+                var n1 = MakeMove("N1", PokenType.Normal, AttackType.Physical, 50, 100, 30);
+                var v1 = MakeMove("V1", PokenType.Flying, AttackType.Physical, 60, 100, 20);
+                var n2 = MakeMove("N2", PokenType.Normal, AttackType.Physical, 70, 100, 20);
+                var v2 = MakeMove("V2", PokenType.Flying, AttackType.Physical, 85, 85, 15);
+                var ave = MakeSpecies("Pollito", PokenType.Fire, PokenType.Fighting, 80, 120, 70, 110, 70, 80);
+                ave.learnset = new[]
+                {
+                    new LearnsetEntry { move = patada, level = 1 }, new LearnsetEntry { move = doble, level = 1 },
+                    new LearnsetEntry { move = n1, level = 10 }, new LearnsetEntry { move = v1, level = 20 },
+                    new LearnsetEntry { move = n2, level = 25 }, new LearnsetEntry { move = v2, level = 30 }
+                };
+                var p = new PokenModel(ave, 40, FixedIvs);
+                Check(p.Moves.Count == 4 && p.Moves.Exists(m => m.Definition == patada) && p.Moves.Exists(m => m.Definition == doble),
+                    "Tipos: una forma final aprende un ataque de cada uno de sus tipos");
+                Check(p.Moves.Exists(m => m.Definition == v2), "Tipos: no se pierde su fisico mas fuerte");
+
+                // Sin ningun ataque de su tipo a su nivel: el primero que aprenderia.
+                var destructor = MakeMove("Destructor", PokenType.Normal, AttackType.Physical, 40, 100, 35);
+                var amnesia = MakeMove("Amnesia", PokenType.Psychic, AttackType.Status, 0, 0, 20);
+                var psiquico = MakeMove("Psiquico", PokenType.Psychic, AttackType.Special, 90, 100, 10);
+                var mito = MakeSpecies("Mito", PokenType.Psychic, PokenType.None, 100, 100, 100, 100, 100, 100);
+                mito.learnset = new[]
+                {
+                    new LearnsetEntry { move = destructor, level = 1 }, new LearnsetEntry { move = amnesia, level = 10 },
+                    new LearnsetEntry { move = psiquico, level = 100 }
+                };
+                Check(new PokenModel(mito, 50, FixedIvs).Moves.Exists(m => m.Definition == psiquico),
+                    "Tipos: si a su nivel no hay ninguno, aprende el primero de su tipo");
+
+                // Uno flojo de su tipo se cambia por uno que pega bastante mas; uno bueno, no.
+                var llama = MakeMove("Llama", PokenType.Fire, AttackType.Special, 75, 100, 15);
+                var giro = MakeMove("Giro", PokenType.Fire, AttackType.Special, 35, 85, 15);
+                var x1 = MakeMove("X1", PokenType.Normal, AttackType.Physical, 40, 100, 30);
+                var x2 = MakeMove("X2", PokenType.Normal, AttackType.Physical, 45, 100, 30);
+                var x3 = MakeMove("X3", PokenType.Normal, AttackType.Physical, 50, 100, 30);
+                var zorro = MakeSpecies("Zorrito", PokenType.Fire, PokenType.None, 75, 69, 72, 114, 100, 104);
+                zorro.learnset = new[]
+                {
+                    new LearnsetEntry { move = llama, level = 1 }, new LearnsetEntry { move = x1, level = 10 },
+                    new LearnsetEntry { move = x2, level = 15 }, new LearnsetEntry { move = x3, level = 18 },
+                    new LearnsetEntry { move = giro, level = 22 }
+                };
+                var z = new PokenModel(zorro, 30, FixedIvs);
+                Check(z.Moves.Exists(m => m.Definition == llama) && !z.Moves.Exists(m => m.Definition == giro),
+                    "Tipos: un ataque flojo de su tipo se cambia por el fuerte del learnset");
+
+                var psico = MakeMove("Psico", PokenType.Psychic, AttackType.Special, 80, 100, 15);
+                var prem = MakeMove("Prem", PokenType.Psychic, AttackType.Special, 120, 100, 10);
+                var mago = MakeSpecies("Mago", PokenType.Psychic, PokenType.None, 55, 50, 45, 135, 95, 120);
+                mago.learnset = new[] { new LearnsetEntry { move = prem, level = 1 }, new LearnsetEntry { move = x1, level = 5 },
+                                        new LearnsetEntry { move = x2, level = 6 }, new LearnsetEntry { move = x3, level = 7 },
+                                        new LearnsetEntry { move = psico, level = 8 } };
+                var m2 = new PokenModel(mago, 30, FixedIvs);
+                Check(m2.Moves.Exists(m => m.Definition == psico) && !m2.Moves.Exists(m => m.Definition == prem),
+                    "Tipos: si el de su tipo ya pega bien, no se toca");
+            }
+            finally
+            {
+                PokenModel.EspecialDeRespaldo = antes;
+            }
+        }
+
+        // El chip de la liberacion pega lo de su tabla a un Poken de ~62 PS (el de
+        // Nv 20 para el que se penso) y en proporcion a uno con mas PS.
+        private static void TestElChipEscalaConLosPs()
+        {
+            var nestor = MakeSpecies("NestorChip", PokenType.Electric, PokenType.None, 110, 95, 90, 105, 95, 80);
+            int Golpe(int baseHp, int nivel)
+            {
+                var sp = MakeSpecies("Aguante", PokenType.Normal, PokenType.None, baseHp, 50, 50, 50, 50, 50);
+                var jugador = MakePoken(sp, nivel);
+                var model = MakeBattle(jugador, MakePoken(nestor, 50));
+                int antes = jugador.CurrentHP;
+                new LiberationEngine(model, new SeededRng(1), 4).ResolveTurn(LiberationEngine.Accion.Nada);
+                return antes - jugador.CurrentHP;
+            }
+            float antes = LiberationEngine.ExponenteDeEscala;
+            LiberationEngine.ExponenteDeEscala = 0.6f;
+            try
+            {
+                int chico = Golpe(50, 20);    // ~53 PS: por debajo de la referencia, la tabla
+                int grande = Golpe(120, 50);  // ~187 PS: ~3 veces la referencia
+                Check(chico == 34, $"Chip: a ~62 PS o menos pega lo de la tabla (pego {chico})");
+                Check(grande >= 60 && grande <= 70, $"Chip: a ~190 PS pega mas que la tabla, sin llegar al triple (pego {grande})");
+            }
+            finally
+            {
+                LiberationEngine.ExponenteDeEscala = antes;
             }
         }
 

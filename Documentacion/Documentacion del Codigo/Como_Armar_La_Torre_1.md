@@ -116,8 +116,13 @@ Para que una puerta necesite las cámaras: `requiereFlag = Torre1_CamarasCortada
 
 El trigger del núcleo apunta a **uno de dos assets**, según el jugador haya cortado los cuatro subsistemas o no:
 
-- `Definitions/Torre1/Nestor` — Raticate 16 · Braixen 17 · **Melmetal 18** · Porygon-Z 19
-- `Definitions/Torre1/Nestor_SinMelmetal` — Raticate 16 · Braixen 17 · **Unown 14** · Porygon-Z 19
+- `Definitions/Torre1/Nestor` — Silvally 36 · Delphox 36 · **Melmetal 36** · Porygon-Z 36
+- `Definitions/Torre1/Nestor_SinMelmetal` — Silvally 36 · Delphox 36 · **Unown 36** · Porygon-Z 36
+
+Desde el rebalanceo del 6-oct-2026 (`Rebalanceo_Oct_2026.md`) el jugador llega con su inicial a
+Nv 43, Basculegion Nv 42 y Blaziken Nv 44, todos formas finales. El escudo del núcleo es de
+**25 PS por nodo** (75 con los tres) y el daño del chip en la liberación escala con los PS del
+que lo recibe (exponente 0,6): con los números de antes (10 por nodo, daño fijo) los dos se volvían adorno.
 
 Es **todo o nada**: los cuatro completos o Melmetal está. Cortar dos de tres nodos del firewall achica el escudo pero no cuenta, para obligar a terminar lo que se empieza. Unown tiene un solo movimiento y stats bajos: la recompensa por explorar se lee al instante.
 

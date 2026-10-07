@@ -104,10 +104,11 @@ public static class QuarchoCuevaBuilder
     // este y el viaje con Tixi, lo que se use primero.
     private const string DialogoDelTransmisor = "Lobby/Dialogos/Lobby_Tixi_VueltaDelCasino_Transmisor";
 
-    // Mew: el premio de Tacconi en la cueva. Nv 30, un escalon arriba de los
-    // Pokemon de las ruletas de Martin.
+    // Mew: el premio de Tacconi en la cueva. Nv 52, lo mas alto que puede
+    // conseguir el jugador, dos arriba del Mewtwo de Julieta (rebalanceo del
+    // 6-oct-2026; era 30).
     private const string EspecieMew = "0151_Mew";
-    private const int NivelMew = 30;
+    private const int NivelMew = 52;
 
     // El arte que paso el equipo (Graphics/Tixi), pasado a pixel art: hoja 4x4
     // de 64x82 y retrato de 160x160. Mide 76 px de alto y no 58: se igualo por

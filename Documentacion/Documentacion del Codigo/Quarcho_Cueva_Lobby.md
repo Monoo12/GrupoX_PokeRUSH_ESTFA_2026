@@ -94,7 +94,7 @@ El menú: **Ruleta de Pokémon / de objetos / de mejoras**, **Juegos del casino*
 
 | Ruleta | Precio | Qué da |
 |---|---|---|
-| Pokémon | 1500 | Siempre un Pokémon Nv 28–30 (rareza por el ícono, igual que las del casino; la especie se sortea, ver `Casino_Personajes_Y_Ruletas.md`) |
+| Pokémon | 1500 | Siempre un Pokémon Nv 50–52, forma final (rareza por el ícono, igual que las del casino; la especie se sortea, ver `Casino_Personajes_Y_Ruletas.md`) |
 | Objetos | 600 | Curativos, Revivir, Cura Total o plata |
 | Mejoras | 500 | Una mejora para **la próxima batalla** |
 
@@ -147,7 +147,7 @@ mataría sus corrutinas) y la referencia en Tixi. El fondo de esas peleas es `Ex
 
 Es el **mismo `CasinoTacconiNpc` del piso 3** con otro premio y con tope:
 
-- Una mano de blackjack apostando un Pokémon. **Si perdés, Tacconi se queda con tu Pokémon y gastás una chance**; el empate no gasta; si ganás, te llevás el **Mew (Nv 30)** y se termina.
+- Una mano de blackjack apostando un Pokémon. **Si perdés, Tacconi se queda con tu Pokémon y gastás una chance**; el empate no gasta; si ganás, te llevás el **Mew (Nv 52**, desde el rebalanceo del 6-oct-2026; era Nv 30) y se termina.
 - Las chances son los flags `Lobby_TacconiChance1..3`; gastadas las tres, no juega más. El Mew ganado es `Lobby_TacconiMewGanado`.
 - Como en el casino, no acepta la apuesta si perdiéndola te quedás sin nadie que pueda pelear.
 

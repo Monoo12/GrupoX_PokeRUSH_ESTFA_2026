@@ -261,7 +261,7 @@ reintentar, salir de la zona y volver a entrar, o hablarle con X.
 
 **La escena de prueba:** `PokeRush > Jefe final (Julieta) > Armar la escena de
 prueba` y Play. Caminá hacia Julieta. Arranca con una partida DEMO de seis
-Pokémon de nivel 34-36 y **no guarda** la partida. Atajos (solo en esta escena):
+Pokémon de nivel 47-50 (desde el rebalanceo del 6-oct-2026) y **no guarda** la partida. Atajos (solo en esta escena):
 
 | Tecla | Qué hace |
 |---|---|
@@ -324,9 +324,12 @@ Santiago: el builder no pinta nada (salvo esa celda de la puerta).
 
 Todo desde el Inspector de `PeleaJulieta` o desde assets, sin recompilar:
 
-- **Equipo y niveles**: `Julieta.asset`. Hoy: Magnezone 33, Alakazam 34,
-  Genesect 34, Metagross 35, **Hoopa 37 y Mewtwo 38** (los dos del portal).
-  Un escalón arriba de Reymar (24-27).
+- **Equipo y niveles**: `Julieta.asset` (y `PeleaJulietaAssets.Equipo`, que lo
+  rehace). Hoy: Magnezone 43, Alakazam 44, Genesect 44, Metagross 45, **Hoopa
+  47 y Mewtwo 50** (los dos del portal). Mewtwo es el Pokémon rival más alto del
+  juego (Reymar llega a 49); el resto queda más abajo porque son legendarios y
+  míticos. Ojo con Alakazam: a Nv 45 aprende Premonición (120) y la pelea se
+  pone bastante más dura. Ver `Rebalanceo_Oct_2026.md`.
 - **Cuándo cambia cada fase**: las condiciones de los momentos `F1 -> F2`,
   `F2 -> F3` y `F3 -> Ruptura` en el guion.
 - **Néstor**: probabilidad 45%, cooldown 2, gracia 1, máximo 3 (en el casino son

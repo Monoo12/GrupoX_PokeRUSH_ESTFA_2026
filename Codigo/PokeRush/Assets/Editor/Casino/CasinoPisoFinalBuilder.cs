@@ -456,21 +456,24 @@ public static class CasinoPisoFinalBuilder
     // ---------- assets ----------
 
     // El rival mas duro del casino, pero sin pasarse: seis Pokemon de nivel
-    // 24-27 contra los cuatro de nivel 21-23 del guardia VIP, que era lo mas
-    // dificil hasta ahora (eran 26-29: el playtest del 4-oct pidio bajarlo).
-    // Equipo de mafioso (siniestro y fantasma) con Gengar de as. El perfil Elite es un escalon arriba del GymLeader del guardia VIP
-    // y todavia no es el FinalBoss, que queda para el jefe del juego.
+    // 46-49, todos formas finales, contra los cuatro de nivel 48-49 del guardia
+    // VIP (rebalanceo del 6-oct-2026; eran 24-27). Equipo de mafioso, todo
+    // Siniestro, con Hydreigon de as: la linea de siempre (Absol, Drapion,
+    // Bisharp ya Kingambit) mas Grimmsnarl y Tyranitar. En el simulador de
+    // balance se le gana ~60% de las veces al primer intento. El perfil Elite
+    // es un escalon arriba del GymLeader del guardia VIP y todavia no es el
+    // FinalBoss, que queda para el jefe del juego.
     private static EnemyDefinition ArmarElJefe()
     {
         EnemyDefinition def = CasinoNpcBuilder.Enemigo(
             "JefeFinalCasino", "Reymar", 3000, StoryFlag.Casino_JefeFinalVencido,
             RetratoDelJefe, "Elite",
-            ("0359_Absol", 24),
-            ("0452_Drapion", 24),
-            ("0625_Bisharp", 25),
-            ("0553_Krookodile", 25),
-            ("0461_Weavile", 26),
-            ("0094_Gengar", 27));
+            ("0359_Absol", 46),
+            ("0452_Drapion", 46),
+            ("0861_Grimmsnarl", 47),
+            ("0983_Kingambit", 47),
+            ("0248_Tyranitar", 48),
+            ("0635_Hydreigon", 49));
 
         if (def != null)
         {

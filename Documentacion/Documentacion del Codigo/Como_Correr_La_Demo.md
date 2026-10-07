@@ -100,10 +100,10 @@ Las cuatro pistas están importadas como **Streaming** con **Preload Audio Data*
 - Moverse con **WASD / flechas**, correr con **Shift**.
 - **X** para interactuar.
 - **Néstor** pregunta si querés pelear; si aceptás arranca el combate contra el boss.
-- **Basculin** está en la sala inicial y se puede liberar: se suma al equipo en Nv20.
+- **Basculegion** está en la sala inicial y se puede liberar: se suma al equipo en Nv42 (era Basculin Nv20 hasta el rebalanceo del 6-oct-2026).
 - **Dos Pokéballs en la sala de Néstor**, una a cada lado del escritorio: la izquierda da **3 Pociones** y la derecha **2 Superpociones**. Se agarran con X y no vuelven a aparecer (cada una tiene su flag).
 - **El panel del rack** en la sala de servidores corta la energía y apaga los rayos del pasillo.
-- Detrás de los rayos, subiendo por el pasillo, está **Combusken**, que también se libera.
+- Detrás de los rayos, subiendo por el pasillo, está **Blaziken** (era Combusken), que también se libera, en Nv44.
 - **F2** guarda.
 
 ---
