@@ -40,6 +40,8 @@ public static class TeclasDeLaInterfaz
     // Volver: Z / Backspace / B, y Escape (que en estas pantallas siempre es volver).
     public static bool Volver()
     {
+        // El Escape que cierra la consola de administrador no es un "volver".
+        if (GameInputService.TecladoOcupado) return false;
         GameInputService input = GameInputService.Instance;
         bool escape = Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame;
         if (!escape && (input == null || !input.WasPressed(GameAction.Cancel))) return false;

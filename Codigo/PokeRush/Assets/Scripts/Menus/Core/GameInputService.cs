@@ -70,6 +70,37 @@ public class GameInputService
     // renglon que la estaba pidiendo.
     public bool IsRebinding { get; private set; }
 
+    // La consola de administrador esta usando el teclado para escribir: el
+    // input logico se apaga igual que al reasignar, si no "ir casino1" mueve
+    // al personaje y la X confirma un dialogo. Sigue ocupado el frame en que
+    // se suelta, asi el Escape que cierra la consola no abre ademas el menu.
+    // Los pocos que leen el teclado directo (el 1-4 del combate, F2, el
+    // Escape de las pantallas con botones) preguntan por esto mismo.
+    //
+    // Estatico y no del servicio: tiene que valer aunque nadie haya creado el
+    // servicio todavia, y se limpia al entrar a Play (el proyecto no recarga
+    // el dominio: una consola abierta al salir dejaria el juego sin input).
+    private static bool _tecladoOcupado;
+    private static int _tecladoLiberadoEnFrame = -1;
+
+    public static bool TecladoOcupado =>
+        _tecladoOcupado || _tecladoLiberadoEnFrame == Time.frameCount;
+
+    public static void OcuparTeclado(bool ocupado)
+    {
+        if (_tecladoOcupado && !ocupado) _tecladoLiberadoEnFrame = Time.frameCount;
+        _tecladoOcupado = ocupado;
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void LiberarTeclado()
+    {
+        _tecladoOcupado = false;
+        _tecladoLiberadoEnFrame = -1;
+    }
+
+    private bool Apagado => IsRebinding || TecladoOcupado;
+
     // Avisa cuando cambian los bindings (lo escucha la UI de Opciones para
     // redibujar los nombres de tecla).
     public event Action BindingsChanged;
@@ -257,7 +288,7 @@ public class GameInputService
 
     public bool WasPressed(GameAction action)
     {
-        if (IsRebinding) return false;
+        if (Apagado) return false;
         if (EstaConsumida(action)) return false;
         return _actions.TryGetValue(action, out InputAction input)
                && input != null && input.WasPressedThisFrame();
@@ -291,7 +322,7 @@ public class GameInputService
 
     public bool IsPressed(GameAction action)
     {
-        if (IsRebinding) return false;
+        if (Apagado) return false;
         return _actions.TryGetValue(action, out InputAction input)
                && input != null && input.IsPressed();
     }
@@ -299,14 +330,14 @@ public class GameInputService
     // Apretada ahora O repitiendo por mantenerla. Es lo que usan las listas.
     public bool WasPressedOrRepeated(GameAction action)
     {
-        if (EstaConsumida(action)) return false;
+        if (Apagado || EstaConsumida(action)) return false;
         return WasPressed(action) || _repeatPending.Contains(action);
     }
 
     // Direccion de navegacion como vector (para el movimiento en el mundo).
     public Vector2 ReadDirection()
     {
-        if (IsRebinding) return Vector2.zero;
+        if (Apagado) return Vector2.zero;
         float x = (IsPressed(GameAction.Right) ? 1f : 0f) - (IsPressed(GameAction.Left) ? 1f : 0f);
         float y = (IsPressed(GameAction.Up) ? 1f : 0f) - (IsPressed(GameAction.Down) ? 1f : 0f);
         Vector2 dir = new Vector2(x, y);

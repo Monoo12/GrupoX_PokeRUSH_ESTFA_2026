@@ -129,7 +129,7 @@ public class CreacionPersonajeView : MonoBehaviour
             // Enter dentro del campo: si el nombre sirve, sigue.
             campoNombre.onEndEdit.AddListener(_ =>
             {
-                if (Keyboard.current != null &&
+                if (Keyboard.current != null && !GameInputService.TecladoOcupado &&
                     (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame))
                     ConfirmarNombre();
             });
@@ -191,7 +191,7 @@ public class CreacionPersonajeView : MonoBehaviour
 
         if (_ocupada || _saliendo) return;
         bool escribiendo = campoNombre != null && campoNombre.isFocused;
-        if (escribiendo) return;
+        if (escribiendo || GameInputService.TecladoOcupado) return;
 
         GameInputService input = GameInputService.Instance;
 

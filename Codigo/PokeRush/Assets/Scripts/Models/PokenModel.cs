@@ -566,8 +566,15 @@ public class PokenModel
         if (CurrentHP > MaxHP) CurrentHP = MaxHP;
     }
 
+    // Modo dios de la consola de administrador: mientras diga que si para un
+    // Pokemon, no recibe dano de ningun lado (ataques, estados, clima, la
+    // ruleta, el chip de la liberacion: todo pasa por TakeDamage). Null = el
+    // juego normal.
+    public static System.Func<PokenModel, bool> NoRecibeDanio;
+
     public void TakeDamage(int damage)
     {
+        if (NoRecibeDanio != null && NoRecibeDanio(this)) return;
         CurrentHP -= damage;
         if (CurrentHP < 0) CurrentHP = 0;
     }

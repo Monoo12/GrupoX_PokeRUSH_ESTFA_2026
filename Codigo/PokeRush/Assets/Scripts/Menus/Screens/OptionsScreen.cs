@@ -10,7 +10,11 @@ using UnityEngine.UI;
 // prefab ni esta pantalla.
 public class OptionsScreen : MenuScreen
 {
-    private enum RowKind { Header, MusicVolume, SfxVolume, Resolution, ScreenMode, Rebind, Reset, Back }
+    private enum RowKind { Header, MusicVolume, SfxVolume, Resolution, ScreenMode, Rebind, Consola, Reset, Back }
+
+    // La tecla de la consola de administrador (la de la izquierda del 1): no se
+    // reasigna a ninguna accion, si no abriria la consola y ademas haria otra cosa.
+    private const string TeclaDeLaConsola = "<Keyboard>/backquote";
 
     private class Row
     {
@@ -80,6 +84,9 @@ public class OptionsScreen : MenuScreen
                 Action = action
             });
 
+        _model.Add(new Row { Kind = RowKind.Header, Label = "Pruebas", Selectable = false });
+        _model.Add(new Row { Kind = RowKind.Consola, Label = "Consola de administrador" });
+
         _model.Add(new Row { Kind = RowKind.Header, Label = string.Empty, Selectable = false });
         _model.Add(new Row { Kind = RowKind.Reset, Label = "Restaurar valores" });
         _model.Add(new Row { Kind = RowKind.Back, Label = "Volver" });
@@ -131,6 +138,10 @@ public class OptionsScreen : MenuScreen
                         esperando ? "..." : GameInputService.Instance.GetDisplayName(row.Action));
                     break;
 
+                case RowKind.Consola:
+                    widget.Bind(row.Label, GameSettings.ConsolaHabilitada ? "< Sí >" : "< No >");
+                    break;
+
                 default:
                     widget.Bind(row.Label, null);
                     break;
@@ -143,7 +154,9 @@ public class OptionsScreen : MenuScreen
         if (hintText != null)
             hintText.text = _waitingForKey
                 ? "Apretá la tecla nueva (Esc para cancelar)"
-                : "Izq/Der: ajustar   Aceptar: cambiar tecla   Volver: salir";
+                : _model.Count > _cursor && _model[_cursor].Kind == RowKind.Consola
+                    ? "Prendida, se abre con la tecla | (a la izquierda del 1)"
+                    : "Izq/Der: ajustar   Aceptar: cambiar tecla   Volver: salir";
     }
 
     private string VolumeLabel(float value01)
@@ -243,6 +256,11 @@ public class OptionsScreen : MenuScreen
                 break;
             }
 
+            case RowKind.Consola:
+                GameSettings.ConsolaHabilitada = !GameSettings.ConsolaHabilitada;
+                Sonidos.Cursor();
+                break;
+
             default:
                 return;
         }
@@ -258,6 +276,10 @@ public class OptionsScreen : MenuScreen
         {
             case RowKind.Rebind:
                 StartRebind(row.Action);
+                break;
+
+            case RowKind.Consola:
+                Adjust(1);
                 break;
 
             case RowKind.Reset:
@@ -306,6 +328,12 @@ public class OptionsScreen : MenuScreen
         {
             ShowMessage(GameInputService.DisplayNameForPath(path) +
                 " está reservada para abrir el menú.", Refresh);
+            return;
+        }
+
+        if (string.Equals(path, TeclaDeLaConsola, StringComparison.OrdinalIgnoreCase))
+        {
+            ShowMessage("Esa tecla (la de la izquierda del 1) está reservada para la consola de administrador.", Refresh);
             return;
         }
 

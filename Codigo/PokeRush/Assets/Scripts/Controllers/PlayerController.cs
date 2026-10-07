@@ -28,6 +28,10 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Radio del chequeo en el tile de adelante.")]
     [SerializeField] private float interactionRadius = 0.4f;
 
+    // Consola de administrador: atravesar paredes. Solo saltea el chequeo de
+    // obstaculos; puertas, zonas y NPCs siguen reaccionando igual.
+    public static bool AtravesarParedes;
+
     private PlayerModel _playerModel;
     private StoryModel _storyModel;
 
@@ -189,7 +193,8 @@ public class PlayerController : MonoBehaviour
         Vector2 destination = (Vector2)transform.position + step * tileSize;
 
         // Si hay un obstaculo en el tile destino, no me muevo (choco contra la pared).
-        if (Physics2D.OverlapCircle(destination, collisionCheckRadius, obstacleMask) != null)
+        if (!AtravesarParedes &&
+            Physics2D.OverlapCircle(destination, collisionCheckRadius, obstacleMask) != null)
         {
             Sonidos.Choque();
             return;

@@ -28,7 +28,7 @@ public class GuardadoRapido : MonoBehaviour
     private void Update()
     {
         var kb = Keyboard.current;
-        if (kb == null || !kb[tecla].wasPressedThisFrame) return;
+        if (kb == null || GameInputService.TecladoOcupado || !kb[tecla].wasPressedThisFrame) return;
 
         // Con la caja abierta la tecla la maneja el dialogo: guardar en el medio
         // de una decision dejaria el save a mitad de camino.

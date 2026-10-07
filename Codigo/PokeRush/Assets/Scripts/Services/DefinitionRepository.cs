@@ -132,6 +132,38 @@ public class DefinitionRepository
             if (e != null && !string.IsNullOrEmpty(e.nombre) && !string.IsNullOrEmpty(e.ruta)) d[e.nombre] = e.ruta;
         return d;
     }
+    // ---------- listados (consola de administrador) ----------
+    //
+    // Para buscar y autocompletar por nombre SIN cargar las especies: con el
+    // indice, los nombres salen de ahi y no se toca ningun asset.
+
+    public IEnumerable<string> NombresDePokens()
+    {
+        if (!_loaded) LoadAll();
+        return _rutaDePoken != null ? _rutaDePoken.Keys : _pokens.Keys;
+    }
+
+    // Numero de Pokedex sin cargar la especie: el asset se llama
+    // "0257_Blaziken". 0 si no se sabe.
+    public int NumeroDePokedex(string nombre)
+    {
+        if (!_loaded) LoadAll();
+        if (string.IsNullOrEmpty(nombre)) return 0;
+        if (_rutaDePoken != null && _rutaDePoken.TryGetValue(nombre, out string ruta))
+        {
+            string archivo = System.IO.Path.GetFileName(ruta);
+            int guion = archivo.IndexOf('_');
+            return guion > 0 && int.TryParse(archivo.Substring(0, guion), out int n) ? n : 0;
+        }
+        return _pokens.TryGetValue(nombre, out PokenDefinition p) && p != null ? p.dexNumber : 0;
+    }
+
+    public IEnumerable<string> NombresDeObjetos()
+    {
+        if (!_loaded) LoadAll();
+        return _healItems.Keys.Concat(_battleItems.Keys).Concat(_specialItems.Keys);
+    }
+
     public HealItemDefinition GetHealItem(string name) => _healItems.GetValueOrDefault(name);
     public BattleItemDefinition GetBattleItem(string name) => _battleItems.GetValueOrDefault(name);
     public SpecialItemDefinition GetSpecialItem(string name) => _specialItems.GetValueOrDefault(name);

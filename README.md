@@ -81,10 +81,16 @@ escena con Tixi) → CreditosFinales → Menu Principal`
 | Volver / abrir el menú | **Z** o Backspace (y Esc) | B / Círculo (y Start) |
 | Cambiar de página (mochila, PC) | Q / E | L1 / R1 |
 | Guardado rápido | F2 | — |
+| Consola de administrador (si está prendida) | La tecla de la izquierda del 1 (**\|**) | — |
 
 Todas las teclas se pueden reasignar en **Menú → Opciones**, donde también están
 el volumen de música y efectos, la **resolución** y el **modo de pantalla**
 (completa o ventana). Alt+Enter alterna pantalla completa.
+
+Para probar la build sin jugar todo de nuevo está la **consola de administrador**:
+se prende en **Opciones → Pruebas** y se abre con la tecla de la izquierda del 1.
+Va a cualquier punto de la historia, da Pokémon, plata y objetos, gana peleas,
+atraviesa paredes y acelera el juego. Ver `Consola_De_Administrador.md`.
 
 ### Dónde se guarda la partida
 
@@ -99,7 +105,7 @@ pantalla de partidas).
 
 Paso a paso en **[BUILD.md](BUILD.md)**. Resumen: abrir el proyecto y elegir
 **PokeRush → Release → Generar build de Windows**. La build queda en
-`Codigo/PokeRush/Builds/PokeRush_1.2.0/PokeRush.exe`.
+`Codigo/PokeRush/Builds/PokeRush_1.3.0/PokeRush.exe`.
 
 ---
 
@@ -149,6 +155,7 @@ GrupoX_PokeRUSH_ESTFA_2026/
 | `Lobby/` | La Quarcho Cueva y el recorrido de la historia |
 | `Julieta/` | La pelea final y los créditos |
 | `Tutorial/` | El tutorial de la habitación |
+| `Consola/` | La consola de administrador (comandos y botones para probar) |
 | `Testing/` | Bancos de prueba en Play (no se usan en el juego) |
 
 ---
@@ -185,7 +192,7 @@ y los créditos del juego. Es material de fan game de uso académico, sin fines 
 
 | | |
 |---|---|
-| Juego | **1.2.0** |
+| Juego | **1.3.0** |
 | Unity | 6000.4.2f1 |
 | URP | 17.4.0 |
 | Input System | 1.19.0 |
@@ -253,6 +260,9 @@ Lo que cambió en la **1.1.0** (el playtest del 4-oct) está resumido en
 Entrenamiento intenso del chip, el aviso del rival, aprender movimientos al subir
 de nivel, los fondos de combate, la tienda del piso 3...) en
 `Playtest_5_Oct_2026.md`, con el documento de cada sistema donde está el detalle.
+La **1.3.0** trae el rebalanceo de Pokémon y dificultad (`Rebalanceo_Oct_2026.md`:
+formas finales, rivales desde Nv 36, el simulador de balance) y la consola de
+administrador (`Consola_De_Administrador.md`).
 
 ---
 

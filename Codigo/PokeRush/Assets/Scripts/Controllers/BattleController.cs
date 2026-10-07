@@ -544,8 +544,9 @@ public class BattleController : MonoBehaviour
     {
         if (_battleModel == null) return;
 
+        // Con la consola de administrador abierta, los numeros son texto.
         Keyboard kb = Keyboard.current;
-        if (kb == null) return;
+        if (kb == null || GameInputService.TecladoOcupado) return;
 
         // F1-F6 tambien sirven para el cambio OBLIGADO, por eso pasan por
         // OnSwitchChosen (el mismo router que usa la UI) y no por SelectSwitch.
@@ -1894,6 +1895,27 @@ public class BattleController : MonoBehaviour
         StopAllCoroutines();
         if (MenuManager.HasInstance) MenuManager.Instance.CloseAll();
         _battleModel.Finish(playerVictory: false);
+        StartCoroutine(EndBattleRoutine());
+    }
+
+    // Lo contrario: corta la pelea en curso como VICTORIA (la consola de
+    // administrador). Por el mismo cierre normal, asi la plata, los flags del
+    // rival, el guardado y lo que venga despues (la mano de Reymar, el final
+    // de Julieta) pasan como si se hubiera ganado peleando. Contra Nestor
+    // cuenta como liberarlo: si no, la torre quedaria sin su flag.
+    public void GanarAhora()
+    {
+        if (_battleModel == null) return;
+
+        StopAllCoroutines();
+        if (MenuManager.HasInstance) MenuManager.Instance.CloseAll();
+        foreach (PokenModel rival in _battleModel.Enemy.Team) rival.SetCurrentHP(0);
+        if (_bossConfig != null && !_liberationDone)
+        {
+            _liberationDone = true;
+            GameManager.Instance?.Story?.ActivateFlag(StoryFlag.Torre1_NestorLiberado);
+        }
+        _battleModel.Finish(playerVictory: true);
         StartCoroutine(EndBattleRoutine());
     }
 

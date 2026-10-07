@@ -8,6 +8,7 @@ public static class GameSettings
 {
     public const string KeyMusicVolume = "audio.music";
     public const string KeySfxVolume = "audio.sfx";
+    public const string KeyConsola = "pruebas.consola";
 
     private const float DefaultMusicVolume = 0.7f;
     private const float DefaultSfxVolume = 0.8f;
@@ -36,6 +37,15 @@ public static class GameSettings
         }
     }
 
+    // La consola de administrador (ConsolaDeAdministrador): apagada de fabrica.
+    // Prendida, se abre con la tecla de la izquierda del 1. Es de la maquina,
+    // como el volumen: borrar la partida no la apaga.
+    public static bool ConsolaHabilitada
+    {
+        get => SettingsService.Instance.GetBool(KeyConsola, false);
+        set => SettingsService.Instance.SetBool(KeyConsola, value);
+    }
+
     // Empuja los valores guardados al AudioService. Lo llama el MenuManager al
     // arrancar; idempotente para poder llamarlo desde donde sea sin pensarlo.
     public static void Apply()
@@ -62,5 +72,6 @@ public static class GameSettings
         SfxVolume = DefaultSfxVolume;
         ConfiguracionDePantalla.Restaurar();
         GameInputService.Instance.ResetToDefaults();
+        ConsolaHabilitada = false;
     }
 }

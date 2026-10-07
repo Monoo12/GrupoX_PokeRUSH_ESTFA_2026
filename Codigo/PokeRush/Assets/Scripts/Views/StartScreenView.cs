@@ -90,6 +90,10 @@ public class StartScreenView : MonoBehaviour
         bool click = Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame;
         bool toque = Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame;
 
+        // Lo que se escribe o se clickea en la consola de administrador no es
+        // "apretar cualquier tecla".
+        if (GameInputService.TecladoOcupado) return;
+
         if (tecla || click || toque)
         {
             OnStartPressed();

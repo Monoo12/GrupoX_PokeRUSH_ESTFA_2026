@@ -24,7 +24,7 @@ public static class PreparacionDeRelease
 {
     public const string Empresa = "LevelUP Creators";
     public const string Producto = "PokeRush";
-    public const string Version = "1.2.0";
+    public const string Version = "1.3.0";
 
     private const string Icono = "Assets/Sprites/Logos/IconoDelJuego.png";
     private const string Logo = "Assets/Sprites/Logos/LevelUpCreators.png";
