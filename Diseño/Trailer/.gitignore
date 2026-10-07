@@ -1,0 +1,18 @@
+node_modules/
+out/
+.remotion/
+public/assets/
+dist/
+.DS_Store
+.env
+
+# Entorno de Python para el analisis de beats (scripts/detectar-beats.py)
+.venv/
+__pycache__/
+
+# Voz cruda del TTS, antes del procesado (se regenera con npm run voz)
+voz/crudo/
+
+# Clips grabados con OBS: pesan mucho, viven solo en local
+capturas/*.mp4
+capturas/*.mkv
