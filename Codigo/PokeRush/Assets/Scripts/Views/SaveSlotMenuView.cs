@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 // Menu de seleccion de partida guardada. Muestra una tarjeta con los datos del
 // save (nombre, equipo, etc.) y tres botones: Opciones, Borrar partida y Volver.
-// Tocar la tarjeta carga la partida y entra al juego.
+// Tocar la tarjeta carga la partida y entra al juego. La cruz de arriba a la
+// izquierda cierra el juego (la partida ya esta guardada: no hay nada que perder).
 //
 // Los cambios de escena funden a negro (FundidoAEscena). "Borrar partida" pide
 // confirmacion (la pregunta arranca en NO) y "Opciones" abre la pantalla de
@@ -38,6 +39,8 @@ public class SaveSlotMenuView : MonoBehaviour
     [SerializeField] private Button optionsButton;
     [SerializeField] private Button deleteButton;
     [SerializeField] private Button backButton;
+    [Tooltip("La cruz de arriba a la izquierda: cierra el juego. Opcional.")]
+    [SerializeField] private Button quitButton;
 
     [Header("Opciones (opcional)")]
     [SerializeField] private GameObject optionsPanel;
@@ -65,6 +68,7 @@ public class SaveSlotMenuView : MonoBehaviour
         if (optionsButton != null) optionsButton.onClick.AddListener(OnOptionsClicked);
         if (deleteButton != null) deleteButton.onClick.AddListener(OnDeleteClicked);
         if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
+        if (quitButton != null) quitButton.onClick.AddListener(OnQuitClicked);
     }
 
     private void OnDestroy()
@@ -73,6 +77,7 @@ public class SaveSlotMenuView : MonoBehaviour
         if (optionsButton != null) optionsButton.onClick.RemoveListener(OnOptionsClicked);
         if (deleteButton != null) deleteButton.onClick.RemoveListener(OnDeleteClicked);
         if (backButton != null) backButton.onClick.RemoveListener(OnBackClicked);
+        if (quitButton != null) quitButton.onClick.RemoveListener(OnQuitClicked);
     }
 
     private void Start()
@@ -219,6 +224,16 @@ public class SaveSlotMenuView : MonoBehaviour
     {
         if (IgnorarClick) return;
         Ir(sceneVolver);
+    }
+
+    private void OnQuitClicked()
+    {
+        if (IgnorarClick) return;
+        _cargando = true;
+        Grupo.interactable = false;
+        Grupo.blocksRaycasts = false;
+        Sonidos.Cancelar();
+        FundidoAEscena.SalirDelJuego(fundido);
     }
 
     // Cambia de escena fundiendo a negro. Desde aca no se toca nada mas.

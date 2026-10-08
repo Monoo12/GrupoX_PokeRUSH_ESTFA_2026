@@ -10,7 +10,8 @@ using UnityEngine.UI;
 // La pantalla entra con un fundido desde negro, el PRESS START "respira"
 // (PulsoSuave sobre una copia exacta de ese pedazo del arte) y al aceptar
 // destella y funde a negro hacia la escena siguiente (FundidoAEscena), en vez
-// de cortar de golpe.
+// de cortar de golpe. La cruz de arriba a la izquierda funde a negro y cierra
+// el juego.
 public class StartScreenView : MonoBehaviour
 {
     [Header("Presentacion (opcionales)")]
@@ -26,6 +27,8 @@ public class StartScreenView : MonoBehaviour
     [Header("Boton")]
     // Boton "Press Start". Se puede dejar null si solo se usa "cualquier tecla".
     [SerializeField] private Button startButton;
+    [Tooltip("La cruz de arriba a la izquierda: cierra el juego. Opcional.")]
+    [SerializeField] private Button quitButton;
 
     [Header("Escenas destino")]
     // Escena a la que ir si YA existe una partida guardada (menu de elegir save).
@@ -47,11 +50,13 @@ public class StartScreenView : MonoBehaviour
     {
         // Enganchamos el boton por codigo para no depender del Inspector.
         if (startButton != null) startButton.onClick.AddListener(OnStartPressed);
+        if (quitButton != null) quitButton.onClick.AddListener(OnQuitPressed);
     }
 
     private void OnDestroy()
     {
         if (startButton != null) startButton.onClick.RemoveListener(OnStartPressed);
+        if (quitButton != null) quitButton.onClick.RemoveListener(OnQuitPressed);
     }
 
     private void Start()
@@ -94,10 +99,33 @@ public class StartScreenView : MonoBehaviour
         // "apretar cualquier tecla".
         if (GameInputService.TecladoOcupado) return;
 
+        // El click en la cruz es para salir, no "cualquier click": sin esto el
+        // mismo click cerraba el juego y arrancaba la partida a la vez.
+        if (click && SobreLaCruz(Mouse.current.position.ReadValue())) click = false;
+        if (toque && SobreLaCruz(Touchscreen.current.primaryTouch.position.ReadValue())) toque = false;
+
         if (tecla || click || toque)
         {
             OnStartPressed();
         }
+    }
+
+    private bool SobreLaCruz(Vector2 punto)
+    {
+        if (quitButton == null || !quitButton.isActiveAndEnabled) return false;
+        Canvas canvas = quitButton.GetComponentInParent<Canvas>();
+        Camera cam = canvas == null || canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        return RectTransformUtility.RectangleContainsScreenPoint((RectTransform)quitButton.transform, punto, cam);
+    }
+
+    private void OnQuitPressed()
+    {
+        if (_started || !Lista) return;
+        _started = true;
+        Sonidos.Cancelar();
+        if (startButton != null) startButton.interactable = false;
+        quitButton.interactable = false;
+        FundidoAEscena.SalirDelJuego(fundidoDeSalida);
     }
 
     // Handler unico: decide el destino y carga la escena.

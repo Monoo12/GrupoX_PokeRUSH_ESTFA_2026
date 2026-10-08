@@ -119,7 +119,103 @@ public static class PantallasDeInicioBuilder
         if (imagenDelFondo != null && imagenDelFondo.preserveAspect)
             Debug.LogWarning("[Inicio] El Fondo del titulo conserva la proporcion: la copia del PRESS START puede no calzar.");
 
+        Poner(vista, "quitButton", CruzDeSalir(canvas.transform));
+
         return Guardar(scene);
+    }
+
+    // ------------------------------------------------------- la cruz de salir
+
+    // Arriba a la izquierda del titulo y de MenuSaves: cierra el juego
+    // (pedido de Augusto, 8-oct-2026). Un boton cuadrado con los mismos
+    // paneles que el resto de MenuSaves (gris, celeste con el cursor encima o
+    // seleccionado) y una X de pixel art.
+    [MenuItem("PokeRush/UI/Poner la cruz de salir en el inicio")]
+    public static void PonerCruzDeSalir()
+    {
+        if (!SinCambiosPendientes()) return;
+
+        Scene titulo = EditorSceneManager.OpenScene(EscenaTitulo, OpenSceneMode.Single);
+        StartScreenView inicio = Buscar<StartScreenView>(titulo);
+        if (inicio == null) { Debug.LogError("[Inicio] Menu Principal no tiene StartScreenView."); return; }
+        Poner(inicio, "quitButton", CruzDeSalir(inicio.transform));
+        bool okTitulo = Guardar(titulo);
+
+        Scene partidas = EditorSceneManager.OpenScene(EscenaPartidas, OpenSceneMode.Single);
+        SaveSlotMenuView menu = Buscar<SaveSlotMenuView>(partidas);
+        if (menu == null) { Debug.LogError("[Inicio] MenuSaves no tiene SaveSlotMenuView."); return; }
+        Poner(menu, "quitButton", CruzDeSalir(menu.GetComponentInParent<Canvas>().rootCanvas.transform));
+        bool okPartidas = Guardar(partidas);
+
+        Debug.Log($"[Inicio] Cruz de salir: titulo {(okTitulo ? "ok" : "FALLO")}, partidas {(okPartidas ? "ok" : "FALLO")}.");
+    }
+
+    private const string ArteDeLaCruz = "Assets/Sprites/Menus/cruz_salir.png";
+    private const float LadoDeLaCruz = 72f;
+
+    private static Button CruzDeSalir(Transform raiz)
+    {
+        Borrar(raiz, "BotonSalir");
+
+        Image fondo = Imagen("BotonSalir", raiz, SubSprite(Paneles, "boton_gris"), Color.white, null);
+        fondo.type = Image.Type.Sliced;
+        fondo.raycastTarget = true;
+        Ubicar(fondo.gameObject, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(28f, -28f),
+               new Vector2(LadoDeLaCruz, LadoDeLaCruz));
+
+        Image x = Imagen("X", fondo.transform, SpriteDeLaCruz(), Tinta, null);
+        Ubicar(x.gameObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(36f, 36f));
+
+        Button b = fondo.gameObject.AddComponent<Button>();
+        b.targetGraphic = fondo;
+        b.transition = Selectable.Transition.SpriteSwap;
+        Sprite encima = SubSprite(Paneles, "boton_celeste");
+        b.spriteState = new SpriteState { highlightedSprite = encima, selectedSprite = encima, pressedSprite = encima };
+
+        BotonAnimado anim = fondo.gameObject.AddComponent<BotonAnimado>();
+        Poner(anim, "escalaEncima", 1.08f);
+        Poner(anim, "escalaApretado", 0.94f);
+
+        // Encima de todo: en el titulo, el fondo y el PRESS START son hermanos anteriores.
+        fondo.transform.SetAsLastSibling();
+        return b;
+    }
+
+    // Una X de 14x14 con trazo de 2 px, blanca (la tiñe la Image). Point, como
+    // panels.png. Se genera una sola vez.
+    private static Sprite SpriteDeLaCruz()
+    {
+        if (AssetDatabase.LoadAssetAtPath<Sprite>(ArteDeLaCruz) == null)
+        {
+            const int n = 14, m = n - 2;   // 1 px de margen para que el borde no se corte
+            var tex = new Texture2D(n, n, TextureFormat.RGBA32, false);
+            var pixeles = new Color32[n * n];
+            for (int v = 0; v < m; v++)
+                for (int u = 0; u < m; u++)
+                {
+                    bool principal = u - v == 0 || u - v == 1;
+                    bool cruzada = u + v == m - 2 || u + v == m - 1;
+                    if (principal || cruzada) pixeles[(v + 1) * n + u + 1] = new Color32(255, 255, 255, 255);
+                }
+            tex.SetPixels32(pixeles);
+            System.IO.File.WriteAllBytes(ArteDeLaCruz, tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+            AssetDatabase.ImportAsset(ArteDeLaCruz, ImportAssetOptions.ForceSynchronousImport);
+        }
+
+        var importer = (TextureImporter)AssetImporter.GetAtPath(ArteDeLaCruz);
+        if (importer.textureType != TextureImporterType.Sprite || importer.filterMode != FilterMode.Point)
+        {
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.filterMode = FilterMode.Point;
+            importer.mipmapEnabled = false;
+            importer.alphaIsTransparency = true;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.spritePixelsPerUnit = 100f;
+            importer.SaveAndReimport();
+        }
+        return AssetDatabase.LoadAssetAtPath<Sprite>(ArteDeLaCruz);
     }
 
     // ---------------------------------------------------------------- partidas
@@ -194,6 +290,7 @@ public static class PantallasDeInicioBuilder
         vistaSo.ApplyModifiedPropertiesWithoutUndo();
 
         PonerAyuda(vista);
+        Poner(vista, "quitButton", CruzDeSalir(vista.GetComponentInParent<Canvas>().rootCanvas.transform));
 
         // "Próximo: el primer Data Center" no entraba en la cajita de la ruta.
         Text ruta = vista.GetComponentsInChildren<Text>(true).FirstOrDefault(t => t.name == "RutaText");

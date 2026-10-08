@@ -28,6 +28,9 @@ la identidad**: la pone `MenuSaves` y las otras dos la siguen.
 - Al aceptar destella (el "aceptado" clásico) y funde a negro hacia la escena que
   toque (`FundidoAEscena`). Los primeros 0,35 s no acepta nada, así el clic con el
   que se llegó no saltea la pantalla.
+- **La cruz de arriba a la izquierda cierra el juego** (funde a negro y sale; en el
+  editor, sale de Play). Un clic sobre la cruz no cuenta como "cualquier clic":
+  no arranca la partida.
 
 ### Partidas — `SaveSlotMenuView`
 
@@ -43,6 +46,8 @@ la identidad**: la pone `MenuSaves` y las otras dos la siguen.
   nada si la escena no traía un panel propio).
 - Mientras hay un menú encima, la pantalla no recibe nada.
 - Los cambios de escena funden a negro.
+- **La misma cruz del título**, arriba a la izquierda, cierra el juego. La partida
+  ya está guardada: no se pregunta nada.
 
 ### Creación de personaje — `CreacionPersonajeView`
 
@@ -76,7 +81,7 @@ Sirven para cualquier pantalla de uGUI, no solo estas:
 | `BotonAnimado` | Estados de un botón: crece con el cursor encima o seleccionado por teclado, se achica apretado, queda marcado si está **elegido**, se apaga a medias deshabilitado. Se suma a la transición del `Button` (SpriteSwap o ColorTint). |
 | `EntradaAnimada` | El panel entra deslizándose y apareciendo cada vez que se prende; `Salir()` es la inversa. Mientras entra no se puede tocar. Con `retraso` distintos se hace la entrada escalonada. |
 | `PulsoSuave` | "Respira" (escala y opcionalmente transparencia). `Destellar()` lo hace parpadear rápido. |
-| `FundidoAEscena` (ya existía) | Fundido a negro, carga y aclarado. |
+| `FundidoAEscena` (ya existía) | Fundido a negro, carga y aclarado. `SalirDelJuego()` funde a negro y cierra el juego. |
 
 **Ojo:** `BotonAnimado` y `EntradaAnimada` usan cada uno un `CanvasGroup`. No van
 en el mismo objeto: la ficha se envuelve en un nodo que entra animado
@@ -99,3 +104,8 @@ en el mismo objeto: la ficha se envuelve en un nodo que entra animado
 
 Se puede correr de nuevo sin duplicar nada. Si el equipo retoca a mano la
 creación de personaje, **no volver a correrlo**: la rehace.
+
+La cruz de salir sola: `PokeRush > UI > Poner la cruz de salir en el inicio`
+(toca solo el título y MenuSaves; el pulido completo también la pone). Es un
+cuadrado con los paneles `boton_gris` / `boton_celeste` y una X de pixel art de
+14×14 (`Sprites/Menus/cruz_salir.png`, la genera el builder si falta).
