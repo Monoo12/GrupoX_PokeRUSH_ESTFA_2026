@@ -1360,7 +1360,13 @@ public class BattleController : MonoBehaviour
         }
         else if (accion == LiberationEngine.Accion.Cambiar)
         {
-            if (indiceExtra >= 0) _battleModel.SwitchPlayerPoken(indiceExtra);
+            // Sin evento de cambio (lo aplica el controller, no el motor): el
+            // sprite y el HUD se ponen aca o quedaria el que salio.
+            if (indiceExtra >= 0 && _battleModel.SwitchPlayerPoken(indiceExtra))
+            {
+                RefreshActiveSprites();
+                battleHudView?.UpdateHud(_battleModel);
+            }
         }
 
         yield return PlayEvents(_liberation.ResolveTurn(accion));
@@ -1507,14 +1513,12 @@ public class BattleController : MonoBehaviour
                     {
                         if (!cameFromFaint && view.gameObject.activeSelf)
                             yield return battleFxView.Recall(view);
-                        RefreshActiveSprites();
-                        battleHudView?.UpdateHud(_battleModel);
+                        MostrarElQueEntro(ev, view);
                         yield return battleFxView.ThrowBallAndAppear(view, ev.TargetIsPlayer);
                     }
                     else
                     {
-                        RefreshActiveSprites();
-                        battleHudView?.UpdateHud(_battleModel);
+                        MostrarElQueEntro(ev, view);
                     }
                     break;
                 }
@@ -1957,12 +1961,31 @@ public class BattleController : MonoBehaviour
         else Debug.Log($"[Batalla] {message}");
     }
 
+    // Los dos lados al activo del modelo. Solo para cuando el modelo cambia de
+    // Poken SIN un turno de por medio (arranque, liberacion); adentro de
+    // PlayEvents el modelo ya esta en el final del turno y va MostrarElQueEntro.
     private void RefreshActiveSprites()
     {
         if (playerPokenView != null)
             playerPokenView.SetPoken(_battleModel.ActivePlayerPoken, isPlayerSide: true);
         if (enemyPokenView != null)
             enemyPokenView.SetPoken(_battleModel.ActiveEnemyPoken, isPlayerSide: false);
+        battleHudView?.PonerEnElCampo(_battleModel, true, _battleModel.ActivePlayerPoken);
+        battleHudView?.PonerEnElCampo(_battleModel, false, _battleModel.ActiveEnemyPoken);
+    }
+
+    // El que dice el evento, y solo de su lado. Antes se refrescaban los dos
+    // lados con el activo del modelo: si el que entraba caia en el mismo turno
+    // y el rival mandaba otro, se veia al siguiente y nunca al que cayo (bug 5
+    // del testing). Mismo motivo que la foto de PS de HpChanged.
+    private void MostrarElQueEntro(BattleEvent ev, PokenView view)
+    {
+        PokenModel entro = ev.Poken ?? (ev.TargetIsPlayer
+            ? _battleModel.ActivePlayerPoken
+            : _battleModel.ActiveEnemyPoken);
+
+        if (view != null) view.SetPoken(entro, isPlayerSide: ev.TargetIsPlayer);
+        battleHudView?.PonerEnElCampo(_battleModel, ev.TargetIsPlayer, entro, ev.HpAfter);
     }
 
     private static int FirstAliveIndex(List<PokenModel> team)

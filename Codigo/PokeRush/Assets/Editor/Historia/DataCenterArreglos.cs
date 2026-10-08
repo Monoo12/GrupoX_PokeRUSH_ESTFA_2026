@@ -17,6 +17,12 @@ using UnityEngine.Tilemaps;
 //    abajo pasa a Colisiones (se dibuja debajo del jugador y frena). Lo que si
 //    va en Techos (el marco de una puerta, por donde se pasa por abajo) no tiene
 //    Colisiones abajo y se queda donde esta.
+//    EXCEPTO el tope de los ocho escritorios del salon (TopesDeLosEscritorios):
+//    tambien tienen un mueble abajo, pero son una celda de piso con el borde
+//    del escritorio en el cuarto de abajo. La primera pasada (5-oct) los bajo
+//    con los racks y tapo la fila entre las dos hileras de escritorios (bug 3
+//    del testing del 7-oct). Van en Techos: no frenan y el borde le tapa los
+//    pies al que pasa por detras.
 // 2. LOS LIBERADOS: los dos Pokemon encerrados que se suman al equipo con
 //    LiberarPokenTrigger. Desde el rebalanceo del 6-oct-2026 vienen ya
 //    evolucionados (el juego no tiene evolucion y es corto): el del agua del
@@ -68,6 +74,7 @@ public static class DataCenterArreglos
 
         Scene scene = EditorSceneManager.OpenScene(HistoriaDataCenterBuilder.Escena, OpenSceneMode.Single);
         int racks = BajarLosRacks(scene);
+        DevolverLosTopesDeLosEscritorios(scene);
         string dibujos = string.Join(", ", Liberados.Select(l => $"{l.nombre} {(Dibujar(scene, l) ? "ok" : "NO ENCONTRADO")}"));
 
         HistoriaDataCenterBuilder.ReponerColisiones(scene);
@@ -88,6 +95,7 @@ public static class DataCenterArreglos
         {
             if (!techos.HasTile(p) || colisiones.HasTile(p)) continue;
             if (!colisiones.HasTile(p + Vector3Int.down)) continue;   // un marco de puerta: se pasa por abajo
+            if (EsTopeDeEscritorio(p)) continue;
 
             colisiones.SetTile(p, techos.GetTile(p));
             colisiones.SetTransformMatrix(p, techos.GetTransformMatrix(p));
@@ -96,6 +104,40 @@ public static class DataCenterArreglos
             movidas++;
         }
         return movidas;
+    }
+
+    // Las ocho terminales del salon, en dos hileras: el tope de las de arriba
+    // (fila 16) y el de las de abajo (fila 13, el pasillo entre las hileras).
+    private static readonly Vector2Int[] TopesDeLosEscritorios =
+    {
+        new Vector2Int(-8, 16), new Vector2Int(-4, 16), new Vector2Int(2, 16), new Vector2Int(6, 16),
+        new Vector2Int(-8, 13), new Vector2Int(-4, 13), new Vector2Int(2, 13), new Vector2Int(6, 13),
+    };
+
+    private static bool EsTopeDeEscritorio(Vector3Int p)
+        => System.Array.IndexOf(TopesDeLosEscritorios, new Vector2Int(p.x, p.y)) >= 0;
+
+    // Deshace lo que BajarLosRacks hizo de mas el 5-oct. Devuelve cuantos movio.
+    public static int DevolverLosTopesDeLosEscritorios(Scene scene)
+    {
+        var tilemaps = scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Tilemap>(true)).ToList();
+        Tilemap techos = tilemaps.FirstOrDefault(t => t.name == "Techos");
+        Tilemap colisiones = tilemaps.FirstOrDefault(t => t.name == "Colisiones");
+        if (techos == null || colisiones == null) return 0;
+
+        int movidos = 0;
+        foreach (Vector2Int c in TopesDeLosEscritorios)
+        {
+            var p = new Vector3Int(c.x, c.y, 0);
+            if (!colisiones.HasTile(p) || techos.HasTile(p)) continue;
+
+            techos.SetTile(p, colisiones.GetTile(p));
+            techos.SetTransformMatrix(p, colisiones.GetTransformMatrix(p));
+            colisiones.SetTile(p, null);
+            movidos++;
+        }
+        if (movidos > 0) Debug.Log($"[DataCenter] {movidos} topes de escritorio devueltos de Colisiones a Techos.");
+        return movidos;
     }
 
     // Especie, nivel y lo que dice la caja. Lo demas del prefab (radio, flags,

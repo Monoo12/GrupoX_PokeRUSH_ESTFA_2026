@@ -52,7 +52,8 @@ public class BattleEvent
     // porque la barra subia y bajaba casi en el mismo instante.
     public float ExtraPause;
 
-    // Solo en HpChanged: los PS que tenia el Poken JUSTO DESPUES de este cambio.
+    // En HpChanged: los PS que tenia el Poken JUSTO DESPUES de este cambio.
+    // En PokenSwitched: los PS con que entro.
     // -1 = sin sellar (se cae al valor actual del modelo).
     //
     // Hace falta porque el turno se resuelve ENTERO antes de reproducirse: para
@@ -66,8 +67,9 @@ public class BattleEvent
     // el agua), true = volvio a aparecer.
     public bool Visible = true;
 
-    // Solo en QuiereAprender: el Poken del jugador que subio de nivel (Move es
-    // el movimiento nuevo). Puede no ser el que esta en el campo.
+    // En QuiereAprender: el Poken del jugador que subio de nivel (Move es el
+    // movimiento nuevo). Puede no ser el que esta en el campo.
+    // En PokenSwitched: el que entro (ver Entro).
     public PokenModel Poken;
 
     public static BattleEvent Msg(string text)
@@ -75,6 +77,21 @@ public class BattleEvent
 
     public static BattleEvent Of(BattleEventKind kind, bool targetIsPlayer, string text = null)
         => new BattleEvent { Kind = kind, TargetIsPlayer = targetIsPlayer, Message = text };
+
+    // PokenSwitched con la foto de quien entro y con cuantos PS. Por lo mismo
+    // que HpAfter: al reproducirse, el activo del modelo ya es el del FINAL del
+    // turno. Si el que entra cae en el mismo turno y el rival manda otro, el
+    // modelo ya tiene al siguiente, y dibujar "el activo" mostraba a ese en vez
+    // del que de verdad entro y cayo (bug 5 del testing).
+    public static BattleEvent Entro(bool targetIsPlayer, PokenModel poken, string text)
+        => new BattleEvent
+        {
+            Kind = BattleEventKind.PokenSwitched,
+            TargetIsPlayer = targetIsPlayer,
+            Message = text,
+            Poken = poken,
+            HpAfter = poken != null ? poken.CurrentHP : -1
+        };
 
     // Azucar para el caso mas comun
     public static void Add(List<BattleEvent> events, string text) => events.Add(Msg(text));

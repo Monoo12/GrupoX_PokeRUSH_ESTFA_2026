@@ -177,6 +177,10 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
         if (_pendiente != null) StartCoroutine(CorrerPendiente());
     }
 
+    // Apagado a mitad de una charla, la corrutina muere sin llegar al Soltar
+    // y el jugador quedaria frenado para siempre.
+    private void OnDisable() => PlayerInputController.Soltar(this);
+
     private void OnDestroy()
     {
         if (battleController != null) battleController.BattleEnded -= AlTerminarElCombate;
@@ -926,7 +930,13 @@ public class PeleaJulieta : MonoBehaviour, IInteractable, IDirectorDeCombate
     private IEnumerator DecirYSeguir(LineaDeJulieta[] lineas, System.Action despues)
     {
         _conversando = true;
+        // Cada linea es su propia caja: entre que X cierra una y se abre la
+        // siguiente (o mientras corre la accion de la linea) el
+        // PlayerInputController ve el dialogo cerrado y deja caminar. Pasaba en
+        // cada linea (bug 4 del testing). Frenado no corta el input de la caja.
+        PlayerInputController.Frenar(this);
         yield return Reproducir(lineas, null);
+        PlayerInputController.Soltar(this);
         _conversando = false;
         despues?.Invoke();
     }

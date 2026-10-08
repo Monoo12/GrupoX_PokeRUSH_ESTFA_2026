@@ -120,6 +120,9 @@ namespace PokeRush.EditorTools
                 TestEntrenamientoDelChip();
                 TestFondosDeCombatePorLugar();
                 TestBolasDelRivalEnElHud();
+
+                // Testing final (7-oct)
+                TestElCambioDiceQuienEntro();
             }
             finally
             {
@@ -2172,6 +2175,45 @@ namespace PokeRush.EditorTools
             Check(!model.AwaitingEnemyReplacement && model.ActiveEnemyIndex == 1
                   && !events.Exists(e => e.Kind == BattleEventKind.RivalVaAEnviar),
                 "Rival avisa: sin banco del jugador, el rival entra directo");
+        }
+
+        // Bug 5 del testing: el que entra y cae en el mismo turno tiene que
+        // verse. El turno se reproduce ya resuelto, con el modelo apuntando al
+        // reemplazo; el evento del cambio es lo unico que sabe quien entro.
+        private static void TestElCambioDiceQuienEntro()
+        {
+            var golpe = MakeMove("Golpe", PokenType.Normal, AttackType.Physical, 250, 100, 35);
+            var suave = MakeMove("Suave", PokenType.Normal, AttackType.Physical, 1, 100, 35);
+
+            // El rival cambia, el que entra cae y el motor vuelve a mandar al
+            // que habia retirado (modo fijo).
+            var rivalA = MakeDummy("RivalA", 200, 5, suave);
+            var rivalB = MakeDummy("RivalB", 200, 5, suave);
+            var model = MakeBattleConBancos(new List<PokenModel> { MakeDummy("Atacante", 200, 200, golpe) },
+                new List<PokenModel> { rivalA, rivalB });
+            var engine = new TurnEngine(model, new SeededRng(31)) { OfrecerCambioAntesDeQueEntre = false };
+            rivalB.SetCurrentHP(10);
+            List<BattleEvent> events = engine.ResolveTurn(BattleAction.Move(0), BattleAction.Switch(1));
+
+            List<BattleEvent> entradas = events.FindAll(e => e.Kind == BattleEventKind.PokenSwitched && !e.TargetIsPlayer);
+            Check(rivalB.IsFainted && model.ActiveEnemyPoken == rivalA && entradas.Count == 2,
+                "Quien entro: el rival cambia, el que entra cae y entra otro en el mismo turno");
+            Check(entradas.Count == 2 && entradas[0].Poken == rivalB && entradas[0].HpAfter == 10
+                  && entradas[1].Poken == rivalA,
+                "Quien entro: cada cambio del rival trae al suyo y sus PS al entrar, no al del final del turno");
+
+            // Lo mismo del lado del jugador: el que entra cae con el golpe del rival.
+            var banco = MakeDummy("Banco", 200, 5, suave);
+            var model2 = MakeBattleConBancos(new List<PokenModel> { MakeDummy("Titular", 200, 5, suave), banco },
+                new List<PokenModel> { MakeDummy("Pegador", 200, 200, golpe) });
+            var engine2 = new TurnEngine(model2, new SeededRng(32));
+            banco.SetCurrentHP(7);
+            List<BattleEvent> events2 = engine2.ResolveTurn(BattleAction.Switch(1), BattleAction.Move(0));
+
+            BattleEvent entro = events2.Find(e => e.Kind == BattleEventKind.PokenSwitched && e.TargetIsPlayer);
+            Check(banco.IsFainted && entro != null && entro.Poken == banco && entro.HpAfter == 7
+                  && events2.Exists(e => e.Kind == BattleEventKind.PlayerMustSwitch),
+                "Quien entro: el del jugador que cae al entrar entra con sus PS, no con 0");
         }
 
         // Las ruletas: sin repetir lo que el jugador ya tiene ni dos iguales en la rueda.

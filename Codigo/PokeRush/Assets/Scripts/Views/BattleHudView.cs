@@ -243,17 +243,58 @@ public class BattleHudView : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    // Quien se ve de cada lado. No siempre es el activo del modelo: el turno se
+    // resuelve ENTERO antes de reproducirse, y si el rival manda un reemplazo
+    // en el mismo turno, el modelo ya lo tiene puesto mientras en pantalla
+    // todavia esta cayendo el anterior. Lo pone el controller al reproducir
+    // cada PokenSwitched (y al arrancar). De otro combate no vale.
+    private PokenModel _enCampoJugador, _enCampoRival;
+    private BattleModel _modeloDelCampo;
+
+    // 'ps' = los PS con que entro (la foto del evento). -1 = los actuales.
+    public void PonerEnElCampo(BattleModel battleModel, bool jugador, PokenModel poken, int ps = -1)
+    {
+        if (battleModel == null || poken == null) return;
+        if (_modeloDelCampo != battleModel)
+        {
+            _modeloDelCampo = battleModel;
+            _enCampoJugador = battleModel.ActivePlayerPoken;
+            _enCampoRival = battleModel.ActiveEnemyPoken;
+        }
+
+        float psAlEntrar = ps >= 0 ? ps : poken.CurrentHP;
+        if (jugador) { _enCampoJugador = poken; _displayedPlayerHp = psAlEntrar; }
+        else { _enCampoRival = poken; _displayedEnemyHp = psAlEntrar; }
+
+        _model = battleModel;
+        RefrescarDatos(battleModel, EnCampo(battleModel, true), EnCampo(battleModel, false));
+    }
+
+    private PokenModel EnCampo(BattleModel battleModel, bool jugador)
+    {
+        PokenModel poken = battleModel == _modeloDelCampo
+            ? (jugador ? _enCampoJugador : _enCampoRival)
+            : null;
+        return poken ?? (jugador ? battleModel.ActivePlayerPoken : battleModel.ActiveEnemyPoken);
+    }
+
     // Refresco INSTANTANEO (inicio de combate, cambio de Poken). Para el daño
     // gradual usar AnimateHp.
     public void UpdateHud(BattleModel battleModel)
     {
         _model = battleModel;
-        PokenModel player = battleModel.ActivePlayerPoken;
-        PokenModel enemy = battleModel.ActiveEnemyPoken;
+        PokenModel player = EnCampo(battleModel, true);
+        PokenModel enemy = EnCampo(battleModel, false);
 
         _displayedPlayerHp = player.CurrentHP;
         _displayedEnemyHp = enemy.CurrentHP;
 
+        RefrescarDatos(battleModel, player, enemy);
+    }
+
+    // Todo menos la cuenta de PS mostrados: nombre, nivel, estado y barras.
+    private void RefrescarDatos(BattleModel battleModel, PokenModel player, PokenModel enemy)
+    {
         // --- databox del jugador ---
         if (playerNameText != null) playerNameText.text = player.Definition.pokenName;
         if (playerLevelText != null) playerLevelText.text = $"Nv. {player.Level}";
@@ -326,8 +367,8 @@ public class BattleHudView : MonoBehaviour
     public IEnumerator AnimateHp(BattleModel battleModel, BattleEvent ev)
     {
         _model = battleModel;
-        PokenModel player = battleModel.ActivePlayerPoken;
-        PokenModel enemy = battleModel.ActiveEnemyPoken;
+        PokenModel player = EnCampo(battleModel, true);
+        PokenModel enemy = EnCampo(battleModel, false);
 
         float objetivoPlayer = player.CurrentHP;
         float objetivoEnemy = enemy.CurrentHP;

@@ -392,7 +392,7 @@ public class TurnEngine
         {
             BattleEvent.Add(events, $"¡Vuelve, {outgoing}!");
             _model.SwitchPlayerPoken(index);
-            events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, true,
+            events.Add(BattleEvent.Entro(true, _model.ActivePlayerPoken,
                 $"¡Adelante, {_model.ActivePlayerPoken.Definition.pokenName}!"));
             AbilityEffects.OnSwitchIn(_model.PlayerState, _model.EnemyState, events);
             FieldEffects.OnSwitchIn(_model, isPlayerSide: true, events, _rng);
@@ -401,7 +401,7 @@ public class TurnEngine
         {
             BattleEvent.Add(events, $"El rival retiró a {outgoing}.");
             _model.SwitchEnemyPoken(index);
-            events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
+            events.Add(BattleEvent.Entro(false, _model.ActiveEnemyPoken,
                 $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
             AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
             FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);
@@ -764,7 +764,7 @@ public class TurnEngine
             }
 
             _model.SwitchEnemyPoken(next);
-            events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
+            events.Add(BattleEvent.Entro(false, _model.ActiveEnemyPoken,
                 $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
             AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
             FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);
@@ -818,7 +818,7 @@ public class TurnEngine
         _model.SetAwaitingPlayerReplacement(false);
         _model.SwitchPlayerPoken(index);
 
-        events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, true,
+        events.Add(BattleEvent.Entro(true, _model.ActivePlayerPoken,
             $"¡Adelante, {_model.ActivePlayerPoken.Definition.pokenName}!"));
         AbilityEffects.OnSwitchIn(_model.PlayerState, _model.EnemyState, events);
         FieldEffects.OnSwitchIn(_model, isPlayerSide: true, events, _rng);
@@ -861,7 +861,7 @@ public class TurnEngine
         }
 
         _model.SwitchEnemyPoken(next);
-        events.Add(BattleEvent.Of(BattleEventKind.PokenSwitched, false,
+        events.Add(BattleEvent.Entro(false, _model.ActiveEnemyPoken,
             $"¡El rival envió a {_model.ActiveEnemyPoken.Definition.pokenName}!"));
         AbilityEffects.OnSwitchIn(_model.EnemyState, _model.PlayerState, events);
         FieldEffects.OnSwitchIn(_model, isPlayerSide: false, events, _rng);

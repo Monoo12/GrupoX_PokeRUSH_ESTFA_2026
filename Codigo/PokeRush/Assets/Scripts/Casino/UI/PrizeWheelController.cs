@@ -184,6 +184,17 @@ public class PrizeWheelController : MenuScreen
     private bool BloqueaSalir => _recompensaUnica && _result.Giros == 0;
     private bool YaGiroSuPremio => _recompensaUnica && _result.Giros > 0;
 
+    // La ruleta de premio es obligatoria y se cierra sola despues del cartel,
+    // asi que VOLVER no se dibuja: apagado pero visible, el testing lo reporto
+    // como un boton que no anda. Solo queda en la maquina de uso libre
+    // (PrizeWheelInteractable).
+    private bool HayVolver => !_recompensaUnica;
+
+    // Donde dejo el builder a GIRAR, al lado de VOLVER. Sin VOLVER se corre al
+    // medio de los dos para quedar debajo de la rueda.
+    private Vector2 _posicionDeGirar;
+    private bool _posicionDeGirarGuardada;
+
     // Grados que ocupa cada gajo.
     private float PasoDeGajo => _enJuego != null && _enJuego.Length > 0
         ? 360f / _enJuego.Length
@@ -225,7 +236,30 @@ public class PrizeWheelController : MenuScreen
         Result = _result;
 
         RepartirIconos();
+        AcomodarBotones();
         Reiniciar();
+    }
+
+    private void AcomodarBotones()
+    {
+        if (backButton != null) backButton.gameObject.SetActive(HayVolver);
+        if (spinButton == null) return;
+
+        var girar = (RectTransform)spinButton.transform;
+        if (!_posicionDeGirarGuardada)
+        {
+            _posicionDeGirar = girar.anchoredPosition;
+            _posicionDeGirarGuardada = true;
+        }
+
+        Vector2 posicion = _posicionDeGirar;
+        if (!HayVolver && backButton != null)
+        {
+            // Redondeado: medio pixel corrido ensucia el pixel art del boton.
+            float medio = (_posicionDeGirar.x + ((RectTransform)backButton.transform).anchoredPosition.x) / 2f;
+            posicion.x = Mathf.Round(medio);
+        }
+        girar.anchoredPosition = posicion;
     }
 
     // Cada apertura empieza de cero: sin efectos prendidos, sin premio viejo,
@@ -341,7 +375,7 @@ public class PrizeWheelController : MenuScreen
 
             case GameAction.Right:
             case GameAction.Down:
-                if (BloqueaSalir) return;
+                if (!HayVolver || BloqueaSalir) return;
                 _volverSeleccionado = true;
                 RefrescarBotones();
                 return;
