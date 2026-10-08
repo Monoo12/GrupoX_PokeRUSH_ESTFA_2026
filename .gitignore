@@ -13,8 +13,9 @@ UserSettings/
 .idea/
 *.csproj.user
 
-# === Plastic SCM ===
+# === Plastic SCM (ya no se usa) ===
 .plastic/
+Codigo/PokeRush/ignore.conf
 
 # === graphify ===
 # El grafo canónico vive en "Contexto IA/graphify-out/" (versionado).
@@ -30,7 +31,7 @@ Codigo/PokeRush/*.sln
 # para versionar.
 Codigo/PokeRush/Capturas/
 
-# === Python: cache de los scripts de scripts/ ===
+# === Python: cache de los scripts de Codigo/Herramientas/ ===
 __pycache__/
 *.pyc
 

@@ -247,11 +247,20 @@ GrupoX_PokeRUSH_ESTFA_2026/
 │   │   └── TextMesh Pro/         fuentes y recursos de TextMesh Pro
 │   ├── Packages/                 manifest de paquetes de Unity
 │   └── ProjectSettings/          configuración del proyecto (versionada)
-├── Documentacion/                documentación del código, base de datos y entregables
-│   └── Documentacion del Codigo/ un .md por sistema (combate, menús, audio, casino...)
-├── Diseño/                       mockups, material de diseño y el tráiler
+├── Codigo/Herramientas/          scripts de Python para procesar arte y audio
+├── Diseño/
+│   ├── Graphics/                 pack de Essentials de referencia (lo leen los importadores: no se mueve)
+│   ├── Interfaz/                 Mockups/ y Pantallas/ del equipo
+│   ├── Personajes/               hojas originales (Néstor)
+│   └── Trailer/                  el tráiler en Remotion
+├── Documentacion/
+│   ├── Entregables/              entregables, resumen del proyecto y contrato de licencia
+│   ├── Analisis y Diseño/        arquitectura, historias de usuario, DFD y base de datos
+│   ├── Testing/                  casos de prueba, reporte de bugs y playtests
+│   ├── Gestion/                  dailys, devolución docente y material de la materia
+│   ├── Documentacion del Codigo/ un .md por sistema (combate, menús, audio, casino...)
+│   └── Creditos_De_Assets.md
 ├── Contexto IA/graphify-out/     grafo del código (para las sesiones con IA)
-├── scripts/                      scripts de Python para procesar arte y audio
 ├── BUILD.md                      cómo generar la build
 └── README.md
 ```
@@ -299,8 +308,10 @@ y los créditos del juego. Es material de fan game de uso académico, sin fines 
 
 ## Git / GitHub
 
-- **La organización del repo no se cambia** (lo decidimos así para no romper el
-  contexto de la IA).
+- **La organización del repo** es la de *Estructura del proyecto*: `Codigo`,
+  `Diseño` y `Documentacion` (reordenadas el 8-oct-2026), más `Contexto IA`, que
+  se queda en la raíz para no romper el contexto de la IA. Algo nuevo va en la
+  subcarpeta que corresponda, no suelto en la raíz.
 - **Escenas y prefabs no se fusionan como texto** (`.gitattributes`:
   `*.unity` y `*.prefab` con `merge=binary`). Si un pull o un merge marca
   conflicto en uno de esos archivos, hay que elegir una versión entera:
@@ -317,7 +328,7 @@ y los créditos del juego. Es material de fan game de uso académico, sin fines 
   funciona sin ellos. Si se empieza a usar un PNG nuevo del pack de gráficos hay
   que subirlo a mano:
   `git add -f "Codigo/PokeRush/Assets/Graphics/.../archivo.png" "....png.meta"`.
-  Del pack de audio se copia con `python scripts/copiar_audio_essentials.py`.
+  Del pack de audio se copia con `python Codigo/Herramientas/copiar_audio_essentials.py`.
 - No se versionan `Library/`, `Temp/`, `Logs/`, `UserSettings/`, `Builds/` ni los
   `.csproj`/`.sln` (Unity los regenera). Por eso la build y el release **no** están
   en el repo: el `.zip` vive solo en la sección *Releases* de GitHub.
@@ -345,15 +356,15 @@ menús, HUD, casino, Quarcho Cueva, historia en los niveles, tutorial, jefe fina
 
 Qué trajo cada versión:
 
-- **1.1.0** (playtest del 4-oct): `Playtest_4_Oct_2026.md`.
+- **1.1.0** (playtest del 4-oct): `Documentacion/Testing/Playtest_4_Oct_2026.md`.
 - **1.2.0** (playtest del 5-oct: Entrenamiento intenso del chip, aviso del rival,
   aprender movimientos al subir de nivel, fondos de combate, tienda del piso 3):
-  `Playtest_5_Oct_2026.md`.
+  `Documentacion/Testing/Playtest_5_Oct_2026.md`.
 - **1.3.0**: rebalanceo de Pokémon y dificultad (`Rebalanceo_Oct_2026.md`) y la
   consola de administrador (`Consola_De_Administrador.md`).
-- **1.4.0**: los arreglos del testing final (`Reporte de Bugs.pdf`), la cruz para
-  salir al escritorio desde el título y las partidas, y el servidor de Julieta, que
-  no se podía tocar y no dejaba terminar el juego.
+- **1.4.0**: los arreglos del testing final (`Documentacion/Testing/Reporte de Bugs.pdf`),
+  la cruz para salir al escritorio desde el título y las partidas, y el servidor de
+  Julieta, que no se podía tocar y no dejaba terminar el juego.
 
 Devolución docente y datos del grupo (roles, color, plataforma de organización):
-`Documentacion/Devolucion_Docente.md`.
+`Documentacion/Gestion/Devolucion_Docente.md`.

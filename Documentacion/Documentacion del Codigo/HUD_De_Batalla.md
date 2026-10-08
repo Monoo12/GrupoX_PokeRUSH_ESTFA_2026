@@ -224,7 +224,7 @@ Si el campo queda vacío, el del **lugar** donde se pelea: la tabla
 `Resources/Definitions/Combate/FondosDeCombate.asset` (escena → fondo, la arma
 `PokeRush > Combate > Elegir los fondos de combate`). Y si la escena no está en la
 tabla, el del prefab (Pradera). Antes una pelea sin fondo se quedaba con el de la
-pelea anterior. Los fondos de cada lugar están en `Playtest_5_Oct_2026.md`.
+pelea anterior. Los fondos de cada lugar están en `Documentacion/Testing/Playtest_5_Oct_2026.md`.
 
 ## ⚪ Las Poké Balls del equipo rival (playtest del 5-oct)
 

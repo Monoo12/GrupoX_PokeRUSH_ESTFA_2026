@@ -11,7 +11,7 @@ using UnityEngine.Tilemaps;
 //   - una escena vacia con el rig listo para pintarla a mano.
 //
 // Los tiles se nombran JuliTile_00_NNNN, donde NNNN es la celda dentro de la
-// hoja de 48 columnas que genera scripts/juli_tileset.py. Un elemento de varias
+// hoja de 48 columnas que genera Codigo/Herramientas/juli_tileset.py. Un elemento de varias
 // celdas ocupa indices consecutivos: base + fila*48 + columna. Por eso alcanza
 // con guardar el indice de arriba-izquierda y el tamaño.
 //
@@ -352,7 +352,7 @@ namespace PokeRush.EditorTools
             if (_tiles.Count == 0)
             {
                 Debug.LogError($"[ArenaJuli] No hay tiles en {TilesAsset}. Corre antes " +
-                               "scripts/juli_tileset.py y PokeRush > Armar paletas faltantes.");
+                               "Codigo/Herramientas/juli_tileset.py y PokeRush > Armar paletas faltantes.");
                 return false;
             }
             if (_tiles.Count != TilesEsperados)

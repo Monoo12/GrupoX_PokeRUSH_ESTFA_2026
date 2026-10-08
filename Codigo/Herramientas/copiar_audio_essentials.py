@@ -11,14 +11,14 @@ versiona. Se puede volver a correr; no pisa archivos que ya existen.
 Despues de correrlo: Unity importa solo, y `PokeRush > Audio > Armar catalogo
 de audio` arma los indices (gritos y ataques) y el catalogo.
 
-Uso:  python scripts/copiar_audio_essentials.py
+Uso:  python Codigo/Herramientas/copiar_audio_essentials.py
 """
 import os
 import re
 import shutil
 import sys
 
-RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Codigo", "PokeRush", "Assets")
+RAIZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "PokeRush", "Assets")
 PACK = os.path.join(RAIZ, "AudioAÑIL")
 SE = os.path.join(PACK, "SE")
 ME = os.path.join(PACK, "ME")

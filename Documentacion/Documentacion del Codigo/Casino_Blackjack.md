@@ -21,7 +21,7 @@ Si ya leíste cómo funciona la ruleta, esto no te va a sorprender.
 | `Editor/Casino/BlackjackTableBuilder.cs` | Arma el prefab de la pantalla y lo registra en el `MenuSystem`. |
 | `Editor/Casino/BlackjackSmokeTests.cs` | Prueba las reglas (60 checks). |
 | `Scripts/Testing/BlackjackSmokeTest.cs` | Juega una sesión entera en Play Mode (64 checks). |
-| `scripts/cortar_arte_blackjack.py` | Prepara los `bj_*.png` a partir del arte crudo. |
+| `Codigo/Herramientas/cortar_arte_blackjack.py` | Prepara los `bj_*.png` a partir del arte crudo. |
 
 ---
 
@@ -106,7 +106,7 @@ solas hasta un mínimo que siempre deja ver el número de la esquina.
 ### El arte derivado
 
 Los recortes del pack vienen bien de color y con alpha de verdad, pero tres cosas
-hay que arreglarlas antes de usarlas. Las hace `scripts/cortar_arte_blackjack.py`
+hay que arreglarlas antes de usarlas. Las hace `Codigo/Herramientas/cortar_arte_blackjack.py`
 y quedan como `bj_*.png` al lado de los originales, que no se tocan:
 
 1. **Las 52 cartas no se pueden cortar con una grilla.** En la hoja están a un
@@ -138,7 +138,7 @@ al tamaño del Canvas**: exportar una carta a 37 px la deja como un borrón.
 
 Desde el menú `PokeRush/Casino/`, en este orden:
 
-1. `python scripts/cortar_arte_blackjack.py` — solo si cambió el arte crudo.
+1. `python Codigo/Herramientas/cortar_arte_blackjack.py` — solo si cambió el arte crudo.
 2. **Importar el arte del blackjack** — deja los PNG en Point y corta las hojas.
    (Lo corre solo el builder, no hace falta a mano.)
 3. **Construir la mesa de blackjack** — genera

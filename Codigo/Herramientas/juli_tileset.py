@@ -17,7 +17,7 @@ Que hace en cambio:
 Salida: Assets/Sprites/Tilesets/JuliTile/JuliTile_00.png, lista para
 `PokeRush > Armar paleta del tileset seleccionado`.
 
-Uso:  python scripts/juli_tileset.py <ruta-del-repo>
+Uso:  python Codigo/Herramientas/juli_tileset.py <ruta-del-repo>
 """
 import json
 import os

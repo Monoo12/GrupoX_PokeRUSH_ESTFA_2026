@@ -36,7 +36,7 @@ borron. Exportadas a los ~100 px que tienen en la hoja caen casi 1:1 en
 pantalla. El tamano en el Canvas lo fija el RectTransform del builder, no el
 PNG.
 
-Uso:  python scripts/limpiar_ruleta.py
+Uso:  python Codigo/Herramientas/limpiar_ruleta.py
 """
 
 import os
@@ -45,7 +45,8 @@ import sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# La raiz del repo: este archivo esta en Codigo/Herramientas/.
+RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CARPETA = os.path.join(RAIZ, "Codigo", "PokeRush", "Assets", "Ruleta Nueva")
 HOJA = os.path.join(CARPETA, "sprite_sheet_completo.png")
 

@@ -6,7 +6,7 @@ using UnityEngine;
 //   PokeRush > Importar sprites de Nestor
 //
 // POR QUE UN SCRIPT Y NO A MANO
-// Los sprites de Nestor no son una grilla: la hoja original (Diseño/nestor)
+// Los sprites de Nestor no son una grilla: la hoja original (Diseño/Personajes/Nestor)
 // tiene poses de distinto tamaño repartidas irregularmente, asi que ya vienen
 // recortados a PNG sueltos con alfa. Lo que falta es la parte que Unity no
 // adivina y que a mano son 20 assets x 5 campos: filtro Point (si no, el pixel

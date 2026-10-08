@@ -44,7 +44,7 @@ public static class CasinoPisoFinalBuilder
     private const string HojaDeLosGuardias = "rocketElite";
 
     // Martin Reymar. Es un BUSTO: se lo ve de la cintura para arriba, sentado
-    // atras de la mesa. Lo prepara scripts/preparar_sprites_casino.py.
+    // atras de la mesa. Lo prepara Codigo/Herramientas/preparar_sprites_casino.py.
     private const string SpriteDeMartin = "Assets/Sprites/Casino/martin_sentado.png";
     private const string RetratoDelJefe = "MARTIN";
 
@@ -244,7 +244,7 @@ public static class CasinoPisoFinalBuilder
         sr.sortingOrder = OrdenDetrasDeLaMesa;
         if (sr.sprite == null)
             Debug.LogError($"[PisoFinal] No se pudo cargar {SpriteDeMartin}. " +
-                           "Corre scripts/preparar_sprites_casino.py.");
+                           "Corre Codigo/Herramientas/preparar_sprites_casino.py.");
 
         DibujarLaMesa(go.transform);
 

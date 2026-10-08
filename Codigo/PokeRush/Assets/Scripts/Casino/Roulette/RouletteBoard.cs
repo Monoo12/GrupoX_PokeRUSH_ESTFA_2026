@@ -35,7 +35,7 @@ public static class RouletteBoard
     // ilustracion con 36 casilleros y una secuencia que se salteaba el 23, el
     // 10 y el 24. Se repinto con estos 37 en sentido horario, asi que la bola
     // frena sobre el numero que se canta. Ver repintar_anillo() en
-    // scripts/limpiar_ruleta.py; si alguien cambia Orden hay que volver a
+    // Codigo/Herramientas/limpiar_ruleta.py; si alguien cambia Orden hay que volver a
     // correr ese script o la rueda deja de coincidir.
     public const float PasoDeCasillero = 360f / Casilleros;
 

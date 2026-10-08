@@ -20,7 +20,7 @@ using UnityEngine;
 // De donde salen los bj_*.png: los originales de la carpeta estan bien (alpha
 // de verdad, paleta correcta), pero las 52 cartas vienen en cuatro tiras a un
 // paso de 48,46 px y con cada carta de un tamanio distinto, y las fichas traen
-// el valor escrito debajo y cortado al medio. scripts/cortar_arte_blackjack.py
+// el valor escrito debajo y cortado al medio. Codigo/Herramientas/cortar_arte_blackjack.py
 // rearma las cartas en una grilla exacta, arregla las dos cartas de treboles
 // que la hoja trajo mal dibujadas y deja las fichas solo con el disco. Los
 // originales quedan intactos al lado.
@@ -65,7 +65,7 @@ public static class BlackjackArtImporter
         if (AssetDatabase.LoadAssetAtPath<Texture2D>(CartasPath) == null)
         {
             Debug.LogError($"[Blackjack] Falta {CartasPath}. Corre primero " +
-                           "'python scripts/cortar_arte_blackjack.py'.");
+                           "'python Codigo/Herramientas/cortar_arte_blackjack.py'.");
             return;
         }
 

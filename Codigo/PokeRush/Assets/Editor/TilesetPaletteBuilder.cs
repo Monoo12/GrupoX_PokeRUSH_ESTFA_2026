@@ -12,7 +12,7 @@ using UnityEngine.Tilemaps;
 // Por que los trozos y no los PNG originales: los sheets de RPG Maker miden
 // hasta 23.370 px de alto y el limite duro de textura de Unity son 16.384. Los
 // que lo superan no se pueden cargar ni a resolucion completa, asi que hay que
-// partirlos ANTES, fuera de Unity (scripts/partir_tilesets.py). Se conserva el
+// partirlos ANTES, fuera de Unity (Codigo/Herramientas/partir_tilesets.py). Se conserva el
 // orden de la grilla original para que los grupos de tiles (una casa, un
 // camino) queden juntos y reconocibles al pintar.
 //
@@ -32,7 +32,7 @@ namespace PokeRush.EditorTools
         {
             if (!Directory.Exists(ChunkDir))
             {
-                Debug.LogError($"[Tiles] No existe {ChunkDir}. Corre antes scripts/partir_tilesets.py " +
+                Debug.LogError($"[Tiles] No existe {ChunkDir}. Corre antes Codigo/Herramientas/partir_tilesets.py " +
                                "(los sheets originales superan el limite de textura de Unity).");
                 return;
             }

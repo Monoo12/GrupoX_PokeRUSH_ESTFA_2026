@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 // El orden es el de las filas de bj_cartas.png, y de eso depende que sprite se
 // dibuja: picas, corazones, diamantes, treboles. Si alguien reordena esto hay
-// que volver a generar la hoja con scripts/cortar_arte_blackjack.py.
+// que volver a generar la hoja con Codigo/Herramientas/cortar_arte_blackjack.py.
 public enum BlackjackSuit
 {
     Picas,

@@ -18,7 +18,7 @@ la tabla.
 | `Scripts/Data/CatalogoDeAudio.cs` | El catálogo: todos los clips, con su volumen medido. |
 | `Scripts/Controllers/MusicaDeEscena.cs` | **Opcional**: una escena que lo tiene manda su propia canción (los menús y el Data Center lo traen de antes). |
 | `Editor/Audio/AudioDelJuegoBuilder.cs` | `PokeRush > Audio > ...`: arma el catálogo, mide los volúmenes, corta los pasos y configura la importación. |
-| `scripts/copiar_audio_essentials.py` | Copia del pack de Essentials (`Assets/AudioAÑIL`, solo local) lo que el juego usa. |
+| `Codigo/Herramientas/copiar_audio_essentials.py` | Copia del pack de Essentials (`Assets/AudioAÑIL`, solo local) lo que el juego usa. |
 
 ### Cómo se rearma
 
@@ -183,6 +183,6 @@ importacion`.
 Son 351 MB y traen un `Game.exe`: **vive solo en local** (está en el
 `.gitignore`, como `Assets/Graphics`). Lo que el juego usa se copió con nombres
 claros a `Assets/Audio/Combate` y `Assets/Audio/Efectos/{Menus,Mundo,Combate,Casino}`
-con `python scripts/copiar_audio_essentials.py`; eso sí está versionado. Para
+con `python Codigo/Herramientas/copiar_audio_essentials.py`; eso sí está versionado. Para
 sumar un efecto nuevo del pack: agregarlo a la lista `EFECTOS` del script,
 correrlo, y asignarlo en el catálogo (o en `AudioDelJuegoBuilder`).

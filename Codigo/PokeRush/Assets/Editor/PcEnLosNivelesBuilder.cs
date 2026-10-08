@@ -132,7 +132,7 @@ public static class PcEnLosNivelesBuilder
 
     // Abrir una escena en el editor pierde en silencio los colliderType = Grid
     // puestos por celda, y guardarla en ese estado los pierde tambien en disco
-    // (ver Documentacion/Como_Armar_Un_Mapa_Nuevo.md). Se reponen antes de guardar.
+    // (ver Documentacion/Documentacion del Codigo/Como_Armar_Un_Mapa_Nuevo.md). Se reponen antes de guardar.
     private static void ReponerColisiones(Scene scene)
     {
         Tilemap colisiones = scene.GetRootGameObjects()

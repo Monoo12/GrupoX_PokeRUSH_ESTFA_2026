@@ -9,7 +9,7 @@ using UnityEngine;
 // sombreado suave. El CanvasScaler agranda todo 3,75x a 1920 de ancho, y Point
 // sobre un degrade a escala no entera duplica pixeles de forma despareja y se
 // lee como suciedad. Con el arte exportado a la resolucion de la hoja
-// (ver scripts/limpiar_ruleta.py) las piezas caen cerca de 1:1 en pantalla y
+// (ver Codigo/Herramientas/limpiar_ruleta.py) las piezas caen cerca de 1:1 en pantalla y
 // Bilinear las deja limpias.
 //
 // De donde salen los roulette_*.png de Assets/Ruleta Nueva:
@@ -24,7 +24,7 @@ using UnityEngine;
 //      mide 290x325 suelta y 284x341 en sprite_sheet_completo.png.
 //
 // La hoja SI trae alpha de verdad, asi que los roulette_*.png se recortaron de
-// ahi con scripts/limpiar_ruleta.py: componentes conexas para encontrar cada
+// ahi con Codigo/Herramientas/limpiar_ruleta.py: componentes conexas para encontrar cada
 // pieza, circulo ajustado para separar las tres ruletas (que se superponen),
 // borrado de los valores de ejemplo de los paneles y un pase de color que
 // lleva la caoba a dorado y el casi-negro a azul noche. Los 42 originales

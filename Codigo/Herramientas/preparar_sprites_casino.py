@@ -29,7 +29,7 @@ El alto de cada uno no es el mismo que el de los NPCs del pack (58 px) y esta
 explicado en su constante. Los PNG que deja se importan solos: los configura
 `CasinoNpcBuilder.SpriteDePersonaje` (32 px por unidad, pivote abajo al medio).
 
-Uso:  python scripts/preparar_sprites_casino.py
+Uso:  python Codigo/Herramientas/preparar_sprites_casino.py
 """
 import os
 from collections import deque
@@ -37,7 +37,8 @@ from collections import deque
 import numpy as np
 from PIL import Image
 
-RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# La raiz del repo: este archivo esta en Codigo/Herramientas/.
+RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ASSETS = os.path.join(RAIZ, "Codigo", "PokeRush", "Assets")
 
 CONTORNO = (0, 0, 0)

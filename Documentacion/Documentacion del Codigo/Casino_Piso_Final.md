@@ -19,7 +19,7 @@ Todo lo visible se genera con un builder del editor, como el resto del casino.
 | `Resources/Definitions/Casino/JefeFinalCasino.asset` | El rival: seis Pokémon de nivel 46-49 (Absol, Drapion, Grimmsnarl, Kingambit, Tyranitar e Hydreigon), perfil de IA `Elite`. |
 | `Resources/Definitions/Casino/Dialogos/Casino_Reymar_*.asset` | La charla de `historia.pdf` de a tramos: `Tramo1..4` (camino a la mesa), `Antes` (al pisar la zona de la pelea), `Despues` (al ganarle) y `Servidor` (atrás de la mesa). |
 | `Resources/Definitions/Casino/RuletaDelJefeFinal.asset` | Los ocho gajos de la ruleta, con sus pesos. |
-| `Sprites/Casino/martin_sentado.png` | El busto de Martín, 51x52. Lo prepara `scripts/preparar_sprites_casino.py` a partir de `Assets/Martin/`. |
+| `Sprites/Casino/martin_sentado.png` | El busto de Martín, 51x52. Lo prepara `Codigo/Herramientas/preparar_sprites_casino.py` a partir de `Assets/Martin/`. |
 | `Graphics/Trainers/MARTIN.png` | Su retrato de la caja de diálogo, 160x160. |
 
 Lo demás **ya existía y se reusa entero**: la pantalla de la ruleta
@@ -279,7 +279,7 @@ la mesa le tapa 0,35. En la cueva pasa lo mismo con su mesa: -2,85 (era -2,4).
 Las dos escenas se corrigieron en el YAML, sin rearmar los pisos.
 
 Su pelea ahora es en el fondo **Campeon** (era un rojo liso), y las de los guardias
-del pasillo en **BaseVillano** (ver `Playtest_5_Oct_2026.md`).
+del pasillo en **BaseVillano** (ver `Documentacion/Testing/Playtest_5_Oct_2026.md`).
 
 ## Lo que falta (equipo)
 

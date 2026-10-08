@@ -3,6 +3,9 @@
 Lo que salió de jugar la build 1.0.0 entera y cómo quedó cada cosa. El detalle de
 cada sistema está en su documento; acá va el índice.
 
+Los `.md` que se nombran en la columna **Dónde** están en
+`Documentacion/Documentacion del Codigo/`.
+
 | # | Pedido | Qué se hizo | Dónde |
 |---|---|---|---|
 | 1 | Los cuadrados rojos se ven en la build | Las paredes invisibles de Santiago (`ParedInvisibleTile`) deciden su color con `Application.isPlaying`, pero la build dibujaba el color que quedó guardado en el tilemap. `ParedesInvisiblesEnJuego` refresca esas celdas al cargar cada escena. | `Assets/ANDRUSIANI/Runtime/ParedesInvisiblesEnJuego.cs` |

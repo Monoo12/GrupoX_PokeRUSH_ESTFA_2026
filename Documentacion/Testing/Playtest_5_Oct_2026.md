@@ -5,6 +5,9 @@ Lo que salió de jugar la 1.1.0 y cómo quedó cada cosa. Se hizo sin supervisi�
 dejaba una decisión abierta, la columna **Decidido acá** dice qué se eligió,
 para revisarlo.
 
+Los `.md` que se nombran en la columna **Dónde** están en
+`Documentacion/Documentacion del Codigo/`.
+
 | # | Pedido | Qué se hizo | Dónde |
 |---|---|---|---|
 | 1 | Tragaperras: que se gane más seguido, 1 de cada 4 | Se repartieron de nuevo los pesos de los símbolos (la cereza, el premio chico, pesa 100): premio en 1 de cada 4 tiradas (25,1%) y 89-90% de devolución (en la 1.1.0, 1 de cada 5 y 88%). La tabla de pagos dibujada no cambia. | `Resources/Definitions/Casino/MaquinaBasica.asset`, `CasinoPrefabBuilder` |

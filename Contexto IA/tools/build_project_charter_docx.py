@@ -9,9 +9,9 @@ from docx.oxml.ns import qn
 from docx.shared import Pt
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]  # la raiz del repo
 TEMPLATE = Path(r"C:\Users\augus\Downloads\Project Charterr (2).docx")
-OUTPUT = ROOT / "Documentación General" / "Project_Charter_PokeRush_Formato.docx"
+OUTPUT = ROOT / "Documentacion" / "Entregables" / "Project_Charter_PokeRush_Formato.docx"
 
 
 def set_font(run, size=10, bold=False):

@@ -16,7 +16,7 @@ Documentación de cómo se crea la base de datos de PokeRush y de todas las oper
 
 La creación está centralizada en `DatabaseService`, un singleton que abre (o crea si no existe) el archivo `pokerush.db` y genera todas las tablas al construirse.
 
-**Archivo:** [`Services/DatabaseService.cs`](../../Codigo/PokeRush/Assets/Scripts/Services/DatabaseService.cs)
+**Archivo:** [`Services/DatabaseService.cs`](../../../Codigo/PokeRush/Assets/Scripts/Services/DatabaseService.cs)
 
 ```csharp
 private DatabaseService()
@@ -55,7 +55,7 @@ El cierre de la conexión se hace con `DatabaseService.Instance.Close()`.
 
 ## 2. Esquema (tablas y columnas)
 
-Las tablas se definen como clases en [`Services/DatabaseRows.cs`](../../Codigo/PokeRush/Assets/Scripts/Services/DatabaseRows.cs). Resumen:
+Las tablas se definen como clases en [`Services/DatabaseRows.cs`](../../../Codigo/PokeRush/Assets/Scripts/Services/DatabaseRows.cs). Resumen:
 
 | Tabla (`[Table]`)     | Clase                 | PK                     | Columnas                                                                                                   |
 |-----------------------|-----------------------|------------------------|-----------------------------------------------------------------------------------------------------------|
@@ -80,7 +80,7 @@ Notas de diseño relevantes:
 
 ## 3. Queries / operaciones sobre la BD
 
-Toda la lógica de lectura/escritura vive en [`Services/SaveService.cs`](../../Codigo/PokeRush/Assets/Scripts/Services/SaveService.cs) (singleton). La conexión la toma de `DatabaseService.Instance.Connection`.
+Toda la lógica de lectura/escritura vive en [`Services/SaveService.cs`](../../../Codigo/PokeRush/Assets/Scripts/Services/SaveService.cs) (singleton). La conexión la toma de `DatabaseService.Instance.Connection`.
 
 Patrón general de guardado de colecciones: **borrar todo lo del jugador y re-insertar** (más simple que hacer diff fila por fila).
 
@@ -142,11 +142,11 @@ Borra en orden respetando las dependencias (hijos antes que padres):
 
 | Llamada | Archivo | Contexto |
 |---------|---------|----------|
-| `DatabaseService.Instance` (abre BD + crea tablas) | [`GameManager.cs:46`](../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs) | Arranque del juego |
-| `SaveService.Instance.LoadPlayer(Story)` | [`GameManager.cs:104`](../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs), [`SaveSlotMenuView.cs:96`](../../Codigo/PokeRush/Assets/Scripts/Views/SaveSlotMenuView.cs) | Cargar / continuar partida |
-| `SaveService.Instance.SavePlayer(...)` | [`GameManager.cs:114`](../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs) | Guardar progreso |
-| `SaveService.Instance.HasSaveData(...)` | [`StartScreenView.cs:71`](../../Codigo/PokeRush/Assets/Scripts/Views/StartScreenView.cs), [`GameManager.cs:147`](../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs) | Botón "Continuar" / verificación |
-| `SaveService.Instance.DeleteSave()` | [`SaveSlotMenuView.cs:152`](../../Codigo/PokeRush/Assets/Scripts/Views/SaveSlotMenuView.cs) | Botón "Borrar partida" |
+| `DatabaseService.Instance` (abre BD + crea tablas) | [`GameManager.cs:46`](../../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs) | Arranque del juego |
+| `SaveService.Instance.LoadPlayer(Story)` | [`GameManager.cs:104`](../../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs), [`SaveSlotMenuView.cs:96`](../../../Codigo/PokeRush/Assets/Scripts/Views/SaveSlotMenuView.cs) | Cargar / continuar partida |
+| `SaveService.Instance.SavePlayer(...)` | [`GameManager.cs:114`](../../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs) | Guardar progreso |
+| `SaveService.Instance.HasSaveData(...)` | [`StartScreenView.cs:71`](../../../Codigo/PokeRush/Assets/Scripts/Views/StartScreenView.cs), [`GameManager.cs:147`](../../../Codigo/PokeRush/Assets/Scripts/Managers/GameManager.cs) | Botón "Continuar" / verificación |
+| `SaveService.Instance.DeleteSave()` | [`SaveSlotMenuView.cs:152`](../../../Codigo/PokeRush/Assets/Scripts/Views/SaveSlotMenuView.cs) | Botón "Borrar partida" |
 
 ---
 

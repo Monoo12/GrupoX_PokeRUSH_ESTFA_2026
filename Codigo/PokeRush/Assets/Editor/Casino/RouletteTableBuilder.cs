@@ -14,7 +14,7 @@ using Object = UnityEngine.Object;
 // El arte sale de Assets/Ruleta Nueva (los roulette_*.png). Casi todo es la
 // version recortada y recoloreada de sprite_sheet_completo.png; la rueda es la
 // excepcion y sale de ruleta_base_2.png, que es un dibujo aparte y mucho mejor.
-// Ver RouletteArtImporter y scripts/limpiar_ruleta.py para el por que.
+// Ver RouletteArtImporter y Codigo/Herramientas/limpiar_ruleta.py para el por que.
 //
 // Las medidas de abajo son pixeles de la resolucion de referencia del Canvas
 // (512x384), con el origen en el centro. La idea del acomodo:
@@ -43,7 +43,7 @@ public static class RouletteTableBuilder
     // ruleta_base_2.png: el circulo de la rueda ocupa 0.9955 del sprite, la
     // pista lisa por la que corre la bola esta a 0.80 de ese radio y el anillo
     // de casilleros a 0.52 (ver RUEDA_PISTA / RUEDA_CASILLEROS en
-    // scripts/limpiar_ruleta.py). O sea 152/2 * 0.9955 * 0.80 y * 0.52.
+    // Codigo/Herramientas/limpiar_ruleta.py). O sea 152/2 * 0.9955 * 0.80 y * 0.52.
     private const float BallOuterRadius = 60.5f;
     private const float BallPocketRadius = 39.5f;
 

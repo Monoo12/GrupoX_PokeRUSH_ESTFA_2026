@@ -79,8 +79,8 @@ exacta.
 | `Sprites/Menus/pantalla incio.png` | `menus/pantalla-inicio.png` | 1672×941, ilustración estilo píxel | Flash del drop y logo final | Arte del título: dos personajes enfrentados en azul y rojo (por el pelo y la ropa parecen Tixi y Julieta), el logo PokeRush arriba y PRESS START. **Es el único lugar donde está el logo de PokeRush**: no hay un PNG suelto |
 | `Sprites/Menus/fondoCampeon.png` | `menus/fondo-campeon.png` | 800×800, ilustración estilo píxel | La ciudad de noche ("El mundo") | |
 | `Sprites/Menus/panels.png` | `menus/panels.png` | 408×536, 19 colores | Paleta y marcos | Grises y azul pizarra con borde turquesa |
-| `Diseño/Pantallas/Pantalla-hud batalla.png` | (no se copia) | 1536×1024 | Referencia | Diseño del HUD que todavía no está en el juego |
-| `Diseño/Mockups/Mockup hud batalla.png`, `MockUP pantalla incio.png`, `MockUP Menu principal-save.png` | (no se copian) | — | Referencia | |
+| `Diseño/Interfaz/Pantallas/Pantalla-hud batalla.png` | (no se copia) | 1536×1024 | Referencia | Diseño del HUD que todavía no está en el juego |
+| `Diseño/Interfaz/Mockups/Mockup hud batalla.png`, `MockUP pantalla incio.png`, `MockUP Menu principal-save.png` | (no se copian) | — | Referencia | |
 
 ### Personajes
 

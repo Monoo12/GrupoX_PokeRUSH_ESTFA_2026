@@ -89,7 +89,7 @@ se cambian los PNG de `Graphics/Casino/` y listo.
 - **Origen:** arte generado para este proyecto (no es de terceros). Entró con la
   hoja `blackjack_sprite_sheet_completo.png` y los recortes sueltos al lado.
 - **Qué le hicimos:** los recortes vienen bien de color y con alpha de verdad,
-  pero no se pueden usar tal cual. `scripts/cortar_arte_blackjack.py` genera los
+  pero no se pueden usar tal cual. `Codigo/Herramientas/cortar_arte_blackjack.py` genera los
   `bj_*.png` a partir de ellos:
   - `bj_cartas.png` — las 52 cartas en una grilla exacta. En la hoja están a un
     paso de 48,46 px y cada una de un tamaño distinto, así que una grilla regular

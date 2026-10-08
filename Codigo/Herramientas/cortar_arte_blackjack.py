@@ -49,7 +49,7 @@ borron. Por eso la hoja de cartas sale escalada x3 con NEAREST: la celda de
 156 px cae casi 1:1 en pantalla (156 / 3,75 = 41,6 unidades) y el pixel art se
 ve nitido. Las fichas ya vienen a ~88 px, que es mas o menos como se usan.
 
-Uso:  python scripts/cortar_arte_blackjack.py
+Uso:  python Codigo/Herramientas/cortar_arte_blackjack.py
 """
 
 import os
@@ -57,7 +57,8 @@ import os
 import numpy as np
 from PIL import Image
 
-RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# La raiz del repo: este archivo esta en Codigo/Herramientas/.
+RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CARPETA = os.path.join(RAIZ, "Codigo", "PokeRush", "Assets", "BlackJack God")
 HOJA = "blackjack_sprite_sheet_completo.png"
 
