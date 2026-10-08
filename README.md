@@ -351,6 +351,9 @@ Qué trajo cada versión:
   `Playtest_5_Oct_2026.md`.
 - **1.3.0**: rebalanceo de Pokémon y dificultad (`Rebalanceo_Oct_2026.md`) y la
   consola de administrador (`Consola_De_Administrador.md`).
+- **1.4.0**: los arreglos del testing final (`Reporte de Bugs.pdf`), la cruz para
+  salir al escritorio desde el título y las partidas, y el servidor de Julieta, que
+  no se podía tocar y no dejaba terminar el juego.
 
 Devolución docente y datos del grupo (roles, color, plataforma de organización):
 `Documentacion/Devolucion_Docente.md`.
