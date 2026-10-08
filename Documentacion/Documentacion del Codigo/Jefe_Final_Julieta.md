@@ -301,7 +301,11 @@ y se puede volver a correr (no duplica nada):
 2. Pone `PeleaJulieta` (Julieta, la zona y el servidor) en la sala redonda, si no
    estaba: Julieta arriba de todo en (1, 22.5), entre las dos columnas del centro
    (su collider tapa las dos, así se le habla desde cualquiera), el servidor
-   detrás y la zona en la fila 19, delante de la pokébola.
+   detrás y la zona en la fila 19, delante de la pokébola. El servidor se rehace
+   siempre, con el pie en (1.5, 23): en el hueco de la pared, apoyado sobre la
+   fila 22, desde donde se lo toca con X. Para correrlo se mueve el objeto
+   `Servidor`, **no las pantallas**: el brillo y el collider van en el objeto
+   (el 7-oct se movieron solo las pantallas y el final no se podía terminar).
 3. Rehace `MapaRaiz/HistoriaDeLaSede`: las tres zonas de la llegada y el
    `ApagonDelNivel` del final.
 4. **Abre la puerta del edificio**: en la primera versión, la puerta (1,4) estaba
@@ -309,7 +313,8 @@ y se puede volver a correr (no duplica nada):
    dos capas pierde la de `Colisiones` (el dibujo queda en `Techos`).
 5. Completa el rig (combate, diálogo, GameManager con un equipo de fin de juego
    para entrar por Play directo; viniendo de la cueva manda la partida), repone
-   las colisiones, **verifica que se llegue caminando a la zona** y guarda.
+   las colisiones, **verifica que se llegue caminando a la zona y que el servidor
+   se pueda tocar con X** (y que su dibujo no esté corrido del objeto) y guarda.
 
 La arena no lleva el banco de pruebas (F9/F10/F11). El mapa sigue siendo de
 Santiago: el builder no pinta nada (salvo esa celda de la puerta).

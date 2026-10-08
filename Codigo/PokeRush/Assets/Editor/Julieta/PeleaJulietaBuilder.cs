@@ -98,7 +98,10 @@ public static class PeleaJulietaBuilder
     // (y 17..24) con la pokeball en el centro. Julieta va arriba de todo, con
     // el servidor atras: es un callejon, asi que puede tapar las dos columnas.
     private static readonly Vector2 ArenaJulieta = new Vector2(1f, 22.5f);
-    private static readonly Vector2 ArenaServidor = new Vector2(1f, 23.5f);
+    // En el hueco de la pared, apoyado sobre la fila 22 (la ultima que se
+    // camina). Donde lo dejo Santiago a mano el 7-oct; antes estaba media celda
+    // mas arriba y a la izquierda.
+    private static readonly Vector2 ArenaServidor = new Vector2(1.5f, 23f);
     private static readonly Vector2 ArenaCentroDeLaZona = new Vector2(1f, 19.5f);   // fila 19, x -2..3
     private static readonly Vector2 ArenaTamanioDeLaZona = new Vector2(6f, 1f);
 
@@ -497,12 +500,14 @@ public static class PeleaJulietaBuilder
         go.transform.SetParent(raiz.transform, false);
         go.transform.position = new Vector3(abajo.x, abajo.y, 0f);
         go.layer = CapaObstacles;
-        // El collider arranca media celda mas arriba que el dibujo: asi la
-        // fila de adelante queda libre y se lo puede tocar con X parado ahi
-        // (el final se juega tocandolo).
+        // El collider arranca en el primer borde de celda desde el pie del
+        // dibujo: si el dibujo empieza a mitad de una celda, esa fila queda
+        // libre. Asi el jugador se para justo adelante y lo toca con X (el
+        // final se juega tocandolo): el X mira el centro de la celda de al lado.
+        float libre = Mathf.Ceil(abajo.y - 0.01f) - abajo.y;
         var box = go.AddComponent<BoxCollider2D>();
-        box.size = new Vector2(4f, 1.5f);
-        box.offset = new Vector2(0f, 1.25f);
+        box.size = new Vector2(4f, 2f - libre);
+        box.offset = new Vector2(0f, libre + box.size.y / 2f);
 
         for (int f = 0; f < 2; f++)
         for (int c = 0; c < 4; c++)
@@ -818,6 +823,38 @@ public static class PeleaJulietaBuilder
         for (float y = b.min.y + 0.5f; y < b.max.y && !llega; y += 1f)
             if (alcanzadas.Contains(suelo.WorldToCell(new Vector3(x, y, 0f)))) llega = true;
         if (!llega) problemas.Add("no se llega caminando a la zona de la pelea desde donde aparece el jugador.");
+
+        // El final se juega tocando el servidor con X. El 7-oct se movieron a
+        // mano las pantallas y no el objeto Servidor: el brillo y el collider
+        // quedaron media celda arriba y a la izquierda, y desde adelante el X
+        // no lo alcanzaba.
+        ServidorPrincipal servidor = pelea.GetComponentInChildren<ServidorPrincipal>(true);
+        Collider2D colServidor = servidor != null ? servidor.GetComponent<Collider2D>() : null;
+        if (colServidor == null) problemas.Add("el servidor no tiene collider: no se lo puede tocar con X.");
+        else
+        {
+            // El brillo va en el objeto, una celda arriba del pie: ahi tiene que
+            // estar el centro del dibujo.
+            List<SpriteRenderer> pantallas = servidor.GetComponentsInChildren<SpriteRenderer>(true)
+                .Where(sr => sr.name.StartsWith("Pantalla_")).ToList();
+            if (pantallas.Count > 0)
+            {
+                Vector2 dibujo = pantallas.Aggregate(new Vector2(), (s, sr) => s + (Vector2)sr.bounds.center) / pantallas.Count;
+                if (Vector2.Distance(dibujo, (Vector2)servidor.transform.position + Vector2.up) > 0.1f)
+                    problemas.Add("el dibujo del servidor se movió sin su objeto: el brillo y el X quedaron en otro " +
+                                  "lado. Se mueve el objeto 'Servidor', no las pantallas.");
+            }
+
+            // El X mira el centro de la celda de al lado con radio 0,4
+            // (PlayerController.IntentarInteractuar).
+            Bounds bs = colServidor.bounds;
+            bool seToca = alcanzadas.Any(c => dirs.Any(d =>
+            {
+                Vector3 mira = suelo.GetCellCenterWorld(c + d);
+                return bs.SqrDistance(new Vector3(mira.x, mira.y, bs.center.z)) <= 0.4f * 0.4f;
+            }));
+            if (!seToca) problemas.Add("no hay ninguna celda a la que se llegue caminando desde la que se toque el servidor con X.");
+        }
 
         Debug.Log($"[Julieta] Verificación: {alcanzadas.Count} celdas alcanzables, la zona {(llega ? "se alcanza" : "NO se alcanza")}.");
         return problemas;
