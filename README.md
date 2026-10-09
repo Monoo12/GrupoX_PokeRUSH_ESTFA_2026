@@ -147,6 +147,13 @@ El repo pesa ~500 MB. Git va a pedir iniciar sesión en GitHub la primera vez.
 5. Cuando termina aparece el menú **PokeRush** en la barra de arriba.
 6. Abrir `Assets/Scenes/Menu Principal.unity` y apretar **Play**.
 
+> **Si hay cualquier error al clonarlo o al importarlo en Unity, usar la rama
+> `BACKUP`**: tiene el proyecto completo, con todas las herramientas de trabajo.
+> ```bash
+> git clone -b BACKUP https://github.com/Monoo12/GrupoX_PokeRUSH_ESTFA_2026.git
+> ```
+> Si ya estaba clonado: `git checkout BACKUP`.
+
 ### B.5 Paquetes y librerías
 
 Los baja Unity solo al abrir el proyecto, según `Packages/manifest.json`. **No
@@ -163,7 +170,7 @@ hay que instalar nada a mano** (salvo tener Git, por el primero de la lista).
 | `com.unity.nuget.newtonsoft-json` | 3.2.1 | JSON |
 | `com.unity.timeline` | 1.8.12 | Animaciones por línea de tiempo |
 | `com.unity.test-framework` | 1.6.0 | Pruebas |
-| `com.unity.ai.assistant` | 2.17.0-pre.1 | **Solo editor**: el MCP que usan las sesiones con IA. No va a la build |
+| `com.unity.ai.assistant` | 2.17.0-pre.1 | **Solo editor**: asistente de Unity. No va a la build |
 
 ### B.6 Si Unity muestra advertencias al abrir
 
@@ -232,7 +239,7 @@ GrupoX_PokeRUSH_ESTFA_2026/
 ├── Codigo/PokeRush/              ← el proyecto de Unity (esto se abre en el Hub)
 │   ├── Assets/
 │   │   ├── Audio/                música por nivel, efectos, gritos y ataques
-│   │   ├── Editor/               herramientas de editor (menú PokeRush: builders y pruebas)
+│   │   ├── Editor/               la herramienta de build (menú PokeRush → Release)
 │   │   ├── Fonts/                tipografías de pixel art
 │   │   ├── Graphics/             pack de gráficos de Pokémon Essentials (local; ver Git)
 │   │   ├── Palettes/             paletas de tiles para pintar los mapas
@@ -247,12 +254,10 @@ GrupoX_PokeRUSH_ESTFA_2026/
 │   │   └── TextMesh Pro/         fuentes y recursos de TextMesh Pro
 │   ├── Packages/                 manifest de paquetes de Unity
 │   └── ProjectSettings/          configuración del proyecto (versionada)
-├── Codigo/Herramientas/          scripts de Python para procesar arte y audio
 ├── Diseño/
-│   ├── Graphics/                 pack de Essentials de referencia (lo leen los importadores: no se mueve)
+│   ├── Graphics/                 pack de Essentials de referencia
 │   ├── Interfaz/                 Mockups/ y Pantallas/ del equipo
-│   ├── Personajes/               hojas originales (Néstor)
-│   └── Trailer/                  el tráiler en Remotion
+│   └── Personajes/               hojas originales (Néstor)
 ├── Documentacion/
 │   ├── Entregables/              entregables, resumen del proyecto y contrato de licencia
 │   ├── Analisis y Diseño/        arquitectura, historias de usuario, DFD y base de datos
@@ -260,7 +265,6 @@ GrupoX_PokeRUSH_ESTFA_2026/
 │   ├── Gestion/                  dailys, devolución docente y material de la materia
 │   ├── Documentacion del Codigo/ un .md por sistema (combate, menús, audio, casino...)
 │   └── Creditos_De_Assets.md
-├── Contexto IA/graphify-out/     grafo del código (para las sesiones con IA)
 ├── BUILD.md                      cómo generar la build
 └── README.md
 ```
@@ -281,7 +285,7 @@ GrupoX_PokeRUSH_ESTFA_2026/
 | `Julieta/` | La pelea final y los créditos |
 | `Tutorial/` | El tutorial de la habitación |
 | `Consola/` | La consola de administrador (comandos y botones para probar) |
-| `Testing/` | Bancos de prueba en Play (no se usan en el juego) |
+| `Testing/` | Lo que usan las escenas de prueba (no va al juego) |
 
 ---
 
@@ -309,9 +313,8 @@ y los créditos del juego. Es material de fan game de uso académico, sin fines 
 ## Git / GitHub
 
 - **La organización del repo** es la de *Estructura del proyecto*: `Codigo`,
-  `Diseño` y `Documentacion` (reordenadas el 8-oct-2026), más `Contexto IA`, que
-  se queda en la raíz para no romper el contexto de la IA. Algo nuevo va en la
-  subcarpeta que corresponda, no suelto en la raíz.
+  `Diseño` y `Documentacion`. Algo nuevo va en la subcarpeta que corresponda,
+  no suelto en la raíz.
 - **Escenas y prefabs no se fusionan como texto** (`.gitattributes`:
   `*.unity` y `*.prefab` con `merge=binary`). Si un pull o un merge marca
   conflicto en uno de esos archivos, hay que elegir una versión entera:
@@ -328,7 +331,6 @@ y los créditos del juego. Es material de fan game de uso académico, sin fines 
   funciona sin ellos. Si se empieza a usar un PNG nuevo del pack de gráficos hay
   que subirlo a mano:
   `git add -f "Codigo/PokeRush/Assets/Graphics/.../archivo.png" "....png.meta"`.
-  Del pack de audio se copia con `python Codigo/Herramientas/copiar_audio_essentials.py`.
 - No se versionan `Library/`, `Temp/`, `Logs/`, `UserSettings/`, `Builds/` ni los
   `.csproj`/`.sln` (Unity los regenera). Por eso la build y el release **no** están
   en el repo: el `.zip` vive solo en la sección *Releases* de GitHub.

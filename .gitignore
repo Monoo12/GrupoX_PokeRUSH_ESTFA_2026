@@ -17,10 +17,27 @@ UserSettings/
 .plastic/
 Codigo/PokeRush/ignore.conf
 
-# === graphify ===
-# El grafo canónico vive en "Contexto IA/graphify-out/" (versionado).
-# Esto ignora solo la salida suelta que graphify deja en la raíz al correr.
+# === Solo local: herramientas de trabajo, no son parte del juego ===
+/CLAUDE.md
+/AGENTS.md
+/Contexto IA/
+/.claude/
+/.codex/
 /graphify-out/
+Codigo/Herramientas/
+Codigo/PokeRush/Tools/
+Diseño/Trailer/
+Codigo/PokeRush/Assets/AI Toolkit/
+Codigo/PokeRush/Assets/AI Toolkit.meta
+# Editor: queda solo la herramienta de build (PokeRush > Release).
+Codigo/PokeRush/Assets/Editor/*
+!Codigo/PokeRush/Assets/Editor/Release/
+!Codigo/PokeRush/Assets/Editor/Release.meta
+# Testing: quedan solo los scripts que usan las escenas de prueba.
+Codigo/PokeRush/Assets/Scripts/Testing/*
+!Codigo/PokeRush/Assets/Scripts/Testing/BattleTester.cs*
+!Codigo/PokeRush/Assets/Scripts/Testing/DemoInventorySeeder.cs*
+!Codigo/PokeRush/Assets/Scripts/Testing/PeleaJulietaBancoDePrueba.cs*
 # === Unity: proyectos generados por el editor (se regeneran solos) ===
 Codigo/PokeRush/*.csproj
 Codigo/PokeRush/*.slnx
@@ -31,7 +48,7 @@ Codigo/PokeRush/*.sln
 # para versionar.
 Codigo/PokeRush/Capturas/
 
-# === Python: cache de los scripts de Codigo/Herramientas/ ===
+# === Python: cache ===
 __pycache__/
 *.pyc
 
