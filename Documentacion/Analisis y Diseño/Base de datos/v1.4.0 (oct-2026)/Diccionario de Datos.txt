@@ -1,0 +1,97 @@
+DICCIONARIO DE DATOS
+PokeRush - versión 1.4.0 (octubre 2026)
+
+Motor: SQLite. Archivo: pokerush.db, en la carpeta de datos persistentes de Unity (en Windows: AppData/LocalLow/LevelUP Creators/PokeRush).
+Cada atributo se escribe: nombre lógico [columna real en la base] (clave, tipo).
+Los atributos marcados con (NUEVO) se agregaron después de la versión anterior de este diccionario.
+Los atributos id_definicion_* guardan el nombre de un ScriptableObject de Unity (Pokémon, movimiento, ítem o cosmético). No son claves foráneas reales: el juego los resuelve en código mediante DefinitionRepository.
+
+JUGADOR (player)
+Representa a cada partida guardada: los datos del jugador y su progreso económico.
+Atributos:
+id_jugador [Id] (PK, INT): Número de slot de guardado (hoy siempre 1). Lo asigna el juego; no es autoincremental.
+nombre [Name] (VARCHAR): Nombre del jugador, ingresado al crear la partida.
+genero [Gender] (VARCHAR) (NUEVO): Género elegido al crear la partida: "Varon" o "Mujer". En guardados viejos queda vacío y se lee como Varon.
+dinero [Money] (INT): Cantidad de dinero acumulado por el jugador.
+deuda [Debt] (INT) (NUEVO): Lo que el jugador le debe a la enfermería del casino. Empieza en 0.
+mejoras_pendientes [PendingBuffs] (VARCHAR) (NUEVO): Mejoras de la ruleta de Martín que se aplican en la próxima batalla, con el formato "Ataque:1;Velocidad:2" (mejora:etapas). Vacío = ninguna.
+
+POKEN (player_poken)
+Representa a cada Pokémon del jugador, esté en el equipo o guardado en el PC, con su progreso individual.
+Atributos:
+id_poken [Id] (PK, INT): Identificador único del Pokémon. Autoincremental.
+id_jugador [PlayerId] (FK, INT): Jugador al que pertenece este Pokémon.
+id_definicion_poken [PokenDefinitionId] (VARCHAR): Nombre del PokenDefinition que describe la especie (ej: "Lucario").
+nivel [Level] (INT): Nivel actual del Pokémon (1 a 100).
+xp_actual [CurrentXP] (INT): Experiencia acumulada en el nivel actual.
+hp_actual [CurrentHP] (INT): Puntos de vida actuales.
+efecto_estado [StatusEffect] (VARCHAR): Estado alterado actual: None, Burned, Frozen, Paralyzed, Poisoned, Asleep o Confused.
+indice_slot [SlotIndex] (INT): Si está en el equipo, su posición en el equipo (0 a 5). Si está en el PC, su lugar dentro de la caja (0 a 29).
+id_definicion_cosmetico_equipado [EquippedCosmetic] (VARCHAR): Nombre del cosmético equipado en este Pokémon (uno como máximo). Vacío = ninguno.
+ivs [Ivs] (VARCHAR) (NUEVO): Valores individuales del Pokémon, con el formato "hp,atk,def,spa,spd,spe" (ej: "31,12,0,5,20,31"). Se guarda como texto para distinguir un guardado viejo (vacío: el juego genera IVs nuevos) de un IV 0 real.
+es_shiny [IsShiny] (BOOLEAN) (NUEVO): Indica si el Pokémon es shiny (1) o no (0).
+indice_caja [BoxIndex] (INT) (NUEVO): Dónde está el Pokémon. Vacío (NULL) = en el equipo; un número = la caja del PC donde está guardado (el PC tiene 8 cajas de 30 lugares).
+
+POKEN_MOVIMIENTO (player_poken_moves)
+Relaciona a cada Pokémon con los movimientos que tiene aprendidos (hasta cuatro).
+Atributos:
+id_poken_movimiento [Id] (PK, INT): Identificador único de la relación. Autoincremental.
+id_poken [PlayerPokenId] (FK, INT): Pokémon que conoce el movimiento.
+id_definicion_movimiento [MoveDefinitionId] (VARCHAR): Nombre del MoveDefinition que describe el movimiento (ej: "Esfera Aural").
+pp_actual [CurrentPP] (INT): Cantidad de usos restantes de ese movimiento.
+indice_slot [SlotIndex] (INT) (NUEVO): Posición del movimiento en la lista del Pokémon (0 a 3). Permite que el orden elegido en la pantalla de datos se mantenga al guardar.
+
+INVENTARIO (player_inventory)
+Representa los ítems que posee un jugador, sin importar su categoría. Hay una fila por cada ítem distinto.
+Atributos:
+id_inventario [Id] (PK, INT): Identificador único de la fila de inventario. Autoincremental.
+id_jugador [PlayerId] (FK, INT): Jugador propietario del ítem.
+id_definicion_item [ItemDefinitionId] (VARCHAR): Nombre del ítem (ej: "Poción", "Tarjeta VIP").
+tipo_item [ItemType] (VARCHAR): Categoría del ítem: "Heal" (curación), "Battle" (combate) o "Special" (especial). Le indica al juego en qué lista de definiciones buscarlo.
+cantidad [Quantity] (INT): Cantidad disponible de ese ítem.
+
+COSMETICO_EQUIPADO (player_cosmetics)
+Registra qué cosméticos tiene desbloqueados cada jugador.
+La tabla existe en la base, pero la versión 1.4.0 todavía no guarda datos en ella.
+Atributos:
+id_cosmetico_equipado [Id] (PK, INT): Identificador único de la fila. Autoincremental.
+id_jugador [PlayerId] (FK, INT): Jugador propietario del cosmético.
+id_definicion_cosmetico [CosmeticDefinitionId] (VARCHAR): Nombre del CosmeticDefinition que describe el cosmético.
+
+FLAG (active_flags)
+Registra los hitos de la historia que el jugador ya cumplió (ej: haber vencido a un guardia, haber cortado un firewall, haber terminado el tutorial).
+Atributos:
+id_flag [Id] (PK, INT): Identificador único de la fila. Autoincremental.
+id_jugador [PlayerId] (FK, INT): Jugador al que pertenece esta flag.
+nombre_flag [FlagName] (VARCHAR): Nombre de la flag activada, igual al valor del enum StoryFlag (ej: "Torre1_FirewallNodoA"). Si el enum ya no tiene ese nombre, la fila se ignora al cargar.
+Restricciones:
+Un jugador no puede tener la misma flag dos veces.
+
+NPC (dialogues)
+Representa cada línea de diálogo disponible para los personajes no jugables.
+La tabla existe en la base, pero queda vacía: los diálogos del juego están guardados en las escenas y en los ScriptableObjects.
+Atributos:
+id_dialogo [Id] (PK, INT): Identificador único de la línea de diálogo. Autoincremental.
+id_npc [NpcId] (VARCHAR): Identificador del NPC dueño de esta línea.
+indice_linea [LineIndex] (INT): Orden de la línea dentro del diálogo del NPC.
+texto [Text] (VARCHAR): Contenido textual de la línea.
+flag_requerida [RequiredFlag] (VARCHAR): Nombre de la flag que debe estar activa para que la línea esté disponible (puede no requerir ninguna).
+flag_otorgada [GrantsFlag] (VARCHAR): Nombre de la flag que se activa al mostrarse la línea (puede no otorgar ninguna).
+Restricciones:
+La validación de flag_requerida y flag_otorgada se resuelve en código comparando contra los nombres guardados en FLAG; no existe una clave foránea formal entre NPC y FLAG.
+
+OPCION (settings) (NUEVA)
+Guarda las opciones del juego (volumen, pantalla, controles) como pares clave/valor.
+Son de la computadora, no de la partida: no tienen jugador asociado y borrar la partida no las modifica.
+Atributos:
+clave [Key] (PK, VARCHAR): Nombre de la opción. Claves que usa el juego:
+  audio.music: volumen de la música (0 a 1).
+  audio.sfx: volumen de los efectos de sonido (0 a 1).
+  video.ancho / video.alto: resolución de pantalla, en píxeles.
+  video.modo: modo de pantalla (1 = pantalla completa, 3 = ventana).
+  pruebas.consola: consola de administrador activada (1) o no (0).
+  input.<acción>: teclas asignadas a cada acción (Up, Down, Left, Right, Confirm, Cancel, Run, PageLeft, PageRight), separadas por "|" (ej: "<Keyboard>/k"). Solo existe si el jugador cambió la tecla por defecto. Menu no se guarda: usa siempre la misma tecla que Cancel.
+valor [Value] (VARCHAR): Valor de la opción, guardado como texto.
+
+ENTIDADES QUE NO SON TABLAS
+ESPECIE, MOVIMIENTO, ITEM y COSMETICO aparecen en el MER, pero no son tablas de la base: son ScriptableObjects de Unity que viven en el proyecto. La base guarda solo su nombre (los atributos id_definicion_*).
